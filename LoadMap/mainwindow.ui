@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>400</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionchange"/>
+   <addaction name="action"/>
+   <addaction name="action_2"/>
+   <addaction name="action_3"/>
+   <addaction name="action_4"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionchange">
+   <property name="text">
+    <string>切换</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>添加人</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>删除</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>开始</string>
+   </property>
+  </action>
+  <action name="action_4">
+   <property name="text">
+    <string>停止</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>

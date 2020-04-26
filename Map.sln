@@ -1,0 +1,59 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2017
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OsgExtern", "E:/Git/Map/OsgExtern\OsgExtern.vcxproj", "{033A0E77-4BEC-3A79-81D8-2DE14B1E90FC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SceneCore", "E:/Git/Map/SceneCore\SceneCore.vcxproj", "{341AE69F-D51C-3C3B-9432-FB70052F56DD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{033A0E77-4BEC-3A79-81D8-2DE14B1E90FC} = {033A0E77-4BEC-3A79-81D8-2DE14B1E90FC}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Map", "E:/Git/Map/Map\Map.vcxproj", "{E3F1DDBA-3944-339D-BCAC-36138DCAE34B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{033A0E77-4BEC-3A79-81D8-2DE14B1E90FC} = {033A0E77-4BEC-3A79-81D8-2DE14B1E90FC}
+		{341AE69F-D51C-3C3B-9432-FB70052F56DD} = {341AE69F-D51C-3C3B-9432-FB70052F56DD}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpaceEnv", "E:/Git/Map/SpaceEnv\SpaceEnv.vcxproj", "{43EB97CB-9AF7-31FA-A1EC-71FED2DB1137}"
+	ProjectSection(ProjectDependencies) = postProject
+		{033A0E77-4BEC-3A79-81D8-2DE14B1E90FC} = {033A0E77-4BEC-3A79-81D8-2DE14B1E90FC}
+		{341AE69F-D51C-3C3B-9432-FB70052F56DD} = {341AE69F-D51C-3C3B-9432-FB70052F56DD}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PersonInfo", "E:/Git/Map/PlotManager/PersonInfo\PersonInfo.vcxproj", "{49FC7F5B-910C-3236-AD0D-3A49B8EF7AEF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{033A0E77-4BEC-3A79-81D8-2DE14B1E90FC} = {033A0E77-4BEC-3A79-81D8-2DE14B1E90FC}
+		{341AE69F-D51C-3C3B-9432-FB70052F56DD} = {341AE69F-D51C-3C3B-9432-FB70052F56DD}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{033A0E77-4BEC-3A79-81D8-2DE14B1E90FC}.Debug|x64.ActiveCfg = Debug|x64
+		{033A0E77-4BEC-3A79-81D8-2DE14B1E90FC}.Debug|x64.Build.0 = Debug|x64
+		{033A0E77-4BEC-3A79-81D8-2DE14B1E90FC}.Release|x64.ActiveCfg = Release|x64
+		{033A0E77-4BEC-3A79-81D8-2DE14B1E90FC}.Release|x64.Build.0 = Release|x64
+		{341AE69F-D51C-3C3B-9432-FB70052F56DD}.Debug|x64.ActiveCfg = Debug|x64
+		{341AE69F-D51C-3C3B-9432-FB70052F56DD}.Debug|x64.Build.0 = Debug|x64
+		{341AE69F-D51C-3C3B-9432-FB70052F56DD}.Release|x64.ActiveCfg = Release|x64
+		{341AE69F-D51C-3C3B-9432-FB70052F56DD}.Release|x64.Build.0 = Release|x64
+		{E3F1DDBA-3944-339D-BCAC-36138DCAE34B}.Debug|x64.ActiveCfg = Debug|x64
+		{E3F1DDBA-3944-339D-BCAC-36138DCAE34B}.Debug|x64.Build.0 = Debug|x64
+		{E3F1DDBA-3944-339D-BCAC-36138DCAE34B}.Release|x64.ActiveCfg = Release|x64
+		{E3F1DDBA-3944-339D-BCAC-36138DCAE34B}.Release|x64.Build.0 = Release|x64
+		{43EB97CB-9AF7-31FA-A1EC-71FED2DB1137}.Debug|x64.ActiveCfg = Debug|x64
+		{43EB97CB-9AF7-31FA-A1EC-71FED2DB1137}.Debug|x64.Build.0 = Debug|x64
+		{43EB97CB-9AF7-31FA-A1EC-71FED2DB1137}.Release|x64.ActiveCfg = Release|x64
+		{43EB97CB-9AF7-31FA-A1EC-71FED2DB1137}.Release|x64.Build.0 = Release|x64
+		{49FC7F5B-910C-3236-AD0D-3A49B8EF7AEF}.Debug|x64.ActiveCfg = Debug|x64
+		{49FC7F5B-910C-3236-AD0D-3A49B8EF7AEF}.Debug|x64.Build.0 = Debug|x64
+		{49FC7F5B-910C-3236-AD0D-3A49B8EF7AEF}.Release|x64.ActiveCfg = Release|x64
+		{49FC7F5B-910C-3236-AD0D-3A49B8EF7AEF}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
