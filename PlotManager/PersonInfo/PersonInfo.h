@@ -8,6 +8,8 @@
 
 #include "PersonInfo_Global.h"
 
+class PersonInfoCallBack;
+
 class CPersonInfo:public QtSceneNode<IPersonInfo>
 {
 public:
@@ -25,16 +27,19 @@ public:
      */
     void InitSceneNode();
 
+    void PosChanged();
+
     /**
-     * @brief 设置位置
-     * @param pScenePos
+     * @brief 设置人员名字
+     * @param strName
      */
-    void SetPos(const ScenePos& pScenePos);
-    void Add();
-    void Del();
+    void SetName(const string& strName);
+    const string& GetName();
 private:
-    osg::observer_ptr<osgEarth::PlaceNode> m_pPerson;
-    osgEarth::Symbology::Style        m_placeStyle;        /// 位置样式
+    osg::ref_ptr<osgEarth::PlaceNode> m_pPerson;
+    osg::ref_ptr<PersonInfoCallBack>   m_pCallBack;  ///
+    osgEarth::Symbology::Style        m_placeStyle; /// 位置样式
+    string                            m_sName;      ///  名字
 };
 
 extern "C"

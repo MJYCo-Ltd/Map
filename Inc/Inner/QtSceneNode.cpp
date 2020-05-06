@@ -13,15 +13,12 @@ QtSceneNode<T>::QtSceneNode(ISceneGraph *pSceneGraph)
     m_pSceneGraph = pSceneGraph;
 }
 
-#include <QDebug>
-
 /// 析构函数
 template <typename T>
 QtSceneNode<T>::~QtSceneNode()
 {
     static int nSize=0;
     m_pOsgNode = nullptr;
-    qDebug()<<"~QtSceneNode "<<typeid(T).name()<<++nSize;
 }
 
 /// 设置位置
@@ -31,6 +28,7 @@ void QtSceneNode<T>::SetPos(const ScenePos & rPos)
     if(m_unScenePos != rPos)
     {
         m_unScenePos = rPos;
+        PosChanged();
     }
 }
 
@@ -96,9 +94,7 @@ osg::Node* QtSceneNode<T>::GetOsgNode()
 template<typename T>
 void QtSceneNode<T>::Clear()
 {
-    static int nClearSize=0;
     m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pOsgNode));
-    qDebug()<<"QtSceneNode Clear "<<typeid(T).name()<<++nClearSize;
 }
 
 template<typename T>

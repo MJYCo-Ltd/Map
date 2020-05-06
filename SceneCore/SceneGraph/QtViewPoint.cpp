@@ -69,7 +69,6 @@ private:
     bool         m_bUpdateProject=false;
 };
 
-#include <QDebug>
 class ChangeManipulator:public osg::Operation
 {
 public:
@@ -132,6 +131,7 @@ void QtViewPoint::MapTypeChanged(MapType emType)
             m_p2DEarthManipulator = new CMyEarthManipulator(emType);
             m_p2DEarthManipulator->InitViewPoint();
         }
+        m_emType = View_2D;
 
         m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_p2DEarthManipulator));
     }
@@ -142,6 +142,7 @@ void QtViewPoint::MapTypeChanged(MapType emType)
             m_p3DEarthManipulator = new CMyEarthManipulator(emType);
             m_p3DEarthManipulator->InitViewPoint();
         }
+        m_emType = View_3D;
         m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_p3DEarthManipulator));
         break;
     }
@@ -166,6 +167,7 @@ void QtViewPoint::SetTrackNode(ISceneNode *pTrackNode)
     {
         if(nullptr != pTrackNode && pTrackNode != m_pTrackNode)
         {
+            m_emType = View_Node;
             m_pTrackNode = pTrackNode;
             m_pTrackManipulator->setTrackNode(m_pTrackNode->GetOsgNode());
         }
@@ -194,6 +196,11 @@ void QtViewPoint::SetViewPoint(const SceneViewPoint & rViewPoint)
     if(rViewPoint != m_rViewPoint)
     {
         m_rViewPoint = rViewPoint;
+        auto viewPoint = m_p3DEarthManipulator->getViewpoint();
+        viewPoint.setFocalPoint(osgEarth::GeoPoint(osgEarth::SpatialReference::get("wgs84"),m_rViewPoint.stPos.fLon,
+                                                   m_rViewPoint.stPos.fLat,0));
+        viewPoint.setRange(1000);
+        m_p3DEarthManipulator->setViewpoint(viewPoint,3);
     }
 }
 

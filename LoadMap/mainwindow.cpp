@@ -55,7 +55,7 @@ void MainWindow::on_actionchange_triggered()
 
 void MainWindow::on_action_triggered()
 {
-    m_pPersonInfo->Add();
+    //m_pPersonInfo->Add();
 //    auto pLayer = m_pSceneGraph->GetMap()->GetPlotManager()->FindOrCreateLayer("test");
 
 //    for(int i=0; i<1000;++i)
@@ -68,7 +68,7 @@ void MainWindow::on_action_triggered()
 
 void MainWindow::on_action_2_triggered()
 {
-    m_pPersonInfo->Del();
+    //m_pPersonInfo->Del();
 //    auto pLayer = m_pSceneGraph->GetMap()->GetPlotManager()->FindOrCreateLayer("test");
 //    pLayer->Clear();
 //    for(auto one : m_listNode)

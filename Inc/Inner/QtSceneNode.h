@@ -60,8 +60,13 @@ public:
      */
     void SetVisible(bool bVisible);
     bool IsVisible(){return(m_bVisible);}
+
 protected:
     virtual void VisibleChanged(){}
+    /**
+     * @brief 位置更改
+     */
+    virtual void PosChanged(){}
 
 protected:
     set<ISceneNode*>                  m_setChildNode;/// 子节点

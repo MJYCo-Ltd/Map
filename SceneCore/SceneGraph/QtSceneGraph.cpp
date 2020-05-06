@@ -27,6 +27,8 @@ QtSceneGraph::~QtSceneGraph()
 {
     m_pMap->Clear();
     m_pRoot->Clear();
+    delete m_pRoot;
+    delete m_pMap;
 
     /// 删除主窗口
     delete m_pMainWindow;
@@ -48,9 +50,6 @@ QtSceneGraph::~QtSceneGraph()
     }
 
     delete m_pThread;
-
-    delete m_pRoot;
-    delete m_pMap;
 
     delete m_pResourceLod;
 }

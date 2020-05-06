@@ -12,6 +12,14 @@ class IRender;
 class QtViewPointUpdateCallback;
 class CMyEarthManipulator;
 
+/// 设置视点状态
+enum ViewPointType
+{
+    View_2D,
+    View_3D,
+    View_Node
+};
+
 class QtViewPoint :public IViewPort,public IMapMessageObserver
 {
 public:
@@ -82,6 +90,7 @@ protected:
     osg::ref_ptr<osgGA::CameraManipulator>         m_pSelfManipulator;  /// 没有地图的操作器
     osg::ref_ptr<osgGA::NodeTrackerManipulator>    m_pTrackManipulator; /// 跟踪操作器
     bool                                           m_bIsMap=false;      /// 是否是地图
+    ViewPointType                                  m_emType;
 
     IRender*       m_pRender;
     ISceneNode*    m_pTrackNode=nullptr;

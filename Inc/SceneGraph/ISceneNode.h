@@ -38,7 +38,7 @@ union ScenePos
         }
         else
         {
-            return(true);
+            return(false);
         }
     }
 

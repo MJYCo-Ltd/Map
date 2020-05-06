@@ -11,15 +11,11 @@ using namespace std;
 class IPersonInfo:public IMapSceneNode
 {
 public:
-
-    virtual void Add()=0;
-    virtual void Del()=0;
-
-//    /**
-//     * @brief 设置名字
-//     */
-//    virtual void SetName(const string& )=0;
-//    virtual const string& GetName()=0;
+    /**
+     * @brief 设置名字
+     */
+    virtual void SetName(const string& )=0;
+    virtual const string& GetName()=0;
 
 };
 
