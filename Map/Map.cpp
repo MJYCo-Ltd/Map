@@ -24,7 +24,21 @@ CMap::CMap(MapType type, ISceneGraph *pSceneGraph):
 
 CMap::~CMap()
 {
-    delete m_pPlotManager;
+	delete m_pPlotManager;
+
+	m_pCamera = nullptr;
+	m_p2DRoot = nullptr;
+	if (m_pMap3DNode.valid())
+	{
+		m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pMap3DNode));
+		m_pMap3DNode = nullptr;
+	}
+
+	if (m_pMap2DNode.valid())
+	{
+		m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pMap2DNode));
+		m_pMap2DNode = nullptr;
+	}
 }
 
 void CMap::SubMessage(IMapMessageObserver *pMsgObr)
@@ -58,7 +72,7 @@ const MapLayers &CMap::GetMapLayers()
 }
 
 /// 控制图层显隐
-void CMap::SetLayerVisible(const string &sLayerName)
+void CMap::SetLayerVisible(const string & sLayerName)
 {
 }
 

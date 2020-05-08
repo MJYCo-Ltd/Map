@@ -55,6 +55,9 @@ void MainWindow::on_actionchange_triggered()
 
 void MainWindow::on_action_triggered()
 {
+	auto pLayer = m_pSceneGraph->GetMap()->GetPlotManager()->FindOrCreateLayer("test");
+	m_pPersonInfo = dynamic_cast<IPersonInfo*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode(1));
+	pLayer->AddSceneNode(m_pPersonInfo);
     //m_pPersonInfo->Add();
 //    auto pLayer = m_pSceneGraph->GetMap()->GetPlotManager()->FindOrCreateLayer("test");
 
@@ -69,8 +72,8 @@ void MainWindow::on_action_triggered()
 void MainWindow::on_action_2_triggered()
 {
     //m_pPersonInfo->Del();
-//    auto pLayer = m_pSceneGraph->GetMap()->GetPlotManager()->FindOrCreateLayer("test");
-//    pLayer->Clear();
+    auto pLayer = m_pSceneGraph->GetMap()->GetPlotManager()->FindOrCreateLayer("test");
+    pLayer->Clear();
 //    for(auto one : m_listNode)
 //    {
 //        m_pSceneGraph->GetMap()->GetPlotManager()->DeleteMapSceneNode(one);

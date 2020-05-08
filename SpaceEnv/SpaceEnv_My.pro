@@ -22,21 +22,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-SDK_CONFIG *= OSG Satellite OsgExtern
+SDK_CONFIG *= OSG Satellite OsgExtern SceneCore
 
 include(../SoftSDK_My.pri)
 
 INCLUDEPATH *= $$PWD/../Inc
 
-DESTDIR = $$PWD/../Bin/new
+DESTDIR = $$PWD/../../Bin
 DLLDESTDIR = F:\TestGL3\bin
 
 LIBS *= -L$$DESTDIR
-CONFIG (debug, debug|release){
-    LIBS *= -lSceneCored
-}else{
-    LIBS *= -lSceneCore
-}
 
 unix {
     target.path = /usr/lib

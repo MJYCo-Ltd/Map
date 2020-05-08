@@ -27,6 +27,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PersonInfo", "PlotManager\P
 		{B3DF0103-E2D3-382A-A3EE-89A26C51278A} = {B3DF0103-E2D3-382A-A3EE-89A26C51278A}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LoadMap", "LoadMap\LoadMap.vcxproj", "{E035D417-12CC-3563-B1D2-362B35919BE9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B3DF0103-E2D3-382A-A3EE-89A26C51278A} = {B3DF0103-E2D3-382A-A3EE-89A26C51278A}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LoadQmlMap", "LoadQmlMap\LoadQmlMap.vcxproj", "{8F5B7CBE-FD50-3D5B-8849-7D60326DA081}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -53,11 +60,19 @@ Global
 		{1896CD4C-22B1-3DD1-AEC9-4AF38E61B78B}.Debug|x64.Build.0 = Debug|x64
 		{1896CD4C-22B1-3DD1-AEC9-4AF38E61B78B}.Release|x64.ActiveCfg = Release|x64
 		{1896CD4C-22B1-3DD1-AEC9-4AF38E61B78B}.Release|x64.Build.0 = Release|x64
+		{E035D417-12CC-3563-B1D2-362B35919BE9}.Debug|x64.ActiveCfg = Debug|x64
+		{E035D417-12CC-3563-B1D2-362B35919BE9}.Debug|x64.Build.0 = Debug|x64
+		{E035D417-12CC-3563-B1D2-362B35919BE9}.Release|x64.ActiveCfg = Release|x64
+		{E035D417-12CC-3563-B1D2-362B35919BE9}.Release|x64.Build.0 = Release|x64
+		{8F5B7CBE-FD50-3D5B-8849-7D60326DA081}.Debug|x64.ActiveCfg = Debug|x64
+		{8F5B7CBE-FD50-3D5B-8849-7D60326DA081}.Debug|x64.Build.0 = Debug|x64
+		{8F5B7CBE-FD50-3D5B-8849-7D60326DA081}.Release|x64.ActiveCfg = Release|x64
+		{8F5B7CBE-FD50-3D5B-8849-7D60326DA081}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Qt5Version = 5.9.1
+		Qt5Version = Qt5.14.1
 	EndGlobalSection
 EndGlobal

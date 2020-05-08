@@ -17,7 +17,7 @@ QtSceneNode<T>::QtSceneNode(ISceneGraph *pSceneGraph)
 template <typename T>
 QtSceneNode<T>::~QtSceneNode()
 {
-    static int nSize=0;
+	m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pOsgNode));
     m_pOsgNode = nullptr;
 }
 
@@ -88,13 +88,6 @@ template<typename T>
 osg::Node* QtSceneNode<T>::GetOsgNode()
 {
     return(m_pOsgNode.get());
-}
-
-
-template<typename T>
-void QtSceneNode<T>::Clear()
-{
-    m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pOsgNode));
 }
 
 template<typename T>

@@ -67,7 +67,7 @@ HEADERS += \
     Window/Widget/QtOsgWindow.h \
     Message/MessageManager.h
 
-DESTDIR = $$PWD/../Bin/new
+DESTDIR = $$PWD/../../Bin
 DLLDESTDIR = F:\TestGL3\bin
 
 LIBS *= -L$$DESTDIR

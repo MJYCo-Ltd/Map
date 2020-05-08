@@ -58,7 +58,6 @@ bool CMapNodeFactory::DeleteMapSceneNode(IMapSceneNode *pMapSceneNode)
     auto findResult = find(m_allCreateNode.begin(),m_allCreateNode.end(),pMapSceneNode);
     if(m_allCreateNode.end() != findResult)
     {
-        pMapSceneNode->Clear();
         m_allCreateNode.erase(findResult);
         delete pMapSceneNode;
         return(true);

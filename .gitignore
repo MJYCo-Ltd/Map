@@ -51,3 +51,16 @@ compile_commands.json
 # QtCreator local machine specific files for imported projects
 *creator.user*
 /.vs
+*.pdb
+*.log
+*.tlog
+*.exp
+*.ilk
+*.lib
+*.db
+*.obj
+*.opendb
+*.props
+*.cbt
+/PlotManager/PlotManager.sln
+*.user

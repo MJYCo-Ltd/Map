@@ -50,11 +50,6 @@ public:
     osg::Node* GetOsgNode();
 
     /**
-     * @brief 清空
-     */
-    void Clear();
-
-    /**
      * @brief 设置节点是否可见
      * @param bVisible
      */

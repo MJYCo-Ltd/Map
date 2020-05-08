@@ -28,7 +28,7 @@ include(../SoftSDK_My.pri)
 
 INCLUDEPATH *= $$PWD/../Inc
 
-DESTDIR = $$PWD/../Bin/new
+DESTDIR = $$PWD/../../Bin
 DLLDESTDIR = F:\TestGL3\bin
 unix {
     target.path = /usr/lib

@@ -25,8 +25,6 @@ QtSceneGraph::QtSceneGraph(SceneGraphType type):
 /// 析构函数
 QtSceneGraph::~QtSceneGraph()
 {
-    m_pMap->Clear();
-    m_pRoot->Clear();
     delete m_pRoot;
     delete m_pMap;
 

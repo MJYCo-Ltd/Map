@@ -25,7 +25,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 INCLUDEPATH *= $$PWD/../Inc
-DESTDIR = $$PWD/../Bin
+DESTDIR = $$PWD/../../Bin
 
 SOURCES += \
         main.cpp \

@@ -24,11 +24,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SDK_CONFIG *= OSG OsgExtern SceneCore
 
-include(../../SoftSDK_My.pri)
+include($$PWD/../../SoftSDK_My.pri)
 
 INCLUDEPATH *= $$PWD/../../Inc
 
-DESTDIR = $$PWD/../../Bin/new
+DESTDIR = $$PWD/../../../Bin
 DLLDESTDIR = F:\TestGL3\bin
 
 LIBS *= -L$$DESTDIR

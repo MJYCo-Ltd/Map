@@ -107,11 +107,6 @@ public:
     virtual osg::Node* GetOsgNode()=0;
 
     /**
-     * @brief 释放
-     */
-    virtual void Clear()=0;
-
-    /**
      * @brief 获取绑定的场景
      * @return
      */

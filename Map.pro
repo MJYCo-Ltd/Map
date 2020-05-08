@@ -5,7 +5,9 @@ SUBDIRS =\
     SceneCore\
     Map\
     SpaceEnv\
-    PlotManager
+    PlotManager\
+	LoadMap\
+	LoadQmlMap
 
 OsgExtern.file = ./OsgExtern/OsgExtern_My.pro
 SceneCore.file = ./SceneCore/SceneCore_My.pro
