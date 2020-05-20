@@ -11,6 +11,7 @@
 #          This will only copy exe or dll to DLLDESTDIR
 
 SDKPath = F:\TestGL3
+MathPath=$${PWD}/../VersionMath
 
 # 开启utf-8 编码方式支持
 win32-msvc:QMAKE_CXXFLAGS += -utf-8
@@ -24,6 +25,7 @@ LIBPDIR = $${SDKPath}\lib
 
 # Set the path for find libs
 LIBS *= -L$${LIBPDIR}
+LIBS *= -L$${MathPath}/lib
 
 contains(SDK_CONFIG,OSG){
 
@@ -45,6 +47,7 @@ contains(SDK_CONFIG,OSG){
 }
 
 contains(SDK_CONFIG,Satellite){
+    INCLUDEPATH *= $${MathPath}/Inc
     CONFIG (debug, debug|release){
         LIBS *= -lSatellited -lMathd
     }else{

@@ -27,6 +27,9 @@ public:
      */
     void InitSceneNode();
 
+    /**
+     * @brief 位置更新消息
+     */
     void PosChanged();
 
     /**

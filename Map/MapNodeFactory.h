@@ -34,11 +34,17 @@ protected:
      * @brief 初始化工厂
      */
     void InitFactory();
+
+	/**
+	 * @brief 初始化类型
+	 */
+	void InitType(unsigned int unType);
 private:
     ISceneGraph* m_pSceneGraph;
 
     typedef IMapSceneNode* (*pCreateNodeFun)(ISceneGraph*);
     map<unsigned int,pCreateNodeFun> m_mapTypeFunc;
+	map<unsigned int, string>        m_mapTypeDllName; /// 类型和dll的
     list<IMapSceneNode*> m_allCreateNode;
 };
 

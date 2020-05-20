@@ -28,14 +28,14 @@ public:
         return traverse(object, data);
     }
 
-    /// ¸üĞÂÎ»ÖÃ
+    /// æ›´æ–°ä½ç½®
     void SetPotsion(const ScenePos & rScenPos)
     {
         m_stPos = rScenPos;
         m_bUpdatePos = true;
     }
 
-    /// ¸üĞÂÃû×Ö
+    /// æ›´æ–°åå­—
     void UpdateName(const string& sName)
     {
         m_sName = sName;
@@ -46,7 +46,7 @@ protected:
 private:
     ScenePos m_stPos;
     string   m_sName;
-    bool     m_bUpdatePos = false;
+    bool     m_bUpdatePos  = false;
     bool     m_bUpdateName = false;
     osg::observer_ptr<osgEarth::PlaceNode> m_pPlaceNode;
 };
@@ -69,7 +69,7 @@ void CPersonInfo::UpdateMapNode(osgEarth::MapNode *pMapNode)
     }
 }
 
-
+/// åˆå§‹åŒ–èŠ‚ç‚¹
 void CPersonInfo::InitSceneNode()
 {
     QtSceneNode<IPersonInfo>::InitSceneNode();
@@ -92,7 +92,7 @@ void CPersonInfo::InitSceneNode()
     auto pImage = m_pSceneGraph->ResouceLoader()->LoadImage(sImagePath,32,32);
 
 
-    m_pPerson = new osgEarth::PlaceNode(osgEarth::GeoPoint(osgEarth::SpatialReference::get("wgs84"),120,24,0),
+    m_pPerson = new osgEarth::PlaceNode(osgEarth::GeoPoint(osgEarth::SpatialReference::get("wgs84"),0,0,0),
                                         "test",m_placeStyle,pImage);
     m_pPerson->setDynamic(true);
     m_pCallBack = new PersonInfoCallBack(m_pPerson);
@@ -101,12 +101,13 @@ void CPersonInfo::InitSceneNode()
 
 }
 
+/// ä½ç½®æ›´æ–°æ¶ˆæ¯
 void CPersonInfo::PosChanged()
 {
     m_pCallBack->SetPotsion(m_unScenePos);
 }
 
-/// ÉèÖÃÃû×Ö
+/// è®¾ç½®åå­—
 void CPersonInfo::SetName(const string &strName)
 {
     if(m_sName != strName)
