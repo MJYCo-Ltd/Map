@@ -13,7 +13,7 @@
 CMapNodeFactory::CMapNodeFactory(ISceneGraph *pSceneGraph):
     m_pSceneGraph(pSceneGraph)
 {
-    InitFactory();
+	InitFactory();
 }
 
 /// 析构模型工厂
@@ -35,6 +35,13 @@ CMapNodeFactory::~CMapNodeFactory()
 IMapSceneNode *CMapNodeFactory::CreateMapSceneNode(unsigned int unType)
 {
     auto findOne = m_mapTypeFunc.find(unType);
+
+	if (m_mapTypeFunc.end() == findOne)
+	{
+		InitType(unType);
+	}
+
+	findOne = m_mapTypeFunc.find(unType);
     if(m_mapTypeFunc.end() != findOne)
     {
         IMapSceneNode* pNode = findOne->second(m_pSceneGraph);
@@ -77,18 +84,28 @@ void CMapNodeFactory::InitFactory()
     ifstream in(sFilePath, ios::in);
     unsigned int uType;
     string sDllName;
-    QLibrary loadDll;
     if(in.is_open())
     {
         while(!in.eof())
         {
             in>>uType>>sDllName;
-            loadDll.setFileName(sDllName.c_str());
-            auto pFunc = reinterpret_cast<pCreateNodeFun>(loadDll.resolve("CreateNode"));
-            if(nullptr != pFunc)
-            {
-                m_mapTypeFunc[uType] = pFunc;
-            }
+			m_mapTypeDllName[uType] = sDllName;
         }
     }
+}
+
+/// 初始化类型
+void CMapNodeFactory::InitType(unsigned int unType)
+{
+	QLibrary loadDll;
+	auto findOne = m_mapTypeDllName.find(unType);
+	if (m_mapTypeDllName.end() != findOne)
+	{
+		loadDll.setFileName(findOne->second.c_str());
+		auto pFunc = reinterpret_cast<pCreateNodeFun>(loadDll.resolve("CreateNode"));
+		if (nullptr != pFunc)
+		{
+			m_mapTypeFunc[unType] = pFunc;
+		}
+	}
 }
