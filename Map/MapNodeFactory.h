@@ -17,10 +17,10 @@ public:
 
     /**
      * @brief 根据类型创建节点
-     * @param unType
+     * @param 接口名称
      * @return
      */
-    IMapSceneNode* CreateMapSceneNode(unsigned int unType);
+    IMapSceneNode* CreateMapSceneNode(const string &sInterface);
 
     /**
      * @brief 删除节点
@@ -38,13 +38,16 @@ protected:
 	/**
 	 * @brief 初始化类型
 	 */
-	void InitType(unsigned int unType);
+    void InitType(const string& sInterface);
 private:
     ISceneGraph* m_pSceneGraph;
 
-    typedef IMapSceneNode* (*pCreateNodeFun)(ISceneGraph*);
-    map<unsigned int,pCreateNodeFun> m_mapTypeFunc;
-	map<unsigned int, string>        m_mapTypeDllName; /// 类型和dll的
+    typedef IMapSceneNode* (*pCreateNodeFun)(ISceneGraph*,const string&);
+    typedef bool(*pQueryInterfaceFun)(string&);
+
+    map<string,pCreateNodeFun> m_mapTypeFunc;
+
+    map<string, string>        m_mapTypeDllName; /// 类型和dll的
     list<IMapSceneNode*> m_allCreateNode;
 };
 

@@ -6,10 +6,10 @@
 
 QT       -= gui
 
-TARGET = GeoShape
+TARGET = MapShape
 TEMPLATE = lib
 
-DEFINES += PERSONINFO_LIBRARY
+DEFINES += MAPSHAPE_LIBRARY
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -37,3 +37,9 @@ unix {
     target.path = /usr/lib
     INSTALLS += target
 }
+
+HEADERS += \
+    MapShape.h
+
+SOURCES += \
+    MapShape.cpp

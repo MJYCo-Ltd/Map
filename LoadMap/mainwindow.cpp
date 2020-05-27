@@ -55,37 +55,22 @@ void MainWindow::on_actionchange_triggered()
 
 void MainWindow::on_action_triggered()
 {
-	auto pLayer = m_pSceneGraph->GetMap()->GetPlotManager()->FindOrCreateLayer("test");
-	m_pPersonInfo = dynamic_cast<IPersonInfo*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode(1));
-	pLayer->AddSceneNode(m_pPersonInfo);
-    //m_pPersonInfo->Add();
-//    auto pLayer = m_pSceneGraph->GetMap()->GetPlotManager()->FindOrCreateLayer("test");
-
-//    for(int i=0; i<1000;++i)
-//    {
-//        auto pNode = m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode(1);
-//        pLayer->AddSceneNode(pNode);
-//        m_listNode.push_back(pNode);
-//    }
+    auto pLayer = m_pSceneGraph->GetMap()->GetPlotManager()->FindOrCreateLayer("test");
+    m_pPersonInfo = dynamic_cast<IPersonInfo*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IPersonInfo"));
+    pLayer->AddSceneNode(m_pPersonInfo);
 }
 
 void MainWindow::on_action_2_triggered()
 {
-    //m_pPersonInfo->Del();
     auto pLayer = m_pSceneGraph->GetMap()->GetPlotManager()->FindOrCreateLayer("test");
     pLayer->Clear();
-//    for(auto one : m_listNode)
-//    {
-//        m_pSceneGraph->GetMap()->GetPlotManager()->DeleteMapSceneNode(one);
-//    }
-//    m_listNode.clear();
 }
 
 void MainWindow::on_action_3_triggered()
 {
     nTimerID = startTimer(1000);
     auto pLayer = m_pSceneGraph->GetMap()->GetPlotManager()->FindOrCreateLayer("test");
-    m_pPersonInfo = dynamic_cast<IPersonInfo*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode(1));
+    m_pPersonInfo = dynamic_cast<IPersonInfo*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IPersonInfo"));
     pLayer->AddSceneNode(m_pPersonInfo);
 }
 

@@ -151,9 +151,10 @@ void CPlotManager::UpdateMapNode(osgEarth::MapNode *pOldMapNode,osgEarth::MapNod
                 new ChangeMapNode(pOldMapNode,pNewMapNode,m_pModelLayer,m_pModelNode.get(), this));
 }
 
-IMapSceneNode *CPlotManager::CreateMapSceneNode(unsigned int uType)
+/// 根据接口类型创建地图节点
+IMapSceneNode *CPlotManager::CreateMapSceneNode(const string& csInterfaceName)
 {
-    return (m_pCreateFactory->CreateMapSceneNode(uType));
+    return(m_pCreateFactory->CreateMapSceneNode(csInterfaceName));
 }
 
 bool CPlotManager::DeleteMapSceneNode(IMapSceneNode *pMapSceneNode)

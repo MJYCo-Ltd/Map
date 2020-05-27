@@ -51,11 +51,11 @@ public:
     void UpdateMapNode(osgEarth::MapNode* pOldMapNode, osgEarth::MapNode *pNewMapNode);
 
     /**
-     * @brief 创建地图节点
-     * @param uType
+     * @brief 根据接口类型创建节点
+     * @param csInterfaceName
      * @return
      */
-    IMapSceneNode* CreateMapSceneNode(unsigned int uType);
+    IMapSceneNode * CreateMapSceneNode(const string& csInterfaceName);
 
     /**
      * @brief 删除地图节点

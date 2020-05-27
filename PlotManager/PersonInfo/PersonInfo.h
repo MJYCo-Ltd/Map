@@ -38,16 +38,24 @@ public:
      */
     void SetName(const string& strName);
     const string& GetName();
+
+    /**
+     * @brief 获取接口名称
+     * @return
+     */
+    static const string& GetInterFaceName(){return(S_sInterFace);}
 private:
     osg::ref_ptr<osgEarth::PlaceNode> m_pPerson;
     osg::ref_ptr<PersonInfoCallBack>   m_pCallBack;  ///
-    osgEarth::Symbology::Style        m_placeStyle; /// 位置样式
-    string                            m_sName;      ///  名字
+    osgEarth::Symbology::Style        m_placeStyle;  /// 位置样式
+    string                            m_sName;       ///  名字
+    static string                     S_sInterFace;  /// 接口名字
 };
 
 extern "C"
 {
-    PERSONINFOSHARED_EXPORT IPersonInfo* CreateNode(ISceneGraph*pSceneGraph);
+    PERSONINFOSHARED_EXPORT IPersonInfo* CreateNode(ISceneGraph*pSceneGraph,const string& sInterfaceName);
+    PERSONINFOSHARED_EXPORT bool QueryInterface(string& sInterfaceName);
 }
 
 #endif // CPERSONINFO_H
