@@ -49,10 +49,10 @@ public:
     virtual void Clear()=0;
 
     /**
-     * @brief 创建一个地图节点
+     * @brief 根据字符串创建一个地图节点
      * @return
      */
-    virtual IMapSceneNode* CreateMapSceneNode(unsigned int)=0;
+    virtual IMapSceneNode* CreateMapSceneNode(const string&)=0;
 
     /**
      * @brief 删除地图节点

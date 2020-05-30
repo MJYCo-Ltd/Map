@@ -3,6 +3,8 @@
 #include <Inner/OsgExtern/OsgExtern.h>
 #include "PersonInfo.h"
 
+string CPersonInfo::S_sInterFace("IPersonInfo");
+
 class PersonInfoCallBack:public osg::Callback
 {
 public:
@@ -122,7 +124,22 @@ const string &CPersonInfo::GetName()
     return(m_sName);
 }
 
-IPersonInfo* CreateNode(ISceneGraph* pSceneGraph)
+/// 创建地图节点
+IPersonInfo* CreateNode(ISceneGraph* pSceneGraph, const string &sInterfaceName)
 {
-    return(new CPersonInfo(pSceneGraph));
+    if(sInterfaceName == CPersonInfo::GetInterFaceName())
+    {
+        return(new CPersonInfo(pSceneGraph));
+    }
+    else
+    {
+        return(nullptr);
+    }
+}
+
+/// 查询接口
+bool QueryInterface(string& sInterfaceName)
+{
+    sInterfaceName = CPersonInfo::GetInterFaceName();
+    return(false);
 }
