@@ -4,12 +4,12 @@
 #include <osg/Camera>
 #include <osgEarth/MapNode>
 #include <Map/IMap.h>
-#include <Inner/QtSceneNode.h>
+#include <Inner/QtOsgSceneNode.h>
 #include "Map_Global.h"
 
 class CPlotManager;
 
-class CMap:public QtSceneNode<IMap>
+class CMap:public QtOsgSceneNode<IMap>
 {
 public:
     CMap(MapType type,ISceneGraph* pSceneGraph);

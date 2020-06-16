@@ -2,7 +2,8 @@
 #include <osg/OperationThread>
 #include <osgViewer/ViewerEventHandlers>
 
-#include <Inner/QtSceneNode.h>
+#include <Inner/IOsgSceneNode.h>
+#include <Inner/QtOsgSceneNode.h>
 
 #include "MyEarthManipulator.h"
 #include "QtViewPoint.h"
@@ -151,43 +152,43 @@ void QtViewPoint::MapTypeChanged(MapType emType)
 /// 设置跟踪视点
 void QtViewPoint::SetTrackNode(ISceneNode *pTrackNode)
 {
-    if(!m_pTrackManipulator.valid())
+    IOsgSceneNode* pOsgNode = dynamic_cast<IOsgSceneNode*>(pTrackNode);
+    if(pOsgNode)
     {
-        m_pTrackManipulator = new osgGA::NodeTrackerManipulator;
-
-        if(nullptr != pTrackNode)
+        if(!m_pTrackManipulator.valid())
         {
-            m_pTrackNode = pTrackNode;
+            m_pTrackManipulator = new osgGA::NodeTrackerManipulator;
 
-            m_pTrackManipulator->setTrackNode(m_pTrackNode->GetOsgNode());
+            m_pTrackNode = pOsgNode;
+            m_pTrackManipulator->setTrackNode(pOsgNode->GetOsgNode());
             m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_pTrackManipulator));
+        }
+        else
+        {
+            if(pOsgNode != m_pTrackNode)
+            {
+                m_emType = View_Node;
+                m_pTrackNode = pOsgNode;
+                m_pTrackManipulator->setTrackNode(pOsgNode->GetOsgNode());
+            }
         }
     }
     else
     {
-        if(nullptr != pTrackNode && pTrackNode != m_pTrackNode)
+        if(m_bIsMap)
         {
-            m_emType = View_Node;
-            m_pTrackNode = pTrackNode;
-            m_pTrackManipulator->setTrackNode(m_pTrackNode->GetOsgNode());
+            m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_p2DEarthManipulator));
         }
-        else if(nullptr == pTrackNode)
+        else
         {
-            if(m_bIsMap)
-            {
-                m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_p2DEarthManipulator));
-            }
-            else
-            {
-                m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_pSelfManipulator));
-            }
+            m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_pSelfManipulator));
         }
     }
 }
 
 ISceneNode *QtViewPoint::GetTrackNode()
 {
-    return(m_pTrackNode);
+    return(dynamic_cast<ISceneNode*>(m_pTrackNode));
 }
 
 /// 设置视点

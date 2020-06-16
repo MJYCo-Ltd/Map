@@ -2,6 +2,7 @@
 #include <SceneGraph/ISceneGraph.h>
 #include <Inner/IRender.h>
 #include <Inner/OsgExtern/OsgExtern.h>
+#include <Inner/IOsgSceneNode.h>
 
 #include "PlotLayer.h"
 
@@ -16,7 +17,7 @@ public:
     void operator () (osg::Object*)
     {
         m_pMapSceneNode->UpdateMapNode(m_pLayer->m_pMapNode.get());
-        m_pLayer->m_pGroup->addChild(m_pMapSceneNode->GetOsgNode());
+        m_pLayer->m_pGroup->addChild(dynamic_cast<IOsgSceneNode*>(m_pMapSceneNode)->GetOsgNode());
     }
 private:
     CPlotLayer* m_pLayer;
@@ -68,7 +69,8 @@ void CPlotLayer::RemoveSceneNode(IMapSceneNode *pSceneNode)
         if(pSceneNode == find->second)
         {
             /// 从场景中移除
-            m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pSceneGraph->GetRoot()->GetOsgNode()->asGroup(),pSceneNode->GetOsgNode(),false));
+            m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(dynamic_cast<IOsgSceneNode*>(m_pSceneGraph->GetRoot())->GetOsgNode(),
+                                                                                  dynamic_cast<IOsgSceneNode*>(pSceneNode)->GetOsgNode(),false));
             m_mapID2Node.erase(find);
             return;
         }
@@ -81,7 +83,7 @@ void CPlotLayer::Clear()
         m_mapID2Node.end() != find;)
     {
         /// 从场景中移除
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pGroup,find->second->GetOsgNode(),false));
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pGroup,dynamic_cast<IOsgSceneNode*>(find->second)->GetOsgNode(),false));
         find = m_mapID2Node.erase(find);
     }
 }

@@ -4,6 +4,8 @@
 #include <QLibrary>
 #include <osgDB/ReadFile>
 
+#include <Inner/IOsgSceneNode.h>
+
 #include "QtRender.h"
 #include "QtViewPoint.h"
 #include "QtSceneGraph.h"
@@ -152,7 +154,7 @@ IMap *QtSceneGraph::GetMap()
 
 ISceneNode *QtSceneGraph::GetRoot()
 {
-    return(m_pRoot);
+    return(dynamic_cast<ISceneNode*>(m_pRoot));
 }
 
 /// 加载节点
@@ -161,7 +163,7 @@ ISceneNode *QtSceneGraph::LoadNode(const string &strPath)
     auto node = m_pResourceLod->LoadNode(strPath,false);
     if(nullptr != node)
     {
-        auto result = new QtSceneNode<ISceneNode>(this);
+        auto result = new QtOsgSceneNode<ISceneNode>(this);
         result->InitSceneNode();
         result->GetOsgNode()->asGroup()->addChild(node);
         return(result);
@@ -197,7 +199,7 @@ QThread* QtSceneGraph::GetRenderThread()
 void QtSceneGraph::InitSceneGraph()
 {
     m_pResourceLod = new CResourceLod;
-    m_pRoot = new QtSceneNode<ISceneNode>(this);
+    m_pRoot = new QtOsgSceneNode<ISceneNode>(this);
     /// 初始化主视图
     m_pMainWindow = new QtWindow(m_pRender,m_pThread,true);
     auto pViewPoint = static_cast<QtViewPoint*>(m_pMainWindow->GetMainViewPoint());
@@ -248,8 +250,8 @@ void QtSceneGraph::LoadMap(QtViewPoint* pViewPoint)
                 break;
             }
 
-            m_pMap->InitSceneNode();
-            m_pRoot->AddSceneNode(m_pMap);
+            dynamic_cast<IOsgSceneNode*>(m_pMap)->InitSceneNode();
+            dynamic_cast<ISceneNode*>(m_pRoot)->AddSceneNode(m_pMap);
             m_pMap->SubMessage(pViewPoint);
         }
     }

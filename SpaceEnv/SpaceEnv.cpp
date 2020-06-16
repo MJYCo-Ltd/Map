@@ -34,7 +34,7 @@ private:
 
 
 CSpaceEnv::CSpaceEnv(ISceneGraph *pSceneGraph):
-    QtSceneNode<ISpaceEnv>(pSceneGraph)
+    QtOsgSceneNode<ISpaceEnv>(pSceneGraph)
 {
 }
 
@@ -89,7 +89,7 @@ void CSpaceEnv::UpdateDate(double dMJD)
 /// 初始化场景节点
 void CSpaceEnv::InitSceneNode()
 {
-    QtSceneNode<ISpaceEnv>::InitSceneNode();
+    QtOsgSceneNode<ISpaceEnv>::InitSceneNode();
     m_pRotateTransform = new osg::MatrixTransform;
     m_pOsgNode->addChild(m_pRotateTransform);
 

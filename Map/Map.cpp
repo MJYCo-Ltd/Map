@@ -14,10 +14,11 @@
 #include <SpaceEnv/ISpaceEnv.h>
 #include "PlotManager.h"
 #include "Inner/ILoadResource.h"
+#include <Inner/IOsgSceneNode.h>
 #include "Map.h"
 
 CMap::CMap(MapType type, ISceneGraph *pSceneGraph):
-    QtSceneNode<IMap>(pSceneGraph),
+    QtOsgSceneNode<IMap>(pSceneGraph),
     m_emType(type)
 {
 }
@@ -110,7 +111,7 @@ ISpaceEnv *CMap::GetSpaceEnv()
 /// 初始化场景
 void CMap::InitSceneNode()
 {
-    QtSceneNode<IMap>::InitSceneNode();
+    QtOsgSceneNode<IMap>::InitSceneNode();
     m_pPlotManager = new CPlotManager(m_pSceneGraph);
     InitMap();
 }
@@ -204,14 +205,14 @@ void CMap::LoadSpaceEnv()
             if(nullptr != pCreateSpaceEnv)
             {
                 m_pSpaceEnv = pCreateSpaceEnv(m_pSceneGraph);
-                m_pSpaceEnv->InitSceneNode();
+                dynamic_cast<IOsgSceneNode*>(m_pSpaceEnv)->InitSceneNode();
             }
         }
     }
 
     if(nullptr != m_pSpaceEnv && MAP_3D == m_emType)
     {
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode.get(),m_pSpaceEnv->GetOsgNode(),true));
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode.get(),dynamic_cast<IOsgSceneNode*>(m_pSpaceEnv)->GetOsgNode(),true));
     }
 }
 

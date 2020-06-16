@@ -54,7 +54,7 @@ private:
 };
 
 CPersonInfo::CPersonInfo(ISceneGraph*pSceneGraph):
-    QtSceneNode<IPersonInfo>(pSceneGraph)
+    QtOsgSceneNode<IPersonInfo>(pSceneGraph)
 {
 }
 
@@ -74,7 +74,7 @@ void CPersonInfo::UpdateMapNode(osgEarth::MapNode *pMapNode)
 /// 初始化节点
 void CPersonInfo::InitSceneNode()
 {
-    QtSceneNode<IPersonInfo>::InitSceneNode();
+    QtOsgSceneNode<IPersonInfo>::InitSceneNode();
 
 
     m_placeStyle.getOrCreateSymbol<osgEarth::TextSymbol>()->encoding() = osgEarth::Symbology::TextSymbol::ENCODING_UTF8;
