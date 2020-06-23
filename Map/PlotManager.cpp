@@ -102,6 +102,8 @@ bool CPlotManager::RemoveLayer(IPlotLayer *&pLayer)
     {
         if(pLayer == findLayer->second)
         {
+            m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
+                        new CModifyNode(m_pModelNode,static_cast<CPlotLayer*>(pLayer)->GetOsgNode(),false));
             m_mapLayer.erase(findLayer);
             delete pLayer;
             pLayer = nullptr;
@@ -121,6 +123,8 @@ bool CPlotManager::RemoveLayer(const string &sLayerName)
 
     if(m_mapLayer.end() != findLayer)
     {
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
+                    new CModifyNode(m_pModelNode,static_cast<CPlotLayer*>(findLayer->second)->GetOsgNode(),false));
         delete findLayer->second;
         m_mapLayer.erase(findLayer);
         return(true);

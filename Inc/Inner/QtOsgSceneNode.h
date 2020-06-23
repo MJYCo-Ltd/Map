@@ -1,20 +1,20 @@
-#ifndef QTSCENENODE_H
-#define QTSCENENODE_H
+#ifndef QT_OSG_SCENE_NODE_H
+#define QT_OSG_SCENE_NODE_H
 
 #include <set>
 #include <osg/Group>
-#include "SceneGraph/ISceneNode.h"
+#include "IOsgSceneNode.h"
 #include "SceneGraph/ISceneGraph.h"
 using namespace std;
 
 class QtSceneGraph;
 
 template <typename T>
-class QtSceneNode:public T
+class QtOsgSceneNode:public T,public IOsgSceneNode
 {
 public:
-    explicit QtSceneNode(ISceneGraph* pSceneGraph);
-    virtual ~QtSceneNode();
+    explicit QtOsgSceneNode(ISceneGraph* pSceneGraph);
+    virtual ~QtOsgSceneNode();
 
     /**
      * @brief 设置场景节点的位置
@@ -47,7 +47,7 @@ public:
      * @brief 获取osg的节点
      * @return
      */
-    osg::Node* GetOsgNode();
+    osg::Group* GetOsgNode();
 
     /**
      * @brief 设置节点是否可见
@@ -64,14 +64,12 @@ protected:
     virtual void PosChanged(){}
 
 protected:
-    set<ISceneNode*>                  m_setChildNode;/// 子节点
+    set<IOsgSceneNode*>               m_setChildNode;/// 子节点
     osg::ref_ptr<osg::Group>          m_pOsgNode;    /// 本节点
     ScenePos                          m_unScenePos;  /// 场景位置
     bool                              m_bVisible=true;/// 是否可见
 };
 
-//typedef QtSceneNode<ISceneNode> CSceneNode;
+#include "QtOsgSceneNode.cpp"
 
-#include "QtSceneNode.cpp"
-
-#endif // QTSCENENODE_H
+#endif // QT_OSG_SCENE_NODE_H

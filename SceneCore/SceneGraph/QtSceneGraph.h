@@ -2,9 +2,10 @@
 #define QTSCENEGRAPH_H
 #include <list>
 #include "SceneGraph/ISceneGraph.h"
-#include "Inner/QtSceneNode.h"
+#include "Inner/QtOsgSceneNode.h"
 using namespace std;
 
+class IOsgSceneNode;
 class QtWindow;
 class QThread;
 class QtRender;
@@ -115,7 +116,7 @@ protected:
     void LoadMap(QtViewPoint *pViewPoint);
 
 protected:
-    ISceneNode*       m_pRoot;
+    IOsgSceneNode*    m_pRoot;
     bool              m_bUnderQml;
     SceneGraphType    m_emType;
     QtWindow*         m_pMainWindow;

@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{8AC20D34-B8B4-342A-BF4A-433CF43ACC5D}</ProjectGuid>
-    <RootNamespace>SceneCore</RootNamespace>
+    <ProjectGuid>{8C3804FB-0283-332B-BE48-137C94A05660}</ProjectGuid>
+    <RootNamespace>MapShape</RootNamespace>
     <Keyword>QtVS_v302</Keyword>
     <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
@@ -20,21 +20,21 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <PlatformToolset>v142</PlatformToolset>
-    <OutputDirectory>..\..\Bin\</OutputDirectory>
+    <OutputDirectory>..\..\..\Bin\</OutputDirectory>
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
     <CharacterSet>NotSet</CharacterSet>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <IntermediateDirectory>release\</IntermediateDirectory>
-    <PrimaryOutput>SceneCore</PrimaryOutput>
+    <PrimaryOutput>MapShape</PrimaryOutput>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <PlatformToolset>v142</PlatformToolset>
-    <OutputDirectory>..\..\Bin\</OutputDirectory>
+    <OutputDirectory>..\..\..\Bin\</OutputDirectory>
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
     <CharacterSet>NotSet</CharacterSet>
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <IntermediateDirectory>debug\</IntermediateDirectory>
-    <PrimaryOutput>SceneCored</PrimaryOutput>
+    <PrimaryOutput>MapShaped</PrimaryOutput>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <PropertyGroup Condition="'$(QtMsBuild)'=='' or !Exists('$(QtMsBuild)\qt.targets')">
@@ -56,31 +56,31 @@
   </ImportGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <QtInstall>msvc2019</QtInstall>
-    <QtModules>core;network;gui;widgets;qml;quick</QtModules>
+    <QtModules>core</QtModules>
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <QtInstall>msvc2019</QtInstall>
-    <QtModules>core;network;gui;widgets;qml;quick</QtModules>
+    <QtModules>core</QtModules>
   </PropertyGroup>
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
     <Import Project="$(QtMsBuild)\qt.props" />
   </ImportGroup>
   <PropertyGroup>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\Bin\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\Bin\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Platform)\$(Configuration)\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">SceneCore</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MapShape</TargetName>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</IgnoreImportLibrary>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <PostBuildEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</PostBuildEventUseInBuild>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\Bin\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\Bin\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Platform)\$(Configuration)\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">SceneCored</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MapShaped</TargetName>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</IgnoreImportLibrary>
     <PostBuildEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</PostBuildEventUseInBuild>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;..\..\..\TestGL3\include;..\Inc;release;/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;..\..\..\..\TestGL3\include;..\..\Inc;release;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -utf-8 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>release\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -89,7 +89,7 @@
       <ExceptionHandling>Sync</ExceptionHandling>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <Optimization>MaxSpeed</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;SCENECORE_LIBRARY;QT_DEPRECATED_WARNINGS;NDEBUG;QT_NO_DEBUG;QT_QMLMODELS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;MAPSHAPE_LIBRARY;QT_DEPRECATED_WARNINGS;NDEBUG;QT_NO_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -99,7 +99,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>G:\Project\TestGL3\lib\OpenThreads.lib;G:\Project\TestGL3\lib\opencv_world430.lib;G:\Project\TestGL3\lib\osg.lib;G:\Project\TestGL3\lib\osgDB.lib;G:\Project\TestGL3\lib\osgGA.lib;G:\Project\TestGL3\lib\osgSim.lib;G:\Project\TestGL3\lib\osgViewer.lib;G:\Project\TestGL3\lib\osgUtil.lib;G:\Project\TestGL3\lib\osgText.lib;G:\Project\TestGL3\lib\osgManipulator.lib;G:\Project\TestGL3\lib\osgWidget.lib;G:\Project\TestGL3\lib\osgEarth.lib;OsgExtern.lib;$(QTDIR)\lib\Qt5QmlModels.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>G:\Project\TestGL3\lib\OpenThreads.lib;G:\Project\TestGL3\lib\opencv_world430.lib;G:\Project\TestGL3\lib\osg.lib;G:\Project\TestGL3\lib\osgDB.lib;G:\Project\TestGL3\lib\osgGA.lib;G:\Project\TestGL3\lib\osgSim.lib;G:\Project\TestGL3\lib\osgViewer.lib;G:\Project\TestGL3\lib\osgUtil.lib;G:\Project\TestGL3\lib\osgText.lib;G:\Project\TestGL3\lib\osgManipulator.lib;G:\Project\TestGL3\lib\osgWidget.lib;G:\Project\TestGL3\lib\osgEarth.lib;OsgExtern.lib;SceneCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>G:\Project\TestGL3\lib;G:\Project\Linux\VersionMath\lib;G:\Project\Linux\Bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -107,7 +107,7 @@
       <LinkDLL>true</LinkDLL>
       <LinkIncremental>false</LinkIncremental>
       <OptimizeReferences>true</OptimizeReferences>
-      <OutputFile>$(OutDir)\SceneCore.dll</OutputFile>
+      <OutputFile>$(OutDir)\MapShape.dll</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -118,24 +118,16 @@
       <WarningLevel>0</WarningLevel>
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;SCENECORE_LIBRARY;QT_DEPRECATED_WARNINGS;NDEBUG;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_QUICK_LIB;QT_GUI_LIB;QT_QMLMODELS_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;MAPSHAPE_LIBRARY;QT_DEPRECATED_WARNINGS;NDEBUG;QT_NO_DEBUG;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" ..\..\..\TestGL3\bin\</Command>
-      <Message>Copy SceneCore.dll to ..\..\..\TestGL3\bin\</Message>
+      <Command>copy "$(TargetPath)" ..\..\..\..\TestGL3\bin\</Command>
+      <Message>Copy MapShape.dll to ..\..\..\..\TestGL3\bin\</Message>
     </PostBuildEvent>
-    <QtMoc>
-      <CompilerFlavor>msvc</CompilerFlavor>
-      <Include>./$(Configuration)/moc_predefs.h</Include>
-      <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
-      <DynamicSource>output</DynamicSource>
-      <QtMocDir>$(Configuration)</QtMocDir>
-      <QtMocFileName>moc_%(Filename).cpp</QtMocFileName>
-    </QtMoc>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;..\..\..\TestGL3\include;..\Inc;debug;/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;.;..\..\..\..\TestGL3\include;..\..\Inc;debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -utf-8 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>debug\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -144,7 +136,7 @@
       <ExceptionHandling>Sync</ExceptionHandling>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;SCENECORE_LIBRARY;QT_DEPRECATED_WARNINGS;QT_QMLMODELS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;MAPSHAPE_LIBRARY;QT_DEPRECATED_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -154,13 +146,13 @@
       <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>G:\Project\TestGL3\lib\OpenThreadsd.lib;G:\Project\TestGL3\lib\opencv_world430d.lib;G:\Project\TestGL3\lib\osgd.lib;G:\Project\TestGL3\lib\osgDBd.lib;G:\Project\TestGL3\lib\osgGAd.lib;G:\Project\TestGL3\lib\osgSimd.lib;G:\Project\TestGL3\lib\osgViewerd.lib;G:\Project\TestGL3\lib\osgUtild.lib;G:\Project\TestGL3\lib\osgTextd.lib;G:\Project\TestGL3\lib\osgManipulatord.lib;G:\Project\TestGL3\lib\osgWidgetd.lib;G:\Project\TestGL3\lib\osgEarthd.lib;OsgExternd.lib;$(QTDIR)\lib\Qt5QmlModelsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>G:\Project\TestGL3\lib\OpenThreadsd.lib;G:\Project\TestGL3\lib\opencv_world430d.lib;G:\Project\TestGL3\lib\osgd.lib;G:\Project\TestGL3\lib\osgDBd.lib;G:\Project\TestGL3\lib\osgGAd.lib;G:\Project\TestGL3\lib\osgSimd.lib;G:\Project\TestGL3\lib\osgViewerd.lib;G:\Project\TestGL3\lib\osgUtild.lib;G:\Project\TestGL3\lib\osgTextd.lib;G:\Project\TestGL3\lib\osgManipulatord.lib;G:\Project\TestGL3\lib\osgWidgetd.lib;G:\Project\TestGL3\lib\osgEarthd.lib;OsgExternd.lib;SceneCored.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>G:\Project\TestGL3\lib;G:\Project\Linux\VersionMath\lib;G:\Project\Linux\Bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
       <LinkDLL>true</LinkDLL>
-      <OutputFile>$(OutDir)\SceneCored.dll</OutputFile>
+      <OutputFile>$(OutDir)\MapShaped.dll</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -171,64 +163,20 @@
       <WarningLevel>0</WarningLevel>
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;SCENECORE_LIBRARY;QT_DEPRECATED_WARNINGS;QT_WIDGETS_LIB;QT_QUICK_LIB;QT_GUI_LIB;QT_QMLMODELS_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;MAPSHAPE_LIBRARY;QT_DEPRECATED_WARNINGS;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" ..\..\..\TestGL3\bin\</Command>
-      <Message>Copy SceneCored.dll to ..\..\..\TestGL3\bin\</Message>
+      <Command>copy "$(TargetPath)" ..\..\..\..\TestGL3\bin\</Command>
+      <Message>Copy MapShaped.dll to ..\..\..\..\TestGL3\bin\</Message>
     </PostBuildEvent>
-    <QtMoc>
-      <CompilerFlavor>msvc</CompilerFlavor>
-      <Include>./$(Configuration)/moc_predefs.h</Include>
-      <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
-      <DynamicSource>output</DynamicSource>
-      <QtMocDir>$(Configuration)</QtMocDir>
-      <QtMocFileName>moc_%(Filename).cpp</QtMocFileName>
-    </QtMoc>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Message\MessageManager.cpp" />
-    <ClCompile Include="SceneGraph\MyEarthManipulator.cpp" />
-    <ClCompile Include="MyNotify.cpp" />
-    <ClCompile Include="Window\QtEventMap.cpp" />
-    <ClCompile Include="Window\QtFBOWindow.cpp" />
-    <ClCompile Include="Window\Qml\QtOsgItem.cpp" />
-    <ClCompile Include="Window\Qml\QtOsgMapItem.cpp" />
-    <ClCompile Include="Window\Qml\QtOsgUserItem.cpp" />
-    <ClCompile Include="Window\Widget\QtOsgWindow.cpp" />
-    <ClCompile Include="SceneGraph\QtRender.cpp" />
-    <ClCompile Include="SceneGraph\QtSceneGraph.cpp" />
-    <ClCompile Include="SceneGraph\QtViewPoint.cpp" />
-    <ClCompile Include="Window\QtWindow.cpp" />
-    <ClCompile Include="SceneGraph\ResourceLod.cpp" />
-    <ClCompile Include="Window\Qml\SGSimpleTextureNode.cpp" />
-    <ClCompile Include="SceneCore.cpp" />
-    <ClCompile Include="SceneGraph\SceneGraphManager.cpp" />
+    <ClCompile Include="MapShape.cpp" />
+    <ClCompile Include="QtMapSceneNode.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Message\MessageManager.h" />
-    <ClInclude Include="SceneGraph\MyEarthManipulator.h" />
-    <ClInclude Include="MyNotify.h" />
-    <ClInclude Include="Window\QtEventMap.h" />
-    <ClInclude Include="Window\QtFBOWindow.h" />
-    <QtMoc Include="..\Inc\Qml\QtOsgItem.h">
-    </QtMoc>
-    <QtMoc Include="..\Inc\Qml\QtOsgMapItem.h">
-    </QtMoc>
-    <QtMoc Include="..\Inc\Qml\QtOsgUserItem.h">
-    </QtMoc>
-    <QtMoc Include="Window\Widget\QtOsgWindow.h">
-    </QtMoc>
-    <QtMoc Include="SceneGraph\QtRender.h">
-    </QtMoc>
-    <ClInclude Include="SceneGraph\QtSceneGraph.h" />
-    <ClInclude Include="SceneGraph\QtViewPoint.h" />
-    <ClInclude Include="Window\QtWindow.h" />
-    <ClInclude Include="SceneGraph\ResourceLod.h" />
-    <QtMoc Include="Window\Qml\SGSimpleTextureNode.h">
-    </QtMoc>
-    <ClInclude Include="SceneCore.h" />
-    <ClInclude Include="SceneGraph\SceneGraphManager.h" />
+    <ClInclude Include="MapShape.h" />
+    <ClInclude Include="QtMapSceneNode.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">

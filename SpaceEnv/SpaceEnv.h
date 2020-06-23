@@ -2,13 +2,13 @@
 #define SPACEENV_H
 
 #include <SpaceEnv/ISpaceEnv.h>
-#include <Inner/QtSceneNode.h>
+#include <Inner/QtOsgSceneNode.h>
 #include "SpaceEnv_Global.h"
 
 class CSolarEnv;
 class CStarEnv;
 
-class CSpaceEnv:public QtSceneNode<ISpaceEnv>
+class CSpaceEnv:public QtOsgSceneNode<ISpaceEnv>
 {
     friend class CMatixUpdateCallback;
 

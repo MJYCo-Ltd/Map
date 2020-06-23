@@ -48,11 +48,6 @@ union ScenePos
     }
 };
 
-namespace osg
-{
-    class Node;
-}
-
 class ISceneGraph;
 /**
  * @brief 场景节点类
@@ -66,11 +61,6 @@ public:
      * @brief 设置场景节点的位置
      */
     virtual void SetPos(const ScenePos&)=0;
-
-    /**
-     * @brief 初始化
-     */
-    virtual void InitSceneNode()=0;
 
     /**
      * @brief 获取当前节点位置
@@ -100,11 +90,6 @@ public:
      */
     virtual bool IsVisible()=0;
 
-    /**
-     * @brief 获取显示节点
-     * @return
-     */
-    virtual osg::Node* GetOsgNode()=0;
 
     /**
      * @brief 获取绑定的场景

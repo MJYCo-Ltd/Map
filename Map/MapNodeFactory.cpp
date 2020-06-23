@@ -9,6 +9,7 @@
 #include <Map/IMapSceneNode.h>
 #include <Inner/OsgExtern/OsgExtern.h>
 #include <Inner/IRender.h>
+#include <Inner/IOsgSceneNode.h>
 #include "MapNodeFactory.h"
 
 CMapNodeFactory::CMapNodeFactory(ISceneGraph *pSceneGraph):
@@ -22,7 +23,7 @@ CMapNodeFactory::~CMapNodeFactory()
 {
     for(auto one : m_allCreateNode)
     {
-        auto pGroup = one->GetOsgNode()->asGroup();
+        auto pGroup = dynamic_cast<IOsgSceneNode*>(one)->GetOsgNode();
         if(nullptr != pGroup)
         {
             m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(pGroup));
@@ -48,7 +49,7 @@ IMapSceneNode *CMapNodeFactory::CreateMapSceneNode(const string& sInterface)
         IMapSceneNode* pNode = findOne->second(m_pSceneGraph,sInterface);
         if(nullptr != pNode)
         {
-            pNode->InitSceneNode();
+            dynamic_cast<IOsgSceneNode*>(pNode)->InitSceneNode();
             m_allCreateNode.push_back(pNode);
         }
 

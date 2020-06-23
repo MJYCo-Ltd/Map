@@ -9,6 +9,7 @@
 #include "Map/IMap.h"
 
 class IRender;
+class IOsgSceneNode;
 class QtViewPointUpdateCallback;
 class CMyEarthManipulator;
 
@@ -93,7 +94,7 @@ protected:
     ViewPointType                                  m_emType;
 
     IRender*       m_pRender;
-    ISceneNode*    m_pTrackNode=nullptr;
+    IOsgSceneNode* m_pTrackNode=nullptr;
     SceneViewPoint m_rViewPoint;
     CameraViewPort m_rViewPort;
     ProjectType    m_emProjectType;

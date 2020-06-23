@@ -29,7 +29,7 @@ include(../SoftSDK_My.pri)
 INCLUDEPATH *= $$PWD/../Inc
 
 DESTDIR = $$PWD/../../Bin
-DLLDESTDIR = F:\TestGL3\bin
+DLLDESTDIR = $$SDKPath\bin
 
 LIBS *= -L$$DESTDIR
 

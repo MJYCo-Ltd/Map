@@ -68,7 +68,7 @@ HEADERS += \
     Message/MessageManager.h
 
 DESTDIR = $$PWD/../../Bin
-DLLDESTDIR = F:\TestGL3\bin
+DLLDESTDIR = $$SDKPath\bin
 
 LIBS *= -L$$DESTDIR
 unix {

@@ -4,13 +4,13 @@
 #include <osgEarth/PlaceNode>
 
 #include <Map/Plot/IPersonInfo.h>
-#include <Inner/QtSceneNode.h>
+#include <Inner/QtOsgSceneNode.h>
 
 #include "PersonInfo_Global.h"
 
 class PersonInfoCallBack;
 
-class CPersonInfo:public QtSceneNode<IPersonInfo>
+class CPersonInfo:public QtOsgSceneNode<IPersonInfo>
 {
 public:
     CPersonInfo(ISceneGraph*pSceneGraph);

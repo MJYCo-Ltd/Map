@@ -64,4 +64,12 @@ compile_commands.json
 *.cbt
 /PlotManager/PlotManager.sln
 *.user
-/MapEngine.zip
+/LoadMap/x64/Debug
+/LoadQmlMap/x64/Debug
+/Map/x64/Debug
+/OsgExtern/x64/Debug
+/PlotManager/MapShape/x64/Debug
+*.filters
+/PlotManager/PersonInfo/x64/Debug
+/SceneCore/x64/Debug
+/SpaceEnv/x64/Debug
