@@ -1,30 +1,12 @@
 #include <osgDB/FileNameUtils>
 #include <osgDB/ReadFile>
 #include <osg/Group>
-#include <opencv2/imgcodecs.hpp>
-#include <opencv2/imgproc.hpp>
 #include "ResourceLod.h"
-
-#include <QDebug>
-class MyImage:public osg::Image
-{
-public:
-    MyImage(osg::Image * pImage):osg::Image(*pImage)
-    {
-    }
-    void allocateImage(int s,int t,int r,
-                               GLenum pixelFormat,GLenum type,
-                               int packing=1)
-    {
-        qDebug()<<"allocateImage ";
-        osg::Image::allocateImage(s,t,r,pixelFormat,type,packing);
-    }
-};
 
 /// 初始化路径
 void CResourceLod::InitPath(const std::string &csAppPath)
 {
-    m_sAppPath = csAppPath + '\\';
+    m_sAppPath = csAppPath;
 }
 
 /// 加载模型
@@ -124,7 +106,6 @@ osgText::Font *CResourceLod::LoadFont(const std::string &sFontPath, bool bIsRef)
     }
 }
 
-#include <QDebug>
 /// 读取图片
 osg::Image *CResourceLod::LoadImage(const std::string &sImagePath, int nWidth, int nHeight, bool bIsRef)
 {
@@ -160,18 +141,15 @@ osg::Image *CResourceLod::LoadImage(const std::string &sImagePath, int nWidth, i
     }
     else
     {
-        qDebug()<<"readImage "<<imagePath.c_str();
         osg::ref_ptr<osg::Image> pImage = osgDB::readImageFile(imagePath);
-        pImage->scaleImage(nWidth, nHeight, pImage->r());
 
-        auto pMyImage = new MyImage(pImage);
-
-        if(nullptr != pMyImage)
+        if(nullptr != pImage)
         {
-            m_mapImage[sForFind] = pMyImage;
+            pImage->scaleImage(nWidth, nHeight, pImage->r());
+            m_mapImage[sForFind] = pImage;
         }
 
-        return(pMyImage);
+        return(pImage);
     }
 }
 

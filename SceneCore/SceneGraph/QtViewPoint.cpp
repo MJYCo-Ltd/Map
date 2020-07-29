@@ -200,7 +200,7 @@ void QtViewPoint::SetViewPoint(const SceneViewPoint & rViewPoint)
         auto viewPoint = m_p3DEarthManipulator->getViewpoint();
         viewPoint.setFocalPoint(osgEarth::GeoPoint(osgEarth::SpatialReference::get("wgs84"),m_rViewPoint.stPos.fLon,
                                                    m_rViewPoint.stPos.fLat,0));
-        viewPoint.setRange(1000);
+        viewPoint.setRange(osgEarth::Distance(1000,osgEarth::Units::METERS));
         m_p3DEarthManipulator->setViewpoint(viewPoint,3);
     }
 }

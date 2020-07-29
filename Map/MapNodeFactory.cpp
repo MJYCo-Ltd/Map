@@ -79,9 +79,9 @@ void CMapNodeFactory::InitFactory()
 {
     string sFilePath = GetExePath();
 #ifdef _DEBUG
-    sFilePath += "\\NodeFactoryd.dll";
+    sFilePath += "NodeFactoryd.dll";
 #else
-    sFilePath += "\\NodeFactory.dll";
+    sFilePath += "NodeFactory.dll";
 #endif
     ifstream in(sFilePath, ios::in);
     string sInterfaceType;

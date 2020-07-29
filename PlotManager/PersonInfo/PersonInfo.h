@@ -4,13 +4,13 @@
 #include <osgEarth/PlaceNode>
 
 #include <Map/Plot/IPersonInfo.h>
-#include <Inner/QtOsgSceneNode.h>
+#include <Inner/QtOsgEarthMapSceneNode.h>
 
 #include "PersonInfo_Global.h"
 
 class PersonInfoCallBack;
 
-class CPersonInfo:public QtOsgSceneNode<IPersonInfo>
+class CPersonInfo:public QtOsgEarthMapSceneNode<IPersonInfo>
 {
 public:
     CPersonInfo(ISceneGraph*pSceneGraph);
@@ -46,8 +46,8 @@ public:
     static const string& GetInterFaceName(){return(S_sInterFace);}
 private:
     osg::ref_ptr<osgEarth::PlaceNode> m_pPerson;
-    osg::ref_ptr<PersonInfoCallBack>   m_pCallBack;  ///
-    osgEarth::Symbology::Style        m_placeStyle;  /// 位置样式
+    osg::ref_ptr<PersonInfoCallBack>  m_pCallBack;   ///
+    osgEarth::Style                   m_placeStyle;  /// 位置样式
     string                            m_sName;       ///  名字
     static string                     S_sInterFace;  /// 接口名字
 };

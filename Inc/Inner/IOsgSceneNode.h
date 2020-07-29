@@ -9,6 +9,7 @@ namespace osg
 class IOsgSceneNode
 {
 public:
+    virtual ~IOsgSceneNode(){}
     /**
      * @brief 获取显示节点
      * @return

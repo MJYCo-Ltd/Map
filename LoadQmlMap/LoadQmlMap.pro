@@ -25,7 +25,12 @@ TRANSLATIONS += \
     LoadQmlMap_zh_CN.ts
 
 LIBS *= -L$$DESTDIR
-LIBS *= -lSceneCored
+CONFIG (debug, debug|release){
+    LIBS *= -lSceneCored
+    TARGET = $$join(TARGET,,,d)
+}else{
+    LIBS *= -lSceneCore
+}
 
 win32-msvc*:QMAKE_CXXFLAGS += -utf-8
 win32-msvc*:QMAKE_CXXFLAGS += /wd"4100"

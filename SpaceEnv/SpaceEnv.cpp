@@ -97,10 +97,10 @@ void CSpaceEnv::InitSceneNode()
     m_pOsgNode->addUpdateCallback(m_pUpdateCallBack);
 
     m_pStarEnv = new CStarEnv(m_pSceneGraph);
-    m_pSolarEnv = new CSolarEnv(m_pSceneGraph);
+    //m_pSolarEnv = new CSolarEnv(m_pSceneGraph);
 
 	m_pRotateTransform->addChild(m_pStarEnv);
-	m_pRotateTransform->addChild(m_pSolarEnv);
+    //m_pRotateTransform->addChild(m_pSolarEnv);
 }
 
 void CSpaceEnv::UpdateMatrix()

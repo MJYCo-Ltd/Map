@@ -40,6 +40,7 @@ FORMS += \
 LIBS *= -L$$DESTDIR
 CONFIG (debug, debug|release){
     LIBS *= -lSceneCored
+    TARGET = $$join(TARGET,,,d)
 }else{
     LIBS *= -lSceneCore
 }

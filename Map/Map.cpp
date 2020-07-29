@@ -1,3 +1,4 @@
+#include <osgViewer/View>
 #include <osg/MatrixTransform>
 #include <osgEarth/Version>
 
@@ -15,6 +16,7 @@
 #include "PlotManager.h"
 #include "Inner/ILoadResource.h"
 #include <Inner/IOsgSceneNode.h>
+#include <Inner/IOsgViewPoint.h>
 #include "Map.h"
 
 CMap::CMap(MapType type, ISceneGraph *pSceneGraph):
@@ -157,7 +159,7 @@ void CMap::InitMap()
         break;
     case MAP_3D:
     {
-        if(!m_pCamera.valid())
+        if(!m_pMap3DNode.valid())
         {
             auto node = m_pSceneGraph->ResouceLoader()->LoadNode("Geocentric.earth");
             m_pMap3DNode = osgEarth::MapNode::findMapNode(node);
@@ -165,27 +167,32 @@ void CMap::InitMap()
             m_pMap3DNode->open();
 #endif
 
-            m_pCamera = new osg::Camera;
-            m_pCamera->setClearMask(GL_DEPTH_BUFFER_BIT);
-            m_pCamera->setRenderOrder( osg::Camera::NESTED_RENDER );
-            m_pCamera->setComputeNearFarMode( osg::CullSettings::COMPUTE_NEAR_FAR_USING_BOUNDING_VOLUMES );
-            m_pCamera->addChild(node);
+//            m_pCamera = new osg::Camera;
+//            m_pCamera->setClearMask(GL_DEPTH_BUFFER_BIT);
+//            m_pCamera->setRenderOrder( osg::Camera::NESTED_RENDER,1);
+//            m_pCamera->setComputeNearFarMode( osg::CullSettings::COMPUTE_NEAR_FAR_USING_BOUNDING_VOLUMES );
+//            m_pCamera->addChild(node);
+//            m_pCamera->setGraphicsContext(dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
+//                                          ->GetOsgView()->getCamera()->getGraphicsContext());
 
+            osg::Camera* pCamera = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
+                                                      ->GetOsgView()->getCamera();
+            pCamera->setClearMask(GL_DEPTH_BUFFER_BIT);
             osgEarth::Util::LogarithmicDepthBuffer buffer;
             buffer.setUseFragDepth( true );
-            buffer.install(m_pCamera);
+            buffer.install(pCamera);
 
-            osgEarth::GLUtils::setGlobalDefaults(m_pCamera->getOrCreateStateSet());
+            osgEarth::GLUtils::setGlobalDefaults(pCamera->getOrCreateStateSet());
         }
 
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode.get(),m_pCamera.get(),true));
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode.get(),m_pMap3DNode.get(),true));
         m_pPlotManager->UpdateMapNode(m_pMap2DNode,m_pMap3DNode);
     }
         break;
     }
 
     /// 加载星空
-//    LoadSpaceEnv();
+    LoadSpaceEnv();
 }
 
 /// 加载星空背景

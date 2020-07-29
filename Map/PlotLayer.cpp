@@ -2,6 +2,7 @@
 #include <SceneGraph/ISceneGraph.h>
 #include <Inner/IRender.h>
 #include <Inner/OsgExtern/OsgExtern.h>
+#include <Inner/IOsgEarthMapSceneNode.h>
 #include <Inner/IOsgSceneNode.h>
 
 #include "PlotLayer.h"
@@ -10,7 +11,7 @@
 class PlotLayerAddNode:public osg::Operation
 {
 public:
-    PlotLayerAddNode(CPlotLayer* pLayer,IMapSceneNode* pMapSceneNode):
+    PlotLayerAddNode(CPlotLayer* pLayer,IOsgEarthMapSceneNode* pMapSceneNode):
         m_pLayer(pLayer),
         m_pMapSceneNode(pMapSceneNode){}
 
@@ -21,7 +22,7 @@ public:
     }
 private:
     CPlotLayer* m_pLayer;
-    IMapSceneNode* m_pMapSceneNode;
+    IOsgEarthMapSceneNode* m_pMapSceneNode;
 };
 
 /// 标绘图层
@@ -55,7 +56,7 @@ unsigned int CPlotLayer::AddSceneNode(IMapSceneNode *pSceneNode)
 
 
     /// 添加到场景中去
-    m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new PlotLayerAddNode(this,pSceneNode));
+    m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new PlotLayerAddNode(this,dynamic_cast<IOsgEarthMapSceneNode*>(pSceneNode)));
 
     return(m_unID);
 }
@@ -114,7 +115,7 @@ void CPlotLayer::UpdateMapNode(osgEarth::MapNode *pMapNode)
 {
     for(auto one : m_mapID2Node)
     {
-        one.second->UpdateMapNode(pMapNode);
+        dynamic_cast<IOsgEarthMapSceneNode*>(one.second)->UpdateMapNode(pMapNode);
     }
 }
 

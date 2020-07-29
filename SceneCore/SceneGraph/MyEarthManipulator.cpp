@@ -35,7 +35,7 @@ void CMyEarthManipulator::ChangeMap(MapType emType)
     }
 }
 
-#include <QDebug>
+/// 处理处理消息
 bool CMyEarthManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& us)
 {
     if(MAP_2D == m_emType && !m_bCalFactor)
@@ -111,9 +111,9 @@ void CMyEarthManipulator::rotate(double dx, double dy)
     }
 }
 
-void CMyEarthManipulator::zoom(double dx, double dy)
+void CMyEarthManipulator::zoom(double dx, double dy, osg::View *view)
 {
-    osgEarth::Util::EarthManipulator::zoom(dx,dy);
+    osgEarth::Util::EarthManipulator::zoom(dx,dy,view);
     if(MAP_2D == m_emType)
     {
         AdjustViewPoint();
@@ -144,21 +144,23 @@ void CMyEarthManipulator::AdjustViewPoint()
         setViewpoint(vp);
     }
 
-
 }
 
+/// 初始化视点
 void CMyEarthManipulator::InitViewPoint()
 {
     osgEarth::Viewpoint vp;
     auto srs = osgEarth::SpatialReference::get("wgs84");
 
 
-
     vp.focalPoint()= osgEarth::GeoPoint(srs,118.8,32.1,0);
-    vp.heading() = -0;
-    vp.pitch() = -90;
-    vp.range() = 12000000;
+    vp.heading()->set(0,osgEarth::Units::DEGREES);
+    vp.pitch()->set(-90,osgEarth::Units::DEGREES);
+    vp.range()->set(12000,osgEarth::Units::KILOMETERS);
     setHomeViewpoint(vp);
 
-    AdjustViewPoint();
+    if(MAP_2D == m_emType)
+    {
+        AdjustViewPoint();
+    }
 }
