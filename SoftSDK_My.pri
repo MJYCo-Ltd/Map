@@ -10,7 +10,7 @@
 #Attention DLLDESTDIR only useful in windows
 #          This will only copy exe or dll to DLLDESTDIR
 
-SDKPath = $${PWD}/../../TestGL3
+SDKPath = $${PWD}/../../NewGL3
 MathPath=$${PWD}/../VersionMath
 
 # 开启utf-8 编码方式支持
@@ -34,13 +34,13 @@ contains(SDK_CONFIG,OSG){
 
    CONFIG (debug, debug|release){
 #threads
-       LIBS *= -lOpenThreadsd -lopencv_world430d
+       LIBS *= -lOpenThreadsd
 # osg libs
        LIBS *= -losgd -losgDBd -losgGAd -losgSimd -losgViewerd -losgUtild -losgTextd -losgManipulatord -losgWidgetd
 #osgEarth libs
        LIBS *= -losgEarthd
    }else{
-       LIBS *= -lOpenThreads -lopencv_world430
+       LIBS *= -lOpenThreads
        LIBS *= -losg -losgDB -losgGA -losgSim -losgViewer -losgUtil  -losgText  -losgManipulator  -losgWidget
        LIBS *= -losgEarth
    }

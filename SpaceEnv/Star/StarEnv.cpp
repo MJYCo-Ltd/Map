@@ -11,6 +11,7 @@
 #include <ISceneCore.h>
 #include <SceneGraph/ISceneGraph.h>
 #include <Inner/ILoadResource.h>
+#include <Inner/IOsgViewPoint.h>
 
 #include "StarEnv.h"
 #include "Milkyway.h"
@@ -38,7 +39,7 @@ public:
 
             double aspectRatio = dWidth/dHeight;
             m_pParent->setViewport( new osg::Viewport(0, 0, dWidth, dHeight));
-            m_pParent->setProjectionMatrixAsPerspective(45.0,aspectRatio,0.001,10);
+            m_pParent->setProjectionMatrixAsPerspective(45.0,aspectRatio,0.00011,1.1);
         }
 
         return osgGA::GUIEventHandler::handle(ea,aa);
@@ -51,7 +52,7 @@ private:
 CStarEnv::CStarEnv(ISceneGraph *pSceneGraph):
     m_pSceneGraph(pSceneGraph)
 {
-    setEventCallback(new ResizeEventHandler(this));
+    //setEventCallback(new ResizeEventHandler(this));
     /// 初始化IERS文件
     if(!Aerospace::CIRESInfo::GetInstance()->IsInit())
     {
@@ -59,12 +60,14 @@ CStarEnv::CStarEnv(ISceneGraph *pSceneGraph):
     }
 
     /// 优先渲染
+    //setClearMask(GL_DEPTH_BUFFER_BIT);
     setRenderOrder(osg::Camera::PRE_RENDER);
     setAllowEventFocus(false);
-    setReferenceFrame(osg::Transform::ABSOLUTE_RF);
+    setReferenceFrame(osg::Transform::ABSOLUTE_RF_INHERIT_VIEWPOINT);
 
     /// 不进行远近裁剪面的计算
     setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR);
+    setProjectionMatrixAsPerspective(45.0,1.0,0.00011,1.1);
 
     osg::StateSet *state = getOrCreateStateSet();
 
@@ -91,10 +94,13 @@ CStarEnv::CStarEnv(ISceneGraph *pSceneGraph):
     this->addChild(m_pMilkyway->getNode());
     this->addChild(m_pBoundary->getNode());
     this->addChild(m_pStarManager->getNode());
+
+    SetMainView(dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())->GetOsgView());
 }
 
 void CStarEnv::SetMainView(osgViewer::View* pMainView)
 {
+    setViewport(pMainView->getCamera()->getViewport());
     m_pMainView = pMainView;
     m_pMainCamera = m_pMainView->getCamera();
 }

@@ -7,6 +7,7 @@
 
 #include "SceneGraph/IViewPort.h"
 #include "Map/IMap.h"
+#include "Inner/IOsgViewPoint.h"
 
 class IRender;
 class IOsgSceneNode;
@@ -21,7 +22,7 @@ enum ViewPointType
     View_Node
 };
 
-class QtViewPoint :public IViewPort,public IMapMessageObserver
+class QtViewPoint :public IViewPort,public IMapMessageObserver,public IOsgViewPoint
 {
 public:
     explicit QtViewPoint(IRender* pRender,ProjectType emProject=Perspective);
