@@ -10,7 +10,7 @@
 #Attention DLLDESTDIR only useful in windows
 #          This will only copy exe or dll to DLLDESTDIR
 
-SDKPath = $${PWD}/../../NewGL3
+SDKPath = F:\TestGL3
 MathPath=$${PWD}/../VersionMath
 
 # 开启utf-8 编码方式支持
