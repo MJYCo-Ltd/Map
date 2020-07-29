@@ -95,7 +95,7 @@ void CPersonInfo::InitSceneNode()
 
 
     m_pPerson = new osgEarth::PlaceNode(osgEarth::GeoPoint(osgEarth::SpatialReference::get("wgs84"),0,0,0),
-                                        "test",m_placeStyle,pImage);
+                                        m_sName,m_placeStyle,pImage);
     m_pPerson->setDynamic(true);
     m_pCallBack = new PersonInfoCallBack(m_pPerson);
     m_pPerson->addUpdateCallback(m_pCallBack);
