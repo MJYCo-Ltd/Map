@@ -389,7 +389,7 @@ void CPlanetModel::MakePlanet()
 
     /// 行星纹理
     std::stringstream buf;
-    buf << "SpaceResource/pixmaps/" << m_sPlanetImage << ".png";
+    buf << "SpaceResource/pixmaps/" << m_sPlanetImage << ".jpg";
     osg::ref_ptr<osg::Texture2D> txt = m_pSceneGraph->ResouceLoader()->LoadTexture(buf.str());
     geom->getOrCreateStateSet()->setTextureAttributeAndModes(0, txt.get(),
                                                              osg::StateAttribute::ON);

@@ -180,7 +180,8 @@ void CMap::InitMap()
 
             osg::Camera* pCamera = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
                                                       ->GetOsgView()->getCamera();
-            pCamera->setClearMask(GL_DEPTH_BUFFER_BIT);
+
+
 //            osgEarth::Util::LogarithmicDepthBuffer buffer;
 //            buffer.setUseFragDepth( true );
 //            buffer.install(pCamera);
@@ -222,6 +223,9 @@ void CMap::LoadSpaceEnv()
 
     if(nullptr != m_pSpaceEnv && MAP_3D == m_emType)
     {
+        osg::Camera* pCamera = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
+                                                  ->GetOsgView()->getCamera();
+        pCamera->setClearMask(GL_DEPTH_BUFFER_BIT);
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode.get(),dynamic_cast<IOsgSceneNode*>(m_pSpaceEnv)->GetOsgNode(),true));
     }
 }

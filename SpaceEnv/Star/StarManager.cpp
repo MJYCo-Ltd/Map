@@ -18,7 +18,7 @@
 CStarManager::CStarManager(ISceneGraph *pSceneGraph)
     :m_pSceneGraph(pSceneGraph)
     ,m_unMaxLevel(0)
-    ,m_fShowMaxMag(12.0f)
+    ,m_fShowMaxMag(6.0f)
     ,m_bShowStarName(false)
     ,m_bShowConstell(false)
     ,m_pGeodesicGrid(nullptr)

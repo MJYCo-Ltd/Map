@@ -8,6 +8,7 @@
 
 #include "SpaceEnv.h"
 
+/// 更新矩阵
 class CMatixUpdateCallback:public osg::Callback
 {
 public:
@@ -34,7 +35,7 @@ private:
     CSpaceEnv* m_pSpaceEnv;
 };
 
-
+///
 CSpaceEnv::CSpaceEnv(ISceneGraph *pSceneGraph):
     QtOsgSceneNode<ISpaceEnv>(pSceneGraph)
 {
@@ -109,6 +110,7 @@ void CSpaceEnv::InitSceneNode()
     time_t timep;
     struct tm p;
 
+    /// 更新时间
     time(&timep);
     gmtime_s(&p,&timep);
     Aerospace::CDate data(p.tm_year+1900,p.tm_mon+1
