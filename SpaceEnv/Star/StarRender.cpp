@@ -30,94 +30,44 @@ std::string s_getStarVertexSource()
 {
     return std::string(
                 "#version " GLSL_VERSION_STR "\n"
-                                             "uniform float lnfovFactor; \n"
-                                             "uniform float lnInputScale; \n"
-                                             "uniform float lnOneOverMaxdL; \n"
-                                             "uniform float fRelativeFact; \n"
-                                             "uniform float fLinearScale; \n"
-                                             "uniform float alphaWaOverAlphaDa; \n"
-                                             "uniform float lnTerm2; \n"
-                                             "//uniform vec3 stars_v3CameraPos; \n"
-                                             "//uniform vec3 stars_v3LightPos; \n"
-                                             "//uniform float stars_fScalar; \n"
-                                             "//uniform float stars_invScalar; \n"
-                                             "out vec4 color; \n"
-                                             "out float magnitude; \n"
-                                             "out float vertSize; \n"
-                                             "out float vertAlpha; \n"
-                                             "//out float visibility; \n"
-                                             "float pointSourceMagToLnLuminance(float mag) \n"
-                                             "{ \n"
-                                             "  return -0.92103 *(mag + 12.12331) + lnfovFactor; \n"
-                                             "} \n"
-                                             "float adaptLuminanceScaledLn(float lnWorldLuminance, float pFact) \n"
-                                             "{ \n"
-                                             "  return exp(((lnInputScale + lnWorldLuminance - 8.0656104861) * alphaWaOverAlphaDa + lnTerm2 + lnOneOverMaxdL) * pFact); \n"
-                                             "} \n"
-                                             "float remap( float val, float vmin, float vmax, float r0, float r1 ) \n"
-                                             "{ \n"
-                                             "    float vr = (clamp(val, vmin, vmax)-vmin)/(vmax-vmin); \n"
-                                             "    return r0 + vr * (r1-r0); \n"
-                                             "} \n"
-                                             "void main(void) \n"
-                                             "{  \n"
-                                             "   magnitude = gl_Color.a * 1000.0; \n"
-                                             "   color = gl_Color; \n"
-                                             "	float lnlum = pointSourceMagToLnLuminance(magnitude); \n"
-                                             "	vertSize = adaptLuminanceScaledLn(lnlum, fRelativeFact * 0.35) * fLinearScale * 0.24; \n"
-                                             "	vertAlpha = 1.0; \n"
-                                             "	if (vertSize < 1.0) \n"
-                                             "  { \n"
-                                             "    vertAlpha = vertSize * vertSize; \n"
-                                             "    vertSize = 1.0;  \n"
-                                             "  } \n"
-                                             "  else \n"
-                                             "  {  \n"
-                                             "    vertAlpha = 1.0; \n"
-                                             "    if (vertSize > 8.0) \n"
-                                             "    { \n"
-                                             "      vertSize = 8.0 + sqrt(1.0 + vertSize - 8.0) - 1.0; \n"
-                                             "    } \n"
-                                             "  } \n"
-                                             "	color.a = vertAlpha; \n"
-                                             "   if (vertSize < 6.0) \n"
-                                             "       gl_PointSize = vertSize * 3.5;  \n"
-                                             "   else  \n"
-                                             "       gl_PointSize = vertSize * 6.0;  \n"
-                                             "	 gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex; \n"
-                                             "    /*float hae = length(stars_v3CameraPos) - 6378137.0 * stars_fScalar; \n"
-                                             "    float highness = remap( hae * stars_invScalar, 25000.0, 150000.0, 0.0, 1.0 ); \n"
-                                             "    vec3 eye = normalize(stars_v3CameraPos); \n"
-                                             "    float darkness = 1.0-remap(dot(eye, stars_v3LightPos), -0.25, 0.0, 0.0, 1.0); \n"
-                                             "    visibility = clamp(highness + darkness, 0.0, 1.0); */\n"
-                                             "} \n");
+                "out vec4 color; \n"
+                "out float magnitude; \n"
+                "out float pointSize; \n"
+                "void main(void) \n"
+                "{  \n"
+                "   magnitude = gl_Color.a * 1e3; \n"
+                "   color = gl_Color; \n"
+                "	color.a = 1; \n"
+                "   if (magnitude < 6.0) \n"
+                "       gl_PointSize = 12.0 - magnitude * 2.0;  \n"
+                "   else  \n"
+                "       gl_PointSize = 1.0;  \n"
+                "	 gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex; \n"
+                "    pointSize = gl_PointSize; \n"
+                "} \n");
 }
 
 std::string s_getStarFragmentSource()
 {
     return std::string(
                 "#version " GLSL_VERSION_STR "\n"
-                                             "in vec4 color;\n"
-                                             "in float magnitude; \n"
-                                             "in float vertSize; \n"
-                                             "in float vertAlpha; \n"
-                                             "//in float visibility; \n"
-                                             "out vec4 fragColor; \n"
-                                             "uniform sampler2D star0; \n"
-                                             "uniform sampler2D star1; \n"
-                                             "uniform float maxMag; \n"
-                                             "void main(void) \n"
-                                             "{ \n"
-                                             "  if ((maxMag > 0.0) && (magnitude > maxMag)) \n"
-                                             "    discard; \n"
-                                             "  if (vertSize < 6.0) \n"
-                                             "	   fragColor = color * texture2D(star0, gl_PointCoord); \n"
-                                             "  else \n"
-                                             "    fragColor = color *  texture2D(star1, gl_PointCoord); \n"
-                                             "//   fragColor.a = min(vertAlpha, fragColor.a) /* visibility*/; \n"
-
-                                             "  //fragColor.a = min(vertAlpha, fragColor.a) * visibility; \n"
-                                             "} \n");
+                "in vec4 color;\n"
+                "in float magnitude; \n"
+                "in float pointSize; \n"
+                "out vec4 fragColor; \n"
+                "uniform sampler2D star0; \n"
+                "uniform sampler2D star1; \n"
+                "uniform float maxMag; \n"
+                "void main(void) \n"
+                "{ \n"
+                "  if ((maxMag > 0.0) && (magnitude > maxMag)) \n"
+                "    discard; \n"
+                "  if (pointSize > 2.0) \n"
+                "	   fragColor = color * texture2D(star0, gl_PointCoord); \n"
+                "  else \n"
+                "    fragColor = color *  texture2D(star1, gl_PointCoord); \n"
+                "  fragColor.a = 1; \n"
+                "} \n");
 }
 
 CStarRender::CStarRender(ISceneGraph *pSceneGraph, float fShowMaxMag)
@@ -125,10 +75,6 @@ CStarRender::CStarRender(ISceneGraph *pSceneGraph, float fShowMaxMag)
     ,m_fShowMaxMag(fShowMaxMag)
     ,m_pGeodesicGrid(nullptr)
 {
-    _starLinearScale = 19.569f;
-    _inScale = 1.0f;
-    _limitMagnitude = -100.f;
-    _limitLuminance = 0;
     m_StarTR.setWorldAdaptationLuminance(1.0);
 
     init();
@@ -239,48 +185,37 @@ void CStarRender::init()
 
 
     osg::ref_ptr<osg::Texture2D> starTexture1 = m_pSceneGraph->ResouceLoader()->LoadTexture("SpaceResource/pixmaps/asterism.png");
-    state->setTextureAttributeAndModes(0, starTexture1.get(),
-                                       osg::StateAttribute::ON);
+    state->setTextureAttributeAndModes(0, starTexture1.get());
 
     osg::ref_ptr<osg::Texture2D> starTexture2 = m_pSceneGraph->ResouceLoader()->LoadTexture("SpaceResource/pixmaps/star.png");
-    state->setTextureAttributeAndModes(1, starTexture2.get(),
-                                       osg::StateAttribute::ON);
+    state->setTextureAttributeAndModes(1, starTexture2.get());
+
+    osg::ref_ptr<osg::PointSprite> sprite = new osg::PointSprite();
+    state->setTextureAttributeAndModes(0, sprite);
+    state->setTextureAttributeAndModes(1, sprite);
 
     osg::ref_ptr<osg::Program> starsProgram = new osg::Program();
-    osg::Shader *vs = new osg::Shader(osg::Shader::VERTEX,
+    osg::ref_ptr<osg::Shader> vs = new osg::Shader(osg::Shader::VERTEX,
                                       s_getStarVertexSource());
     starsProgram->addShader(vs);
-    osg::Shader *fs = new osg::Shader(osg::Shader::FRAGMENT,
+    osg::ref_ptr<osg::Shader> fs = new osg::Shader(osg::Shader::FRAGMENT,
                                       s_getStarFragmentSource());
     starsProgram->addShader(fs);
-    state->setAttributeAndModes(starsProgram.get(),
-                                osg::StateAttribute::ON);
+    state->setAttributeAndModes(starsProgram.get());
 
-    state->getOrCreateUniform("star0", osg::Uniform::INT_SAMPLER_2D)->set(0);
-    state->getOrCreateUniform("star1", osg::Uniform::INT_SAMPLER_2D)->set(1);
+    state->getOrCreateUniform("star0", osg::Uniform::SAMPLER_2D)->set(0);
+    state->getOrCreateUniform("star1", osg::Uniform::SAMPLER_2D)->set(1);
 
     /// 设置点大小
-    state->setMode(GL_VERTEX_PROGRAM_POINT_SIZE, osg::StateAttribute::ON);
-
-
+    state->setMode(GL_PROGRAM_POINT_SIZE,osg::StateAttribute::ON);
+    state->setMode(GL_POINT_SMOOTH,osg::StateAttribute::ON);
 }
 
 void CStarRender::setupState()
 {
     osg::StateSet *state = getOrCreateStateSet();
 
-    state->getOrCreateUniform("lnfovFactor", osg::Uniform::FLOAT)->set(_lnfovFactor);
-
-    state->getOrCreateUniform("fRelativeFact", osg::Uniform::FLOAT)->set(1.0f);
-    state->getOrCreateUniform("fLinearScale", osg::Uniform::FLOAT)->set(_starLinearScale);
     state->getOrCreateUniform("maxMag", osg::Uniform::FLOAT)->set(m_fShowMaxMag);
-    int nInt=-1;
-    state->getOrCreateUniform("texStar", osg::Uniform::INT_SAMPLER_2D)->get(nInt);
-
-    state->getOrCreateUniform("lnTerm2", osg::Uniform::FLOAT)->set(m_StarTR.lnTerm2);
-    state->getOrCreateUniform("lnInputScale", osg::Uniform::FLOAT)->set(m_StarTR.lnInputScale);
-    state->getOrCreateUniform("lnOneOverMaxdL", osg::Uniform::FLOAT)->set(m_StarTR.lnOneOverMaxdL);
-    state->getOrCreateUniform("alphaWaOverAlphaDa", osg::Uniform::FLOAT)->set(m_StarTR.alphaWaOverAlphaDa);
 }
 
 void CStarRender::updateEye(float fov)
@@ -289,111 +224,4 @@ void CStarRender::updateEye(float fov)
         fov = 45;
     if (fov > 60)
         fov = 60;
-
-    float powFactor = ::pow(60.f / fmax(0.7f,fov), 0.8f);
-    m_StarTR.setInputScale(_inScale * powFactor);
-
-    _lnfovFactor = ::log(
-                145800000.0f / (fov * fov)
-                / (EYE_RESOLUTION * EYE_RESOLUTION)/ powFactor
-                / 1.4f);
-
-    _starLinearScale = ::pow(42.0f,0.85f);
-
-    _limitMagnitude = computeLimitMagnitude(1.0f);
-    _limitLuminance = computeLimitLuminance();
-}
-
-float CStarRender::pointSourceMagToLnLuminance(float mag) const
-{
-    return -0.92103 * (mag + 12.12331) + _lnfovFactor;
-}
-
-void CStarRender::computeRCMag(float mag, float rcMag[2], float scalar) const
-{
-    rcMag[0] = m_StarTR.adaptLuminanceScaledLn(pointSourceMagToLnLuminance(mag),
-                                               scalar * 0.28);
-    rcMag[0] *= _starLinearScale * 0.185;
-
-    if (rcMag[0] < 1)
-    {
-        rcMag[1] = rcMag[0] * rcMag[0];
-        if (rcMag[0] < 0.5)
-            rcMag[0] = 0.5f;
-    }
-    else
-    {
-        // cmag:
-        rcMag[1] = 1.0f;
-        if (rcMag[0] > MAX_LINEAR_RADIUS)
-        {
-            rcMag[0] = MAX_LINEAR_RADIUS
-                    + std::sqrt(1.f + rcMag[0] - MAX_LINEAR_RADIUS) - 1.f;
-        }
-    }
-    rcMag[0] *= 3.5f;
-}
-
-float CStarRender::computeLimitMagnitude(float scalar) const
-{
-    float a = -26.f;
-    float b = 30.f;
-    float rcmag[2];
-    float lim = 0.f;
-    int safety = 0;
-    while (std::fabs(lim - a) > 0.05)
-    {
-        computeRCMag(lim, rcmag, scalar);
-        if (rcmag[0] <= 0.f)
-        {
-            float tmp = lim;
-            lim = (a + lim) * 0.5;
-            b = tmp;
-        }
-        else
-        {
-            float tmp = lim;
-            lim = (b + lim) * 0.5;
-            a = tmp;
-        }
-        ++safety;
-        if (safety > 20)
-        {
-            lim = -99;
-            break;
-        }
-    }
-    return lim;
-}
-
-float CStarRender::computeLimitLuminance() const
-{
-    float a = 0.f;
-    float b = 500000.f;
-    float lim = 40.f;
-    int safety = 0;
-    float adaptL;
-    while (std::fabs(lim - a) > 0.05)
-    {
-        adaptL = m_StarTR.adaptLuminanceScaled(lim);
-        if (adaptL <= 0.05f) // Object considered not visible if its adapted scaled luminance<0.05
-        {
-            float tmp = lim;
-            lim = (b + lim) * 0.5;
-            a = tmp;
-        }
-        else
-        {
-            float tmp = lim;
-            lim = (a + lim) * 0.5;
-            b = tmp;
-        }
-        ++safety;
-        if (safety > 30)
-        {
-            lim = 500000;
-            break;
-        }
-    }
-    return lim;
 }

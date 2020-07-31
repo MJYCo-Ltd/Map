@@ -3,10 +3,8 @@
 CMyEarthManipulator::CMyEarthManipulator(MapType type):
     osgEarth::Util::EarthManipulator()
 {
-    ChangeMap(type);
-
     getSettings()->setThrowDecayRate(0.1);
-    getSettings()->setTerrainAvoidanceEnabled(true);
+    ChangeMap(type);
 }
 
 ///
@@ -25,9 +23,10 @@ void CMyEarthManipulator::ChangeMap(MapType emType)
         case MAP_3D:
             getSettings()->setThrowingEnabled(true);
             getSettings()->setMinMaxDistance(1,DBL_MAX);
+            getSettings()->setLockAzimuthWhilePanning(false);
+            getSettings()->setTerrainAvoidanceEnabled(true);
             break;
         case MAP_2D:
-            getSettings()->setThrowingEnabled(false);
             getSettings()->setMinMaxDistance(10,m_dMaxDistance);
             AdjustViewPoint();
             break;

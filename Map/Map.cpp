@@ -109,7 +109,7 @@ ISpaceEnv *CMap::GetSpaceEnv()
 {
     return(m_pSpaceEnv);
 }
-
+#include <QDebug>
 /// 初始化场景
 void CMap::InitSceneNode()
 {
@@ -142,6 +142,9 @@ void CMap::InitMap()
             m_pLeftMatrixTransform->setMatrix(osg::Matrix::translate(
                                                   osg::Vec3f(-m_pMap2DNode->getMap()->getProfile()->getExtent().width()
                                                              ,0.0f,0.0f)));
+
+            qDebug()<<m_pMap2DNode->getMap()->getProfile()->getExtent().width();
+            qDebug()<<m_pMap2DNode->getMap()->getProfile()->getExtent().height();
             m_pRightMatrixTransform->setMatrix(osg::Matrix::translate(
                                                    osg::Vec3f(m_pMap2DNode->getMap()->getProfile()->getExtent().width()
                                                               ,0.0f,0.0f)));
@@ -178,9 +181,9 @@ void CMap::InitMap()
             osg::Camera* pCamera = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
                                                       ->GetOsgView()->getCamera();
             pCamera->setClearMask(GL_DEPTH_BUFFER_BIT);
-            osgEarth::Util::LogarithmicDepthBuffer buffer;
-            buffer.setUseFragDepth( true );
-            buffer.install(pCamera);
+//            osgEarth::Util::LogarithmicDepthBuffer buffer;
+//            buffer.setUseFragDepth( true );
+//            buffer.install(pCamera);
 
             osgEarth::GLUtils::setGlobalDefaults(pCamera->getOrCreateStateSet());
         }

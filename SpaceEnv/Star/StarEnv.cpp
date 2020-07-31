@@ -52,7 +52,7 @@ private:
 CStarEnv::CStarEnv(ISceneGraph *pSceneGraph):
     m_pSceneGraph(pSceneGraph)
 {
-    //setEventCallback(new ResizeEventHandler(this));
+    setEventCallback(new ResizeEventHandler(this));
     /// 初始化IERS文件
     if(!Aerospace::CIRESInfo::GetInstance()->IsInit())
     {
@@ -60,10 +60,9 @@ CStarEnv::CStarEnv(ISceneGraph *pSceneGraph):
     }
 
     /// 优先渲染
-    //setClearMask(GL_DEPTH_BUFFER_BIT);
     setRenderOrder(osg::Camera::PRE_RENDER);
     setAllowEventFocus(false);
-    setReferenceFrame(osg::Transform::ABSOLUTE_RF_INHERIT_VIEWPOINT);
+    setReferenceFrame(osg::Transform::ABSOLUTE_RF);
 
     /// 不进行远近裁剪面的计算
     setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR);

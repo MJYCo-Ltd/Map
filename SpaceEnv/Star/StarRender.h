@@ -44,21 +44,12 @@ private:
     void init();
     void updateEye(float fov);
     void setupState();
-    float pointSourceMagToLnLuminance(float mag) const;
-    void computeRCMag(float mag, float rcMag[2], float scalar) const;
-    float computeLimitMagnitude(float scalar) const;
-    float computeLimitLuminance() const;
 private:
     ISceneGraph*                       m_pSceneGraph;
     ZoneArrayRenderVector                           m_vRenderVector;
 
     CStarToneReproducer m_StarTR;   /// 更改星星颜色
     Frustum                     m_Frustum; /// 更新裁剪体
-    float _lnfovFactor;
-    float _starLinearScale;
-    float _inScale;
-    float _limitMagnitude;
-    float _limitLuminance;
 
     int                   m_nMaxLevel;
     float                m_fShowMaxMag;  /// 最大的视星等

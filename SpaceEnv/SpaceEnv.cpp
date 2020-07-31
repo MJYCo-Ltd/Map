@@ -1,6 +1,8 @@
+#include <ctime>
 #include <osg/Callback>
 #include <Math/Matrix.h>
 #include <Satellite/CoorSys.h>
+#include <Satellite/Date.h>
 #include "Solar/SolarEnv.h"
 #include "Star/StarEnv.h"
 
@@ -97,10 +99,23 @@ void CSpaceEnv::InitSceneNode()
     m_pOsgNode->addUpdateCallback(m_pUpdateCallBack);
 
     m_pStarEnv = new CStarEnv(m_pSceneGraph);
-    //m_pSolarEnv = new CSolarEnv(m_pSceneGraph);
+    m_pSolarEnv = new CSolarEnv(m_pSceneGraph);
+    m_pSolarEnv->CreateSolar();
 
 	m_pRotateTransform->addChild(m_pStarEnv);
-    //m_pRotateTransform->addChild(m_pSolarEnv);
+    m_pRotateTransform->addChild(m_pSolarEnv);
+
+
+    time_t timep;
+    struct tm p;
+
+    time(&timep);
+    gmtime_s(&p,&timep);
+    Aerospace::CDate data(p.tm_year+1900,p.tm_mon+1
+                    ,p.tm_mday,p.tm_hour
+                    ,p.tm_min,p.tm_sec,UTC);
+
+    UpdateDate(data.GetMJD());
 }
 
 void CSpaceEnv::UpdateMatrix()
@@ -112,6 +127,7 @@ void CSpaceEnv::UpdateMatrix()
                   ,0.0,0.0,0.0,1.0);
 
     m_pRotateTransform->setMatrix(rotateMatrix);
+    m_pSolarEnv->UpdateTime(m_dMJD);
 }
 
 /// 创建空间背景

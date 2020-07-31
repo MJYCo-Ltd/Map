@@ -68,6 +68,7 @@ osg::Texture2D *CResourceLod::LoadTexture(const std::string &sTexturePath,bool b
             pTexture->setImage(pImage);
             pTexture->setFilter(osg::Texture::MIN_FILTER, osg::Texture::LINEAR);
             pTexture->setFilter(osg::Texture::MAG_FILTER, osg::Texture::LINEAR);
+            pTexture->setResizeNonPowerOfTwoHint(false);
 
             m_mapTexture[texturePath] = pTexture;
         }
@@ -109,7 +110,9 @@ osgText::Font *CResourceLod::LoadFont(const std::string &sFontPath, bool bIsRef)
 /// 读取图片
 osg::Image *CResourceLod::LoadImage(const std::string &sImagePath, int nWidth, int nHeight, bool bIsRef)
 {
-    std::string imagePath;
+    static std::string imagePath;
+    static bool bScale;
+
     if(bIsRef)
     {
         imagePath = m_sAppPath + sImagePath;
@@ -123,6 +126,15 @@ osg::Image *CResourceLod::LoadImage(const std::string &sImagePath, int nWidth, i
     std::map<string,osg::ref_ptr<osg::Image> >::iterator itor;
     if(0 != nWidth && 0 != nHeight)
     {
+        bScale = true;
+    }
+    else
+    {
+        bScale = false;
+    }
+
+    if(bScale)
+    {
         char buffer[255]="";
         itoa(nWidth,buffer,10);
         sForFind += "_";
@@ -130,7 +142,6 @@ osg::Image *CResourceLod::LoadImage(const std::string &sImagePath, int nWidth, i
         sForFind += "_";
         itoa(nHeight,buffer,10);
         sForFind += buffer;
-
     }
 
     itor = m_mapImage.find(sForFind);
@@ -145,7 +156,11 @@ osg::Image *CResourceLod::LoadImage(const std::string &sImagePath, int nWidth, i
 
         if(nullptr != pImage)
         {
-            pImage->scaleImage(nWidth, nHeight, pImage->r());
+            if(bScale)
+            {
+                pImage->scaleImage(nWidth, nHeight, pImage->r());
+            }
+
             m_mapImage[sForFind] = pImage;
         }
 

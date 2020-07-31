@@ -69,8 +69,8 @@ public:
 protected:
     void  UpdateMatrix();
 protected:
-    CSolarEnv* m_pSolarEnv;  /// 行星背景
-    CStarEnv*  m_pStarEnv;   /// 星空背景
+    osg::ref_ptr<CSolarEnv> m_pSolarEnv;  /// 行星背景
+    osg::ref_ptr<CStarEnv>  m_pStarEnv;   /// 星空背景
     CMatixUpdateCallback* m_pUpdateCallBack;
     osg::ref_ptr<osg::MatrixTransform> m_pRotateTransform;
     double     m_dMJD=0.0;       /// 约简儒略日

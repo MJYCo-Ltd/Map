@@ -220,7 +220,7 @@ void CStarZoneArrayRenderer::readZones(IStarZoneArray *za, unsigned int idx, con
             m_fMinMag = mag;
         }
 
-        osg::Vec4 starColor(ColorTable[clr].x(), ColorTable[clr].y(),ColorTable[clr].z(),mag*0.001f);
+        osg::Vec4 starColor(ColorTable[clr].x(), ColorTable[clr].y(),ColorTable[clr].z(),mag*1e-3);
         colors->push_back(starColor);
         elements->push_back(i);
 

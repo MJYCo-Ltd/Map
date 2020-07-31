@@ -104,30 +104,10 @@ void InitConstellationName()
     g_mapConstellationName["Vela"] = L"船帆座";
 }
 
-/// 绘制星座线
-class DrawConstellation:public osg::Drawable
-{
-    friend class CStarConstellation;
-public:
-    void drawImplementation(osg::RenderInfo& renderInfo) const
-    {
-        foreach(osg::ref_ptr<osg::Geometry> pConstellation,m_vConstellationLine)
-        {
-            pConstellation->draw(renderInfo);
-        }
-    }
-protected:
-     std::vector<osg::ref_ptr<osg::Geometry> > m_vConstellationLine;
-};
-
 CStarConstellation::CStarConstellation(ISceneGraph *pSceneGraph):
     m_pSceneGraph(pSceneGraph)
 {
     InitConstellationName();
-
-    m_pConstellationLine = new DrawConstellation;
-    m_pConstellationLine->getOrCreateStateSet()->setMode(GL_LINE_SMOOTH, osg::StateAttribute::ON);
-    m_pConstellationLine->getOrCreateStateSet()->setAttribute(new osg::LineWidth(2));
 }
 
 bool CStarConstellation::ReadConstellation()
@@ -216,15 +196,23 @@ void CStarConstellation::setGeodesicGrid(int nLevel, ZoneArrayVector &vZoneData,
 /// 构建渲染体
 void CStarConstellation::BuildGeometry(osg::Group* pRoot)
 {
+    osg::Geometry *geom = new osg::Geometry;
+    osg::Vec3Array *verts = new osg::Vec3Array;
+    osg::Vec4Array *colors = new osg::Vec4Array;
+
+    int nIndexVert=0;
+    geom->setVertexArray(verts);
+    colors->push_back(osg::Vec4(0, 0.25, 0.5, 0.8));
+    geom->setColorArray(colors);
+    geom->setColorBinding(osg::Geometry::BIND_OVERALL);
+
     /// 构建星座名字
     for (QMap<QString,QVector<int> >::iterator itor = m_mapName2Hips.begin();
          itor != m_mapName2Hips.end(); ++itor)
     {
         osg::Vec3 center(0, 0, 0);
 
-        osg::Geometry *geom = new osg::Geometry;
-        osg::Vec3Array *verts = new osg::Vec3Array;
-        osg::Vec4Array *colors = new osg::Vec4Array;
+
         osg::DrawElementsUShort *el = new osg::DrawElementsUShort(GL_LINES);
 
         osg::Vec3 vTemp;
@@ -234,7 +222,7 @@ void CStarConstellation::BuildGeometry(osg::Group* pRoot)
 
             verts->push_back(vTemp);
             center += vTemp;
-            el->push_back(j);
+            el->push_back(nIndexVert++);
         }
         center /= (double)itor.value().size();
 
@@ -264,16 +252,12 @@ void CStarConstellation::BuildGeometry(osg::Group* pRoot)
         pRoot->addChild(text);
         m_vNames.push_back(text);
 
-        geom->setVertexArray(verts);
-        colors->push_back(osg::Vec4(0, 0.25, 0.5, 0.8));
-        geom->setColorArray(colors);
-        geom->setColorBinding(osg::Geometry::BIND_OVERALL);
+
         geom->addPrimitiveSet(el);
-        geom->getOrCreateStateSet()->setMode(GL_LINE_SMOOTH, osg::StateAttribute::ON);
-        geom->getOrCreateStateSet()->setAttribute(new osg::LineWidth(2));
-        m_pConstellationLine->m_vConstellationLine.push_back(geom);
     }
-    pRoot->addChild(m_pConstellationLine);
+    geom->getOrCreateStateSet()->setMode(GL_LINE_SMOOTH, osg::StateAttribute::ON);
+    geom->getOrCreateStateSet()->setAttribute(new osg::LineWidth(2));
+    pRoot->addChild(geom);
 }
 
 /// 查找星星位置

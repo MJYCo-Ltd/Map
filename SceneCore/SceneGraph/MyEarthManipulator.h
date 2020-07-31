@@ -25,7 +25,7 @@ public:
     bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& us);
     void pan(double dx, double dy);
     void rotate(double dx, double dy);
-    void zoom( double dx, double dy, osg::View* view );
+    void zoom(double dx, double dy, osg::View *view);
 
     /**
      * @brief 初始化视点
