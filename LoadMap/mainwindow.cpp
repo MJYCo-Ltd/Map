@@ -57,6 +57,13 @@ void MainWindow::on_action_triggered()
 {
     auto pLayer = m_pSceneGraph->GetMap()->GetPlotManager()->FindOrCreateLayer("test");
     m_pPersonInfo = dynamic_cast<IPersonInfo*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IPersonInfo"));
+    m_pPersonInfo->SetName("123");
+    ScenePos pos;
+    pos.fLon = 120;
+    pos.fLat = 24;
+    pos.fHeight = 100;
+    pos.bIsGeo = true;
+    m_pPersonInfo->SetPos(pos);
     pLayer->AddSceneNode(m_pPersonInfo);
 }
 

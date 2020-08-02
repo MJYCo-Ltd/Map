@@ -110,9 +110,11 @@ void CPlotLayer::SetVisible(bool bVisible)
     }
 }
 
+
 /// 更新地图
 void CPlotLayer::UpdateMapNode(osgEarth::MapNode *pMapNode)
 {
+    m_pMapNode = pMapNode;
     for(auto one : m_mapID2Node)
     {
         dynamic_cast<IOsgEarthMapSceneNode*>(one.second)->UpdateMapNode(pMapNode);

@@ -1,28 +1,27 @@
 #include <algorithm>
-
 #include <osg/OperationThread>
 #include <osgEarth/Version>
-
+#include <osgEarth/MapNode>
+#include <osgEarth/AnnotationLayer>
 #include <SceneGraph/ISceneGraph.h>
 #include <Inner/IRender.h>
 #include <Inner/OsgExtern/OsgExtern.h>
+#include "MyModelLayer.h"
 
 #include "MapNodeFactory.h"
 #include "PlotLayer.h"
 #include "PlotManager.h"
-#include <QDebug>
+
 class ChangeMapNode:public osg::Operation
 {
 public:
     ChangeMapNode(osgEarth::MapNode* pOldMapNode,
                   osgEarth::MapNode* pNewMapNode,
-                  osgEarth::ModelLayer* pModelLayer,
-		          osg::Group* pModelNode,
+                  CMyModelLayer* pModelLayer,
                   CPlotManager* pPlotManager):
         m_pOld(pOldMapNode),
         m_pNew(pNewMapNode),
-        m_pModelLayer(pModelLayer),
-		m_pModelNode(pModelNode),
+        m_pMyModelLayer(pModelLayer),
         m_pPlotManager(pPlotManager){}
 
 
@@ -30,15 +29,10 @@ public:
     {
         if(m_pOld.valid())
         {
-            m_pOld->getMap()->removeLayer(m_pModelLayer);
-
-			if (0 == m_pModelLayer->getNode()->asGroup()->getNumChildren())
-			{
-				m_pModelLayer->setNode(m_pModelNode);
-			}
+            m_pOld->getMap()->removeLayer(m_pMyModelLayer);
         }
 
-		m_pNew->getMap()->addLayer(m_pModelLayer);
+        m_pNew->getMap()->addLayer(m_pMyModelLayer);
 
          
         /// 更新
@@ -51,23 +45,16 @@ public:
 private:
     osg::ref_ptr<osgEarth::MapNode> m_pOld; /// 旧的地图节点
     osg::ref_ptr<osgEarth::MapNode> m_pNew; /// 新的地图节点
-    osg::ref_ptr<osgEarth::ModelLayer> m_pModelLayer; /// 模型图层
-	osg::ref_ptr<osg::Group> m_pModelNode;
-    CPlotManager* m_pPlotManager;
+    osg::ref_ptr<CMyModelLayer> m_pMyModelLayer; /// 模型图层
+    CPlotManager* m_pPlotManager=nullptr;
 };
 
 
 CPlotManager::CPlotManager(ISceneGraph* pSceneGraph):
     m_pSceneGraph(pSceneGraph)
 {
-    m_pModelNode = new osg::Group;
-#if OSGEARTH_VERSION_GREATER_OR_EQUAL(3,0,0)
-    m_pModelLayer = new osgEarth::ModelLayer;
-    m_pModelLayer->setNode(m_pModelNode);
-#else
-    m_pModelLayer = new osgEarth::ModelLayer("PlotModel",m_pModelNode);
-#endif
 
+    m_pMyModelLayer = new CMyModelLayer;
     m_pCreateFactory = new CMapNodeFactory(m_pSceneGraph);
 }
 
@@ -85,7 +72,7 @@ IPlotLayer *CPlotManager::FindOrCreateLayer(const string &sLayerName)
         auto one = new CPlotLayer(sLayerName,m_pMapNode.get(),m_pSceneGraph);
         m_mapLayer[sLayerName] = one;
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
-                    new CModifyNode(m_pModelNode,one->GetOsgNode(),true));
+                    new CModifyNode(m_pMyModelLayer->getGroup(),one->GetOsgNode(),true));
         return(one);
     }
     else
@@ -103,7 +90,7 @@ bool CPlotManager::RemoveLayer(IPlotLayer *&pLayer)
         if(pLayer == findLayer->second)
         {
             m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
-                        new CModifyNode(m_pModelNode,static_cast<CPlotLayer*>(pLayer)->GetOsgNode(),false));
+                        new CModifyNode(m_pMyModelLayer->getGroup(),static_cast<CPlotLayer*>(pLayer)->GetOsgNode(),false));
             m_mapLayer.erase(findLayer);
             delete pLayer;
             pLayer = nullptr;
@@ -124,7 +111,7 @@ bool CPlotManager::RemoveLayer(const string &sLayerName)
     if(m_mapLayer.end() != findLayer)
     {
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
-                    new CModifyNode(m_pModelNode,static_cast<CPlotLayer*>(findLayer->second)->GetOsgNode(),false));
+                    new CModifyNode(m_pMyModelLayer->getGroup(),static_cast<CPlotLayer*>(findLayer->second)->GetOsgNode(),false));
         delete findLayer->second;
         m_mapLayer.erase(findLayer);
         return(true);
@@ -152,7 +139,7 @@ void CPlotManager::UpdateMapNode(osgEarth::MapNode *pOldMapNode,osgEarth::MapNod
 {
     m_pMapNode = pNewMapNode;
     m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
-                new ChangeMapNode(pOldMapNode,pNewMapNode,m_pModelLayer,m_pModelNode.get(), this));
+                new ChangeMapNode(pOldMapNode,pNewMapNode,m_pMyModelLayer,this));
 }
 
 /// 根据接口类型创建地图节点

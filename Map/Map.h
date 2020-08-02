@@ -82,7 +82,7 @@ protected:
     osg::ref_ptr<osgEarth::MapNode> m_pMap2DNode;
     MapLayers    m_allLayers;
     MapType      m_emType;
-    CPlotManager* m_pPlotManager;
+    CPlotManager* m_pPlotManager=nullptr;
     ISpaceEnv*    m_pSpaceEnv=nullptr;
 };
 

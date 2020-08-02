@@ -99,10 +99,10 @@ private:
     QSize                                          m_stWinSize;      /// 窗口大小
     QSize                                          m_stTextureSize;  /// 纹理大小
 
-    QOffscreenSurface                 *m_pOffScreenSurface; /// 离屏渲染表面
-    QOpenGLContext                    *m_pOpenglContext;    /// opengl设备上下文
-    QOpenGLFramebufferObject *m_pRenderFbo;            /// 渲染帧缓存对象
-    QOpenGLFramebufferObject *m_pDisplayFbo;           /// 显示帧缓存对象
+    QOffscreenSurface                 *m_pOffScreenSurface=nullptr; /// 离屏渲染表面
+    QOpenGLContext                    *m_pOpenglContext=nullptr;    /// opengl设备上下文
+    QOpenGLFramebufferObject *m_pRenderFbo=nullptr;            /// 渲染帧缓存对象
+    QOpenGLFramebufferObject *m_pDisplayFbo=nullptr;           /// 显示帧缓存对象
     list<IWindowMessageObserver*>*     m_pAllOserver;   /// 所有的消息订阅者
 };
 

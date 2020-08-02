@@ -3,15 +3,19 @@
 #include<map>
 using namespace std;
 
-#include<osgEarth/MapNode>
-#include <osgEarth/ModelLayer>
-
+#include <osg/ref_ptr>
+#include <osg/observer_ptr>
 #include <Map/IPlotManager.h>
 #include <Map/IPlotLayer.h>
 
 class CPlotLayer;
 class ISceneGraph;
 class CMapNodeFactory;
+class CMyModelLayer;
+
+namespace osgEarth{
+class MapNode;
+}
 
 class CPlotManager:public IPlotManager
 {
@@ -63,12 +67,11 @@ public:
      */
     bool DeleteMapSceneNode(IMapSceneNode* pMapSceneNode);
 private:
-    ISceneGraph*                       m_pSceneGraph; /// 场景图
-    CMapNodeFactory*                   m_pCreateFactory;/// 创建节点
+    ISceneGraph*                       m_pSceneGraph=nullptr; /// 场景图
+    CMapNodeFactory*                   m_pCreateFactory=nullptr;/// 创建节点
     map<string,CPlotLayer*>            m_mapLayer;    /// 所有的图层
     osg::observer_ptr<osgEarth::MapNode> m_pMapNode;
-    osg::ref_ptr<osgEarth::ModelLayer> m_pModelLayer; /// 模型图层
-    osg::ref_ptr<osg::Group>           m_pModelNode;  /// 模型图层对应的节点
+    osg::ref_ptr<CMyModelLayer> m_pMyModelLayer; /// 模型图层
 };
 
 #endif // CPLOTMANAGER_H

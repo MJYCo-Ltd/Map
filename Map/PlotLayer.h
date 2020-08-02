@@ -61,7 +61,7 @@ public:
      */
     osg::Node* GetOsgNode();
 private:
-    ISceneGraph*                      m_pSceneGraph;
+    ISceneGraph*                      m_pSceneGraph=nullptr;
     osg::observer_ptr<osgEarth::MapNode> m_pMapNode;
     osg::ref_ptr<osg::Group> m_pGroup;
     string       m_sLayerName;

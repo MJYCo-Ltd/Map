@@ -74,3 +74,9 @@ compile_commands.json
 /SceneCore/x64/Debug
 /SpaceEnv/x64/Debug
 /MapEngine.zip
+/LoadMap/debug
+/LoadMap/release
+/LoadQmlMap/debug
+/LoadQmlMap/release
+*.txt
+*.vcxproj

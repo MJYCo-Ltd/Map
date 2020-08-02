@@ -74,12 +74,12 @@ protected:
      */
     void InitWindow();
 protected:
-    QThread*        m_pThread;
+    QThread*        m_pThread=nullptr;
     QtOsgWindow*    m_pWindow=nullptr;        /// Qt的窗口
     QWidget*        m_pWidget=nullptr;        /// 返回Widget窗口
-    QtFBOWindow*    m_pFBOWindow;             /// osg窗口
-    QtViewPoint*    m_pMainViewPoint;
-    QtRender*       m_pRender;
+    QtFBOWindow*    m_pFBOWindow=nullptr;             /// osg窗口
+    QtViewPoint*    m_pMainViewPoint=nullptr;
+    QtRender*       m_pRender=nullptr;
 
     bool            m_bCanChange=true;
     list<QtViewPoint*> m_vOtherViewPoint;

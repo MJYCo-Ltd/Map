@@ -49,7 +49,7 @@ private:
     void Init();
 
 private:
-    QThread*        m_pThread;
+    QThread*        m_pThread=nullptr;
     QtRender*       m_pRender=nullptr;
     QtFBOWindow*    m_pFBOWindow=nullptr;
     QOpenGLShaderProgram* m_pProgram=nullptr;

@@ -40,7 +40,7 @@ protected:
 	 */
     void InitType(const string& sInterface);
 private:
-    ISceneGraph* m_pSceneGraph;
+    ISceneGraph* m_pSceneGraph=nullptr;
 
     typedef IMapSceneNode* (*pCreateNodeFun)(ISceneGraph*,const string&);
     typedef bool(*pQueryInterfaceFun)(string&);

@@ -9,6 +9,7 @@
 #endif
 
 #include <osgEarth/GLUtils>
+#include <osgEarth/AutoClipPlaneHandler>
 
 #include <QLibrary>
 
@@ -109,7 +110,7 @@ ISpaceEnv *CMap::GetSpaceEnv()
 {
     return(m_pSpaceEnv);
 }
-#include <QDebug>
+
 /// 初始化场景
 void CMap::InitSceneNode()
 {
@@ -143,8 +144,7 @@ void CMap::InitMap()
                                                   osg::Vec3f(-m_pMap2DNode->getMap()->getProfile()->getExtent().width()
                                                              ,0.0f,0.0f)));
 
-            qDebug()<<m_pMap2DNode->getMap()->getProfile()->getExtent().width();
-            qDebug()<<m_pMap2DNode->getMap()->getProfile()->getExtent().height();
+
             m_pRightMatrixTransform->setMatrix(osg::Matrix::translate(
                                                    osg::Vec3f(m_pMap2DNode->getMap()->getProfile()->getExtent().width()
                                                               ,0.0f,0.0f)));
@@ -170,26 +170,26 @@ void CMap::InitMap()
             m_pMap3DNode->open();
 #endif
 
-//            m_pCamera = new osg::Camera;
-//            m_pCamera->setClearMask(GL_DEPTH_BUFFER_BIT);
-//            m_pCamera->setRenderOrder( osg::Camera::NESTED_RENDER,1);
-//            m_pCamera->setComputeNearFarMode( osg::CullSettings::COMPUTE_NEAR_FAR_USING_BOUNDING_VOLUMES );
-//            m_pCamera->addChild(node);
-//            m_pCamera->setGraphicsContext(dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
-//                                          ->GetOsgView()->getCamera()->getGraphicsContext());
+            m_pCamera = new osg::Camera;
+            m_pCamera->setClearMask(GL_DEPTH_BUFFER_BIT);
+            m_pCamera->setRenderOrder( osg::Camera::NESTED_RENDER);
+            m_pCamera->setAllowEventFocus(false);
+            m_pCamera->setProjectionResizePolicy(osg::Camera::FIXED);
+            m_pCamera->setComputeNearFarMode( osg::CullSettings::COMPUTE_NEAR_FAR_USING_BOUNDING_VOLUMES );
+            m_pCamera->addChild(node);
+            m_pCamera->setGraphicsContext(dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
+                                          ->GetOsgView()->getCamera()->getGraphicsContext());
 
-            osg::Camera* pCamera = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
-                                                      ->GetOsgView()->getCamera();
+            m_pCamera->addCullCallback(new osgEarth::AutoClipPlaneCullCallback(m_pMap3DNode));
 
+            osgEarth::Util::LogarithmicDepthBuffer buffer;
+            buffer.setUseFragDepth( true );
+            buffer.install(m_pCamera);
 
-//            osgEarth::Util::LogarithmicDepthBuffer buffer;
-//            buffer.setUseFragDepth( true );
-//            buffer.install(pCamera);
-
-            osgEarth::GLUtils::setGlobalDefaults(pCamera->getOrCreateStateSet());
+            osgEarth::GLUtils::setGlobalDefaults(m_pCamera->getOrCreateStateSet());
         }
 
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode.get(),m_pMap3DNode.get(),true));
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode.get(),m_pCamera.get(),true));
         m_pPlotManager->UpdateMapNode(m_pMap2DNode,m_pMap3DNode);
     }
         break;
