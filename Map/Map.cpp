@@ -28,21 +28,21 @@ CMap::CMap(MapType type, ISceneGraph *pSceneGraph):
 
 CMap::~CMap()
 {
-	delete m_pPlotManager;
+    delete m_pPlotManager;
 
-	m_pCamera = nullptr;
-	m_p2DRoot = nullptr;
-	if (m_pMap3DNode.valid())
-	{
-		m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pMap3DNode));
-		m_pMap3DNode = nullptr;
-	}
+    m_pCamera = nullptr;
+    m_p2DRoot = nullptr;
+    if (m_pMap3DNode.valid())
+    {
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pMap3DNode));
+        m_pMap3DNode = nullptr;
+    }
 
-	if (m_pMap2DNode.valid())
-	{
-		m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pMap2DNode));
-		m_pMap2DNode = nullptr;
-	}
+    if (m_pMap2DNode.valid())
+    {
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pMap2DNode));
+        m_pMap2DNode = nullptr;
+    }
 }
 
 void CMap::SubMessage(IMapMessageObserver *pMsgObr)
@@ -138,22 +138,22 @@ void CMap::InitMap()
             m_p2DRoot->addChild(node);
 
 
-            auto m_pLeftMatrixTransform = new osg::MatrixTransform;
-            auto m_pRightMatrixTransform = new osg::MatrixTransform;
-            m_pLeftMatrixTransform->setMatrix(osg::Matrix::translate(
-                                                  osg::Vec3f(-m_pMap2DNode->getMap()->getProfile()->getExtent().width()
-                                                             ,0.0f,0.0f)));
+//            auto m_pLeftMatrixTransform = new osg::MatrixTransform;
+//            auto m_pRightMatrixTransform = new osg::MatrixTransform;
+//            m_pLeftMatrixTransform->setMatrix(osg::Matrix::translate(
+//                                                  osg::Vec3f(-m_pMap2DNode->getMap()->getProfile()->getExtent().width()
+//                                                             ,0.0f,0.0f)));
 
 
-            m_pRightMatrixTransform->setMatrix(osg::Matrix::translate(
-                                                   osg::Vec3f(m_pMap2DNode->getMap()->getProfile()->getExtent().width()
-                                                              ,0.0f,0.0f)));
+//            m_pRightMatrixTransform->setMatrix(osg::Matrix::translate(
+//                                                   osg::Vec3f(m_pMap2DNode->getMap()->getProfile()->getExtent().width()
+//                                                              ,0.0f,0.0f)));
 
-            m_pLeftMatrixTransform->addChild(node);
-            m_pRightMatrixTransform->addChild(node);
+//            m_pLeftMatrixTransform->addChild(node);
+//            m_pRightMatrixTransform->addChild(node);
 
-            m_p2DRoot->addChild(m_pLeftMatrixTransform);
-            m_p2DRoot->addChild(m_pRightMatrixTransform);
+//            m_p2DRoot->addChild(m_pLeftMatrixTransform);
+//            m_p2DRoot->addChild(m_pRightMatrixTransform);
         }
 
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode,m_p2DRoot,true));
@@ -221,12 +221,22 @@ void CMap::LoadSpaceEnv()
         }
     }
 
-    if(nullptr != m_pSpaceEnv && MAP_3D == m_emType)
+    if(nullptr != m_pSpaceEnv)
     {
         osg::Camera* pCamera = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
-                                                  ->GetOsgView()->getCamera();
-        pCamera->setClearMask(GL_DEPTH_BUFFER_BIT);
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode.get(),dynamic_cast<IOsgSceneNode*>(m_pSpaceEnv)->GetOsgNode(),true));
+                ->GetOsgView()->getCamera();
+        if(MAP_3D == m_emType)
+        {
+            pCamera->setClearMask(GL_DEPTH_BUFFER_BIT);
+            pCamera->setClearColor(osg::Vec4(0.0,0.0,0.0,1.0));
+            m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode.get(),
+                                                                                  dynamic_cast<IOsgSceneNode*>(m_pSpaceEnv)->GetOsgNode(),true));
+        }
+        else if(MAP_2D == m_emType)
+        {
+            pCamera->setClearMask(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
+            pCamera->setClearColor(osg::Vec4(1.0,1.0,1.0,1.0));
+        }
     }
 }
 

@@ -133,7 +133,6 @@ void QtViewPoint::MapTypeChanged(MapType emType)
             m_p2DEarthManipulator->InitViewPoint();
         }
         m_emType = View_2D;
-
         m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_p2DEarthManipulator));
     }
         break;

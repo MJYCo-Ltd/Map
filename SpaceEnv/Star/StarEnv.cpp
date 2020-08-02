@@ -52,7 +52,6 @@ private:
 CStarEnv::CStarEnv(ISceneGraph *pSceneGraph):
     m_pSceneGraph(pSceneGraph)
 {
-    setEventCallback(new ResizeEventHandler(this));
     /// 初始化IERS文件
     if(!Aerospace::CIRESInfo::GetInstance()->IsInit())
     {
@@ -102,6 +101,8 @@ void CStarEnv::SetMainView(osgViewer::View* pMainView)
     setViewport(pMainView->getCamera()->getViewport());
     m_pMainView = pMainView;
     m_pMainCamera = m_pMainView->getCamera();
+    setViewport(m_pMainCamera->getViewport());
+    m_pMainCamera->setEventCallback(new ResizeEventHandler(this));
 }
 
 void CStarEnv::UpdateMatrix(const osg::Matrix &crMatrix)
