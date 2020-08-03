@@ -136,11 +136,11 @@ osg::Image *CResourceLod::LoadImage(const std::string &sImagePath, int nWidth, i
     if(bScale)
     {
         char buffer[255]="";
-        itoa(nWidth,buffer,10);
+        sprintf(buffer,"%d",nWidth);
         sForFind += "_";
         sForFind += buffer;
         sForFind += "_";
-        itoa(nHeight,buffer,10);
+        sprintf(buffer,"%d",nHeight);
         sForFind += buffer;
     }
 

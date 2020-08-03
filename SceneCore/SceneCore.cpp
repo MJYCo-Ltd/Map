@@ -77,7 +77,11 @@ bool CheckPC()
 void SetExePath(const string sPath)
 {
     s_strPath = sPath;
+#ifdef Q_OS_WIN
 	s_strPath += '\\';
+#else
+    s_strPath += '/';
+#endif
 }
 
 /// 获取路径

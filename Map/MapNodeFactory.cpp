@@ -78,10 +78,10 @@ bool CMapNodeFactory::DeleteMapSceneNode(IMapSceneNode *pMapSceneNode)
 void CMapNodeFactory::InitFactory()
 {
     string sFilePath = GetExePath();
-#ifdef _DEBUG
-    sFilePath += "NodeFactoryd.dll";
-#else
+#ifdef QT_NO_DEBUG
     sFilePath += "NodeFactory.dll";
+#else
+    sFilePath += "NodeFactoryd.dll";
 #endif
     ifstream in(sFilePath, ios::in);
     string sInterfaceType;

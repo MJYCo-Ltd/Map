@@ -4,21 +4,20 @@
 #include <osgEarth/MapNode>
 #include "IOsgEarthMapSceneNode.h"
 #include "QtOsgSceneNode.h"
+#include "OsgExtern/OsgExtern_Global.h"
 
 template <typename T>
 class QtOsgEarthMapSceneNode:public QtOsgSceneNode<T>,public IOsgEarthMapSceneNode
 {
 public:
-    explicit QtOsgEarthMapSceneNode(ISceneGraph* pSceneGraph);
-    virtual ~QtOsgEarthMapSceneNode();
+    explicit QtOsgEarthMapSceneNode(ISceneGraph* pSceneGraph):QtOsgSceneNode<T>(pSceneGraph){}
+    virtual ~QtOsgEarthMapSceneNode(){}
 
     /**
      * @brief  更新地图节点
      * @param pMapNode
      */
-    virtual void UpdateMapNode(osgEarth::MapNode* pMapNode);
+    virtual void UpdateMapNode(osgEarth::MapNode* pMapNode){}
 };
-
-#include "QtOsgEarthMapSceneNode.cpp"
 
 #endif // QT_OSGEARTH_MAP_SCENE_NODE_H

@@ -7,6 +7,7 @@
 
 class CSolarEnv;
 class CStarEnv;
+class CMatixUpdateCallback;
 
 class CSpaceEnv:public QtOsgSceneNode<ISpaceEnv>
 {

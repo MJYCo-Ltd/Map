@@ -5,6 +5,8 @@
 
 class EllipsoidBounding;
 class ISceneGraph;
+class PlanetUpdateCallback;
+class PlantDrawCallback;
 
 class CPlanetModel:public osg::MatrixTransform
 {

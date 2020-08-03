@@ -119,7 +119,6 @@ void CMyEarthManipulator::zoom(double dx, double dy, osg::View *view)
     }
 }
 
-#include <QDebug>
 /// 调整视点
 void CMyEarthManipulator::AdjustViewPoint()
 {
@@ -132,7 +131,6 @@ void CMyEarthManipulator::AdjustViewPoint()
     const double YOffet = vp.focalPoint()->y();
     const double EyeHeight = vp.range()->getValue();
 
-    qDebug()<<m_extent.yMax();
     const double DISTANCE = m_extent.yMax()-EyeHeight*m_dFactor;
     if(YOffet > 0 && (YOffet + EyeHeight*m_dFactor) > m_extent.yMax())
     {

@@ -15,9 +15,11 @@
 
 #include <SpaceEnv/ISpaceEnv.h>
 #include "PlotManager.h"
-#include "Inner/ILoadResource.h"
+#include <Inner/IRender.h>
+#include <Inner/ILoadResource.h>
 #include <Inner/IOsgSceneNode.h>
 #include <Inner/IOsgViewPoint.h>
+#include <Inner/OsgExtern/OsgExtern.h>
 #include "Map.h"
 
 CMap::CMap(MapType type, ISceneGraph *pSceneGraph):
@@ -116,6 +118,10 @@ void CMap::InitSceneNode()
 {
     QtOsgSceneNode<IMap>::InitSceneNode();
     m_pPlotManager = new CPlotManager(m_pSceneGraph);
+
+    osg::Camera* pCamera = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
+            ->GetOsgView()->getCamera();
+    osgEarth::GLUtils::setGlobalDefaults(pCamera->getOrCreateStateSet());
     InitMap();
 }
 
@@ -185,8 +191,6 @@ void CMap::InitMap()
             osgEarth::Util::LogarithmicDepthBuffer buffer;
             buffer.setUseFragDepth( true );
             buffer.install(m_pCamera);
-
-            osgEarth::GLUtils::setGlobalDefaults(m_pCamera->getOrCreateStateSet());
         }
 
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode.get(),m_pCamera.get(),true));
@@ -205,10 +209,22 @@ void CMap::LoadSpaceEnv()
     if(nullptr == m_pSpaceEnv)
     {
         typedef ISpaceEnv* (*CreateSpaceEnvFun)(ISceneGraph*);
-#ifdef _DEBUG
-        QLibrary loadMap("SpaceEnvd.dll");
-#else
+#ifdef Q_OS_WIN
+
+#ifdef QT_NO_DEBUG
         QLibrary loadMap("SpaceEnv.dll");
+#else
+        QLibrary loadMap("SpaceEnvd.dll");
+#endif
+
+#else
+
+#ifdef QT_NO_DEBUG
+        QLibrary loadMap("libSpaceEnv.so");
+#else
+        QLibrary loadMap("libSpaceEnvd.so");
+#endif
+
 #endif
         if(loadMap.load())
         {
@@ -235,7 +251,7 @@ void CMap::LoadSpaceEnv()
         else if(MAP_2D == m_emType)
         {
             pCamera->setClearMask(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
-            pCamera->setClearColor(osg::Vec4(1.0,1.0,1.0,1.0));
+            pCamera->setClearColor(osg::Vec4(0.63922,0.8,1.0,1.0));
         }
     }
 }

@@ -24,8 +24,11 @@ int main(int argc, char *argv[])
     {
         return(1);
     }
-
+#ifdef Q_OS_WIN
     char * pStr = strrchr(argv[0],'\\');
+#elif
+    char * pStr = strrchr(argv[0],'/');
+#endif
     pStr[0] = 0;
     SetExePath(argv[0]);
 

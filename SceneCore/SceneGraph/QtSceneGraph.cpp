@@ -228,10 +228,23 @@ void QtSceneGraph::InitSceneGraph()
 void QtSceneGraph::LoadMap(QtViewPoint* pViewPoint)
 {
     typedef IMap* (*CreateMapFun)(MapType,ISceneGraph*);
-#ifdef _DEBUG
-    QLibrary loadMap("Mapd.dll");
+
+#ifdef Q_OS_WIN
+
+#ifdef QT_NO_DEBUG
+        QLibrary loadMap("Map.dll");
 #else
-    QLibrary loadMap("Map.dll");
+        QLibrary loadMap("Mapd.dll");
+#endif
+
+#else
+
+#ifdef QT_NO_DEBUG
+        QLibrary loadMap("libMap.so");
+#else
+        QLibrary loadMap("libMapd.so");
+#endif
+
 #endif
     if(loadMap.load())
     {

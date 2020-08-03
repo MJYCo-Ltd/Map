@@ -108,14 +108,14 @@ void CSpaceEnv::InitSceneNode()
 
 
     time_t timep;
-    struct tm p;
+    //struct tm p;
 
     /// 更新时间
     time(&timep);
-    gmtime_s(&p,&timep);
-    Aerospace::CDate data(p.tm_year+1900,p.tm_mon+1
-                    ,p.tm_mday,p.tm_hour
-                    ,p.tm_min,p.tm_sec,UTC);
+    auto p = gmtime(&timep);
+    Aerospace::CDate data(p->tm_year+1900,p->tm_mon+1
+                    ,p->tm_mday,p->tm_hour
+                    ,p->tm_min,p->tm_sec,UTC);
 
     UpdateDate(data.GetMJD());
 }

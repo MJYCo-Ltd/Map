@@ -2,6 +2,7 @@
 #include <osg/OperationThread>
 #include <osgViewer/ViewerEventHandlers>
 
+#include "Inner/IRender.h"
 #include <Inner/IOsgSceneNode.h>
 #include <Inner/QtOsgSceneNode.h>
 
