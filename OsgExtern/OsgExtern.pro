@@ -28,8 +28,8 @@ include(../SoftSDK.pri)
 
 INCLUDEPATH *= $$PWD/../Inc
 
-DESTDIR = $$PWD/../Bin
-DLLDESTDIR = G:\new\LXQ\VS2017\lib\x64
+DESTDIR = $$PWD/../../Bin
+DLLDESTDIR = $$SDKPath\bin
 unix {
     target.path = /usr/lib
     INSTALLS += target

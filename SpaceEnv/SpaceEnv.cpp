@@ -92,9 +92,8 @@ void CSpaceEnv::UpdateDate(double dMJD)
 /// 初始化场景节点
 void CSpaceEnv::InitSceneNode()
 {
-    QtOsgSceneNode<ISpaceEnv>::InitSceneNode();
     m_pRotateTransform = new osg::MatrixTransform;
-    m_pOsgNode->addChild(m_pRotateTransform);
+    m_pOsgNode = m_pRotateTransform;
 
     m_pUpdateCallBack = new CMatixUpdateCallback(this);
     m_pOsgNode->addUpdateCallback(m_pUpdateCallBack);
@@ -103,7 +102,7 @@ void CSpaceEnv::InitSceneNode()
     m_pSolarEnv = new CSolarEnv(m_pSceneGraph);
     m_pSolarEnv->CreateSolar();
 
-	m_pRotateTransform->addChild(m_pStarEnv);
+    m_pRotateTransform->addChild(m_pStarEnv);
     m_pRotateTransform->addChild(m_pSolarEnv);
 
 

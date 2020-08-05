@@ -67,8 +67,8 @@ HEADERS += \
     Window/Widget/QtOsgWindow.h \
     Message/MessageManager.h
 
-DESTDIR = $$PWD/../Bin
-DLLDESTDIR = G:\new\LXQ\VS2017\lib\x64
+DESTDIR = $$PWD/../../Bin
+DLLDESTDIR = $$SDKPath\bin
 
 LIBS *= -L$$DESTDIR
 unix {
