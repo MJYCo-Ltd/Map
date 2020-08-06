@@ -18,6 +18,17 @@ public:
      * @param pMapNode
      */
     virtual void UpdateMapNode(osgEarth::MapNode* pMapNode){}
+
+    /**
+     * @brief 是否可以删除
+     * @return
+     */
+    virtual bool CanDelete()
+    {
+        return(m_bCanDelete);
+    }
+protected:
+    bool   m_bCanDelete=true;
 };
 
 #endif // QT_OSGEARTH_MAP_SCENE_NODE_H

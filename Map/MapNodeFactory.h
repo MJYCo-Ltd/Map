@@ -43,7 +43,14 @@ private:
     ISceneGraph* m_pSceneGraph=nullptr;
 
     typedef IMapSceneNode* (*pCreateNodeFun)(ISceneGraph*,const string&);
+    typedef bool (*pDeleteNodeFun)(IMapSceneNode*);
     typedef bool(*pQueryInterfaceFun)(string&);
+
+    struct MapSceneFun
+    {
+        pCreateNodeFun pCrete;
+        pDeleteNodeFun pDelete;
+    };
 
     map<string,pCreateNodeFun> m_mapTypeFunc;
 
