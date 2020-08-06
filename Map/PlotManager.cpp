@@ -148,7 +148,8 @@ IMapSceneNode *CPlotManager::CreateMapSceneNode(const string& csInterfaceName)
     return(m_pCreateFactory->CreateMapSceneNode(csInterfaceName));
 }
 
-bool CPlotManager::DeleteMapSceneNode(IMapSceneNode *pMapSceneNode)
+/// 强制删除没用的地图节点
+void CPlotManager::FreeNoUseMapSceneNode()
 {
-    return(m_pCreateFactory->DeleteMapSceneNode(pMapSceneNode));
+    m_pCreateFactory->DeleteNoUseSceneNode();
 }

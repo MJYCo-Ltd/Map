@@ -62,10 +62,9 @@ public:
     IMapSceneNode * CreateMapSceneNode(const string& csInterfaceName);
 
     /**
-     * @brief 删除地图节点
-     * @return
+     * @brief FreeNoUseMapSceneNode
      */
-    bool DeleteMapSceneNode(IMapSceneNode* pMapSceneNode);
+    void FreeNoUseMapSceneNode();
 private:
     ISceneGraph*                       m_pSceneGraph=nullptr; /// 场景图
     CMapNodeFactory*                   m_pCreateFactory=nullptr;/// 创建节点

@@ -1,6 +1,6 @@
 #ifndef QT_OSGEARTH_MAP_SCENE_NODE_H
 #define QT_OSGEARTH_MAP_SCENE_NODE_H
-
+#include <QDebug>
 #include <osgEarth/MapNode>
 #include "IOsgEarthMapSceneNode.h"
 #include "QtOsgSceneNode.h"
@@ -23,9 +23,9 @@ public:
      * @brief 是否可以删除
      * @return
      */
-    virtual bool CanDelete()
+    virtual bool CanDelete() const
     {
-        return(m_bCanDelete);
+        return(m_pOsgNode->referenceCount() < 2);
     }
 protected:
     bool   m_bCanDelete=true;

@@ -12,7 +12,7 @@ public:
      * @brief 是否可以删除
      * @return
      */
-    virtual bool CanDelete()=0;
+    virtual bool CanDelete() const =0;
 };
 
 #endif

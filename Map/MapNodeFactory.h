@@ -1,6 +1,6 @@
 #ifndef CMAPNODEFACTORY_H
 #define CMAPNODEFACTORY_H
-
+#include <QObject>
 #include <list>
 #include <map>
 
@@ -9,8 +9,9 @@ class ISceneGraph;
 
 using namespace std;
 
-class CMapNodeFactory
+class CMapNodeFactory:public QObject
 {
+    Q_OBJECT
 public:
     CMapNodeFactory(ISceneGraph* pSceneGraph);
     ~CMapNodeFactory();
@@ -23,11 +24,9 @@ public:
     IMapSceneNode* CreateMapSceneNode(const string &sInterface);
 
     /**
-     * @brief 删除节点
-     * @param pMapSceneNode
-     * @return
+     * @brief 删除不再使用的地图节点
      */
-    bool DeleteMapSceneNode(IMapSceneNode *pMapSceneNode);
+    void DeleteNoUseSceneNode();
 
 protected:
     /**
@@ -39,7 +38,13 @@ protected:
 	 * @brief 初始化类型
 	 */
     void InitType(const string& sInterface);
+
+    /**
+     * @brief 定时处理
+     */
+    void timerEvent(QTimerEvent *);
 private:
+    int   m_nTimerID=-1;
     ISceneGraph* m_pSceneGraph=nullptr;
 
     typedef IMapSceneNode* (*pCreateNodeFun)(ISceneGraph*,const string&);
@@ -48,11 +53,12 @@ private:
 
     struct MapSceneFun
     {
-        pCreateNodeFun pCrete;
-        pDeleteNodeFun pDelete;
+        pCreateNodeFun pCrete=nullptr;
+        pDeleteNodeFun pDelete=nullptr;
     };
 
-    map<string,pCreateNodeFun> m_mapTypeFunc;
+    map<string,MapSceneFun> m_mapTypeFunc;
+    map<IMapSceneNode*,string>m_mapDeleteFunc;
 
     map<string, string>        m_mapTypeDllName; /// 类型和dll的
     list<IMapSceneNode*> m_allCreateNode;

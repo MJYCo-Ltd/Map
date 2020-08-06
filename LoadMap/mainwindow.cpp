@@ -90,5 +90,4 @@ void MainWindow::on_action_4_triggered()
 
     auto pLayer = m_pSceneGraph->GetMap()->GetPlotManager()->FindOrCreateLayer("test");
     pLayer->RemoveSceneNode(m_pPersonInfo);
-    m_pSceneGraph->GetMap()->GetPlotManager()->DeleteMapSceneNode(m_pPersonInfo);
 }

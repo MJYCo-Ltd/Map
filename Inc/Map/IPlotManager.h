@@ -55,10 +55,9 @@ public:
     virtual IMapSceneNode* CreateMapSceneNode(const string&)=0;
 
     /**
-     * @brief 删除地图节点
-     * @return
+     * @brief 强制删除不再使用的地图节点
      */
-    virtual bool DeleteMapSceneNode(IMapSceneNode*)=0;
+    virtual void FreeNoUseMapSceneNode()=0;
 };
 
 #endif

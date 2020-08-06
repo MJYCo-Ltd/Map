@@ -1,7 +1,66 @@
+#include <QSet>
+#include <QDebug>
 #include <ISceneCore.h>
 #include <Inner/ILoadResource.h>
 #include <Inner/OsgExtern/OsgExtern.h>
 #include "PersonInfo.h"
+
+static QSet<IMapSceneNode*> g_allCreate;
+static int g_num(0);
+
+void my_init()
+{
+    ++g_num;
+    qDebug()<<"my_init"<<g_num;
+}
+
+void my_fini()
+{
+    --g_num;
+    qDebug()<<"my_fini"<<g_num;
+    if(0==g_num)
+    {
+        for(auto one : g_allCreate)
+        {
+            qDebug()<<"my_fini delete";
+            delete one;
+        }
+        g_allCreate.clear();
+    }
+}
+
+#ifdef Q_OS_WIN
+#include <qt_windows.h>
+#undef LoadImage
+
+BOOL WINAPI DllMain(
+  _In_ HINSTANCE hinstDLL, /// 指向自身的句柄
+  _In_ DWORD  fdwReason,   /// 调用原因
+  _In_ LPVOID lpvReserved  /// 隐式加载和显式加载
+)
+{
+    switch(fdwReason)
+    {
+    case DLL_PROCESS_ATTACH:
+        my_init();
+        break;
+    case DLL_PROCESS_DETACH:
+        my_fini();
+        break;
+//    case DLL_THREAD_ATTACH:
+//        my_init();
+//        break;
+//    case DLL_THREAD_DETACH:
+//        my_fini();
+//        break;
+    }
+
+    return(TRUE);
+}
+#else
+void my_init(void) __attribute__((constructor)); //告诉gcc把这个函数扔到init section
+void my_fini(void) __attribute__((destructor));  //告诉gcc把这个函数扔到fini section
+#endif
 
 string CPersonInfo::S_sInterFace("IPersonInfo");
 
@@ -129,7 +188,9 @@ IPersonInfo* CreateNode(ISceneGraph* pSceneGraph, const string &sInterfaceName)
 {
     if(sInterfaceName == CPersonInfo::GetInterFaceName())
     {
-        return(new CPersonInfo(pSceneGraph));
+        auto pPerson = new CPersonInfo(pSceneGraph);
+        g_allCreate.insert(pPerson);
+        return(pPerson);
     }
     else
     {
@@ -137,9 +198,20 @@ IPersonInfo* CreateNode(ISceneGraph* pSceneGraph, const string &sInterfaceName)
     }
 }
 
+/// 删除地图节点
+bool DeleteNode(IMapSceneNode * pMapSceneNode)
+{
+    if(g_allCreate.remove(pMapSceneNode))
+    {
+        delete pMapSceneNode;
+    }
+    qDebug()<<"delete";
+    return(true);
+}
+
 /// 查询接口
 bool QueryInterface(string& sInterfaceName)
 {
     sInterfaceName = CPersonInfo::GetInterFaceName();
-    return(false);
+    return(true);
 }
