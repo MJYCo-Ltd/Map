@@ -6,10 +6,10 @@
 
 QT       -= gui
 
-TARGET = PersonInfo
+TARGET = MapShape
 TEMPLATE = lib
 
-DEFINES += PERSONINFO_LIBRARY
+DEFINES += MAPSHAPE_LIBRARY
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -24,7 +24,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SDK_CONFIG *= OSG OsgExtern SceneCore
 
-include($$PWD/../../SoftSDK_My.pri)
+include($$PWD/../../SoftSDK.pri)
 
 INCLUDEPATH *= $$PWD/../../Inc
 
@@ -39,7 +39,9 @@ unix {
 }
 
 HEADERS += \
-    PersonInfo.h
+    MapShape.h \
+    QtMapSceneNode.h
 
 SOURCES += \
-    PersonInfo.cpp
+    MapShape.cpp \
+    QtMapSceneNode.cpp

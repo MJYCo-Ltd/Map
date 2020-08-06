@@ -22,14 +22,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-SDK_CONFIG *= OSG OsgExtern
+SDK_CONFIG *= OSG OsgExtern SceneCore
 
 include(../SoftSDK.pri)
 
 INCLUDEPATH *= $$PWD/../Inc
 
-DESTDIR = $$PWD/../Bin
-DLLDESTDIR = G:\new\LXQ\VS2017\lib\x64
+DESTDIR = $$PWD/../../Bin
+DLLDESTDIR = $$SDKPath/bin
 
 LIBS *= -L$$DESTDIR
 
@@ -40,13 +40,15 @@ unix {
 
 HEADERS += \
     Map.h \
-    MapSceneNode.h \
+    MapNodeFactory.h \
     Map_Global.h \
+    MyModelLayer.h \
     PlotLayer.h \
     PlotManager.h
 
 SOURCES += \
     Map.cpp \
-    MapSceneNode.cpp \
+    MapNodeFactory.cpp \
+    MyModelLayer.cpp \
     PlotLayer.cpp \
     PlotManager.cpp

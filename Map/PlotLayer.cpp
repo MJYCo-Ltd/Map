@@ -70,8 +70,7 @@ void CPlotLayer::RemoveSceneNode(IMapSceneNode *pSceneNode)
         if(pSceneNode == find->second)
         {
             /// 从场景中移除
-            m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(dynamic_cast<IOsgSceneNode*>(m_pSceneGraph->GetRoot())->GetOsgNode(),
-                                                                                  dynamic_cast<IOsgSceneNode*>(pSceneNode)->GetOsgNode(),false));
+            RemoveNode(pSceneNode);
             m_mapID2Node.erase(find);
             return;
         }
@@ -84,7 +83,7 @@ void CPlotLayer::Clear()
         m_mapID2Node.end() != find;)
     {
         /// 从场景中移除
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pGroup,dynamic_cast<IOsgSceneNode*>(find->second)->GetOsgNode(),false));
+        RemoveNode(find->second);
         find = m_mapID2Node.erase(find);
     }
 }
@@ -125,4 +124,11 @@ void CPlotLayer::UpdateMapNode(osgEarth::MapNode *pMapNode)
 osg::Node *CPlotLayer::GetOsgNode()
 {
     return (m_pGroup);
+}
+
+void CPlotLayer::RemoveNode(IMapSceneNode *pSceneNode)
+{
+    /// 从场景中移除
+    m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
+                new CModifyNode(m_pGroup,dynamic_cast<IOsgSceneNode*>(pSceneNode)->GetOsgNode(),false));
 }

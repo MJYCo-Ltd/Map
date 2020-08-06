@@ -60,6 +60,11 @@ public:
      * @return
      */
     osg::Node* GetOsgNode();
+protected:
+    /**
+     * @brief 移除节点
+     */
+    void RemoveNode(IMapSceneNode*);
 private:
     ISceneGraph*                      m_pSceneGraph=nullptr;
     osg::observer_ptr<osgEarth::MapNode> m_pMapNode;

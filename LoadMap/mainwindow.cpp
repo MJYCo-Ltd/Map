@@ -70,7 +70,7 @@ void MainWindow::on_action_triggered()
 void MainWindow::on_action_2_triggered()
 {
     auto pLayer = m_pSceneGraph->GetMap()->GetPlotManager()->FindOrCreateLayer("test");
-    pLayer->Clear();
+    pLayer->RemoveSceneNode(m_pPersonInfo);
 }
 
 void MainWindow::on_action_3_triggered()

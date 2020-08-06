@@ -1,6 +1,7 @@
 #include <osgEarth/GeoData>
 #include <osg/OperationThread>
 #include <osgViewer/ViewerEventHandlers>
+//#include <osgGA/StateSetManipulator>
 
 #include "Inner/IRender.h"
 #include <Inner/IOsgSceneNode.h>
@@ -95,6 +96,7 @@ QtViewPoint::QtViewPoint(IRender *pRender, ProjectType emProject):
 {
     m_pView = new osgViewer::View;
     m_pView->addEventHandler(new osgViewer::StatsHandler);
+    //m_pView->addEventHandler(new osgGA::StateSetManipulator(m_pView->getCamera()->getOrCreateStateSet()));
 
     m_pView->getCamera()->setViewport(0,0,C_WINDOW_WIDTH,C_WINDOW_HEIGHT);
     m_pView->getCamera()->setClearColor(osg::Vec4(0,0,0,1));

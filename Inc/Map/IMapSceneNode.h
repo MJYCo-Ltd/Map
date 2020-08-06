@@ -7,6 +7,12 @@ class IMapSceneNode:public ISceneNode
 {
 public:
     virtual ~IMapSceneNode(){}
+
+    /**
+     * @brief 是否可以删除
+     * @return
+     */
+    virtual bool CanDelete()=0;
 };
 
 #endif
