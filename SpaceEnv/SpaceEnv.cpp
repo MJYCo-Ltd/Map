@@ -68,12 +68,13 @@ void CSpaceEnv::SetConstellationLinesVisible(bool bShow)
     m_pStarEnv->SetConstellationVisible(bShow);
 }
 
+/// 设置显示
 void CSpaceEnv::SetConstellationNamesVisible(bool bShow)
 {
     m_pStarEnv->SetStarNameVisible(bShow);
 }
 
-
+/// 设置行星名称显隐
 void CSpaceEnv::SetPlanetsNamesVisible(bool bShow)
 {
     m_pSolarEnv->SetPlanetNameShow(bShow);
@@ -108,7 +109,6 @@ void CSpaceEnv::InitSceneNode()
 
 
     time_t timep;
-    //struct tm p;
 
     /// 更新时间
     time(&timep);

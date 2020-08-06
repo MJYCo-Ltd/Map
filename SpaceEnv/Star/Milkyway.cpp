@@ -10,6 +10,18 @@ CMilkyway::CMilkyway(ISceneGraph *pSceneGraph):
     makeMilkyway();
 }
 
+void CMilkyway::SetVisible(bool bVisible)
+{
+    if(bVisible)
+    {
+        m_pMilkyway->setNodeMask(-1);
+    }
+    else
+    {
+        m_pMilkyway->setNodeMask(0);
+    }
+}
+
 osg::Node *CMilkyway::getNode()
 {
     return(m_pMilkyway.get());

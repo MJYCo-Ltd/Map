@@ -141,6 +141,12 @@ void CStarEnv::SetConstellationVisible(bool bVisible)
     m_pStarManager->SetConstellation(bVisible);
 }
 
+/// 设置银河的显隐
+void CStarEnv::SetMilkwayVisible(bool bVisible)
+{
+    m_pMilkyway->SetVisible(bVisible);
+}
+
 CStarEnv::~CStarEnv()
 {
 }

@@ -50,6 +50,11 @@ public:
      */
     void SetConstellationVisible(bool bVisible);
 
+    /**
+     * @brief 设置银河的显隐
+     */
+    void SetMilkwayVisible(bool);
+
 protected:
 
     ~CStarEnv();

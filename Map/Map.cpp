@@ -135,7 +135,7 @@ void CMap::InitMap()
     {
         if(!m_p2DRoot.valid())
         {
-            auto node = m_pSceneGraph->ResouceLoader()->LoadNode("Projected.earth");
+            auto node = m_pSceneGraph->ResouceLoader()->LoadNode("Projected_ok.earth");
             m_pMap2DNode = osgEarth::MapNode::findMapNode(node);
 #if OSGEARTH_VERSION_GREATER_OR_EQUAL(3,0,0)
             m_pMap2DNode->open();
@@ -144,22 +144,22 @@ void CMap::InitMap()
             m_p2DRoot->addChild(node);
 
 
-//            auto m_pLeftMatrixTransform = new osg::MatrixTransform;
-//            auto m_pRightMatrixTransform = new osg::MatrixTransform;
-//            m_pLeftMatrixTransform->setMatrix(osg::Matrix::translate(
-//                                                  osg::Vec3f(-m_pMap2DNode->getMap()->getProfile()->getExtent().width()
-//                                                             ,0.0f,0.0f)));
+            auto m_pLeftMatrixTransform = new osg::MatrixTransform;
+            auto m_pRightMatrixTransform = new osg::MatrixTransform;
+            m_pLeftMatrixTransform->setMatrix(osg::Matrix::translate(
+                                                  osg::Vec3f(-m_pMap2DNode->getMap()->getProfile()->getExtent().width()
+                                                             ,0.0f,0.0f)));
 
 
-//            m_pRightMatrixTransform->setMatrix(osg::Matrix::translate(
-//                                                   osg::Vec3f(m_pMap2DNode->getMap()->getProfile()->getExtent().width()
-//                                                              ,0.0f,0.0f)));
+            m_pRightMatrixTransform->setMatrix(osg::Matrix::translate(
+                                                   osg::Vec3f(m_pMap2DNode->getMap()->getProfile()->getExtent().width()
+                                                              ,0.0f,0.0f)));
 
-//            m_pLeftMatrixTransform->addChild(node);
-//            m_pRightMatrixTransform->addChild(node);
+            m_pLeftMatrixTransform->addChild(node);
+            m_pRightMatrixTransform->addChild(node);
 
-//            m_p2DRoot->addChild(m_pLeftMatrixTransform);
-//            m_p2DRoot->addChild(m_pRightMatrixTransform);
+            m_p2DRoot->addChild(m_pLeftMatrixTransform);
+            m_p2DRoot->addChild(m_pRightMatrixTransform);
         }
 
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode,m_p2DRoot,true));

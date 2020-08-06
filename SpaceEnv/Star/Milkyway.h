@@ -12,6 +12,11 @@ class CMilkyway:public osg::Referenced
 public:
     CMilkyway(ISceneGraph* pSceneGraph);
 
+    /**
+     * @brief 设置显隐
+     */
+    void SetVisible(bool);
+
     osg::Node* getNode();
 protected:
     ~CMilkyway();
