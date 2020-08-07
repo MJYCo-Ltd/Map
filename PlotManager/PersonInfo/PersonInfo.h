@@ -56,7 +56,7 @@ extern "C"
 {
     PERSONINFOSHARED_EXPORT IPersonInfo* CreateNode(ISceneGraph*,const string& );
     PERSONINFOSHARED_EXPORT bool QueryInterface(string&);
-    PERSONINFOSHARED_EXPORT bool DeleteNode(IMapSceneNode*);
+//    PERSONINFOSHARED_EXPORT bool DeleteNode(IMapSceneNode*);
 }
 
 #endif // CPERSONINFO_H

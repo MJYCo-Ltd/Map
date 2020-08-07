@@ -39,9 +39,13 @@ unix {
 }
 
 HEADERS += \
+    DrawShape/SceneLine.h \
+    DrawShape/ScenePoint.h \
     MapShape.h \
     QtMapSceneNode.h
 
 SOURCES += \
+    DrawShape/SceneLine.cpp \
+    DrawShape/ScenePoint.cpp \
     MapShape.cpp \
     QtMapSceneNode.cpp

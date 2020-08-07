@@ -1,52 +1,7 @@
 #ifndef INTERFACE_SCENE_NODE_HEARDER_H
 #define INTERFACE_SCENE_NODE_HEARDER_H
 
-#include <cmath>
-/**
- * @brief 视点位置
- */
-union ScenePos
-{
-    struct
-    {
-        float fLon;    /// 经度 [度]
-        float fLat;    /// 纬度 [度]
-        float fHeight; /// 高度 [米]
-        bool  bIsGeo;  /// 是否是经纬度
-    };
-
-    struct
-    {
-        float fX;    /// x轴坐标
-        float fY;    /// y轴坐标
-        float fZ;    /// z轴坐标
-    };
-
-    bool operator == (const ScenePos& rOther) const
-    {
-        if(&rOther == this)
-        {
-            return(true);
-        }
-
-        if(fabs(fLon - rOther.fLon) < 1e-6
-         &&fabs(fLat - rOther.fLat) < 1e-6
-         &&fabs(fHeight - rOther.fHeight) < 1e-6
-         && bIsGeo == rOther.bIsGeo)
-        {
-            return(true);
-        }
-        else
-        {
-            return(false);
-        }
-    }
-
-    bool operator !=(const ScenePos& rOther) const
-    {
-        return(!(this->operator==(rOther)));
-    }
-};
+#include "SceneType.h"
 
 class ISceneGraph;
 /**
@@ -61,11 +16,6 @@ public:
      * @brief 设置场景节点的位置
      */
     virtual void SetPos(const ScenePos&)=0;
-
-    /**
-     * @brief 获取当前节点位置
-     * @return
-     */
     virtual const ScenePos& GetPos()=0;
 
     /**

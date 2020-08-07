@@ -1,11 +1,33 @@
+#include "DrawShape/ScenePoint.h"
 #include "MapShape.h"
+
+static string s_sPoint("IPoint");
+static string s_sLine("ILine");
+static string s_sEllipse("IEllipse");
+static string s_sArc("IArc");
+static string s_sRectangle("IRectangle");
+static string s_sPolygon("IPolygon");
+static string s_sCone("ICone");
+static string s_sImage("IImage");
 
 CMapShape::CMapShape()
 {
 }
 
+string CMapShape::GetInterFaceName()
+{
+    string sTemp;
+
+
+    return(sTemp);
+}
+
 IMapSceneNode* CreateNode(ISceneGraph*pSceneGraph,const string& sInterfaceName)
 {
+    if(sInterfaceName == s_sPoint)
+    {
+        return(new CScenePoint(pSceneGraph));
+    }
     return(nullptr);
 }
 
@@ -13,14 +35,21 @@ bool QueryInterface(string& sInterfaceName)
 {
     sInterfaceName.clear();
 
-    sInterfaceName += "Point;";
-    sInterfaceName += "Line;";
-    sInterfaceName += "Ellipse;";
-    sInterfaceName += "Arc;";
-    sInterfaceName += "Rectangle;";
-    sInterfaceName += "Polygon;";
-    sInterfaceName += "Cone;";
-    sInterfaceName += "Image";
+    sInterfaceName += s_sPoint;
+    sInterfaceName += " ";
+    sInterfaceName += s_sLine;
+    sInterfaceName += " ";
+    sInterfaceName += s_sEllipse;
+    sInterfaceName += " ";
+    sInterfaceName += s_sArc;
+    sInterfaceName += " ";
+    sInterfaceName += s_sRectangle;
+    sInterfaceName += " ";
+    sInterfaceName += s_sPolygon;
+    sInterfaceName += " ";
+    sInterfaceName += s_sCone;
+    sInterfaceName += " ";
+    sInterfaceName += s_sImage;
 
     return(true);
 }

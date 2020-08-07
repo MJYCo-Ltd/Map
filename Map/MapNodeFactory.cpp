@@ -22,6 +22,7 @@ CMapNodeFactory::CMapNodeFactory(ISceneGraph *pSceneGraph):
 /// 析构模型工厂
 CMapNodeFactory::~CMapNodeFactory()
 {
+    killTimer(m_nTimerID);
     for(auto one : m_allCreateNode)
     {
         auto pGroup = dynamic_cast<IOsgSceneNode*>(one)->GetOsgNode();
@@ -30,6 +31,8 @@ CMapNodeFactory::~CMapNodeFactory()
             m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(pGroup));
         }
     }
+
+    DeleteNoUseSceneNode();
 
     m_allCreateNode.clear();
 }
@@ -72,11 +75,12 @@ void CMapNodeFactory::DeleteNoUseSceneNode()
         auto pMapSceneNode = *one;
         if(pMapSceneNode->CanDelete())
         {
-            auto findDelete = m_mapDeleteFunc.find(pMapSceneNode);
-            if(m_mapDeleteFunc.end() != findDelete)
-            {
-                m_mapTypeFunc[findDelete->second].pDelete(pMapSceneNode);
-            }
+//            auto findDelete = m_mapDeleteFunc.find(pMapSceneNode);
+//            if(m_mapDeleteFunc.end() != findDelete)
+//            {
+//                m_mapTypeFunc[findDelete->second].pDelete(pMapSceneNode);
+//            }
+            delete pMapSceneNode;
             one = m_allCreateNode.erase(one);
         }
         else
@@ -119,7 +123,7 @@ void CMapNodeFactory::InitType(const string &sInterface)
         loadDll.setFileName(findOne->second.c_str());
         auto pQueryFunc = reinterpret_cast<pQueryInterfaceFun>(loadDll.resolve("QueryInterface"));
         auto pCreateFun = reinterpret_cast<pCreateNodeFun>(loadDll.resolve("CreateNode"));
-        auto pDeleteFunc = reinterpret_cast<pDeleteNodeFun>(loadDll.resolve("DeleteNode"));
+        //auto pDeleteFunc = reinterpret_cast<pDeleteNodeFun>(loadDll.resolve("DeleteNode"));
 
         if (nullptr != pCreateFun && nullptr != pQueryFunc)
         {
@@ -131,13 +135,13 @@ void CMapNodeFactory::InitType(const string &sInterface)
                 {
                     is>>sType;
                     m_mapTypeFunc[sType].pCrete = pCreateFun;
-                    m_mapTypeFunc[sType].pDelete = pDeleteFunc;
+                    //m_mapTypeFunc[sType].pDelete = pDeleteFunc;
                 }
             }
             else
             {
                 m_mapTypeFunc[sInterface].pCrete = pCreateFun;
-                m_mapTypeFunc[sInterface].pDelete = pDeleteFunc;
+                //m_mapTypeFunc[sInterface].pDelete = pDeleteFunc;
             }
         }
     }

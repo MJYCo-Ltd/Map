@@ -1,10 +1,8 @@
 #ifndef QT_OSGEARTH_MAP_SCENE_NODE_H
 #define QT_OSGEARTH_MAP_SCENE_NODE_H
-#include <QDebug>
 #include <osgEarth/MapNode>
 #include "IOsgEarthMapSceneNode.h"
 #include "QtOsgSceneNode.h"
-#include "OsgExtern/OsgExtern_Global.h"
 
 template <typename T>
 class QtOsgEarthMapSceneNode:public QtOsgSceneNode<T>,public IOsgEarthMapSceneNode
@@ -20,6 +18,19 @@ public:
     virtual void UpdateMapNode(osgEarth::MapNode* pMapNode){}
 
     /**
+     * @brief 设置
+     * @param emType
+     */
+    virtual void SetTerrainType(MAP_TERRAIN emType)
+    {
+        if(m_emTerrain != emType)
+        {
+            m_emTerrain = emType;
+            TerrainTypeChanged();
+        }
+    }
+
+    /**
      * @brief 是否可以删除
      * @return
      */
@@ -27,8 +38,12 @@ public:
     {
         return(m_pOsgNode->referenceCount() < 2);
     }
+
+protected:
+    virtual void TerrainTypeChanged(){};
 protected:
     bool   m_bCanDelete=true;
+    MAP_TERRAIN m_emTerrain;
 };
 
 #endif // QT_OSGEARTH_MAP_SCENE_NODE_H

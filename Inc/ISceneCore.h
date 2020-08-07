@@ -52,7 +52,7 @@ extern "C"
      * @brief 设置exe运行路径
      * @param sPath
      */
-    SCENECORESHARED_EXPORT void SetExePath(const string sPath);
+    SCENECORESHARED_EXPORT void SetExePath(const string &sPath);
 
     /**
      * @brief 获取exe运行路径

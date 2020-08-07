@@ -1,3 +1,4 @@
+#include <QDebug>
 #include <osgEarth/Registry>
 #include <osgEarth/Capabilities>
 #include <osgDB/ReadFile>
@@ -5,9 +6,59 @@
 #include "SceneCore.h"
 #include "SceneGraph/SceneGraphManager.h"
 #include "Message/MessageManager.h"
-static CSceneCore s_gMapCore;
+static CSceneCore* s_gMapCore=nullptr;
+static int g_num;
 static bool        s_gBChecked(false);
 static string     s_strPath;
+
+void my_init()
+{
+    ++g_num;
+    qDebug()<<"my_init scenecore"<<g_num;
+}
+
+void my_fini()
+{
+    --g_num;
+    qDebug()<<"my_fini scenecore"<<g_num;
+    if(0==g_num)
+    {
+        delete s_gMapCore;
+    }
+}
+
+#ifdef Q_OS_WIN
+#include <qt_windows.h>
+#undef LoadImage
+
+BOOL WINAPI DllMain(
+  _In_ HINSTANCE hinstDLL, /// 指向自身的句柄
+  _In_ DWORD  fdwReason,   /// 调用原因
+  _In_ LPVOID lpvReserved  /// 隐式加载和显式加载
+)
+{
+    switch(fdwReason)
+    {
+    case DLL_PROCESS_ATTACH:
+        my_init();
+        break;
+    case DLL_PROCESS_DETACH:
+        my_fini();
+        break;
+//    case DLL_THREAD_ATTACH:
+//        my_init();
+//        break;
+//    case DLL_THREAD_DETACH:
+//        my_fini();
+//        break;
+    }
+
+    return(TRUE);
+}
+#else
+void my_init(void) __attribute__((constructor)); //告诉gcc把这个函数扔到init section
+void my_fini(void) __attribute__((destructor));  //告诉gcc把这个函数扔到fini section
+#endif
 
 CSceneCore::CSceneCore():
     m_pSceneGraphManger(new CSceneGraphManager),
@@ -55,7 +106,11 @@ ISceneCore *GetSceneCore()
     }
     else
     {
-        return(&s_gMapCore);
+        if(nullptr == s_gMapCore)
+        {
+            s_gMapCore = new CSceneCore;
+        }
+        return(s_gMapCore);
     }
 }
 
@@ -74,7 +129,7 @@ bool CheckPC()
 }
 
 /// 配置路径
-void SetExePath(const string sPath)
+void SetExePath(const string& sPath)
 {
     s_strPath = sPath;
 #ifdef Q_OS_WIN

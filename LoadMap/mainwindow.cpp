@@ -1,4 +1,5 @@
 #include <Map/Plot/IPersonInfo.h>
+#include <Map/Plot/IPoint.h>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "SceneGraph/ISceneGraph.h"
@@ -65,6 +66,14 @@ void MainWindow::on_action_triggered()
     pos.bIsGeo = true;
     m_pPersonInfo->SetPos(pos);
     pLayer->AddSceneNode(m_pPersonInfo);
+
+    m_pPoint = dynamic_cast<IPoint*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IPoint"));
+    pos.fLon = 121;
+    pos.fLat = 25;
+    pos.fHeight = 1000;
+    pos.bIsGeo = true;
+    m_pPoint->SetPos(pos);
+    pLayer->AddSceneNode(m_pPoint);
 }
 
 void MainWindow::on_action_2_triggered()
