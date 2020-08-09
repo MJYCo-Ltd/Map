@@ -1,6 +1,7 @@
 #include <osgViewer/View>
 #include <osg/MatrixTransform>
 #include <osgEarth/Version>
+#include <osgEarth/Terrain>
 
 #if OSGEARTH_VERSION_GREATER_OR_EQUAL(3,0,0)
 #include <osgEarth/LogarithmicDepthBuffer>
@@ -68,7 +69,92 @@ void CMap::UnSubMessage(IMapMessageObserver *pMsgObr)
 /// 坐标转换
 bool CMap::ConvertCoord(int &nX, int &nY, ScenePos &geoPos, short TranType)
 {
-    return(true);
+    if(0 == TranType)
+    {
+        osg::Vec3d world;
+        osgEarth::GeoPoint geoPoint;
+        auto pOsgViewPoint = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint());
+        if(!pOsgViewPoint || !pOsgViewPoint->GetOsgView())
+        {
+            return(false);
+        }
+
+        switch (m_emType)
+        {
+        case MAP_2D:
+            if(m_pMap2DNode->getTerrain()->getWorldCoordsUnderMouse(pOsgViewPoint->GetOsgView(), nX, nY, world))
+            {
+                geoPoint.fromWorld(m_pMap2DNode->getMapSRS(),world);
+                geoPoint.makeGeographic();
+                geoPos.bIsGeo = true;
+                geoPos.fLon = geoPoint.x();
+                geoPos.fLat = geoPoint.y();
+                geoPos.fHeight = geoPoint.z();
+                return (true);
+            }
+            break;
+        case MAP_3D:
+            if(m_pMap3DNode->getTerrain()->getWorldCoordsUnderMouse(pOsgViewPoint->GetOsgView(), nX, nY, world))
+            {
+                geoPoint.fromWorld(m_pMap3DNode->getMapSRS(),world);
+                geoPoint.makeGeographic();
+                geoPos.bIsGeo = true;
+                geoPos.fLon = geoPoint.x();
+                geoPos.fLat = geoPoint.y();
+                geoPos.fHeight = geoPoint.z();
+                return (true);
+            }
+            break;
+        }
+        return(false);
+    }
+    else if(1==TranType)
+    {
+        auto pOsgViewPoint = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint());
+        if(!pOsgViewPoint || !pOsgViewPoint->GetOsgView())
+        {
+            return(false);
+        }
+
+        auto pView = pOsgViewPoint->GetOsgView();
+
+        osg::Vec3d world;
+        osgEarth::GeoPoint geoPoint(osgEarth::SpatialReference::create("wgs84"),geoPos.fLon,geoPos.fLat,geoPos.fHeight),geoOut;
+        switch (m_emType)
+        {
+        case MAP_2D:
+            if(geoPoint.transform(m_pMap2DNode->getMapSRS(),geoOut) &&
+               m_pMap2DNode->getMapSRS()->transformToWorld(osg::Vec3d(geoOut.x(),geoOut.y(),geoOut.z()),world))
+            {
+                osg::Matrixd _MVPW = pView->getCamera()->getViewMatrix() * pView->getCamera()->getProjectionMatrix()
+                        * pView->getCamera()->getViewport()->computeWindowMatrix();
+
+                osg::Vec3d scrennPos = world * _MVPW;
+                nX = scrennPos.x();
+                nY = pView->getCamera()->getViewport()->height() - scrennPos.y();
+                return(true);
+            }
+            break;
+        case MAP_3D:
+            if(m_pMap3DNode->getMapSRS()->transformToWorld(osg::Vec3d(geoPos.fLon,geoPos.fLat,geoPos.fHeight),world))
+            {
+                osg::Matrixd _MVPW = pView->getCamera()->getViewMatrix() * pView->getCamera()->getProjectionMatrix()
+                        * pView->getCamera()->getViewport()->computeWindowMatrix();
+
+                osg::Vec3d scrennPos = world * _MVPW;
+                nX = scrennPos.x();
+                nY = pView->getCamera()->getViewport()->height() - scrennPos.y();
+                return(true);
+            }
+            break;
+        }
+
+        return(false);
+    }
+    else
+    {
+        return(false);
+    }
 }
 
 /// 获取所有的图层

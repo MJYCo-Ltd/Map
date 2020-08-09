@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include "Qml/QtOsgItem.h"
 #include "ISceneCore.h"
+#include "AppGlobal.h"
 
 int main(int argc, char *argv[])
 {
@@ -20,6 +21,7 @@ int main(int argc, char *argv[])
     SetExePath(argv[0]);
 
 
+    qmlRegisterType<QAppGlobal>("MyItem",1,0,"AppGlobal");
     qmlRegisterType<QtOsgItem>("MyItem",1,0,"OsgItem");
 
     QQmlApplicationEngine engine;

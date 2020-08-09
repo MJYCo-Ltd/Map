@@ -1,5 +1,7 @@
+#include <QDebug>
 #include <Map/Plot/IPersonInfo.h>
 #include <Map/Plot/IPoint.h>
+#include <Map/Plot/ILine.h>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "SceneGraph/ISceneGraph.h"
@@ -57,6 +59,7 @@ void MainWindow::on_actionchange_triggered()
 void MainWindow::on_action_triggered()
 {
     auto pLayer = m_pSceneGraph->GetMap()->GetPlotManager()->FindOrCreateLayer("test");
+    /// 绘制人
     m_pPersonInfo = dynamic_cast<IPersonInfo*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IPersonInfo"));
     m_pPersonInfo->SetName("123");
     ScenePos pos;
@@ -67,13 +70,48 @@ void MainWindow::on_action_triggered()
     m_pPersonInfo->SetPos(pos);
     pLayer->AddSceneNode(m_pPersonInfo);
 
+    /// 绘制点
     m_pPoint = dynamic_cast<IPoint*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IPoint"));
     pos.fLon = 121;
     pos.fLat = 25;
     pos.fHeight = 1000;
     pos.bIsGeo = true;
     m_pPoint->SetPos(pos);
+    SceneColor color;
+    color.fR = 1.0f;
+    m_pPoint->SetColor(color);
     pLayer->AddSceneNode(m_pPoint);
+
+    /// 绘制线
+    m_pLine = dynamic_cast<ILine*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("ILine"));
+    m_pLine->AddPoint(0,pos);
+    pos.fLon = 122;
+    pos.fLat = 26;
+    pos.fHeight = 1000;
+    pos.bIsGeo = true;
+    m_pLine->AddPoint(0,pos);
+    pos.fLon = 123;
+    pos.fLat = 27;
+    pos.fHeight = 1000;
+    pos.bIsGeo = true;
+    m_pLine->AddPoint(0,pos);
+    m_pLine->SetColor(color);
+    pLayer->AddSceneNode(m_pLine);
+
+    ///  坐标转换
+    int nX,nY;
+    if(m_pSceneGraph->GetMap()->ConvertCoord(nX,nY,pos,1))
+    {
+        qDebug()<<nX<<','<<nY<<'\n'<<pos.fLon<<','<<pos.fLat;
+        if(m_pSceneGraph->GetMap()->ConvertCoord(nX,nY,pos,1))
+        {
+            qDebug()<<pos.fLon<<','<<pos.fLat;
+        }
+    }
+    else
+    {
+        qDebug()<<"ConvertCoord falid";
+    }
 }
 
 void MainWindow::on_action_2_triggered()

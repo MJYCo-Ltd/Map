@@ -155,8 +155,6 @@ void CSceneLine::InitSceneNode()
                 new osgEarth::LineString,
                 osgEarth::SpatialReference::get("wgs84"), m_styleNode);
 
-    pFeature->geoInterp() = osgEarth::GEOINTERP_GREAT_CIRCLE;
-
     m_pFeatureNode = new osgEarth::FeatureNode(pFeature);
     m_pFeatureNode->setDynamic(true);
     m_pLineCallBack = new LineCallBack(this);
@@ -179,7 +177,7 @@ void CSceneLine::InitStyle()
     m_styleNode.getOrCreate<osgEarth::AltitudeSymbol>()
             ->clamping() = osgEarth::AltitudeSymbol::CLAMP_RELATIVE_TO_TERRAIN;
     m_styleNode.getOrCreate<osgEarth::AltitudeSymbol>()
-            ->technique() = osgEarth::AltitudeSymbol::TECHNIQUE_SCENE;
+            ->technique() = osgEarth::AltitudeSymbol::TECHNIQUE_MAP;
     m_styleNode.getOrCreate<osgEarth::AltitudeSymbol>()->binding()
             = osgEarth::AltitudeSymbol::BINDING_VERTEX;
     m_styleNode.getOrCreate<osgEarth::AltitudeSymbol>()
