@@ -20,23 +20,23 @@ public:
     /**
      * @brief 增加点
      */
-    virtual void AddPoint(const ScenePos&)=0;
+    virtual void AddPoint(int,const ScenePos&)=0;
 
     /**
      * @brief 移除点
      */
-    virtual void RemovePoint(int)=0;
+    virtual bool RemovePoint(int)=0;
 
     /**
      * @brief 更新指定位置点
      */
-    virtual void UpdatePoint(int,const ScenePos&)=0;
+    virtual bool UpdatePoint(int,const ScenePos&)=0;
 
     /**
      * @brief 设置多个位置
      */
     virtual void SetMultPos(const vector<ScenePos>&)=0;
-    virtual const vector<ScenePos>& GetMulPos()=0;
+    virtual vector<ScenePos> GetMulPos()=0;
     /**
      * @brief 设置点的大小
      */

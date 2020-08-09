@@ -5,8 +5,16 @@
 #include <Map/Plot/ILine.h>
 #include <Inner/QtDrawShape.h>
 
+enum LINE_CHANGE_TYPE
+{
+    NO_CHANGE,    /// 没有更改
+    UPDATE_POINT, /// 更新点
+    REPLACE_POINS /// 替换所有的点
+};
+
 class CSceneLine:public QtDrawShape<ILine>
 {
+    friend class LineCallBack;
 public:
     CSceneLine(ISceneGraph*);
 
@@ -14,23 +22,23 @@ public:
     /**
      * @brief 增加点
      */
-    virtual void AddPoint(const ScenePos&);
+    virtual void AddPoint(int,const ScenePos&);
 
     /**
      * @brief 移除点
      */
-    virtual void RemovePoint(int);
+    virtual bool RemovePoint(int);
 
     /**
      * @brief 更新指定位置
      */
-    virtual void UpdatePoint(int,const ScenePos&);
+    virtual bool UpdatePoint(int,const ScenePos&);
 
     /**
      * @brief 设置多个位置
      */
     void SetMultPos(const vector<ScenePos>&);
-    const vector<ScenePos>& GetMulPos(){return(m_vAllPos);}
+    vector<ScenePos> GetMulPos();
 
     /**
      * @brief 更新地图节点
@@ -67,9 +75,12 @@ public:
     const SceneColor& GetColor(){return(m_stColor);}
 private:
     float m_fLineWidth=1.0f;
+    int   m_nIndex=0;
+    LINE_CHANGE_TYPE m_emChangeType=NO_CHANGE; /// 操作类型
     SceneColor m_stColor;
     SCENE_LINE_TYPE m_emType=SOLID_LINE;
-    vector<ScenePos> m_vAllPos;
+    list<ScenePos> m_listAllPos;
+    osg::ref_ptr<LineCallBack>          m_pLineCallBack;
     osg::ref_ptr<osgEarth::FeatureNode> m_pFeatureNode;
 };
 

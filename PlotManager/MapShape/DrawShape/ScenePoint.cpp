@@ -1,4 +1,40 @@
+#include <osg/Callback>
 #include "ScenePoint.h"
+class PointCallBack:public osg::Callback
+{
+public:
+    PointCallBack(CScenePoint* pPoint):m_pPoint(pPoint)
+    {
+    }
+
+    bool run(osg::Object* object, osg::Object* data)
+    {
+        if(m_pPoint->m_bUpdate)
+        {
+            osgEarth::Geometry* pGeometry = m_pPoint->m_pFeatureNode->getFeature()->getGeometry();
+            if(pGeometry->size() < 1)
+            {
+                pGeometry->push_back(osg::Vec3(m_pPoint->m_unScenePos.fLon,
+                                                m_pPoint->m_unScenePos.fLat,
+                                                m_pPoint->m_unScenePos.fHeight));
+            }
+            else
+            {
+                pGeometry->at(0) = osg::Vec3(m_pPoint->m_unScenePos.fLon,
+                                              m_pPoint->m_unScenePos.fLat,
+                                              m_pPoint->m_unScenePos.fHeight);
+            }
+
+            /// 重新构建futureNode
+            m_pPoint->m_pFeatureNode->dirty();
+            m_pPoint->m_bUpdate=false;
+        }
+
+        return traverse(object, data);
+    }
+private:
+    CScenePoint* m_pPoint;
+};
 
 CScenePoint::CScenePoint(ISceneGraph *pSceneGraph)
     :QtDrawShape<IPoint>(pSceneGraph)
@@ -32,24 +68,16 @@ void CScenePoint::InitSceneNode()
     m_pFeatureNode = new osgEarth::FeatureNode(pFeature);
     m_pFeatureNode->setDynamic(true);
 
+    m_pPointCallBack = new PointCallBack(this);
+    m_pFeatureNode->addUpdateCallback(m_pPointCallBack);
+
     m_pOsgNode->addChild(m_pFeatureNode);
 }
 
 /// 更改位置
 void CScenePoint::PosChanged()
 {
-    osgEarth::Geometry* pGeometry = m_pFeatureNode->getFeature()->getGeometry();
-    if(pGeometry->size() < 1)
-    {
-        pGeometry->push_back(osg::Vec3d(m_unScenePos.fLon,m_unScenePos.fLat,m_unScenePos.fHeight));
-    }
-    else
-    {
-        pGeometry->at(0) = osg::Vec3d(m_unScenePos.fLon,m_unScenePos.fLat,m_unScenePos.fHeight);
-    }
-
-    /// 重新构建futureNode
-    m_pFeatureNode->dirty();
+    m_bUpdate = true;
 }
 
 /// 初始化样式

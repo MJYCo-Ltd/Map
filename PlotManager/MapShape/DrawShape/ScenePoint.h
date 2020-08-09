@@ -7,6 +7,7 @@
 
 class CScenePoint:public QtDrawShape<IPoint>
 {
+    friend class PointCallBack;
 public:
     CScenePoint(ISceneGraph*pSceneGraph);
 
@@ -44,7 +45,9 @@ public:
     const SceneColor& GetColor(){return (m_stColor);}
 protected:
     float  m_fPointSize=10.0f;
+    bool   m_bUpdate=false;
     SceneColor m_stColor;
+    osg::ref_ptr<PointCallBack> m_pPointCallBack;
     osg::ref_ptr<osgEarth::FeatureNode> m_pFeatureNode;
 };
 

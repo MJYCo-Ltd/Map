@@ -1,4 +1,50 @@
+#include <osg/Callback>
 #include "SceneLine.h"
+
+class LineCallBack:public osg::Callback
+{
+public:
+    LineCallBack(CSceneLine* pLine):m_pLine(pLine)
+    {
+    }
+
+    bool run(osg::Object* object, osg::Object* data)
+    {
+        switch(m_pLine->m_emChangeType)
+        {
+        case UPDATE_POINT:
+        {
+            osgEarth::Geometry* pGeometry = m_pLine->m_pFeatureNode->getFeature()->getGeometry();
+            pGeometry->at(m_pLine->m_nIndex).set(m_pLine->m_unScenePos.fLon,
+                                                 m_pLine->m_unScenePos.fLat,
+                                                 m_pLine->m_unScenePos.fHeight);
+            /// 重新构建futureNode
+            m_pLine->m_pFeatureNode->dirty();
+            m_pLine->m_emChangeType=NO_CHANGE;
+        }
+            break;
+        case REPLACE_POINS:
+        {
+            osgEarth::Geometry* pGeometry = m_pLine->m_pFeatureNode->getFeature()->getGeometry();
+            pGeometry->clear();
+            pGeometry->reserve(m_pLine->m_listAllPos.size());
+            for(auto one : m_pLine->m_listAllPos)
+            {
+                pGeometry->push_back(osg::Vec3(one.fLon,
+                                               one.fLat,
+                                               one.fHeight));
+            }
+            m_pLine->m_pFeatureNode->dirty();
+            m_pLine->m_emChangeType=NO_CHANGE;
+        }
+            break;
+        }
+
+        return traverse(object, data);
+    }
+private:
+    CSceneLine* m_pLine;
+};
 
 CSceneLine::CSceneLine(ISceneGraph *pSceneGraph):
     QtDrawShape<ILine>(pSceneGraph)
@@ -6,23 +52,83 @@ CSceneLine::CSceneLine(ISceneGraph *pSceneGraph):
 }
 
 /// 添加点
-void CSceneLine::AddPoint(const ScenePos &)
+void CSceneLine::AddPoint(int nIndex, const ScenePos & rScenePos)
 {
+    if(nIndex <=0)
+    {
+        m_listAllPos.push_front(rScenePos);
+    }
+    else if(nIndex >= m_listAllPos.size())
+    {
+        m_listAllPos.push_back(rScenePos);
+    }
+    else
+    {
+        auto pIter = m_listAllPos.begin();
+        for(int i=0; i<nIndex;++i,++pIter){}
+
+        m_listAllPos.insert(pIter,rScenePos);
+    }
+
+    m_emChangeType = REPLACE_POINS;
 }
 
 /// 移除指定位置点
-void CSceneLine::RemovePoint(int)
+bool CSceneLine::RemovePoint(int nIndex)
 {
+    if(nIndex<0 || nIndex >= m_listAllPos.size())
+    {
+        return(false);
+    }
+
+    auto pIter = m_listAllPos.begin();
+    for(int i=0; i<nIndex;++i,++pIter){}
+    m_listAllPos.erase(pIter);
+
+    m_emChangeType = REPLACE_POINS;
+    return(true);
 }
 
 /// 更新指定位置的
-void CSceneLine::UpdatePoint(int, const ScenePos &)
+bool CSceneLine::UpdatePoint(int nIndex, const ScenePos &rPos)
 {
+    if(nIndex<0 || nIndex >= m_listAllPos.size())
+    {
+        return(false);
+    }
+
+    m_nIndex = nIndex;
+    if(m_unScenePos != rPos)
+    {
+        m_unScenePos = rPos;
+        m_emChangeType = UPDATE_POINT;
+    }
+
+    return(true);
 }
 
 ///初始化多个位置点
-void CSceneLine::SetMultPos(const vector<ScenePos> &)
+void CSceneLine::SetMultPos(const vector<ScenePos> & vAllPoints)
 {
+    m_listAllPos.clear();
+
+    for(auto one : vAllPoints)
+    {
+        m_listAllPos.push_back(one);
+    }
+    m_emChangeType = REPLACE_POINS;
+}
+
+vector<ScenePos> CSceneLine::GetMulPos()
+{
+    vector<ScenePos> vTempPos;
+    vTempPos.reserve(m_listAllPos.size());
+    for(auto one : m_listAllPos)
+    {
+        vTempPos.push_back(one);
+    }
+
+    return(vTempPos);
 }
 
 /// 更新地图
@@ -53,6 +159,8 @@ void CSceneLine::InitSceneNode()
 
     m_pFeatureNode = new osgEarth::FeatureNode(pFeature);
     m_pFeatureNode->setDynamic(true);
+    m_pLineCallBack = new LineCallBack(this);
+    m_pFeatureNode->addUpdateCallback(m_pLineCallBack);
     m_pOsgNode->addChild(m_pFeatureNode);
 }
 

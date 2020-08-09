@@ -1,4 +1,5 @@
 #include "DrawShape/ScenePoint.h"
+#include "DrawShape/SceneLine.h"
 #include "MapShape.h"
 
 static string s_sPoint("IPoint");
@@ -28,6 +29,11 @@ IMapSceneNode* CreateNode(ISceneGraph*pSceneGraph,const string& sInterfaceName)
     {
         return(new CScenePoint(pSceneGraph));
     }
+    else if(sInterfaceName == s_sLine)
+    {
+        return(new CSceneLine(pSceneGraph));
+    }
+
     return(nullptr);
 }
 
