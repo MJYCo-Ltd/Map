@@ -46,6 +46,12 @@ public:
     ISceneNode* GetTrackNode();
 
     /**
+     * @brief 获取视口的屏显控制类
+     * @return
+     */
+    IViewHud* GetHud();
+
+    /**
      * @brief 设置视点位置
      */
     void SetViewPoint(const SceneViewPoint&rViewPoint);
@@ -94,6 +100,7 @@ protected:
     bool                                           m_bIsMap=false;      /// 是否是地图
     ViewPointType                                  m_emType;
 
+    IViewHud*      m_pHud=nullptr;                                       /// 屏显
     IRender*       m_pRender;
     IOsgSceneNode* m_pTrackNode=nullptr;
     SceneViewPoint m_rViewPoint;

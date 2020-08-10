@@ -219,6 +219,7 @@ void QtSceneGraph::InitSceneGraph()
 
     osgViewer::View* pView = pViewPoint->GetOsgView();
     pView->setSceneData(m_pRoot->GetOsgNode());
+    m_pMainWindow->GetMainViewPoint()->GetHud();
     m_pRender->m_pOsgViewer->addView(pView);
 
 

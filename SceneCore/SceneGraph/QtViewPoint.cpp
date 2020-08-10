@@ -1,7 +1,6 @@
 #include <osgEarth/GeoData>
 #include <osg/OperationThread>
 #include <osgViewer/ViewerEventHandlers>
-//#include <osgGA/StateSetManipulator>
 
 #include "Inner/IRender.h"
 #include <Inner/IOsgSceneNode.h>
@@ -9,6 +8,7 @@
 
 #include "MyEarthManipulator.h"
 #include "QtViewPoint.h"
+#include "QtViewHud.h"
 
 class QtViewPointUpdateCallback:public osg::Callback
 {
@@ -89,14 +89,13 @@ private:
     osg::ref_ptr<osgGA::CameraManipulator> m_pManipulator;
 };
 
+#include <osgViewer/ViewerEventHandlers>
 /// 视点
 QtViewPoint::QtViewPoint(IRender *pRender, ProjectType emProject):
     m_pRender(pRender),
     m_emProjectType(emProject)
 {
     m_pView = new osgViewer::View;
-    m_pView->addEventHandler(new osgViewer::StatsHandler);
-    //m_pView->addEventHandler(new osgGA::StateSetManipulator(m_pView->getCamera()->getOrCreateStateSet()));
 
     m_pView->getCamera()->setViewport(0,0,C_WINDOW_WIDTH,C_WINDOW_HEIGHT);
     m_pView->getCamera()->setClearColor(osg::Vec4(0,0,0,1));
@@ -112,6 +111,7 @@ QtViewPoint::QtViewPoint(IRender *pRender, ProjectType emProject):
     m_pCameraUpdate = new QtViewPointUpdateCallback(this);
 
     m_pView->getCamera()->addUpdateCallback(m_pCameraUpdate);
+    m_pView->addEventHandler(new osgViewer::StatsHandler);
 
     m_pSelfManipulator = new osgGA::TrackballManipulator;
     m_pView->setCameraManipulator(m_pSelfManipulator);
@@ -120,6 +120,7 @@ QtViewPoint::QtViewPoint(IRender *pRender, ProjectType emProject):
 /// 析构函数
 QtViewPoint::~QtViewPoint()
 {
+    delete m_pHud;
     m_pView->getCamera()->removeUpdateCallback(m_pCameraUpdate);
 }
 
@@ -188,9 +189,19 @@ void QtViewPoint::SetTrackNode(ISceneNode *pTrackNode)
     }
 }
 
+/// 获取场景根节点
 ISceneNode *QtViewPoint::GetTrackNode()
 {
     return(dynamic_cast<ISceneNode*>(m_pTrackNode));
+}
+
+IViewHud *QtViewPoint::GetHud()
+{
+    if(nullptr == m_pHud)
+    {
+        m_pHud = new QtViewHud(m_pView);
+    }
+    return(m_pHud);
 }
 
 /// 设置视点
