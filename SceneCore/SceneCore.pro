@@ -35,6 +35,7 @@ SOURCES += \
     SceneGraph/MyEarthManipulator.cpp \
     SceneGraph/QtRender.cpp \
     SceneGraph/QtSceneGraph.cpp \
+    SceneGraph/QtViewHud.cpp \
     SceneGraph/QtViewPoint.cpp \
     SceneGraph/ResourceLod.cpp \
     SceneGraph/SceneGraphManager.cpp \
@@ -57,6 +58,7 @@ HEADERS += \
     SceneGraph/MyEarthManipulator.h \
     SceneGraph/QtRender.h \
     SceneGraph/QtSceneGraph.h \
+    SceneGraph/QtViewHud.h \
     SceneGraph/QtViewPoint.h \
     SceneGraph/ResourceLod.h \
     SceneGraph/SceneGraphManager.h \

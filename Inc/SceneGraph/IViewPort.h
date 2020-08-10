@@ -1,5 +1,6 @@
 #ifndef INTERFACE_VIEW_PORT_HEARDER_H
 #define INTERFACE_VIEW_PORT_HEARDER_H
+#include "IViewHud.h"
 #include "ISceneNode.h"
 
 const int C_WINDOW_HEIGHT(100);
@@ -98,6 +99,12 @@ public:
      * @return
      */
     virtual ISceneNode* GetTrackNode()=0;
+
+    /**
+     * @brief 获取视口的屏显控制类
+     * @return
+     */
+    virtual IViewHud* GetHud()=0;
 
     /**
      * @brief 设置视点位置

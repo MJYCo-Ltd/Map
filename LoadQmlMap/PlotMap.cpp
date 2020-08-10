@@ -2,6 +2,7 @@
 #include <Map/Plot/IPersonInfo.h>
 #include <Map/Plot/IPoint.h>
 #include <Map/Plot/ILine.h>
+#include <Map/Plot/IPolygon.h>
 #include <SceneGraph/ISceneGraph.h>
 #include <Map/IMap.h>
 #include <Map/IPlotManager.h>
@@ -61,20 +62,21 @@ void CPlotMap::PlotLine()
     m_pLine->SetColor(color);
     pLayer->AddSceneNode(m_pLine);
 
-    ///  坐标转换
-    int nX,nY;
-    if(m_pSceneGraph->GetMap()->ConvertCoord(nX,nY,pos,1))
-    {
-        qDebug()<<nX<<','<<nY<<'\n'<<pos.fLon<<','<<pos.fLat;
-        if(m_pSceneGraph->GetMap()->ConvertCoord(nX,nY,pos,1))
-        {
-            qDebug()<<pos.fLon<<','<<pos.fLat;
-        }
-    }
-    else
-    {
-        qDebug()<<"ConvertCoord falid";
-    }
+    /// 绘制区域
+    auto m_pPolygon = dynamic_cast<IPolygon*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IPolygon"));
+    m_pPolygon->AddPoint(0,pos);
+    pos.fLon = 123;
+    pos.fLat = 26;
+    pos.fHeight = 1000;
+    pos.bIsGeo = true;
+    m_pPolygon->AddPoint(1,pos);
+    pos.fLon = 121;
+    pos.fLat = 26.5;
+    pos.fHeight = 1000;
+    pos.bIsGeo = true;
+    m_pPolygon->AddPoint(2,pos);
+    m_pPolygon->SetColor(color);
+    pLayer->AddSceneNode(m_pPolygon);
 }
 
 void CPlotMap::ClearLayer()

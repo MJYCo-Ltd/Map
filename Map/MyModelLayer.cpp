@@ -1,10 +1,7 @@
 #include <osgEarth/AnnotationNode>
-#include <osgEarth/AnnotationRegistry>
 #include "MyModelLayer.h"
 
 using namespace osgEarth;
-
-//...................................................................
 
 void CMyModelLayer::init()
 {
