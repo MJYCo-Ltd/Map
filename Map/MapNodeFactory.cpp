@@ -112,6 +112,7 @@ void CMapNodeFactory::InitFactory()
     }
 }
 
+#include<QDebug>
 /// 初始化类型
 void CMapNodeFactory::InitType(const string &sInterface)
 {
@@ -122,6 +123,11 @@ void CMapNodeFactory::InitType(const string &sInterface)
         string sInterfaceNameList;
         loadDll.setFileName(findOne->second.c_str());
         auto pQueryFunc = reinterpret_cast<pQueryInterfaceFun>(loadDll.resolve("QueryInterface"));
+        if(nullptr == pQueryFunc)
+        {
+            qDebug()<<loadDll.errorString();
+        }
+
         auto pCreateFun = reinterpret_cast<pCreateNodeFun>(loadDll.resolve("CreateNode"));
         //auto pDeleteFunc = reinterpret_cast<pDeleteNodeFun>(loadDll.resolve("DeleteNode"));
 

@@ -36,7 +36,7 @@ public:
      */
     virtual bool CanDelete() const
     {
-        return(m_pOsgNode->referenceCount() < 2);
+        return(QtOsgSceneNode<T>::m_pOsgNode->referenceCount() < 2);
     }
 
 protected:

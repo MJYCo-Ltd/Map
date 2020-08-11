@@ -1,5 +1,5 @@
-import QtQuick 2.13
-import QtQuick.Window 2.13
+import QtQuick 2.12
+import QtQuick.Window 2.12
 import MyItem 1.0
 
 Window

@@ -28,10 +28,10 @@ TRANSLATIONS += \
 
 LIBS *= -L$$DESTDIR
 CONFIG (debug, debug|release){
-    LIBS *= -lSceneCored
+    LIBS *= -lSceneCored -lOsgExternd
     TARGET = $$join(TARGET,,,d)
 }else{
-    LIBS *= -lSceneCore
+    LIBS *= -lSceneCore -lOsgExtern
 }
 
 win32-msvc*:QMAKE_CXXFLAGS += -utf-8
@@ -44,6 +44,7 @@ QML_IMPORT_PATH =
 QML_DESIGNER_IMPORT_PATH =
 
 # Default rules for deployment.
+unix:!mac:QMAKE_LFLAGS += -Wl,-rpath=.:./osglib:./stklib
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target

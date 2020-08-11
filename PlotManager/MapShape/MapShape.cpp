@@ -1,6 +1,7 @@
 #include "DrawShape/ScenePoint.h"
 #include "DrawShape/SceneLine.h"
 #include "DrawShape/ScenePolygon.h"
+#include "DrawShape/SceneModel.h"
 #include "MapShape.h"
 
 static string s_sPoint("IPoint");
@@ -11,6 +12,7 @@ static string s_sRectangle("IRectangle");
 static string s_sPolygon("IPolygon");
 static string s_sCone("ICone");
 static string s_sImage("IImage");
+static string s_sModel("IModel");
 
 CMapShape::CMapShape()
 {
@@ -38,6 +40,10 @@ IMapSceneNode* CreateNode(ISceneGraph*pSceneGraph,const string& sInterfaceName)
     {
         return(new CScenePolygon(pSceneGraph));
     }
+    else if(sInterfaceName == s_sModel)
+    {
+        return(new CSceneModel(pSceneGraph));
+    }
 
     return(nullptr);
 }
@@ -61,6 +67,8 @@ bool QueryInterface(string& sInterfaceName)
     sInterfaceName += s_sCone;
     sInterfaceName += " ";
     sInterfaceName += s_sImage;
+    sInterfaceName += " ";
+    sInterfaceName += s_sModel;
 
     return(true);
 }

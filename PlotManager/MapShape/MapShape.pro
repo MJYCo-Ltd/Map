@@ -40,6 +40,7 @@ unix {
 
 HEADERS += \
     DrawShape/SceneLine.h \
+    DrawShape/SceneModel.h \
     DrawShape/ScenePoint.h \
     DrawShape/ScenePolygon.h \
     MapShape.h \
@@ -47,6 +48,7 @@ HEADERS += \
 
 SOURCES += \
     DrawShape/SceneLine.cpp \
+    DrawShape/SceneModel.cpp \
     DrawShape/ScenePoint.cpp \
     DrawShape/ScenePolygon.cpp \
     MapShape.cpp \

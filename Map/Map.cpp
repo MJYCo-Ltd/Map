@@ -33,8 +33,17 @@ CMap::~CMap()
 {
     delete m_pPlotManager;
 
-    m_pCamera = nullptr;
-    m_p2DRoot = nullptr;
+    if(m_pCamera.valid())
+    {
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pCamera));
+        m_pCamera = nullptr;
+    }
+
+    if(m_p2DRoot.valid())
+    {
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_p2DRoot));
+        m_p2DRoot = nullptr;
+    }
     if (m_pMap3DNode.valid())
     {
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pMap3DNode));

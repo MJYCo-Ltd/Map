@@ -21,12 +21,12 @@ class QtOsgSceneNode:public T,public IOsgSceneNode
 public:
     explicit QtOsgSceneNode(ISceneGraph* pSceneGraph)
     {
-        m_pSceneGraph = pSceneGraph;
+        T::m_pSceneGraph = pSceneGraph;
     }
 
     virtual ~QtOsgSceneNode()
     {
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pOsgNode));
+        T::m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pOsgNode));
         m_pOsgNode = nullptr;
     }
 
@@ -73,7 +73,7 @@ public:
         if(findItor == m_setChildNode.end())
         {
             auto update = new CModifyNode(m_pOsgNode,pOsgSceneNode->GetOsgNode(),true);
-            m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(update);
+            T::m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(update);
 
             m_setChildNode.insert(pOsgSceneNode);
             return(true);
@@ -93,7 +93,7 @@ public:
         if(findItor != m_setChildNode.end())
         {
             auto update = new CModifyNode(m_pOsgNode,pOsgSceneNode->GetOsgNode(),false);
-            m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(update);
+            T::m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(update);
 
             m_setChildNode.erase(findItor);
             return(true);

@@ -10,18 +10,22 @@
 #Attention DLLDESTDIR only useful in windows
 #          This will only copy exe or dll to DLLDESTDIR
 
-SDKPath = G:\Project\NewGL3
 MathPath=$${PWD}/../VersionMath
 
-# 开启utf-8 编码方式支持
-win32-msvc:QMAKE_CXXFLAGS += -utf-8
-win32-msvc:QMAKE_CXXFLAGS += /wd"4100"
+win32{
+    SDKPath = G:/Project/NewGL3
+    # 开启utf-8 编码方式支持
+    QMAKE_CXXFLAGS += -utf-8
+    QMAKE_CXXFLAGS += /wd"4100"
+    LIBPDIR = $${SDKPath}/lib
+}
 
 unix{
     QMAKE_CXXFLAGS += -fvisibility=hidden
+    INCLUDEPATH *=$$PWD/../VersionMath/Inc
+    LIBPDIR = $$PWD/../Bin/stklib
 }
 # This can change by Qmake, We don't need change by yourself.
-LIBPDIR = $${SDKPath}\lib
 
 # Set the path for find libs
 LIBS *= -L$${LIBPDIR}
@@ -30,7 +34,9 @@ LIBS *= -L$${MathPath}/lib
 contains(SDK_CONFIG,OSG){
 
 # include file
-    INCLUDEPATH *=$${SDKPath}\include
+win32{
+    INCLUDEPATH *=$${SDKPath}/include
+}
 
    CONFIG (debug, debug|release){
 #threads

@@ -3,6 +3,7 @@
 #include <QWindow>
 #include <QDebug>
 #include "ISceneCore.h"
+#include "Map/IMap.h"
 
 /**
  * @brief 窗口消息定义
@@ -11,7 +12,22 @@ class WindowMessage:public IWindowMessageObserver
 {
 public:
     void KeyUp(char chr){qDebug()<<chr;}
-    void MouseDown(MouseButtonMask, int, int){qDebug()<<"Mouse down";}
+    void MouseDown(MouseButtonMask type, int, int)
+    {
+        switch (type)
+        {
+        case LEFT_MOUSE_BUTTON:
+            qDebug()<<"Left Mouse";
+            break;
+        case RIGHT_MOUSE_BUTTON:
+            qDebug()<<"right Mouse";
+            break;
+        case MIDDLE_MOUSE_BUTTON:
+            qDebug()<<"Middle Mouse";
+            break;
+        }
+        qDebug()<<"Mouse down";
+    }
 };
 
 int main(int argc, char *argv[])
@@ -26,7 +42,7 @@ int main(int argc, char *argv[])
     }
 #ifdef Q_OS_WIN
     char * pStr = strrchr(argv[0],'\\');
-#elif
+#else
     char * pStr = strrchr(argv[0],'/');
 #endif
     pStr[0] = 0;
@@ -39,9 +55,14 @@ int main(int argc, char *argv[])
 
     auto pScene = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(SCENEGRAPH_3D,"");
 
+    for(auto one:pScene->GetMap()->GetMapLayers())
+    {
+        qDebug()<<*one.c_str();
+    }
+
     w.SetSecenGraph(pScene);
 
-//    pScene->GetMainWindow()->SubMessage(new WindowMessage);
+    //pScene->GetMainWindow()->SubMessage(new WindowMessage);
 
     QWidget* pWindow = pScene->GetMainWindow()->ToWidget();
     if(nullptr != pWindow)
