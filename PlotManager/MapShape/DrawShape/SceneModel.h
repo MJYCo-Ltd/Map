@@ -65,6 +65,7 @@ public:
 private:
     bool   m_bAutoScal=false;
     double m_dScalBit=1.0;
+    double m_dChangePos=1e5;   /// 切换
     osg::ref_ptr<osg::LOD>            m_pLodNode;
     osg::ref_ptr<osgEarth::ModelNode> m_pModel;
     osgEarth::Style   m_stylePic;    /// 节点样式

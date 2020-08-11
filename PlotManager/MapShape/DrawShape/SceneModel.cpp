@@ -13,7 +13,8 @@ void CSceneModel::UpdateMapNode(osgEarth::MapNode *pMapNode)
         if(!m_pModel.valid())
         {
             m_pModel = new osgEarth::ModelNode(pMapNode,m_styleNode);
-            ///gengxinweizhi
+
+            /// 修改位置
             PosChanged();
 
             m_pLodNode->addChild(m_pModel,0.f,FLT_MAX);
@@ -51,7 +52,11 @@ void CSceneModel::PosChanged()
 void CSceneModel::InitStyle()
 {
     m_styleNode.getOrCreate<osgEarth::ModelSymbol>()->autoScale() = true;
-    m_styleNode.getOrCreate<osgEarth::ModelSymbol>()->minAutoScale()=1.0;
+
+    m_styleNode.getOrCreate<osgEarth::ModelSymbol>()->scaleX()=m_dScalBit;
+    m_styleNode.getOrCreate<osgEarth::ModelSymbol>()->scaleY()=m_dScalBit;
+    m_styleNode.getOrCreate<osgEarth::ModelSymbol>()->scaleZ()=m_dScalBit;
+
     m_styleNode.getOrCreate<osgEarth::AltitudeSymbol>()
             ->clamping()=osgEarth::AltitudeSymbol::CLAMP_RELATIVE_TO_TERRAIN;
     m_styleNode.getOrCreate<osgEarth::AltitudeSymbol>()
