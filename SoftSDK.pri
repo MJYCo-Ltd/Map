@@ -53,11 +53,11 @@ win32{
 }
 
 contains(SDK_CONFIG,Satellite){
-    INCLUDEPATH *= $${MathPath}/Inc
+    INCLUDEPATH *= $${MathPath}/Inc $${MathPath}/Inc/Math
     CONFIG (debug, debug|release){
-        LIBS *= -lSatellited -lMathd
+        LIBS *= -lSatellited -lMathd -lGisMathd
     }else{
-        LIBS *= -lSatellite -lMath
+        LIBS *= -lSatellite -lMath -lGisMath
     }
 }
 

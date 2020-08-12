@@ -3,6 +3,7 @@
 #include <Map/Plot/IPoint.h>
 #include <Map/Plot/ILine.h>
 #include <Map/Plot/IPolygon.h>
+#include <Map/Plot/IModel.h>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "SceneGraph/ISceneGraph.h"
@@ -106,30 +107,26 @@ void MainWindow::on_action_triggered()
     pos.fLon = 123;
     pos.fLat = 26;
     pos.fHeight = 1000;
-    pos.bIsGeo = true;
     m_pPolygon->AddPoint(1,pos);
     pos.fLon = 121;
     pos.fLat = 26.5;
-    pos.fHeight = 1000;
+    pos.fHeight = 100;
     pos.bIsGeo = true;
     m_pPolygon->AddPoint(2,pos);
     m_pPolygon->SetColor(color);
     pLayer->AddSceneNode(m_pPolygon);
 
-    ///  坐标转换
-    int nX,nY;
-    if(m_pSceneGraph->GetMap()->ConvertCoord(nX,nY,pos,1))
-    {
-        qDebug()<<nX<<','<<nY<<'\n'<<pos.fLon<<','<<pos.fLat;
-        if(m_pSceneGraph->GetMap()->ConvertCoord(nX,nY,pos,1))
-        {
-            qDebug()<<pos.fLon<<','<<pos.fLat;
-        }
-    }
-    else
-    {
-        qDebug()<<"ConvertCoord falid";
-    }
+    auto m_pModel = dynamic_cast<IModel*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IModel"));
+    m_pModel->Set2DAndSamllPic("ico/red.png",0);
+    m_pModel->SetModelPath("model/AirPlane.ive");
+    m_pModel->SetScalBit(50);
+    m_pModel->SetName("王有情");
+
+    m_pModel->SetPos(pos);
+    pos.fLon = 123;
+    pos.fLat = 26;
+    m_pModel->SetPos(pos);
+    pLayer->AddSceneNode(m_pModel);
 }
 
 void MainWindow::on_action_2_triggered()

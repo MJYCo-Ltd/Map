@@ -21,6 +21,7 @@ class QtOsgSceneNode:public T,public IOsgSceneNode
 public:
     explicit QtOsgSceneNode(ISceneGraph* pSceneGraph)
     {
+        m_unScenePos.bIsGeo = false;
         T::m_pSceneGraph = pSceneGraph;
     }
 

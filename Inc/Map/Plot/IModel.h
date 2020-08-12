@@ -17,9 +17,14 @@ class IModel:public IDrawShape
 {
 public:
     /**
-     * @brief 设置二维和模型变小时显示的图片
+     * @brief 设置名字
      */
-    virtual void Set2DAndSamllPic(const string&)=0;
+    virtual void SetName(const string&)=0;
+
+    /**
+     * @brief 设置二维和模型变小时显示的图片和初始化角度
+     */
+    virtual void Set2DAndSamllPic(const string&,double)=0;
 
     /**
      * @brief 设置模型路径
