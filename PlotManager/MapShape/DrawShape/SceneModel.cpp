@@ -4,7 +4,6 @@
 #include <ISceneCore.h>
 #include <Inner/ILoadResource.h>
 #include "SceneModel.h"
-#include <QDebug>
 /// 图片节点
 class ImageCallBack:public osg::Callback
 {
@@ -64,6 +63,7 @@ private:
 CSceneModel::CSceneModel(ISceneGraph *pSceneGraph):
     QtDrawShape<IModel>(pSceneGraph)
 {
+    m_prePos.bIsGeo = false;
 }
 
 /// 设置显示名称
@@ -141,8 +141,6 @@ void CSceneModel::PosChanged()
                                     m_unScenePos.fLon*DD2R,m_unScenePos.fLat*DD2R
                                     ,dAzim1,dAzeim2,dDis))
         {
-            qDebug()<<m_prePos.fLon<<','<<m_prePos.fLat;
-            qDebug()<<m_unScenePos.fLon<<','<<m_unScenePos.fLat;
             SetYPR(dAzim1 * DR2D,m_dRoll,m_dPitch);
         }
     }
@@ -253,7 +251,6 @@ void CSceneModel::SetScalBit(double dScal)
 /// 设置旋转角度
 void CSceneModel::SetYPR(double dYaw, double dRoll, double dPitch)
 {
-    qDebug()<<dYaw<<'\t'<<m_dYaw;
     bool bUpdate = false;
     if(fabs(m_dYaw - dYaw) > 1e-6)
     {
@@ -305,7 +302,6 @@ void CSceneModel::ChangeScal()
 /// 更改姿态角
 void CSceneModel::ChangeYPR()
 {
-    qDebug()<<"m_dYaw:"<<m_dYaw;
     m_stylePic.getOrCreate<osgEarth::IconSymbol>()->heading()=m_dYaw+m_dInitAngle;
     m_bUpdateStle=true;
 

@@ -1,16 +1,26 @@
 #ifndef INTERFACE_SENSOR_HEARDER_H
 #define INTERFACE_SENSOR_HEARDER_H
-#include <string>
-
 #include "../IMapSceneNode.h"
-using namespace std;
 
 /**
- * @brief 场景节点类
+ * @brief 传感器基类
  */
 class ISensor:public IMapSceneNode
 {
 public:
+    virtual ~ISensor(){}
+
+    /**
+     * @brief 设置颜色
+     */
+    virtual void SetColor(SceneColor&)=0;
+    virtual const SceneColor& Color() const=0;
+
+    /**
+     * @brief 设置探测距离
+     */
+    virtual void SetDistance(double)=0;
+    virtual double Distance()=0;
 
 };
 

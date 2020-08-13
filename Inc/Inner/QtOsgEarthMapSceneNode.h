@@ -30,19 +30,9 @@ public:
         }
     }
 
-    /**
-     * @brief 是否可以删除
-     * @return
-     */
-    virtual bool CanDelete() const
-    {
-        return(QtOsgSceneNode<T>::m_pOsgNode->referenceCount() < 2);
-    }
-
 protected:
     virtual void TerrainTypeChanged(){};
 protected:
-    bool   m_bCanDelete=true;
     MAP_TERRAIN m_emTerrain;
 };
 

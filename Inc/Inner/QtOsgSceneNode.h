@@ -2,9 +2,12 @@
 #define QT_OSG_SCENE_NODE_H
 
 #include <set>
-#include <osg/Group>
+#include <osg/PositionAttitudeTransform>
 #include <algorithm>
 #include <osg/OperationThread>
+
+#include <Math/VecMat.h>
+#include <Math/YPRAngle.h>
 
 #include <Inner/IRender.h>
 #include <Inner/OsgExtern/OsgExtern.h>
@@ -14,6 +17,43 @@
 #include "SceneGraph/ISceneGraph.h"
 using namespace std;
 class QtSceneGraph;
+
+class PosAttitudeUpdate:public osg::Callback
+{
+public:
+    PosAttitudeUpdate(osg::PositionAttitudeTransform* pTransForm):m_pTransform(pTransForm){}
+
+    /**
+     * @brief 更新位置
+     * @param vPos
+     */
+    void SetPos(const osg::Vec3d& vPos)
+    {
+        m_vPos = vPos;
+        m_bUpdatePos = true;
+    }
+
+    bool run(osg::Object* object, osg::Object* data)
+    {
+        if(m_bUpdatePos)
+        {
+            m_pTransform->setPosition(m_vPos);
+            m_bUpdatePos = false;
+        }
+
+        if(m_bUpdateAttitude)
+        {
+            //m_pTransform->setAttitude();
+            m_bUpdateAttitude = false;
+        }
+        return traverse(object, data);
+    }
+private:
+    osg::PositionAttitudeTransform* m_pTransform;
+    osg::Vec3d  m_vPos;
+    bool  m_bUpdatePos=false;
+    bool  m_bUpdateAttitude=false;
+};
 
 template <typename T>
 class QtOsgSceneNode:public T,public IOsgSceneNode
@@ -47,9 +87,27 @@ public:
      * @brief 获取当前节点位置
      * @return 当前节点位置
      */
-    const ScenePos& GetPos()
+    const ScenePos& GetPos() const
     {
         return(m_unScenePos);
+    }
+
+    /**
+     * @brief 设置姿态
+     * @param rAttitude
+     */
+    void SetAttitude(const SceneAttitude& rAttitude)
+    {
+        if(m_stAttitude != rAttitude)
+        {
+            m_stAttitude = rAttitude;
+            AttitudeChanged();
+        }
+    }
+
+    const SceneAttitude& GetAttitude() const
+    {
+        return(m_stAttitude);
     }
 
     /**
@@ -108,7 +166,9 @@ public:
      */
     void InitSceneNode()
     {
-        m_pOsgNode = new osg::Group;
+        auto pTransform = new osg::PositionAttitudeTransform;
+        pTransform->addUpdateCallback(new PosAttitudeUpdate(pTransform));
+        m_pOsgNode = pTransform;
     }
 
     /**
@@ -129,23 +189,54 @@ public:
         if(m_bVisible != bVisible)
         {
             m_bVisible = bVisible;
+            if(m_bVisible)
+            {
+                /// 此处可能会导致遍历器设置mask的问题
+                m_pOsgNode->setNodeMask(-1);
+            }
+            else
+            {
+                m_pOsgNode->setNodeMask(0);
+            }
+
             VisibleChanged();
         }
     }
-    bool IsVisible(){return(m_bVisible);}
+
+    bool IsVisible() const{return(m_bVisible);}
+
+    /**
+     * @brief 是否可以删除
+     * @return
+     */
+    virtual bool CanDelete() const
+    {
+        return(m_pOsgNode->referenceCount() < 2);
+    }
 
 protected:
+
+    /**
+     * @brief 显隐状态更改
+     */
     virtual void VisibleChanged(){}
     /**
      * @brief 位置更改
      */
     virtual void PosChanged(){}
 
+    /**
+     * @brief 姿态更改
+     */
+    virtual void AttitudeChanged(){}
+
 protected:
     set<IOsgSceneNode*>               m_setChildNode;/// 子节点
     osg::ref_ptr<osg::Group>          m_pOsgNode;    /// 本节点
     ScenePos                          m_unScenePos;  /// 场景位置
+    SceneAttitude                     m_stAttitude;  /// 姿态信息
     bool                              m_bVisible=true;/// 是否可见
+    bool                              m_bCanDelete=true;///是否可以删除
 };
 
 #endif // QT_OSG_SCENE_NODE_H

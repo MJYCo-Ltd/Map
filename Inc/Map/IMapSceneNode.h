@@ -15,12 +15,6 @@ public:
     virtual ~IMapSceneNode(){}
 
     /**
-     * @brief 是否可以删除
-     * @return
-     */
-    virtual bool CanDelete() const =0;
-
-    /**
      * @brief 设置贴地模式
      */
     virtual void SetTerrainType(MAP_TERRAIN)=0;

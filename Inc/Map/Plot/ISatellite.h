@@ -6,6 +6,8 @@
 #include "../IMapSceneNode.h"
 using namespace std;
 
+class ISensor;
+
 /**
  * @brief 场景节点类
  */
