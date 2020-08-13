@@ -165,7 +165,7 @@ void CPersonInfo::InitSceneNode()
 /// 位置更新消息
 void CPersonInfo::PosChanged()
 {
-    m_pCallBack->SetPotsion(m_unScenePos);
+    m_pCallBack->SetPotsion(m_stScenePos);
 }
 
 /// 设置名字

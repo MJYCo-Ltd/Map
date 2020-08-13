@@ -6,8 +6,10 @@
 #include <algorithm>
 #include <osg/OperationThread>
 
+#include <Sofa/sofam.h>
 #include <Math/VecMat.h>
 #include <Math/YPRAngle.h>
+#include <Math/Quaternion.h>
 
 #include <Inner/IRender.h>
 #include <Inner/OsgExtern/OsgExtern.h>
@@ -25,7 +27,6 @@ public:
 
     /**
      * @brief 更新位置
-     * @param vPos
      */
     void SetPos(const osg::Vec3d& vPos)
     {
@@ -33,6 +34,51 @@ public:
         m_bUpdatePos = true;
     }
 
+    /**
+     * @brief 更新姿态
+     */
+    void SetAttitude(const SceneAttitude& rAttitude)
+    {
+        Math::YPRROTATE type=YPR;
+        switch (rAttitude.rotaOrder)
+        {
+        case SR_RPY:
+        case SR_XYZ:
+            type = RPY;
+            break;
+        case SR_RYP:
+        case SR_XZY:
+            type = RYP;
+            break;
+        case SR_PRY:
+        case SR_YXZ:
+            type = PRY;
+            break;
+        case SR_PYR:
+        case SR_YZX:
+            type = PYR;
+            break;
+        case SR_YRP:
+        case SR_ZXY:
+            type = YRP;
+            break;
+        default:
+            break;
+        }
+        Math::CQuaternion tmpQuat(Math::CYPRAngle::CreateMatrix(rAttitude.dRoll*DD2R,
+                                      rAttitude.dPitch*DD2R,
+                                      rAttitude.dYaw*DD2R,
+                                      Math::YPR));
+
+        m_qAttiutude.x() = tmpQuat.GetX();
+        m_qAttiutude.y() = tmpQuat.GetY();
+        m_qAttiutude.z() = tmpQuat.GetZ();
+        m_qAttiutude.w() = tmpQuat.GetS();
+
+        m_bUpdateAttitude = true;
+    }
+
+    /// 更新循环
     bool run(osg::Object* object, osg::Object* data)
     {
         if(m_bUpdatePos)
@@ -43,7 +89,7 @@ public:
 
         if(m_bUpdateAttitude)
         {
-            //m_pTransform->setAttitude();
+            m_pTransform->setAttitude(m_qAttiutude);
             m_bUpdateAttitude = false;
         }
         return traverse(object, data);
@@ -51,6 +97,7 @@ public:
 private:
     osg::PositionAttitudeTransform* m_pTransform;
     osg::Vec3d  m_vPos;
+    osg::Quat   m_qAttiutude;
     bool  m_bUpdatePos=false;
     bool  m_bUpdateAttitude=false;
 };
@@ -61,7 +108,7 @@ class QtOsgSceneNode:public T,public IOsgSceneNode
 public:
     explicit QtOsgSceneNode(ISceneGraph* pSceneGraph)
     {
-        m_unScenePos.bIsGeo = false;
+        m_stScenePos.bIsGeo = false;
         T::m_pSceneGraph = pSceneGraph;
     }
 
@@ -76,9 +123,9 @@ public:
      */
     void SetPos(const ScenePos&rPos)
     {
-        if(m_unScenePos != rPos)
+        if(m_stScenePos != rPos)
         {
-            m_unScenePos = rPos;
+            m_stScenePos = rPos;
             PosChanged();
         }
     }
@@ -89,7 +136,7 @@ public:
      */
     const ScenePos& GetPos() const
     {
-        return(m_unScenePos);
+        return(m_stScenePos);
     }
 
     /**
@@ -223,18 +270,28 @@ protected:
     /**
      * @brief 位置更改
      */
-    virtual void PosChanged(){}
+    virtual void PosChanged()
+    {
+        if(!m_stScenePos.bIsGeo)
+        {
+            m_pUpdataCall->SetPos(osg::Vec3d(m_stScenePos.fX,m_stScenePos.fY,m_stScenePos.fZ));
+        }
+    }
 
     /**
      * @brief 姿态更改
      */
-    virtual void AttitudeChanged(){}
+    virtual void AttitudeChanged()
+    {
+        m_pUpdataCall->SetAttitude(m_stAttitude);
+    }
 
 protected:
     set<IOsgSceneNode*>               m_setChildNode;/// 子节点
     osg::ref_ptr<osg::Group>          m_pOsgNode;    /// 本节点
-    ScenePos                          m_unScenePos;  /// 场景位置
+    ScenePos                          m_stScenePos;  /// 场景位置
     SceneAttitude                     m_stAttitude;  /// 姿态信息
+    PosAttitudeUpdate*                m_pUpdataCall; /// 更新回调
     bool                              m_bVisible=true;/// 是否可见
     bool                              m_bCanDelete=true;///是否可以删除
 };

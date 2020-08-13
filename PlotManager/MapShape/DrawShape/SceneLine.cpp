@@ -15,9 +15,9 @@ public:
         case UPDATE_POINT:
         {
             osgEarth::Geometry* pGeometry = m_pLine->m_pFeatureNode->getFeature()->getGeometry();
-            pGeometry->at(m_pLine->m_nIndex).set(m_pLine->m_unScenePos.fLon,
-                                                 m_pLine->m_unScenePos.fLat,
-                                                 m_pLine->m_unScenePos.fHeight);
+            pGeometry->at(m_pLine->m_nIndex).set(m_pLine->m_stScenePos.fLon,
+                                                 m_pLine->m_stScenePos.fLat,
+                                                 m_pLine->m_stScenePos.fHeight);
             /// 重新构建futureNode
             m_pLine->m_pFeatureNode->dirty();
             m_pLine->m_emChangeType=NO_CHANGE;
@@ -98,9 +98,9 @@ bool CSceneLine::UpdatePoint(int nIndex, const ScenePos &rPos)
     }
 
     m_nIndex = nIndex;
-    if(m_unScenePos != rPos)
+    if(m_stScenePos != rPos)
     {
-        m_unScenePos = rPos;
+        m_stScenePos = rPos;
         m_emChangeType = UPDATE_POINT;
     }
 
@@ -119,6 +119,7 @@ void CSceneLine::SetMultPos(const vector<ScenePos> & vAllPoints)
     m_emChangeType = REPLACE_POINS;
 }
 
+/// 获取所有位置点
 vector<ScenePos> CSceneLine::GetMulPos()
 {
     vector<ScenePos> vTempPos;
@@ -177,7 +178,7 @@ void CSceneLine::InitStyle()
     m_styleNode.getOrCreate<osgEarth::AltitudeSymbol>()
             ->clamping() = osgEarth::AltitudeSymbol::CLAMP_RELATIVE_TO_TERRAIN;
     m_styleNode.getOrCreate<osgEarth::AltitudeSymbol>()
-            ->technique() = osgEarth::AltitudeSymbol::TECHNIQUE_MAP;
+            ->technique() = osgEarth::AltitudeSymbol::TECHNIQUE_DRAPE;
     m_styleNode.getOrCreate<osgEarth::AltitudeSymbol>()->binding()
             = osgEarth::AltitudeSymbol::BINDING_VERTEX;
     m_styleNode.getOrCreate<osgEarth::AltitudeSymbol>()
