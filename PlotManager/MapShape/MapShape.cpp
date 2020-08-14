@@ -2,6 +2,7 @@
 #include "DrawShape/SceneLine.h"
 #include "DrawShape/ScenePolygon.h"
 #include "DrawShape/SceneModel.h"
+#include "DrawShape/SceneCone.h"
 #include "MapShape.h"
 
 static string s_sPoint("IPoint");
@@ -13,6 +14,7 @@ static string s_sPolygon("IPolygon");
 static string s_sCone("ICone");
 static string s_sImage("IImage");
 static string s_sModel("IModel");
+static string s_sConeSensor("IConeSensor");
 
 CMapShape::CMapShape()
 {
@@ -44,6 +46,10 @@ IMapSceneNode* CreateNode(ISceneGraph*pSceneGraph,const string& sInterfaceName)
     {
         return(new CSceneModel(pSceneGraph));
     }
+    else if(sInterfaceName == s_sConeSensor)
+    {
+        return(new CSceneCone(pSceneGraph));
+    }
 
     return(nullptr);
 }
@@ -69,6 +75,8 @@ bool QueryInterface(string& sInterfaceName)
     sInterfaceName += s_sImage;
     sInterfaceName += " ";
     sInterfaceName += s_sModel;
+    sInterfaceName += " ";
+    sInterfaceName += s_sConeSensor;
 
     return(true);
 }

@@ -8,7 +8,13 @@
 class IConeSensor:public ISensor
 {
 public:
+    virtual ~IConeSensor(){}
 
+    /**
+     * @brief
+     */
+    virtual void SetAngle(double)=0;
+    virtual double Angle() const =0;
 };
 
 #endif

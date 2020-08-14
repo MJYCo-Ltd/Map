@@ -13,14 +13,14 @@ public:
     /**
      * @brief 设置颜色
      */
-    virtual void SetColor(SceneColor&)=0;
+    virtual void SetColor(const SceneColor&)=0;
     virtual const SceneColor& Color() const=0;
 
     /**
      * @brief 设置探测距离
      */
     virtual void SetDistance(double)=0;
-    virtual double Distance()=0;
+    virtual double Distance()const=0;
 
 };
 

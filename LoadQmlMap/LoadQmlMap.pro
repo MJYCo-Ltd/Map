@@ -28,10 +28,10 @@ TRANSLATIONS += \
 
 LIBS *= -L$$DESTDIR
 CONFIG (debug, debug|release){
-    LIBS *= -lSceneCored -lOsgExternd
+    LIBS *= -lSceneCored -lOsgExternd -lMathd
     TARGET = $$join(TARGET,,,d)
 }else{
-    LIBS *= -lSceneCore -lOsgExtern
+    LIBS *= -lSceneCore -lOsgExtern -lMath
 }
 
 win32-msvc*:QMAKE_CXXFLAGS += -utf-8

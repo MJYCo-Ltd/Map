@@ -20,6 +20,7 @@ public:
 
     /**
      * @brief 设置姿态
+     * @attention 只有ScenePos的bIsGeo才可以进行姿态调整
      */
     virtual void SetAttitude(const SceneAttitude&)=0;
     virtual const SceneAttitude& GetAttitude()const =0;

@@ -5,6 +5,7 @@
 #include <Map/Plot/IPolygon.h>
 #include <Inner/QtDrawShape.h>
 #include "SceneLine.h"
+class PolygonCallBack;
 
 class CScenePolygon:public QtDrawShape<IPolygon>
 {

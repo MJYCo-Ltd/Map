@@ -9,6 +9,10 @@ enum MAP_TERRAIN
     RELATIVE_TERRAIN /// 不贴地
 };
 
+/**
+ * @brief IMapSceneNode与ISceneNode的主要区别是
+ *        一个带经纬度信息，一个不带
+ */
 class IMapSceneNode:public ISceneNode
 {
 public:

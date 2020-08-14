@@ -20,6 +20,7 @@
 using namespace std;
 class QtSceneGraph;
 
+/// 位置和姿态更新
 class PosAttitudeUpdate:public osg::Callback
 {
 public:
@@ -102,6 +103,7 @@ private:
     bool  m_bUpdateAttitude=false;
 };
 
+/// 所有显示节点的基类
 template <typename T>
 class QtOsgSceneNode:public T,public IOsgSceneNode
 {
@@ -214,7 +216,8 @@ public:
     void InitSceneNode()
     {
         auto pTransform = new osg::PositionAttitudeTransform;
-        pTransform->addUpdateCallback(new PosAttitudeUpdate(pTransform));
+        m_pUpdataCall = new PosAttitudeUpdate(pTransform);
+        pTransform->addUpdateCallback(m_pUpdataCall);
         m_pOsgNode = pTransform;
     }
 
@@ -272,7 +275,7 @@ protected:
      */
     virtual void PosChanged()
     {
-        if(!m_stScenePos.bIsGeo)
+        if(!m_stScenePos.bIsGeo && nullptr != m_pUpdataCall)
         {
             m_pUpdataCall->SetPos(osg::Vec3d(m_stScenePos.fX,m_stScenePos.fY,m_stScenePos.fZ));
         }
@@ -283,7 +286,10 @@ protected:
      */
     virtual void AttitudeChanged()
     {
-        m_pUpdataCall->SetAttitude(m_stAttitude);
+        if(nullptr != m_pUpdataCall)
+        {
+            m_pUpdataCall->SetAttitude(m_stAttitude);
+        }
     }
 
 protected:
@@ -291,7 +297,7 @@ protected:
     osg::ref_ptr<osg::Group>          m_pOsgNode;    /// 本节点
     ScenePos                          m_stScenePos;  /// 场景位置
     SceneAttitude                     m_stAttitude;  /// 姿态信息
-    PosAttitudeUpdate*                m_pUpdataCall; /// 更新回调
+    PosAttitudeUpdate*                m_pUpdataCall=nullptr; /// 更新回调
     bool                              m_bVisible=true;/// 是否可见
     bool                              m_bCanDelete=true;///是否可以删除
 };

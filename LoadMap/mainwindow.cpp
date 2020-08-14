@@ -4,6 +4,7 @@
 #include <Map/Plot/ILine.h>
 #include <Map/Plot/IPolygon.h>
 #include <Map/Plot/IModel.h>
+#include <Map/Plot/IConeSensor.h>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "SceneGraph/ISceneGraph.h"
@@ -121,6 +122,9 @@ void MainWindow::on_action_triggered()
     pos.fLat = 26;
     m_pModel->SetPos(pos);
     pLayer->AddSceneNode(m_pModel);
+
+    ///
+    auto pCone = dynamic_cast<IConeSensor*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IConeSensor"));
 }
 
 void MainWindow::on_action_2_triggered()

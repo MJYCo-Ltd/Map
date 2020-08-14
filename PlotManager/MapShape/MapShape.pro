@@ -39,7 +39,7 @@ unix {
 }
 
 HEADERS += \
-    DrawShape/SceneConeSensor.h \
+    DrawShape/SceneCone.h \
     DrawShape/SceneLine.h \
     DrawShape/SceneModel.h \
     DrawShape/ScenePoint.h \
@@ -48,7 +48,7 @@ HEADERS += \
     QtMapSceneNode.h
 
 SOURCES += \
-    DrawShape/SceneConeSensor.cpp \
+    DrawShape/SceneCone.cpp \
     DrawShape/SceneLine.cpp \
     DrawShape/SceneModel.cpp \
     DrawShape/ScenePoint.cpp \

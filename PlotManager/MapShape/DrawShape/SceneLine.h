@@ -12,6 +12,8 @@ enum LINE_CHANGE_TYPE
     REPLACE_POINS /// 替换所有的点
 };
 
+class LineCallBack;
+
 class CSceneLine:public QtDrawShape<ILine>
 {
     friend class LineCallBack;

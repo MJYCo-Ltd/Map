@@ -4,6 +4,7 @@
 #include <osgEarth/FeatureNode>
 #include <Map/Plot/IPoint.h>
 #include <Inner/QtDrawShape.h>
+class PointCallBack;
 
 class CScenePoint:public QtDrawShape<IPoint>
 {
