@@ -67,7 +67,6 @@ void MainWindow::on_action_triggered()
     ScenePos pos;
     pos.fLon = 120;
     pos.fLat = 24;
-    pos.fHeight = 100;
     pos.bIsGeo = true;
     m_pPersonInfo->SetPos(pos);
     pLayer->AddSceneNode(m_pPersonInfo);
@@ -76,7 +75,6 @@ void MainWindow::on_action_triggered()
     m_pPoint = dynamic_cast<IPoint*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IPoint"));
     pos.fLon = 121;
     pos.fLat = 25;
-    pos.fHeight = 1000;
     pos.bIsGeo = true;
     m_pPoint->SetPos(pos);
     SceneColor color;
@@ -90,12 +88,10 @@ void MainWindow::on_action_triggered()
     m_pLine->AddPoint(0,pos);
     pos.fLon = 122;
     pos.fLat = 26;
-    pos.fHeight = 1000;
     pos.bIsGeo = true;
     m_pLine->AddPoint(0,pos);
     pos.fLon = 123;
     pos.fLat = 27;
-    pos.fHeight = 1000;
     pos.bIsGeo = true;
     m_pLine->AddPoint(0,pos);
     m_pLine->SetColor(color);
@@ -106,11 +102,9 @@ void MainWindow::on_action_triggered()
     m_pPolygon->AddPoint(0,pos);
     pos.fLon = 123;
     pos.fLat = 26;
-    pos.fHeight = 1000;
     m_pPolygon->AddPoint(1,pos);
     pos.fLon = 121;
     pos.fLat = 26.5;
-    pos.fHeight = 100;
     pos.bIsGeo = true;
     m_pPolygon->AddPoint(2,pos);
     m_pPolygon->SetColor(color);
