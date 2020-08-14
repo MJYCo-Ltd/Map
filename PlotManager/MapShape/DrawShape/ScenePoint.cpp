@@ -14,15 +14,15 @@ public:
             osgEarth::Geometry* pGeometry = m_pPoint->m_pFeatureNode->getFeature()->getGeometry();
             if(pGeometry->size() < 1)
             {
-                pGeometry->push_back(osg::Vec3(m_pPoint->m_unScenePos.fLon,
-                                                m_pPoint->m_unScenePos.fLat,
-                                                m_pPoint->m_unScenePos.fHeight));
+                pGeometry->push_back(osg::Vec3(m_pPoint->m_stScenePos.fLon,
+                                                m_pPoint->m_stScenePos.fLat,
+                                                m_pPoint->m_stScenePos.fHeight));
             }
             else
             {
-                pGeometry->at(0) = osg::Vec3(m_pPoint->m_unScenePos.fLon,
-                                              m_pPoint->m_unScenePos.fLat,
-                                              m_pPoint->m_unScenePos.fHeight);
+                pGeometry->at(0) = osg::Vec3(m_pPoint->m_stScenePos.fLon,
+                                              m_pPoint->m_stScenePos.fLat,
+                                              m_pPoint->m_stScenePos.fHeight);
             }
 
             /// 重新构建futureNode

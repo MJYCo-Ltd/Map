@@ -17,9 +17,9 @@ public:
         case UPDATE_POINT:
         {
             osgEarth::Geometry* pGeometry = m_pPolygon->m_pFeatureNode->getFeature()->getGeometry();
-            pGeometry->at(m_pPolygon->m_nIndex).set(m_pPolygon->m_unScenePos.fLon,
-                                                 m_pPolygon->m_unScenePos.fLat,
-                                                 m_pPolygon->m_unScenePos.fHeight);
+            pGeometry->at(m_pPolygon->m_nIndex).set(m_pPolygon->m_stScenePos.fLon,
+                                                 m_pPolygon->m_stScenePos.fLat,
+                                                 m_pPolygon->m_stScenePos.fHeight);
             /// 重新构建futureNode
             m_pPolygon->m_pFeatureNode->dirty();
             m_pPolygon->m_emChangeType=NO_CHANGE;
@@ -100,9 +100,9 @@ bool CScenePolygon::UpdatePoint(int nIndex, const ScenePos &rPos)
     }
 
     m_nIndex = nIndex;
-    if(m_unScenePos != rPos)
+    if(m_stScenePos != rPos)
     {
-        m_unScenePos = rPos;
+        m_stScenePos = rPos;
         m_emChangeType = UPDATE_POINT;
     }
 
