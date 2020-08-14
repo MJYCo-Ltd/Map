@@ -6,6 +6,7 @@
  */
 
 #include <Map/Plot/ISatellite.h>
+
 #include <Inner/QtOsgEarthMapSceneNode.h>
 #include "SatelliteShow_Global.h"
 
@@ -16,6 +17,31 @@ class CSatelliteShow:public QtOsgEarthMapSceneNode<ISatellite>
 {
 public:
     CSatelliteShow(ISceneGraph*);
+
+    /**
+     * @brief 初始化节点
+     */
+    void InitSceneNode();
+
+    /**
+     * @brief 设置名称
+     */
+    void SetName(const string&);
+
+    /**
+     * @brief 设置卫星模型路径
+     */
+    void SetModelPath(const string&);
+
+    /**
+     * @brief 设置轨道颜色
+     */
+    void SetOribitColor(const SceneColor&);
+
+    /**
+     * @brief 设置缩放系数
+     */
+    void SetScalBit(double);
 
     /**
      * @brief 地图更新
@@ -38,9 +64,16 @@ public:
      */
     static const string& GetInterFaceName(){return(S_sInterFace);}
 protected:
-
+    /**
+     * @brief 构建显示名字
+     */
+    void BuildName();
+protected:
     osg::ref_ptr<CSatellite2D> m_p2D; /// 卫星的二维地图绘制类
     osg::ref_ptr<CSatellite3D> m_p3D; /// 卫星的三维地图绘制类
+    string m_sName;
+    string m_sModelPath;
+
     static string S_sInterFace;
 };
 

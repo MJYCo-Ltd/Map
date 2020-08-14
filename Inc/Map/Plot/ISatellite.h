@@ -15,17 +15,37 @@ class ISatellite:public IMapSceneNode
 {
 public:
     /**
-     * @brief 设置卫星J2000下的位置和速度
-     * @param vTime        各个计算点对应的 约简儒略日 时间
-     * @param rOribitInfo  卫星的 J2000下的位置和速度   [m,m,m,m/s,m/s,m/s]
+     * @brief 设置名称
      */
-    virtual void SetJ2000Oribit(const vector<double> &vTime, const vector<Math::CVector> &rOribitInfo)=0;
+    virtual void SetName(const string&)=0;
+
+    /**
+     * @brief 设置卫星模型路径
+     */
+    virtual void SetModelPath(const string&)=0;
+
+    /**
+     * @brief 设置轨道颜色
+     */
+    virtual void SetOribitColor(const SceneColor&)=0;
+
+    /**
+     * @brief 设置缩放系数
+     */
+    virtual void SetScalBit(double)=0;
+
+    /**
+     * @brief 设置卫星J2000下的位置和速度
+     * @param 第一个参数 各个计算点对应的 约简儒略日 时间
+     * @param 第二个参数 卫星的 J2000下的位置和速度   [m,m,m,m/s,m/s,m/s]
+     */
+    virtual void SetJ2000Oribit(const vector<double> &, const vector<Math::CVector> &)=0;
 
     /**
      * @brief 设置卫星的经纬度
-     * @param vOribitInfo 卫星的 经纬信息 [rag,rag]
+     * @param 经纬信息 [deg,deg]
      */
-    virtual void SetGeoOribit(const vector<Math::CVector>& vOribitInfo)=0;
+    virtual void SetGeoOribit(const vector<Math::CVector>&)=0;
 
 };
 
