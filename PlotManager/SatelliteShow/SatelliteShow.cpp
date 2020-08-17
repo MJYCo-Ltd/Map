@@ -13,7 +13,7 @@ string CSatelliteShow::S_sInterFace("ISatellite");
 
 
 CSatelliteShow::CSatelliteShow(ISceneGraph *pSceneGrap):
-    QtOsgSceneNode<ISatellite>(pSceneGrap)
+    QtOsgEarthMapSceneNode<ISatellite>(pSceneGrap)
 {
     m_pOribit = new COribit(m_pSceneGraph);
     //m_p3D = new CSatellite3D(pSceneGrap);
@@ -21,7 +21,7 @@ CSatelliteShow::CSatelliteShow(ISceneGraph *pSceneGrap):
 
 void CSatelliteShow::InitSceneNode()
 {
-    QtOsgSceneNode<ISatellite>::InitSceneNode();
+    QtOsgEarthMapSceneNode<ISatellite>::InitSceneNode();
     m_pOribit->InitSceneNode();
     /// 添加到节点上去
     m_pSceneGraph->GetMap()->GetSpaceEnv()->AddSceneNode(this);
@@ -34,16 +34,6 @@ void CSatelliteShow::SetName(const string & satName)
     if(m_sName != satName)
     {
         m_sName = satName;
-        if(m_pSatellite.valid())
-        {
-            m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode,m_pSatellite,false));
-        }
-
-        m_pSatellite = m_pSceneGraph->ResouceLoader()->LoadNode(satName);
-        if(m_pSatellite.valid())
-        {
-            m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode,m_pSatellite,true));
-        }
         //m_p3D->SetSatName(m_sName);
     }
 }
@@ -53,7 +43,16 @@ void CSatelliteShow::SetModelPath(const string &sModelPath)
     if(m_sModelPath != sModelPath)
     {
         m_sModelPath = sModelPath;
-        //m_p3D->SetModelPath(m_sModelPath);
+        if(m_pSatellite.valid())
+        {
+            m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode,m_pSatellite,false));
+        }
+
+        m_pSatellite = m_pSceneGraph->ResouceLoader()->LoadNode(m_sModelPath);
+        if(m_pSatellite.valid())
+        {
+            m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode,m_pSatellite,true));
+        }
     }
 }
 

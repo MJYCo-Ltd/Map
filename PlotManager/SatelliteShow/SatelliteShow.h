@@ -14,7 +14,7 @@ class CSatellite2D;
 class CSatellite3D;
 class COribit;
 
-class CSatelliteShow:public QtOsgSceneNode<ISatellite>
+class CSatelliteShow:public QtOsgEarthMapSceneNode<ISatellite>
 {
     friend class OribitUpdateCallBack;
 public:

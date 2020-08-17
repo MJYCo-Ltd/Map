@@ -11,7 +11,7 @@ class ISensor;
 /**
  * @brief 场景节点类
  */
-class ISatellite:public ISceneNode
+class ISatellite:public IMapSceneNode
 {
 public:
     /**
