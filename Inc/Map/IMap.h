@@ -86,6 +86,12 @@ public:
      * @return
      */
     virtual ISpaceEnv* GetSpaceEnv()=0;
+
+    /**
+     * @brief 开启/关闭 地球自转
+     * @attention 默认开启
+     */
+    virtual void SetEarthSelfRotate(bool)=0;
 };
 
 #endif
