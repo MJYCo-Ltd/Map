@@ -90,6 +90,12 @@ void CSpaceEnv::UpdateDate(double dMJD)
     }
 }
 
+/// 设置地球自转
+void CSpaceEnv::SetEarthSelfRotate(bool bSelRotate)
+{
+    m_bEarthSelfRotate = bSelRotate;
+}
+
 /// 初始化场景节点
 void CSpaceEnv::InitSceneNode()
 {
@@ -121,13 +127,16 @@ void CSpaceEnv::InitSceneNode()
 
 void CSpaceEnv::UpdateMatrix()
 {
-    Math::CMatrix ecf2J2000 = Aerospace::CCoorSys::J20002ECF(m_dMJD);
-    osg::Matrix rotateMatrix(ecf2J2000(0,0),ecf2J2000(1,0),ecf2J2000(2,0),0.0
-                  ,ecf2J2000(0,1),ecf2J2000(1,1),ecf2J2000(2,1),0.0
-                  ,ecf2J2000(0,2),ecf2J2000(1,2),ecf2J2000(2,2),0.0
-                  ,0.0,0.0,0.0,1.0);
+    if(!m_bEarthSelfRotate)
+    {
+        Math::CMatrix ecf2J2000 = Aerospace::CCoorSys::J20002ECF(m_dMJD);
+        osg::Matrix rotateMatrix(ecf2J2000(0,0),ecf2J2000(1,0),ecf2J2000(2,0),0.0
+                                 ,ecf2J2000(0,1),ecf2J2000(1,1),ecf2J2000(2,1),0.0
+                                 ,ecf2J2000(0,2),ecf2J2000(1,2),ecf2J2000(2,2),0.0
+                                 ,0.0,0.0,0.0,1.0);
 
-    m_pRotateTransform->setMatrix(rotateMatrix);
+        m_pRotateTransform->setMatrix(rotateMatrix);
+    }
     m_pSolarEnv->UpdateTime(m_dMJD);
 }
 

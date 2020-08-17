@@ -64,6 +64,11 @@ public:
      */
     ISpaceEnv* GetSpaceEnv();
 
+    /**
+     * @brief 设置地球是否自转
+     */
+    void SetEarthSelfRotate(bool);
+
 protected:
     void InitSceneNode();
 
@@ -74,8 +79,10 @@ protected:
 
     void LoadSpaceEnv();
 protected:
+    bool   m_bSelfRotate=true;
     list<IMapMessageObserver*> m_listObserver;
     osg::ref_ptr<osg::Camera>  m_pCamera;
+    osg::ref_ptr<osg::MatrixTransform> m_pRotate;
     osg::ref_ptr<osg::Group>   m_p2DRoot;
 
     osg::ref_ptr<osgEarth::MapNode> m_pMap3DNode;

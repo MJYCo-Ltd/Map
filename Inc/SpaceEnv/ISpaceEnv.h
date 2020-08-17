@@ -58,6 +58,11 @@ public:
      * @param 约简儒略日
      */
     virtual void UpdateDate(double)=0;
+
+    /**
+     * @brief 设置地球自转
+     */
+    virtual void SetEarthSelfRotate(bool)=0;
 };
 
 #endif

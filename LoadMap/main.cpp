@@ -4,6 +4,7 @@
 #include <QDebug>
 #include "ISceneCore.h"
 #include "Map/IMap.h"
+#include "SpaceEnv/ISpaceEnv.h"
 
 /**
  * @brief 窗口消息定义
@@ -54,7 +55,7 @@ int main(int argc, char *argv[])
 
 
     auto pScene = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(SCENEGRAPH_3D,"");
-
+    pScene->GetMap()->GetSpaceEnv()->SetMilkywayVisible(false);
     for(auto one:pScene->GetMap()->GetMapLayers())
     {
         qDebug()<<*one.c_str();

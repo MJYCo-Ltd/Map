@@ -208,6 +208,15 @@ ISpaceEnv *CMap::GetSpaceEnv()
     return(m_pSpaceEnv);
 }
 
+/// 设置地球自转
+void CMap::SetEarthSelfRotate(bool bSelfRotate)
+{
+    if(m_bSelfRotate != bSelfRotate)
+    {
+        m_bSelfRotate = bSelfRotate;
+    }
+}
+
 /// 初始化场景
 void CMap::InitSceneNode()
 {
@@ -282,6 +291,10 @@ void CMap::InitMap()
                                           ->GetOsgView()->getCamera()->getGraphicsContext());
 
             m_pCamera->addCullCallback(new osgEarth::AutoClipPlaneCullCallback(m_pMap3DNode));
+
+            m_pRotate = new osg::MatrixTransform;
+            m_pCamera->addChild(m_pRotate);
+            m_pRotate->addChild(node);
 
             osgEarth::Util::LogarithmicDepthBuffer buffer;
             buffer.setUseFragDepth( true );

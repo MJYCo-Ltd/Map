@@ -64,6 +64,11 @@ public:
     void UpdateDate(double dMJD);
 
     /**
+     * @brief 设置地球自转
+     */
+    void SetEarthSelfRotate(bool);
+
+    /**
      * @brief 初始化节点
      */
     void InitSceneNode();
@@ -75,6 +80,7 @@ protected:
     CMatixUpdateCallback* m_pUpdateCallBack;
     osg::ref_ptr<osg::MatrixTransform> m_pRotateTransform;
     double     m_dMJD=0.0;       /// 约简儒略日
+    bool       m_bEarthSelfRotate=true;
 };
 
 extern "C"
