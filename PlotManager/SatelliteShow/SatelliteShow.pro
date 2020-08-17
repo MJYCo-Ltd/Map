@@ -39,11 +39,13 @@ unix {
 }
 
 HEADERS += \
+    Oribit.h \
     Satellite2D.h \
     Satellite3D.h \
     SatelliteShow.h
 
 SOURCES += \
+    Oribit.cpp \
     Satellite2D.cpp \
     Satellite3D.cpp \
     SatelliteShow.cpp

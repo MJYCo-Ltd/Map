@@ -93,14 +93,28 @@ public:
             m_pTransform->setAttitude(m_qAttiutude);
             m_bUpdateAttitude = false;
         }
+
+        if(m_bUpdateScale)
+        {
+            m_pTransform->setScale(osg::Vec3d(m_dScale,m_dScale,m_dScale));
+            m_bUpdateScale = false;
+        }
         return traverse(object, data);
+    }
+
+    void SetScal(double dScale)
+    {
+        m_dScale = dScale;
+        m_bUpdateScale = true;
     }
 private:
     osg::PositionAttitudeTransform* m_pTransform;
     osg::Vec3d  m_vPos;
     osg::Quat   m_qAttiutude;
+    double      m_dScale=1.0;
     bool  m_bUpdatePos=false;
     bool  m_bUpdateAttitude=false;
+    bool  m_bUpdateScale=false;
 };
 
 /// 所有显示节点的基类

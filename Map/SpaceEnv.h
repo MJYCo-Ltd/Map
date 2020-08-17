@@ -31,6 +31,11 @@ public:
      */
     void InitSceneNode();
 
+    /**
+     * @brief 更新时间
+     */
+    void UpdateData(double);
+
 protected:
 
     /**

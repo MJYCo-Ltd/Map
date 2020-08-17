@@ -1,4 +1,7 @@
 #include <QLibrary>
+#include <Math/VecMat.h>
+#include <Satellite/CoorSys.h>
+#include <Math/YPRAngle.h>
 #include <SpaceEnv/ISpaceBackGround.h>
 #include "SpaceEnv.h"
 
@@ -45,6 +48,20 @@ void CSpaceEnv::InitSceneNode()
     QtOsgSceneNode<ISpaceEnv>::InitSceneNode();
 
     LoadBackGround();
+}
+
+/// 更新时间
+void CSpaceEnv::UpdateData(double dMJD)
+{
+    Math::CMatrix ecf2J2000 = Aerospace::CCoorSys::J20002ECF(dMJD);
+    Math::CYPRAngle ypr(ecf2J2000);
+    YPR_Rotate rotate = ypr.GetRotate(RPY);
+    SceneAttitude attitude;
+    attitude.dYaw = rotate.dYaw*DR2D;
+    attitude.dRoll = rotate.dRoll*DR2D;
+    attitude.dPitch = rotate.dPitch*DR2D;
+    attitude.rotaOrder = SR_RPY;
+    SetAttitude(attitude);
 }
 
 void CSpaceEnv::LoadBackGround()

@@ -11,7 +11,7 @@ class ISensor;
 /**
  * @brief 场景节点类
  */
-class ISatellite:public IMapSceneNode
+class ISatellite:public ISceneNode
 {
 public:
     /**
@@ -46,6 +46,11 @@ public:
      * @param 经纬信息 [deg,deg]
      */
     virtual void SetGeoOribit(const vector<Math::CVector>&)=0;
+
+    /**
+     * @brief 更新时间
+     */
+    virtual void UpdateData(double)=0;
 
 };
 

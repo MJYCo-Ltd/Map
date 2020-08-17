@@ -1,7 +1,6 @@
 #include <ctime>
 #include <osg/Callback>
 #include <Math/Matrix.h>
-#include <Satellite/CoorSys.h>
 #include <Satellite/Date.h>
 #include "Solar/SolarEnv.h"
 #include "Star/StarEnv.h"

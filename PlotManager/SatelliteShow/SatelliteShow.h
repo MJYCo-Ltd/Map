@@ -12,9 +12,11 @@
 
 class CSatellite2D;
 class CSatellite3D;
+class COribit;
 
-class CSatelliteShow:public QtOsgEarthMapSceneNode<ISatellite>
+class CSatelliteShow:public QtOsgSceneNode<ISatellite>
 {
+    friend class OribitUpdateCallBack;
 public:
     CSatelliteShow(ISceneGraph*);
 
@@ -44,11 +46,6 @@ public:
     void SetScalBit(double);
 
     /**
-     * @brief 地图更新
-     */
-    void UpdateMapNode(osgEarth::MapNode*);
-
-    /**
      * @brief 设置轨道数据
      */
     void SetJ2000Oribit(const vector<double> &, const vector<Math::CVector> &);
@@ -63,16 +60,32 @@ public:
      * @return
      */
     static const string& GetInterFaceName(){return(S_sInterFace);}
+
+    /**
+     * @brief 更新时间
+     */
+    void UpdateData(double);
 protected:
     /**
      * @brief 构建显示名字
      */
     void BuildName();
+
+    double CalItNewton(double *dX, double dT, int nDim);
 protected:
-    osg::ref_ptr<CSatellite2D> m_p2D; /// 卫星的二维地图绘制类
-    osg::ref_ptr<CSatellite3D> m_p3D; /// 卫星的三维地图绘制类
     string m_sName;
     string m_sModelPath;
+    std::vector<Math::CVector> m_vOribit;   /// teme坐标系下的数据
+    std::vector<double> m_vdMjd;               /// 坐标对应的时间
+    COribit*            m_pOribit=nullptr;
+    Math::CVector                           m_stNowPos; /// 当前卫星的位置
+
+
+    double                       m_dStart;
+    double                       m_dEnd;
+    double                       m_dStep;
+    double                       m_dScal;
+    int  m_nIndex = -1;
 
     static string S_sInterFace;
 };

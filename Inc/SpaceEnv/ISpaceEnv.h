@@ -22,6 +22,11 @@ public:
      * @attention 默认显示
      */
     virtual void ShowSpaceBackGround(bool)=0;
+
+    /**
+     * @brief 更新时间
+     */
+    virtual void UpdateData(double)=0;
 };
 
 #endif
