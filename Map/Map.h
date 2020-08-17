@@ -8,6 +8,7 @@
 #include "Map_Global.h"
 
 class CPlotManager;
+class CSpaceEnv;
 
 class CMap:public QtOsgSceneNode<IMap>
 {
@@ -59,10 +60,10 @@ public:
     IPlotManager* GetPlotManager();
 
     /**
-     * @brief 获取星空背景
+     * @brief 获取地惯系节点
      * @return
      */
-    ISpaceEnv* GetSpaceEnv();
+    virtual ISpaceEnv* GetSpaceEnv();
 
     /**
      * @brief 设置地球是否自转
@@ -76,13 +77,10 @@ protected:
      * @brief 初始化地图
      */
     void InitMap();
-
-    void LoadSpaceEnv();
 protected:
     bool   m_bSelfRotate=true;
     list<IMapMessageObserver*> m_listObserver;
     osg::ref_ptr<osg::Camera>  m_pCamera;
-    osg::ref_ptr<osg::MatrixTransform> m_pRotate;
     osg::ref_ptr<osg::Group>   m_p2DRoot;
 
     osg::ref_ptr<osgEarth::MapNode> m_pMap3DNode;
@@ -90,7 +88,7 @@ protected:
     MapLayers    m_allLayers;
     MapType      m_emType;
     CPlotManager* m_pPlotManager=nullptr;
-    ISpaceEnv*    m_pSpaceEnv=nullptr;
+    CSpaceEnv*    m_pSpaceEnv=nullptr; /// 空间背景
 };
 
 extern "C"

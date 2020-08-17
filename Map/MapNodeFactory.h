@@ -28,11 +28,12 @@ public:
      */
     void DeleteNoUseSceneNode();
 
-protected:
     /**
      * @brief 初始化工厂
      */
     void InitFactory();
+
+protected:
 
 	/**
 	 * @brief 初始化类型

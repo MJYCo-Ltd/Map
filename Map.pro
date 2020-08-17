@@ -4,7 +4,7 @@ SUBDIRS =\
     OsgExtern\
     SceneCore\
     Map\
-    SpaceEnv\
+    SpaceBackGround\
     PlotManager\
 	LoadMap\
 	LoadQmlMap

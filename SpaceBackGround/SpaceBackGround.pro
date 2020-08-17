@@ -6,7 +6,7 @@
 
 QT       -= gui
 
-TARGET = SpaceEnv
+TARGET = SpaceBackGround
 TEMPLATE = lib
 
 DEFINES += SPACEENV_LIBRARY
@@ -42,7 +42,7 @@ HEADERS += \
     Solar/PlanetModel.h \
     Solar/SolarEnv.h \
     Solar/SunModel.h \
-    SpaceEnv.h \
+    SpaceBackGround.h \
     Star/Boundary.h \
     Star/Frustum.h \
     Star/GeodesicGrid.h \
@@ -63,7 +63,7 @@ SOURCES += \
     Solar/PlanetModel.cpp \
     Solar/SolarEnv.cpp \
     Solar/SunModel.cpp \
-    SpaceEnv.cpp \
+    SpaceBackGround.cpp \
     Star/Boundary.cpp \
     Star/Frustum.cpp \
     Star/GeodesicGrid.cpp \

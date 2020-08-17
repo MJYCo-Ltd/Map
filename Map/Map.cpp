@@ -12,21 +12,21 @@
 #include <osgEarth/GLUtils>
 #include <osgEarth/AutoClipPlaneHandler>
 
-#include <QLibrary>
-
-#include <SpaceEnv/ISpaceEnv.h>
 #include "PlotManager.h"
 #include <Inner/IRender.h>
 #include <Inner/ILoadResource.h>
 #include <Inner/IOsgSceneNode.h>
 #include <Inner/IOsgViewPoint.h>
 #include <Inner/OsgExtern/OsgExtern.h>
+#include "SpaceEnv.h"
 #include "Map.h"
 
 CMap::CMap(MapType type, ISceneGraph *pSceneGraph):
     QtOsgSceneNode<IMap>(pSceneGraph),
     m_emType(type)
 {
+    m_pPlotManager = new CPlotManager(m_pSceneGraph);
+    m_pSpaceEnv = new CSpaceEnv(m_pSceneGraph);
 }
 
 CMap::~CMap()
@@ -202,7 +202,7 @@ IPlotManager *CMap::GetPlotManager()
     return(m_pPlotManager);
 }
 
-/// 获取星空背景
+/// 返回空间类的指针
 ISpaceEnv *CMap::GetSpaceEnv()
 {
     return(m_pSpaceEnv);
@@ -220,14 +220,39 @@ void CMap::SetEarthSelfRotate(bool bSelfRotate)
 /// 初始化场景
 void CMap::InitSceneNode()
 {
-    QtOsgSceneNode<IMap>::InitSceneNode();
-    m_pPlotManager = new CPlotManager(m_pSceneGraph);
+    m_pOsgNode = new osg::Group;
+
+    m_pPlotManager->RegisterPlotType();
 
     osg::Camera* pCamera = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
             ->GetOsgView()->getCamera();
     osgEarth::GLUtils::setGlobalDefaults(pCamera->getOrCreateStateSet());
+    m_pSpaceEnv->SetMainCamara(pCamera);
     InitMap();
 }
+
+class RotateCallBack:public osg::Callback
+{
+public:
+    RotateCallBack(osg::MatrixTransform* pMatTrans):m_pPlaceNode(pMatTrans)
+    {
+    }
+
+    bool run(osg::Object* object, osg::Object* data)
+    {
+        static double nAngle(0);
+        nAngle += 0.001;
+
+        m_pPlaceNode->setMatrix(osg::Matrix::rotate(nAngle,osg::Z_AXIS));
+        return traverse(object, data);
+    }
+
+protected:
+    virtual ~RotateCallBack() {}
+private:
+
+    osg::observer_ptr<osg::MatrixTransform> m_pPlaceNode;
+};
 
 void CMap::InitMap()
 {
@@ -268,6 +293,7 @@ void CMap::InitMap()
 
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode,m_p2DRoot,true));
         m_pPlotManager->UpdateMapNode(m_pMap3DNode,m_pMap2DNode);
+        m_pSpaceEnv->ShowSpaceBackGround(false);
     }
         break;
     case MAP_3D:
@@ -292,10 +318,6 @@ void CMap::InitMap()
 
             m_pCamera->addCullCallback(new osgEarth::AutoClipPlaneCullCallback(m_pMap3DNode));
 
-            m_pRotate = new osg::MatrixTransform;
-            m_pCamera->addChild(m_pRotate);
-            m_pRotate->addChild(node);
-
             osgEarth::Util::LogarithmicDepthBuffer buffer;
             buffer.setUseFragDepth( true );
             buffer.install(m_pCamera);
@@ -303,64 +325,11 @@ void CMap::InitMap()
 
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode.get(),m_pCamera.get(),true));
         m_pPlotManager->UpdateMapNode(m_pMap2DNode,m_pMap3DNode);
+        m_pSpaceEnv->InitSceneNode();
+        AddSceneNode(m_pSpaceEnv);
+        m_pSpaceEnv->ShowSpaceBackGround(true);
     }
         break;
-    }
-
-    /// 加载星空
-    LoadSpaceEnv();
-}
-
-/// 加载星空背景
-void CMap::LoadSpaceEnv()
-{
-    if(nullptr == m_pSpaceEnv)
-    {
-        typedef ISpaceEnv* (*CreateSpaceEnvFun)(ISceneGraph*);
-#ifdef Q_OS_WIN
-
-#ifdef QT_NO_DEBUG
-        QLibrary loadMap("SpaceEnv.dll");
-#else
-        QLibrary loadMap("SpaceEnvd.dll");
-#endif
-
-#else
-
-#ifdef QT_NO_DEBUG
-        QLibrary loadMap("libSpaceEnv.so");
-#else
-        QLibrary loadMap("libSpaceEnvd.so");
-#endif
-
-#endif
-        if(loadMap.load())
-        {
-            CreateSpaceEnvFun pCreateSpaceEnv = reinterpret_cast<CreateSpaceEnvFun>(loadMap.resolve("CreateSpaceEnv"));
-            if(nullptr != pCreateSpaceEnv)
-            {
-                m_pSpaceEnv = pCreateSpaceEnv(m_pSceneGraph);
-                dynamic_cast<IOsgSceneNode*>(m_pSpaceEnv)->InitSceneNode();
-            }
-        }
-    }
-
-    if(nullptr != m_pSpaceEnv)
-    {
-        osg::Camera* pCamera = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
-                ->GetOsgView()->getCamera();
-        if(MAP_3D == m_emType)
-        {
-            pCamera->setClearMask(GL_DEPTH_BUFFER_BIT);
-            pCamera->setClearColor(osg::Vec4(0.0,0.0,0.0,1.0));
-            m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode.get(),
-                                                                                  dynamic_cast<IOsgSceneNode*>(m_pSpaceEnv)->GetOsgNode(),true));
-        }
-        else if(MAP_2D == m_emType)
-        {
-            pCamera->setClearMask(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
-            pCamera->setClearColor(osg::Vec4(0.63922,0.8,1.0,1.0));
-        }
     }
 }
 

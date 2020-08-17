@@ -11,6 +11,8 @@
 #include "Map/IMap.h"
 #include "Map/IPlotManager.h"
 #include "Map/IPlotLayer.h"
+#include "SpaceEnv/ISpaceEnv.h"
+#include "SpaceEnv/ISpaceBackGround.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -122,6 +124,8 @@ void MainWindow::on_action_triggered()
     pos.fLat = 26;
     m_pModel->SetPos(pos);
     pLayer->AddSceneNode(m_pModel);
+
+    m_pSceneGraph->GetMap()->GetSpaceEnv()->ShowSpaceBackGround(false);
 
     ///
     auto pCone = dynamic_cast<IConeSensor*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IConeSensor"));

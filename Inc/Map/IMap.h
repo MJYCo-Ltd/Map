@@ -20,6 +20,7 @@ enum MapType
 };
 
 class IPlotManager;
+class ISpaceBackGround;
 class ISpaceEnv;
 
 struct IMapMessageObserver
@@ -82,7 +83,7 @@ public:
     virtual IPlotManager* GetPlotManager()=0;
 
     /**
-     * @brief 获取星空管理类
+     * @brief 获取地惯系节点
      * @return
      */
     virtual ISpaceEnv* GetSpaceEnv()=0;

@@ -153,3 +153,9 @@ void CPlotManager::FreeNoUseMapSceneNode()
 {
     m_pCreateFactory->DeleteNoUseSceneNode();
 }
+
+/// 注册可以标绘的类型
+void CPlotManager::RegisterPlotType()
+{
+    m_pCreateFactory->InitFactory();
+}

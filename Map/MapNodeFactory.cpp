@@ -15,8 +15,6 @@
 CMapNodeFactory::CMapNodeFactory(ISceneGraph *pSceneGraph):
     m_pSceneGraph(pSceneGraph)
 {
-    m_nTimerID = startTimer(60000);
-    InitFactory();
 }
 
 /// 析构模型工厂
@@ -110,6 +108,8 @@ void CMapNodeFactory::InitFactory()
             m_mapTypeDllName[sInterfaceType] = sDllName;
         }
     }
+
+    m_nTimerID = startTimer(60000);
 }
 
 #include<QDebug>

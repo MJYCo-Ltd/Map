@@ -65,6 +65,11 @@ public:
      * @brief FreeNoUseMapSceneNode
      */
     void FreeNoUseMapSceneNode();
+
+    /**
+     * @brief
+     */
+    void RegisterPlotType();
 private:
     ISceneGraph*                       m_pSceneGraph=nullptr; /// 场景图
     CMapNodeFactory*                   m_pCreateFactory=nullptr;/// 创建节点

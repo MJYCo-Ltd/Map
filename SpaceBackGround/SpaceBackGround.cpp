@@ -6,14 +6,14 @@
 #include "Solar/SolarEnv.h"
 #include "Star/StarEnv.h"
 
-#include "SpaceEnv.h"
+#include "SpaceBackGround.h"
 
 /// 更新矩阵
 class CMatixUpdateCallback:public osg::Callback
 {
 public:
 
-    CMatixUpdateCallback(CSpaceEnv* pEnv):m_pSpaceEnv(pEnv){}
+    CMatixUpdateCallback(CSpaceBackGround* pEnv):m_pSpaceEnv(pEnv){}
 
     void NeedUpdate()
     {
@@ -32,56 +32,56 @@ public:
 
 private:
     bool m_bNeedUpdate=false;
-    CSpaceEnv* m_pSpaceEnv;
+    CSpaceBackGround* m_pSpaceEnv;
 };
 
 ///
-CSpaceEnv::CSpaceEnv(ISceneGraph *pSceneGraph):
-    QtOsgSceneNode<ISpaceEnv>(pSceneGraph)
+CSpaceBackGround::CSpaceBackGround(ISceneGraph *pSceneGraph):
+    QtOsgSceneNode<ISpaceBackGround>(pSceneGraph)
 {
 }
 
-CSpaceEnv::~CSpaceEnv()
+CSpaceBackGround::~CSpaceBackGround()
 {
 }
 
-void CSpaceEnv::SetMaxVisibleMagnitude(int nMax)
+void CSpaceBackGround::SetMaxVisibleMagnitude(int nMax)
 {
 }
 
-void CSpaceEnv::SetMilkywayVisible(bool bShow)
+void CSpaceBackGround::SetMilkywayVisible(bool bShow)
 {
 }
 
-void CSpaceEnv::SetStarNamesVisible(bool bShow)
+void CSpaceBackGround::SetStarNamesVisible(bool bShow)
 {
     m_pStarEnv->SetStarNameVisible(bShow);
 }
 
-void CSpaceEnv::SetBoundariesVisible(bool bShow)
+void CSpaceBackGround::SetBoundariesVisible(bool bShow)
 {
     m_pStarEnv->SetBoundaryVisible(bShow);
 }
 
-void CSpaceEnv::SetConstellationLinesVisible(bool bShow)
+void CSpaceBackGround::SetConstellationLinesVisible(bool bShow)
 {
     m_pStarEnv->SetConstellationVisible(bShow);
 }
 
 /// 设置显示
-void CSpaceEnv::SetConstellationNamesVisible(bool bShow)
+void CSpaceBackGround::SetConstellationNamesVisible(bool bShow)
 {
     m_pStarEnv->SetStarNameVisible(bShow);
 }
 
 /// 设置行星名称显隐
-void CSpaceEnv::SetPlanetsNamesVisible(bool bShow)
+void CSpaceBackGround::SetPlanetsNamesVisible(bool bShow)
 {
     m_pSolarEnv->SetPlanetNameShow(bShow);
 }
 
 /// 更新时间
-void CSpaceEnv::UpdateDate(double dMJD)
+void CSpaceBackGround::UpdateDate(double dMJD)
 {
     if(fabs(m_dMJD - dMJD) > 1e-11)
     {
@@ -90,17 +90,10 @@ void CSpaceEnv::UpdateDate(double dMJD)
     }
 }
 
-/// 设置地球自转
-void CSpaceEnv::SetEarthSelfRotate(bool bSelRotate)
-{
-    m_bEarthSelfRotate = bSelRotate;
-}
-
 /// 初始化场景节点
-void CSpaceEnv::InitSceneNode()
+void CSpaceBackGround::InitSceneNode()
 {
-    m_pRotateTransform = new osg::MatrixTransform;
-    m_pOsgNode = m_pRotateTransform;
+    m_pOsgNode = new osg::Group;
 
     m_pUpdateCallBack = new CMatixUpdateCallback(this);
     m_pOsgNode->addUpdateCallback(m_pUpdateCallBack);
@@ -109,8 +102,8 @@ void CSpaceEnv::InitSceneNode()
     m_pSolarEnv = new CSolarEnv(m_pSceneGraph);
     m_pSolarEnv->CreateSolar();
 
-    m_pRotateTransform->addChild(m_pStarEnv);
-    m_pRotateTransform->addChild(m_pSolarEnv);
+    m_pOsgNode->addChild(m_pStarEnv);
+    m_pOsgNode->addChild(m_pSolarEnv);
 
 
     time_t timep;
@@ -125,23 +118,13 @@ void CSpaceEnv::InitSceneNode()
     UpdateDate(data.GetMJD());
 }
 
-void CSpaceEnv::UpdateMatrix()
+void CSpaceBackGround::UpdateMatrix()
 {
-    if(!m_bEarthSelfRotate)
-    {
-        Math::CMatrix ecf2J2000 = Aerospace::CCoorSys::J20002ECF(m_dMJD);
-        osg::Matrix rotateMatrix(ecf2J2000(0,0),ecf2J2000(1,0),ecf2J2000(2,0),0.0
-                                 ,ecf2J2000(0,1),ecf2J2000(1,1),ecf2J2000(2,1),0.0
-                                 ,ecf2J2000(0,2),ecf2J2000(1,2),ecf2J2000(2,2),0.0
-                                 ,0.0,0.0,0.0,1.0);
-
-        m_pRotateTransform->setMatrix(rotateMatrix);
-    }
     m_pSolarEnv->UpdateTime(m_dMJD);
 }
 
 /// 创建空间背景
-ISpaceEnv* CreateSpaceEnv(ISceneGraph* pSceneGraph)
+ISpaceBackGround *CreateSpaceEnv(ISceneGraph* pSceneGraph)
 {
-    return(new CSpaceEnv(pSceneGraph));
+    return(new CSpaceBackGround(pSceneGraph));
 }

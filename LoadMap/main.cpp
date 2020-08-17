@@ -12,7 +12,7 @@
 class WindowMessage:public IWindowMessageObserver
 {
 public:
-    void KeyUp(char chr){qDebug()<<chr;}
+    void KeyUp(char chr){qDebug()<<(int)chr;}
     void MouseDown(MouseButtonMask type, int, int)
     {
         switch (type)
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 
 
     auto pScene = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(SCENEGRAPH_3D,"");
-    pScene->GetMap()->GetSpaceEnv()->SetMilkywayVisible(false);
+//    pScene->GetMap()->GetSpaceEnv()->SetMilkywayVisible(false);
     for(auto one:pScene->GetMap()->GetMapLayers())
     {
         qDebug()<<*one.c_str();
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 
     w.SetSecenGraph(pScene);
 
-    //pScene->GetMainWindow()->SubMessage(new WindowMessage);
+    pScene->GetMainWindow()->SubMessage(new WindowMessage);
 
     QWidget* pWindow = pScene->GetMainWindow()->ToWidget();
     if(nullptr != pWindow)

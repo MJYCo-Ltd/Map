@@ -45,7 +45,7 @@ void CSatelliteShow::SetScalBit(double)
 /// 地图更新
 void CSatelliteShow::UpdateMapNode(osgEarth::MapNode *pMapNode)
 {
-    if(pMapNode->isGeocentric() && m_pSceneGraph->GetMap()->GetSpaceEnv())
+    if(pMapNode->isGeocentric() /*&& m_pSceneGraph->GetMap()->GetSpaceEnv()*/)
     {
     }
 }

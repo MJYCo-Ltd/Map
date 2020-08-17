@@ -1,7 +1,7 @@
 #ifndef SPACEENV_H
 #define SPACEENV_H
 
-#include <SpaceEnv/ISpaceEnv.h>
+#include <SpaceEnv/ISpaceBackGround.h>
 #include <Inner/QtOsgSceneNode.h>
 #include "SpaceEnv_Global.h"
 
@@ -9,13 +9,13 @@ class CSolarEnv;
 class CStarEnv;
 class CMatixUpdateCallback;
 
-class CSpaceEnv:public QtOsgSceneNode<ISpaceEnv>
+class CSpaceBackGround:public QtOsgSceneNode<ISpaceBackGround>
 {
     friend class CMatixUpdateCallback;
 
 public:
-    CSpaceEnv(ISceneGraph* pSceneGraph);
-    ~CSpaceEnv();
+    CSpaceBackGround(ISceneGraph* pSceneGraph);
+    ~CSpaceBackGround();
     /**
      * @brief 设置显示最大星等 默认为 6 最大星等为 20
      * @param nMax
@@ -64,11 +64,6 @@ public:
     void UpdateDate(double dMJD);
 
     /**
-     * @brief 设置地球自转
-     */
-    void SetEarthSelfRotate(bool);
-
-    /**
      * @brief 初始化节点
      */
     void InitSceneNode();
@@ -78,13 +73,11 @@ protected:
     osg::ref_ptr<CSolarEnv> m_pSolarEnv;  /// 行星背景
     osg::ref_ptr<CStarEnv>  m_pStarEnv;   /// 星空背景
     CMatixUpdateCallback* m_pUpdateCallBack;
-    osg::ref_ptr<osg::MatrixTransform> m_pRotateTransform;
     double     m_dMJD=0.0;       /// 约简儒略日
-    bool       m_bEarthSelfRotate=true;
 };
 
 extern "C"
 {
-    SPACEENVSHARED_EXPORT ISpaceEnv* CreateSpaceEnv(ISceneGraph* pSceneGraph);
+    SPACEENVSHARED_EXPORT ISpaceBackGround* CreateSpaceEnv(ISceneGraph* pSceneGraph);
 }
 #endif // SPACEENV_H

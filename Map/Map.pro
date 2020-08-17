@@ -44,11 +44,13 @@ HEADERS += \
     Map_Global.h \
     MyModelLayer.h \
     PlotLayer.h \
-    PlotManager.h
+    PlotManager.h \
+    SpaceEnv.h
 
 SOURCES += \
     Map.cpp \
     MapNodeFactory.cpp \
     MyModelLayer.cpp \
     PlotLayer.cpp \
-    PlotManager.cpp
+    PlotManager.cpp \
+    SpaceEnv.cpp
