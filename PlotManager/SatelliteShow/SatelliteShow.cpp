@@ -1,6 +1,8 @@
 #include <Math/Intpol.h>
 #include <Map/IMap.h>
 #include <SpaceEnv/ISpaceEnv.h>
+#include <Inner/ILoadResource.h>
+#include <Inner/OsgExtern/OsgExtern.h>
 #include "Oribit.h"
 #include "Satellite3D.h"
 #include "Satellite2D.h"
@@ -32,6 +34,16 @@ void CSatelliteShow::SetName(const string & satName)
     if(m_sName != satName)
     {
         m_sName = satName;
+        if(m_pSatellite.valid())
+        {
+            m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode,m_pSatellite,false));
+        }
+
+        m_pSatellite = m_pSceneGraph->ResouceLoader()->LoadNode(satName);
+        if(m_pSatellite.valid())
+        {
+            m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode,m_pSatellite,true));
+        }
         //m_p3D->SetSatName(m_sName);
     }
 }

@@ -77,6 +77,7 @@ protected:
     string m_sModelPath;
     std::vector<Math::CVector> m_vOribit;   /// teme坐标系下的数据
     std::vector<double> m_vdMjd;               /// 坐标对应的时间
+    osg::ref_ptr<osg::Node>    m_pSatellite; ///卫星模型
     COribit*            m_pOribit=nullptr;
     Math::CVector                           m_stNowPos; /// 当前卫星的位置
 
