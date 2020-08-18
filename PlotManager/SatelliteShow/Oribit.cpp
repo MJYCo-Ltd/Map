@@ -66,7 +66,7 @@ void COribit::SetOribitColor(const SceneColor &)
 
 void COribit::InitSceneNode()
 {
-    m_pOsgNode = new osg::Group;
+    QtOsgSceneNode<IOribit>::InitSceneNode();
     m_pOribit = new osg::Geometry();
     m_pOribit->setUpdateCallback(new OribitUpdateCallBack(this,m_pOribit));
     m_pOsgNode->addChild(m_pOribit);

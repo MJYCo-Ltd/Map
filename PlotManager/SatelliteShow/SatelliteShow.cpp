@@ -16,6 +16,7 @@ CSatelliteShow::CSatelliteShow(ISceneGraph *pSceneGrap):
     QtOsgEarthMapSceneNode<ISatellite>(pSceneGrap)
 {
     m_pOribit = new COribit(m_pSceneGraph);
+    m_stNowPos.Resize(6);
     //m_p3D = new CSatellite3D(pSceneGrap);
 }
 
@@ -102,14 +103,16 @@ void CSatelliteShow::UpdateData(double dMJD)
     int nIndex = dSpend/m_dStep;
 
     /// 过滤掉非法值
-    if(1 > m_nIndex)
+    if(1 > nIndex)
     {
-        m_nIndex = 1;
+        nIndex = 1;
     }
-    else if(m_nIndex > m_vdMjd.size() -1)
+    else if(nIndex > m_vdMjd.size() -1)
     {
-        m_nIndex = m_vdMjd.size() - 1;
+        nIndex = m_vdMjd.size() - 1;
     }
+
+    m_nIndex = nIndex;
 
 
     /// 赋值

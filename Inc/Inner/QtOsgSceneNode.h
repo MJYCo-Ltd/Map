@@ -13,6 +13,7 @@
 
 #include <Inner/IRender.h>
 #include <Inner/OsgExtern/OsgExtern.h>
+#include <Inner/OsgExtern/MyPositionAttitudeTransform.h>
 
 #include "IOsgSceneNode.h"
 #include "OsgExtern/OsgExtern_Global.h"
@@ -117,7 +118,9 @@ private:
     bool  m_bUpdateScale=false;
 };
 
-/// 所有显示节点的基类
+/**
+ *  实现ISceneNode所有的接口
+ */
 template <typename T>
 class QtOsgSceneNode:public T,public IOsgSceneNode
 {
@@ -171,6 +174,39 @@ public:
     const SceneAttitude& GetAttitude() const
     {
         return(m_stAttitude);
+    }
+
+    /**
+     * @brief 设置缩放系数
+     */
+    void SetScal(double dScal)
+    {
+        if(dScal > 0 && dScal != m_dScal)
+        {
+            m_dScal = dScal;
+        }
+    }
+    double Scal()const
+    {
+        return(m_dScal);
+    }
+
+    /**
+     * @brief 设置旋转依赖的中心点
+     * @attention 例如人的手是相对于肘关节进行
+                  旋转，而不是手腕
+     */
+    void SetPivotPos(const ScenePos& rPivoPos)
+    {
+        if(m_stPivoPos != rPivoPos)
+        {
+            m_stPivoPos = rPivoPos;
+        }
+    }
+
+    const ScenePos& PivotPos() const
+    {
+        return(m_stPivoPos);
     }
 
     /**
@@ -229,10 +265,9 @@ public:
      */
     void InitSceneNode()
     {
-        auto pTransform = new osg::PositionAttitudeTransform;
-        m_pUpdataCall = new PosAttitudeUpdate(pTransform);
-        pTransform->addUpdateCallback(m_pUpdataCall);
-        m_pOsgNode = pTransform;
+        m_pOsgNode = new CMyPositionAttitudeTransform;
+        m_pUpdataCall = new PosAttitudeUpdate(m_pOsgNode);
+        m_pOsgNode->addUpdateCallback(m_pUpdataCall);
     }
 
     /**
@@ -308,10 +343,12 @@ protected:
 
 protected:
     set<IOsgSceneNode*>               m_setChildNode;/// 子节点
-    osg::ref_ptr<osg::Group>          m_pOsgNode;    /// 本节点
+    osg::ref_ptr<CMyPositionAttitudeTransform>  m_pOsgNode;    /// 本节点
     ScenePos                          m_stScenePos;  /// 场景位置
+    ScenePos                          m_stPivoPos;   /// 相对中心位置
     SceneAttitude                     m_stAttitude;  /// 姿态信息
     PosAttitudeUpdate*                m_pUpdataCall=nullptr; /// 更新回调
+    double                            m_dScal=1.0;
     bool                              m_bVisible=true;/// 是否可见
     bool                              m_bCanDelete=true;///是否可以删除
 };

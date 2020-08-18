@@ -92,7 +92,7 @@ void CSpaceBackGround::UpdateDate(double dMJD)
 /// 初始化场景节点
 void CSpaceBackGround::InitSceneNode()
 {
-    m_pOsgNode = new osg::Group;
+    QtOsgSceneNode<ISpaceBackGround>::InitSceneNode();
 
     m_pUpdateCallBack = new CMatixUpdateCallback(this);
     m_pOsgNode->addUpdateCallback(m_pUpdateCallBack);

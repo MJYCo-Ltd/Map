@@ -39,10 +39,10 @@ FORMS += \
 
 LIBS *= -L$$DESTDIR
 CONFIG (debug, debug|release){
-    LIBS *= -lSceneCored -lOsgExternd -lMathd
+    LIBS *= -lSceneCored -lOsgExternd
     TARGET = $$join(TARGET,,,d)
 }else{
-    LIBS *= -lSceneCore -lOsgExtern -lMath
+    LIBS *= -lSceneCore -lOsgExtern
 }
 unix:!mac:QMAKE_LFLAGS += -Wl,-rpath=.:./osglib:./stklib
 win32-msvc*:QMAKE_CXXFLAGS += -utf-8

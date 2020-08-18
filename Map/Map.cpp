@@ -220,7 +220,7 @@ void CMap::SetEarthSelfRotate(bool bSelfRotate)
 /// 初始化场景
 void CMap::InitSceneNode()
 {
-    m_pOsgNode = new osg::Group;
+    QtOsgSceneNode<IMap>::InitSceneNode();
 
     m_pPlotManager->RegisterPlotType();
 

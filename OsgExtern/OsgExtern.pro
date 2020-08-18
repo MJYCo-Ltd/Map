@@ -37,4 +37,5 @@ unix {
 
 SOURCES += \
     MathCommon.cpp \
+    MyPositionAttitudeTransform.cpp \
     RemoveFromeScene.cpp
