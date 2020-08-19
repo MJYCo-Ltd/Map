@@ -13,7 +13,7 @@
 MathPath=$${PWD}/../VersionMath
 
 win32{
-    SDKPath = G:/Project/NewGL3
+    SDKPath = $$PWD/../NewGL3
     # 开启utf-8 编码方式支持
     QMAKE_CXXFLAGS += -utf-8
     QMAKE_CXXFLAGS += /wd"4100"
