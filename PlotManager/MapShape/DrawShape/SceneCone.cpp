@@ -15,7 +15,7 @@ public:
     {
         if(m_pCone->m_bUpdate)
         {
-            double dR = m_pCone->m_dDistance * tan(m_pCone->m_dAngle);
+            double dR = m_pCone->m_dDistance * tan(m_pCone->m_dAngle*DD2R);
             static const double * pCos = CMathCommon::GetInstance()->GetCos();
             static const double* pSin = CMathCommon::GetInstance()->GetSin();
 
@@ -54,6 +54,7 @@ private:
 void CSceneCone::InitSceneNode()
 {
     QtSensor<IConeSensor>::InitSceneNode();
+    BuildGeometry();
 }
 
 CSceneCone::CSceneCone(ISceneGraph *pSceneGraph):
@@ -94,7 +95,7 @@ void CSceneCone::BuildGeometry()
 
     pArray->push_back(osg::Vec3(0.0,0.0,0.0));
 
-    double dR = m_dDistance * tan(m_dAngle);
+    double dR = m_dDistance * tan(m_dAngle * DD2R);
     const double * pCos = CMathCommon::GetInstance()->GetCos();
     const double* pSin = CMathCommon::GetInstance()->GetSin();
 
@@ -119,7 +120,7 @@ void CSceneCone::BuildGeometry()
     pBack->SetVec3Array(pArray);
     pBack->SetVec4Array(pColorArray);
 
-    pLocalGeometry->addUpdateCallback(pBack);
+    pLocalGeometry->setUpdateCallback(pBack);
     m_pOsgNode->addChild(pLocalGeometry);
 }
 
@@ -128,14 +129,4 @@ void CSceneCone::PosChanged()
     if(m_stScenePos.bIsGeo)
     {
     }
-}
-
-void CSceneCone::UpdateColor()
-{
-    m_bUpdate = true;
-}
-
-void CSceneCone::UpdateDistance()
-{
-    m_bUpdate=true;
 }

@@ -45,11 +45,12 @@ public:
         return(m_dDistance);
     }
 protected:
-    virtual void UpdateColor(){}
-    virtual void UpdateDistance(){}
+    virtual void UpdateColor(){ m_bUpdate = true; }
+    virtual void UpdateDistance(){ m_bUpdate = true; }
 protected:
     SceneColor m_stColor;
-    double     m_dDistance=0.;
+    double     m_dDistance=1e4;
+    bool       m_bUpdate = false;
 };
 
 #endif

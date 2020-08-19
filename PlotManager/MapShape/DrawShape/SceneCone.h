@@ -30,11 +30,8 @@ protected:
     void BuildGeometry();
 
     void PosChanged();
-    void UpdateColor();
-    void UpdateDistance();
 protected:
-    double m_dAngle=0.;
-    bool   m_bUpdate=false;
+    double m_dAngle=48.0;
 };
 
 #endif // CSCENECONE_H
