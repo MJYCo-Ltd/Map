@@ -13,13 +13,6 @@ public:
     CSolarEnv(ISceneGraph* pSceneGraph);
 
     /**
-     * @brief 更新矩阵
-     * @param crMatrix
-     */
-    void UpdateMatrix(const osg::Matrix& crMatrix);
-    const osg::Matrix& GetUpdateMatrix(){return(m_rRotMatrix);}
-
-    /**
      * @brief 创造整个太阳系
      */
     void CreateSolar();
@@ -50,7 +43,6 @@ public:
 private:
     ISceneGraph*     m_pSceneGraph;                       /// 场景
     bool             m_bNeedUpdate;                       /// 是否需要更新
-    osg::Matrix      m_rRotMatrix;                        /// 旋转矩阵
     std::map<int,osg::ref_ptr<CPlanetModel> > m_mapPlanet;/// 行星绘制类
     osg::ref_ptr<CSunModel>                   m_pSun;     /// 绘制的太阳
 };

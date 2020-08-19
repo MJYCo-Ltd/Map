@@ -160,20 +160,21 @@ public:
     }
 };
 
-class SunUpdateCallback:public osg::NodeCallback
+class SunUpdateCallback:public osg::Callback
 {
 public:
 
     SunUpdateCallback(CSunModel* pParent):m_pParent(pParent){}
 
     /// 回调
-    void operator()(osg::Node* node, osg::NodeVisitor* nv)
+    bool run(osg::Object* object, osg::Object* data)
     {
         if(m_pParent->m_bNeedUpdate)
         {
             m_pParent->setMatrix(osg::Matrix::translate(m_pParent->m_rECIPostion));
             m_pParent->m_bNeedUpdate = false;
         }
+        return traverse(object, data);
     }
 private:
     CSunModel* m_pParent;

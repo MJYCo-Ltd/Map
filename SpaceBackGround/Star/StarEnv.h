@@ -21,12 +21,6 @@ public:
     void SetMainView(osgViewer::View* pMainView);
 
     /**
-     * @brief 更新地惯系矩阵
-     * @param crMatrix
-     */
-    void UpdateMatrix(const osg::Matrix& crMatrix);
-
-    /**
      * @brief 重写父类方法
      * @param nv
      */
@@ -65,7 +59,6 @@ private:
     osg::ref_ptr<CStarManager>         m_pStarManager;
     osg::observer_ptr<osgViewer::View> m_pMainView;
     osg::observer_ptr<osg::Camera>     m_pMainCamera;
-    osg::Matrix                        m_rRotMatrix;
 };
 
 #endif // SA_STAR_ENV_H

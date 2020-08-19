@@ -105,11 +105,6 @@ void CStarEnv::SetMainView(osgViewer::View* pMainView)
     m_pMainCamera->setEventCallback(new ResizeEventHandler(this));
 }
 
-void CStarEnv::UpdateMatrix(const osg::Matrix &crMatrix)
-{
-    m_rRotMatrix = crMatrix;
-}
-
 
 void CStarEnv::traverse(osg::NodeVisitor& nv)
 {
@@ -117,7 +112,7 @@ void CStarEnv::traverse(osg::NodeVisitor& nv)
     {
         osg::Matrix matrix = m_pMainCamera->getViewMatrix();
         matrix.getRotate().get(matrix);
-        this->setViewMatrix(m_rRotMatrix*matrix);
+        this->setViewMatrix(matrix);
     }
 
     osg::Camera::traverse( nv );

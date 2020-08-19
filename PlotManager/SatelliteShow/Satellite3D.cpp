@@ -9,7 +9,7 @@
 #include "Satellite3D.h"
 
 /// 卫星位置回调函数
-class SatelliteUpdateCallBack:public osg::NodeCallback
+class SatelliteUpdateCallBack:public osg::Callback
 {
 public:
     SatelliteUpdateCallBack(CSatellite3D* pSatellite,osg::MatrixTransform* pNode):

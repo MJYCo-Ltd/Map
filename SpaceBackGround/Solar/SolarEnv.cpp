@@ -77,27 +77,6 @@ static float s_planetRadius[][2] =
     {1738200, 1737400}
 };
 
-/// 太阳系更新回调
-class CSolarEnvUpdate:public osg::NodeCallback
-{
-public:
-    CSolarEnvUpdate(CSolarEnv* pParent):m_pParent(pParent){}
-
-    /// 重写UpdateCallback
-    void operator()(osg::Node* node, osg::NodeVisitor* nv)
-    {
-        bool& bIsNeedUpdate = m_pParent->IsNeedUpdate();
-        if(bIsNeedUpdate)
-        {
-            m_pParent->setMatrix(m_pParent->GetUpdateMatrix());
-            bIsNeedUpdate = false;
-        }
-        traverse(node,nv);
-    }
-private:
-    CSolarEnv* m_pParent;
-};
-
 /// 太阳系构建函数
 CSolarEnv::CSolarEnv(ISceneGraph *pSceneGraph)
     :m_pSceneGraph(pSceneGraph)
@@ -110,8 +89,6 @@ CSolarEnv::CSolarEnv(ISceneGraph *pSceneGraph)
     }
 
     InitSolarName();
-    /// 设置更新回调
-    addUpdateCallback(new CSolarEnvUpdate(this));
 
     osg::StateSet *state = getOrCreateStateSet();
 
@@ -122,12 +99,6 @@ CSolarEnv::CSolarEnv(ISceneGraph *pSceneGraph)
                 new osg::BlendFunc(osg::BlendFunc::SRC_ALPHA,
                                    osg::BlendFunc::ONE_MINUS_SRC_ALPHA),
                 osg::StateAttribute::ON);
-}
-
-void CSolarEnv::UpdateMatrix(const osg::Matrix &crMatrix)
-{
-    m_rRotMatrix = crMatrix;
-    m_bNeedUpdate = true;
 }
 
 /// 构建太阳系

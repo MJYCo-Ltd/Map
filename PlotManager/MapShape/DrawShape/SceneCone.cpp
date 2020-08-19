@@ -2,7 +2,7 @@
 #include <Inner/OsgExtern/MathCommon.h>
 #include "SceneCone.h"
 
-class ConeCallback:public osg::NodeCallback
+class ConeCallback:public osg::Callback
 {
 public:
     ConeCallback(CSceneCone* pCone):

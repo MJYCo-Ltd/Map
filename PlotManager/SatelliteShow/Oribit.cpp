@@ -2,14 +2,14 @@
 #include "Oribit.h"
 
 /// 卫星轨道更新
-class OribitUpdateCallBack : public osg::NodeCallback
+class OribitUpdateCallBack : public osg::Callback
 {
 public:
     OribitUpdateCallBack(COribit* pSatellite,osg::Geometry* pGeometry)
         :m_pSatellite(pSatellite),m_pNode(pGeometry){}
 
-    /// 更新
-    void operator ()(osg::Node *node, osg::NodeVisitor *nv)
+    /// 重写父类
+    bool run(osg::Object* object, osg::Object* data)
     {
         if(m_pSatellite->m_bUpdate)
         {
@@ -38,7 +38,7 @@ public:
             m_pSatellite->m_bUpdate = false;
         }
 
-        traverse(node,nv);
+        return traverse(object, data);
     }
 
 private:
