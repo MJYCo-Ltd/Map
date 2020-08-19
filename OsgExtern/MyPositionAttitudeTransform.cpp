@@ -5,18 +5,24 @@ CMyPositionAttitudeTransform::CMyPositionAttitudeTransform()
 {
 }
 
+/// 设置旋转矩阵
+void CMyPositionAttitudeTransform::SetRotateMatrix(const Matrix & rMatrix)
+{
+    m_matRotate = rMatrix;
+}
+
 bool CMyPositionAttitudeTransform::computeLocalToWorldMatrix(Matrix& matrix,NodeVisitor*) const
 {
     if (_referenceFrame==RELATIVE_RF)
     {
         if(IsTransform()) matrix.preMultTranslate(_position);
-        if(!_attitude.zeroRotation()) matrix.preMultRotate(_attitude);
+        if(!m_matRotate.isIdentity()) matrix.preMult(m_matRotate);
         if(IsScale()) matrix.preMultScale(_scale);
         if(IsPovi()) matrix.preMultTranslate(-_pivotPoint);
     }
     else // absolute
     {
-        if(!_attitude.zeroRotation()) matrix.makeRotate(_attitude);
+        if(!m_matRotate.isIdentity()) matrix.set(m_matRotate);
         if(IsTransform()) matrix.postMultTranslate(_position);
         if(IsScale()) matrix.preMultScale(_scale);
         if(IsPovi()) matrix.preMultTranslate(-_pivotPoint);
@@ -33,13 +39,13 @@ bool CMyPositionAttitudeTransform::computeWorldToLocalMatrix(Matrix& matrix,Node
     if (_referenceFrame==RELATIVE_RF)
     {
         if(IsTransform()) matrix.postMultTranslate(-_position);
-        if(!_attitude.zeroRotation()) matrix.postMultRotate(_attitude.inverse());
+        if(!m_matRotate.isIdentity()) matrix.postMult(m_matRotate);
         if(IsScale()) matrix.postMultScale(Vec3d(1.0/_scale.x(), 1.0/_scale.y(), 1.0/_scale.z()));
         if(IsPovi()) matrix.postMultTranslate(_pivotPoint);
     }
     else // absolute
     {
-        if(!_attitude.zeroRotation()) matrix.makeRotate(_attitude.inverse());
+        if(!m_matRotate.isIdentity()) matrix.set(m_matRotate);
         if(IsTransform()) matrix.preMultTranslate(-_position);
         if(IsScale()) matrix.postMultScale(Vec3d(1.0/_scale.x(), 1.0/_scale.y(), 1.0/_scale.z()));
         if(IsPovi()) matrix.postMultTranslate(_pivotPoint);

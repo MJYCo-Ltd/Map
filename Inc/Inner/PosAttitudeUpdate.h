@@ -6,13 +6,14 @@
 #include <Math/VecMat.h>
 #include <Math/YPRAngle.h>
 #include <Math/Quaternion.h>
+#include <Inner/OsgExtern/MyPositionAttitudeTransform.h>
 #include "SceneType.h"
 
 /// 位置和姿态更新
 class PosAttitudeUpdate:public osg::Callback
 {
 public:
-    PosAttitudeUpdate(osg::PositionAttitudeTransform* pTransForm):m_pTransform(pTransForm){}
+    PosAttitudeUpdate(CMyPositionAttitudeTransform* pTransForm):m_pTransform(pTransForm){}
 
     /**
      * @brief 更新位置
@@ -21,6 +22,12 @@ public:
     {
         m_vPos = vPos;
         m_bUpdatePos = true;
+    }
+
+    void SetMatrix(const osg::Matrix& rRotateMat)
+    {
+        m_matRotate = rRotateMat;
+        m_bUpdateRotate = true;
     }
 
     /**
@@ -54,17 +61,17 @@ public:
         default:
             break;
         }
-        Math::CQuaternion tmpQuat(Math::CYPRAngle::CreateMatrix(rAttitude.dRoll*DD2R,
+        Math::CMatrix RoateMatrix = Math::CYPRAngle::CreateMatrix(rAttitude.dRoll*DD2R,
                                       rAttitude.dPitch*DD2R,
                                       rAttitude.dYaw*DD2R,
-                                      Math::YPR));
+                                      type);
 
-        m_qAttiutude.x() = tmpQuat.GetX();
-        m_qAttiutude.y() = tmpQuat.GetY();
-        m_qAttiutude.z() = tmpQuat.GetZ();
-        m_qAttiutude.w() = tmpQuat.GetS();
+        m_matRotate.set(RoateMatrix(0,0),RoateMatrix(0,1),RoateMatrix(0,2),0.,
+                        RoateMatrix(1,0),RoateMatrix(1,1),RoateMatrix(1,2),0.,
+                        RoateMatrix(2,0),RoateMatrix(2,1),RoateMatrix(2,2),0.,
+                        0.,0.,0.,1.);
 
-        m_bUpdateAttitude = true;
+        m_bUpdateRotate = true;
     }
 
     /// 更新循环
@@ -76,10 +83,10 @@ public:
             m_bUpdatePos = false;
         }
 
-        if(m_bUpdateAttitude)
+        if(m_bUpdateRotate)
         {
-            m_pTransform->setAttitude(m_qAttiutude);
-            m_bUpdateAttitude = false;
+            m_pTransform->SetRotateMatrix(m_matRotate);
+            m_bUpdateRotate = false;
         }
 
         if(m_bUpdateScale)
@@ -97,12 +104,12 @@ public:
         m_bUpdateScale = true;
     }
 private:
-    osg::PositionAttitudeTransform* m_pTransform;
+    CMyPositionAttitudeTransform* m_pTransform;
     osg::Vec3d  m_vPos;
-    osg::Quat   m_qAttiutude;
+    osg::Matrix m_matRotate;
     double      m_dScale=1.0;
     bool  m_bUpdatePos=false;
-    bool  m_bUpdateAttitude=false;
+    bool  m_bUpdateRotate=false;
     bool  m_bUpdateScale=false;
 };
 

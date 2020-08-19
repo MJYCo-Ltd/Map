@@ -154,14 +154,7 @@ void CSatelliteShow::UpdateData(double dMJD)
     rotate.SetRow(1,rY);
     rotate.SetRow(2,rZ);
 
-    Math::CYPRAngle ypr(rotate);
-    YPR_Rotate rotateType = ypr.GetRotate(RPY);
-    SceneAttitude attitude;
-    attitude.dYaw = rotateType.dYaw*DR2D;
-    attitude.dRoll = rotateType.dRoll*DR2D;
-    attitude.dPitch = rotateType.dPitch*DR2D;
-    attitude.rotaOrder = SR_RPY;
-    SetAttitude(attitude);
+    SetAttitude(rotate);
 }
 
 /// 计算插值

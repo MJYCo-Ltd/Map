@@ -3,6 +3,9 @@
 
 #include "SceneType.h"
 
+namespace Math{
+class CMatrix;
+}
 class ISceneGraph;
 /**
  * @brief 场景节点类
@@ -17,26 +20,29 @@ public:
      */
     virtual void SetPos(const ScenePos&)=0;
     virtual const ScenePos& GetPos() const=0;
-	
-	/**
+
+    /**
      * @brief 设置姿态
      */
     virtual void SetAttitude(const SceneAttitude&)=0;
     virtual const SceneAttitude& GetAttitude()const =0;
-	
-	/**
+
+    virtual void SetAttitude(const Math::CMatrix&)=0;
+    virtual const Math::CMatrix& GetAttitudeMatrix()const=0;
+
+    /**
      * @brief 设置缩放系数
      */
-	virtual void SetScal(double)=0;
-	virtual double Scal()const =0;
-	
-	/**
+    virtual void SetScal(double)=0;
+    virtual double Scal()const =0;
+
+    /**
      * @brief 设置旋转依赖的中心点
-	 * @attention 例如人的手是相对于肘关节进行
-	              旋转，而不是手腕
+         * @attention 例如人的手是相对于肘关节进行
+                      旋转，而不是手腕
      */
-	virtual void SetPivotPos(const ScenePos&)=0;
-	virtual const ScenePos& PivotPos() const=0;
+    virtual void SetPivotPos(const ScenePos&)=0;
+    virtual const ScenePos& PivotPos() const=0;
 
     /**
      * @brief 添加场景节点

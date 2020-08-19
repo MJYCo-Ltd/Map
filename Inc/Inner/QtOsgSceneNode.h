@@ -66,6 +66,26 @@ public:
         }
     }
 
+    void SetAttitude(const Math::CMatrix& rMat)
+    {
+        if(m_matRotate != rMat)
+        {
+            m_matRotate = rMat;
+            static osg::Matrix rotateMat;
+            rotateMat.set(m_matRotate(0,0),m_matRotate(0,1),m_matRotate(0,2),0.,
+                          m_matRotate(1,0),m_matRotate(1,1),m_matRotate(1,2),0.,
+                          m_matRotate(2,0),m_matRotate(2,1),m_matRotate(2,2),0.,
+                          0.,0.,0.,1.);
+            m_pUpdataCall->SetMatrix(rotateMat);
+
+        }
+    }
+
+    const Math::CMatrix& GetAttitudeMatrix()const
+    {
+        return (m_matRotate);
+    }
+
     const SceneAttitude& GetAttitude() const
     {
         return(m_stAttitude);
@@ -242,7 +262,8 @@ protected:
     ScenePos                          m_stScenePos;  /// 场景位置
     ScenePos                          m_stPivoPos;   /// 相对中心位置
     SceneAttitude                     m_stAttitude;  /// 姿态信息
-    PosAttitudeUpdate*                m_pUpdataCall=nullptr; /// 更新回调
+    Math::CMatrix                     m_matRotate;   /// 姿态矩阵
+    PosAttitudeUpdate*                m_pUpdataCall=nullptr; /// 更新回调      
     double                            m_dScal=1.0;
     bool                              m_bVisible=true;/// 是否可见
     bool                              m_bCanDelete=true;///是否可以删除
