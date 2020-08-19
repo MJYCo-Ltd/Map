@@ -44,6 +44,7 @@ HEADERS += \
     DrawShape/SceneModel.h \
     DrawShape/ScenePoint.h \
     DrawShape/ScenePolygon.h \
+    DrawShape/SceneSCone.h \
     MapShape.h \
     QtMapSceneNode.h
 
@@ -53,5 +54,6 @@ SOURCES += \
     DrawShape/SceneModel.cpp \
     DrawShape/ScenePoint.cpp \
     DrawShape/ScenePolygon.cpp \
+    DrawShape/SceneSCone.cpp \
     MapShape.cpp \
     QtMapSceneNode.cpp

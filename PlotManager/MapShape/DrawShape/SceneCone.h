@@ -11,12 +11,6 @@ public:
     CSceneCone(ISceneGraph*);
 
     /**
-     * @brief 更新地图节点
-     * @param pMapNode
-     */
-    void UpdateMapNode(osgEarth::MapNode* pMapNode);
-
-    /**
      * @brief 初始化节点
      */
     void InitSceneNode();

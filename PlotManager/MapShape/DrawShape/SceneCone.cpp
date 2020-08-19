@@ -62,11 +62,6 @@ CSceneCone::CSceneCone(ISceneGraph *pSceneGraph):
 {
 }
 
-void CSceneCone::UpdateMapNode(osgEarth::MapNode *pMapNode)
-{
-
-}
-
 void CSceneCone::SetAngle(double dAngle)
 {
     if(dAngle > 0. && fabs(m_dAngle-dAngle)>1e-10)
@@ -79,6 +74,7 @@ void CSceneCone::SetAngle(double dAngle)
 void CSceneCone::BuildGeometry()
 {
     auto pLocalGeometry = new osg::Geometry;
+    pLocalGeometry->setDataVariance(osg::Object::DYNAMIC);
     /// 开启颜色混合 关闭光照
     pLocalGeometry->getOrCreateStateSet()->setMode(GL_BLEND,osg::StateAttribute::ON);
     pLocalGeometry->getOrCreateStateSet()->setMode(GL_LIGHTING,osg::StateAttribute::OFF);
