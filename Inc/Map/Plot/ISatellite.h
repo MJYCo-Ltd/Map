@@ -30,11 +30,6 @@ public:
     virtual void SetOribitColor(const SceneColor&)=0;
 
     /**
-     * @brief 设置缩放系数
-     */
-    virtual void SetScalBit(double)=0;
-
-    /**
      * @brief 设置卫星J2000下的位置和速度
      * @param 第一个参数 各个计算点对应的 约简儒略日 时间
      * @param 第二个参数 卫星的 J2000下的位置和速度   [m,m,m,m/s,m/s,m/s]

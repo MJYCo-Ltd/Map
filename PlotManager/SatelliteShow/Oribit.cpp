@@ -22,7 +22,8 @@ public:
                                             m_pSatellite->m_vOribit[i].GetZ()));
             }
             osg::ref_ptr<osg::Vec4Array> pColor = new osg::Vec4Array;
-            pColor->push_back(osg::Vec4(21./255.,148./255.,203./255.,1.f));
+            pColor->push_back(osg::Vec4(m_pSatellite->m_rColor.fR, m_pSatellite->m_rColor.fG,
+                m_pSatellite->m_rColor.fB, m_pSatellite->m_rColor.fA));
 
             /// 绑定顶点数组
             m_pNode->setVertexArray(pArray);
@@ -60,8 +61,9 @@ void COribit::SetGeoOribit(const vector<CVector> &)
 {
 }
 
-void COribit::SetOribitColor(const SceneColor &)
+void COribit::SetOribitColor(const SceneColor & rOribitColor)
 {
+    m_rColor = rOribitColor;
 }
 
 void COribit::InitSceneNode()

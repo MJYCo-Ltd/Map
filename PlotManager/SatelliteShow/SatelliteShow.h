@@ -41,11 +41,6 @@ public:
     void SetOribitColor(const SceneColor&);
 
     /**
-     * @brief 设置缩放系数
-     */
-    void SetScalBit(double);
-
-    /**
      * @brief 设置轨道数据
      */
     void SetJ2000Oribit(const vector<double> &, const vector<Math::CVector> &);
@@ -82,10 +77,9 @@ protected:
     Math::CVector                           m_stNowPos; /// 当前卫星的位置
 
 
-    double                       m_dStart;
-    double                       m_dEnd;
-    double                       m_dStep;
-    double                       m_dScal;
+    double                       m_dStart = 0.0;
+    double                       m_dEnd = 0.0;
+    double                       m_dStep = 0.0;
     int  m_nIndex = -1;
 
     static string S_sInterFace;

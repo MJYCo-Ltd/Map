@@ -80,3 +80,7 @@ compile_commands.json
 /LoadQmlMap/release
 *.txt
 *.vcxproj
+/Map/release
+/OsgExtern/release
+*.recipe
+*.sln

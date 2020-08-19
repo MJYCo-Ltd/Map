@@ -307,7 +307,7 @@ void CMap::InitMap()
 #endif
 
             m_pCamera = new osg::Camera;
-            m_pCamera->setClearMask(GL_DEPTH_BUFFER_BIT);
+            //m_pCamera->setClearMask(GL_DEPTH_BUFFER_BIT);
             m_pCamera->setRenderOrder( osg::Camera::NESTED_RENDER);
             m_pCamera->setAllowEventFocus(false);
             m_pCamera->setProjectionResizePolicy(osg::Camera::FIXED);
@@ -316,18 +316,20 @@ void CMap::InitMap()
             m_pCamera->setGraphicsContext(dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
                                           ->GetOsgView()->getCamera()->getGraphicsContext());
 
-            m_pCamera->addCullCallback(new osgEarth::AutoClipPlaneCullCallback(m_pMap3DNode));
+            //m_pCamera->addCullCallback(new osgEarth::AutoClipPlaneCullCallback(m_pMap3DNode));
 
-            osgEarth::Util::LogarithmicDepthBuffer buffer;
-            buffer.setUseFragDepth( true );
-            buffer.install(m_pCamera);
+            //osgEarth::Util::LogarithmicDepthBuffer buffer;
+            //buffer.setUseFragDepth( true );
+            //buffer.install(m_pCamera);
+            m_pSpaceEnv->InitSceneNode();
+
+            m_pSpaceEnv->ShowSpaceBackGround(true);
+            m_pCamera->addChild(dynamic_cast<IOsgSceneNode*>(m_pSpaceEnv)->GetOsgNode());
+            //AddSceneNode(m_pSpaceEnv);
         }
 
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode.get(),m_pCamera.get(),true));
         m_pPlotManager->UpdateMapNode(m_pMap2DNode,m_pMap3DNode);
-        m_pSpaceEnv->InitSceneNode();
-        AddSceneNode(m_pSpaceEnv);
-        m_pSpaceEnv->ShowSpaceBackGround(true);
     }
         break;
     }

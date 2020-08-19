@@ -74,6 +74,12 @@ public:
         m_bUpdateRotate = true;
     }
 
+    void SetPivo(const osg::Vec3d& vPos)
+    {
+        m_vPivot = vPos;
+        m_bUpdatePivot = true;
+    }
+
     /// 更新循环
     bool run(osg::Object* object, osg::Object* data)
     {
@@ -94,6 +100,12 @@ public:
             m_pTransform->setScale(osg::Vec3d(m_dScale,m_dScale,m_dScale));
             m_bUpdateScale = false;
         }
+
+        if (m_bUpdatePivot)
+        {
+            m_pTransform->setPivotPoint(m_vPivot);
+            m_bUpdatePivot = false;
+        }
         return traverse(object, data);
     }
 
@@ -106,11 +118,13 @@ public:
 private:
     CMyPositionAttitudeTransform* m_pTransform;
     osg::Vec3d  m_vPos;
+    osg::Vec3d  m_vPivot;
     osg::Matrix m_matRotate;
     double      m_dScale=1.0;
     bool  m_bUpdatePos=false;
     bool  m_bUpdateRotate=false;
     bool  m_bUpdateScale=false;
+    bool  m_bUpdatePivot=false;
 };
 
 #endif // QT_OSG_SCENE_NODE_H

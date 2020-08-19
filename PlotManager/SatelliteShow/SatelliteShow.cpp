@@ -57,17 +57,9 @@ void CSatelliteShow::SetModelPath(const string &sModelPath)
     }
 }
 
-void CSatelliteShow::SetOribitColor(const SceneColor &)
+void CSatelliteShow::SetOribitColor(const SceneColor & rColor)
 {
-}
-
-void CSatelliteShow::SetScalBit(double dScal)
-{
-    if(dScal > 0 && fabs(m_dScal-dScal) > 1e-10)
-    {
-        m_dScal = dScal;
-        m_pUpdataCall->SetScal(m_dScal);
-    }
+    m_pOribit->SetOribitColor(rColor);
 }
 
 /// 设置卫星轨道
