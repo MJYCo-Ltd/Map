@@ -5,8 +5,8 @@
 class ConeCallback:public osg::Callback
 {
 public:
-    ConeCallback(CSceneCone* pCone):
-        m_pCone(pCone)
+    ConeCallback(CSceneCone* pCone,osg::Geometry* pParent):
+        m_pCone(pCone),m_pParent(pParent)
     {
     }
 
@@ -31,6 +31,7 @@ public:
             m_pColorArray->at(j) = m_pColorArray->at(0);
 
             m_pDrawArray->dirty();
+            m_pParent->dirtyGLObjects();
             m_pCone->m_bUpdate = false;
         }
 
@@ -46,6 +47,7 @@ private:
     osg::ref_ptr<osg::Vec3Array> m_pVec3Array;
     osg::ref_ptr<osg::Vec4Array> m_pColorArray;
     osg::ref_ptr<osg::DrawArrays> m_pDrawArray;
+    osg::Geometry*                m_pParent;
 
     CSceneCone*        m_pCone;
 };
