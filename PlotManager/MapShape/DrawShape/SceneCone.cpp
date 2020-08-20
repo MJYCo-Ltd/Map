@@ -113,7 +113,7 @@ void CSceneCone::BuildGeometry()
     osg::DrawArrays* pDrawArray = new osg::DrawArrays(GL_TRIANGLE_FAN,0,pArray->size()) ;
     pLocalGeometry->addPrimitiveSet(pDrawArray);
 //    SetVisible(false);
-    auto pBack= new ConeCallback(this);
+    auto pBack= new ConeCallback(this,pLocalGeometry);
     pBack->SetDrawArrays(pDrawArray);
     pBack->SetVec3Array(pArray);
     pBack->SetVec4Array(pColorArray);
