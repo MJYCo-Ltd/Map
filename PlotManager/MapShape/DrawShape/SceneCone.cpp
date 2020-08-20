@@ -31,7 +31,6 @@ public:
             m_pColorArray->at(j).set(m_pCone->m_stColor.fR,m_pCone->m_stColor.fG,
                                      m_pCone->m_stColor.fB,m_pCone->m_stColor.fA);
 
-            //m_pDrawArray->dirty();
             m_pParent->dirtyGLObjects();
             m_pCone->m_bUpdate = false;
         }
@@ -41,16 +40,12 @@ public:
 
     void SetVec3Array(osg::Vec3Array* pArray){m_pVec3Array = pArray;}
     void SetVec4Array(osg::Vec4Array* pArray){m_pColorArray = pArray;}
-    void SetDrawArrays(osg::DrawArrays* pDrawArrays){m_pDrawArray = pDrawArrays;}
-
 
 private:
-    osg::ref_ptr<osg::Vec3Array> m_pVec3Array;
-    osg::ref_ptr<osg::Vec4Array> m_pColorArray;
-    osg::ref_ptr<osg::DrawArrays> m_pDrawArray;
-    osg::Geometry*                m_pParent;
-
-    CSceneCone*        m_pCone;
+    osg::Vec3Array*              m_pVec3Array=nullptr;
+    osg::Vec4Array*              m_pColorArray=nullptr;
+    osg::Geometry*               m_pParent=nullptr;
+    CSceneCone*                  m_pCone=nullptr;
 };
 
 ///
@@ -113,9 +108,7 @@ void CSceneCone::BuildGeometry()
     pLocalGeometry->setColorArray(pColorArray,osg::Array::BIND_PER_VERTEX);
     osg::DrawArrays* pDrawArray = new osg::DrawArrays(GL_TRIANGLE_FAN,0,pArray->size()) ;
     pLocalGeometry->addPrimitiveSet(pDrawArray);
-//    SetVisible(false);
     auto pBack= new ConeCallback(this,pLocalGeometry);
-    pBack->SetDrawArrays(pDrawArray);
     pBack->SetVec3Array(pArray);
     pBack->SetVec4Array(pColorArray);
 

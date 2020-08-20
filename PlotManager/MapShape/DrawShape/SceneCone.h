@@ -15,6 +15,9 @@ public:
      */
     void InitSceneNode();
 
+    /**
+     * @brief 设置圆锥半角
+     */
     void SetAngle(double);
     double Angle()const
     {
@@ -25,7 +28,7 @@ protected:
 
     void PosChanged();
 protected:
-    double m_dAngle=48.0;
+    double m_dAngle=0.0;
 };
 
 #endif // CSCENECONE_H

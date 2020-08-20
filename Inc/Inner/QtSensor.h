@@ -10,8 +10,7 @@ public:
     explicit QtSensor(ISceneGraph* pSceneGraph):QtDrawShape<T>(pSceneGraph){}
 
     /**
-     * @brief
-     * @param rColor
+     * @brief 设置波束颜色
      */
     void SetColor(const SceneColor& rColor)
     {
@@ -28,7 +27,7 @@ public:
     }
 
     /**
-     * @brief SetDistance
+     * @brief 设置距离
      * @param dDistance
      */
     void SetDistance(double dDistance)
@@ -49,7 +48,7 @@ protected:
     virtual void UpdateDistance(){ m_bUpdate = true; }
 protected:
     SceneColor m_stColor;
-    double     m_dDistance=1e6;
+    double     m_dDistance=0.;
     bool       m_bUpdate = false;
 };
 

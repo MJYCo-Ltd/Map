@@ -3,7 +3,7 @@
 #include "ISensor.h"
 
 /**
- * @brief 场景节点类
+ * @brief 圆锥传感器
  */
 class IConeSensor:public ISensor
 {
@@ -11,7 +11,7 @@ public:
     virtual ~IConeSensor(){}
 
     /**
-     * @brief
+     * @brief 设置圆锥半角
      */
     virtual void SetAngle(double)=0;
     virtual double Angle() const =0;

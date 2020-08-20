@@ -3,7 +3,7 @@
 #include "ISensor.h"
 
 /**
- * @brief 场景节点类
+ * @brief 方锥传感器
  */
 class ISConeSensor:public ISensor
 {
@@ -11,11 +11,14 @@ public:
     virtual ~ISConeSensor(){}
 
     /**
-     * @brief
+     * @brief 设置运动垂向半角
      */
     virtual void SetHAngle(double)=0;
     virtual double HAngle() const =0;
 
+    /**
+     * @brief 设置运动方向上半角
+     */
     virtual void SetVAngle(double)=0;
     virtual double VAngle()const=0;
 };
