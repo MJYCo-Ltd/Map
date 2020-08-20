@@ -13,6 +13,7 @@
 #include "Map/IPlotLayer.h"
 #include "SpaceEnv/ISpaceEnv.h"
 #include "SpaceEnv/ISpaceBackGround.h"
+#include "Map/Plot/ISConeSensor.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -135,6 +136,18 @@ void MainWindow::on_action_triggered()
 
     pCone->SetColor(color);
     pCone->SetAngle(5.);
+    pCone->SetDistance(1e5);
+
+    auto pSCone = dynamic_cast<ISConeSensor*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("ISConeSensor"));
+    pos.fLon = 123;
+    pos.fLat = 26;
+    pSCone->SetPos(pos);
+    pSCone->SetDistance(1e5);
+    pLayer->AddSceneNode(pSCone);
+
+    //pSCone->SetColor(color);
+    pSCone->SetHAngle(5.);
+    pSCone->SetVAngle(1.0);
 }
 
 void MainWindow::on_action_2_triggered()
