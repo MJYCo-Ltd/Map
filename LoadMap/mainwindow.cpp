@@ -72,7 +72,7 @@ void MainWindow::on_action_triggered()
     pos.fLat = 24;
     pos.bIsGeo = true;
     m_pPersonInfo->SetPos(pos);
-    pLayer->AddSceneNode(m_pPersonInfo);
+    //pLayer->AddSceneNode(m_pPersonInfo);
 
     /// 绘制点
     m_pPoint = dynamic_cast<IPoint*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IPoint"));
@@ -113,22 +113,28 @@ void MainWindow::on_action_triggered()
     m_pPolygon->SetColor(color);
     pLayer->AddSceneNode(m_pPolygon);
 
-    auto m_pModel = dynamic_cast<IModel*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IModel"));
-    m_pModel->Set2DAndSamllPic("ico/red.png",0);
-    m_pModel->SetModelPath("model/AirPlane.ive");
-    m_pModel->SetScalBit(50);
-    m_pModel->SetName("王有情");
+    /// 绘制模型
+//    auto m_pModel = dynamic_cast<IModel*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IModel"));
+//    m_pModel->Set2DAndSamllPic("ico/red.png",0);
+//    m_pModel->SetModelPath("model/AirPlane.ive");
+//    m_pModel->SetScalBit(50);
+//    m_pModel->SetName("王有情");
 
-    m_pModel->SetPos(pos);
-    pos.fLon = 123;
-    pos.fLat = 26;
-    m_pModel->SetPos(pos);
-    pLayer->AddSceneNode(m_pModel);
+//    m_pModel->SetPos(pos);
+//    pos.fLon = 123;
+//    pos.fLat = 26;
+//    m_pModel->SetPos(pos);
+//    pLayer->AddSceneNode(m_pModel);
 
-    m_pSceneGraph->GetMap()->GetSpaceEnv()->ShowSpaceBackGround(false);
+//    m_pSceneGraph->GetMap()->GetSpaceEnv()->ShowSpaceBackGround(false);
 
     ///
     auto pCone = dynamic_cast<IConeSensor*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IConeSensor"));
+    pCone->SetPos(pos);
+    pLayer->AddSceneNode(pCone);
+
+    pCone->SetColor(color);
+    pCone->SetAngle(5.);
 }
 
 void MainWindow::on_action_2_triggered()

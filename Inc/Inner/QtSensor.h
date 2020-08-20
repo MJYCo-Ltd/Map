@@ -49,7 +49,7 @@ protected:
     virtual void UpdateDistance(){ m_bUpdate = true; }
 protected:
     SceneColor m_stColor;
-    double     m_dDistance=1e4;
+    double     m_dDistance=1e6;
     bool       m_bUpdate = false;
 };
 

@@ -28,9 +28,10 @@ public:
             }
 
             m_pVec3Array->at(j).set(dR ,0,m_pCone->m_dDistance);
-            m_pColorArray->at(j) = m_pColorArray->at(0);
+            m_pColorArray->at(j).set(m_pCone->m_stColor.fR,m_pCone->m_stColor.fG,
+                                     m_pCone->m_stColor.fB,m_pCone->m_stColor.fA);
 
-            m_pDrawArray->dirty();
+            //m_pDrawArray->dirty();
             m_pParent->dirtyGLObjects();
             m_pCone->m_bUpdate = false;
         }
@@ -126,5 +127,22 @@ void CSceneCone::PosChanged()
 {
     if(m_stScenePos.bIsGeo)
     {
+        osgEarth::GeoPoint geoPos(osgEarth::SpatialReference::get("wgs84"),
+                                  m_stScenePos.fLon,m_stScenePos.fLat,m_stScenePos.fHeight,
+                                  osgEarth::AltitudeMode::ALTMODE_RELATIVE);
+        osg::Matrixd local2World;
+        geoPos.createLocalToWorld(local2World);
+
+
+        m_pUpdataCall->SetPos(local2World.getTrans());
+        //
+//        osg::Matrixd rotate;
+//        local2World.getRotate().get(rotate);
+        local2World(3,0) = local2World(3,1) = local2World(3,2)=0;
+        m_pUpdataCall->SetMatrix(local2World);
+    }
+    else
+    {
+        QtSensor<IConeSensor>::PosChanged();
     }
 }
