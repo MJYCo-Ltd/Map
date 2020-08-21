@@ -66,7 +66,7 @@ public:
                                       rAttitude.dYaw*DD2R,
                                       type);
 
-        m_matRotate.set(RoateMatrix(0,0),RoateMatrix(0,1),RoateMatrix(0,2),0.,
+        m_matRotateAttitude.set(RoateMatrix(0,0),RoateMatrix(0,1),RoateMatrix(0,2),0.,
                         RoateMatrix(1,0),RoateMatrix(1,1),RoateMatrix(1,2),0.,
                         RoateMatrix(2,0),RoateMatrix(2,1),RoateMatrix(2,2),0.,
                         0.,0.,0.,1.);
@@ -91,7 +91,7 @@ public:
 
         if(m_bUpdateRotate)
         {
-            m_pTransform->SetRotateMatrix(m_matRotate);
+            m_pTransform->SetRotateMatrix(m_matRotateAttitude*m_matRotate);
             m_bUpdateRotate = false;
         }
 
@@ -120,6 +120,7 @@ private:
     osg::Vec3d  m_vPos;
     osg::Vec3d  m_vPivot;
     osg::Matrix m_matRotate;
+    osg::Matrix m_matRotateAttitude;
     double      m_dScale=1.0;
     bool  m_bUpdatePos=false;
     bool  m_bUpdateRotate=false;
