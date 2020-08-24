@@ -169,6 +169,7 @@ void CSceneModel::InitStyle()
 
     /// 设置图片的样式
     m_stylePic.getOrCreate<osgEarth::IconSymbol>()->heading()=m_dYaw+m_dInitAngle;
+    m_stylePic.getOrCreate<osgEarth::IconSymbol>()->alignment() = osgEarth::IconSymbol::ALIGN_RIGHT_CENTER;
     m_stylePic.getOrCreateSymbol<osgEarth::TextSymbol>()->encoding() = osgEarth::TextSymbol::ENCODING_UTF8;
     m_stylePic.getOrCreateSymbol<osgEarth::TextSymbol>()->alignment() = osgEarth::TextSymbol::ALIGN_LEFT_CENTER;
     m_stylePic.getOrCreateSymbol<osgEarth::TextSymbol>()->size() = 20;

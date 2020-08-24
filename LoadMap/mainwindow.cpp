@@ -65,89 +65,46 @@ void MainWindow::on_actionchange_triggered()
 void MainWindow::on_action_triggered()
 {
     auto pLayer = m_pSceneGraph->GetMap()->GetPlotManager()->FindOrCreateLayer("test");
-    /// 绘制人
-    m_pPersonInfo = dynamic_cast<IPersonInfo*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IPersonInfo"));
-    m_pPersonInfo->SetName("123");
-    ScenePos pos;
-    pos.fLon = 120;
-    pos.fLat = 24;
-    pos.bIsGeo = true;
-    m_pPersonInfo->SetPos(pos);
-    //pLayer->AddSceneNode(m_pPersonInfo);
 
-    /// 绘制点
-    m_pPoint = dynamic_cast<IPoint*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IPoint"));
-    pos.fLon = 121;
-    pos.fLat = 25;
-    pos.bIsGeo = true;
-    m_pPoint->SetPos(pos);
+    ScenePos pos;
     SceneColor color;
-    color.fR = 1.0f;
-    m_pPoint->SetPointSize(20.f);
-    m_pPoint->SetColor(color);
-    pLayer->AddSceneNode(m_pPoint);
+    color.fR=1.0f;
 
     /// 绘制线
     m_pLine = dynamic_cast<ILine*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("ILine"));
-    m_pLine->AddPoint(0,pos);
-    pos.fLon = 122;
-    pos.fLat = 26;
+    pos.fLon = 124.514;
+    pos.fLat = 22.8686;
     pos.bIsGeo = true;
     m_pLine->AddPoint(0,pos);
-    pos.fLon = 123;
-    pos.fLat = 27;
+    pos.fLon = 121.69;
+    pos.fLat = 20.3223;
     pos.bIsGeo = true;
-    m_pLine->AddPoint(0,pos);
+    m_pLine->AddPoint(1,pos);
+    pos.fLon = 118.276;
+    pos.fLat = 19.3485;
+    pos.bIsGeo = true;
+    m_pLine->AddPoint(2,pos);
+    pos.fLon = 116.44;
+    pos.fLat = 16.863;
+    pos.bIsGeo = true;
+    m_pLine->AddPoint(3,pos);
     m_pLine->SetColor(color);
     pLayer->AddSceneNode(m_pLine);
 
-    /// 绘制区域
-    auto m_pPolygon = dynamic_cast<IPolygon*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IPolygon"));
-    m_pPolygon->AddPoint(0,pos);
-    pos.fLon = 123;
-    pos.fLat = 26;
-    m_pPolygon->AddPoint(1,pos);
-    pos.fLon = 121;
-    pos.fLat = 26.5;
-    pos.bIsGeo = true;
-    m_pPolygon->AddPoint(2,pos);
-    m_pPolygon->SetColor(color);
-    pLayer->AddSceneNode(m_pPolygon);
 
     /// 绘制模型
-//    auto m_pModel = dynamic_cast<IModel*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IModel"));
-//    m_pModel->Set2DAndSamllPic("ico/red.png",0);
-//    m_pModel->SetModelPath("model/AirPlane.ive");
-//    m_pModel->SetScalBit(50);
-//    m_pModel->SetName("王有情");
-
-//    m_pModel->SetPos(pos);
-//    pos.fLon = 123;
-//    pos.fLat = 26;
-//    m_pModel->SetPos(pos);
-//    pLayer->AddSceneNode(m_pModel);
-
-//    m_pSceneGraph->GetMap()->GetSpaceEnv()->ShowSpaceBackGround(false);
-
-    ///
-    auto pCone = dynamic_cast<IConeSensor*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IConeSensor"));
-    pCone->SetPos(pos);
-    pLayer->AddSceneNode(pCone);
-
-    pCone->SetColor(color);
-    pCone->SetAngle(5.);
-    pCone->SetDistance(1e5);
-
-    auto pSCone = dynamic_cast<ISConeSensor*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("ISConeSensor"));
-    pos.fLon = 123;
-    pos.fLat = 26;
-    pSCone->SetPos(pos);
-    pSCone->SetDistance(1e5);
-    pLayer->AddSceneNode(pSCone);
-
-    //pSCone->SetColor(color);
-    pSCone->SetHAngle(5.);
-    pSCone->SetVAngle(1.0);
+    auto m_pModel = dynamic_cast<IModel*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IModel"));
+    m_pModel->Set2DAndSamllPic("Images/ship.png",90);
+    m_pModel->SetModelPath("model/AirPlane.ive");
+    m_pModel->SetScalBit(50);
+    m_pModel->SetName("王有情");
+    pos.fLon=124.514;
+    pos.fLat=22.8686;
+    m_pModel->SetPos(pos);
+    pos.fLon = 124.45060178914574;
+    pos.fLat = 22.812955796767881;
+    m_pModel->SetPos(pos);
+    pLayer->AddSceneNode(m_pModel);
 }
 
 void MainWindow::on_action_2_triggered()
