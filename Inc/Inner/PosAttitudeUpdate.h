@@ -23,6 +23,10 @@ public:
         m_vPos = vPos;
         m_bUpdatePos = true;
     }
+    const osg::Vec3d& Pos()
+    {
+        return(m_vPos);
+    }
 
     void SetMatrix(const osg::Matrix& rRotateMat)
     {
