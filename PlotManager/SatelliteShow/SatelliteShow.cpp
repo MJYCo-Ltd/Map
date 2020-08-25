@@ -48,8 +48,12 @@ void CSatelliteShow::SetModelPath(const string &sModelPath)
         {
             m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode,m_pSatellite,false));
         }
-
-        m_pSatellite = m_pSceneGraph->ResouceLoader()->LoadNode(m_sModelPath);
+        osg::Node* pNode = m_pSceneGraph->ResouceLoader()->LoadNode(m_sModelPath);
+        auto pTransform = new osg::MatrixTransform;
+        osg::Matrix mat;
+        mat.makeRotate(osg::DegreesToRadians(90.),osg::Z_AXIS);
+        pTransform->setMatrix(mat);
+        m_pSatellite = pTransform;
         if(m_pSatellite.valid())
         {
             m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode,m_pSatellite,true));

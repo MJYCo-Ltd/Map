@@ -1,4 +1,5 @@
 #include <osg/Depth>
+#include "GisMath/GisMath.h"
 #include "ScenePulse.h"
 
 /// 脉冲波的回调函数
@@ -155,24 +156,17 @@ void CScenePulse::SetEndPos(const ScenePos &rPos)
             osg::Vec3d vEnd2Start;
             if(m_stEndPos.bIsGeo)
             {
-                osgEarth::GeoPoint geoPos(osgEarth::SpatialReference::get("wgs84"),
-                                          m_stEndPos.fLon,m_stEndPos.fLat,m_stEndPos.fHeight,
-                                          osgEarth::AltitudeMode::ALTMODE_RELATIVE);
-                osg::Matrixd local2World;
-                geoPos.createLocalToWorld(local2World);
-
-
-                vEnd2Start = local2World.getTrans()-m_pUpdataCall->Pos();
+                double dX,dY,dZ;
+                GisMath::LBH2XYZ(m_stEndPos.fLon*DD2R,
+                                 m_stEndPos.fLat*DD2R,
+                                 m_stEndPos.fHeight,
+                                 dX,dY,dZ);
+                vEnd2Start.set(dX,dY,dZ);
             }
             else
             {
-                osg::Vec3d vPos(m_stEndPos.fX,m_stEndPos.fY,m_stEndPos.fZ);
-                vEnd2Start = vPos - m_pUpdataCall->Pos();
+                vEnd2Start.set(m_stEndPos.fX,m_stEndPos.fY,m_stEndPos.fZ);
             }
-            m_dLength = vEnd2Start.length();
-            m_dSpace = m_dLength / m_nPulseCount;
-            m_dHalSpace = m_dSpace / 2.0;
-            m_dSpaceRadius = (m_dEndRadius - m_dStartRadius)/m_dLength;
 
             /// 计算旋转矩阵
             osgEarth::GeoPoint geoPos(osgEarth::SpatialReference::get("wgs84"),
@@ -180,12 +174,18 @@ void CScenePulse::SetEndPos(const ScenePos &rPos)
                                       osgEarth::AltitudeMode::ALTMODE_RELATIVE);
             osg::Matrixd local2World;
             geoPos.createLocalToWorld(local2World);
-            local2World(3,0) = local2World(3,1) = local2World(3,2)=0;
+            osg::Matrixd worl2Local;
+            geoPos.createWorldToLocal(worl2Local);
 
-            osg::Vec3d vTemp = local2World.preMult(vEnd2Start);
+            osg::Vec3d vTemp = worl2Local.preMult(vEnd2Start);
 
             /// 根据叉乘 计算法向量
             osg::Vec3d vAxis = osg::Vec3d(0,0,1) ^ vTemp;
+
+            m_dLength = vTemp.length();
+            m_dSpace = m_dLength / m_nPulseCount;
+            m_dHalSpace = m_dSpace / 2.0;
+            m_dSpaceRadius = (m_dEndRadius - m_dStartRadius)/m_dLength;
 
             /// 根据点乘 计算旋转角度
             double dDot = osg::Vec3d(0,0,1) * vTemp;
@@ -196,7 +196,7 @@ void CScenePulse::SetEndPos(const ScenePos &rPos)
             /// 构建旋转
             osg::Quat tmpRotate(dAngle,vAxis);
 
-
+            local2World(3,0) = local2World(3,1) = local2World(3,2)=0;
             local2World.preMultRotate(tmpRotate);
             m_pUpdataCall->SetMatrix(local2World);
         }
