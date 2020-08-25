@@ -37,10 +37,9 @@ public:
     virtual void SetJ2000Oribit(const vector<double> &, const vector<Math::CVector> &)=0;
 
     /**
-     * @brief 设置卫星的经纬度
-     * @param 经纬信息 [deg,deg]
+     * @brief 设置卫星的地固系的位置
      */
-    virtual void SetGeoOribit(const vector<Math::CVector>&)=0;
+    virtual void SetECFOribit(const vector<Math::CVector>&)=0;
 
     /**
      * @brief 更新时间

@@ -48,7 +48,7 @@ public:
     /**
      * @brief 更新轨道数据
      */
-    void SetGeoOribit(const vector<Math::CVector>&);
+    void SetECFOribit(const vector<Math::CVector>&);
 
     /**
      * @brief 获取接口名称
@@ -66,21 +66,27 @@ protected:
      */
     void BuildName();
 
+    /**
+     * @brief 根据时间计算卫星轨道数据
+     */
     double CalItNewton(double *dX, double dT, int nDim);
+    double CalItNewtonEcf(double*,double,int);
+
 protected:
     string m_sName;
     string m_sModelPath;
-    std::vector<Math::CVector> m_vOribit;   /// teme坐标系下的数据
-    std::vector<double> m_vdMjd;               /// 坐标对应的时间
+    std::vector<Math::CVector> m_vOribit;    /// J2000坐标系下的数据
+    std::vector<Math::CVector> m_vEcfOribit; /// 地固系下的轨道数据
+    std::vector<double>        m_vdMjd;      /// 坐标对应的时间
     osg::ref_ptr<osg::Node>    m_pSatellite; ///卫星模型
-    COribit*            m_pOribit=nullptr;
-    Math::CVector                           m_stNowPos; /// 当前卫星的位置
+    COribit*                   m_pOribit=nullptr;
+    Math::CVector              m_stNowPos; /// 当前卫星的位置
 
 
-    double                       m_dStart = 0.0;
-    double                       m_dEnd = 0.0;
-    double                       m_dStep = 0.0;
-    int  m_nIndex = -1;
+    double                     m_dStart = 0.0;
+    double                     m_dEnd = 0.0;
+    double                     m_dStep = 0.0;
+    int                        m_nIndex = -1;
 
     static string S_sInterFace;
 };

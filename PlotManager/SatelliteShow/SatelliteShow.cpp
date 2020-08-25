@@ -51,7 +51,7 @@ void CSatelliteShow::SetModelPath(const string &sModelPath)
         osg::Node* pNode = m_pSceneGraph->ResouceLoader()->LoadNode(m_sModelPath);
         auto pTransform = new osg::MatrixTransform;
         osg::Matrix mat;
-        mat.makeRotate(osg::DegreesToRadians(90.),osg::Z_AXIS);
+        mat.makeRotate(osg::DegreesToRadians(-90.),osg::Z_AXIS);
         pTransform->setMatrix(mat);
         pTransform->addChild(pNode);
         m_pSatellite = pTransform;
@@ -79,8 +79,9 @@ void CSatelliteShow::SetJ2000Oribit(const vector<double> &vTime, const vector<Ma
     m_pOribit->SetJ2000Oribit(rOribitInfo);
 }
 
-void CSatelliteShow::SetGeoOribit(const vector<Math::CVector> &vOribitInfo)
+void CSatelliteShow::SetECFOribit(const vector<Math::CVector> &vOribitInfo)
 {
+    m_vEcfOribit = vOribitInfo;
 }
 
 void CSatelliteShow::UpdateData(double dMJD)
@@ -152,6 +153,10 @@ void CSatelliteShow::UpdateData(double dMJD)
     rotate.SetRow(2,rZ);
 
     SetAttitude(rotate);
+    /// 计算当前ECF下位置
+    m_stScenePos.fX = CalItNewtonEcf(dTime, dMJD, 0);
+    m_stScenePos.fY = CalItNewtonEcf(dTime, dMJD, 1);
+    m_stScenePos.fZ = CalItNewtonEcf(dTime, dMJD, 2);
 }
 
 /// 计算插值
@@ -163,6 +168,17 @@ double CSatelliteShow::CalItNewton(double *dX, double dT, int nDim)
     dY[2] = m_vOribit[m_nIndex+1](nDim);
 
     return(Numerical::Cntpol::ItNewton(3,dX,dY,dT));
+}
+
+/// 计算ecf坐标系下的插值
+double CSatelliteShow::CalItNewtonEcf(double* dX, double dT, int nDim)
+{
+    static double dY[3];
+    dY[0] = m_vEcfOribit[m_nIndex - 1](nDim);
+    dY[1] = m_vEcfOribit[m_nIndex](nDim);
+    dY[2] = m_vEcfOribit[m_nIndex + 1](nDim);
+
+    return(Numerical::Cntpol::ItNewton(3, dX, dY, dT));
 }
 
 void CSatelliteShow::BuildName()
