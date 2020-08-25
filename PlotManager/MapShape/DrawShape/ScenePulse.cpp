@@ -230,6 +230,7 @@ void CScenePulse::InitSceneNode()
     pLocalGeometry->setUpdateCallback(pNewPulseCallback);
     pNewPulseCallback->SetVec3Array(pArray.get());
     pNewPulseCallback->SetDrawArrays(pDrawArray);
+    pNewPulseCallback->SetColorArray(pColorArray);
     pNewPulseCallback->SetGeometry(pLocalGeometry);
     m_pOsgNode->addChild(pLocalGeometry);
 }
