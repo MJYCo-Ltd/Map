@@ -95,6 +95,7 @@ public:
 
             m_pDrawArray->setCount(m_pVec3Array->size());
             m_pDrawArray->dirty();
+            m_pParentDraw->dirtyGLObjects();
 
             m_dFirst += m_dAddSpace;
         }
@@ -105,11 +106,13 @@ public:
     void SetVec3Array(osg::Vec3Array* pArray){m_pVec3Array = pArray;}
     void SetColorArray(osg::Vec4Array* pColor){m_pVec4Array = pColor;}
     void SetDrawArrays(osg::DrawArrays* pDrawArrays){m_pDrawArray = pDrawArrays;}
+    void SetGeometry(osg::Geometry* pDrawGeo){m_pParentDraw = pDrawGeo;}
 
 private:
     osg::Vec3Array* m_pVec3Array;
     osg::Vec4Array* m_pVec4Array;
     osg::DrawArrays* m_pDrawArray;
+    osg::Geometry*   m_pParentDraw;
     CScenePulse*     m_pParent;
     double           m_dFirst=0;
     double           m_dAddSpace = 100;
@@ -227,6 +230,8 @@ void CScenePulse::InitSceneNode()
     pLocalGeometry->setUpdateCallback(pNewPulseCallback);
     pNewPulseCallback->SetVec3Array(pArray.get());
     pNewPulseCallback->SetDrawArrays(pDrawArray);
+    pNewPulseCallback->SetGeometry(pLocalGeometry);
+    m_pOsgNode->addChild(pLocalGeometry);
 }
 
 /// 位置更新
