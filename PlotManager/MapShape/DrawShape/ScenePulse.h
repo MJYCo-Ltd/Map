@@ -43,7 +43,7 @@ private:
     double     m_dHalSpace;          /// 脉冲波半宽
     ScenePos   m_stEndPos;           /// 终点位置
 
-    int         m_nPulseCount=1;     /// 脉冲数量
+    int         m_nPulseCount=100;     /// 脉冲数量
 };
 
 #endif // CSCENEPULSE_H

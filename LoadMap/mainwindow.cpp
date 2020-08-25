@@ -14,6 +14,7 @@
 #include "SpaceEnv/ISpaceEnv.h"
 #include "SpaceEnv/ISpaceBackGround.h"
 #include "Map/Plot/ISConeSensor.h"
+#include "Map/Plot/IPulseSensor.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -105,6 +106,18 @@ void MainWindow::on_action_triggered()
     pos.fLat = 22.812955796767881;
     m_pModel->SetPos(pos);
     pLayer->AddSceneNode(m_pModel);
+
+
+    /// 绘制脉冲波
+    auto pPulse = dynamic_cast<IPulseSensor*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IPulseSensor"));
+    pPulse->SetPos(pos);
+    pos.fHeight = 1e7;
+    pPulse->SetEndPos(pos);
+    pPulse->SetStartRadius(10000);
+    pPulse->SetEndRadius(1e5);
+    pPulse->SetPulseCount(50);
+    pPulse->SetColor(color);
+    pLayer->AddSceneNode(pPulse);
 }
 
 void MainWindow::on_action_2_triggered()

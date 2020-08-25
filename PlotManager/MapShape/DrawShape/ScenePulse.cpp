@@ -180,6 +180,7 @@ void CScenePulse::SetEndPos(const ScenePos &rPos)
                                       osgEarth::AltitudeMode::ALTMODE_RELATIVE);
             osg::Matrixd local2World;
             geoPos.createLocalToWorld(local2World);
+            local2World(3,0) = local2World(3,1) = local2World(3,2)=0;
 
             osg::Vec3d vTemp = local2World.preMult(vEnd2Start);
 
@@ -195,7 +196,7 @@ void CScenePulse::SetEndPos(const ScenePos &rPos)
             /// 构建旋转
             osg::Quat tmpRotate(dAngle,vAxis);
 
-            local2World(3,0) = local2World(3,1) = local2World(3,2)=0;
+
             local2World.preMultRotate(tmpRotate);
             m_pUpdataCall->SetMatrix(local2World);
         }
