@@ -53,6 +53,7 @@ void CSatelliteShow::SetModelPath(const string &sModelPath)
         osg::Matrix mat;
         mat.makeRotate(osg::DegreesToRadians(90.),osg::Z_AXIS);
         pTransform->setMatrix(mat);
+        pTransform->addChild(pNode);
         m_pSatellite = pTransform;
         if(m_pSatellite.valid())
         {
