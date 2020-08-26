@@ -24,8 +24,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11 console
 
-INCLUDEPATH *= $$PWD/../Inc
-DESTDIR = $$PWD/../../Bin
 
 SOURCES += \
         main.cpp \
@@ -37,29 +35,5 @@ HEADERS += \
 FORMS += \
         mainwindow.ui
 
-LIBS *= -L$$DESTDIR
-
-CONFIG (debug, debug|release){
-    LIBS *= -lSceneCored -lOsgExternd
-    TARGET = $$join(TARGET,,,d)
-}else{
-    LIBS *= -lSceneCore -lOsgExtern
-}
-
-unix{
-    LIBS *= -L$$DESTDIR/stklib
-    CONFIG (debug, debug|release){
-        LIBS *= -lMathd
-    }else{
-        LIBS *= -lMath
-    }
-    QMAKE_LFLAGS += -Wl,-rpath=.:./osglib:./stklib
-}
-
-win32:QMAKE_CXXFLAGS += -utf-8
-win32:QMAKE_CXXFLAGS += /wd"4100"
-
-# Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
+SDK_CONFIG *= SceneCore
+include(../SoftSDK.pri)

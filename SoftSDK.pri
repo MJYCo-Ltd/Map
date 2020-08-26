@@ -10,35 +10,44 @@
 #Attention DLLDESTDIR only useful in windows
 #          This will only copy exe or dll to DLLDESTDIR
 
-MathPath=$${PWD}/../VersionMath
-
 INCLUDEPATH *= $$PWD/Inc
 win32{
-    SDKPath = $$PWD/../NewGL3
+    DEFINES -= UNICODE
     # 开启utf-8 编码方式支持
     QMAKE_CXXFLAGS += -utf-8
     QMAKE_CXXFLAGS += /wd"4100"
-    LIBPDIR = $${SDKPath}/lib
-    LIBS *= -L$${MathPath}/lib
+
+    LIBS *= -L$$PWD/Lib
+    contains(TEMPLATE, "app"){
+        DESTDIR = $$PWD/../Bin
+    }else{
+        DESTDIR = $$PWD/Lib
+        DLLDESTDIR = $$PWD/../Bin
+    }
 }
 
 unix{
-    QMAKE_CXXFLAGS += -fvisibility=hidden
-    INCLUDEPATH *=$$PWD/../VersionMath/Inc
-    LIBPDIR = $$PWD/../Bin
-    LIBS *= -L$$LIBPDIR/stklib
+    DESTDIR = $$PWD/../Bin
+    LIBS *= -L$$DESTDIR
+    contains(TEMPLATE, "app"){
+        QMAKE_LFLAGS += -Wl,-rpath=.:./osglib:./stklib
+    }else{
+        QMAKE_CXXFLAGS += -fvisibility=hidden
+    }
 }
-
-
-DESTDIR = $$LIBPDIR
-
-# Set the path for find libs
-LIBS *= -L$${LIBPDIR}
 
 contains(SDK_CONFIG,OSG){
 
 # include file
-win32:INCLUDEPATH *=$${SDKPath}/include
+    win32{
+        OSGPath = $$PWD/../NewGL3
+        INCLUDEPATH *=$${OSGPath}/include
+        LIBS *= -L$${OSGPath}/lib
+    }
+
+    unix{
+        LIBS *= -L$$DESTDIR/osglib
+    }
 
    CONFIG (debug, debug|release){
 #threads
@@ -55,7 +64,10 @@ win32:INCLUDEPATH *=$${SDKPath}/include
 }
 
 contains(SDK_CONFIG,Satellite){
+    MathPath=$${PWD}/../VersionMath
     INCLUDEPATH *= $${MathPath}/Inc $${MathPath}/Inc/Math
+    win32:LIBS *= -L$${MathPath}/Lib
+    unix:LIBS *= -L$$DESTDIR/stklib
     CONFIG (debug, debug|release){
         LIBS *= -lSatellited -lMathd -lGisMathd
     }else{
@@ -78,6 +90,7 @@ contains(SDK_CONFIG,SceneCore){
         LIBS *= -lSceneCore
     }
 }
+
 # This can suffix a d by itself,if is a debug version
 CONFIG(debug, debug|release) {
   TARGET = $$join(TARGET,,,d)
