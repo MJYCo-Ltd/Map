@@ -26,18 +26,6 @@ SDK_CONFIG *= OSG OsgExtern SceneCore Satellite
 
 include($$PWD/../../SoftSDK.pri)
 
-INCLUDEPATH *= $$PWD/../../Inc
-
-DESTDIR = $$PWD/../../../Bin
-DLLDESTDIR = $$SDKPath\bin
-
-LIBS *= -L$$DESTDIR
-
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
-
 HEADERS += \
     DrawShape/SceneCone.h \
     DrawShape/SceneLine.h \

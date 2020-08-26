@@ -12,31 +12,33 @@
 
 MathPath=$${PWD}/../VersionMath
 
+INCLUDEPATH *= $$PWD/Inc
 win32{
     SDKPath = $$PWD/../NewGL3
     # 开启utf-8 编码方式支持
     QMAKE_CXXFLAGS += -utf-8
     QMAKE_CXXFLAGS += /wd"4100"
     LIBPDIR = $${SDKPath}/lib
+    LIBS *= -L$${MathPath}/lib
 }
 
 unix{
     QMAKE_CXXFLAGS += -fvisibility=hidden
     INCLUDEPATH *=$$PWD/../VersionMath/Inc
-    LIBPDIR = $$PWD/../Bin/stklib
+    LIBPDIR = $$PWD/../Bin
+    LIBS *= -L$$LIBPDIR/stklib
 }
-# This can change by Qmake, We don't need change by yourself.
+
+
+DESTDIR = $$LIBPDIR
 
 # Set the path for find libs
 LIBS *= -L$${LIBPDIR}
-LIBS *= -L$${MathPath}/lib
 
 contains(SDK_CONFIG,OSG){
 
 # include file
-win32{
-    INCLUDEPATH *=$${SDKPath}/include
-}
+win32:INCLUDEPATH *=$${SDKPath}/include
 
    CONFIG (debug, debug|release){
 #threads

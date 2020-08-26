@@ -38,15 +38,26 @@ FORMS += \
         mainwindow.ui
 
 LIBS *= -L$$DESTDIR
+
 CONFIG (debug, debug|release){
     LIBS *= -lSceneCored -lOsgExternd
     TARGET = $$join(TARGET,,,d)
 }else{
     LIBS *= -lSceneCore -lOsgExtern
 }
-unix:!mac:QMAKE_LFLAGS += -Wl,-rpath=.:./osglib:./stklib
-win32-msvc*:QMAKE_CXXFLAGS += -utf-8
-win32-msvc*:QMAKE_CXXFLAGS += /wd"4100"
+
+unix{
+    LIBS *= -L$$DESTDIR/stklib
+    CONFIG (debug, debug|release){
+        LIBS *= -lMathd
+    }else{
+        LIBS *= -lMath
+    }
+    QMAKE_LFLAGS += -Wl,-rpath=.:./osglib:./stklib
+}
+
+win32:QMAKE_CXXFLAGS += -utf-8
+win32:QMAKE_CXXFLAGS += /wd"4100"
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

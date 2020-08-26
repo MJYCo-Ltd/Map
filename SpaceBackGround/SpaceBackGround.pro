@@ -26,18 +26,6 @@ SDK_CONFIG *= OSG Satellite OsgExtern SceneCore
 
 include(../SoftSDK.pri)
 
-INCLUDEPATH *= $$PWD/../Inc
-
-DESTDIR = $$PWD/../../Bin
-DLLDESTDIR = $$SDKPath\bin
-
-LIBS *= -L$$DESTDIR
-
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
-
 HEADERS += \
     Solar/PlanetModel.h \
     Solar/SolarEnv.h \
