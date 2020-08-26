@@ -28,4 +28,5 @@ TRANSLATIONS += \
     LoadQmlMap_zh_CN.ts
 
 SDK_CONFIG *= SceneCore
+unix:SDK_CONFIG *= Satellite OsgExtern
 include(../SoftSDK.pri)
