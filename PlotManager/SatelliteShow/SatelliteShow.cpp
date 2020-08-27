@@ -105,9 +105,9 @@ void CSatelliteShow::UpdateData(double dMJD)
     {
         nIndex = 1;
     }
-    else if(nIndex > m_vdMjd.size() -1)
+    else if(nIndex > m_vdMjd.size() -2)
     {
-        nIndex = m_vdMjd.size() - 1;
+        nIndex = m_vdMjd.size() - 2;
     }
 
     m_nIndex = nIndex;
