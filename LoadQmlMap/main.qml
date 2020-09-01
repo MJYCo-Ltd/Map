@@ -12,45 +12,6 @@ Window
 
     OsgItem
     {
-//        Rectangle
-//        {
-//            id:add
-//            x:10
-//            y:10
-//            width: 100
-//            height: 100
-//            color: "red"
-//            MouseArea
-//            {
-//                anchors.fill: parent
-//                acceptedButtons: Qt.LeftButton
-//                onPressed:
-//                {
-//                    $app.plotALine();
-//                }
-//            }
-//        }
-
-//        Rectangle
-//        {
-//            id:clear
-//            anchors.left: add.right
-//            anchors.leftMargin: 10
-//            y:10
-//            width: 100
-//            height: 100
-//            color: "blue"
-//            MouseArea
-//            {
-//                anchors.fill: parent
-//                acceptedButtons: Qt.LeftButton
-//                onPressed:
-//                {
-//                    $app.clearPlot();
-//                }
-//            }
-//        }
-
         id:showOsg
         focus: true
         anchors.fill: parent

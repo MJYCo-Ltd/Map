@@ -178,11 +178,9 @@ void CSceneLine::InitStyle()
     m_styleNode.getOrCreate<osgEarth::AltitudeSymbol>()
             ->clamping() = osgEarth::AltitudeSymbol::CLAMP_RELATIVE_TO_TERRAIN;
     m_styleNode.getOrCreate<osgEarth::AltitudeSymbol>()
-            ->technique() = osgEarth::AltitudeSymbol::TECHNIQUE_DRAPE;
+            ->technique() = osgEarth::AltitudeSymbol::TECHNIQUE_SCENE;
     m_styleNode.getOrCreate<osgEarth::AltitudeSymbol>()->binding()
             = osgEarth::AltitudeSymbol::BINDING_VERTEX;
-    m_styleNode.getOrCreate<osgEarth::AltitudeSymbol>()
-            ->verticalOffset() = 0.1;
 }
 
 /// 修改线宽
@@ -216,4 +214,23 @@ void CSceneLine::SetColor(const SceneColor &rColor)
         m_pFeatureNode->getFeature()->style()->getOrCreate<osgEarth::LineSymbol>()->stroke()->color()
                 = osgEarth::Color(m_stColor.fR,m_stColor.fG,m_stColor.fB,m_stColor.fA);
     }
+}
+
+void CSceneLine::TerrainTypeChanged()
+{
+    switch (m_emTerrain)
+    {
+    case RELATIVE_TERRAIN:
+        m_styleNode.getOrCreate<osgEarth::AltitudeSymbol>()
+                ->technique() = osgEarth::AltitudeSymbol::TECHNIQUE_MAP;
+
+        std::cout<<"RELATIVE_TERRAIN"<<std::endl;
+        break;
+    case CLOSE_TERRAIN:
+        m_styleNode.getOrCreate<osgEarth::AltitudeSymbol>()
+                ->technique() = osgEarth::AltitudeSymbol::TECHNIQUE_DRAPE;
+        std::cout<<"CLOSE_TERRAIN"<<std::endl;
+        break;
+    }
+    m_pFeatureNode->setStyle(m_styleNode);
 }

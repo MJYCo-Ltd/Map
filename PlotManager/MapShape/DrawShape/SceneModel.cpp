@@ -32,6 +32,12 @@ public:
             m_pModel->m_pImage->setStyle(m_pModel->m_stylePic);
         }
 
+        if(m_pModel->m_bUpdateImagePos)
+        {
+            m_pModel->m_pImage->setPosition(m_pModel->m_stEarthGeoPoint);
+            m_pModel->m_bUpdateImagePos = false;
+        }
+
         return traverse(object, data);
     }
 private:
@@ -54,6 +60,12 @@ public:
             m_pModel->m_pModel->setStyle(m_pModel->m_styleNode);
         }
 
+        if(m_pModel->m_bUpdateModePos)
+        {
+            m_pModel->m_pModel->setPosition(m_pModel->m_stEarthGeoPoint);
+            m_pModel->m_bUpdateModePos = false;
+        }
+
         return traverse(object, data);
     }
 private:
@@ -63,6 +75,9 @@ private:
 CSceneModel::CSceneModel(ISceneGraph *pSceneGraph):
     QtDrawShape<IModel>(pSceneGraph)
 {
+    m_stEarthGeoPoint.set(osgEarth::SpatialReference::get("wgs84"),
+                              m_stScenePos.fLon,m_stScenePos.fLat,m_stScenePos.fHeight,
+                              osgEarth::AltitudeMode::ALTMODE_RELATIVE);
     m_prePos.bIsGeo = false;
 }
 
@@ -129,31 +144,26 @@ void CSceneModel::InitSceneNode()
 void CSceneModel::PosChanged()
 {
     if(!m_stScenePos.bIsGeo) return;
+    m_bUpdateImagePos = true;
+    m_bUpdateModePos = true;
 
-    osgEarth::GeoPoint geoPos(osgEarth::SpatialReference::get("wgs84"),
-                              m_stScenePos.fLon,m_stScenePos.fLat,m_stScenePos.fHeight,
-                              osgEarth::AltitudeMode::ALTMODE_RELATIVE);
+//    /// 如果是经纬度信息
+//    if(m_prePos.bIsGeo && m_prePos != m_stScenePos)
+//    {
+//        double dAzim1,dAzeim2,dDis;
+//        if(0 == GisMath::CalBaiserF(m_prePos.fLon*DD2R,m_prePos.fLat*DD2R,
+//                                    m_stScenePos.fLon*DD2R,m_stScenePos.fLat*DD2R
+//                                    ,dAzim1,dAzeim2,dDis))
+//        {
+//            SetYPR(dAzim1 * DR2D,m_dRoll,m_dPitch);
+//        }
+//    }
 
-    /// 如果是经纬度信息
-    if(m_prePos.bIsGeo && m_prePos != m_stScenePos)
-    {
-        double dAzim1,dAzeim2,dDis;
-        if(0 == GisMath::CalBaiserF(m_prePos.fLon*DD2R,m_prePos.fLat*DD2R,
-                                    m_stScenePos.fLon*DD2R,m_stScenePos.fLat*DD2R
-                                    ,dAzim1,dAzeim2,dDis))
-        {
-            SetYPR(dAzim1 * DR2D,m_dRoll,m_dPitch);
-        }
-    }
+    m_stEarthGeoPoint.x() = m_stScenePos.fLon;
+    m_stEarthGeoPoint.y() = m_stScenePos.fLat;
+    m_stEarthGeoPoint.alt() = m_stScenePos.fHeight;
 
     m_prePos = m_stScenePos;
-    ///模型类
-    if(m_pModel.valid())
-    {
-        m_pModel->setPosition(geoPos);
-    }
-
-    m_pImage->setPosition(geoPos);
 }
 
 /// 初始化样式
@@ -163,9 +173,9 @@ void CSceneModel::InitStyle()
     m_styleNode.getOrCreate<osgEarth::AltitudeSymbol>()
             ->clamping()=osgEarth::AltitudeSymbol::CLAMP_RELATIVE_TO_TERRAIN;
     m_styleNode.getOrCreate<osgEarth::AltitudeSymbol>()
-            ->technique() = osgEarth::AltitudeSymbol::TECHNIQUE_MAP;
+            ->technique() = osgEarth::AltitudeSymbol::TECHNIQUE_SCENE;
     m_styleNode.getOrCreate<osgEarth::AltitudeSymbol>()->binding()
-            = osgEarth::AltitudeSymbol::BINDING_VERTEX;
+            = osgEarth::AltitudeSymbol::BINDING_CENTROID;
 
     /// 设置图片的样式
     m_stylePic.getOrCreate<osgEarth::IconSymbol>()->heading()=m_dYaw+m_dInitAngle;
@@ -261,8 +271,7 @@ void CSceneModel::SetYPR(double dYaw, double dRoll, double dPitch)
     }
 
     if(fabs(m_dRoll - dRoll) > 1e-6)
-    {
-        m_dRoll = dRoll;
+    {        m_dRoll = dRoll;
         bUpdate = true;
     }
 
@@ -304,6 +313,12 @@ void CSceneModel::ChangeScal()
 /// 更改姿态角
 void CSceneModel::ChangeYPR()
 {
+    if(fabs(m_dYaw-259.785) < 1e-3)
+    {
+        return;
+    }
+
+    std::cout<<m_dPitch<<'\t'<<m_dRoll<<'\t'<<m_dYaw<<std::endl;
     m_stylePic.getOrCreate<osgEarth::IconSymbol>()->heading()=m_dYaw+m_dInitAngle;
     m_bUpdateStle=true;
 

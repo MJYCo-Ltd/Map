@@ -75,6 +75,8 @@ public:
      */
     void SetColor(const SceneColor&);
     const SceneColor& GetColor(){return(m_stColor);}
+
+    void TerrainTypeChanged();
 private:
     float m_fLineWidth=1.0f;
     int   m_nIndex=0;

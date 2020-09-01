@@ -94,6 +94,8 @@ private:
     bool   m_bUpdateName=false;
     bool   m_bUpdateStle=false;
     bool   m_bUpdateModel=false;
+    bool   m_bUpdateImagePos=false;
+    bool   m_bUpdateModePos=false;
 
     double m_dScalBit=1.0;
     double m_dChangePos=1e5;   /// 切换
@@ -104,6 +106,7 @@ private:
     double m_dInitAngle=0.;
 
     ScenePos m_prePos;
+    osgEarth::GeoPoint m_stEarthGeoPoint;
 
     string m_sPicPath;
     string m_sModelPath;

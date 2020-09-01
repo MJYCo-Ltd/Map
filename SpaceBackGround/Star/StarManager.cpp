@@ -19,8 +19,8 @@ CStarManager::CStarManager(ISceneGraph *pSceneGraph)
     :m_pSceneGraph(pSceneGraph)
     ,m_unMaxLevel(0)
     ,m_fShowMaxMag(6.0f)
-    ,m_bShowStarName(false)
-    ,m_bShowConstell(false)
+    ,m_bShowStarName(true)
+    ,m_bShowConstell(true)
     ,m_pGeodesicGrid(nullptr)
 {
     m_pRoot = new osg::Group;

@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 
     w.SetSecenGraph(pScene);
 
-    pScene->GetMainWindow()->SubMessage(new WindowMessage);
+    //pScene->GetMainWindow()->SubMessage(new WindowMessage);
 
     QWidget* pWindow = pScene->GetMainWindow()->ToWidget();
     if(nullptr != pWindow)

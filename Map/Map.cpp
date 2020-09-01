@@ -318,14 +318,14 @@ void CMap::InitMap()
 
             //m_pCamera->addCullCallback(new osgEarth::AutoClipPlaneCullCallback(m_pMap3DNode));
 
-            //osgEarth::Util::LogarithmicDepthBuffer buffer;
-            //buffer.setUseFragDepth( true );
-            //buffer.install(m_pCamera);
+            osgEarth::Util::LogarithmicDepthBuffer buffer;
+            buffer.setUseFragDepth( true );
+            buffer.install(m_pCamera);
             m_pSpaceEnv->InitSceneNode();
 
             m_pSpaceEnv->ShowSpaceBackGround(true);
-            m_pCamera->addChild(dynamic_cast<IOsgSceneNode*>(m_pSpaceEnv)->GetOsgNode());
-            //AddSceneNode(m_pSpaceEnv);
+            //m_pCamera->addChild(dynamic_cast<IOsgSceneNode*>(m_pSpaceEnv)->GetOsgNode());
+            AddSceneNode(m_pSpaceEnv);
         }
 
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode.get(),m_pCamera.get(),true));

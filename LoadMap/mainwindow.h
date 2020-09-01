@@ -14,6 +14,7 @@ class IMapSceneNode;
 class IPersonInfo;
 class IPoint;
 class ILine;
+class IModel;
 
 class MainWindow : public QMainWindow
 {
@@ -42,9 +43,17 @@ private:
     ISceneGraph*   m_pSceneGraph;
     list<IMapSceneNode*> m_listNode;
     int nTimerID=-1;
+    int m_nTimes=0;
+    double dL1;
+    double dA1;
+    double dL2;
+    double dA2;
+    double dL3;
+    double dA3;
     IPersonInfo*  m_pPersonInfo=nullptr;
     IPoint*       m_pPoint = nullptr;
     ILine*        m_pLine = nullptr;
+    IModel*       m_pModel=nullptr;
 };
 
 #endif // MAINWINDOW_H

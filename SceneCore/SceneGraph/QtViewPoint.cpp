@@ -161,6 +161,7 @@ void QtViewPoint::SetTrackNode(ISceneNode *pTrackNode)
         if(!m_pTrackManipulator.valid())
         {
             m_pTrackManipulator = new osgGA::NodeTrackerManipulator;
+            m_pTrackManipulator->setDistance(10000);
 
             m_pTrackNode = pOsgNode;
             m_pTrackManipulator->setTrackNode(pOsgNode->GetOsgNode());
@@ -180,7 +181,7 @@ void QtViewPoint::SetTrackNode(ISceneNode *pTrackNode)
     {
         if(m_bIsMap)
         {
-            m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_p2DEarthManipulator));
+            m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_p3DEarthManipulator));
         }
         else
         {

@@ -35,6 +35,6 @@ HEADERS += \
 FORMS += \
         mainwindow.ui
 
-SDK_CONFIG *= SceneCore
+SDK_CONFIG *= SceneCore Satellite
 unix:SDK_CONFIG *= Satellite OsgExtern
 include(../SoftSDK.pri)
