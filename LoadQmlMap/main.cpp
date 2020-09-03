@@ -1,8 +1,11 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 #include "Qml/QtOsgItem.h"
 #include "ISceneCore.h"
 #include "AppGlobal.h"
+
+#include "../ScenarioManager/ScenarioManager.h"
 
 int main(int argc, char *argv[])
 {
@@ -29,6 +32,9 @@ int main(int argc, char *argv[])
     qmlRegisterType<QtOsgItem>("MyItem",1,0,"OsgItem");
 
     QQmlApplicationEngine engine;
+    ScenarioManager scenarioManager(QCoreApplication::applicationDirPath() + "/../Data/Scenarios");
+    engine.rootContext()->setContextProperty("scenarioManager", &scenarioManager);
+
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {

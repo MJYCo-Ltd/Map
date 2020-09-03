@@ -30,3 +30,4 @@ TRANSLATIONS += \
 SDK_CONFIG *= SceneCore
 unix:SDK_CONFIG *= Satellite OsgExtern
 include(../SoftSDK.pri)
+LIBS *= -lScenarioManagerd

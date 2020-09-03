@@ -10,6 +10,8 @@ Window
     height: 480
     title: qsTr("Hello World")
 
+    Row
+    {
     OsgItem
     {
         id:showOsg
@@ -19,5 +21,23 @@ Window
         {
             $app.setOsgItem(showOsg)
         }
+    }
+    ListView {
+        id: view
+        width: 200
+        height: parent.height
+
+        model: scenarioManager.scenarios
+        delegate: Rectangle {
+            width: view.width
+            height: 40
+            border.color: Qt.darker(color)
+
+            Text {
+                anchors.left: parent.left
+                text: modelData
+            }
+        }
+    }
     }
 }

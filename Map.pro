@@ -6,7 +6,7 @@ SUBDIRS =\
     Map\
     SpaceBackGround\
     PlotManager\
-	LoadMap\
-	LoadQmlMap
-
+    ScenarioManager\
+    LoadMap\
+    LoadQmlMap
 CONFIG *= ordered
