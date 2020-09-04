@@ -27,9 +27,3 @@ HEADERS += \
     ScenarioListView.h \
     ScenarioManager_global.h \
     ScenarioManager.h
-
-# Default rules for deployment.
-unix {
-    target.path = /usr/lib
-}
-!isEmpty(target.path): INSTALLS += target

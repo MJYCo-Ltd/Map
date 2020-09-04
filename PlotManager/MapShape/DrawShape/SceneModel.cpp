@@ -230,12 +230,17 @@ void CSceneModel::SetModelPath(const string &sModelPath)
 }
 
 /// 设置模型更改类型
-void CSceneModel::SetPicModelChange(PIC_MODEL_CHANGE_TYPE changeType, double)
+void CSceneModel::SetPicModelChange(PIC_MODEL_CHANGE_TYPE changeType, double dDistance)
 {
     if(m_emType != changeType)
     {
         m_emType = changeType;
         ChangeLodType();
+    }
+
+    if(dDistance > 0 && !osg::equivalent(dDistance,m_dChangePos))
+    {
+        ChangeLodDistance();
     }
 }
 
@@ -299,6 +304,12 @@ void CSceneModel::ChangeLodType()
         m_pLodNode->setRangeMode(osg::LOD::PIXEL_SIZE_ON_SCREEN);
         break;
     }
+}
+
+void CSceneModel::ChangeLodDistance()
+{
+    m_pLodNode->setRange(0,m_dChangePos,FLT_MAX);
+    m_pLodNode->setRange(1,0,m_dChangePos);
 }
 
 /// 更改缩放

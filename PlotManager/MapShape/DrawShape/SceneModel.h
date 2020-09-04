@@ -78,6 +78,8 @@ protected:
      */
     void ChangeLodType();
 
+    void ChangeLodDistance();
+
     /**
      * @brief 更新缩放系数
      */
