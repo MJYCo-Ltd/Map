@@ -32,7 +32,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<QtOsgItem>("MyItem",1,0,"OsgItem");
 
     QQmlApplicationEngine engine;
-    ScenarioManager scenarioManager(QCoreApplication::applicationDirPath() + "/../Data/Scenarios");
+    QString sPath = QCoreApplication::applicationDirPath() + "/Data/Scenarios";
+    ScenarioManager scenarioManager(sPath);
     engine.rootContext()->setContextProperty("scenarioManager", &scenarioManager);
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));

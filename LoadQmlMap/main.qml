@@ -10,8 +10,7 @@ Window
     height: 480
     title: qsTr("Hello World")
 
-    Row
-    {
+
     OsgItem
     {
         id:showOsg
@@ -22,6 +21,7 @@ Window
             $app.setOsgItem(showOsg)
         }
     }
+
     ListView {
         id: view
         width: 200
@@ -38,6 +38,5 @@ Window
                 text: modelData
             }
         }
-    }
     }
 }

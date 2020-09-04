@@ -19,11 +19,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     ScenarioItem.cpp \
-    ScenarioListView.cpp \
     ScenarioManager.cpp
 
 HEADERS += \
     ScenarioItem.h \
-    ScenarioListView.h \
     ScenarioManager_global.h \
     ScenarioManager.h
