@@ -6,11 +6,11 @@ Window
 {
     property var $app: AppGlobal{}
     visible: true
-    width: 640
-    height: 480
+    width: 1024
+    height: 768
     title: qsTr("Hello World")
 
-
+    property int menuHeight: 42
     OsgItem
     {
         id:showOsg
@@ -22,21 +22,56 @@ Window
         }
     }
 
-    ListView {
-        id: view
-        width: 200
-        height: parent.height
-
-        model: scenarioManager.scenarios
-        delegate: Rectangle {
-            width: view.width
-            height: 40
-            border.color: Qt.darker(color)
-
-            Text {
-                anchors.left: parent.left
-                text: modelData
+    Rectangle{
+        id: btnScenario
+        width: 128
+        height: menuHeight
+        opacity:0.5
+        Text{
+            text:"scenario"
+        }
+        anchors.left: parent.left
+        anchors.top: parent.top
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                scenarioListView.visible = ! scenarioListView.visible
             }
         }
     }
+    Rectangle{
+        id: btn2
+        anchors.left: btnScenario.right
+        width: 128
+        height: menuHeight
+        opacity:0.5
+        Text{
+            text:"datetime"
+        }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                selectDataTime.visible = ! selectDataTime.visible
+            }
+        }
+    }
+
+
+    ScenarioListView {
+        id: scenarioListView
+        x:0
+        y: menuHeight
+        visible: false
+    }
+
+    DateTimeView {
+        id:selectDataTime
+        x: 0
+        y: menuHeight
+        visible: false
+        onDataTime:{
+            console.log(value)
+        }
+    }
+
 }

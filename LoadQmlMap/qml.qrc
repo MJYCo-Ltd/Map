@@ -1,5 +1,9 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>ScenarioListView.qml</file>
+        <file>ButtonA.qml</file>
+        <file>DateTimeView.qml</file>
+        <file>SliderDataBar.qml</file>
     </qresource>
 </RCC>
