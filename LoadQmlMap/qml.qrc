@@ -5,5 +5,6 @@
         <file>ButtonA.qml</file>
         <file>DateTimeView.qml</file>
         <file>SliderDataBar.qml</file>
+        <file>BorderImg.qml</file>
     </qresource>
 </RCC>

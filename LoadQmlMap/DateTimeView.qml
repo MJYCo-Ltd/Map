@@ -10,15 +10,20 @@ Rectangle
 {
     id:root
     width: 500
-    height: 600
+    height: 500
     color: Qt.rgba(42/255,50/255,52/255, 0/255)
     property color fontColor: Qt.rgba(142/255,234/255,252/255,1)//"#040404"
     property int margin:40
-    Image{
+    //Image{
+    //    id: border
+    //    anchors.fill: parent
+    //    source:"Image/DateTimeBorder.png"
+    //    opacity: 0.55
+    //}
+    BorderImg{
         id: border
         anchors.fill: parent
-        source:"Image/DateTimeBorder.png"
-        opacity: 0.55
+        radius: parent.margin / 2
     }
 
     // 下面是图表边框及其发光效果
