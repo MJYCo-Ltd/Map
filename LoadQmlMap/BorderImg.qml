@@ -13,7 +13,7 @@ Rectangle {
         y:parent.margin
         width: parent.width - 2 * parent.margin
         height: parent.height - 2 * parent.margin
-        color:Qt.rgba(17/255,17/255,53/255, 55/255)
+        color:defaultStyle.backgroundColor
     }
     Rectangle
     {

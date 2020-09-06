@@ -4,7 +4,9 @@ import MyItem 1.0
 
 Window
 {
+    id: mainWindow
     property var $app: AppGlobal{}
+
     visible: true
     width: 1024
     height: 768
@@ -22,13 +24,26 @@ Window
         }
     }
 
+    Style{
+        id:defaultStyle
+    }
+
     Rectangle{
         id: btnScenario
         width: 128
         height: menuHeight
-        opacity:0.5
+        border
+        {
+            width : 1
+            color : defaultStyle.secondaryColor
+        }
+        color: defaultStyle.backgroundColor
+        opacity:0.6
+
         Text{
-            text:"scenario"
+            anchors.centerIn: parent
+            text:qsTr("方案管理")
+            color:defaultStyle.fontColor
         }
         anchors.left: parent.left
         anchors.top: parent.top
@@ -44,9 +59,17 @@ Window
         anchors.left: btnScenario.right
         width: 128
         height: menuHeight
-        opacity:0.5
+        border
+        {
+            width : 2
+            color : defaultStyle.secondaryColor
+        }
+        color: defaultStyle.backgroundColor
+        opacity:0.6
         Text{
-            text:"datetime"
+            anchors.centerIn: parent
+            text:qsTr("日期时间设置")
+            color:defaultStyle.fontColor
         }
         MouseArea {
             anchors.fill: parent
@@ -61,6 +84,8 @@ Window
         id: scenarioListView
         x:0
         y: menuHeight
+        width: 500
+        height: mainWindow.height - menuHeight
         visible: false
     }
 
