@@ -10,7 +10,7 @@ Rectangle
 {
     id:root
     width: 500
-    height: 500
+    height: 550
     color: "transparent"
     property int margin: defaultStyle.margin
     BorderImg{
@@ -73,10 +73,10 @@ Rectangle
 
     Column{
         id: column
-        x: margin
-        y: margin
-        width: parent.width - margin * 2
-        height: parent.height - margin * 2
+        x: margin * 2
+        y: margin * 2
+        width: parent.width - margin * 4
+        height: parent.height - margin * 4
         spacing: 9
         //请选择时间
         Text{

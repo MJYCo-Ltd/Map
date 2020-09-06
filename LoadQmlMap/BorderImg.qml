@@ -3,9 +3,11 @@ import QtGraphicalEffects 1.0
 
 Rectangle {
     property int margin: 10
-    property int radius: parent.margin / 2
+    property int radius: parent.margin * 2
     property int spacing: defaultStyle.lineWidth + 2
-    color:Qt.rgba(17/255,17/255,53/255, 5/255)
+    //color:Qt.rgba(17/255,17/255,53/255, 5/255)
+    property color backgroundColor : defaultStyle.backgroundColor
+    color: "transparent"
     Rectangle
     {
         id:borderBackground
@@ -13,7 +15,7 @@ Rectangle {
         y:parent.margin
         width: parent.width - 2 * parent.margin
         height: parent.height - 2 * parent.margin
-        color:defaultStyle.backgroundColor
+        color:parent.backgroundColor
     }
     Rectangle
     {
@@ -24,6 +26,7 @@ Rectangle {
         height: defaultStyle.lineWidth
         gradient: Gradient{
             GradientStop{position:0.0; color:defaultStyle.primaryColor}
+            GradientStop{position:0.4; color:defaultStyle.secondaryColor}
             GradientStop{position:0.6; color:defaultStyle.secondaryColor}
             GradientStop{position:1.0; color:defaultStyle.primaryColor}
         }
@@ -56,14 +59,14 @@ Rectangle {
 
                 var radius_max = parent.width / 2
                 var radius_iner = radius_max * 0.3
-                var radius_outer = radius_max * 1.3
+                var radius_outer = radius_max * 1.2
                 var r = radius_iner;
                 while(r < radius_outer)
                 {
                     var angleStart = 0.025 * Math.PI;
                     var angleEnd = - 0.525 * Math.PI;
                     context.beginPath();
-                    context.arc(parent.width * 0.225 , parent.height * 0.725, r, angleStart, angleEnd, true);
+                    context.arc(parent.width * 0.3 , parent.height * 0.7, r, angleStart, angleEnd, true);
                     context.stroke();
 
                     r = r + radius_max * 0.2;
@@ -106,14 +109,14 @@ Rectangle {
 
                 var radius_max = parent.width / 2
                 var radius_iner = radius_max * 0.3
-                var radius_outer = radius_max * 1.3
+                var radius_outer = radius_max * 1.2
                 var r = radius_iner;
                 while(r < radius_outer)
                 {
                     var angleStart = - 0.475 * Math.PI;
                     var angleEnd = - 1.025 * Math.PI;
                     context.beginPath();
-                    context.arc(parent.width * 0.725 , parent.height * 0.725, r, angleStart, angleEnd, true);
+                    context.arc(parent.width * 0.7 , parent.height * 0.7, r, angleStart, angleEnd, true);
                     context.stroke();
 
                     r = r + radius_max * 0.2;
@@ -136,8 +139,7 @@ Rectangle {
         width: defaultStyle.lineWidth
         height: parent.height - parent.radius - 2 * parent.margin
         gradient: Gradient{
-            GradientStop{position:0.0; color:defaultStyle.primaryColor}
-            GradientStop{position:0.6; color:defaultStyle.secondaryColor}
+            GradientStop{position:0.0; color:defaultStyle.secondaryColor}
             GradientStop{position:1.0; color:defaultStyle.primaryColor}
         }
     }
@@ -149,8 +151,7 @@ Rectangle {
         width: defaultStyle.lineWidth
         height: (parent.height - 2 * parent.margin) * 1 / 3
         gradient: Gradient{
-            GradientStop{position:0.0; color:defaultStyle.primaryColor}
-            GradientStop{position:0.2; color:defaultStyle.secondaryColor}
+            GradientStop{position:0.0; color:defaultStyle.secondaryColor}
             GradientStop{position:1.0; color:defaultStyle.primaryColor}
         }
     }
@@ -162,8 +163,7 @@ Rectangle {
         width: defaultStyle.lineWidth
         height: parent.height - 2 * parent.margin - 2 * defaultStyle.lineWidth
         gradient: Gradient{
-            GradientStop{position:0.0; color:defaultStyle.primaryColor}
-            GradientStop{position:0.6; color:defaultStyle.secondaryColor}
+            GradientStop{position:0.0; color:defaultStyle.secondaryColor}
             GradientStop{position:1.0; color:defaultStyle.primaryColor}
         }
     }
@@ -201,8 +201,7 @@ Rectangle {
         width: parent.width - 2 * parent.margin - parent.radius - parent.spacing
         height: defaultStyle.lineWidth
         gradient: Gradient{
-            GradientStop{position:0.0; color:defaultStyle.primaryColor}
-            GradientStop{position:0.6; color:defaultStyle.secondaryColor}
+            GradientStop{position:0.0; color:defaultStyle.secondaryColor}
             GradientStop{position:1.0; color:defaultStyle.primaryColor}
         }
     }
@@ -215,7 +214,8 @@ Rectangle {
         height: defaultStyle.lineWidth
         gradient: Gradient{
             GradientStop{position:0.0; color:defaultStyle.primaryColor}
-            GradientStop{position:0.6; color:defaultStyle.secondaryColor}
+            GradientStop{position:0.3; color:defaultStyle.secondaryColor}
+            GradientStop{position:0.7; color:defaultStyle.secondaryColor}
             GradientStop{position:1.0; color:defaultStyle.primaryColor}
         }
     }
@@ -308,7 +308,7 @@ Rectangle {
     }
     Glow {
         anchors.fill: rightBorder3
-        radius: parent.spacing * 1
+        radius: parent.spacing * 3
         samples: 37
         color: "#87CEFA"
         source: rightBorder3
@@ -322,21 +322,21 @@ Rectangle {
     }
     Glow {
         anchors.fill: rightBorder
-        radius: parent.spacing * 3
+        radius: parent.spacing * 1
         samples: 37
         color: "#87CEFA"
         source: rightBorder
     }
-    Glow {
-        anchors.fill: topBorder
-        radius: parent.spacing * 3
-        samples: 37
-        color: "#87CEFA"
-        source: topBorder
-    }
+    //Glow {
+    //    anchors.fill: topBorder
+    //    radius: parent.spacing * 3
+    //    samples: 37
+    //    color: "#87CEFA"
+    //    source: topBorder
+    //}
     Glow {
         anchors.fill: bottomBorder
-        radius: parent.spacing * 3
+        radius: parent.spacing * 2
         samples: 37
         color: "#87CEFA"
         source: bottomBorder

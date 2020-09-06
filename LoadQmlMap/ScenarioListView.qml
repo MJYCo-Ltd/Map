@@ -4,7 +4,7 @@ Rectangle
 {
     width : 400
     height: parent.height
-    color:"transparent"
+    color: defaultStyle.backgroundColor
     property int margin: defaultStyle.margin
     BorderImg{
         id: borderScenario
@@ -12,20 +12,25 @@ Rectangle
         margin: parent.margin
     }
     ListView {
-        x : 2 * borderScenario.margin
-        y : 2 * borderScenario.margin
-        width : parent.width - 4 * borderScenario.margin
-        height : parent.height - 4 * borderScenario.margin
+        x: margin * 2
+        y: margin * 2
+        width: parent.width - margin * 4
+        height: parent.height - margin * 4
         model: scenarioManager.scenarios
         delegate: Rectangle {
             width: parent.width
             height: 40
-            color:"transparent"
-            border.color:"transparent"
-
+            color: "transparent"
+            Rectangle {
+                y:parent.height - 1
+                width:parent.width
+                height:1
+                color:defaultStyle.fontColor
+            }
             Text {
                 color:defaultStyle.fontColor
-                anchors.left: parent.left
+                //anchors.left: parent.left
+                anchors.centerIn: parent
                 text: modelData
             }
             MouseArea {

@@ -28,54 +28,45 @@ Window
         id:defaultStyle
     }
 
-    Rectangle{
+    ButtonA{
         id: btnScenario
         width: 128
         height: menuHeight
-        border
+        border.width: 0
+        BorderImg2
         {
-            width : 1
-            color : defaultStyle.secondaryColor
+            color:"transparent"
+            titleWidth: 0
+            titleHeight: 0
+            opacity:  0.2
+            margin : 3
+            anchors.fill: parent
         }
-        color: defaultStyle.backgroundColor
-        opacity:0.6
-
-        Text{
-            anchors.centerIn: parent
-            text:qsTr("方案管理")
-            color:defaultStyle.fontColor
-        }
+        text:qsTr("方案管理")
         anchors.left: parent.left
         anchors.top: parent.top
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                scenarioListView.visible = ! scenarioListView.visible
-            }
+        onClicked: {
+            scenarioListView.visible = ! scenarioListView.visible
         }
     }
-    Rectangle{
+    ButtonA{
         id: btn2
         anchors.left: btnScenario.right
         width: 128
         height: menuHeight
-        border
+        border.width: 0
+        BorderImg2
         {
-            width : 2
-            color : defaultStyle.secondaryColor
-        }
-        color: defaultStyle.backgroundColor
-        opacity:0.6
-        Text{
-            anchors.centerIn: parent
-            text:qsTr("日期时间设置")
-            color:defaultStyle.fontColor
-        }
-        MouseArea {
+            color:"transparent"
+            titleWidth: 0
+            titleHeight: 0
+            opacity:  0.2
+            margin : 3
             anchors.fill: parent
-            onClicked: {
-                selectDataTime.visible = ! selectDataTime.visible
-            }
+        }
+        text:qsTr("日期时间设置")
+        onClicked: {
+            selectDataTime.visible = ! selectDataTime.visible
         }
     }
 
@@ -84,7 +75,7 @@ Window
         id: scenarioListView
         x:0
         y: menuHeight
-        width: 500
+        width: 400
         height: mainWindow.height - menuHeight
         visible: false
     }

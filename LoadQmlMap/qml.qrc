@@ -7,5 +7,6 @@
         <file>SliderDataBar.qml</file>
         <file>BorderImg.qml</file>
         <file>Style.qml</file>
+        <file>BorderImg2.qml</file>
     </qresource>
 </RCC>
