@@ -19,11 +19,10 @@ Rectangle {
     property color pressColor: "#969ff0de"
     property color releaseColor: "transparent"
     property int fontSize: 12
-    property color fontColor: Qt.rgba(142/255,234/255,252/255,1)//"#040404"
 
     Text {
         id:btnText
-        color: fontColor
+        color: defaultStyle.fontColor
         text: root.text
         font.pointSize: fontSize
         verticalAlignment: Text.AlignVCenter

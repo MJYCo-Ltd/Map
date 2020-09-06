@@ -11,36 +11,13 @@ Rectangle
     id:root
     width: 500
     height: 500
-    color: Qt.rgba(42/255,50/255,52/255, 0/255)
-    property color fontColor: Qt.rgba(142/255,234/255,252/255,1)//"#040404"
-    property int margin:40
-    //Image{
-    //    id: border
-    //    anchors.fill: parent
-    //    source:"Image/DateTimeBorder.png"
-    //    opacity: 0.55
-    //}
+    color: "transparent"
+    property int margin: defaultStyle.margin
     BorderImg{
-        id: border
+        id: borderDataTime
         anchors.fill: parent
-        radius: parent.margin / 2
+        margin: parent.margin
     }
-
-    // 下面是图表边框及其发光效果
-    //Image {
-    //    id: border
-    //    source: "border.png"
-    //    anchors.fill: parent
-    //}
-
-    //Glow {
-    //    anchors.fill: root
-    //    radius: 20
-    //    samples: 37
-    //    color: "#87CEFA"
-    //    source: border
-    //}
-
     property int year:2020
     property int month: 1
     property int day: 1
@@ -108,7 +85,7 @@ Rectangle
             id:tipsText
             text: qsTr("请选择时间")
             anchors.horizontalCenterOffset: 0
-            color: fontColor//"#000000"
+            color: defaultStyle.fontColor
             font.pointSize: 12
             anchors.horizontalCenter: parent.horizontalCenter
             horizontalAlignment: Text.AlignHCenter
@@ -120,7 +97,7 @@ Rectangle
             anchors.horizontalCenter: parent.horizontalCenter            
             width: parent.width - margin
             height: 1
-            color: fontColor//"#bcbbbb"
+            color: defaultStyle.fontColor
         }
 
         Row{
@@ -133,7 +110,7 @@ Rectangle
                 Text {
                     font.pointSize: 10
                     anchors.centerIn: parent
-                    color: fontColor//"black"
+                    color: defaultStyle.fontColor
                     text: qsTr("年")
                 }
             }
@@ -146,7 +123,7 @@ Rectangle
                     font.pointSize: 10
                     anchors.centerIn: parent
                     text: qsTr("月")
-                    color: fontColor
+                    color: defaultStyle.fontColor
                 }
             }
             Rectangle{
@@ -157,7 +134,7 @@ Rectangle
                     font.pointSize: 10
                     anchors.centerIn: parent
                     text: qsTr("日")
-                    color: fontColor
+                    color: defaultStyle.fontColor
                 }
             }
             Rectangle{
@@ -168,7 +145,7 @@ Rectangle
                     font.pointSize: 10
                     anchors.centerIn: parent
                     text: qsTr("时")
-                    color :fontColor
+                    color :defaultStyle.fontColor
                 }
             }
             Rectangle{
@@ -179,7 +156,7 @@ Rectangle
                     font.pointSize: 10
                     anchors.centerIn: parent
                     text: qsTr("分")
-                    color: fontColor
+                    color: defaultStyle.fontColor
                 }
 
             }
@@ -191,7 +168,7 @@ Rectangle
                     font.pointSize: 10
                     anchors.centerIn: parent
                     text: qsTr("秒")
-                    color:fontColor
+                    color:defaultStyle.fontColor
                 }
             }
         }
@@ -200,7 +177,7 @@ Rectangle
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width - margin
             height: 1
-            color: fontColor//"#bcbbbb"
+            color: defaultStyle.fontColor
         }
 
         Row{
@@ -267,7 +244,7 @@ Rectangle
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width - margin
             height: 1
-            color: fontColor//"#bcbbbb"
+            color: defaultStyle.fontColor
         }
         Row{
             anchors.horizontalCenter: parent.horizontalCenter
