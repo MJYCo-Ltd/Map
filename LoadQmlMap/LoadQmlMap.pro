@@ -22,7 +22,8 @@ SOURCES += \
         PlotMap.cpp \
         main.cpp
 
-RESOURCES += qml.qrc
+RESOURCES += qml.qrc \
+    img.qrc
 
 TRANSLATIONS += \
     LoadQmlMap_zh_CN.ts
@@ -31,3 +32,5 @@ SDK_CONFIG *= SceneCore
 unix:SDK_CONFIG *= Satellite OsgExtern
 include(../SoftSDK.pri)
 LIBS *= -lScenarioManagerd
+
+DISTFILES +=
