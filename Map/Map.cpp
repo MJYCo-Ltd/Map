@@ -264,7 +264,7 @@ void CMap::InitMap()
     {
         if(!m_p2DRoot.valid())
         {
-            auto node = m_pSceneGraph->ResouceLoader()->LoadNode("Projected_image.earth");
+            auto node = m_pSceneGraph->ResouceLoader()->LoadNode("Projected.earth");
             m_pMap2DNode = osgEarth::MapNode::findMapNode(node);
 #if OSGEARTH_VERSION_GREATER_OR_EQUAL(3,0,0)
             m_pMap2DNode->open();

@@ -61,7 +61,11 @@ void QtOsgItem::Ready()
     QtRender* pRender = static_cast<QtRender*>(static_cast<QtSceneGraph*>(m_pSceneGraph)->SceneGraphRender());
 
     /// 重置窗口大小
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
     QCoreApplication::postEvent(pRender,new RenderResize(this,this->size().toSize()));
+#else
+    QCoreApplication::postEvent(pRender,new RenderResize(this,QSize(this->width(),this->height())));
+#endif
     QCoreApplication::postEvent(pRender,new QEvent(static_cast<QEvent::Type>(RENDER_START)));
 }
 
