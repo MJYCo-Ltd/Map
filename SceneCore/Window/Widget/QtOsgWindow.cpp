@@ -47,6 +47,7 @@ void QtOsgWindow::UpdateTexture()
 {
     m_unTextureID = m_pFBOWindow->GetFBOTextureID();
     m_bUpdate = true;
+    requestUpdate();
 }
 
 void QtOsgWindow::initializeGL()
@@ -66,6 +67,7 @@ void QtOsgWindow::initializeGL()
     m_pVao->create();
 
     static const char *vertexShaderSource=
+            "#version 330\n"
             "varying vec2 uv;\n"
             "void main(void)\n"
             "{\n"
@@ -124,7 +126,7 @@ void QtOsgWindow::timerEvent(QTimerEvent *event)
 {
     if(m_nTimerID == event->timerId())
     {
-        update();
+        //requestUpdate();
     }
 }
 
