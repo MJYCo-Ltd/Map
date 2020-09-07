@@ -8,5 +8,11 @@
         <file>BorderImg.qml</file>
         <file>Style.qml</file>
         <file>BorderImg2.qml</file>
+        <file>BorderMsg.qml</file>
+        <file>MsgAlert.qml</file>
+        <file>MsgDone.qml</file>
+        <file>MsgGood.qml</file>
+        <file>MsgInfo.qml</file>
+        <file>MsgWarning.qml</file>
     </qresource>
 </RCC>

@@ -36,6 +36,7 @@ Window
         BorderImg2
         {
             color:"transparent"
+            secondaryColor: Qt.rgba(250,250,255,250)
             titleWidth: 0
             titleHeight: 0
             opacity:  0.2
@@ -50,7 +51,7 @@ Window
         }
     }
     ButtonA{
-        id: btn2
+        id: btnDataTime
         anchors.left: btnScenario.right
         width: 128
         height: menuHeight
@@ -58,6 +59,7 @@ Window
         BorderImg2
         {
             color:"transparent"
+            secondaryColor: Qt.rgba(250,250,255,250)
             titleWidth: 0
             titleHeight: 0
             opacity:  0.2
@@ -69,7 +71,27 @@ Window
             selectDataTime.visible = ! selectDataTime.visible
         }
     }
-
+    ButtonA{
+        id: btnMsgBox
+        anchors.left: btnDataTime.right
+        width: 128
+        height: menuHeight
+        border.width: 0
+        BorderImg2
+        {
+            color:"transparent"
+            secondaryColor: Qt.rgba(250,250,255,250)
+            titleWidth: 0
+            titleHeight: 0
+            opacity:  0.2
+            margin : 3
+            anchors.fill: parent
+        }
+        text:qsTr("消息框")
+        onClicked: {
+            testMsg.visible = ! testMsg.visible
+        }
+    }
 
     ScenarioListView {
         id: scenarioListView
@@ -89,5 +111,31 @@ Window
             console.log(value)
         }
     }
-
+    Rectangle{
+        id:testMsg
+        x:(parent.width - width) / 2
+        y:parent.height - height - menuHeight
+        width:650
+        height:300
+        color:"transparent"
+        visible: false
+        Column
+        {
+            MsgDone{
+                text:" Well done! You successfullyread this important."
+            }
+            MsgInfo{
+                text:"Heads up! This alert needs your attention, but it's not super important."
+            }
+            MsgAlert{
+                text:"Oh snap! Change a few things up and try submitting again."
+            }
+            MsgWarning{
+                text:"Warning! Better check yourself, you're not looking too good."
+            }
+            MsgGood{
+                text:" Well done! You successfully read this important."
+            }
+        }
+    }
 }

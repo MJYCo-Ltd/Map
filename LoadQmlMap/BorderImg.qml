@@ -47,8 +47,8 @@ Rectangle {
             contextType: "2d"
             onPaint: {
                 context.lineWidth = 1
-                context.strokeStyle = defaultStyle.secondaryColor
-                context.fillStyle = defaultStyle.primaryColor
+                context.strokeStyle = defaultStyle.primaryColor
+                context.fillStyle = defaultStyle.secondaryColor
                 context.beginPath();
                 context.moveTo(width * 0.1, height * 0.8)
                 context.lineTo(width * 0.2, height * 0.9)
@@ -97,8 +97,8 @@ Rectangle {
             contextType: "2d"
             onPaint: {
                 context.lineWidth = 1
-                context.strokeStyle = defaultStyle.secondaryColor
-                context.fillStyle = defaultStyle.primaryColor
+                context.strokeStyle = defaultStyle.primaryColor
+                context.fillStyle = defaultStyle.secondaryColor
                 context.beginPath();
                 context.moveTo(width * 0.8, height * 0.9)
                 context.lineTo(width * 0.9, height * 0.8)
