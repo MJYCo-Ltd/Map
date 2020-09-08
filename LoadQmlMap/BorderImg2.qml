@@ -7,8 +7,11 @@ Rectangle {
     property int titleWidth: defaultStyle.titleWidth
     property int titleHeight: defaultStyle.titleHeight
     property color backgroundColor : defaultStyle.backgroundColor
+    property color primaryColor : defaultStyle.primaryColor
+    property color secondaryColor : defaultStyle.secondaryColor
     color: backgroundColor
     Canvas {
+        id: backgroundCanvas
         x : margin
         y : margin
         width: parent.width - 2 * margin
@@ -17,8 +20,8 @@ Rectangle {
 
         onPaint: {
             context.lineWidth = 1
-            context.strokeStyle = defaultStyle.secondaryColor
-            context.fillStyle = defaultStyle.primaryColor
+            context.strokeStyle = parent.secondaryColor
+            context.fillStyle = parent.primaryColor
             context.beginPath();
             context.moveTo(0, radius)
             context.lineTo(0, height - radius)
@@ -48,6 +51,13 @@ Rectangle {
             context.stroke();
         }
     }
+    Glow {
+        anchors.fill: backgroundCanvas
+        radius: parent.spacing * 2
+        samples: 37
+        color: "#87CEFA"
+        source: backgroundCanvas
+    }
 
     Rectangle {
         id:innerRect
@@ -66,8 +76,8 @@ Rectangle {
             contextType: "2d"
             onPaint: {
                 context.lineWidth = 2
-                context.strokeStyle = defaultStyle.secondaryColor
-                context.fillStyle = defaultStyle.primaryColor
+                context.strokeStyle = parent.secondaryColor
+                context.fillStyle = parent.primaryColor
                 context.beginPath();
                 context.moveTo(0, titleHeight + radius)
                 context.lineTo(0, height - radius)
