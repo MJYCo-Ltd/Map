@@ -20,6 +20,12 @@ public:
     ~QtWindow();
 
     /**
+     * @brief 设置帧率
+     */
+    void SetFrameRate(int);
+    int GetFrameRate(){return(m_nFrameRate);}
+
+    /**
      * @brief 创建一个新的视点
      * @return
      */
@@ -77,9 +83,10 @@ protected:
     QThread*        m_pThread=nullptr;
     QtOsgWindow*    m_pWindow=nullptr;        /// Qt的窗口
     QWidget*        m_pWidget=nullptr;        /// 返回Widget窗口
-    QtFBOWindow*    m_pFBOWindow=nullptr;             /// osg窗口
+    QtFBOWindow*    m_pFBOWindow=nullptr;     /// osg窗口
     QtViewPoint*    m_pMainViewPoint=nullptr;
     QtRender*       m_pRender=nullptr;
+    int             m_nFrameRate=60;          /// 帧率
 
     bool            m_bCanChange=true;
     list<QtViewPoint*> m_vOtherViewPoint;

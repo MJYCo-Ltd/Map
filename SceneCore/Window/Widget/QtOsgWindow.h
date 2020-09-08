@@ -28,6 +28,11 @@ public:
     void SetFBOWindow(QtFBOWindow* pFBOWindow);
     QtFBOWindow* GetFBOWindow();
 
+    /**
+     * @brief 更改定时器间隔
+     */
+    void ChangeTimer(int);
+
 
 public slots:
     void UpdateTexture();

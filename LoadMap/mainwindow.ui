@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>468</width>
+    <height>395</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>468</width>
      <height>26</height>
     </rect>
    </property>
@@ -36,6 +36,8 @@
    <addaction name="action_2"/>
    <addaction name="action_3"/>
    <addaction name="action_4"/>
+   <addaction name="action_5"/>
+   <addaction name="action_6"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionchange">
@@ -61,6 +63,16 @@
   <action name="action_4">
    <property name="text">
     <string>停止</string>
+   </property>
+  </action>
+  <action name="action_5">
+   <property name="text">
+    <string>增加帧率</string>
+   </property>
+  </action>
+  <action name="action_6">
+   <property name="text">
+    <string>降低帧率</string>
    </property>
   </action>
  </widget>

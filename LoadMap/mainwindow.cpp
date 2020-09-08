@@ -159,3 +159,15 @@ void MainWindow::on_action_4_triggered()
         killTimer(nTimerID);
     }
 }
+
+/// 增加帧率
+void MainWindow::on_action_5_triggered()
+{
+    m_pSceneGraph->GetMainWindow()->SetFrameRate(100);
+}
+
+/// 降低帧率
+void MainWindow::on_action_6_triggered()
+{
+    m_pSceneGraph->GetMainWindow()->SetFrameRate(10);
+}

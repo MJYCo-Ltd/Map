@@ -42,12 +42,21 @@ QtFBOWindow *QtOsgWindow::GetFBOWindow()
     return(m_pFBOWindow);
 }
 
+/// 修改定时器间隔
+void QtOsgWindow::ChangeTimer(int nTimer)
+{
+    if(-1 != m_nTimerID)
+    {
+        killTimer(m_nTimerID);
+        m_nTimerID = startTimer(nTimer);
+    }
+}
+
 /// 引擎渲染成功返回的纹理
 void QtOsgWindow::UpdateTexture()
 {
     m_unTextureID = m_pFBOWindow->GetFBOTextureID();
     m_bUpdate = true;
-    requestUpdate();
 }
 
 void QtOsgWindow::initializeGL()
@@ -126,7 +135,7 @@ void QtOsgWindow::timerEvent(QTimerEvent *event)
 {
     if(m_nTimerID == event->timerId())
     {
-        //requestUpdate();
+        requestUpdate();
     }
 }
 

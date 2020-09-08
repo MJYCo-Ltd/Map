@@ -53,6 +53,12 @@ struct IWindow
     virtual ~IWindow(){}
 
     /**
+     * @brief 设置帧率
+     */
+    virtual void SetFrameRate(int)=0;
+    virtual  int GetFrameRate()=0;
+
+    /**
      * @brief 获取主视点
      * @return
      */

@@ -26,6 +26,19 @@ QtWindow::~QtWindow()
     m_vOtherViewPoint.clear();
 }
 
+/// 设置帧率
+void QtWindow::SetFrameRate(int nRate)
+{
+    if(nRate >0 && m_nFrameRate != nRate)
+    {
+        m_nFrameRate = nRate;
+        if(nullptr != m_pWindow)
+        {
+            m_pWindow->ChangeTimer(1000/m_nFrameRate);
+        }
+    }
+}
+
 IViewPort *QtWindow::GetMainViewPoint()
 {
     return(m_pMainViewPoint);
@@ -73,6 +86,8 @@ QWidget *QtWindow::ToWidget()
     if(m_bCanChange)
     {
         m_pWindow = new QtOsgWindow(m_pThread);
+        m_pWindow->ChangeTimer(1000/m_nFrameRate);
+
         m_pWindow->ConnectRender(m_pRender);
         m_pWindow->SetFBOWindow(m_pFBOWindow);
         m_pWidget = QWidget::createWindowContainer(m_pWindow);
@@ -88,6 +103,8 @@ QWindow *QtWindow::ToWindow()
     if(m_bCanChange)
     {
         m_pWindow = new QtOsgWindow(m_pThread);
+        m_pWindow->ChangeTimer(1000/m_nFrameRate);
+
         m_pWindow->ConnectRender(m_pRender);
         m_pWindow->SetFBOWindow(m_pFBOWindow);
         m_bCanChange = false;
@@ -127,5 +144,4 @@ void QtWindow::InitWindow()
     m_pMainViewPoint->GetOsgView()->getCamera()->setGraphicsContext(m_pFBOWindow);
     m_pMainViewPoint->GetOsgView()->getCamera()->setNearFarRatio(0.0001);
     m_pMainViewPoint->GetOsgView()->getCamera()->setSmallFeatureCullingPixelSize(-1.0f);
-    //m_pMainViewPoint->GetOsgView()->getCamera()->setClearMask(GL_DEPTH_BUFFER_BIT);
 }
