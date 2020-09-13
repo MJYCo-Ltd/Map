@@ -8,6 +8,7 @@ Item {
     // font
     property var fontFamily: "Helvetica"
     property int fontSize: 12
+    property color fontColor : Qt.rgba(255/255,255/255,255/255, 255/255)
     // icon
     property int iconSize : 32
     // menu
@@ -20,7 +21,6 @@ Item {
     // colors
     property color primaryColor : borderColorMsgInfo
     property color secondaryColor : bgColorMsgGood
-    property color fontColor : Qt.rgba(85/255,254/255,213/255, 255/255)
     property color backgroundColor:Qt.rgba(34/255,53/255,60/255, 255/255)
     property color borderColor: Qt.rgba(85/255,254/255,213/255, 255/255)
     // 绿
