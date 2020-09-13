@@ -9,7 +9,7 @@ Item {
     property int start: 0
     property int end: 20
     property int current: 0
-    property color fontColor: Qt.rgba(142/255,234/255,252/255,1)
+    property color fontColor: defaultStyle.fontColor//Qt.rgba(142/255,234/255,252/255,1)
 
     signal selectChange(var value)
 

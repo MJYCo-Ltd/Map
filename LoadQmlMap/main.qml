@@ -11,8 +11,8 @@ Window
     width: 1024
     height: 768
     title: qsTr("Hello World")
-
-    property int menuHeight: 42
+    property int menuHeight: defaultStyle.menuHeight
+    property int menuWidth: defaultStyle.menuWidth
     OsgItem
     {
         id:showOsg
@@ -23,89 +23,94 @@ Window
             $app.setOsgItem(showOsg)
         }
     }
-
     Style{
         id:defaultStyle
     }
-
-    ButtonA{
-        id: btnScenario
-        width: 128
+    Rectangle{
+        id:menuBar
+        width: mainWindow.width
         height: menuHeight
-        border.width: 0
-        BorderImg2
+        color:"transparent"
+        Rectangle
         {
-            color:"transparent"
-            secondaryColor: Qt.rgba(250,250,255,250)
-            titleWidth: 0
-            titleHeight: 0
-            opacity:  0.2
-            margin : 3
+            id:background
             anchors.fill: parent
+            opacity: 0.1
+            Image{
+                anchors.fill: parent
+                source: "Image/TalkboxBG.png"
+            }
         }
-        text:qsTr("方案管理")
-        anchors.left: parent.left
-        anchors.top: parent.top
-        onClicked: {
-            scenarioListView.visible = ! scenarioListView.visible
+        Rectangle{
+            id:marginLeft
+            width: (menuBar.width - 4 * menuWidth) / 2
+            color:"transparent"
+        }
+        MenuButton{
+            id: btnScenario
+            width: menuWidth
+            height: menuHeight
+            text:qsTr("方案")
+            anchors.left: marginLeft.right
+            anchors.top: parent.top
+            onClicked: {
+                scenarioListView.visible = ! scenarioListView.visible
+            }
+        }
+        MenuButton{
+            id: btnDataTime
+            anchors.left: btnScenario.right
+            width: menuWidth
+            height: menuHeight
+            text:qsTr("日期")
+            onClicked: {
+                selectDataTime.visible = ! selectDataTime.visible
+            }
+        }
+        MenuButton{
+            id: btnMsgBox
+            anchors.left: btnDataTime.right
+            width: menuWidth
+            height: menuHeight
+            text:qsTr("消息")
+            onClicked: {
+                testMsg.visible = ! testMsg.visible
+            }
+        }
+        MenuButton{
+            id: btnSystem
+            anchors.left: btnMsgBox.right
+            width: menuWidth
+            height: menuHeight
+            text:qsTr("系统")
+            onClicked: {
+            }
         }
     }
-    ButtonA{
-        id: btnDataTime
-        anchors.left: btnScenario.right
-        width: 128
-        height: menuHeight
-        border.width: 0
-        BorderImg2
-        {
-            color:"transparent"
-            secondaryColor: Qt.rgba(250,250,255,250)
-            titleWidth: 0
-            titleHeight: 0
-            opacity:  0.2
-            margin : 3
-            anchors.fill: parent
-        }
-        text:qsTr("日期时间设置")
-        onClicked: {
-            selectDataTime.visible = ! selectDataTime.visible
+    Rectangle{
+        id:menuBarDecoration
+        width:mainWindow.width
+        height:16
+        anchors.top: menuBar.bottom
+        color:"transparent"
+        Image {
+            width:mainWindow.width
+            height:16
+            source: "Image/Menu-TopLine-Emblem.png"
         }
     }
-    ButtonA{
-        id: btnMsgBox
-        anchors.left: btnDataTime.right
-        width: 128
-        height: menuHeight
-        border.width: 0
-        BorderImg2
-        {
-            color:"transparent"
-            secondaryColor: Qt.rgba(250,250,255,250)
-            titleWidth: 0
-            titleHeight: 0
-            opacity:  0.2
-            margin : 3
-            anchors.fill: parent
-        }
-        text:qsTr("消息框")
-        onClicked: {
-            testMsg.visible = ! testMsg.visible
-        }
-    }
-
     ScenarioListView {
         id: scenarioListView
-        x:0
-        y: menuHeight
+        x: defaultStyle.margin
+        y: defaultStyle.margin + menuHeight
         width: 400
-        height: mainWindow.height - menuHeight
+        height: mainWindow.height - y
         visible: false
     }
-
     DateTimeView {
         id:selectDataTime
-        x: 0
-        y: menuHeight
+        x: defaultStyle.margin
+        y: defaultStyle.margin + menuHeight
         visible: false
         onDataTime:{
             console.log(value)

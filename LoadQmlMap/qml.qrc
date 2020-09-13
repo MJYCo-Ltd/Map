@@ -14,5 +14,9 @@
         <file>MsgGood.qml</file>
         <file>MsgInfo.qml</file>
         <file>MsgWarning.qml</file>
+        <file>BorderImg3.qml</file>
+        <file>ButtonX.qml</file>
+        <file>Button.qml</file>
+        <file>MenuButton.qml</file>
     </qresource>
 </RCC>

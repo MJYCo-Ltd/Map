@@ -24,6 +24,7 @@ Rectangle {
         id:btnText
         color: defaultStyle.fontColor
         text: root.text
+        font.family: defaultStyle.fontFamily
         font.pointSize: fontSize
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter

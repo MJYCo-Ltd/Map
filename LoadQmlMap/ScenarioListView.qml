@@ -1,45 +1,71 @@
-import QtQuick 2.0
+import QtQuick 2.15
 
 Rectangle
 {
-    width : 400
-    height: parent.height
-    color: defaultStyle.backgroundColor
+    property int itemWidth: width - 2 * margin
+    property int itemHeight: defaultStyle.menuHeight
     property int margin: defaultStyle.margin
-    BorderImg{
-        id: borderScenario
-        anchors.fill: parent
-        margin: parent.margin
+    width : 500
+    //height: 410
+    color: "transparent"
+    //color: defaultStyle.backgroundColor
+    //BorderImg3{
+    //    id: borderScenarioListView
+    //    anchors.fill: parent
+    //    //margin: parent.margin
+    //}
+    Button{
+        id:btnAdd
+        x : margin
+        y : margin
+        text:"+"
+        width: itemWidth
+        height: itemHeight
+        border.width: 0
+        onClicked: {
+            Qt.quit()
+        }
     }
     ListView {
-        x: margin * 2
-        y: margin * 2
-        width: parent.width - margin * 4
-        height: parent.height - margin * 4
+        id:listView
+        x: margin
+        y: margin + btnAdd.height
+        height: parent.height - btnAdd.height - margin
         model: scenarioManager.scenarios
         delegate: Rectangle {
-            width: parent.width
-            height: 40
+            width: itemWidth
+            height: itemHeight
             color: "transparent"
-            Rectangle {
-                y:parent.height - 1
-                width:parent.width
-                height:1
-                color:defaultStyle.fontColor
-            }
-            Text {
-                color:defaultStyle.fontColor
-                //anchors.left: parent.left
-                anchors.centerIn: parent
+            Button{
+                id:scenarioButton
+                x:0
+                width:itemWidth// - itemHeight
+                height:itemHeight
                 text: modelData
-            }
-            MouseArea {
-                anchors.fill: parent
                 onClicked: {
-                    Qt.quit()
                 }
             }
+            //ButtonX{
+            //    anchors.left: scenarioButton.right
+            //    width:itemHeight
+            //    height:itemHeight
+            //    text: modelData
+            //}
         }
+        //ScrollBar.vertical: ScrollBar {       //滚动条
+        //    anchors.right: listView.right
+        //    active: true
+        //    background:Rectangle {
+        //            anchors.centerIn: parent
+        //            height: parent.height
+        //            width: 10
+        //            color: 'grey'
+        //        }
+        //    contentItem: Rectangle {
+        //        radius: width/3        //bar的圆角
+        //        color: 'yellow'
+        //    }
+        //}
     }
 }
 

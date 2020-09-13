@@ -9,14 +9,14 @@ import QtQml 2.0
 Rectangle
 {
     id:root
-    width: 500
-    height: 550
+    width: 490
+    height: 420
     color: "transparent"
     property int margin: defaultStyle.margin
-    BorderImg{
+    BorderImg3{
         id: borderDataTime
         anchors.fill: parent
-        margin: parent.margin
+        //margin: parent.margin
     }
     property int year:2020
     property int month: 1
@@ -61,7 +61,6 @@ Rectangle
             dayButton.end = normalYear[monthButton.current-1]
         }
     }
-
     //阴影
     layer.enabled: true
     layer.effect: DropShadow{
@@ -70,7 +69,6 @@ Rectangle
         radius: 1
         samples: 3
     }
-
     Column{
         id: column
         x: margin * 2
@@ -99,7 +97,6 @@ Rectangle
             height: 1
             color: defaultStyle.fontColor
         }
-
         Row{
             width: parent.width
             height: 20
@@ -114,7 +111,6 @@ Rectangle
                     text: qsTr("年")
                 }
             }
-
             Rectangle{
                 color: "transparent"
                 height: 20;
@@ -172,14 +168,12 @@ Rectangle
                 }
             }
         }
-
         Rectangle{
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width - margin
             height: 1
             color: defaultStyle.fontColor
         }
-
         Row{
             width:  parent.width
             height:  240
@@ -250,7 +244,6 @@ Rectangle
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width - margin
             layoutDirection: Qt.RightToLeft
-
             ButtonA{
                 width: 100
                 height: 28
