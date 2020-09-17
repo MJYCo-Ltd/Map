@@ -35,7 +35,7 @@ Window
         {
             id:background
             anchors.fill: parent
-            opacity: 0.1
+            opacity: 0.15
             Image{
                 anchors.fill: parent
                 source: "Image/TalkboxBG.png"
@@ -50,11 +50,11 @@ Window
             id: btnScenario
             width: menuWidth
             height: menuHeight
-            text:qsTr("方案")
+            text:qsTr("WELCOME")
             anchors.left: marginLeft.right
             anchors.top: parent.top
             onClicked: {
-                scenarioListView.visible = ! scenarioListView.visible
+                welcome.visible = ! welcome.visible
             }
         }
         MenuButton{
@@ -62,7 +62,7 @@ Window
             anchors.left: btnScenario.right
             width: menuWidth
             height: menuHeight
-            text:qsTr("日期")
+            text:qsTr("DATE")
             onClicked: {
                 selectDataTime.visible = ! selectDataTime.visible
             }
@@ -72,7 +72,7 @@ Window
             anchors.left: btnDataTime.right
             width: menuWidth
             height: menuHeight
-            text:qsTr("消息")
+            text:qsTr("MESSAGE")
             onClicked: {
                 testMsg.visible = ! testMsg.visible
             }
@@ -82,7 +82,7 @@ Window
             anchors.left: btnMsgBox.right
             width: menuWidth
             height: menuHeight
-            text:qsTr("系统")
+            text:qsTr("SYSTEM")
             onClicked: {
             }
         }
@@ -99,18 +99,23 @@ Window
             source: "Image/Menu-TopLine-Emblem.png"
         }
     }
-    ScenarioListView {
-        id: scenarioListView
-        x: defaultStyle.margin
-        y: defaultStyle.margin + menuHeight
-        width: 400
-        height: mainWindow.height - y
+    Welcome {
+        id: welcome
         visible: false
     }
+    /*
+    ScenarioOverView {
+        id: scenarioOverView
+        x: parent.width - width - margin
+        y: margin + menuHeight
+        //width: 1000
+        height: mainWindow.height - y - margin
+        visible: false
+    }*/
     DateTimeView {
         id:selectDataTime
-        x: defaultStyle.margin
-        y: defaultStyle.margin + menuHeight
+        x: margin
+        y: margin + menuHeight
         visible: false
         onDataTime:{
             console.log(value)

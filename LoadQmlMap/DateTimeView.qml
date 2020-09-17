@@ -16,7 +16,6 @@ Rectangle
     BorderImg3{
         id: borderDataTime
         anchors.fill: parent
-        //margin: parent.margin
     }
     property int year:2020
     property int month: 1
@@ -95,7 +94,7 @@ Rectangle
             anchors.horizontalCenter: parent.horizontalCenter            
             width: parent.width - margin
             height: 1
-            color: defaultStyle.fontColor
+            color: defaultStyle.borderColor
         }
         Row{
             width: parent.width
@@ -172,7 +171,7 @@ Rectangle
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width - margin
             height: 1
-            color: defaultStyle.fontColor
+            color: defaultStyle.borderColor
         }
         Row{
             width:  parent.width
@@ -238,7 +237,7 @@ Rectangle
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width - margin
             height: 1
-            color: defaultStyle.fontColor
+            color: defaultStyle.borderColor
         }
         Row{
             anchors.horizontalCenter: parent.horizontalCenter

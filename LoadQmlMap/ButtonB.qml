@@ -10,27 +10,47 @@ Rectangle {
     signal clicked(var string);
     property string text:"button"
     property int fontSize: 12
+    property color colorOverlay : defaultStyle.borderColor
     Rectangle
     {
-        id:hilite
+        id:hiliteTop
         width: parent.width
-        height: 16
-        anchors.bottom: parent.bottom
+        height: 8
+        anchors.top: parent.top
         color: "transparent"
-        visible:false
+        //visible:false
         Image{
-            id:hiliteImg
+            id:hiliteImgTop
             width: parent.width
             height: parent.height
             source: "Image/Menu_Button_Hilite.png"
         }
         ColorOverlay {
-            anchors.fill: hiliteImg
-            source: hiliteImg
-            color: defaultStyle.primaryColor
+            anchors.fill: hiliteImgTop
+            source: hiliteImgTop
+            color: colorOverlay
         }
     }
-
+    Rectangle
+    {
+        id:hiliteBottom
+        width: parent.width
+        height: 8
+        anchors.bottom: parent.bottom
+        color: "transparent"
+        //visible:false
+        Image{
+            id:hiliteImgBottom
+            width: parent.width
+            height: parent.height
+            source: "Image/Menu_Button_Hilite.png"
+        }
+        ColorOverlay {
+            anchors.fill: hiliteImgBottom
+            source: hiliteImgBottom
+            color: colorOverlay
+        }
+    }
     Rectangle
     {
         id:leftBorder
@@ -69,10 +89,14 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         onEntered: {
-            hilite.visible = true
+            //hiliteTop.visible = true
+            //hiliteBottom.visible = true
+            colorOverlay = defaultStyle.borderColorPressed
         }
         onExited: {
-            hilite.visible = false
+            //hiliteTop.visible = false
+            //hiliteBottom.visible = false
+            colorOverlay = defaultStyle.borderColor
         }
         onClicked: {
             root.clicked(btnText.text)

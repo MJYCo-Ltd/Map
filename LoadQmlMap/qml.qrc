@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>ScenarioListView.qml</file>
+        <file>ScenarioOverView.qml</file>
         <file>ButtonA.qml</file>
         <file>DateTimeView.qml</file>
         <file>SliderDataBar.qml</file>
@@ -16,7 +16,8 @@
         <file>MsgWarning.qml</file>
         <file>BorderImg3.qml</file>
         <file>ButtonX.qml</file>
-        <file>Button.qml</file>
+        <file>ButtonB.qml</file>
         <file>MenuButton.qml</file>
+        <file>Welcome.qml</file>
     </qresource>
 </RCC>

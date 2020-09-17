@@ -4,25 +4,29 @@ Item {
     id : defaultStyle
     // title
     property int titleWidth : 240
-    property int titleHeight : 60
+    property int titleHeight : 42
     // font
     property var fontFamily: "Helvetica"
     property int fontSize: 12
+    property int fontSizeSmall: 10
     property color fontColor : Qt.rgba(255/255,255/255,255/255, 255/255)
+    property color fontColorLight : Qt.rgba(220/255,220/255,220/255, 220/255)
+    property color fontColorGold : Qt.rgba(216 / 255, 192 / 255, 72 / 255, 255 / 255)
     // icon
     property int iconSize : 32
     // menu
     property int menuWidth : 240
-    property int menuHeight: 48
+    property int menuHeight: 42
     // margin
-    property int margin: 16
+    property int margin: 16    
     //
     property int lineWidth: 2
     // colors
     property color primaryColor : borderColorMsgInfo
     property color secondaryColor : bgColorMsgGood
     property color backgroundColor:Qt.rgba(34/255,53/255,60/255, 255/255)
-    property color borderColor: Qt.rgba(85/255,254/255,213/255, 255/255)
+    property color borderColor: Qt.rgba(216 / 255, 192 / 255, 72 / 255, 255 / 255)
+    property color borderColorPressed: Qt.rgba(85/255,254/255,213/255, 255/255)
     // 绿
     property color fontColorMsgDone:Qt.rgba(10/255,212/255,6/255, 1)
     property color borderColorMsgDone:Qt.rgba(10/255,212/255,6/255, 1)

@@ -62,7 +62,7 @@ Rectangle {
         color: "transparent"
         Text {
             id:btnText
-            color: Qt.rgba(216 / 255, 192 / 255, 72 / 255, 255 / 255)//defaultStyle.fontColor
+            color: defaultStyle.fontColorGold
             text: root.text
             font.family: "华文中宋"
             font.pointSize: fontSize
