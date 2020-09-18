@@ -21,7 +21,7 @@ Rectangle
             color: Qt.rgba(30 * index / 255, (200 - 20 * index) / 255, (150 - 8 * index) / 255, 1)
             Text {
                 color: defaultStyle.fontColor
-                text: modelData
+                text: modelData.name
                 font.family: defaultStyle.fontFamily
                 font.pointSize: defaultStyle.fontSize
                 verticalAlignment: Text.AlignVCenter
@@ -131,7 +131,7 @@ Rectangle
                 height:cellHeight + margin * 2
                 cellWidth: itemWidth
                 cellHeight: itemHeight
-                model: scenarioManager.favoriteNames
+                model: scenarioManager.favorites
                 delegate: item
             }
         }
@@ -172,7 +172,7 @@ Rectangle
                 height:cellHeight + margin * 2
                 cellWidth: itemWidth
                 cellHeight: itemHeight
-                model: scenarioManager.scenarioNames
+                model: scenarioManager.scenarios
                 delegate: item
             }
         }

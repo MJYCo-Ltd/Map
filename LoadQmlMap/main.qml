@@ -14,6 +14,9 @@ Window
     title: qsTr("Hello World")
     property int menuHeight: defaultStyle.menuHeight
     property int menuWidth: defaultStyle.menuWidth
+    ScenarioManager{
+        id:scenarioManager
+    }
     OsgItem
     {
         id:showOsg

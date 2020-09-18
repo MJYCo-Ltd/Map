@@ -2,29 +2,39 @@
 #define SCENARIOMANAGER_H
 
 #include "ScenarioManager_global.h"
+#include "Scenario.h"
 #include <QObject>
+#include <QQmlListProperty>
 #include <QStringList>
 #include <QString>
 #include <QList>
 #include <QDir>
 
-class Scenario;
+Q_DECLARE_METATYPE(QQmlListProperty<Scenario>)
+//class Scenario;
 class ScenarioItem;
 class SCENARIOMANAGER_EXPORT ScenarioManager : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QStringList scenarioNames READ scenarioNames NOTIFY scenarioListChanged)
-    Q_PROPERTY(QStringList favoriteNames READ favoriteNames NOTIFY favoriteListChanged)
+    Q_PROPERTY(QDir dir READ dir WRITE setDir)
+    //Q_PROPERTY(QStringList scenarioNames READ scenarioNames NOTIFY scenarioListChanged)
+    //Q_PROPERTY(QStringList favoriteNames READ favoriteNames NOTIFY favoriteListChanged)
+    Q_PROPERTY(QQmlListProperty<Scenario> scenarios READ scenarios NOTIFY scenarioListChanged)
+    Q_PROPERTY(QQmlListProperty<Scenario> favorites READ favorites NOTIFY favoriteListChanged)
 public:
-    ScenarioManager(QDir dir);
-    QDir dir();
-    QDir scenarioDir();
+    ScenarioManager(QObject* parent = nullptr);
+    void init();
 
+    QDir dir();
+    void setDir(QDir);
+    QDir scenarioDir();
     // scenario
     Scenario* currentScenario();
     void setCurrentScenario(QString name);
     QStringList scenarioNames();
     QStringList favoriteNames();
+    QQmlListProperty<Scenario> scenarios();
+    QQmlListProperty<Scenario> favorites();
     bool addScenario(QString name, QString imageFilePath = "");
     void addTempScenario(); // example : untitled_1
     Scenario* scenario(QString name);
@@ -42,9 +52,7 @@ public:
 signals:
     void scenarioListChanged();
     void favoriteListChanged();
-protected:
-    void init();
-    QList<Scenario*> scenarios();
+
 protected:
     QDir                    _dir;
     QDir                    _scenarioDir;

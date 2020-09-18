@@ -1,10 +1,11 @@
 #include "ScenarioManager.h"
 #include "ScenarioItem.h"
 #include "Scenario.h"
+#include <QCoreApplication>
 #include <QDebug>
 #include <QFile>
 
-ScenarioManager::ScenarioManager(QDir dir):_dir(dir)
+ScenarioManager::ScenarioManager(QObject* parent)
 {
     //addTempScenario();
 
@@ -13,13 +14,16 @@ ScenarioManager::ScenarioManager(QDir dir):_dir(dir)
 
 void ScenarioManager::init()
 {
+    QString sPath = QCoreApplication::applicationDirPath() + "/Data/Scenarios";
+    setDir(sPath);
     // read scenario list
     QDir dir = this->dir();
     dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
     QStringList names = dir.entryList();
     foreach(QString name, names)
     {
-        Scenario* snr = new Scenario(this, name);
+        Scenario* snr = new Scenario(this);
+        snr->setName(name);
         if (snr)
             _scenarioList.append(snr);
     }
@@ -45,11 +49,15 @@ QDir ScenarioManager::dir()
     return _dir;
 }
 
-QDir ScenarioManager::scenarioDir()
+void ScenarioManager::setDir(QDir dir)
 {
-    return _scenarioDir;
+    _dir = dir;
 }
 
+QDir ScenarioManager::scenarioDir()
+{
+    return _currentScenario->dir();
+}
 
 Scenario* ScenarioManager::currentScenario()
 {
@@ -58,8 +66,7 @@ Scenario* ScenarioManager::currentScenario()
 
 void ScenarioManager::setCurrentScenario(QString name)
 {
-    QList<Scenario*> list = scenarios();
-    foreach(Scenario* one, list)
+    foreach(Scenario* one, _scenarioList)
     {
         if (0) // QString(one->name(), name)
         {
@@ -69,9 +76,19 @@ void ScenarioManager::setCurrentScenario(QString name)
     }
 }
 
-QList<Scenario*> ScenarioManager::scenarios()
+//QList<Scenario*> ScenarioManager::scenarios()
+//{
+//    return _scenarioList;
+//}
+QQmlListProperty<Scenario> ScenarioManager::scenarios()
 {
-    return _scenarioList;
+    return QQmlListProperty<Scenario>(this, _scenarioList);
+
+}
+
+QQmlListProperty<Scenario> ScenarioManager::favorites()
+{
+    return QQmlListProperty<Scenario>(this, _favoriteList);
 }
 
 QStringList ScenarioManager::scenarioNames()
@@ -80,8 +97,7 @@ QStringList ScenarioManager::scenarioNames()
     //dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
     //return dir.entryList();
     QStringList names;
-    QList<Scenario*> list = _scenarioList;
-    foreach(Scenario* one, list)
+    foreach(Scenario* one, _scenarioList)
     {
         names.append(one->name());
     }
@@ -91,8 +107,7 @@ QStringList ScenarioManager::scenarioNames()
 QStringList ScenarioManager::favoriteNames()
 {
     QStringList names;
-    QList<Scenario*> list = _favoriteList;
-    foreach(Scenario* one, list)
+    foreach(Scenario* one, _favoriteList)
     {
         names.append(one->name());
     }
@@ -106,8 +121,7 @@ bool ScenarioManager::contains(QString name)
 
 Scenario* ScenarioManager::scenario(QString name)
 {
-    QList<Scenario*> list = _scenarioList;
-    foreach(Scenario* one, list)
+    foreach(Scenario* one, _scenarioList)
     {
         if (QString::compare(name, one->name()) == 0)
         {
@@ -151,9 +165,10 @@ bool ScenarioManager::addScenario(QString name, QString fp)
         return false;
     if ( ! dir().mkdir(name))
         return false;
-    Scenario* scenario = new Scenario(this, name);
+    Scenario* scenario = new Scenario(this);
     if (scenario == nullptr)
         return false;
+    scenario->setName(name);
     // copy image file
     if(fp.endsWith(".png"))
         QFile::copy(fp, scenario->imageFilePath());

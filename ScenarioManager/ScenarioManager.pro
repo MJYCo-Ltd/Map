@@ -1,4 +1,4 @@
-QT += widgets
+QT += widgets qml
 
 TEMPLATE = lib
 DEFINES += SCENARIOMANAGER_LIBRARY

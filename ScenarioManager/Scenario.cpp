@@ -1,9 +1,9 @@
 #include "Scenario.h"
 #include "ScenarioManager.h"
 
-Scenario::Scenario(ScenarioManager* mgr, QString name):
-    _mgr(mgr), _name(name)
+Scenario::Scenario(QObject* parent)
 {
+    _mgr = (ScenarioManager*)parent;
     //QDir dir = _mgr->dir();
     //QDir scenarioDir(dir.path() + "/" + name);
     //QStringList fileList = scenarioDir.entryList(QDir::Files);
@@ -22,9 +22,15 @@ QString Scenario::name()
     return _name;
 }
 
+void Scenario::setName(QString name)
+{
+    _name = name;
+}
+
 QDir Scenario::dir()
 {
-    return QDir(_mgr->dir().path() + "/" + name());
+    //return QDir(_mgr->dir().path() + "/" + name());
+    return QDir("");
 }
 
 QString Scenario::imageFilePath()

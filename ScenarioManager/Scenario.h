@@ -1,23 +1,27 @@
 #ifndef SCENARIO_H
 #define SCENARIO_H
 
+#include "ScenarioManager_global.h"
 #include <QObject>
 #include <QString>
 #include <QDir>
 
 class ScenarioManager;
-class Scenario : public QObject
+class SCENARIOMANAGER_EXPORT Scenario : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString name READ name)
-    Q_PROPERTY(QString imageFilePath READ imageFilePath)
+    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+    //Q_PROPERTY(QString imageFilePath READ imageFilePath)
 public:
-    Scenario(ScenarioManager* mgr, QString name);
+    Scenario(QObject* parent = nullptr);
 
     QDir dir();
     QString name();
+    void setName(QString);
     QString imageFilePath();
-private:
+signals:
+    void nameChanged();
+protected:
     ScenarioManager*    _mgr;
     QString             _name;
 };
