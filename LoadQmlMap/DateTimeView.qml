@@ -23,9 +23,7 @@ Rectangle
     property int hour: 1
     property int minute: 1
     property int second: 1
-
     property var local: Qt.locale()
-
     signal dataTime(var value)
 
     function setDataTime(value){
@@ -75,7 +73,6 @@ Rectangle
         width: parent.width - margin * 4
         height: parent.height - margin * 4
         spacing: 9
-        //请选择时间
         Text{
             width: parent.width
             height: 30
@@ -270,7 +267,6 @@ Rectangle
                 color: "transparent"
                 radius: 0
                 //normalColor: "transparent"
-
             }
             ButtonA{
                 width: 100

@@ -1,10 +1,43 @@
 #include "ScenarioManager.h"
 #include "ScenarioItem.h"
-#include <QDir>
+#include "Scenario.h"
+#include <QDebug>
+#include <QFile>
 
 ScenarioManager::ScenarioManager(QDir dir):_dir(dir)
 {
-    addTempScenario();
+    //addTempScenario();
+
+    init();
+}
+
+void ScenarioManager::init()
+{
+    // read scenario list
+    QDir dir = this->dir();
+    dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
+    QStringList names = dir.entryList();
+    foreach(QString name, names)
+    {
+        Scenario* snr = new Scenario(this, name);
+        if (snr)
+            _scenarioList.append(snr);
+    }
+    // read favorite list
+    QFile file(dir.path() + "/favorites");
+    if ( ! file.open(QFile::ReadOnly | QFile::Text) )
+        qDebug() << "file : " << file.fileName() << " open failed!";
+    QString text = file.readAll();
+    QStringList list = text.split(",");
+    foreach(QString one, list)
+    {
+        Scenario* s = scenario(one);
+        if(s != nullptr)
+        {
+            _favoriteList.append(s);
+        }
+    }
+    file.close();
 }
 
 QDir ScenarioManager::dir()
@@ -18,32 +51,88 @@ QDir ScenarioManager::scenarioDir()
 }
 
 
-QString ScenarioManager::currentScenario()
+Scenario* ScenarioManager::currentScenario()
 {
     return _currentScenario;
 }
 
 void ScenarioManager::setCurrentScenario(QString name)
 {
-    QStringList list = scenarios();
-    if (list.contains(name))
+    QList<Scenario*> list = scenarios();
+    foreach(Scenario* one, list)
     {
-        _currentScenario = name;
-        _scenarioDir = dir().path() + "/" + currentScenario();
+        if (0) // QString(one->name(), name)
+        {
+            _currentScenario = one;
+            return;
+        }
     }
 }
 
-QStringList ScenarioManager::scenarios()
+QList<Scenario*> ScenarioManager::scenarios()
 {
-    QDir dir = this->dir();
-    dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
-    return dir.entryList();
+    return _scenarioList;
+}
+
+QStringList ScenarioManager::scenarioNames()
+{
+    //QDir dir = this->dir();
+    //dir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
+    //return dir.entryList();
+    QStringList names;
+    QList<Scenario*> list = _scenarioList;
+    foreach(Scenario* one, list)
+    {
+        names.append(one->name());
+    }
+    return names;
+}
+
+QStringList ScenarioManager::favoriteNames()
+{
+    QStringList names;
+    QList<Scenario*> list = _favoriteList;
+    foreach(Scenario* one, list)
+    {
+        names.append(one->name());
+    }
+    return names;
 }
 
 bool ScenarioManager::contains(QString name)
 {
-    QStringList list = scenarios();
-    return list.contains(name);
+    return (scenario(name) != nullptr);
+}
+
+Scenario* ScenarioManager::scenario(QString name)
+{
+    QList<Scenario*> list = _scenarioList;
+    foreach(Scenario* one, list)
+    {
+        if (QString::compare(name, one->name()) == 0)
+        {
+            return one;
+        }
+    }
+    return nullptr;
+}
+
+void ScenarioManager::addFavorite(QString name)
+{
+    addFavorite(scenario(name));
+}
+
+void ScenarioManager::addFavorite(Scenario* scenario)
+{
+    if (scenario == nullptr)
+        return;
+    foreach(Scenario* one, _favoriteList)
+    {
+        if (one == scenario)
+            return;
+    }
+    _favoriteList.append(scenario);
+    emit favoriteListChanged();
 }
 
 void ScenarioManager::addTempScenario()
@@ -56,17 +145,26 @@ void ScenarioManager::addTempScenario()
     }
 }
 
-bool ScenarioManager::addScenario(QString name)
+bool ScenarioManager::addScenario(QString name, QString fp)
 {
     if (contains(name))
         return false;
-    dir().mkdir(name);
+    if ( ! dir().mkdir(name))
+        return false;
+    Scenario* scenario = new Scenario(this, name);
+    if (scenario == nullptr)
+        return false;
+    // copy image file
+    if(fp.endsWith(".png"))
+        QFile::copy(fp, scenario->imageFilePath());
+    _scenarioList.append(scenario);
     emit scenarioListChanged();
     return true;
 }
 
 void ScenarioManager::removeScenario(QString name)
 {
+    _scenarioList.removeOne(scenario(name));
     dir().rmdir(name);
     emit scenarioListChanged();
 }
@@ -86,27 +184,21 @@ void ScenarioManager::save()
         one->save();
     }
 }
-
+/*
 void ScenarioManager::saveAs(QString newName)
 {
     foreach (ScenarioItem* one, _itemList)
     {
         one->saveAs(newName);
     }
-}
+}*/
 
 void ScenarioManager::addItem(ScenarioItem* item)
 {
-    foreach (ScenarioItem* one, _itemList)
-    {
-        if (one == item)
-        {
-            _itemList.removeOne(one);
-            return;
-        }
-    }
+    if( ! contains(item))
+        _itemList.append(item);
 }
-/*
+
 bool ScenarioManager::contains(ScenarioItem* item)
 {
     foreach (ScenarioItem* one, _itemList)
@@ -116,4 +208,5 @@ bool ScenarioManager::contains(ScenarioItem* item)
             return true;
         }
     }
-}*/
+    return false;
+}

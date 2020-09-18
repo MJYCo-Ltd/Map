@@ -11,10 +11,12 @@ Rectangle {
     y: margin + menuHeight
     width:parent.width - margin * 2
     height:parent.height - menuHeight - margin * 2
+    color:"transparent"
     Rectangle
     {
         id:background
         anchors.fill: parent
+        opacity: 0.15
         Image{
             anchors.fill: parent
             source: "Image/TalkboxBG.png"

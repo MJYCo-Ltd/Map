@@ -6,6 +6,7 @@
 #include "AppGlobal.h"
 
 #include "../ScenarioManager/ScenarioManager.h"
+#include "../AreaPlanManager/AreaPlanManager.h"
 
 int main(int argc, char *argv[])
 {
@@ -35,6 +36,8 @@ int main(int argc, char *argv[])
     QString sPath = QCoreApplication::applicationDirPath() + "/Data/Scenarios";
     ScenarioManager scenarioManager(sPath);
     engine.rootContext()->setContextProperty("scenarioManager", &scenarioManager);
+    //AreaPlanManager areaPlanManager();
+    //engine.rootContext()->setContextProperty("areaPlanManager", &areaPlanManager);
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

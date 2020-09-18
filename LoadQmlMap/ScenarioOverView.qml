@@ -21,7 +21,7 @@ Rectangle
             color: Qt.rgba(30 * index / 255, (200 - 20 * index) / 255, (150 - 8 * index) / 255, 1)
             Text {
                 color: defaultStyle.fontColor
-                text: scenarioManager.scenarios[index]
+                text: modelData
                 font.family: defaultStyle.fontFamily
                 font.pointSize: defaultStyle.fontSize
                 verticalAlignment: Text.AlignVCenter
@@ -63,7 +63,7 @@ Rectangle
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
                 height:defaultStyle.titleHeight
-                text:"New Scenario"
+                text:" New Scenario"
             }
             Rectangle{
                 x : margin / 2
@@ -111,7 +111,7 @@ Rectangle
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
                 height:defaultStyle.titleHeight
-                text:"My Favorite"
+                text:" My Favorite"
             }
             Text
             {
@@ -122,7 +122,7 @@ Rectangle
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignRight
                 height:defaultStyle.titleHeight
-                text:"More>"
+                text:"More> "
             }
             GridView {
                 id:gridViewFavorite
@@ -131,7 +131,7 @@ Rectangle
                 height:cellHeight + margin * 2
                 cellWidth: itemWidth
                 cellHeight: itemHeight
-                model: columnCount
+                model: scenarioManager.favoriteNames
                 delegate: item
             }
         }
@@ -152,7 +152,7 @@ Rectangle
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
                 height:defaultStyle.titleHeight
-                text:"My Scenarios"
+                text:" My Scenarios"
             }
             Text
             {
@@ -163,7 +163,7 @@ Rectangle
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignRight
                 height:defaultStyle.titleHeight
-                text:"More>"
+                text:"More> "
             }
             GridView {
                 id:gridViewRecent
@@ -172,7 +172,7 @@ Rectangle
                 height:cellHeight + margin * 2
                 cellWidth: itemWidth
                 cellHeight: itemHeight
-                model: columnCount
+                model: scenarioManager.scenarioNames
                 delegate: item
             }
         }

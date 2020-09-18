@@ -5,6 +5,7 @@ import MyItem 1.0
 Window
 {
     id: mainWindow
+    visibility : Window.FullScreen
     property var $app: AppGlobal{}
 
     visible: true
@@ -84,6 +85,7 @@ Window
             height: menuHeight
             text:qsTr("SYSTEM")
             onClicked: {
+                Qt.quit()
             }
         }
     }
