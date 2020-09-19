@@ -11,7 +11,7 @@ class SCENARIOMANAGER_EXPORT Scenario : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-    //Q_PROPERTY(QString imageFilePath READ imageFilePath)
+    Q_PROPERTY(QString imageFilePath READ imageFilePath NOTIFY imageFilePathChanged)
 public:
     Scenario(QObject* parent = nullptr);
 
@@ -21,6 +21,7 @@ public:
     QString imageFilePath();
 signals:
     void nameChanged();
+    void imageFilePathChanged();
 protected:
     ScenarioManager*    _mgr;
     QString             _name;

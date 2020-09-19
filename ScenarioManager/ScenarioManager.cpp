@@ -2,6 +2,7 @@
 #include "ScenarioItem.h"
 #include "Scenario.h"
 #include <QCoreApplication>
+#include <QTextStream>
 #include <QDebug>
 #include <QFile>
 
@@ -10,6 +11,25 @@ ScenarioManager::ScenarioManager(QObject* parent)
     //addTempScenario();
 
     init();
+}
+
+ScenarioManager::~ScenarioManager()
+{
+    QDir dir = this->dir();
+    // read favorite list
+    QFile file(dir.path() + "/favorites");
+    if ( ! file.open(QFile::WriteOnly | QFile::Text) )
+        qDebug() << "file : " << file.fileName() << " open failed!";
+    //QString text = file.readAll();
+    //QStringList list = text.split(",");
+    QTextStream out(&file);
+    for(int i = 0; i < _favoriteList.count(); i++)
+    {
+        if (i > 0)
+            out << ",";
+        out << _favoriteList[i]->name();
+    }
+    file.close();
 }
 
 void ScenarioManager::init()
@@ -146,6 +166,19 @@ void ScenarioManager::addFavorite(Scenario* scenario)
             return;
     }
     _favoriteList.append(scenario);
+    emit favoriteListChanged();
+}
+
+void ScenarioManager::removeFavorite(QString name)
+{
+    removeFavorite(scenario(name));
+}
+
+void ScenarioManager::removeFavorite(Scenario* scenario)
+{
+    if (scenario == nullptr)
+        return;
+    _favoriteList.removeOne(scenario);
     emit favoriteListChanged();
 }
 

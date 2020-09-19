@@ -29,8 +29,7 @@ void Scenario::setName(QString name)
 
 QDir Scenario::dir()
 {
-    //return QDir(_mgr->dir().path() + "/" + name());
-    return QDir("");
+    return QDir(_mgr->dir().path() + "/" + name());
 }
 
 QString Scenario::imageFilePath()

@@ -23,6 +23,7 @@ class SCENARIOMANAGER_EXPORT ScenarioManager : public QObject
     Q_PROPERTY(QQmlListProperty<Scenario> favorites READ favorites NOTIFY favoriteListChanged)
 public:
     ScenarioManager(QObject* parent = nullptr);
+    ~ScenarioManager();
     void init();
 
     QDir dir();
@@ -30,7 +31,7 @@ public:
     QDir scenarioDir();
     // scenario
     Scenario* currentScenario();
-    void setCurrentScenario(QString name);
+    Q_INVOKABLE void setCurrentScenario(QString name);
     QStringList scenarioNames();
     QStringList favoriteNames();
     QQmlListProperty<Scenario> scenarios();
@@ -38,11 +39,13 @@ public:
     bool addScenario(QString name, QString imageFilePath = "");
     void addTempScenario(); // example : untitled_1
     Scenario* scenario(QString name);
-    void addFavorite(QString name);
-    void addFavorite(Scenario*);
+    Q_INVOKABLE void addFavorite(QString name);
+    Q_INVOKABLE void addFavorite(Scenario*);
+    Q_INVOKABLE void removeFavorite(QString name);
+    Q_INVOKABLE void removeFavorite(Scenario*);
+    Q_INVOKABLE void removeScenario(QString name);
     bool contains(QString name);
-    void removeScenario(QString name);
-    void load();
+    Q_INVOKABLE void load();
     void save();
     //void saveAs(QString newName);
 
