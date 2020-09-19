@@ -19,5 +19,6 @@
         <file>ButtonB.qml</file>
         <file>MenuButton.qml</file>
         <file>Welcome.qml</file>
+        <file>ScenarioOverviewItem.qml</file>
     </qresource>
 </RCC>

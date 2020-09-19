@@ -5,6 +5,9 @@ Item {
     // title
     property int titleWidth : 240
     property int titleHeight : 42
+    // scenario item
+    property int scnItemWidth: 148
+    property int scnItemHeight: 148
     // font
     property var fontFamily: "Helvetica"
     property int fontSize: 12

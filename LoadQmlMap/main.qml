@@ -29,7 +29,7 @@ Window
     }
     Style{
         id:defaultStyle
-    }
+    }    
     Rectangle{
         id:menuBar
         width: mainWindow.width

@@ -4,81 +4,10 @@ import QtQuick.Controls 2.15
 
 Rectangle
 {
-    property int itemWidth: 148
-    property int itemHeight: 148
-    property int buttonWidth : 80
-    property int buttonHeight : 24
+    property int itemWidth: defaultStyle.scnItemWidth
+    property int itemHeight: defaultStyle.scnItemHeight
     property int margin: defaultStyle.margin
-    //property int columnCount: (width - 2 * margin)/ itemWidth
-    //width : itemWidth * columnCount + 2 * margin
     color: "transparent"
-    // -------------------------------------------------------------------------------------------
-    Component
-    {
-        id:item
-        Rectangle{
-            x : margin / 2
-            y : margin / 2
-            width:itemWidth - margin
-            height:itemHeight - margin
-            color:"transparent"
-            property int textHeight: 24
-            //color: Qt.rgba(30 * index / 255, (200 - 20 * index) / 255, (150 - 8 * index) / 255, 1)
-            Image{
-                //anchors.fill: parent
-                //radius:8
-                width:parent.width
-                height:parent.height - textHeight
-                source:"file:///" + modelData.imageFilePath
-            }
-            Rectangle{
-                id:rectButtons
-                x : (parent.width - width) / 2
-                y : (parent.height - buttonHeight - textHeight) / 2
-                width:buttonWidth
-                height:buttonHeight
-                color:"transparent"
-                visible: false
-                Button{
-                    width: buttonWidth
-                    height:buttonHeight
-                    text: qsTr("remove")
-                    onClicked: {
-                        scenarioManager.removeFavorite(modelData.name)
-                    }
-                }
-            }
-            Text {
-                id:text
-                y:parent.height - text.height
-                width:parent.width
-                height:textHeight
-                color: defaultStyle.fontColor
-                text: modelData.name
-                font.family: defaultStyle.fontFamily
-                font.pointSize: defaultStyle.fontSize
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                //anchors.fill: parent
-            }
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
-                onEntered: {
-                    rectButtons.visible = true
-                }
-                onExited: {
-                    rectButtons.visible = false
-                }
-                onClicked: {
-                    scenarioManager.setCurrentScenario(modelData.name)
-                    scenarioManager.load()
-                    welcome.visible = false
-                }
-            }
-        }
-    }
-    // -------------------------------------------------------------------------------------------
     Rectangle
     {
         x:margin
@@ -171,7 +100,11 @@ Rectangle
                 cellWidth: itemWidth
                 cellHeight: itemHeight
                 model: scenarioManager.favorites
-                delegate: item
+                delegate: ScenarioOverviewItem{
+                    favorite:true
+                    name: modelData.name
+                    imageFilePath: modelData.imageFilePath
+                }
             }
         }
         Rectangle
@@ -212,7 +145,11 @@ Rectangle
                 cellWidth: itemWidth
                 cellHeight: itemHeight
                 model: scenarioManager.scenarios
-                delegate: item
+                delegate: ScenarioOverviewItem{
+                    favorite:false
+                    name: modelData.name
+                    imageFilePath: modelData.imageFilePath
+                }
             }
         }
     }
