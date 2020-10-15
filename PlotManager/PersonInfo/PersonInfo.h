@@ -40,15 +40,34 @@ public:
     const string& GetName();
 
     /**
+     * @brief 设置分组类型
+     * @param type
+     */
+    void SetType(GroupType type);
+    GroupType GetType(){return(m_eGroup);}
+
+    /**
+     * @brief 设置人员状态
+     * @param status
+     */
+    void SetStatus(PersonStatus status);
+    PersonStatus GetStatus(){return(m_eStatus);}
+
+    /**
      * @brief 获取接口名称
      * @return
      */
     static const string& GetInterFaceName(){return(S_sInterFace);}
+protected:
+    void changeImage();
 private:
     osg::ref_ptr<osgEarth::PlaceNode> m_pPerson;
     osg::ref_ptr<PersonInfoCallBack>  m_pCallBack;   ///
     osgEarth::Style                   m_placeStyle;  /// 位置样式
     string                            m_sName;       ///  名字
+    bool                              m_bUpdateImage=false;
+    GroupType                         m_eGroup = NONE_GROUP;  /// 设置人员分组
+    PersonStatus                      m_eStatus = PERSON_OK;  /// 设置人员状态
     static string                     S_sInterFace;  /// 接口名字
 };
 

@@ -86,6 +86,12 @@ public:
             m_pPlaceNode->setText(m_sName);
             m_bUpdateName = false;
         }
+
+        if(m_bUpdateImage)
+        {
+            m_pPlaceNode->setIconImage(m_pImage.get());
+            m_bUpdateImage = false;
+        }
         return traverse(object, data);
     }
 
@@ -102,13 +108,22 @@ public:
         m_sName = sName;
         m_bUpdateName = true;
     }
+
+    void UpdateImage(osg::Image* pImage)
+    {
+        m_pImage = pImage;
+        m_bUpdateImage = true;
+    }
 protected:
     virtual ~PersonInfoCallBack() {}
 private:
     ScenePos m_stPos;
     string   m_sName;
+    string   m_sPicPath;
     bool     m_bUpdatePos  = false;
     bool     m_bUpdateName = false;
+    bool     m_bUpdateImage = false;
+    osg::observer_ptr<osg::Image>          m_pImage;
     osg::observer_ptr<osgEarth::PlaceNode> m_pPlaceNode;
 };
 
@@ -149,7 +164,7 @@ void CPersonInfo::InitSceneNode()
     m_placeStyle.getOrCreate<osgEarth::IconSymbol>()->declutter() = false;
     m_placeStyle.getOrCreate<osgEarth::IconSymbol>()->alignment() = osgEarth::IconSymbol::ALIGN_RIGHT_CENTER;
 
-    string sImagePath = "ico/red.png";
+    string sImagePath = "ico/white.png";
     auto pImage = m_pSceneGraph->ResouceLoader()->LoadImage(sImagePath,32,32);
 
 
@@ -183,13 +198,71 @@ const string &CPersonInfo::GetName()
     return(m_sName);
 }
 
+/// 设置类型
+void CPersonInfo::SetType(GroupType type)
+{
+    if(m_eGroup != type)
+    {
+        m_eGroup = type;
+        changeImage();
+    }
+}
+
+/// 设置人员状态
+void CPersonInfo::SetStatus(PersonStatus status)
+{
+    if(m_eStatus != status)
+    {
+        m_eStatus = status;
+        changeImage();
+    }
+}
+
+/// 更改图片
+void CPersonInfo::changeImage()
+{
+    string sIconPath="ico/";
+    switch(m_eGroup)
+    {
+    case RED_GROUP:
+        sIconPath += "red";
+        break;
+    case BLUE_GROUP:
+        sIconPath += "blue";
+        break;
+    default:
+        sIconPath += "white";
+        break;
+    }
+
+    switch (m_eStatus)
+    {
+    case PERSON_HURT:
+        sIconPath += "_hurt";
+        break;
+    case PERSON_HIT:
+        sIconPath += "_fire";
+        break;
+    case PERSON_DATH:
+        sIconPath += "_death";
+        break;
+    case PERSON_UNLINE:
+        sIconPath += "_unline";
+        break;
+    default:
+        break;
+    }
+
+    sIconPath += ".png";
+    m_pCallBack->UpdateImage(m_pSceneGraph->ResouceLoader()->LoadImage(sIconPath,32,32));
+}
+
 /// 创建地图节点
 IPersonInfo* CreateNode(ISceneGraph* pSceneGraph, const string &sInterfaceName)
 {
     if(sInterfaceName == CPersonInfo::GetInterFaceName())
     {
         auto pPerson = new CPersonInfo(pSceneGraph);
-//        g_allCreate.insert(pPerson);
         return(pPerson);
     }
     else

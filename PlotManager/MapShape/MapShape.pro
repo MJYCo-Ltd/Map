@@ -28,22 +28,26 @@ include($$PWD/../../SoftSDK.pri)
 
 HEADERS += \
     DrawShape/SceneCone.h \
+    DrawShape/SceneCover.h \
     DrawShape/SceneLine.h \
     DrawShape/SceneModel.h \
     DrawShape/ScenePoint.h \
     DrawShape/ScenePolygon.h \
     DrawShape/ScenePulse.h \
     DrawShape/SceneSCone.h \
+    Grid2TriangleStrip.h \
     MapShape.h \
     QtMapSceneNode.h
 
 SOURCES += \
     DrawShape/SceneCone.cpp \
+    DrawShape/SceneCover.cpp \
     DrawShape/SceneLine.cpp \
     DrawShape/SceneModel.cpp \
     DrawShape/ScenePoint.cpp \
     DrawShape/ScenePolygon.cpp \
     DrawShape/ScenePulse.cpp \
     DrawShape/SceneSCone.cpp \
+    Grid2TriangleStrip.cpp \
     MapShape.cpp \
     QtMapSceneNode.cpp

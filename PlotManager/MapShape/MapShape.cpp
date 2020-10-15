@@ -5,6 +5,7 @@
 #include "DrawShape/SceneCone.h"
 #include "DrawShape/SceneSCone.h"
 #include "DrawShape/ScenePulse.h"
+#include "DrawShape/SceneCover.h"
 #include "MapShape.h"
 
 static string s_sPoint("IPoint");
@@ -19,6 +20,7 @@ static string s_sModel("IModel");
 static string s_sConeSensor("IConeSensor");
 static string s_sSConeSensor("ISConeSensor");
 static string s_sPulseSensor("IPulseSensor");
+static string s_sCover("ICover");
 
 CMapShape::CMapShape()
 {
@@ -62,6 +64,10 @@ IMapSceneNode* CreateNode(ISceneGraph*pSceneGraph,const string& sInterfaceName)
     {
         return(new CScenePulse(pSceneGraph));
     }
+    else if(sInterfaceName == s_sCover)
+    {
+        return (new CSceneCover(pSceneGraph));
+    }
 
     return(nullptr);
 }
@@ -93,6 +99,8 @@ bool QueryInterface(string& sInterfaceName)
     sInterfaceName += s_sSConeSensor;
     sInterfaceName += " ";
     sInterfaceName += s_sPulseSensor;
+    sInterfaceName += " ";
+    sInterfaceName += s_sCover;
 
     return(true);
 }

@@ -7,7 +7,7 @@
 
 #include "../ScenarioManager/Scenario.h"
 #include "../ScenarioManager/ScenarioManager.h"
-#include "../AreaPlanManager/AreaPlanManager.h"
+//#include "../AreaPlanManager/AreaPlanManager.h"
 
 int main(int argc, char *argv[])
 {
