@@ -7,6 +7,7 @@
 
 #include "../ScenarioManager/Scenario.h"
 #include "../ScenarioManager/ScenarioManager.h"
+#include "../AreaPlanManager/AreaPlan.h"
 #include "../AreaPlanManager/AreaPlanManager.h"
 
 int main(int argc, char *argv[])
@@ -32,7 +33,9 @@ int main(int argc, char *argv[])
     qmlRegisterType<QAppGlobal>("MyItem",1,0,"AppGlobal");
     qmlRegisterType<QtOsgItem>("MyItem",1,0,"OsgItem");
     qmlRegisterType<ScenarioManager>("MyItem",1,0,"ScenarioManager");
+    qmlRegisterType<AreaPlanManager>("MyItem",1,0,"AreaPlanManager");
     qmlRegisterType<Scenario>("MyItem",1,0,"Scenario");
+    qmlRegisterType<AreaPlan>("MyItem",1,0,"AreaPlan");
 
     QQmlApplicationEngine engine;
 

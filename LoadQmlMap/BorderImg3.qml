@@ -18,10 +18,6 @@ Rectangle {
             source: "Image/TalkboxBG.png"
         }
     }
-    PropertyAnimation{
-        id:enterAnim
-        target:borderImg3
-    }
     MouseArea{
        anchors.fill:parent
        hoverEnabled: true

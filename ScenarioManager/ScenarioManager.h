@@ -50,7 +50,7 @@ public:
     //void saveAs(QString newName);
 
     // scenario item
-    void addItem(ScenarioItem*);
+    Q_INVOKABLE void addItem(ScenarioItem*);
     bool contains(ScenarioItem*);
 signals:
     void scenarioListChanged();
