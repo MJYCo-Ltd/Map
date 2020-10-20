@@ -23,7 +23,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-SDK_CONFIG *= OSG OsgExtern Satellite
+SDK_CONFIG *= OSG OsgExtern
 
 include(../SoftSDK.pri)
 
@@ -34,7 +34,7 @@ SOURCES += \
     SceneGraph/QtRender.cpp \
     SceneGraph/QtSceneGraph.cpp \
     SceneGraph/QtViewHud.cpp \
-    SceneGraph/QtViewPoint.cpp \
+    SceneGraph/QtViewPort.cpp \
     SceneGraph/ResourceLod.cpp \
     SceneGraph/SceneGraphManager.cpp \
     Window/Qml/QtOsgItem.cpp \
@@ -44,8 +44,7 @@ SOURCES += \
     Window/QtFBOWindow.cpp \
     Window/QtWindow.cpp \
     Window/QtEventMap.cpp \
-    Window/Widget/QtOsgWindow.cpp \
-    Message/MessageManager.cpp
+    Window/Widget/QtOsgWindow.cpp
 
 HEADERS += \
     ../Inc/Qml/QtOsgMapItem.h \
@@ -53,16 +52,16 @@ HEADERS += \
     ../Inc/Qml/QtOsgUserItem.h \
     MyNotify.h \
     SceneCore.h \
+    SceneGraph/DealViewPortChange.h \
     SceneGraph/MyEarthManipulator.h \
     SceneGraph/QtRender.h \
     SceneGraph/QtSceneGraph.h \
     SceneGraph/QtViewHud.h \
-    SceneGraph/QtViewPoint.h \
+    SceneGraph/QtViewPort.h \
     SceneGraph/ResourceLod.h \
     SceneGraph/SceneGraphManager.h \
     Window/Qml/SGSimpleTextureNode.h \
     Window/QtFBOWindow.h \
     Window/QtWindow.h \
     Window/QtEventMap.h \
-    Window/Widget/QtOsgWindow.h \
-    Message/MessageManager.h
+    Window/Widget/QtOsgWindow.h

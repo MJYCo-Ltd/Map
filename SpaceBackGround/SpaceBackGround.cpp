@@ -7,39 +7,6 @@
 
 #include "SpaceBackGround.h"
 
-/// 更新矩阵
-class CMatixUpdateCallback:public osg::Callback
-{
-public:
-
-    CMatixUpdateCallback(CSpaceBackGround* pEnv):m_pSpaceEnv(pEnv){}
-
-    void NeedUpdate()
-    {
-        m_bNeedUpdate = true;
-    }
-
-    bool run(osg::Object* object, osg::Object* data)
-    {
-        if(m_bNeedUpdate)
-        {
-            m_pSpaceEnv->UpdateMatrix();
-            m_bNeedUpdate = false;
-        }
-        return osg::Callback::run(object, data);
-    }
-
-private:
-    bool m_bNeedUpdate=false;
-    CSpaceBackGround* m_pSpaceEnv;
-};
-
-///
-CSpaceBackGround::CSpaceBackGround(ISceneGraph *pSceneGraph):
-    QtOsgSceneNode<ISpaceBackGround>(pSceneGraph)
-{
-}
-
 CSpaceBackGround::~CSpaceBackGround()
 {
 }
@@ -85,45 +52,31 @@ void CSpaceBackGround::UpdateDate(double dMJD)
     if(fabs(m_dMJD - dMJD) > 1e-11)
     {
         m_dMJD = dMJD;
-        m_pUpdateCallBack->NeedUpdate();
+        m_pSolarEnv->UpdateTime(m_dMJD);
     }
 }
 
 /// 初始化场景节点
-void CSpaceBackGround::InitSceneNode()
+void CSpaceBackGround::InitNode()
 {
-    QtOsgSceneNode<ISpaceBackGround>::InitSceneNode();
+    m_pOsgNode = new osg::Group;
+    SetOsgNode(m_pOsgNode);
 
-    m_pUpdateCallBack = new CMatixUpdateCallback(this);
-    m_pOsgNode->addUpdateCallback(m_pUpdateCallBack);
-
-    m_pStarEnv = new CStarEnv(m_pSceneGraph);
-    m_pSolarEnv = new CSolarEnv(m_pSceneGraph);
+    m_pStarEnv = new CStarEnv(ImplSceneNode<ISpaceBackGround>::m_pSceneGraph);
+    m_pSolarEnv = new CSolarEnv(ImplSceneNode<ISpaceBackGround>::m_pSceneGraph);
     m_pSolarEnv->CreateSolar();
 
     m_pOsgNode->addChild(m_pStarEnv);
     m_pOsgNode->addChild(m_pSolarEnv);
-
-
-    time_t timep;
-
-    /// 更新时间
-    time(&timep);
-    auto p = gmtime(&timep);
-    Aerospace::CDate data(p->tm_year+1900,p->tm_mon+1
-                    ,p->tm_mday,p->tm_hour
-                    ,p->tm_min,p->tm_sec,UTC);
-
-    UpdateDate(data.GetMJD());
 }
 
-void CSpaceBackGround::UpdateMatrix()
+void CSpaceBackGround::UpdateMatrix(const Math::CMatrix &rRotate)
 {
-    m_pSolarEnv->UpdateTime(m_dMJD);
+    m_pStarEnv->UpdateMatrix(rRotate);
 }
 
 /// 创建空间背景
-ISpaceBackGround *CreateSpaceEnv(ISceneGraph* pSceneGraph)
+ISpaceBackGround *CreateSpaceBackGround(ISceneGraph* pSceneGraph)
 {
     return(new CSpaceBackGround(pSceneGraph));
 }

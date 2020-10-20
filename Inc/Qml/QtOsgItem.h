@@ -43,7 +43,6 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent *event);
     void wheelEvent(QWheelEvent *event);
     void touchEvent(QTouchEvent* event);
-    void timerEvent(QTimerEvent* event);
 
 protected:
    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
@@ -60,7 +59,6 @@ protected slots:
 
 private:
     uint                 m_unTextureID;/// 需要更新的纹理
-    int                  m_nTimerID=-1;
     bool                 m_bUpdate=false;/// 是否更改
     ISceneGraph*         m_pSceneGraph;/// 场景图
     QtFBOWindow*         m_pFBOWindow; /// 渲染窗口

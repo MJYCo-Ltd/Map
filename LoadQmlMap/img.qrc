@@ -1,9 +1,5 @@
 <RCC>
     <qresource prefix="/">
         <file>Image/DateTimeBorder.png</file>
-        <file>Image/Menu_Button_Hilite.png</file>
-        <file>Image/NormalShadow.png</file>
-        <file>Image/TalkboxBG.png</file>
-        <file>Image/Menu-TopLine-Emblem.png</file>
     </qresource>
 </RCC>

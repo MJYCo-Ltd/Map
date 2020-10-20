@@ -17,6 +17,7 @@ Rectangle {
         width: parent.width - 2 * margin
         height: parent.height - 2 * margin
         contextType: "2d"
+
         onPaint: {
             context.lineWidth = 1
             context.strokeStyle = parent.secondaryColor
@@ -57,6 +58,7 @@ Rectangle {
         color: "#87CEFA"
         source: backgroundCanvas
     }
+
     Rectangle {
         id:innerRect
         property int margin: parent.margin

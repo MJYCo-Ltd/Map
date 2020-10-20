@@ -2,15 +2,14 @@
 #define QTSCENEGRAPH_H
 #include <list>
 #include "SceneGraph/ISceneGraph.h"
-#include "Inner/QtOsgSceneNode.h"
 using namespace std;
 
-class IOsgSceneNode;
+class IOsgSceneGroup;
 class QtWindow;
 class QThread;
 class QtRender;
 class CResourceLod;
-class QtViewPoint;
+class QtViewPort;
 
 class QtSceneGraph : public ISceneGraph
 {
@@ -19,17 +18,9 @@ public:
     ~QtSceneGraph();
 
     /**
-     * @brief 切换类型
-     * @param type
-     * @return
+     * @brief 初始化场景
      */
-    bool ChangeType(SceneGraphType type);
-
-    /**
-     * @brief 获取场景类型
-     * @return 场景类型
-     */
-    SceneGraphType GetType();
+    void InitSceneGraph();
 
     /**
      * @brief 获取主窗口
@@ -53,33 +44,27 @@ public:
      * @brief 是否包含某窗口
      * @return
      */
-    bool ContainWindow(IWindow* pWindow);
+    bool ContainWindow(IWindow* pWindow) const;
 
     /**
      * @brief 设置在qml下面运行
      */
     virtual void SetQuickItem(QQuickItem* pQuickItem);
-    virtual bool IsQuickItem(QQuickItem* pQuickItem);
-    virtual bool IsUnderQML();
+    virtual bool IsQuickItem(QQuickItem* pQuickItem) const;
 
-    /**
-     * @brief 获取地图
-     * @return
-     */
-    IMap* GetMap();
-
+    IMap* GetMap(){return(m_pMap);}
     /**
      * @brief 获取根节点
      * @return
      */
-    ISceneNode* GetRoot();
+    ISceneGroup* GetRoot(){return(m_pRoot);}
 
     /**
      * @brief 加载节点
      * @param strPath  节点路径
      * @return
      */
-    ISceneNode* LoadNode(const string& strPath);
+    ISceneModel* LoadNode(const string& strPath,bool);
 
     /**
      * @brief 资源加载器
@@ -101,30 +86,29 @@ public:
     /**
      * @brief 获取渲染线程
      */
-    QThread* GetRenderThread();
+    QThread* GetRenderThread(){return(m_pThread);}
 
 protected:
 
     /**
-     * @brief 初始化场景
+     * @brief 加载标绘接口
      */
-    void InitSceneGraph();
+    void LoadPlot();
 
     /**
      * @brief 加载地图
      */
-    void LoadMap(QtViewPoint *pViewPoint);
+    void LoadMap();
+
 
 protected:
-    IOsgSceneNode*    m_pRoot;
-    bool              m_bUnderQml;
-    SceneGraphType    m_emType;
+    ISceneGroup*      m_pRoot=nullptr;
+    IMap*             m_pMap=nullptr;
     QtWindow*         m_pMainWindow;
     QQuickItem*       m_pQuickItem=nullptr;
     QtRender*         m_pRender;
     QThread*          m_pThread;
     CResourceLod*     m_pResourceLod;
-    IMap*             m_pMap=nullptr;
     list<QtWindow*> m_vOtherWindow;
 };
 

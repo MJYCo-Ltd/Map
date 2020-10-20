@@ -90,7 +90,7 @@ BorderMsg{
     Text{
         x : parent.margin + iconSize + parent.spacing
         y: (parent.height - height) / 2
-        font.family: defaultStyle.fontFamily
+        font.family: "Helvetica"
         font.pointSize: 13
         color: defaultStyle.fontColorMsgDone
         text:parent.text

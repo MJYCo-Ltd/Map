@@ -1,22 +1,25 @@
+#include <QFileDialog>
 #include <QDebug>
-#include <Map/Plot/IPersonInfo.h>
-#include <Map/Plot/IPoint.h>
-#include <Map/Plot/ILine.h>
-#include <Map/Plot/IPolygon.h>
-#include <Map/Plot/IModel.h>
-#include <Map/Plot/IConeSensor.h>
+
+#include <SceneGraph/ISceneGraph.h>
+#include <Map/IMap.h>
+#include <SpaceEnv/ISpaceEnv.h>
+#include <SpaceEnv/ISpaceBackGround.h>
+#include <Plot/IPlot.h>
+#include <Plot/MapShape/IMapLine.h>
+#include <Plot/SceneShape/ILine.h>
+#include <Plot/MapShape/IMapCoverImage.h>
+#include <Plot/Common/ISceneModel.h>
+#include <Plot/MapShape/IMapLocation.h>
+#include <Plot/SceneShape/IPoint.h>
+#include <Plot/SceneShape/IConeSensor.h>
+#include <Plot/SceneShape/ISConeSensor.h>
+#include <Plot/Common/ISceneFlashGroup.h>
+#include <GisMath/GisMath.h>
+#include <Sofa/sofam.h>
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "SceneGraph/ISceneGraph.h"
-#include "Map/IMap.h"
-#include "Map/IPlotManager.h"
-#include "Map/IPlotLayer.h"
-#include "SpaceEnv/ISpaceEnv.h"
-#include "SpaceEnv/ISpaceBackGround.h"
-#include "Map/Plot/ISConeSensor.h"
-#include "Map/Plot/IPulseSensor.h"
-#include "GisMath/GisMath.h"
-#include <Sofa/sofam.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -37,40 +40,40 @@ void MainWindow::SetSecenGraph(ISceneGraph *pSceneGraph)
 
 void MainWindow::timerEvent(QTimerEvent *event)
 {
-    ScenePos pos;
-    pos.bIsGeo = true;
-    pos.fHeight = 500;
-    ++m_nTimes;
-    double dLon,dLat;
-    if(m_nTimes < 2000)
-    {
-        GisMath::CalBaiser(121.225100*DD2R,23.128880*DD2R,dA1,m_nTimes*dL1,dLon,dLat);
-        pos.fLon = dLon*DR2D;
-        pos.fLat = dLat*DR2D;
-        m_pModel->SetPos(pos);
+//    ScenePos pos;
+//    pos.bIsGeo = true;
+//    pos.fHeight = 500;
+//    ++m_nTimes;
+//    double dLon,dLat;
+//    if(m_nTimes < 2000)
+//    {
+//        GisMath::CalBaiser(121.225100*DD2R,23.128880*DD2R,dA1,m_nTimes*dL1,dLon,dLat);
+//        pos.fLon = dLon*DR2D;
+//        pos.fLat = dLat*DR2D;
+//        m_pModel->SetPos(pos);
 
-        m_pModel->SetYPR(dA1*DR2D,0,0);
-    }
-    else if(m_nTimes < 4000)
-    {
-        GisMath::CalBaiser(121.185947*DD2R,23.123019*DD2R,dA2,(m_nTimes-2000)*dL2,dLon,dLat);
-        pos.fLon = dLon*DR2D;
-        pos.fLat = dLat*DR2D;
-        m_pModel->SetPos(pos);
-        m_pModel->SetYPR(dA2*DR2D,0,0);
-    }
-    else if(m_nTimes < 6000)
-    {
-        GisMath::CalBaiser(121.178775*DD2R,23.101700*DD2R,dA3,(m_nTimes-4000)*dL3,dLon,dLat);
-        pos.fLon = dLon*DR2D;
-        pos.fLat = dLat*DR2D;
-        m_pModel->SetPos(pos);
-        m_pModel->SetYPR(dA3*DR2D,0,0);
-    }
-    else
-    {
-        killTimer(nTimerID);
-    }
+//        m_pModel->SetYPR(dA1*DR2D,0,0);
+//    }
+//    else if(m_nTimes < 4000)
+//    {
+//        GisMath::CalBaiser(121.185947*DD2R,23.123019*DD2R,dA2,(m_nTimes-2000)*dL2,dLon,dLat);
+//        pos.fLon = dLon*DR2D;
+//        pos.fLat = dLat*DR2D;
+//        m_pModel->SetPos(pos);
+//        m_pModel->SetYPR(dA2*DR2D,0,0);
+//    }
+//    else if(m_nTimes < 6000)
+//    {
+//        GisMath::CalBaiser(121.178775*DD2R,23.101700*DD2R,dA3,(m_nTimes-4000)*dL3,dLon,dLat);
+//        pos.fLon = dLon*DR2D;
+//        pos.fLat = dLat*DR2D;
+//        m_pModel->SetPos(pos);
+//        m_pModel->SetYPR(dA3*DR2D,0,0);
+//    }
+//    else
+//    {
+//        killTimer(nTimerID);
+//    }
 }
 
 bool bClick=false;
@@ -88,9 +91,83 @@ void MainWindow::on_actionchange_triggered()
     }
 }
 
+bool bShowBackGround=false;
 void MainWindow::on_action_triggered()
 {
-    auto pLayer = m_pSceneGraph->GetMap()->GetPlotManager()->FindOrCreateLayer("test");
+    auto pPoint = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
+    auto pPoint1 = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
+    auto pPoint2 = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
+    auto pPoint3 = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
+    pPoint->SetPointSize(5.f);
+    pPoint1->SetPointSize(5.f);
+    pPoint2->SetPointSize(5.f);
+    pPoint3->SetPointSize(5.f);
+
+    SceneColor color;
+    color.fR=1.0f;
+    pPoint->SetColor(color);
+    pPoint1->SetColor(color);
+    pPoint2->SetColor(color);
+    pPoint3->SetColor(color);
+    m_pSceneGraph->GetRoot()->AddSceneNode(pPoint);
+    m_pSceneGraph->GetRoot()->AddSceneNode(pPoint1);
+    m_pSceneGraph->GetRoot()->AddSceneNode(pPoint2);
+    m_pSceneGraph->GetRoot()->AddSceneNode(pPoint3);
+
+    auto pLine = dynamic_cast<ILine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILine"));
+    pLine->SetColor(color);
+
+    ScenePos scenePos;
+    pLine->AddPoint(0,scenePos);
+
+    scenePos.fX = 100.f;
+    pPoint1->SetPos(scenePos);
+    pLine->AddPoint(1,scenePos);
+
+    scenePos.fX = 100.f;
+    scenePos.fY = 100.f;
+    pPoint2->SetPos(scenePos);
+    pLine->AddPoint(2,scenePos);
+
+    scenePos.fX = 0.f;
+    pPoint3->SetPos(scenePos);
+    pLine->AddPoint(3,scenePos);
+    m_pSceneGraph->GetRoot()->AddSceneNode(pLine);
+
+
+    auto pConSensor = dynamic_cast<IConeSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IConeSensor"));
+    pConSensor->SetDistance(10.);
+    color.fG=1.f;
+    color.fA=.3f;
+    pConSensor->SetAngle(50.f);
+    pConSensor->SetColor(color);
+    m_pSceneGraph->GetRoot()->AddSceneNode(pConSensor);
+
+    auto pAttitudeGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
+    auto pSConSensor = dynamic_cast<ISConeSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISConeSensor"));
+    pSConSensor->SetDistance(100.);
+    color.fG=0.f;
+    color.fB=1.f;
+    color.fA=0.1f;
+    pSConSensor->SetColor(color);
+    pSConSensor->SetHAngle(4.f);
+    pSConSensor->SetVAngle(10.f);
+    pAttitudeGroup->AddSceneNode(pSConSensor);
+    pAttitudeGroup->SetPos(scenePos);
+    m_pSceneGraph->GetRoot()->AddSceneNode(pAttitudeGroup);
+
+    return;
+//    auto pAirPlane = m_pSceneGraph->GetPlot()->LoadSceneNode("model/AirPlane.ive");
+
+//    auto pScal = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP);
+//    pScal->AddSceneNode(pAirPlane);
+//    auto pFlash = m_pSceneGraph->GetPlot()->CreateSceneGroup(FLASH_GROUP);
+//    pFlash->AddSceneNode(pScal);
+//    m_pSceneGraph->GetRoot()->AddSceneNode(pFlash);
+//    return;
+    m_pSceneGraph->GetMap()->GetSpaceEnv()->ShowSpaceBackGround(bShowBackGround);
+    bShowBackGround = !bShowBackGround;
+    auto pLayer = m_pSceneGraph->GetMap()->CreateLayer("test");
     double dAizm2;
     GisMath::CalBaiserF(121.225100*DD2R,23.128880*DD2R,121.185947*DD2R,23.123019*DD2R,dA1,dAizm2,dL1);
     dL1 /= 2000.;
@@ -99,52 +176,122 @@ void MainWindow::on_action_triggered()
     GisMath::CalBaiserF(121.178775*DD2R,23.101700*DD2R,121.164617*DD2R,23.059267*DD2R,dA3,dAizm2,dL3);
     dL3 /= 2000.;
 
-    ScenePos pos;
-    SceneColor color;
+    MapGeoPos pos;
+
     color.fR=1.0f;
 
     /// 添加线
-    m_pLine = dynamic_cast<ILine*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("ILine"));
-    pos.fLon = 121.225100;
-    pos.fLat = 23.128880;
+    m_pLine = dynamic_cast<IMapLine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLine"));
+    pos.fLon = 103.566212;
+    pos.fLat = 19.573845;
     pos.fHeight = 500;
-    pos.bIsGeo = true;
+
     m_pLine->AddPoint(0,pos);
-    pos.fLon = 121.185947;
-    pos.fLat = 23.123019;
-    pos.bIsGeo = true;
+    pos.fLon = 110.0606607;
+    pos.fLat = 19.910152;
+
     m_pLine->AddPoint(1,pos);
-    pos.fLon = 121.178775;
-    pos.fLat = 23.101700;
-    pos.bIsGeo = true;
+    pos.fLon = 116.358510;
+    pos.fLat = 20.009330;
+
     m_pLine->AddPoint(2,pos);
-    pos.fLon = 121.164617;
-    pos.fLat = 23.059267;
-    pos.bIsGeo = true;
+    pos.fLon = 125.625319;
+    pos.fLat = 19.748377;
+
     m_pLine->AddPoint(3,pos);
-    m_pLine->SetColor(color);
+    m_pLine->SetLineColor(color);
     //m_pLine->SetTerrainType(RELATIVE_TERRAIN);
     pLayer->AddSceneNode(m_pLine);
 
+//    IMapCoverImage* pCover = dynamic_cast<IMapCoverImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapCoverImage"));
+//    if(nullptr != pCover)
+//    {
+//        QString sFileName = QFileDialog::getOpenFileName(nullptr,QString::fromUtf8("打开xyz文件"),QApplication::applicationDirPath(),"*.xyz");
+
+//        if(!sFileName.isNull())
+//        {
+//            QFile file(sFileName);
+//            if(file.open(QIODevice::ReadOnly))
+//            {
+//                QTextStream ssIn(&file);
+
+//                double dPreLon(-300),dMinValue(DBL_MAX),dMaxValue(DBL_MIN);
+
+//                CoverInfo tmpCoverInfo;
+//                PosValue tmpPos;
+
+//                int nX(1),nY(0);
+
+//                while (!ssIn.atEnd())
+//                {
+//                    ssIn>>tmpPos.dX>>tmpPos.dY>>tmpPos.dValue;
+//                    if(0 == tmpPos.dX)
+//                    {
+//                        break;
+//                    }
+
+//                    tmpCoverInfo.vPosInfo.push_back(tmpPos);
+
+//                    if(tmpPos.dX < dPreLon)
+//                    {
+//                        ++nX;
+//                    }
+
+//                    ++nY;
+
+//                    dPreLon = tmpPos.dX;
+
+//                    if(tmpPos.dValue < dMinValue)
+//                    {
+//                        dMinValue = tmpPos.dValue;
+//                    }
+
+//                    if(tmpPos.dValue > dMaxValue)
+//                    {
+//                        dMaxValue = tmpPos.dValue;
+//                    }
+//                }
+
+//                tmpCoverInfo.nXNum = nX;
+//                tmpCoverInfo.nYNum = nY/nX;
+//                tmpCoverInfo.dMin = dMinValue;
+//                tmpCoverInfo.dMax = dMaxValue;
+
+
+
+//                pCover->SetCoverInfo(tmpCoverInfo);
+//                pLayer->AddSceneNode(pCover);
+//                file.close();
+//            }
+
+//        }
+//    }
+
 
     /// 添加模型
-    m_pModel = dynamic_cast<IModel*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IModel"));
-    m_pModel->Set2DAndSamllPic("Images/ship.png",90);
-    m_pModel->SetModelPath("model/AirPlane.ive");
-    //m_pModel->SetScalBit(1);
-    m_pModel->SetName("李晓强");
-    pos.fLon=121.225100;
-    pos.fLat=23.128880;
-    m_pModel->SetPos(pos);
-    pLayer->AddSceneNode(m_pModel);
+    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("model/AirPlane.ive");
+    IMapLocation* pLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+    auto pScal = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP);
+    auto pFlash = m_pSceneGraph->GetPlot()->CreateSceneGroup(FLASH_GROUP)->AsSceneFlashGroup();
 
-    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->SetTrackNode(m_pModel);
+    pFlash->SetFlashFreq(0.5f);
+    pFlash->SetFlashColor(color);
+    pScal->AddSceneNode(pModel);
+    pFlash->AddSceneNode(pScal);
+    pLocation->SetSceneNode(pFlash);
+
+    pos.fLon=125.625319;
+    pos.fLat=19.748377;
+    pLocation->SetGeoPos(pos);
+    pLayer->AddSceneNode(pLocation);
+
+//    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->SetTrackNode(m_pModel);
 }
 
 void MainWindow::on_action_2_triggered()
 {
-    auto pLayer = m_pSceneGraph->GetMap()->GetPlotManager()->FindOrCreateLayer("test");
-    pLayer->Clear();
+//    auto pLayer = m_pSceneGraph->GetMap()->GetPlotManager()->FindOrCreateLayer("test");
+//    pLayer->Clear();
 }
 
 void MainWindow::on_action_3_triggered()

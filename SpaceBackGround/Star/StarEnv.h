@@ -2,6 +2,7 @@
 #define SA_STAR_ENV_H
 
 #include <osgViewer/View>
+#include <Math/Matrix.h>
 
 #include "Milkyway.h"
 #include "Boundary.h"
@@ -49,10 +50,17 @@ public:
      */
     void SetMilkwayVisible(bool);
 
+    /**
+     * @brief 更新矩阵
+     * @param rRotate
+     */
+    void UpdateMatrix(const Math::CMatrix &rRotate);
+
 protected:
 
     ~CStarEnv();
 private:
+    osg::Matrix                        m_rRoate;
     ISceneGraph*                       m_pSceneGraph;
     osg::ref_ptr<CMilkyway>            m_pMilkyway;
     osg::ref_ptr<CBoundary>            m_pBoundary;

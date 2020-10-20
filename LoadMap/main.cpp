@@ -5,7 +5,6 @@
 #include "ISceneCore.h"
 #include "Map/IMap.h"
 #include "SpaceEnv/ISpaceEnv.h"
-#include "ShowEarth.h"
 
 /**
  * @brief 窗口消息定义
@@ -50,19 +49,19 @@ int main(int argc, char *argv[])
     pStr[0] = 0;
     SetExePath(argv[0]);
 
-    CShowEarth w;
+    MainWindow w;
     w.show();
 
 
 
-    auto pScene = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(SCENEGRAPH_3D,"");
+    auto pScene = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(SCENEGRAPH_USER);
 //    pScene->GetMap()->GetSpaceEnv()->SetMilkywayVisible(false);
-    for(auto one:pScene->GetMap()->GetMapLayers())
-    {
-        qDebug()<<*one.c_str();
-    }
+//    for(auto one:pScene->GetMap()->GetMapLayers())
+//    {
+//        qDebug()<<*one.c_str();
+//    }
 
-    //w.SetSecenGraph(pScene);
+    w.SetSecenGraph(pScene);
 
     //pScene->GetMainWindow()->SubMessage(new WindowMessage);
 

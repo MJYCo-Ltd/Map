@@ -1,14 +1,17 @@
-#include <QDebug>
 #include <Inner/OsgExtern/OsgExtern.h>
 
-RemoveFromeScene::RemoveFromeScene(osg::Group* pParent):
+RemoveFromeScene::RemoveFromeScene(osg::Node *pParent):
     m_pParent(pParent)
 {
 }
 
 void RemoveFromeScene::operator()(osg::Object *)
 {
-    m_pParent->removeChildren(0,m_pParent->getNumChildren());
+    if(auto pGroup = m_pParent->asGroup())
+    {
+        pGroup->removeChildren(0,pGroup->getNumChildren());
+    }
+
     auto parents = m_pParent->getParents();
     for(auto one : parents)
     {

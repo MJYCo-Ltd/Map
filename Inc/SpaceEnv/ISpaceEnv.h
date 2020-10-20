@@ -1,16 +1,17 @@
 #ifndef INTERFACE_SPACE_ENV_HEARDER_H
 #define INTERFACE_SPACE_ENV_HEARDER_H
 
-#include "../SceneGraph/ISceneNode.h"
-
+#include <Plot/Common/ISceneAttitudeGroup.h>
 class ISpaceBackGround;
 
 /**
  * @brief 场景节点类
  */
-class ISpaceEnv:public ISceneNode
+class ISpaceEnv:public ISceneAttitudeGroup
 {
 public:
+
+    CONSTRUCTOR(ISpaceEnv,ISceneAttitudeGroup)
     /**
      * @brief 获取星空背景
      * @return
@@ -26,7 +27,7 @@ public:
     /**
      * @brief 更新时间
      */
-    virtual void UpdateData(double)=0;
+    virtual void UpdateDate(double)=0;
 };
 
 #endif

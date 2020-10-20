@@ -26,12 +26,10 @@ CONFIG += c++11 console
 
 
 SOURCES += \
-        ShowEarth.cpp \
         main.cpp \
         mainwindow.cpp
 
 HEADERS += \
-        ShowEarth.h \
         mainwindow.h
 
 FORMS += \

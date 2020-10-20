@@ -3,8 +3,9 @@
 
 #include <list>
 #include <string>
-#include "../SceneGraph/ISceneNode.h"
-
+#include <SceneGraph/ISceneGroup.h>
+#include "MapType.h"
+#include "IMapLayer.h"
 using namespace std;
 
 /**
@@ -15,14 +16,13 @@ typedef list<string> MapLayers;
 
 enum MapType
 {
-    MAP_3D,   /// 默认加载三维地图场景
-    MAP_2D    /// 默认加载二维地图场景
+    MAP_3D,   /// 三维地图
+    MAP_2D    /// 二维地图
 };
 
-class IPlotManager;
-class ISpaceBackGround;
 class ISpaceEnv;
 
+/// 地图消息观察者
 struct IMapMessageObserver
 {
     /**
@@ -30,14 +30,21 @@ struct IMapMessageObserver
      *        地图都进行修改
      */
     virtual void MapTypeChanged(MapType){}
+
+    /**
+     * @brief 图层更改消息
+     */
+    virtual void AddLayer(const string&){}
+    virtual void RemoveLayer(const string&){}
 };
 
 /**
- * @brief 场景节点类
+ * @brief 地图节点
  */
-class IMap:public ISceneNode
+class IMap:public ISceneGroup
 {
 public:
+    IMap(ISceneGraph* pSceneGraph):ISceneGroup(pSceneGraph){}
 
     /**
      * @brief 注册消息
@@ -57,13 +64,13 @@ public:
      * @param 转换类型 0表示从屏幕坐标转换成地理坐标，1表示由地理坐标转换成屏幕坐标
      * @return
      */
-    virtual bool ConvertCoord(int&, int&, ScenePos&, short)=0;
+    virtual bool ConvertCoord(int&, int&, MapGeoPos&, short)=0;
 
     /**
      * @brief 获取地图图层
      * @return
      */
-    virtual const MapLayers& GetMapLayers()=0;
+    virtual MapLayers GetMapLayers() const =0;
 
     /**
      * @brief 控制地图图层显隐
@@ -72,15 +79,26 @@ public:
     virtual void SetLayerVisible(const string&)=0;
 
     /**
+     * @brief 创建一个图层
+     * @return
+     */
+    virtual IMapLayer* CreateLayer(const string&)=0;
+
+    /**
+     * @brief 移除图层
+     * @return
+     */
+    virtual bool RemoveLayer(IMapLayer*&)=0;
+
+    /**
+     * @brief 清空所有的图层
+     */
+    virtual void ClearLayers()=0;
+
+    /**
      * @brief 更改地图类型
      */
     virtual void ChangeMapType(MapType)=0;
-
-    /**
-     * @brief  获取标绘管理类
-     * @return
-     */
-    virtual IPlotManager* GetPlotManager()=0;
 
     /**
      * @brief 获取地惯系节点
@@ -93,6 +111,8 @@ public:
      * @attention 默认开启
      */
     virtual void SetEarthSelfRotate(bool)=0;
+protected:
+    virtual ~IMap(){}
 };
 
 #endif

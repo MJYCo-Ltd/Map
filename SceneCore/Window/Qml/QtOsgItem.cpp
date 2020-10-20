@@ -17,7 +17,7 @@ QtOsgItem::QtOsgItem():
     m_unTextureID(0),
     m_pShow(nullptr)
 {
-    m_pSceneGraph = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(SCENEGRAPH_3D,"");
+    m_pSceneGraph = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(SCENEGRAPH_3D);
     m_pSceneGraph->SetQuickItem(this);
 
     m_pFBOWindow = static_cast<QtWindow*>(m_pSceneGraph->GetMainWindow())->GetOsgWindow();
@@ -67,7 +67,6 @@ void QtOsgItem::Ready()
     QCoreApplication::postEvent(pRender,new RenderResize(this,QSize(this->width(),this->height())));
 #endif
     QCoreApplication::postEvent(pRender,new QEvent(static_cast<QEvent::Type>(RENDER_START)));
-    //m_nTimerID = startTimer(16);
 }
 
 /// 按键按下
@@ -126,25 +125,12 @@ void QtOsgItem::touchEvent(QTouchEvent *event)
     QQuickItem::touchEvent(event);
 }
 
-void QtOsgItem::timerEvent(QTimerEvent *event)
-{
-    if(m_nTimerID == event->timerId())
-    {
-        qDebug()<<"Timer";
-        update();
-    }
-}
-
 /// 窗口大小更改时，创建view
 void QtOsgItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     QtRender* pRender = static_cast<QtRender*>(static_cast<QtSceneGraph*>(m_pSceneGraph)->SceneGraphRender());
     QCoreApplication::postEvent(pRender,new RenderResize(this,newGeometry.size().toSize()));
     QQuickItem::geometryChanged(newGeometry,oldGeometry);
-    if(nullptr != m_pShow)
-    {
-        m_pShow->setRect(boundingRect());
-    }
 }
 
 /// 获取渲染节点添加到渲染树上
@@ -173,6 +159,8 @@ QSGNode *QtOsgItem::updatePaintNode(QSGNode * oldNode, QQuickItem::UpdatePaintNo
     }
 
     m_pShow->RebuildTexture();
+
+    m_pShow->setRect(boundingRect());
 
     if(m_bUpdate)
     {

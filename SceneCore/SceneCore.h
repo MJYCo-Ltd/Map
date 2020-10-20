@@ -4,7 +4,6 @@
 #include "ISceneCore.h"
 
 class CSceneGraphManager;
-class CMessageManager;
 /**
  * @brief 整个场景的核心库
  */
@@ -20,19 +19,12 @@ public:
      */
     ISceneGraphManager* GetSceneGraphManager();
 
-    /**
-     * @brief 获取消息管理者
-     * @return
-     */
-    IMessageManager* GetMessageManager();
-
 protected:
     void InitSystem();
     void InitLog();
 
 protected:
     CSceneGraphManager*  m_pSceneGraphManger;
-    CMessageManager*     m_pMessageManager;
 };
 
 ISceneCore* GetMapCore();

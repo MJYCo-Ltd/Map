@@ -12,32 +12,28 @@
 #include <osgEarth/GLUtils>
 #include <osgEarth/AutoClipPlaneHandler>
 
-#include "PlotManager.h"
 #include <Inner/IRender.h>
 #include <Inner/ILoadResource.h>
 #include <Inner/IOsgSceneNode.h>
 #include <Inner/IOsgViewPoint.h>
 #include <Inner/OsgExtern/OsgExtern.h>
+#include "MapNodeChanged.h"
+#include "MapModifyLayer.h"
 #include "SpaceEnv.h"
 #include "Map.h"
+#include "MapLayer.h"
+#include "MapModelLayer.h"
 
 CMap::CMap(MapType type, ISceneGraph *pSceneGraph):
-    QtOsgSceneNode<IMap>(pSceneGraph),
+    ImplSceneGroup<IMap>(pSceneGraph),
     m_emType(type)
 {
-    m_pPlotManager = new CPlotManager(m_pSceneGraph);
-    m_pSpaceEnv = new CSpaceEnv(m_pSceneGraph);
 }
 
+/// 析构函数
 CMap::~CMap()
 {
-    delete m_pPlotManager;
-
-    if(m_pCamera.valid())
-    {
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pCamera));
-        m_pCamera = nullptr;
-    }
+    ClearLayers();
 
     if(m_p2DRoot.valid())
     {
@@ -55,8 +51,12 @@ CMap::~CMap()
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pMap2DNode));
         m_pMap2DNode = nullptr;
     }
+
+    /// 清空根节点
+    m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pGroup));
 }
 
+/// 订阅消息
 void CMap::SubMessage(IMapMessageObserver *pMsgObr)
 {
     auto findResult = find(m_listObserver.begin(),m_listObserver.end(),pMsgObr);
@@ -66,6 +66,7 @@ void CMap::SubMessage(IMapMessageObserver *pMsgObr)
     }
 }
 
+/// 取消订阅
 void CMap::UnSubMessage(IMapMessageObserver *pMsgObr)
 {
     auto findResult = find(m_listObserver.begin(),m_listObserver.end(),pMsgObr);
@@ -76,7 +77,7 @@ void CMap::UnSubMessage(IMapMessageObserver *pMsgObr)
 }
 
 /// 坐标转换
-bool CMap::ConvertCoord(int &nX, int &nY, ScenePos &geoPos, short TranType)
+bool CMap::ConvertCoord(int &nX, int &nY, MapGeoPos &geoPos, short TranType)
 {
     if(0 == TranType)
     {
@@ -95,7 +96,6 @@ bool CMap::ConvertCoord(int &nX, int &nY, ScenePos &geoPos, short TranType)
             {
                 geoPoint.fromWorld(m_pMap2DNode->getMapSRS(),world);
                 geoPoint.makeGeographic();
-                geoPos.bIsGeo = true;
                 geoPos.fLon = geoPoint.x();
                 geoPos.fLat = geoPoint.y();
                 geoPos.fHeight = geoPoint.z();
@@ -107,7 +107,6 @@ bool CMap::ConvertCoord(int &nX, int &nY, ScenePos &geoPos, short TranType)
             {
                 geoPoint.fromWorld(m_pMap3DNode->getMapSRS(),world);
                 geoPoint.makeGeographic();
-                geoPos.bIsGeo = true;
                 geoPos.fLon = geoPoint.x();
                 geoPos.fLat = geoPoint.y();
                 geoPos.fHeight = geoPoint.z();
@@ -167,14 +166,116 @@ bool CMap::ConvertCoord(int &nX, int &nY, ScenePos &geoPos, short TranType)
 }
 
 /// 获取所有的图层
-const MapLayers &CMap::GetMapLayers()
+MapLayers CMap::GetMapLayers() const
 {
-    return(m_allLayers);
+    MapLayers tmpLayers(m_earthFileLayers);
+    for(auto one : m_userLayers)
+    {
+        tmpLayers.push_back(one.first);
+    }
+    return(tmpLayers);
 }
 
 /// 控制图层显隐
 void CMap::SetLayerVisible(const string & sLayerName)
 {
+}
+
+/// 创建图层
+IMapLayer *CMap::CreateLayer(const string & sLayerName)
+{
+    auto findOne = m_userLayers.find(sLayerName);
+    if(m_userLayers.end() != findOne)
+    {
+        return(findOne->second);
+    }
+    else
+    {
+        osgEarth::MapNode* pMapNode(nullptr);
+        switch (m_emType)
+        {
+        case MAP_2D:
+            pMapNode = m_pMap2DNode;
+            break;
+        case MAP_3D:
+            pMapNode = m_pMap3DNode;
+            break;
+        }
+        CMapLayer* pLayer = new CMapLayer(sLayerName,pMapNode,m_pSceneGraph);
+        m_userLayers[sLayerName] = pLayer;
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(pMapNode,pLayer->GetModelLayer(),true));
+
+        /// 通知观察者
+        for(auto one:m_listObserver)
+        {
+            one->AddLayer(sLayerName);
+        }
+
+        return (pLayer);
+    }
+}
+
+/// 移除图层
+bool CMap::RemoveLayer(IMapLayer *& pLayer)
+{
+    for(auto one = m_userLayers.begin();one != m_userLayers.end();++one)
+    {
+        if(one->second == pLayer)
+        {
+            osgEarth::MapNode* pMapNode(nullptr);
+            switch (m_emType)
+            {
+            case MAP_2D:
+                pMapNode = m_pMap2DNode;
+                break;
+            case MAP_3D:
+                pMapNode = m_pMap3DNode;
+                break;
+            }
+
+            /// 从map中移除节点
+            m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(pMapNode,one->second->GetModelLayer(),false));
+            delete one->second;
+            m_userLayers.erase(one);
+
+            /// 通知观察者
+            for(auto oneObserver:m_listObserver)
+            {
+                oneObserver->RemoveLayer(one->first);
+            }
+            return(true);
+        }
+    }
+
+    return(false);
+}
+
+void CMap::ClearLayers()
+{
+    osgEarth::MapNode* pMapNode(nullptr);
+    switch (m_emType)
+    {
+    case MAP_2D:
+        pMapNode = m_pMap2DNode;
+        break;
+    case MAP_3D:
+        pMapNode = m_pMap3DNode;
+        break;
+    }
+
+    for(auto one = m_userLayers.begin();one != m_userLayers.end();++one)
+    {
+        /// 从map中移除节点
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(pMapNode,one->second->GetModelLayer(),false));
+        delete one->second;
+        m_userLayers.erase(one);
+
+        /// 通知观察者
+        for(auto oneObserver:m_listObserver)
+        {
+            oneObserver->RemoveLayer(one->first);
+        }
+    }
 }
 
 /// 更改地图类型
@@ -196,12 +297,6 @@ void CMap::ChangeMapType(MapType mapType)
     }
 }
 
-/// 获取标绘管理类
-IPlotManager *CMap::GetPlotManager()
-{
-    return(m_pPlotManager);
-}
-
 /// 返回空间类的指针
 ISpaceEnv *CMap::GetSpaceEnv()
 {
@@ -218,46 +313,20 @@ void CMap::SetEarthSelfRotate(bool bSelfRotate)
 }
 
 /// 初始化场景
-void CMap::InitSceneNode()
+void CMap::InitNode()
 {
-    QtOsgSceneNode<IMap>::InitSceneNode();
+    ImplSceneGroup<IMap>::InitNode();
 
-    m_pPlotManager->RegisterPlotType();
-
+    m_pSpaceEnv = new CSpaceEnv(m_pSceneGraph);
     osg::Camera* pCamera = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
             ->GetOsgView()->getCamera();
-    osgEarth::GLUtils::setGlobalDefaults(pCamera->getOrCreateStateSet());
     m_pSpaceEnv->SetMainCamara(pCamera);
     InitMap();
 }
 
-class RotateCallBack:public osg::Callback
-{
-public:
-    RotateCallBack(osg::MatrixTransform* pMatTrans):m_pPlaceNode(pMatTrans)
-    {
-    }
-
-    bool run(osg::Object* object, osg::Object* data)
-    {
-        static double nAngle(0);
-        nAngle += 0.001;
-
-        m_pPlaceNode->setMatrix(osg::Matrix::rotate(nAngle,osg::Z_AXIS));
-        return traverse(object, data);
-    }
-
-protected:
-    virtual ~RotateCallBack() {}
-private:
-
-    osg::observer_ptr<osg::MatrixTransform> m_pPlaceNode;
-};
-
 void CMap::InitMap()
 {
-    m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CClearChildNode(m_pOsgNode));
-
+    m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CClearChildNode(m_pGroup));
     switch (m_emType)
     {
     case MAP_2D:
@@ -289,11 +358,11 @@ void CMap::InitMap()
 
             m_p2DRoot->addChild(m_pLeftMatrixTransform);
             m_p2DRoot->addChild(m_pRightMatrixTransform);
+            osgEarth::GLUtils::setGlobalDefaults(m_p2DRoot->getOrCreateStateSet());
         }
 
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode,m_p2DRoot,true));
-        m_pPlotManager->UpdateMapNode(m_pMap3DNode,m_pMap2DNode);
-        m_pSpaceEnv->ShowSpaceBackGround(false);
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pGroup,m_p2DRoot,true));
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapNodeChanged(m_pMap3DNode,m_pMap2DNode,this));
     }
         break;
     case MAP_3D:
@@ -305,31 +374,18 @@ void CMap::InitMap()
 #if OSGEARTH_VERSION_GREATER_OR_EQUAL(3,0,0)
             m_pMap3DNode->open();
 #endif
-
-            m_pCamera = new osg::Camera;
-            //m_pCamera->setClearMask(GL_DEPTH_BUFFER_BIT);
-            m_pCamera->setRenderOrder( osg::Camera::NESTED_RENDER);
-            m_pCamera->setAllowEventFocus(false);
-            m_pCamera->setProjectionResizePolicy(osg::Camera::FIXED);
-            m_pCamera->setComputeNearFarMode( osg::CullSettings::COMPUTE_NEAR_FAR_USING_BOUNDING_VOLUMES );
-            m_pCamera->addChild(node);
-            m_pCamera->setGraphicsContext(dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
-                                          ->GetOsgView()->getCamera()->getGraphicsContext());
-
-            //m_pCamera->addCullCallback(new osgEarth::AutoClipPlaneCullCallback(m_pMap3DNode));
-
             osgEarth::Util::LogarithmicDepthBuffer buffer;
             buffer.setUseFragDepth( true );
-            buffer.install(m_pCamera);
-            m_pSpaceEnv->InitSceneNode();
+            buffer.install(m_pMap3DNode);
+            m_pSpaceEnv->Init();
 
-            m_pSpaceEnv->ShowSpaceBackGround(true);
-            //m_pCamera->addChild(dynamic_cast<IOsgSceneNode*>(m_pSpaceEnv)->GetOsgNode());
-            AddSceneNode(m_pSpaceEnv);
+            osgEarth::GLUtils::setGlobalDefaults(m_pMap3DNode->getOrCreateStateSet());
         }
 
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode.get(),m_pCamera.get(),true));
-        m_pPlotManager->UpdateMapNode(m_pMap2DNode,m_pMap3DNode);
+        /// 增加更新
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pGroup,m_pMap3DNode.get(),true));
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pGroup,m_pSpaceEnv->GetOsgNode(),true));
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapNodeChanged(m_pMap2DNode,m_pMap3DNode,this));
     }
         break;
     }

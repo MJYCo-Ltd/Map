@@ -6,16 +6,20 @@ namespace osg
     class Operation;
 }
 
+/**
+ * @brief 仿真运行控制器
+ */
 class IRender
 {
 public:
-    virtual ~IRender(){}
 
     /**
      * @brief 添加更新操作
      * @param pUpdate
      */
     virtual void AddUpdateOperation(osg::Operation*)=0;
+protected:
+    virtual ~IRender(){}
 };
 
 #endif

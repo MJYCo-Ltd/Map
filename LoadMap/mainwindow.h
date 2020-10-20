@@ -13,7 +13,7 @@ class ISceneGraph;
 class IMapSceneNode;
 class IPersonInfo;
 class IPoint;
-class ILine;
+class IMapLine;
 class IModel;
 
 class MainWindow : public QMainWindow
@@ -56,7 +56,7 @@ private:
     double dA3;
     IPersonInfo*  m_pPersonInfo=nullptr;
     IPoint*       m_pPoint = nullptr;
-    ILine*        m_pLine = nullptr;
+    IMapLine*        m_pLine = nullptr;
     IModel*       m_pModel=nullptr;
 };
 

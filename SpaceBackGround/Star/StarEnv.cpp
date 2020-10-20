@@ -112,7 +112,7 @@ void CStarEnv::traverse(osg::NodeVisitor& nv)
     {
         osg::Matrix matrix = m_pMainCamera->getViewMatrix();
         matrix.getRotate().get(matrix);
-        this->setViewMatrix(matrix);
+        this->setViewMatrix(m_rRoate*matrix);
     }
 
     osg::Camera::traverse( nv );
@@ -140,6 +140,14 @@ void CStarEnv::SetConstellationVisible(bool bVisible)
 void CStarEnv::SetMilkwayVisible(bool bVisible)
 {
     m_pMilkyway->SetVisible(bVisible);
+}
+
+void CStarEnv::UpdateMatrix(const CMatrix &rRotate)
+{
+    m_rRoate.set(rRotate(0, 0), rRotate(0, 1), rRotate(0, 2), 0.,
+                 rRotate(1, 0), rRotate(1, 1), rRotate(1, 2), 0.,
+                 rRotate(2, 0), rRotate(2, 1), rRotate(2, 2), 0.,
+                 0., 0., 0., 1.);
 }
 
 CStarEnv::~CStarEnv()

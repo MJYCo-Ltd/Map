@@ -1,4 +1,4 @@
-QT += widgets qml
+QT += widgets
 
 TEMPLATE = lib
 DEFINES += SCENARIOMANAGER_LIBRARY
@@ -18,12 +18,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    Scenario.cpp \
     ScenarioItem.cpp \
     ScenarioManager.cpp
 
 HEADERS += \
-    Scenario.h \
     ScenarioItem.h \
     ScenarioManager_global.h \
     ScenarioManager.h

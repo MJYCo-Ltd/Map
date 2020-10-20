@@ -2,12 +2,14 @@
 #define INTERFACE_SCENE_GRAPH_HEARDER_H
 
 #include <string>
-#include "Window/IWindow.h"
-#include "ISceneNode.h"
+#include <Window/IWindow.h>
+#include <SceneGraph/ISceneGroup.h>
+
 class QQuickItem;
 class IMap;
 class ILoadResouce;
 class IRender;
+class IPlot;
 
 using namespace std;
 
@@ -24,13 +26,12 @@ enum SceneGraphType
 class ISceneGraph
 {
 public:
-    virtual ~ISceneGraph(){}
-
+    ISceneGraph(SceneGraphType emType):m_emType(emType){}
     /**
      * @brief 获取当前的显示类型
      * @return
      */
-    virtual SceneGraphType GetType()=0;
+    virtual SceneGraphType GetType() const{return(m_emType);};
 
     /**
      * @brief 获取主窗口
@@ -54,15 +55,15 @@ public:
      * @brief 判断该场景是否包含某一个窗口
      * @return
      */
-    virtual bool ContainWindow(IWindow*)=0;
+    virtual bool ContainWindow(IWindow*) const=0;
 
     /**
      * @brief 设置在qml下面运行
      * @attention 此函数非平台开发人员不要调用
      */
     virtual void SetQuickItem(QQuickItem*)=0;
-    virtual bool IsQuickItem(QQuickItem*)=0;
-    virtual bool IsUnderQML()=0;
+    virtual bool IsQuickItem(QQuickItem*) const=0;
+    virtual bool IsUnderQML() const{return(m_bUnderQml);}
 
     /**
      * @brief 获取地图
@@ -74,15 +75,15 @@ public:
 
     /**
      * @brief 获取场景根节点
-     * @return
+     * @attention 如果加载的是地图，此处与返回的是IMap
      */
-    virtual ISceneNode* GetRoot()=0;
+    virtual ISceneGroup* GetRoot(){return(nullptr);}
 
     /**
-     * @brief 加载模型
-     * @return 模型节点
+     * @brief 获取标绘接口
+     * @return
      */
-    virtual ISceneNode* LoadNode(const string&)=0;
+    virtual IPlot* GetPlot(){return(m_pPlot);}
 
     /**
      * @brief 资源加载器
@@ -100,6 +101,17 @@ public:
      * @brief 渲染
      */
     virtual void Run()=0;
+protected:
+    virtual ~ISceneGraph(){}
+
+    void Relase()
+    {
+        delete m_pPlot;
+    }
+protected:
+    bool              m_bUnderQml=false;
+    SceneGraphType    m_emType;
+    IPlot*            m_pPlot=nullptr;
 };
 
 #endif

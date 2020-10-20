@@ -9,13 +9,14 @@ import QtQml 2.0
 Rectangle
 {
     id:root
-    width: 490
-    height: 420
+    width: 500
+    height: 550
     color: "transparent"
     property int margin: defaultStyle.margin
-    BorderImg3{
+    BorderImg{
         id: borderDataTime
         anchors.fill: parent
+        margin: parent.margin
     }
     property int year:2020
     property int month: 1
@@ -23,7 +24,9 @@ Rectangle
     property int hour: 1
     property int minute: 1
     property int second: 1
+
     property var local: Qt.locale()
+
     signal dataTime(var value)
 
     function setDataTime(value){
@@ -58,6 +61,7 @@ Rectangle
             dayButton.end = normalYear[monthButton.current-1]
         }
     }
+
     //阴影
     layer.enabled: true
     layer.effect: DropShadow{
@@ -66,6 +70,7 @@ Rectangle
         radius: 1
         samples: 3
     }
+
     Column{
         id: column
         x: margin * 2
@@ -73,6 +78,7 @@ Rectangle
         width: parent.width - margin * 4
         height: parent.height - margin * 4
         spacing: 9
+        //请选择时间
         Text{
             width: parent.width
             height: 30
@@ -91,8 +97,9 @@ Rectangle
             anchors.horizontalCenter: parent.horizontalCenter            
             width: parent.width - margin
             height: 1
-            color: defaultStyle.borderColor
+            color: defaultStyle.fontColor
         }
+
         Row{
             width: parent.width
             height: 20
@@ -107,6 +114,7 @@ Rectangle
                     text: qsTr("年")
                 }
             }
+
             Rectangle{
                 color: "transparent"
                 height: 20;
@@ -164,12 +172,14 @@ Rectangle
                 }
             }
         }
+
         Rectangle{
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width - margin
             height: 1
-            color: defaultStyle.borderColor
+            color: defaultStyle.fontColor
         }
+
         Row{
             width:  parent.width
             height:  240
@@ -234,12 +244,13 @@ Rectangle
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width - margin
             height: 1
-            color: defaultStyle.borderColor
+            color: defaultStyle.fontColor
         }
         Row{
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width - margin
             layoutDirection: Qt.RightToLeft
+
             ButtonA{
                 width: 100
                 height: 28
@@ -267,6 +278,7 @@ Rectangle
                 color: "transparent"
                 radius: 0
                 //normalColor: "transparent"
+
             }
             ButtonA{
                 width: 100

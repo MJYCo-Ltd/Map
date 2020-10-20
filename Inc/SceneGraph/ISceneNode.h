@@ -1,85 +1,75 @@
 #ifndef INTERFACE_SCENE_NODE_HEARDER_H
 #define INTERFACE_SCENE_NODE_HEARDER_H
 
-#include "SceneType.h"
+#include <SceneGraph/SceneType.h>
 
-namespace Math{
-class CMatrix;
-}
 class ISceneGraph;
+class ISceneGroup;
+class ISceneModel;
+class IOsgSceneNode;
+class IMapSceneNode;
+class ISceneLodGroup;
+class ISceneFlashGroup;
+class ISceneScaleGroup;
+class ISceneAttitudeGroup;
+
+#define JUDGE_DOUBLE_CALL_FUNCTION(VA,VB,VC) {if(fabs(VA-VB)>DBL_EPSILON){VB=VA;VC();}}
+#define JUDGE_FLOAT_CALL_FUNCTION(VA,VB,VC) {if(fabs(VA-VB)>FLT_EPSILON){VB=VA;VC();}}
+
+#define JUDGE_DOUBLE_SET_TRUE(VA,VB,VC) {if(fabs(VA-VB)>DBL_EPSILON){VB=VA;VC=true;}}
+#define JUDGE_FLOAT_SET_TRUE(VA,VB,VC) {if(fabs(VA-VB)>FLT_EPSILON){VB=VA;VC=true;}}
+
+#define JUDGE_EQUAL_CALL_FUNCTION(VA,VB,VC) {if(VA != VB){VB = VA;VC();}}
+#define JUDGE_EQUAL_SET_TRUE(VA,VB,VC) {if(VA != VB){VB = VA;VC=true;}}
+
+#define CONSTRUCTOR(VA,VB) VA(ISceneGraph* pSceneGraph):VB(pSceneGraph){}
 /**
  * @brief 场景节点类
  */
 class ISceneNode
 {
 public:
-    virtual ~ISceneNode(){}
+    CONSTRUCTOR(ISceneNode,m_pSceneGraph)
 
     /**
-     * @brief 设置场景节点的位置
+     * @brief 获取节点绑定的场景
+     * @return
      */
-    virtual void SetPos(const ScenePos&)=0;
-    virtual const ScenePos& GetPos() const=0;
-
-    /**
-     * @brief 设置姿态
-     */
-    virtual void SetAttitude(const SceneAttitude&)=0;
-    virtual const SceneAttitude& GetAttitude()const =0;
-
-    virtual void SetAttitude(const Math::CMatrix&)=0;
-    virtual const Math::CMatrix& GetAttitudeMatrix()const=0;
-
-    /**
-     * @brief 设置缩放系数
-     */
-    virtual void SetScal(double)=0;
-    virtual double Scal()const =0;
-
-    /**
-     * @brief 设置旋转依赖的中心点
-         * @attention 例如人的手是相对于肘关节进行
-                      旋转，而不是手腕
-     */
-    virtual void SetPivotPos(const ScenePos&)=0;
-    virtual const ScenePos& PivotPos() const=0;
-
-    /**
-     * @brief 添加场景节点
-     * @attention 只有一个线程下的节点才能相互添加
-     */
-    virtual bool AddSceneNode(ISceneNode*)=0;
-
-    /**
-     * @brief 删除场景节点
-     * @attention 移除场景节点
-     */
-    virtual bool RemoveSceneNode(ISceneNode*)=0;
+    const ISceneGraph* GetBoundSceneGraph() const{return(m_pSceneGraph);}
 
     /**
      * @brief 设置节点可见
      */
-    virtual void SetVisible(bool)=0;
+    void SetVisible(bool bVisible) JUDGE_EQUAL_CALL_FUNCTION(bVisible,m_bVisible,VisibleChanged)
+    bool IsVisible() const{return(m_bVisible);}
 
     /**
-     * @brief 判断节点是否可见
-     * @return
+     * @brief 状态更改消息
      */
-    virtual bool IsVisible() const=0;
+    virtual void VisibleChanged()
+    {
+        m_bVisibleChanged = true;
+    }
 
     /**
-     * @brief 是否可以删除
+     * @brief 转换成想要的类型
      * @return
      */
-    virtual bool CanDelete() const =0;
+    virtual ISceneGroup* AsSceneGroup(){return(nullptr);}
+    virtual ISceneModel* AsSceneModel(){return(nullptr);}
+    virtual ISceneLodGroup* AsSceneLodGroup(){return(nullptr);}
+    virtual ISceneScaleGroup* AsSceneScaleGroup(){return(nullptr);}
+    virtual ISceneFlashGroup* AsSceneFlashGroup(){return(nullptr);}
+    virtual ISceneAttitudeGroup* AsSceneAttitudeGroup(){return(nullptr);}
+    virtual IMapSceneNode* AsMapSceneNode(){return(nullptr);}
+    virtual IOsgSceneNode* AsOsgSceneNode(){return(nullptr);}
+protected:
+    virtual ~ISceneNode(){}
 
-    /**
-     * @brief 获取绑定的场景
-     * @return
-     */
-    virtual ISceneGraph* GetBindSceneGraph(){return(m_pSceneGraph);}
 protected:
     ISceneGraph* m_pSceneGraph;
+    bool         m_bVisible=true;
+    bool         m_bVisibleChanged=false;
 };
 
 #endif

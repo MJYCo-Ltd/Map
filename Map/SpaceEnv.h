@@ -1,10 +1,12 @@
 #ifndef CSPACEENV_H
 #define CSPACEENV_H
 #include <osg/Camera>
-#include <Inner/QtOsgSceneNode.h>
+#include <Inner/IOsgSceneNode.h>
+#include <Inner/ImplSceneAttitudeGroup.hpp>
 #include <SpaceEnv/ISpaceEnv.h>
+#include <Plot/Common/ISceneAttitudeGroup.h>
 
-class CSpaceEnv:public QtOsgSceneNode<ISpaceEnv>
+class CSpaceEnv:public ImplSceneAttitudeGroup<ISpaceEnv>
 {
 public:
     CSpaceEnv(ISceneGraph*);
@@ -29,12 +31,12 @@ public:
     /**
      * @brief 初始化节点
      */
-    void InitSceneNode();
+    void InitNode();
 
     /**
      * @brief 更新时间
      */
-    void UpdateData(double);
+    void UpdateDate(double);
 
 protected:
 

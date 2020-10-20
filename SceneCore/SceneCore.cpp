@@ -1,11 +1,10 @@
-#include <QDebug>
+#include <QtCore>
 #include <osgEarth/Registry>
 #include <osgEarth/Capabilities>
 #include <osgDB/ReadFile>
 #include "MyNotify.h"
 #include "SceneCore.h"
 #include "SceneGraph/SceneGraphManager.h"
-#include "Message/MessageManager.h"
 static CSceneCore* s_gMapCore=nullptr;
 static int g_num;
 static bool        s_gBChecked(false);
@@ -14,13 +13,13 @@ static string     s_strPath;
 void my_init()
 {
     ++g_num;
-    qDebug()<<"my_init scenecore"<<g_num;
+    osg::notify(osg::NOTICE)<<"my_init scenecore"<<g_num;
 }
 
 void my_fini()
 {
     --g_num;
-    qDebug()<<"my_fini scenecore"<<g_num;
+    osg::notify(osg::NOTICE)<<"my_fini scenecore"<<g_num;
     if(0==g_num)
     {
         delete s_gMapCore;
@@ -61,8 +60,7 @@ void my_fini(void) __attribute__((destructor));  //告诉gcc把这个函数扔�
 #endif
 
 CSceneCore::CSceneCore():
-    m_pSceneGraphManger(new CSceneGraphManager),
-    m_pMessageManager(new CMessageManager)
+    m_pSceneGraphManger(new CSceneGraphManager)
 {
     InitSystem();
 }
@@ -70,17 +68,11 @@ CSceneCore::CSceneCore():
 CSceneCore::~CSceneCore()
 {
     delete m_pSceneGraphManger;
-    delete m_pMessageManager;
 }
 
 ISceneGraphManager *CSceneCore::GetSceneGraphManager()
 {
     return(m_pSceneGraphManger);
-}
-
-IMessageManager *CSceneCore::GetMessageManager()
-{
-    return(m_pMessageManager);
 }
 
 /// 初始化系统

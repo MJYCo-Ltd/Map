@@ -10,13 +10,13 @@ class QThread;
 class QtOsgWindow;
 class QtOsgItem;
 class QtFBOWindow;
-class QtViewPoint;
+class QtViewPort;
 class QtRender;
 
 class QtWindow:public IWindow
 {
 public:
-    QtWindow(QtRender* pRender,QThread* pThread,bool bInit=false);
+    QtWindow(QtRender* pRender, QThread* pThread);
     ~QtWindow();
 
     /**
@@ -74,22 +74,22 @@ public:
      * @return
      */
     bool UnSubMessage(IWindowMessageObserver* pObserver);
-protected:
+
     /**
      * @brief 初始化窗口
      */
     void InitWindow();
 protected:
-    QThread*        m_pThread=nullptr;
+    QThread*        m_pThread;
+    QtRender*       m_pRender;
     QtOsgWindow*    m_pWindow=nullptr;        /// Qt的窗口
     QWidget*        m_pWidget=nullptr;        /// 返回Widget窗口
     QtFBOWindow*    m_pFBOWindow=nullptr;     /// osg窗口
-    QtViewPoint*    m_pMainViewPoint=nullptr;
-    QtRender*       m_pRender=nullptr;
+    QtViewPort*    m_pMainViewPoint=nullptr;
     int             m_nFrameRate=60;          /// 帧率
-
+    bool            m_bInit=false;
     bool            m_bCanChange=true;
-    list<QtViewPoint*> m_vOtherViewPoint;
+    list<QtViewPort*> m_vOtherViewPoint;
     list<IWindowMessageObserver*> m_allWindowMessageObserver;
 };
 
