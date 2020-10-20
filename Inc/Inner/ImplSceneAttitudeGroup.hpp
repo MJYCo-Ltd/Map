@@ -20,7 +20,7 @@ public:
     {
         if(m_bPosChanged)
         {
-            m_pOsgAttitudeNode->setPosition(osg::Vec3(T::m_stPos.fX,T::m_stPos.fY,T::m_stPos.fZ));
+            m_pOsgAttitudeNode->setPosition(osg::Vec3d(T::m_stPos.fX,T::m_stPos.fY,T::m_stPos.fZ));
             m_bPosChanged=false;
         }
 
@@ -81,9 +81,9 @@ public:
      */
     void InitNode()
     {
+        ImplSceneNode<T>::InitNode();
         m_pOsgAttitudeNode = new CMyPositionAttitudeTransform;
-        SetOsgNode(m_pOsgAttitudeNode.get());
-        ImplSceneGroup<T>::InitNode();
+        SetGroupNode(m_pOsgAttitudeNode.get());
     }
 
     /// 状态更改

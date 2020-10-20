@@ -16,11 +16,10 @@ public:
 protected:
     void InitNode()
     {
+        ImplSceneNode<T>::InitNode();
         m_pAutoScaleTransform = new osg::AutoTransform;
         m_pAutoScaleTransform->setAutoScaleToScreen(true);
-        SetOsgNode(m_pAutoScaleTransform);
-
-        ImplSceneGroup<T>::InitNode();
+        SetGroupNode(m_pAutoScaleTransform.get());
     }
 
     /**
@@ -35,7 +34,7 @@ protected:
     }
 
 protected:
-    osg::AutoTransform* m_pAutoScaleTransform;
+    osg::observer_ptr<osg::AutoTransform> m_pAutoScaleTransform;
 };
 
 #endif // IMPL_SCENE_MODEL_H

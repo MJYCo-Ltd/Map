@@ -18,15 +18,16 @@ public:
 protected:
     void InitNode()
     {
+        ImplSceneNode<T>::InitNode();
         m_pLod = new osg::LOD;
-        SetOsgNode(m_pLod);
+        SetGroupNode(m_pLod.get());
     }
 
     void ChangeTypeChanged(){}
     void LevelsChanged(){}
 
 protected:
-    osg::LOD* m_pLod;
+    osg::observer_ptr<osg::LOD> m_pLod;
 };
 
 #endif // QT_OSG_SCENE_NODE_H

@@ -23,7 +23,6 @@ public:
      * @brief 设置姿态
      */
     void SetAttitude(const SceneAttitude& rAttitude)JUDGE_EQUAL_CALL_FUNCTION(rAttitude,m_stAttitude,AttitudeChanged)
-    const SceneAttitude& GetAttitude()const{return(m_stAttitude);}
     void SetAttitude(const Math::CMatrix& rMatrix)JUDGE_EQUAL_CALL_FUNCTION(rMatrix,m_matAttitude,AttitudeMatrixChanged)
     const Math::CMatrix& Attitude()const{return(m_matAttitude);}
 

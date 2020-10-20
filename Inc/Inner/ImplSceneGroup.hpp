@@ -61,16 +61,14 @@ protected:
     void InitNode()
     {
         ImplSceneNode<T>::InitNode();
+        m_pGroup = new osg::Group;
+        SetOsgNode(m_pGroup);
+    }
 
-        if(m_pRootNode.valid())
-        {
-            m_pGroup = m_pRootNode->asGroup();
-        }
-        else
-        {
-            m_pGroup = new osg::Group;
-            SetOsgNode(m_pGroup);
-        }
+    void SetGroupNode(osg::Group* pGroup)
+    {
+        m_pGroup = pGroup;
+        SetOsgNode(m_pGroup);
     }
 protected:
     set<IOsgSceneNode*>       m_setChildNode;/// 子节点
