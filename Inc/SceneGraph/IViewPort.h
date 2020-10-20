@@ -12,7 +12,7 @@ struct SceneViewPoint
     ScenePos stPos;
     float fAzimuth=0.f;
     float fElev=0.f;
-    float fDistance=10000.f;
+    float fDistance=10.f;
 
     ///重写判等操作符
     bool operator == (const SceneViewPoint& rOther) const

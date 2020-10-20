@@ -376,7 +376,7 @@ void CMap::InitMap()
 #endif
             osgEarth::Util::LogarithmicDepthBuffer buffer;
             buffer.setUseFragDepth( true );
-            buffer.install(m_pMap3DNode);
+            buffer.install(m_pGroup);
             m_pSpaceEnv->Init();
 
             osgEarth::GLUtils::setGlobalDefaults(m_pMap3DNode->getOrCreateStateSet());

@@ -77,6 +77,10 @@ void QtViewPort::SetTrackNode(ISceneNode *pTrackNode)
 
     if(pOsgNode)
     {
+//        osgEarth::Viewpoint viewPoint = m_p3DEarthManipulator->getViewpoint();
+//        viewPoint.setNode(pOsgNode->GetOsgNode());
+//        viewPoint.setRange(osgEarth::Distance(1000,osgEarth::Units::METERS));
+//        m_p3DEarthManipulator->setViewpoint(viewPoint,3);
         if(!m_pTrackManipulator.valid())
         {
             m_pTrackManipulator = new osgGA::NodeTrackerManipulator;
@@ -91,6 +95,7 @@ void QtViewPort::SetTrackNode(ISceneNode *pTrackNode)
         }
         else
         {
+            m_pTrackManipulator->setRotationMode(osgGA::NodeTrackerManipulator::ELEVATION_AZIM);
             if(pOsgNode != m_pTrackNode)
             {
                 m_emPreType = m_emType;

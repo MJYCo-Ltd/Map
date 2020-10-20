@@ -16,7 +16,10 @@
 #include <Plot/SceneShape/ISConeSensor.h>
 #include <Plot/Common/ISceneFlashGroup.h>
 #include <Plot/SceneShape/IRadarSensor.h>
+#include <Plot/SatelliteShow/ISatellite.h>
 #include <GisMath/GisMath.h>
+#include <Satellite/Date.h>
+#include <Satellite/SGP4.h>
 #include <Sofa/sofam.h>
 
 #include "mainwindow.h"
@@ -95,6 +98,13 @@ void MainWindow::on_actionchange_triggered()
 bool bShowBackGround=false;
 void MainWindow::on_action_triggered()
 {
+    IMapLayer* pLayer = m_pSceneGraph->GetMap()->CreateLayer("test");
+    IMapLocation* pEarthLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+    pLayer->AddSceneNode(pEarthLocation);
+
+    ISceneGroup* pSceneRoot = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
+    pEarthLocation->SetSceneNode(pSceneRoot);
+
     /// 绘制点
     auto pPoint = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
     auto pPoint1 = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
@@ -111,10 +121,10 @@ void MainWindow::on_action_triggered()
     pPoint1->SetColor(color);
     pPoint2->SetColor(color);
     pPoint3->SetColor(color);
-    m_pSceneGraph->GetRoot()->AddSceneNode(pPoint);
-    m_pSceneGraph->GetRoot()->AddSceneNode(pPoint1);
-    m_pSceneGraph->GetRoot()->AddSceneNode(pPoint2);
-    m_pSceneGraph->GetRoot()->AddSceneNode(pPoint3);
+    pSceneRoot->AddSceneNode(pPoint);
+    pSceneRoot->AddSceneNode(pPoint1);
+    pSceneRoot->AddSceneNode(pPoint2);
+    pSceneRoot->AddSceneNode(pPoint3);
 
     /// 绘制线
     auto pLine = dynamic_cast<ILine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILine"));
@@ -135,7 +145,7 @@ void MainWindow::on_action_triggered()
     scenePos.fX = 0.f;
     pPoint3->SetPos(scenePos);
     pLine->AddPoint(3,scenePos);
-    m_pSceneGraph->GetRoot()->AddSceneNode(pLine);
+    pSceneRoot->AddSceneNode(pLine);
 
 
     /// 绘制锥形波
@@ -145,7 +155,7 @@ void MainWindow::on_action_triggered()
     color.fA=.6f;
     pConSensor->SetAngle(50.f);
     pConSensor->SetColor(color);
-    m_pSceneGraph->GetRoot()->AddSceneNode(pConSensor);
+    pSceneRoot->AddSceneNode(pConSensor);
 
     /// 绘制方波
     auto pAttitudeGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
@@ -160,7 +170,7 @@ void MainWindow::on_action_triggered()
     pSConSensor->SetVAngle(10.f);
     pAttitudeGroup->AddSceneNode(pSConSensor);
     pAttitudeGroup->SetPos(scenePos);
-    m_pSceneGraph->GetRoot()->AddSceneNode(pAttitudeGroup);
+    pSceneRoot->AddSceneNode(pAttitudeGroup);
 
     /// 绘制雷达波
     /// 绘制方波
@@ -173,8 +183,12 @@ void MainWindow::on_action_triggered()
 //    pRadarSensor->SetElevation(-10,10);
     pRadarSensor->SetColor(color);
     //pRadarSensor->ShowFace(false);
-    m_pSceneGraph->GetRoot()->AddSceneNode(pAttitudeGroup1);
-    return;
+    pSceneRoot->AddSceneNode(pAttitudeGroup1);
+//    m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);
+//    m_pTrackNode = pPoint1;
+//    return;
+
+//////////////////////测试地图上的模型///////////////////////////////////////////////////
 //    auto pAirPlane = m_pSceneGraph->GetPlot()->LoadSceneNode("model/AirPlane.ive");
 
 //    auto pScal = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP);
@@ -183,9 +197,8 @@ void MainWindow::on_action_triggered()
 //    pFlash->AddSceneNode(pScal);
 //    m_pSceneGraph->GetRoot()->AddSceneNode(pFlash);
 //    return;
-    m_pSceneGraph->GetMap()->GetSpaceEnv()->ShowSpaceBackGround(bShowBackGround);
+//    m_pSceneGraph->GetMap()->GetSpaceEnv()->ShowSpaceBackGround(bShowBackGround);
     bShowBackGround = !bShowBackGround;
-    auto pLayer = m_pSceneGraph->GetMap()->CreateLayer("test");
     double dAizm2;
     GisMath::CalBaiserF(121.225100*DD2R,23.128880*DD2R,121.185947*DD2R,23.123019*DD2R,dA1,dAizm2,dL1);
     dL1 /= 2000.;
@@ -196,7 +209,10 @@ void MainWindow::on_action_triggered()
 
     MapGeoPos pos;
 
-    color.fR=1.0f;
+    color.fR=1.f;
+    color.fG=1.f;
+    color.fB=0.f;
+    color.fA=1.f;
 
     /// 添加线
     m_pLine = dynamic_cast<IMapLine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLine"));
@@ -302,14 +318,48 @@ void MainWindow::on_action_triggered()
     pos.fLat=19.748377;
     pLocation->SetGeoPos(pos);
     pLayer->AddSceneNode(pLocation);
+    pos.fLat=20.748377;
+    pEarthLocation->SetGeoPos(pos);
 
-//    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->SetTrackNode(m_pModel);
+    /// 标绘卫星
+    ISatellite* pSatellite= dynamic_cast<ISatellite*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISatellite"));
+    CDate mjBein(2020,3,2,1,0,0,UTC);
+    Satellite::CSGP4 spg41("1 91001U          20061.66666667 -.00000001  00000-0 -13106-2 0 00008",
+                          "2 91001 045.0073 000.0048 0004655 268.5152 091.4846 07.15404217000017");
+
+    double dMJD = mjBein.GetMJD();
+    vector<CVector> vPos;
+    vector<double> vTime;
+    CVector vPV;
+
+    vTime.reserve(86400);
+    vPos.reserve(86400);
+    for(int i=0;i<86400;i+=300)
+    {
+        vPV = spg41.CalPV(dMJD+i*SECDAY);
+        vTime.push_back(dMJD+i*SECDAY);
+        vPos.push_back(vPV);
+    }
+
+    pSatellite->SetJ2000Oribit(vTime,vPos);
+    pSatellite->SetModelPath("model/SJ-2/shixian-2.flt");
+
+    auto pSatelliteSensor = dynamic_cast<IConeSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IConeSensor"));
+    color.fG=1.f;
+    color.fA=.6f;
+    pSatelliteSensor->SetAngle(10.f);
+    pSatelliteSensor->SetColor(color);
+    pSatellite->SetOribitColor(color);
+    pSatellite->AddSensor(pSatelliteSensor);
+    pSatellite->UpdateData(dMJD+0.3);
+
+    m_pTrackNode = pRadarSensor;
+
 }
 
 void MainWindow::on_action_2_triggered()
 {
-//    auto pLayer = m_pSceneGraph->GetMap()->GetPlotManager()->FindOrCreateLayer("test");
-//    pLayer->Clear();
+    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->SetTrackNode(m_pTrackNode);
 }
 
 void MainWindow::on_action_3_triggered()

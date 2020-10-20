@@ -15,6 +15,7 @@ class IPersonInfo;
 class IPoint;
 class IMapLine;
 class IModel;
+class ISceneNode;
 
 class MainWindow : public QMainWindow
 {
@@ -58,6 +59,7 @@ private:
     IPoint*       m_pPoint = nullptr;
     IMapLine*        m_pLine = nullptr;
     IModel*       m_pModel=nullptr;
+    ISceneNode*    m_pTrackNode=nullptr;
 };
 
 #endif // MAINWINDOW_H
