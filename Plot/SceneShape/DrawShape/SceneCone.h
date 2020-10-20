@@ -19,8 +19,6 @@ protected:
      */
     void CreateShape();
 
-    void UpdateColor();
-
 };
 
 #endif // CSCENECONE_H

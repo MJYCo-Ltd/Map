@@ -3,6 +3,7 @@
 #include "DrawShape/ScenePulse.h"
 #include "DrawShape/ScenePoint.h"
 #include "DrawShape/SceneLine.h"
+#include "DrawShape/SceneRadar.h"
 #include "SceneShape.h"
 
 static string s_sPoint("IPoint");
@@ -16,6 +17,7 @@ static string s_sImage("IImage");
 static string s_sConeSensor("IConeSensor");
 static string s_sSConeSensor("ISConeSensor");
 static string s_sPulseSensor("IPulseSensor");
+static string s_sRadarSensor("IRadarSensor");
 
 CSceneShape::CSceneShape()
 {
@@ -51,6 +53,10 @@ ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const string& sInterfaceName)
     {
         return(new CSceneLine(pSceneGraph));
     }
+    else if(sInterfaceName == s_sRadarSensor)
+    {
+        return(new CSceneRadar(pSceneGraph));
+    }
 
     return(nullptr);
 }
@@ -80,6 +86,8 @@ bool QueryInterface(string& sInterfaceName)
     sInterfaceName += s_sSConeSensor;
     sInterfaceName += " ";
     sInterfaceName += s_sPulseSensor;
+    sInterfaceName += " ";
+    sInterfaceName += s_sRadarSensor;
 
     return(true);
 }

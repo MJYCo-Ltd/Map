@@ -1,6 +1,6 @@
 #ifndef INTERFACE_SCENE_ATTITUDE_GROUP_HEARDER_H
 #define INTERFACE_SCENE_ATTITUDE_GROUP_HEARDER_H
-
+#include <Math/Matrix.h>
 #include <SceneGraph/ISceneGroup.h>
 
 /**
@@ -24,6 +24,8 @@ public:
      */
     void SetAttitude(const SceneAttitude& rAttitude)JUDGE_EQUAL_CALL_FUNCTION(rAttitude,m_stAttitude,AttitudeChanged)
     const SceneAttitude& GetAttitude()const{return(m_stAttitude);}
+    void SetAttitude(const Math::CMatrix& rMatrix)JUDGE_EQUAL_CALL_FUNCTION(rMatrix,m_matAttitude,AttitudeMatrixChanged)
+    const Math::CMatrix& Attitude()const{return(m_matAttitude);}
 
     /**
      * @brief 设置旋转依赖的中心点
@@ -37,8 +39,10 @@ protected:
 
     virtual void PosChanged()=0;
     virtual void AttitudeChanged()=0;
+    virtual void AttitudeMatrixChanged()=0;
     virtual void PivotPosChanged()=0;
 protected:
+    Math::CMatrix m_matAttitude;
     ScenePos      m_stPos;
     ScenePos      m_stPivot;
     SceneAttitude m_stAttitude;

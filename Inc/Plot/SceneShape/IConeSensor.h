@@ -13,8 +13,8 @@ public:
     /**
      * @brief 设置圆锥半角
      */
-    virtual void SetAngle(double dAngle)JUDGE_DOUBLE_CALL_FUNCTION(dAngle,m_dAngle,ShapeChanged)
-    virtual double Angle() const{return(m_dAngle);}
+    void SetAngle(double dAngle)JUDGE_DOUBLE_CALL_FUNCTION(dAngle,m_dAngle,ShapeChanged)
+    double Angle() const{return(m_dAngle);}
 protected:
     virtual ~IConeSensor(){}
 

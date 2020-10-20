@@ -1,44 +1,26 @@
 #ifndef CSATELLITESHOW_H
 #define CSATELLITESHOW_H
 
+#include <NoQt.h>
 /**
  * @brief 显示卫星的类
  */
 
-#include <Map/Plot/ISatellite.h>
+#include <Plot/SatelliteShow/ISatellite.h>
 
-#include <Inner/QtOsgEarthMapSceneNode.h>
-#include "SatelliteShow_Global.h"
+#include <Inner/ImplSceneGroup.hpp>
 
-class CSatellite2D;
-class CSatellite3D;
-class COribit;
+class ILine;
 
-class CSatelliteShow:public QtOsgEarthMapSceneNode<ISatellite>
+class CSatelliteShow:public ImplSceneGroup<ISatellite>
 {
-    friend class OribitUpdateCallBack;
 public:
-    CSatelliteShow(ISceneGraph*);
+    CONSTRUCTOR(CSatelliteShow,ImplSceneGroup<ISatellite>)
 
     /**
      * @brief 初始化节点
      */
-    void InitSceneNode();
-
-    /**
-     * @brief 设置名称
-     */
-    void SetName(const string&);
-
-    /**
-     * @brief 设置卫星模型路径
-     */
-    void SetModelPath(const string&);
-
-    /**
-     * @brief 设置轨道颜色
-     */
-    void SetOribitColor(const SceneColor&);
+    void InitNode();
 
     /**
      * @brief 设置轨道数据
@@ -46,26 +28,16 @@ public:
     void SetJ2000Oribit(const vector<double> &, const vector<Math::CVector> &);
 
     /**
-     * @brief 更新轨道数据
+     * @brief 添加传感器
+     * @param pSensor
      */
-    void SetECFOribit(const vector<Math::CVector>&);
+    void AddSensor(ISensor*pSensor);
 
-    /**
-     * @brief 获取接口名称
-     * @return
-     */
-    static const string& GetInterFaceName(){return(S_sInterFace);}
-
-    /**
-     * @brief 更新时间
-     */
-    void UpdateData(double);
 protected:
-    /**
-     * @brief 构建显示名字
-     */
-    void BuildName();
-
+    void ModelChanged();
+    void NameChanged();
+    void NowTimeChanged();
+    void OribitColorChanged();
     /**
      * @brief 根据时间计算卫星轨道数据
      */
@@ -73,13 +45,10 @@ protected:
     double CalItNewtonEcf(double*,double,int);
 
 protected:
-    string m_sName;
-    string m_sModelPath;
+    ISceneAttitudeGroup*       m_pSatellite=nullptr;
+    ILine*                     m_pOribit=nullptr;
     std::vector<Math::CVector> m_vOribit;    /// J2000坐标系下的数据
-    std::vector<Math::CVector> m_vEcfOribit; /// 地固系下的轨道数据
     std::vector<double>        m_vdMjd;      /// 坐标对应的时间
-    osg::ref_ptr<osg::Node>    m_pSatellite; ///卫星模型
-    COribit*                   m_pOribit=nullptr;
     Math::CVector              m_stNowPos; /// 当前卫星的位置
 
 
@@ -87,13 +56,11 @@ protected:
     double                     m_dEnd = 0.0;
     double                     m_dStep = 0.0;
     int                        m_nIndex = -1;
-
-    static string S_sInterFace;
 };
 
 extern "C"
 {
-    PERSONINFOSHARED_EXPORT ISatellite* CreateNode(ISceneGraph*pSceneGraph,const string& sInterfaceName);
-    PERSONINFOSHARED_EXPORT bool QueryInterface(string& sInterfaceName);
+    Q_DECL_EXPORT ISatellite* CreateNode(ISceneGraph*pSceneGraph,const string& sInterfaceName);
+    Q_DECL_EXPORT bool QueryInterface(string& sInterfaceName);
 }
 #endif // CSATELLITESHOW_H

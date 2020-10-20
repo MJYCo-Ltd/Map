@@ -22,22 +22,7 @@ void CSceneCone::UpdateShape()
 void CSceneCone::CreateShape()
 {
     m_pVertexArray->resize(122);
-    m_pColorArray->resize(122);
     UpdateShape();
-    UpdateColor();
-
-    m_pGeometry->setColorArray(m_pColorArray,osg::Array::BIND_PER_VERTEX);
     osg::DrawArrays* pDrawCone = new osg::DrawArrays(GL_TRIANGLE_FAN,0,m_pVertexArray->size());
-    osg::DrawArrays* pDrawLine = new osg::DrawArrays(GL_LINE_STRIP,1,m_pVertexArray->size()-1);
     m_pGeometry->addPrimitiveSet(pDrawCone);
-    m_pGeometry->addPrimitiveSet(pDrawLine);
-}
-
-void CSceneCone::UpdateColor()
-{
-    m_pColorArray->at(0).set(m_stColor.fR,m_stColor.fG,m_stColor.fB,1.f);
-    for(int i=1;i<122;++i)
-    {
-        m_pColorArray->at(i).set(m_stColor.fR,m_stColor.fG,m_stColor.fB,m_stColor.fA);
-    }
 }

@@ -16,6 +16,7 @@ public:
     void SetColor(const SceneColor& rColor)JUDGE_EQUAL_CALL_FUNCTION(rColor,m_stColor,ColorChanged)
     const SceneColor& Color() const{return(m_stColor);}
 
+
 protected:
     virtual ~IShape(){}
     /**

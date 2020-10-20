@@ -11,7 +11,6 @@ public:
 protected:
     void CreateShape();
     void UpdateShape();
-    void UpdateColor();
 };
 
 #endif // CSCENESCONE_H

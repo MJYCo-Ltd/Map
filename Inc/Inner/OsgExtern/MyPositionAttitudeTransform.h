@@ -1,7 +1,7 @@
 #ifndef H_MY_POSITION_ATTITUDE_TRANSFORM_HEADER_H
 #define H_MY_POSITION_ATTITUDE_TRANSFORM_HEADER_H
 #include <osg/PositionAttitudeTransform>
-
+#include <Math/Matrix.h>
 #include <Inner/OsgExtern/OsgExtern_Global.h>
 
 /**
@@ -16,7 +16,8 @@ public:
      * @brief设置旋转矩阵
      */
     void SetRotateMatrix(const osg::Matrix&);
-    const osg::Matrix& RotateMatrix()const{return(m_matRotate);};
+    void SetRotateMatrix(const Math::CMatrix& rRotate);
+    const osg::Matrix& RotateMatrix()const{return(m_matRotate);}
 
     /**
      * @brief 重写父类方法

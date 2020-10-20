@@ -17,6 +17,7 @@ HEADERS += \
     DrawShape/SceneLine.h \
     DrawShape/ScenePoint.h \
     DrawShape/ScenePulse.h \
+    DrawShape/SceneRadar.h \
     DrawShape/SceneSCone.h \
     SceneShape.h
 
@@ -25,5 +26,6 @@ SOURCES += \
     DrawShape/SceneLine.cpp \
     DrawShape/ScenePoint.cpp \
     DrawShape/ScenePulse.cpp \
+    DrawShape/SceneRadar.cpp \
     DrawShape/SceneSCone.cpp \
     SceneShape.cpp

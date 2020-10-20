@@ -15,6 +15,7 @@
 #include <Plot/SceneShape/IConeSensor.h>
 #include <Plot/SceneShape/ISConeSensor.h>
 #include <Plot/Common/ISceneFlashGroup.h>
+#include <Plot/SceneShape/IRadarSensor.h>
 #include <GisMath/GisMath.h>
 #include <Sofa/sofam.h>
 
@@ -94,6 +95,7 @@ void MainWindow::on_actionchange_triggered()
 bool bShowBackGround=false;
 void MainWindow::on_action_triggered()
 {
+    /// 绘制点
     auto pPoint = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
     auto pPoint1 = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
     auto pPoint2 = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
@@ -114,6 +116,7 @@ void MainWindow::on_action_triggered()
     m_pSceneGraph->GetRoot()->AddSceneNode(pPoint2);
     m_pSceneGraph->GetRoot()->AddSceneNode(pPoint3);
 
+    /// 绘制线
     auto pLine = dynamic_cast<ILine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILine"));
     pLine->SetColor(color);
 
@@ -135,27 +138,42 @@ void MainWindow::on_action_triggered()
     m_pSceneGraph->GetRoot()->AddSceneNode(pLine);
 
 
+    /// 绘制锥形波
     auto pConSensor = dynamic_cast<IConeSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IConeSensor"));
     pConSensor->SetDistance(10.);
     color.fG=1.f;
-    color.fA=.3f;
+    color.fA=.6f;
     pConSensor->SetAngle(50.f);
     pConSensor->SetColor(color);
     m_pSceneGraph->GetRoot()->AddSceneNode(pConSensor);
 
+    /// 绘制方波
     auto pAttitudeGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
     auto pSConSensor = dynamic_cast<ISConeSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISConeSensor"));
     pSConSensor->SetDistance(100.);
     color.fG=0.f;
     color.fB=1.f;
-    color.fA=0.1f;
+    color.fA=0.3f;
     pSConSensor->SetColor(color);
+    //pSConSensor->ShowLine(false);
     pSConSensor->SetHAngle(4.f);
     pSConSensor->SetVAngle(10.f);
     pAttitudeGroup->AddSceneNode(pSConSensor);
     pAttitudeGroup->SetPos(scenePos);
     m_pSceneGraph->GetRoot()->AddSceneNode(pAttitudeGroup);
 
+    /// 绘制雷达波
+    /// 绘制方波
+    auto pAttitudeGroup1 = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
+    auto pRadarSensor = dynamic_cast<IRadarSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IRadarSensor"));
+    pAttitudeGroup1->AddSceneNode(pRadarSensor);
+    pAttitudeGroup1->SetPos(pPoint2->Pos());
+    pRadarSensor->SetDistance(100.);
+//    pRadarSensor->SetAzimuth(0,150);
+//    pRadarSensor->SetElevation(-10,10);
+    pRadarSensor->SetColor(color);
+    //pRadarSensor->ShowFace(false);
+    m_pSceneGraph->GetRoot()->AddSceneNode(pAttitudeGroup1);
     return;
 //    auto pAirPlane = m_pSceneGraph->GetPlot()->LoadSceneNode("model/AirPlane.ive");
 

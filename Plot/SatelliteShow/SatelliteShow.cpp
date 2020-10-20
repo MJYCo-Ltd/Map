@@ -1,71 +1,22 @@
 #include <Math/Intpol.h>
-#include <Map/IMap.h>
-#include <SpaceEnv/ISpaceEnv.h>
-#include <Inner/ILoadResource.h>
-#include <Inner/OsgExtern/OsgExtern.h>
-#include "Oribit.h"
-#include "Satellite3D.h"
-#include "Satellite2D.h"
+#include <Math/VecMat.h>
+#include <Plot/SceneShape/ISensor.h>
+#include <Plot/SceneShape/ILine.h>
+#include <Plot/Common/ISceneAttitudeGroup.h>
+#include <Plot/IPlot.h>
 #include "SatelliteShow.h"
 
-string CSatelliteShow::S_sInterFace("ISatellite");
+string S_3DSatllite("ISatellite");
 
-
-
-CSatelliteShow::CSatelliteShow(ISceneGraph *pSceneGrap):
-    QtOsgEarthMapSceneNode<ISatellite>(pSceneGrap)
+void CSatelliteShow::InitNode()
 {
-    m_pOribit = new COribit(m_pSceneGraph);
-    m_stNowPos.Resize(6);
-    //m_p3D = new CSatellite3D(pSceneGrap);
+    ImplSceneGroup<ISatellite>::InitNode();
+
+    /// 加载模型
+    m_pSatellite = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
+    AddSceneNode(m_pSatellite);
 }
 
-void CSatelliteShow::InitSceneNode()
-{
-    QtOsgEarthMapSceneNode<ISatellite>::InitSceneNode();
-    m_pOribit->InitSceneNode();
-    /// 添加到节点上去
-    m_pSceneGraph->GetMap()->GetSpaceEnv()->AddSceneNode(this);
-    m_pSceneGraph->GetMap()->GetSpaceEnv()->AddSceneNode(m_pOribit);
-    //m_p3D->BuildName();
-}
-
-void CSatelliteShow::SetName(const string & satName)
-{
-    if(m_sName != satName)
-    {
-        m_sName = satName;
-        //m_p3D->SetSatName(m_sName);
-    }
-}
-
-void CSatelliteShow::SetModelPath(const string &sModelPath)
-{
-    if(m_sModelPath != sModelPath)
-    {
-        m_sModelPath = sModelPath;
-        if(m_pSatellite.valid())
-        {
-            m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode,m_pSatellite,false));
-        }
-        osg::Node* pNode = m_pSceneGraph->ResouceLoader()->LoadNode(m_sModelPath);
-        auto pTransform = new osg::MatrixTransform;
-        osg::Matrix mat;
-        mat.makeRotate(osg::DegreesToRadians(-90.),osg::Z_AXIS);
-        pTransform->setMatrix(mat);
-        pTransform->addChild(pNode);
-        m_pSatellite = pTransform;
-        if(m_pSatellite.valid())
-        {
-            m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pOsgNode,m_pSatellite,true));
-        }
-    }
-}
-
-void CSatelliteShow::SetOribitColor(const SceneColor & rColor)
-{
-    m_pOribit->SetOribitColor(rColor);
-}
 
 /// 设置卫星轨道
 void CSatelliteShow::SetJ2000Oribit(const vector<double> &vTime, const vector<Math::CVector> &rOribitInfo)
@@ -75,26 +26,36 @@ void CSatelliteShow::SetJ2000Oribit(const vector<double> &vTime, const vector<Ma
     m_dStart = vTime[0];
     m_dEnd = vTime[vTime.size()-1];
     m_dStep = vTime[1]-vTime[0];
-
-    m_pOribit->SetJ2000Oribit(rOribitInfo);
 }
 
-void CSatelliteShow::SetECFOribit(const vector<Math::CVector> &vOribitInfo)
+/// 增加传感器
+void CSatelliteShow::AddSensor(ISensor *pSensor)
 {
-    m_vEcfOribit = vOribitInfo;
+    m_pSatellite->AddSceneNode(pSensor);
 }
 
-void CSatelliteShow::UpdateData(double dMJD)
+/// 模型修改
+void CSatelliteShow::ModelChanged()
+{
+}
+
+///名称修改
+void CSatelliteShow::NameChanged()
+{
+}
+
+///更新位置
+void CSatelliteShow::NowTimeChanged()
 {
     static double dTime[3];
 
-    if(fabs(m_dStep)<1e-9 || dMJD > m_dEnd)
+    if(fabs(m_dStep)<1e-9 || m_dNowMJD > m_dEnd)
     {
         return;
     }
 
     /// 时间跨度
-    double dSpend = dMJD - m_dStart;
+    double dSpend = m_dNowMJD - m_dStart;
 
     /// 定位数据位置
 
@@ -119,19 +80,16 @@ void CSatelliteShow::UpdateData(double dMJD)
     dTime[2] = m_vdMjd[m_nIndex+1];
 
     /// 计算插值
-    m_stNowPos(0) = CalItNewton(dTime,dMJD,0);
-    m_stNowPos(1) = CalItNewton(dTime,dMJD,1);
-    m_stNowPos(2) = CalItNewton(dTime,dMJD,2);
-    m_stNowPos(3) = CalItNewton(dTime,dMJD,3);
-    m_stNowPos(4) = CalItNewton(dTime,dMJD,4);
-    m_stNowPos(5) = CalItNewton(dTime,dMJD,5);
+    m_stNowPos(0) = CalItNewton(dTime,m_dNowMJD,0);
+    m_stNowPos(1) = CalItNewton(dTime,m_dNowMJD,1);
+    m_stNowPos(2) = CalItNewton(dTime,m_dNowMJD,2);
+    m_stNowPos(3) = CalItNewton(dTime,m_dNowMJD,3);
+    m_stNowPos(4) = CalItNewton(dTime,m_dNowMJD,4);
+    m_stNowPos(5) = CalItNewton(dTime,m_dNowMJD,5);
     ScenePos tmpPos;
     tmpPos.fX = m_stNowPos(0);
     tmpPos.fY = m_stNowPos(1);
     tmpPos.fZ = m_stNowPos(2);
-    tmpPos.bIsGeo = false;
-
-    SetPos(tmpPos);
 
     Math::CVector pos = m_stNowPos.slice(0,2);
     Math::CVector vPos = m_stNowPos.slice(3,5);
@@ -151,12 +109,11 @@ void CSatelliteShow::UpdateData(double dMJD)
     rotate.SetRow(0,rX);
     rotate.SetRow(1,rY);
     rotate.SetRow(2,rZ);
+}
 
-    SetAttitude(rotate);
-    /// 计算当前ECF下位置
-    m_stScenePos.fX = CalItNewtonEcf(dTime, dMJD, 0);
-    m_stScenePos.fY = CalItNewtonEcf(dTime, dMJD, 1);
-    m_stScenePos.fZ = CalItNewtonEcf(dTime, dMJD, 2);
+void CSatelliteShow::OribitColorChanged()
+{
+    m_pOribit->SetColor(m_sColor);
 }
 
 /// 计算插值
@@ -170,25 +127,11 @@ double CSatelliteShow::CalItNewton(double *dX, double dT, int nDim)
     return(Numerical::Cntpol::ItNewton(3,dX,dY,dT));
 }
 
-/// 计算ecf坐标系下的插值
-double CSatelliteShow::CalItNewtonEcf(double* dX, double dT, int nDim)
-{
-    static double dY[3];
-    dY[0] = m_vEcfOribit[m_nIndex - 1](nDim);
-    dY[1] = m_vEcfOribit[m_nIndex](nDim);
-    dY[2] = m_vEcfOribit[m_nIndex + 1](nDim);
-
-    return(Numerical::Cntpol::ItNewton(3, dX, dY, dT));
-}
-
-void CSatelliteShow::BuildName()
-{
-}
 
 /// 创建节点
 ISatellite *CreateNode(ISceneGraph *pSceneGraph, const string &sInterfaceName)
 {
-    if(sInterfaceName == CSatelliteShow::GetInterFaceName())
+    if(sInterfaceName == S_3DSatllite)
     {
         return(new CSatelliteShow(pSceneGraph));
     }
@@ -200,6 +143,6 @@ ISatellite *CreateNode(ISceneGraph *pSceneGraph, const string &sInterfaceName)
 
 bool QueryInterface(string& sInterfaceName)
 {
-    sInterfaceName = CSatelliteShow::GetInterFaceName();
+    sInterfaceName = S_3DSatllite;
     return(true);
 }

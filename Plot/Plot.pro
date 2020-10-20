@@ -3,6 +3,7 @@ TEMPLATE = subdirs
 SUBDIRS =\
     SceneShape\
     MapShape\
+    SatelliteShow\
     PlotManager
 
 

@@ -12,14 +12,14 @@ public:
     /**
      * @brief 设置运动垂向半角
      */
-    virtual void SetHAngle(double dHAngle)JUDGE_DOUBLE_CALL_FUNCTION(dHAngle,m_dHAngle,ShapeChanged)
-    virtual double HAngle() const {return(m_dHAngle);}
+    void SetHAngle(double dHAngle)JUDGE_DOUBLE_CALL_FUNCTION(dHAngle,m_dHAngle,ShapeChanged)
+    double HAngle() const {return(m_dHAngle);}
 
     /**
      * @brief 设置运动方向上半角
      */
-    virtual void SetVAngle(double dVAngle)JUDGE_DOUBLE_CALL_FUNCTION(dVAngle,m_dVAngle,ShapeChanged)
-    virtual double VAngle()const{return(m_dVAngle);}
+    void SetVAngle(double dVAngle)JUDGE_DOUBLE_CALL_FUNCTION(dVAngle,m_dVAngle,ShapeChanged)
+    double VAngle()const{return(m_dVAngle);}
 protected:
     virtual ~ISConeSensor(){}
 protected:

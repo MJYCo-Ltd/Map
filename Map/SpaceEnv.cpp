@@ -73,17 +73,13 @@ void CSpaceEnv::InitNode()
 /// 更新时间
 void CSpaceEnv::UpdateDate(double dMJD)
 {
-    Math::CMatrix ecf2J2000 = Aerospace::CCoorSys::ECF2J2000(dMJD);
+    m_matAttitude = Aerospace::CCoorSys::ECF2J2000(dMJD);
 
-    static osg::Matrix rotateMat;
-    rotateMat.set(ecf2J2000(0, 0), ecf2J2000(0, 1), ecf2J2000(0, 2), 0.,
-                  ecf2J2000(1, 0), ecf2J2000(1, 1), ecf2J2000(1, 2), 0.,
-                  ecf2J2000(2, 0), ecf2J2000(2, 1), ecf2J2000(2, 2), 0.,
-                  0., 0., 0., 1.);
-    m_pUpdataCall->SetMatrix(rotateMat);
+    AttitudeMatrixChanged();
+
     if(nullptr != m_pSpaceBackGround)
     {
-        m_pSpaceBackGround->UpdateMatrix(ecf2J2000);
+        m_pSpaceBackGround->UpdateMatrix(m_matAttitude);
         m_pSpaceBackGround->UpdateDate(dMJD);
     }
 }

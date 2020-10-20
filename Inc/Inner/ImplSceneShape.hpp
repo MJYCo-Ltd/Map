@@ -20,6 +20,7 @@ public:
         m_pGeometry = new osg::Geometry;
         m_pGeometry->setDataVariance(osg::Object::DYNAMIC);
 
+
         /// 创建颜色
         m_pColorArray = new osg::Vec4Array;
         m_pColorArray->push_back(osg::Vec4(T::m_stColor.fR,T::m_stColor.fG,T::m_stColor.fB,T::m_stColor.fA));
