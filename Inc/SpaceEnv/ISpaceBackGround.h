@@ -1,16 +1,17 @@
 #ifndef INTERFACE_SPACE_BACKGROUBD_HEARDER_H
 #define INTERFACE_SPACE_BACKGROUBD_HEARDER_H
 
-#include "../SceneGraph/ISceneNode.h"
-
-
-
+#include <SceneGraph/ISceneNode.h>
+#include <Math/Matrix.h>
 /**
  * @brief 场景节点类
  */
 class ISpaceBackGround:public ISceneNode
 {
 public:
+
+    CONSTRUCTOR(ISpaceBackGround,ISceneNode)
+
     /**
      * @brief 设置显示最大星等 默认为 6 最大星等为 20
      * @param nMax
@@ -58,6 +59,13 @@ public:
      * @param 约简儒略日
      */
     virtual void UpdateDate(double)=0;
+
+    /**
+     * @brief 更新矩阵
+     */
+    virtual void UpdateMatrix(const Math::CMatrix&)=0;
+protected:
+    virtual ~ISpaceBackGround(){}
 };
 
 #endif

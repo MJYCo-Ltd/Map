@@ -22,8 +22,9 @@ enum MouseButtonMask
  * @brief 窗口消息
  * @attention 所有的消息均在GUI的主线程中运行
  */
-struct IWindowMessageObserver
+class IWindowMessageObserver
 {
+public:
     virtual ~IWindowMessageObserver(){}
 
     /**
@@ -48,10 +49,9 @@ struct IWindowMessageObserver
 /**
  * @brief 窗口的基类
  */
-struct IWindow
+class IWindow
 {
-    virtual ~IWindow(){}
-
+public:
     /**
      * @brief 设置帧率
      */
@@ -93,6 +93,8 @@ struct IWindow
      */
     virtual bool SubMessage(IWindowMessageObserver*)=0;
     virtual bool UnSubMessage(IWindowMessageObserver*)=0;
+protected:
+    virtual ~IWindow(){}
 };
 
 

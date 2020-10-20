@@ -1,7 +1,7 @@
 ﻿#include <cmath>
 #include <osgEarth/SpatialReference>
 #include <Sofa/sofam.h>
-#include "Inner/OsgExtern/MathCommon.h"
+#include <Inner/OsgExtern/MathCommon.h>
 
 CMathCommon *CMathCommon::GetInstance()
 {

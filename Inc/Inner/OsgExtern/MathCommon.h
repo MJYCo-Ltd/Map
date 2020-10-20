@@ -1,7 +1,7 @@
 ﻿#ifndef H_HEADER_MATHCOMMON_H
 #define H_HEADER_MATHCOMMON_H
 
-#include "OsgExtern_Global.h"
+#include <Inner/OsgExtern/OsgExtern_Global.h>
 
 class OSGEXTERNSHARED_EXPORT CMathCommon
 {

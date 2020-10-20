@@ -3,18 +3,6 @@
 
 #include "SceneCore_Global.h"
 #include "SceneGraph/ISceneGraphManager.h"
-#include "Message/IMessageManager.h"
-
-/**
- * @brief 核心库消息
- */
-struct IScenceCoreMessageObserver:public IMessageObserver
-{
-    /**
-     * @brief 核心库销毁消息
-     */
-    virtual void ScenceCoreDestroy(){}
-};
 
 struct ISceneCore
 {
@@ -25,12 +13,6 @@ struct ISceneCore
      * @return
      */
     virtual ISceneGraphManager* GetSceneGraphManager()=0;
-
-    /**
-     * @brief 获取消息管理类
-     * @return
-     */
-    virtual IMessageManager* GetMessageManager()=0;
 
 };
 

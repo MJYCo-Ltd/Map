@@ -10,16 +10,23 @@ namespace osg
     class Texture2D;
 }
 
+namespace osgEarth
+{
+    class VirtualProgram;
+}
+
 namespace osgText
 {
     class Font;
 }
 
+/**
+ * @brief 资源加载器
+ */
 class ILoadResouce
 {
 public:
-    virtual ~ILoadResouce(){}
-
+	virtual ~ILoadResouce(){}
     /**
      * @brief 初始化路径
      * @param csAppPath
@@ -58,6 +65,15 @@ public:
      * @return
      */
     virtual osg::Image* LoadImage(const string& sImagePath, int nWidth=0, int nHeight=0,bool bIsRef=true)=0;
+
+    /**
+     * @brief 加载着色器
+     * @param sGLSLPath
+     * @param bIsRef
+     * @return
+     */
+    virtual bool LoadVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const string& sGLSLPath,bool bIsRef=true)=0;
+    virtual bool RemoveVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const string& sGLSLPath,bool bIsRef=true)=0;
 };
 
 #endif

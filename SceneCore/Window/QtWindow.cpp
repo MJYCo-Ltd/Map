@@ -2,19 +2,15 @@
 #include "QtWindow.h"
 #include "QtFBOWindow.h"
 #include "Widget/QtOsgWindow.h"
-#include "SceneGraph/QtViewPoint.h"
+#include "SceneGraph/QtViewPort.h"
 #include "SceneGraph/QtRender.h"
 
-QtWindow::QtWindow(QtRender *pRender, QThread* pThread, bool bInit):
+QtWindow::QtWindow(QtRender *pRender, QThread* pThread):
     m_pThread(pThread),
     m_pFBOWindow(new QtFBOWindow(&m_allWindowMessageObserver)),
-    m_pMainViewPoint(new QtViewPoint(pRender)),
+    m_pMainViewPoint(new QtViewPort(pRender)),
     m_pRender(pRender)
 {
-    if(bInit)
-    {
-        InitWindow();
-    }
 }
 
 QtWindow::~QtWindow()
@@ -49,7 +45,7 @@ IViewPort *QtWindow::GetMainViewPoint()
 /// 创建一个新的节点
 IViewPort *QtWindow::CreateViewPoint()
 {
-    auto newOne = new QtViewPoint(m_pRender);
+    auto newOne = new QtViewPort(m_pRender);
 
     /// 创建新的视图
     auto pView = newOne->GetOsgView();
@@ -68,9 +64,9 @@ bool QtWindow::DeleteViewPoint(IViewPort *& rViewPoint)
     auto findResult = find(m_vOtherViewPoint.begin(),m_vOtherViewPoint.end(),rViewPoint);
     if(findResult != m_vOtherViewPoint.end())
     {
-        auto qtViewPoint = static_cast<QtViewPoint*>(rViewPoint);
+        auto qtViewPoint = static_cast<QtViewPort*>(rViewPoint);
         m_pRender->RemoveView(qtViewPoint->GetOsgView());
-        delete rViewPoint;
+        delete qtViewPoint;
         rViewPoint = nullptr;
         m_vOtherViewPoint.erase(findResult);
         return(true);
@@ -141,7 +137,11 @@ bool QtWindow::UnSubMessage(IWindowMessageObserver *pObserver)
 /// 初始化窗口
 void QtWindow::InitWindow()
 {
-    m_pMainViewPoint->GetOsgView()->getCamera()->setGraphicsContext(m_pFBOWindow);
-    m_pMainViewPoint->GetOsgView()->getCamera()->setNearFarRatio(0.0001);
-    m_pMainViewPoint->GetOsgView()->getCamera()->setSmallFeatureCullingPixelSize(-1.0f);
+    if(!m_bInit)
+    {
+        m_pMainViewPoint->GetOsgView()->getCamera()->setGraphicsContext(m_pFBOWindow);
+        m_pMainViewPoint->GetOsgView()->getCamera()->setNearFarRatio(0.0001);
+        m_pMainViewPoint->GetOsgView()->getCamera()->setSmallFeatureCullingPixelSize(-1.0f);
+        m_bInit=true;
+    }
 }

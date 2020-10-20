@@ -2,19 +2,17 @@
 #define SPACEENV_H
 
 #include <SpaceEnv/ISpaceBackGround.h>
-#include <Inner/QtOsgSceneNode.h>
+#include <Inner/ImplSceneNode.hpp>
 #include "SpaceEnv_Global.h"
 
 class CSolarEnv;
 class CStarEnv;
-class CMatixUpdateCallback;
+class ISceneGraph;
 
-class CSpaceBackGround:public QtOsgSceneNode<ISpaceBackGround>
+class CSpaceBackGround:public ImplSceneNode<ISpaceBackGround>
 {
-    friend class CMatixUpdateCallback;
-
 public:
-    CSpaceBackGround(ISceneGraph* pSceneGraph);
+    CONSTRUCTOR(CSpaceBackGround,ImplSceneNode<ISpaceBackGround>)
     ~CSpaceBackGround();
     /**
      * @brief 设置显示最大星等 默认为 6 最大星等为 20
@@ -66,18 +64,21 @@ public:
     /**
      * @brief 初始化节点
      */
-    void InitSceneNode();
-protected:
-    void  UpdateMatrix();
+    void InitNode();
+
+    /**
+     * @brief 更新矩阵
+     */
+    void UpdateMatrix(const Math::CMatrix& rRotate);
 protected:
     osg::ref_ptr<CSolarEnv> m_pSolarEnv;  /// 行星背景
     osg::ref_ptr<CStarEnv>  m_pStarEnv;   /// 星空背景
-    CMatixUpdateCallback* m_pUpdateCallBack;
-    double     m_dMJD=0.0;       /// 约简儒略日
+    osg::Group*             m_pOsgNode;
+    double                  m_dMJD=0.0;       /// 约简儒略日
 };
 
 extern "C"
 {
-    SPACEENVSHARED_EXPORT ISpaceBackGround* CreateSpaceEnv(ISceneGraph* pSceneGraph);
+    SPACEENVSHARED_EXPORT ISpaceBackGround* CreateSpaceBackGround(ISceneGraph* pSceneGraph);
 }
 #endif // SPACEENV_H

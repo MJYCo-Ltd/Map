@@ -11,6 +11,14 @@ void CMyPositionAttitudeTransform::SetRotateMatrix(const Matrix & rMatrix)
     m_matRotate = rMatrix;
 }
 
+void CMyPositionAttitudeTransform::SetRotateMatrix(const Math::CMatrix &RoateMatrix)
+{
+    m_matRotate.set(RoateMatrix(0,0),RoateMatrix(0,1),RoateMatrix(0,2),0.,
+                    RoateMatrix(1,0),RoateMatrix(1,1),RoateMatrix(1,2),0.,
+                    RoateMatrix(2,0),RoateMatrix(2,1),RoateMatrix(2,2),0.,
+                    0.,0.,0.,1.);
+}
+
 bool CMyPositionAttitudeTransform::computeLocalToWorldMatrix(Matrix& matrix,NodeVisitor*) const
 {
     if (_referenceFrame==RELATIVE_RF)

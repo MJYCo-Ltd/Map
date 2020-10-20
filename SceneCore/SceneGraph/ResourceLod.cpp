@@ -1,6 +1,7 @@
 #include <osgDB/FileNameUtils>
 #include <osgDB/ReadFile>
 #include <osg/Group>
+#include <osgEarth/Shaders>
 #include "ResourceLod.h"
 
 /// 初始化路径
@@ -168,10 +169,38 @@ osg::Image *CResourceLod::LoadImage(const std::string &sImagePath, int nWidth, i
     }
 }
 
-CResourceLod::CResourceLod()
+/// 加载virtualProgram
+bool CResourceLod::LoadVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const string& sGLSLPath,bool bIsRef)
 {
+    std::string glslPath;
+    if(bIsRef)
+    {
+        glslPath = m_sAppPath + sGLSLPath;
+    }
+    else
+    {
+        glslPath = sGLSLPath;
+    }
+
+
+    static osgEarth::Shaders shader;
+    return(shader.load(pVirtualProgram,glslPath));
 }
 
-CResourceLod::~CResourceLod()
+/// 移除virtualProgram
+bool CResourceLod::RemoveVirtualProgram(osgEarth::VirtualProgram *pVirtualProgram, const string &sGLSLPath, bool bIsRef)
 {
+    std::string glslPath;
+    if(bIsRef)
+    {
+        glslPath = m_sAppPath + sGLSLPath;
+    }
+    else
+    {
+        glslPath = sGLSLPath;
+    }
+
+
+    static osgEarth::Shaders shader;
+    return(shader.unload(pVirtualProgram,glslPath));
 }

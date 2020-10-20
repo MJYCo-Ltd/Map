@@ -1,6 +1,7 @@
 #include <algorithm>
 #include "SceneGraphManager.h"
 #include "QtSceneGraph.h"
+#include "SceneGraph/ISceneGroup.h"
 
 using namespace std;
 CSceneGraphManager::CSceneGraphManager()
@@ -17,13 +18,10 @@ CSceneGraphManager::~CSceneGraphManager()
 }
 
 /// 初始化
-ISceneGraph *CSceneGraphManager::CreateSceneGraph(SceneGraphType typeScene, const string &sPath)
+ISceneGraph *CSceneGraphManager::CreateSceneGraph(SceneGraphType typeScene)
 {
     auto pSceneGraph = new QtSceneGraph(typeScene);
-    if(typeScene == SCENEGRAPH_USER)
-    {
-        pSceneGraph->GetRoot()->AddSceneNode(pSceneGraph->LoadNode(sPath));
-    }
+    pSceneGraph->InitSceneGraph();
 
     m_vSceneGraph.push_back(pSceneGraph);
 
@@ -62,7 +60,7 @@ bool CSceneGraphManager::DeleteSceneGraph(ISceneGraph *& rForDelete)
 
     if(itor != m_vSceneGraph.end())
     {
-        delete rForDelete;
+        delete dynamic_cast<QtSceneGraph*>(rForDelete);
         rForDelete = nullptr;
         m_vSceneGraph.erase(itor);
         return(true);

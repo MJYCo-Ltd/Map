@@ -84,3 +84,5 @@ compile_commands.json
 /OsgExtern/release
 *.recipe
 *.sln
+*.cd
+*.doc

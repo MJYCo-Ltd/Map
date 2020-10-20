@@ -5,6 +5,7 @@ Rectangle {
     property int margin: 10
     property int radius: parent.margin * 2
     property int spacing: defaultStyle.lineWidth + 2
+    //color:Qt.rgba(17/255,17/255,53/255, 5/255)
     property color backgroundColor : defaultStyle.backgroundColor
     color: "transparent"
     Rectangle

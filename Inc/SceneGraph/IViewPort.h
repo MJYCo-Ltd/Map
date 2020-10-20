@@ -10,9 +10,11 @@ const int C_WINDOW_WIDTH(100);
 struct SceneViewPoint
 {
     ScenePos stPos;
-    float fAzimuth=0;
-    float fElev=0;
+    float fAzimuth=0.f;
+    float fElev=0.f;
+    float fDistance=10000.f;
 
+    ///重写判等操作符
     bool operator == (const SceneViewPoint& rOther) const
     {
         if(&rOther == this)
@@ -20,9 +22,10 @@ struct SceneViewPoint
             return(true);
         }
 
-        if(this->stPos == rOther.stPos &&
-           fabs(rOther.fElev - fElev) < 1e-6 &&
-           fabs(rOther.fAzimuth - fAzimuth) < 1e-6)
+        if(rOther.stPos == stPos &&
+           fabs(rOther.fElev - fElev) < FLT_EPSILON &&
+           fabs(rOther.fAzimuth - fAzimuth) < FLT_EPSILON &&
+           fabs(rOther.fDistance-fDistance) < FLT_EPSILON)
         {
             return(true);
         }
@@ -87,8 +90,6 @@ enum ProjectType
 class IViewPort
 {
 public:
-    virtual ~IViewPort(){}
-
     /**
      * @brief 设置跟踪的节点
      */
@@ -138,6 +139,8 @@ public:
      * @return 投影类型
      */
     virtual ProjectType GetProjectType()=0;
+protected:
+	virtual ~IViewPort(){}
 };
 
 #endif

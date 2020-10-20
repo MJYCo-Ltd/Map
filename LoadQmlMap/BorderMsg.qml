@@ -8,7 +8,7 @@ Rectangle {
     property color bgColor : defaultStyle.bgColorMsgInfo
     property color bgColorLight : defaultStyle.bgColorMsgInfoLight
     property int borderRadius : 6
-    opacity: 0.75
+
     width:600
     height:48
     color:bgColor
@@ -31,12 +31,10 @@ Rectangle {
         anchors.fill:parent
         hoverEnabled: true
         onEntered: {
-            enterAnim.start()            
-            opacity = 1
+            enterAnim.start()
         }
         onExited: {
-            exitAnim.start()            
-            opacity = 0.75
+            exitAnim.start()
         }
      }
 

@@ -4,13 +4,14 @@
 #include <osg/Texture2D>
 #include <osg/Node>
 #include <osgText/Font>
+#include <osgEarth/VirtualProgram>
 
 #include <Inner/ILoadResource.h>
 class CResourceLod:public ILoadResouce
 {
 public:
-    CResourceLod();
-    virtual ~CResourceLod();
+    CResourceLod(){}
+    virtual ~CResourceLod(){}
 
     /**
      * @brief 初始化路径
@@ -51,12 +52,21 @@ public:
      */
     osg::Image* LoadImage(const string& sImagePath, int nWidth, int nHeight, bool bIsRef);
 
+    /**
+     * @brief 加载着色器
+     * @param sGLSLPath
+     * @param bIsRef
+     * @return
+     */
+    bool LoadVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const string& sGLSLPath,bool bIsRef=true);
+    bool RemoveVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const string& sGLSLPath,bool bIsRef=true);
 protected:
     string m_sAppPath;
-    std::map<string,osg::observer_ptr<osg::Node> >      m_mapNode;    /// 模型映射
-    std::map<string,osg::ref_ptr<osg::Image> >     m_mapImage;   /// 图片映射
-    std::map<string,osg::observer_ptr<osg::Texture2D> > m_mapTexture; /// 纹理映射
-    std::map<string,osg::observer_ptr<osgText::Font> >  m_mapFont;    /// 字体映射
+    map<string,osg::observer_ptr<osg::Node>>      m_mapNode;    /// 模型映射
+    map<string,osg::ref_ptr<osg::Image>>     m_mapImage;   /// 图片映射
+    map<string,osg::observer_ptr<osg::Texture2D>> m_mapTexture; /// 纹理映射
+    map<string,osg::observer_ptr<osgText::Font>>  m_mapFont;    /// 字体映射
+    map<string,osg::observer_ptr<osgEarth::VirtualProgram>>m_mapProgram; /// 纹理
 };
 
 #endif // RESOURCELOD_H

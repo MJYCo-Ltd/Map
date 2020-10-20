@@ -5,7 +5,7 @@ SUBDIRS =\
     SceneCore\
     Map\
     SpaceBackGround\
-    PlotManager\
+    Plot\
     ScenarioManager\
     AreaPlanManager\
     LoadMap\

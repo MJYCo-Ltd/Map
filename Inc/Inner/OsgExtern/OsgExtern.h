@@ -3,7 +3,7 @@
 #include <osg/OperationThread>
 #include <osg/Group>
 
-#include "OsgExtern_Global.h"
+#include <Inner/OsgExtern/OsgExtern_Global.h>
 
 /**
  * @brief 将显示节点从场景中移除
@@ -11,14 +11,14 @@
 class OSGEXTERNSHARED_EXPORT RemoveFromeScene:public osg::Operation
 {
 public:
-    RemoveFromeScene(osg::Group* pParent);
+    RemoveFromeScene(osg::Node* pParent);
 
     /**
      * @brief 回调
      */
     void operator()(osg::Object*);
 private:
-    osg::ref_ptr<osg::Group> m_pParent;
+    osg::ref_ptr<osg::Node> m_pParent;
 };
 
 /**

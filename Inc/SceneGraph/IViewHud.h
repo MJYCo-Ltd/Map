@@ -17,6 +17,7 @@ enum HUD_POS_TYPE
 class IViewHud
 {
 public:
+protected:
     virtual ~IViewHud(){}
 };
 

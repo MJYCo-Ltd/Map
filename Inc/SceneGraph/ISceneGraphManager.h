@@ -15,12 +15,9 @@ public:
     /**
      * @brief 创建场景图
      * @param 场景类型
-     * @param 场景路径
-     * @attention 如果路径中有中文,需要使用utf-8编码的路径,
-     *            否则,可能不识别。
      * @return 创建好的场景图
      */
-    virtual ISceneGraph* CreateSceneGraph(SceneGraphType,const string&)=0;
+    virtual ISceneGraph* CreateSceneGraph(SceneGraphType)=0;
 
     /**
      * @brief 根据窗口查找关联的SceneGraph

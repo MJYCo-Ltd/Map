@@ -1,8 +1,8 @@
 #ifndef H_MY_POSITION_ATTITUDE_TRANSFORM_HEADER_H
 #define H_MY_POSITION_ATTITUDE_TRANSFORM_HEADER_H
 #include <osg/PositionAttitudeTransform>
-
-#include "OsgExtern_Global.h"
+#include <Math/Matrix.h>
+#include <Inner/OsgExtern/OsgExtern_Global.h>
 
 /**
  * @brief 自定义平移旋转节点
@@ -13,10 +13,11 @@ public:
     CMyPositionAttitudeTransform();
 
     /**
-     * @brief
+     * @brief设置旋转矩阵
      */
     void SetRotateMatrix(const osg::Matrix&);
-    const osg::Matrix& RotateMatrix()const{return(m_matRotate);};
+    void SetRotateMatrix(const Math::CMatrix& rRotate);
+    const osg::Matrix& RotateMatrix()const{return(m_matRotate);}
 
     /**
      * @brief 重写父类方法
@@ -38,7 +39,6 @@ protected:
     bool IsPovi()const;
 private:
     osg::Matrix  m_matRotate;
-    bool         m_bSetRotate=false;
 };
 
 #endif // MAP_GLOBAL_H
