@@ -2,6 +2,10 @@
 #include "ScenarioItem.h"
 #include <QDir>
 
+ScenarioManager::ScenarioManager(QObject *parent):QObject(parent)
+{
+}
+
 ScenarioManager::ScenarioManager(QDir dir):_dir(dir)
 {
     addTempScenario();

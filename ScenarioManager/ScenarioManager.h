@@ -14,6 +14,7 @@ class SCENARIOMANAGER_EXPORT ScenarioManager : public QObject
     Q_OBJECT
     Q_PROPERTY(QStringList scenarios READ scenarios NOTIFY scenarioListChanged)
 public:
+    ScenarioManager(QObject*parent=nullptr);
     ScenarioManager(QDir dir);
     QDir dir();
     QDir scenarioDir();
@@ -34,7 +35,6 @@ public:
     Q_INVOKABLE void addItem(ScenarioItem*);
     bool contains(ScenarioItem*);
 
-    void addItem(ScenarioItem*);
     //void removeScenarioItem(ScenarioItem*);
     //bool contains(ScenarioItem*);
 
