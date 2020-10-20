@@ -30,9 +30,14 @@ public:
     void save();
     void saveAs(QString newName);
 
+    // scenario item
+    Q_INVOKABLE void addItem(ScenarioItem*);
+    bool contains(ScenarioItem*);
+
     void addItem(ScenarioItem*);
     //void removeScenarioItem(ScenarioItem*);
     //bool contains(ScenarioItem*);
+
 signals:
     void scenarioListChanged();
 protected:

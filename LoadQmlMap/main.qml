@@ -12,6 +12,18 @@ Window
     height: 768
     title: qsTr("Hello World")
 
+    property int menuHeight: defaultStyle.menuHeight
+    property int menuWidth: defaultStyle.menuWidth
+    ScenarioManager{
+        id:scenarioManager
+    }
+    AreaPlanManager{
+        id:areaPlanManager
+    }
+    AreaPlan{
+        id:areaPlan
+    }
+
     property int menuHeight: 42
     OsgItem
     {
@@ -102,6 +114,77 @@ Window
         visible: false
     }
 
+    ListView{
+        id:areaPlanLayerListView
+        x: defaultStyle.margin
+        y: defaultStyle.margin + menuHeight
+        width: 400
+        height: mainWindow.height - y - defaultStyle.margin
+        visible : false
+        model:areaPlan.layers
+        delegate: Rectangle {
+            width:400
+            height: 48
+            color: "transparent"
+            border.color: defaultStyle.borderColor
+            border.width: 1
+            Rectangle{
+                anchors.fill: parent
+                opacity: 0.15
+                Image{
+                    anchors.fill: parent
+                    source: "Image/TalkboxBG.png"
+                }
+            }
+            Text{
+                color: defaultStyle.fontColorGold
+                font.family: defaultStyle.fontFamily
+                font.pointSize: defaultStyle.fontSize
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                anchors.fill: parent
+                text: modelData.name
+            }
+        }
+    }
+    ListView{
+        x: parent.width - width - defaultStyle.margin
+        y: defaultStyle.margin + menuHeight
+        width: 400
+        height: mainWindow.height - y - defaultStyle.margin
+        model:areaPlanManager.itemList
+        delegate: Rectangle {
+            width:400
+            height: 48
+            color: "transparent"
+            border.color: defaultStyle.borderColor
+            border.width: 1
+            Rectangle{
+                anchors.fill: parent
+                opacity: 0.15
+                Image{
+                    anchors.fill: parent
+                    source: "Image/TalkboxBG.png"
+                }
+            }
+            Text{
+                color: defaultStyle.fontColorGold
+                font.family: defaultStyle.fontFamily
+                font.pointSize: defaultStyle.fontSize
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                anchors.fill: parent
+                text: modelData.name
+            }
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    areaPlan = modelData
+                    areaPlanLayerListView.visible = true
+                }
+            }
+        }
+    }
     DateTimeView {
         id:selectDataTime
         x: 0

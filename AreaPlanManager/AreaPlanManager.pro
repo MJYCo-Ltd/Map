@@ -1,7 +1,7 @@
-QT += core qml widgets
+QT += core qml
 
 TEMPLATE = lib
-DEFINES += SCENARIOMANAGER_LIBRARY
+DEFINES += AREAPLANMANAGER_LIBRARY
 
 CONFIG += c++11
 
@@ -18,10 +18,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    ScenarioItem.cpp \
-    ScenarioManager.cpp
+    AreaPlan.cpp \
+    AreaPlanLayer.cpp \
+    AreaPlanManager.cpp
 
 HEADERS += \
-    ScenarioItem.h \
-    ScenarioManager_global.h \
-    ScenarioManager.h
+    AreaPlan.h \
+    AreaPlanLayer.h \
+    AreaPlanManager_global.h \
+    AreaPlanManager.h
+
+# Default rules for deployment.
+unix {
+    target.path = /usr/lib
+}
+!isEmpty(target.path): INSTALLS += target

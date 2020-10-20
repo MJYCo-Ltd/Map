@@ -5,7 +5,10 @@
 #include "ISceneCore.h"
 #include "AppGlobal.h"
 
+#include "../ScenarioManager/Scenario.h"
 #include "../ScenarioManager/ScenarioManager.h"
+#include "../AreaPlanManager/AreaPlan.h"
+#include "../AreaPlanManager/AreaPlanManager.h"
 
 int main(int argc, char *argv[])
 {
@@ -27,14 +30,20 @@ int main(int argc, char *argv[])
     pStr[0] = 0;
     SetExePath(argv[0]);
 
-
     qmlRegisterType<QAppGlobal>("MyItem",1,0,"AppGlobal");
     qmlRegisterType<QtOsgItem>("MyItem",1,0,"OsgItem");
+    qmlRegisterType<ScenarioManager>("MyItem",1,0,"ScenarioManager");
+    qmlRegisterType<AreaPlanManager>("MyItem",1,0,"AreaPlanManager");
+    qmlRegisterType<Scenario>("MyItem",1,0,"Scenario");
+    qmlRegisterType<AreaPlan>("MyItem",1,0,"AreaPlan");
 
     QQmlApplicationEngine engine;
-    QString sPath = QCoreApplication::applicationDirPath() + "/Data/Scenarios";
-    ScenarioManager scenarioManager(sPath);
-    engine.rootContext()->setContextProperty("scenarioManager", &scenarioManager);
+
+    //QString sPath = QCoreApplication::applicationDirPath() + "/Data/Scenarios";
+    //ScenarioManager scenarioManager();
+    //engine.rootContext()->setContextProperty("scenarioManager", &scenarioManager);
+    //AreaPlanManager areaPlanManager();
+    //engine.rootContext()->setContextProperty("areaPlanManager", &areaPlanManager);
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
