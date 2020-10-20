@@ -5,6 +5,7 @@
 #include "ISceneCore.h"
 #include "Map/IMap.h"
 #include "SpaceEnv/ISpaceEnv.h"
+#include "ShowEarth.h"
 
 /**
  * @brief 窗口消息定义
@@ -49,7 +50,7 @@ int main(int argc, char *argv[])
     pStr[0] = 0;
     SetExePath(argv[0]);
 
-    MainWindow w;
+    CShowEarth w;
     w.show();
 
 
@@ -61,7 +62,7 @@ int main(int argc, char *argv[])
         qDebug()<<*one.c_str();
     }
 
-    w.SetSecenGraph(pScene);
+    //w.SetSecenGraph(pScene);
 
     //pScene->GetMainWindow()->SubMessage(new WindowMessage);
 

@@ -40,7 +40,11 @@ void CSceneCover::PosChanged()
 /// 设置覆盖信息
 void CSceneCover::SetCoverInfo(const CoverInfo & rstCoverInfo)
 {
-    return;
+    if(m_pCoverage.valid())
+    {
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pDrapeableNode,m_pCoverage,false));
+    }
+
     CGrid2TriangleStrip m_Grid2TriangleStrip(rstCoverInfo.nXNum,rstCoverInfo.nYNum);
 
     /// 顶点数组
@@ -52,55 +56,61 @@ void CSceneCover::SetCoverInfo(const CoverInfo & rstCoverInfo)
     pColorArray->resize(rstCoverInfo.vPosInfo.size());
 
 
-    double dStep = 25,dX;
-    double dLong = 2*dStep;
-    double dMin = rstCoverInfo.dMax - dLong;
+    double dValue,dX;
+    double dStep1(1.0),dStep2(2.0),dStep3(3.0);
 
 
     /// 计算地球节点位置
 
     const osgEarth::SpatialReference* pSpatial = osgEarth::SpatialReference::get("wgs84");
-//    osgEarth::GeoPoint geoPoint(pSpatial,m_stScenePos.fLon,m_stScenePos.fLat,m_stScenePos.fHeight);
 
-    double dLonRad=m_stScenePos.fLon *DD2R;
-    double dLatRad=m_stScenePos.fLat *DD2R;
     osg::Vec3d vIn(120,24.0,0);
     osg::Vec3d vOut(vIn);
 
-    double dLonCal,dLatCal;
-    double dLonResult,dLatResult;
-
-//    osg::Matrixd local2World;
-//    geoPoint.createLocalToWorld(local2World);
     /// 设置
     for(int nIndex = 0; nIndex < rstCoverInfo.vPosInfo.size(); ++nIndex)
     {
-//        vIn.x() = rstCoverInfo.vPosInfo[nIndex].dX;
-//        vIn.y() = rstCoverInfo.vPosInfo[nIndex].dY;
-
-//        vOut = vIn * local2World;
-        GisMath::CalBaiser(dLonRad,dLatRad,0,rstCoverInfo.vPosInfo[nIndex].dY,dLonCal,dLatCal);
-        GisMath::CalBaiser(dLonCal,dLatCal,DPI/2.,rstCoverInfo.vPosInfo[nIndex].dX,dLonResult,dLatResult);
-        vIn.x() = dLonResult * DR2D;
-        vIn.y() = dLatResult * DR2D;
-        qDebug()<<nIndex<<'\t'<<rstCoverInfo.vPosInfo[nIndex].dX<<'\t'<<rstCoverInfo.vPosInfo[nIndex].dY;
+        vIn.x() = rstCoverInfo.vPosInfo[nIndex].dX;
+        vIn.y() = rstCoverInfo.vPosInfo[nIndex].dY;
 
         pSpatial->transformToWorld(vIn,vOut);
 
         pArray->at(nIndex) = vOut;
 
-        if(rstCoverInfo.dMax - dLong < rstCoverInfo.vPosInfo[nIndex].dValue)
+        dValue = rstCoverInfo.vPosInfo[nIndex].dValue;
+        if(dValue <0 ) dValue = 0;
+        else if(dValue > 4) dValue = 4;
+
+        if (vIn.x() < 107 || vIn.x() > 122 || vIn.y()<24 || vIn.y() > 30.5) pColorArray->at(nIndex).a()=0.;
+        else pColorArray->at(nIndex).a() = 1.;
+
+        if(dStep1 > dValue)
         {
-            dX = (rstCoverInfo.vPosInfo[nIndex].dValue - dMin) / dStep;
-            pColorArray->at(nIndex).r() = std::min(1.0,dX);
-            pColorArray->at(nIndex).b() = std::max(0.,std::min(1.0,2.0-dX));
-            pColorArray->at(nIndex).a() = 0.3;
+            dX = dValue;
+            pColorArray->at(nIndex).r() = dX*0.4549  + 0.5215686;
+            pColorArray->at(nIndex).g() = dX*-0.18429+ 0.2039;
+            pColorArray->at(nIndex).b() = dX*-0.2823 + 0.3333;
+        }
+        else if(dStep2 > dValue)
+        {
+            dX = (dValue - dStep1);
+            pColorArray->at(nIndex).r() = dX*-0.427471 + 0.976471;
+            pColorArray->at(nIndex).g() = dX*0.96469   + 0.01961;
+            pColorArray->at(nIndex).b() = dX*0.42353   + 0.05098;
+        }
+        else if(dStep3 > dValue)
+        {
+            dX = (dValue - dStep2);
+            pColorArray->at(nIndex).r() = dX*-0.52155 + 0.549;
+            pColorArray->at(nIndex).g() = dX*-0.49019 + 0.9843;
+            pColorArray->at(nIndex).b() = dX*0.52549  + 0.47451;
         }
         else
         {
-            pColorArray->at(nIndex).r() = 0.0;
-            pColorArray->at(nIndex).b() = 1.0;
-            pColorArray->at(nIndex).a() = 0.3;
+            dX = (dValue - dStep3);
+            pColorArray->at(nIndex).r() = dX*0.141176 + 0.02745;
+            pColorArray->at(nIndex).g() = dX*-0.42745 + 0.49411;
+            pColorArray->at(nIndex).b() = dX*-0.33333 + 1.;
         }
 
     }

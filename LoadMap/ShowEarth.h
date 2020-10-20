@@ -11,6 +11,13 @@ public:
 
 signals:
 
+protected slots:
+    void OpenFile();
+
+protected:
+    void InitUI();
+private:
+    QToolBar* m_pToolBar;
 };
 
 #endif // CSHOWEARTH_H
