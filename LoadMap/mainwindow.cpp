@@ -2,6 +2,8 @@
 #include <QDebug>
 
 #include <SceneGraph/ISceneGraph.h>
+#include <SceneGraph/IWindow.h>
+#include <SceneGraph/IViewPort.h>
 #include <Map/IMap.h>
 #include <SpaceEnv/ISpaceEnv.h>
 #include <SpaceEnv/ISpaceBackGround.h>

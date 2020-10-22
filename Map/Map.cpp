@@ -17,6 +17,8 @@
 #include <Inner/IOsgSceneNode.h>
 #include <Inner/IOsgViewPoint.h>
 #include <Inner/OsgExtern/OsgExtern.h>
+#include <SceneGraph/IWindow.h>
+#include <SceneGraph/IViewPort.h>
 #include "MapNodeChanged.h"
 #include "MapModifyLayer.h"
 #include "SpaceEnv.h"

@@ -1,17 +1,12 @@
 #ifndef INTERFACE_SCENE_GRAPH_HEARDER_H
 #define INTERFACE_SCENE_GRAPH_HEARDER_H
-
-#include <string>
-#include <Window/IWindow.h>
-#include <SceneGraph/ISceneGroup.h>
-
+#include <Plot/IPlot.h>
 class QQuickItem;
-class IMap;
 class ILoadResouce;
 class IRender;
-class IPlot;
-
-using namespace std;
+class IWindow;
+class ISceneGroup;
+class IMap;
 
 enum SceneGraphType
 {
@@ -104,6 +99,7 @@ public:
 protected:
     virtual ~ISceneGraph(){}
 
+    /// 释放
     void Relase()
     {
         delete m_pPlot;

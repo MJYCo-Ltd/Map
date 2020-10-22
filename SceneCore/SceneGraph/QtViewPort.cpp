@@ -71,8 +71,13 @@ void QtViewPort::MapTypeChanged(MapType emType)
 }
 
 /// 设置跟踪视点
-void QtViewPort::SetTrackNode(ISceneNode *pTrackNode)
+bool QtViewPort::SetTrackNode(ISceneNode *pTrackNode)
 {
+    if(m_pSceneGraph != pTrackNode->GetBoundSceneGraph())
+    {
+        return(false);
+    }
+
     IOsgSceneNode* pOsgNode = pTrackNode->AsOsgSceneNode();
 
     if(pOsgNode)
@@ -120,6 +125,8 @@ void QtViewPort::SetTrackNode(ISceneNode *pTrackNode)
             break;
         }
     }
+
+    return(true);
 }
 
 /// 获取场景根节点
@@ -132,7 +139,7 @@ IViewHud *QtViewPort::GetHud()
 {
     if(nullptr == m_pHud)
     {
-        m_pHud = new QtViewHud(m_pView);
+        m_pHud = new QtViewHud(m_pView,m_pSceneGraph);
     }
     return(m_pHud);
 }
@@ -224,4 +231,9 @@ ProjectType QtViewPort::GetProjectType()
 osgViewer::View *QtViewPort::GetOsgView()
 {
     return(m_pView.get());
+}
+
+void QtViewPort::SetSceneGraph(ISceneGraph *pSceneGraph)
+{
+    m_pSceneGraph = pSceneGraph;
 }

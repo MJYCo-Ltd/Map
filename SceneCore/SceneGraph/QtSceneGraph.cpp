@@ -145,6 +145,7 @@ void QtSceneGraph::InitSceneGraph()
     m_pMainWindow = new QtWindow(m_pRender,m_pThread);
     m_pMainWindow->InitWindow();
     auto pViewPoint = static_cast<QtViewPort*>(m_pMainWindow->GetMainViewPoint());
+    pViewPoint->SetSceneGraph(this);
 
     /// 加载标绘接口
     LoadPlot();

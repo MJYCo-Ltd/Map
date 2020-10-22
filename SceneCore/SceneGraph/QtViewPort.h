@@ -1,13 +1,12 @@
 #ifndef QT_VIEWPORT_H
 #define QT_VIEWPORT_H
 
-#include <osgViewer/View>
 #include <osgGA/TrackballManipulator>
 #include <osgGA/NodeTrackerManipulator>
 
-#include "SceneGraph/IViewPort.h"
-#include "Map/IMap.h"
-#include "Inner/IOsgViewPoint.h"
+#include <SceneGraph/IViewPort.h>
+#include <Inner/IOsgViewPoint.h>
+#include <Map/IMap.h>
 
 class IRender;
 class IOsgSceneNode;
@@ -39,7 +38,7 @@ public:
     /**
      * @brief 设置跟踪的节点
      */
-    void SetTrackNode(ISceneNode* pTrackNode);
+    bool SetTrackNode(ISceneNode* pTrackNode);
 
     /**
      * @brief 获取跟踪的节点
@@ -92,6 +91,12 @@ public:
      * @return
      */
     osgViewer::View* GetOsgView();
+
+    /**
+     * @brief 设置场景图
+     * @param pSceneGraph
+     */
+    void SetSceneGraph(ISceneGraph* pSceneGraph);
 protected:
     osg::ref_ptr<osgViewer::View>                  m_pView;
     osg::ref_ptr<QtViewPointUpdateCallback>        m_pCameraUpdate;
@@ -102,7 +107,8 @@ protected:
     ViewPointType                                  m_emType=View_User;
     ViewPointType                                  m_emPreType;
 
-    QtViewHud*     m_pHud=nullptr;                                       /// 屏显
+    QtViewHud*     m_pHud=nullptr;                                         /// 屏显根节点
+    ISceneGraph*   m_pSceneGraph=nullptr;                                  /// 设置场景
     IRender*       m_pRender;
     IOsgSceneNode* m_pTrackNode=nullptr;
     SceneViewPoint m_rViewPoint;

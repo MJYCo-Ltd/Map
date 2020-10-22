@@ -12,6 +12,8 @@
 #include <SceneGraph/ISceneGraph.h>
 #include <Inner/ILoadResource.h>
 #include <Inner/IOsgViewPoint.h>
+#include <SceneGraph/IWindow.h>
+#include <SceneGraph/IViewPort.h>
 
 #include "StarEnv.h"
 #include "Milkyway.h"

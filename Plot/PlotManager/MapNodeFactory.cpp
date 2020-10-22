@@ -4,8 +4,9 @@
 #include <osg/Notify>
 #include <QLibrary>
 
-#include <SceneGraph/ISceneGraph.h>
 #include <ISceneCore.h>
+#include <SceneGraph/ISceneGraph.h>
+#include <SceneGraph/ISceneNode.h>
 #include <Inner/OsgExtern/OsgExtern.h>
 #include <Inner/IRender.h>
 #include <Inner/IOsgSceneNode.h>

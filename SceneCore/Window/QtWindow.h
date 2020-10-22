@@ -2,7 +2,7 @@
 #define CMYQTWINDOW_H
 
 #include <list>
-#include "Window/IWindow.h"
+#include <SceneGraph/IWindow.h>
 
 using namespace std;
 

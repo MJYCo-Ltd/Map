@@ -60,13 +60,6 @@ public:
     ISceneGroup* GetRoot(){return(m_pRoot);}
 
     /**
-     * @brief 加载节点
-     * @param strPath  节点路径
-     * @return
-     */
-    ISceneModel* LoadNode(const string& strPath,bool);
-
-    /**
      * @brief 资源加载器
      * @return
      */
