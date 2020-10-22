@@ -3,6 +3,7 @@
 #include <Plot/SceneShape/ISensor.h>
 #include <Plot/SceneShape/ILine.h>
 #include <Plot/Common/ISceneAttitudeGroup.h>
+#include <Plot/Common/ISceneScaleGroup.h>
 #include <Plot/IPlot.h>
 #include <Plot/SceneShape/ILine.h>
 #include <Plot/Common/ISceneModel.h>
@@ -69,8 +70,9 @@ void CSatelliteShow::ModelChanged()
     }
 
     m_pModel = m_pSceneGraph->GetPlot()->LoadSceneNode(m_sModelPath)->AsSceneModel();
-    auto pGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP);
+    auto pGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
     pGroup->AddSceneNode(m_pModel);
+    pGroup->SetScal(10000);
     m_pSatellite->AddSceneNode(pGroup);
 }
 

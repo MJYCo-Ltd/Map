@@ -43,10 +43,10 @@ public:
 protected:
     virtual ~IRadarSensor(){}
 protected:
-    double     m_dMinAzim=0.0;
-    double     m_dMaxAzim=90.;
-    double     m_dMinElev=0.0;
-    double     m_dMaxElev=45.0;
+    double     m_dMinAzim=-50;
+    double     m_dMaxAzim=50.;
+    double     m_dMinElev=-2.5;
+    double     m_dMaxElev=2.5;
 };
 
 #endif

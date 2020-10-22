@@ -21,10 +21,10 @@ void CSceneRadar::UpdateShape()
     double fColumn=(azimuthMax-azimuthMin)/angleSegmentMax;
 
 
-    int row=fRow==(int)fRow?fRow:fRow+1;
+    int row=fRow==int(fRow)?fRow:fRow+1;
     ++row;
 
-    int column=fColumn==(int)fColumn?fColumn:fColumn+1;
+    int column=fColumn==int(fColumn)?fColumn:fColumn+1;
 
     /// 最后一个点是原点
     m_pVertexArray->resize(row*column+1);

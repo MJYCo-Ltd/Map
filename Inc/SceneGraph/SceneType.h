@@ -43,7 +43,7 @@ struct SceneColor
 /// 姿态信息
 struct SceneAttitude
 {
-    Scene_ROTATE rotaOrder=SR_YPR; /// 旋转顺序
+    Scene_ROTATE rotaOrder=SR_RYP; /// 旋转顺序
     double dYaw=0.;    /// 方位 [0~360)  绕Z轴旋转
     double dPitch=0.;  /// 俯仰 [-90,90] 绕Y轴旋转
     double dRoll=0.;   /// 翻滚 [0~360)  绕X轴旋转
