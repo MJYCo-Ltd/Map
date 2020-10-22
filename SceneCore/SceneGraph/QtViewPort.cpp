@@ -140,6 +140,7 @@ IViewHud *QtViewPort::GetHud()
     if(nullptr == m_pHud)
     {
         m_pHud = new QtViewHud(m_pView,m_pSceneGraph);
+        m_pHud->Init();
     }
     return(m_pHud);
 }

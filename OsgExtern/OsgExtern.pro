@@ -12,5 +12,4 @@ include(../SoftSDK.pri)
 SOURCES += \
     MathCommon.cpp \
     MyMatrixTransform.cpp \
-    MyPositionAttitudeTransform.cpp \
-    RemoveFromeScene.cpp
+    MyPositionAttitudeTransform.cpp

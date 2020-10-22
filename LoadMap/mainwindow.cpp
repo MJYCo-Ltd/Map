@@ -20,6 +20,8 @@
 #include <Plot/Common/ISceneFlashGroup.h>
 #include <Plot/SceneShape/IRadarSensor.h>
 #include <Plot/SatelliteShow/ISatellite.h>
+#include <Plot/Hud/IHudText.h>
+#include <Hud/IViewHud.h>
 #include <GisMath/GisMath.h>
 #include <Satellite/Date.h>
 #include <Satellite/SGP4.h>
@@ -101,6 +103,11 @@ void MainWindow::on_actionchange_triggered()
 bool bShowBackGround=false;
 void MainWindow::on_action_triggered()
 {
+    IHudText* pHudText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
+    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudText);
+
+    pHudText->SetText("Hello world");
+    return;
     IMapLayer* pLayer = m_pSceneGraph->GetMap()->CreateLayer("test");
     IMapLocation* pEarthLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     pLayer->AddSceneNode(pEarthLocation);

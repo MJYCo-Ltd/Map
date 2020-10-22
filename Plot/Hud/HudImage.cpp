@@ -1,6 +1,7 @@
 #include "HudImage.h"
 
-CHudImage::CHudImage()
+void CHudImage::ImageChanged()
 {
-
+    m_bImageChanged = true;
+    NodeChanged();
 }

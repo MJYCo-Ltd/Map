@@ -26,9 +26,13 @@ public:
      * @brief 清空所有的节点
      */
     virtual void Clear();
+protected:
+    void InitNode();
+    void AddControl(osgEarth::Controls::ControlCanvas* pCanvas,osgEarth::Controls::Control* pControl);
+    void DelControl(osgEarth::Controls::ControlCanvas* pCanvas,osgEarth::Controls::Control* pControl);
 private:
     osg::observer_ptr<osg::View> m_pView;
-    osg::ref_ptr<osgEarth::Controls::ControlCanvas> m_pControlCanvas;
+    osg::observer_ptr<osgEarth::Controls::ControlCanvas> m_pControlCanvas;
     std::set<IHudNode*> m_setHudNode;
 };
 

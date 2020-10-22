@@ -14,18 +14,6 @@ static string s_sPolygon("IMapPolygon");
 static string s_sCoverImage("IMapCoverImage");
 static string s_sLocation("IMapLocation");
 
-CMapShape::CMapShape()
-{
-}
-
-string CMapShape::GetInterFaceName()
-{
-    string sTemp;
-
-
-    return(sTemp);
-}
-
 ISceneNode *CreateNode(ISceneGraph*pSceneGraph,const string& sInterfaceName)
 {
     if(sInterfaceName == s_sPoint)

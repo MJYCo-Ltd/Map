@@ -19,18 +19,6 @@ static string s_sSConeSensor("ISConeSensor");
 static string s_sPulseSensor("IPulseSensor");
 static string s_sRadarSensor("IRadarSensor");
 
-CSceneShape::CSceneShape()
-{
-}
-
-string CSceneShape::GetInterFaceName()
-{
-    string sTemp;
-
-
-    return(sTemp);
-}
-
 ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const string& sInterfaceName)
 {
     if(sInterfaceName == s_sConeSensor)

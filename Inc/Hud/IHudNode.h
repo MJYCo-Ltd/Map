@@ -31,7 +31,7 @@ protected:
 
 protected:
     HudPos       m_stHudPos;
-    HUD_POS_TYPE m_emHudPosType=HUD_FIXED;
+    HUD_POS_TYPE m_emHudPosType=HUD_DOWN_LEFT;
 };
 
 #endif /// INTERFACE_HUD_NODE_HEARDER_H

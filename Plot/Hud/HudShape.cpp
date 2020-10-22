@@ -1,93 +1,29 @@
-#include "DrawShape/SceneCone.h"
-#include "DrawShape/SceneSCone.h"
-#include "DrawShape/ScenePulse.h"
-#include "DrawShape/ScenePoint.h"
-#include "DrawShape/SceneLine.h"
-#include "DrawShape/SceneRadar.h"
-#include "SceneShape.h"
+#include "HudShape.h"
+#include "HudText.h"
+#include "HudImage.h"
+static std::string s_sHudImage("IHudImage");
+static std::string s_sHudText("IHudText");
 
-static string s_sPoint("IPoint");
-static string s_sLine("ILine");
-static string s_sEllipse("IEllipse");
-static string s_sArc("IArc");
-static string s_sRectangle("IRectangle");
-static string s_sPolygon("IPolygon");
-static string s_sCone("ICone");
-static string s_sImage("IImage");
-static string s_sConeSensor("IConeSensor");
-static string s_sSConeSensor("ISConeSensor");
-static string s_sPulseSensor("IPulseSensor");
-static string s_sRadarSensor("IRadarSensor");
-
-CSceneShape::CSceneShape()
+ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName)
 {
-}
-
-string CSceneShape::GetInterFaceName()
-{
-    string sTemp;
-
-
-    return(sTemp);
-}
-
-ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const string& sInterfaceName)
-{
-    if(sInterfaceName == s_sConeSensor)
+    if(sInterfaceName == s_sHudText)
     {
-        return(new CSceneCone(pSceneGraph));
+        return(new CHudText(pSceneGraph));
     }
-    else if(sInterfaceName == s_sSConeSensor)
+    else if(sInterfaceName == s_sHudImage)
     {
-        return(new CSceneSCone(pSceneGraph));
+        return(new CHudImage(pSceneGraph));
     }
-    else if (sInterfaceName == s_sPulseSensor)
-    {
-        return(new CScenePulse(pSceneGraph));
-    }
-    else if(sInterfaceName == s_sPoint)
-    {
-        return(new CScenePoint(pSceneGraph));
-    }
-    else if(sInterfaceName == s_sLine)
-    {
-        return(new CSceneLine(pSceneGraph));
-    }
-    else if(sInterfaceName == s_sRadarSensor)
-    {
-        return(new CSceneRadar(pSceneGraph));
-    }
-
     return(nullptr);
 }
 
-bool QueryInterface(string& sInterfaceName)
+bool QueryInterface(std::string& sInterfaceName)
 {
     sInterfaceName.clear();
 
-    sInterfaceName += s_sPoint;
+    sInterfaceName += s_sHudImage;
     sInterfaceName += " ";
-    sInterfaceName += s_sLine;
-    sInterfaceName += " ";
-    sInterfaceName += s_sEllipse;
-    sInterfaceName += " ";
-    sInterfaceName += s_sArc;
-    sInterfaceName += " ";
-    sInterfaceName += s_sRectangle;
-    sInterfaceName += " ";
-    sInterfaceName += s_sPolygon;
-    sInterfaceName += " ";
-    sInterfaceName += s_sCone;
-    sInterfaceName += " ";
-    sInterfaceName += s_sImage;
-    sInterfaceName += " ";
-    sInterfaceName += s_sConeSensor;
-    sInterfaceName += " ";
-    sInterfaceName += s_sSConeSensor;
-    sInterfaceName += " ";
-    sInterfaceName += s_sPulseSensor;
-    sInterfaceName += " ";
-    sInterfaceName += s_sRadarSensor;
+    sInterfaceName += s_sHudText;
 
     return(true);
 }
