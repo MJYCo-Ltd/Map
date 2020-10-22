@@ -3,6 +3,9 @@
 
 #include <SceneGraph/SceneType.h>
 
+const int C_WINDOW_HEIGHT(100);
+const int C_WINDOW_WIDTH(100);
+
 /// 视点位置
 struct SceneViewPoint
 {

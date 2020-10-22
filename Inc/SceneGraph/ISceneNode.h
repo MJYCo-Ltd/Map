@@ -4,14 +4,17 @@
 #include <SceneGraph/SceneType.h>
 
 class ISceneGraph;
+class IHudNode;
 class ISceneGroup;
-class ISceneModel;
-class IOsgSceneNode;
-class IMapSceneNode;
 class ISceneLodGroup;
 class ISceneFlashGroup;
 class ISceneScaleGroup;
 class ISceneAttitudeGroup;
+
+class ISceneModel;
+class IOsgSceneNode;
+
+class IMapSceneNode;
 
 /**
  * @brief 场景节点类
@@ -53,6 +56,7 @@ public:
     virtual ISceneAttitudeGroup* AsSceneAttitudeGroup(){return(nullptr);}
     virtual IMapSceneNode* AsMapSceneNode(){return(nullptr);}
     virtual IOsgSceneNode* AsOsgSceneNode(){return(nullptr);}
+    virtual IHudNode* AsHudNode(){return(nullptr);}
 protected:
     virtual ~ISceneNode(){}
 

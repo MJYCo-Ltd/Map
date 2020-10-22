@@ -4,39 +4,18 @@
 #include <list>
 #include <string>
 #include <SceneGraph/ISceneGroup.h>
-#include "MapType.h"
-#include "IMapLayer.h"
-using namespace std;
+#include <Map/MapType.h>
 
 /**
  * @brief 如果图层名称是中文
  *        将采用 utf-8编码
  */
-typedef list<string> MapLayers;
+typedef std::list<std::string> MapLayers;
 
-enum MapType
-{
-    MAP_3D,   /// 三维地图
-    MAP_2D    /// 二维地图
-};
 
 class ISpaceEnv;
-
-/// 地图消息观察者
-struct IMapMessageObserver
-{
-    /**
-     * @brief 地图类型更改
-     *        地图都进行修改
-     */
-    virtual void MapTypeChanged(MapType){}
-
-    /**
-     * @brief 图层更改消息
-     */
-    virtual void AddLayer(const string&){}
-    virtual void RemoveLayer(const string&){}
-};
+class IMapMessageObserver;
+class IMapLayer;
 
 /**
  * @brief 地图节点
@@ -44,7 +23,7 @@ struct IMapMessageObserver
 class IMap:public ISceneGroup
 {
 public:
-    IMap(ISceneGraph* pSceneGraph):ISceneGroup(pSceneGraph){}
+    CONSTRUCTOR(IMap,ISceneGroup)
 
     /**
      * @brief 注册消息
@@ -76,13 +55,13 @@ public:
      * @brief 控制地图图层显隐
      * @param  要控制的图层名称
      */
-    virtual void SetLayerVisible(const string&)=0;
+    virtual void SetLayerVisible(const std::string&)=0;
 
     /**
      * @brief 创建一个图层
      * @return
      */
-    virtual IMapLayer* CreateLayer(const string&)=0;
+    virtual IMapLayer* CreateLayer(const std::string&)=0;
 
     /**
      * @brief 移除图层

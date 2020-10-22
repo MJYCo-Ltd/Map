@@ -19,6 +19,7 @@
 #include <Inner/OsgExtern/OsgExtern.h>
 #include <SceneGraph/IWindow.h>
 #include <SceneGraph/IViewPort.h>
+#include <Map/IMapObserver.h>
 #include "MapNodeChanged.h"
 #include "MapModifyLayer.h"
 #include "SpaceEnv.h"

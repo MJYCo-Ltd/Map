@@ -2,21 +2,28 @@
 #include <osgText/Font>
 #include "QtViewHud.h"
 QtViewHud::QtViewHud(osg::View *pView, ISceneGraph *pSceneGraph)
-    :IViewHud(pSceneGraph),m_pView(pView)
+    :ImplSceneNode<IViewHud>(pSceneGraph),m_pView(pView)
 {
-    m_pControlCanvas = osgEarth::Controls::ControlCanvas::getOrCreate(m_pView.get());
 }
 
 QtViewHud::~QtViewHud()
 {
 }
 
-void QtViewHud::AddHudNode(IHudNode *pHudNode)
+/// 添加屏显节点
+bool QtViewHud::AddHudNode(IHudNode *pHudNode)
 {
+    if(m_pSceneGraph != pHudNode->GetBoundSceneGraph() ||
+      m_setHudNode.find(pHudNode) != m_setHudNode.end())
+    {
+        return(false);
+    }
+    return(true);
 }
 
-void QtViewHud::RemoveHudNode(IHudNode *pHudNode)
+bool QtViewHud::RemoveHudNode(IHudNode *pHudNode)
 {
+    return(true);
 }
 
 void QtViewHud::Clear()

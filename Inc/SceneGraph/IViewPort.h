@@ -4,9 +4,6 @@
 class IViewHud;
 class ISceneNode;
 
-const int C_WINDOW_HEIGHT(100);
-const int C_WINDOW_WIDTH(100);
-
 /**
  * @brief 视口类
  */

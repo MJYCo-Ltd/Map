@@ -1,16 +1,14 @@
 #ifndef INTERFACE_HUD_NODE_HEARDER_H
 #define INTERFACE_HUD_NODE_HEARDER_H
-#include <SceneGraph/SceneType.h>
+#include <SceneGraph/ISceneNode.h>
 #include <Hud/HudType.h>
-
-class ISceneGraph;
 /**
  * @brief 视口的屏显类
  */
-class IHudNode
+class IHudNode:public ISceneNode
 {
 public:
-    CONSTRUCTOR(IHudNode,m_pSceneGraph)
+    CONSTRUCTOR(IHudNode,ISceneNode)
 
     /**
      * @brief 设置节点在屏幕上的位置
@@ -34,7 +32,6 @@ protected:
 protected:
     HudPos       m_stHudPos;
     HUD_POS_TYPE m_emHudPosType=HUD_FIXED;
-    ISceneGraph* m_pSceneGraph=nullptr;
 };
 
 #endif /// INTERFACE_HUD_NODE_HEARDER_H
