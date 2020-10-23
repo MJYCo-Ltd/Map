@@ -12,11 +12,12 @@ class QtOsgItem;
 class QtFBOWindow;
 class QtViewPort;
 class QtRender;
+class ISceneGraph;
 
 class QtWindow:public IWindow
 {
 public:
-    QtWindow(QtRender* pRender, QThread* pThread);
+    QtWindow(ISceneGraph* pSceneGraph,QtRender* pRender, QThread* pThread);
     ~QtWindow();
 
     /**
@@ -80,6 +81,7 @@ public:
      */
     void InitWindow();
 protected:
+    ISceneGraph*    m_pSceneGraph;
     QThread*        m_pThread;
     QtRender*       m_pRender;
     QtOsgWindow*    m_pWindow=nullptr;        /// Qt的窗口

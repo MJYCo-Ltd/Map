@@ -1,3 +1,4 @@
+#include <osgEarth/NodeUtils>
 #include "QtViewHud.h"
 
 QtViewHud::QtViewHud(osg::View *pView, ISceneGraph *pSceneGraph)
@@ -52,7 +53,17 @@ void QtViewHud::Clear()
 /// 初始化节点
 void QtViewHud::InitNode()
 {
-    m_pControlCanvas = osgEarth::Controls::ControlCanvas::getOrCreate(m_pView.get());
+    osgEarth::Controls::ControlCanvas* canvas = osgEarth::findTopMostNodeOfType<osgEarth::Controls::ControlCanvas>(m_pView->getCamera());
+    if ( canvas )
+    {
+        m_pControlCanvas = canvas;
+    }
+    else
+    {
+
+        m_pControlCanvas = new osgEarth::Controls::ControlCanvas();
+    }
+
     m_pRootNode = m_pControlCanvas.get();
 }
 

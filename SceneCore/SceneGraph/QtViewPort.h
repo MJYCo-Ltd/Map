@@ -27,7 +27,7 @@ enum ViewPointType
 class QtViewPort :public IViewPort,public IMapMessageObserver,public IOsgViewPoint
 {
 public:
-    explicit QtViewPort(IRender* pRender,ProjectType emProject=Perspective);
+    explicit QtViewPort(IRender* pRender,ISceneGraph* pSceneGraph,ProjectType emProject=Perspective);
     ~QtViewPort();
 
     /**
@@ -92,12 +92,6 @@ public:
      * @return
      */
     osgViewer::View* GetOsgView();
-
-    /**
-     * @brief 设置场景图
-     * @param pSceneGraph
-     */
-    void SetSceneGraph(ISceneGraph* pSceneGraph);
 protected:
     osg::ref_ptr<osgViewer::View>                  m_pView;
     osg::ref_ptr<QtViewPointUpdateCallback>        m_pCameraUpdate;

@@ -9,7 +9,8 @@
 #include "QtViewHud.h"
 #include "DealViewPortChange.h"
 /// 视点
-QtViewPort::QtViewPort(IRender *pRender, ProjectType emProject):
+QtViewPort::QtViewPort(IRender *pRender,ISceneGraph *pSceneGraph, ProjectType emProject):
+    m_pSceneGraph(pSceneGraph),
     m_pRender(pRender),
     m_emProjectType(emProject)
 {
@@ -141,6 +142,7 @@ IViewHud *QtViewPort::GetHud()
     {
         m_pHud = new QtViewHud(m_pView,m_pSceneGraph);
         m_pHud->Init();
+        m_pSceneGraph->GetRoot()->AddSceneNode(m_pHud);
     }
     return(m_pHud);
 }
@@ -232,9 +234,4 @@ ProjectType QtViewPort::GetProjectType()
 osgViewer::View *QtViewPort::GetOsgView()
 {
     return(m_pView.get());
-}
-
-void QtViewPort::SetSceneGraph(ISceneGraph *pSceneGraph)
-{
-    m_pSceneGraph = pSceneGraph;
 }
