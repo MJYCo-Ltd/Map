@@ -1,20 +1,10 @@
 #ifndef CSCENE_SHAPE_H
 #define CSCENE_SHAPE_H
 
+#include <string>
+using namespace std;
 #include <SceneGraph/ISceneGraph.h>
 #include <NoQt.h>
-
-class CSceneShape
-{
-public:
-    CSceneShape();
-
-    /**
-     * @brief 返回
-     * @return
-     */
-    static string GetInterFaceName();
-};
 
 extern "C"
 {

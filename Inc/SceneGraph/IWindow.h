@@ -1,11 +1,10 @@
 #ifndef INTERFACE_WINDOW_H
 #define INTERFACE_WINDOW_H
 
-#include "SceneGraph/IViewPort.h"
-
 class QWindow;
 class QWidget;
 class QQuickItem;
+class IViewPort;
 
 /**
  * @brief 鼠标类型

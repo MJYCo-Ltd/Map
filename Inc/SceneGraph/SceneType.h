@@ -4,6 +4,18 @@
 #include <cmath>
 #include <limits>
 
+#define JUDGE_DOUBLE_CALL_FUNCTION(VA,VB,VC) {if(fabs(VA-VB)>DBL_EPSILON){VB=VA;VC();}}
+#define JUDGE_FLOAT_CALL_FUNCTION(VA,VB,VC) {if(fabs(VA-VB)>FLT_EPSILON){VB=VA;VC();}}
+
+#define JUDGE_DOUBLE_SET_TRUE(VA,VB,VC) {if(fabs(VA-VB)>DBL_EPSILON){VB=VA;VC=true;}}
+#define JUDGE_FLOAT_SET_TRUE(VA,VB,VC) {if(fabs(VA-VB)>FLT_EPSILON){VB=VA;VC=true;}}
+
+#define JUDGE_EQUAL_CALL_FUNCTION(VA,VB,VC) {if(VA != VB){VB = VA;VC();}}
+#define JUDGE_EQUAL_SET_TRUE(VA,VB,VC) {if(VA != VB){VB = VA;VC=true;}}
+
+#define CONSTRUCTOR(VA,VB) VA(ISceneGraph* pSceneGraph):VB(pSceneGraph){}
+#define SET_TRUE_NODE_UPDATE(VA){VA=true;NodeChanged();}
+
 /**
  * @brief 俯仰翻滚偏航的旋转类型
  */
@@ -43,7 +55,7 @@ struct SceneColor
 /// 姿态信息
 struct SceneAttitude
 {
-    Scene_ROTATE rotaOrder=SR_YPR; /// 旋转顺序
+    Scene_ROTATE rotaOrder=SR_RYP; /// 旋转顺序
     double dYaw=0.;    /// 方位 [0~360)  绕Z轴旋转
     double dPitch=0.;  /// 俯仰 [-90,90] 绕Y轴旋转
     double dRoll=0.;   /// 翻滚 [0~360)  绕X轴旋转
@@ -68,7 +80,7 @@ struct SceneAttitude
 };
 
 /**
- * @brief 视点位置
+ * @brief 位置结构体
  */
 struct ScenePos
 {

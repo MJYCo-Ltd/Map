@@ -10,7 +10,8 @@
 
 #include <QThread>
 
-#include "Window/IWindow.h"
+#include <SceneGraph/IWindow.h>
+#include <SceneGraph/ViewType.h>
 #include "QtEventMap.h"
 #include "QtFBOWindow.h"
 

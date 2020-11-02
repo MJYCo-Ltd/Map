@@ -1,21 +1,11 @@
 #ifndef CMAP_SHAPE_H
 #define CMAP_SHAPE_H
-
+#include <string>
 #include <NoQt.h>
 #include <SceneGraph/ISceneGraph.h>
 #include <Plot/MapShape/IMapPoint.h>
 
-class CMapShape
-{
-public:
-    CMapShape();
-
-    /**
-     * @brief 返回
-     * @return
-     */
-    static string GetInterFaceName();
-};
+using namespace std;
 
 extern "C"
 {

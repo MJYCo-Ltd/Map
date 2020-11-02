@@ -27,14 +27,28 @@ protected:
      */
     void ScalChanged()
     {
+        m_bScaleChanged = true;
+        NodeChanged();
     }
 
     void AutoScalChanged()
     {
     }
 
+    void UpdateNode()
+    {
+        if(m_bScaleChanged)
+        {
+            //m_pAutoScaleTransform->setScale(T::m_dScalBit);
+            m_pAutoScaleTransform->setMinimumScale(T::m_dScalBit);
+            m_bScaleChanged = false;
+        }
+        ImplSceneGroup<T>::UpdateNode();
+    }
+
 protected:
     osg::observer_ptr<osg::AutoTransform> m_pAutoScaleTransform;
+    bool m_bScaleChanged=false;
 };
 
 #endif // IMPL_SCENE_MODEL_H

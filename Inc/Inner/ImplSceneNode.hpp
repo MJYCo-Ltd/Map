@@ -6,7 +6,7 @@
 #include <Inner/IRender.h>
 #include <Inner/ILoadResource.h>
 #include <SceneGraph/ISceneGraph.h>
-
+#include <SceneGraph/SceneType.h>
 /**
  *  实现ISceneNode所有的接口
  */

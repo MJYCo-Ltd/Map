@@ -64,4 +64,10 @@ enum MAP_TERRAIN
     ABSOLUTE_TERRAIN  /// 相对椭球表面高度
 };
 
+enum MapType
+{
+    MAP_3D,   /// 三维地图
+    MAP_2D    /// 二维地图
+};
+
 #endif

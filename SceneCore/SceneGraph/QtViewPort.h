@@ -1,13 +1,13 @@
 #ifndef QT_VIEWPORT_H
 #define QT_VIEWPORT_H
 
-#include <osgViewer/View>
 #include <osgGA/TrackballManipulator>
 #include <osgGA/NodeTrackerManipulator>
 
-#include "SceneGraph/IViewPort.h"
-#include "Map/IMap.h"
-#include "Inner/IOsgViewPoint.h"
+#include <SceneGraph/IViewPort.h>
+#include <Inner/IOsgViewPoint.h>
+#include <Map/IMap.h>
+#include <Map/IMapObserver.h>
 
 class IRender;
 class IOsgSceneNode;
@@ -27,7 +27,7 @@ enum ViewPointType
 class QtViewPort :public IViewPort,public IMapMessageObserver,public IOsgViewPoint
 {
 public:
-    explicit QtViewPort(IRender* pRender,ProjectType emProject=Perspective);
+    explicit QtViewPort(IRender* pRender,ISceneGraph* pSceneGraph,ProjectType emProject=Perspective);
     ~QtViewPort();
 
     /**
@@ -39,7 +39,7 @@ public:
     /**
      * @brief 设置跟踪的节点
      */
-    void SetTrackNode(ISceneNode* pTrackNode);
+    bool SetTrackNode(ISceneNode* pTrackNode);
 
     /**
      * @brief 获取跟踪的节点
@@ -102,7 +102,8 @@ protected:
     ViewPointType                                  m_emType=View_User;
     ViewPointType                                  m_emPreType;
 
-    QtViewHud*     m_pHud=nullptr;                                       /// 屏显
+    QtViewHud*     m_pHud=nullptr;                                         /// 屏显根节点
+    ISceneGraph*   m_pSceneGraph=nullptr;                                  /// 设置场景
     IRender*       m_pRender;
     IOsgSceneNode* m_pTrackNode=nullptr;
     SceneViewPoint m_rViewPoint;

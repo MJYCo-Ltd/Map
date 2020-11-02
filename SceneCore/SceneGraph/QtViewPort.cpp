@@ -9,7 +9,8 @@
 #include "QtViewHud.h"
 #include "DealViewPortChange.h"
 /// 视点
-QtViewPort::QtViewPort(IRender *pRender, ProjectType emProject):
+QtViewPort::QtViewPort(IRender *pRender,ISceneGraph *pSceneGraph, ProjectType emProject):
+    m_pSceneGraph(pSceneGraph),
     m_pRender(pRender),
     m_emProjectType(emProject)
 {
@@ -71,12 +72,21 @@ void QtViewPort::MapTypeChanged(MapType emType)
 }
 
 /// 设置跟踪视点
-void QtViewPort::SetTrackNode(ISceneNode *pTrackNode)
+bool QtViewPort::SetTrackNode(ISceneNode *pTrackNode)
 {
+    if(m_pSceneGraph != pTrackNode->GetBoundSceneGraph())
+    {
+        return(false);
+    }
+
     IOsgSceneNode* pOsgNode = pTrackNode->AsOsgSceneNode();
 
     if(pOsgNode)
     {
+//        osgEarth::Viewpoint viewPoint = m_p3DEarthManipulator->getViewpoint();
+//        viewPoint.setNode(pOsgNode->GetOsgNode());
+//        viewPoint.setRange(osgEarth::Distance(1000,osgEarth::Units::METERS));
+//        m_p3DEarthManipulator->setViewpoint(viewPoint,3);
         if(!m_pTrackManipulator.valid())
         {
             m_pTrackManipulator = new osgGA::NodeTrackerManipulator;
@@ -91,6 +101,7 @@ void QtViewPort::SetTrackNode(ISceneNode *pTrackNode)
         }
         else
         {
+            m_pTrackManipulator->setRotationMode(osgGA::NodeTrackerManipulator::ELEVATION_AZIM);
             if(pOsgNode != m_pTrackNode)
             {
                 m_emPreType = m_emType;
@@ -115,6 +126,8 @@ void QtViewPort::SetTrackNode(ISceneNode *pTrackNode)
             break;
         }
     }
+
+    return(true);
 }
 
 /// 获取场景根节点
@@ -127,7 +140,9 @@ IViewHud *QtViewPort::GetHud()
 {
     if(nullptr == m_pHud)
     {
-        m_pHud = new QtViewHud(m_pView);
+        m_pHud = new QtViewHud(m_pView,m_pSceneGraph);
+        m_pHud->Init();
+        m_pSceneGraph->GetRoot()->AddSceneNode(m_pHud);
     }
     return(m_pHud);
 }

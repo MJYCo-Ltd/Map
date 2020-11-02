@@ -4,25 +4,18 @@
 #include <SceneGraph/SceneType.h>
 
 class ISceneGraph;
+class IHudNode;
 class ISceneGroup;
-class ISceneModel;
-class IOsgSceneNode;
-class IMapSceneNode;
 class ISceneLodGroup;
 class ISceneFlashGroup;
 class ISceneScaleGroup;
 class ISceneAttitudeGroup;
 
-#define JUDGE_DOUBLE_CALL_FUNCTION(VA,VB,VC) {if(fabs(VA-VB)>DBL_EPSILON){VB=VA;VC();}}
-#define JUDGE_FLOAT_CALL_FUNCTION(VA,VB,VC) {if(fabs(VA-VB)>FLT_EPSILON){VB=VA;VC();}}
+class ISceneModel;
+class IOsgSceneNode;
 
-#define JUDGE_DOUBLE_SET_TRUE(VA,VB,VC) {if(fabs(VA-VB)>DBL_EPSILON){VB=VA;VC=true;}}
-#define JUDGE_FLOAT_SET_TRUE(VA,VB,VC) {if(fabs(VA-VB)>FLT_EPSILON){VB=VA;VC=true;}}
+class IMapSceneNode;
 
-#define JUDGE_EQUAL_CALL_FUNCTION(VA,VB,VC) {if(VA != VB){VB = VA;VC();}}
-#define JUDGE_EQUAL_SET_TRUE(VA,VB,VC) {if(VA != VB){VB = VA;VC=true;}}
-
-#define CONSTRUCTOR(VA,VB) VA(ISceneGraph* pSceneGraph):VB(pSceneGraph){}
 /**
  * @brief 场景节点类
  */
@@ -63,6 +56,7 @@ public:
     virtual ISceneAttitudeGroup* AsSceneAttitudeGroup(){return(nullptr);}
     virtual IMapSceneNode* AsMapSceneNode(){return(nullptr);}
     virtual IOsgSceneNode* AsOsgSceneNode(){return(nullptr);}
+    virtual IHudNode* AsHudNode(){return(nullptr);}
 protected:
     virtual ~ISceneNode(){}
 

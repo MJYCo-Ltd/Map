@@ -2,9 +2,11 @@
 #include <QApplication>
 #include <QWindow>
 #include <QDebug>
-#include "ISceneCore.h"
-#include "Map/IMap.h"
-#include "SpaceEnv/ISpaceEnv.h"
+#include <ISceneCore.h>
+#include <SceneGraph/IWindow.h>
+#include <SpaceEnv/ISpaceEnv.h>
+#include <Map/IMap.h>
+
 
 /**
  * @brief 窗口消息定义
@@ -54,7 +56,7 @@ int main(int argc, char *argv[])
 
 
 
-    auto pScene = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(SCENEGRAPH_USER);
+    auto pScene = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(SCENEGRAPH_3D);
 //    pScene->GetMap()->GetSpaceEnv()->SetMilkywayVisible(false);
 //    for(auto one:pScene->GetMap()->GetMapLayers())
 //    {

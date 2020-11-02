@@ -19,7 +19,7 @@ public:
     /**
      * @brief 设置缩放系数
      */
-    void SetScal(double dScalBit){if(dScalBit>0. && fabs(m_dScalBit - dScalBit)>1e-15) ScalChanged();}
+    void SetScal(double dScalBit){if(dScalBit>0. && fabs(m_dScalBit - dScalBit)>1e-15){m_dScalBit=dScalBit;ScalChanged();}}
     double Scal()const{return(m_dScalBit);}
 
     /**

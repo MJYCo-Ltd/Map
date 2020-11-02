@@ -64,7 +64,7 @@ IWindow *QtSceneGraph::CreateNewWindow()
         return(nullptr);
     }
 
-    auto newWindow = new QtWindow(m_pRender,m_pThread);
+    auto newWindow = new QtWindow(this,m_pRender,m_pThread);
     m_vOtherWindow.push_back(newWindow);
 
     return(newWindow);
@@ -142,7 +142,7 @@ void QtSceneGraph::InitSceneGraph()
     m_pResourceLod->InitPath(GetExePath());
 
     /// 创建主视口
-    m_pMainWindow = new QtWindow(m_pRender,m_pThread);
+    m_pMainWindow = new QtWindow(this,m_pRender,m_pThread);
     m_pMainWindow->InitWindow();
     auto pViewPoint = static_cast<QtViewPort*>(m_pMainWindow->GetMainViewPoint());
 

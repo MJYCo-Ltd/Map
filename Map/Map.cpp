@@ -17,6 +17,9 @@
 #include <Inner/IOsgSceneNode.h>
 #include <Inner/IOsgViewPoint.h>
 #include <Inner/OsgExtern/OsgExtern.h>
+#include <SceneGraph/IWindow.h>
+#include <SceneGraph/IViewPort.h>
+#include <Map/IMapObserver.h>
 #include "MapNodeChanged.h"
 #include "MapModifyLayer.h"
 #include "SpaceEnv.h"
@@ -376,7 +379,7 @@ void CMap::InitMap()
 #endif
             osgEarth::Util::LogarithmicDepthBuffer buffer;
             buffer.setUseFragDepth( true );
-            buffer.install(m_pMap3DNode);
+            buffer.install(m_pGroup);
             m_pSpaceEnv->Init();
 
             osgEarth::GLUtils::setGlobalDefaults(m_pMap3DNode->getOrCreateStateSet());

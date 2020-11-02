@@ -45,7 +45,9 @@ protected:
     double CalItNewtonEcf(double*,double,int);
 
 protected:
+    set<ISensor*>              m_vSensor;
     ISceneAttitudeGroup*       m_pSatellite=nullptr;
+    ISceneModel*               m_pModel=nullptr;
     ILine*                     m_pOribit=nullptr;
     std::vector<Math::CVector> m_vOribit;    /// J2000坐标系下的数据
     std::vector<double>        m_vdMjd;      /// 坐标对应的时间

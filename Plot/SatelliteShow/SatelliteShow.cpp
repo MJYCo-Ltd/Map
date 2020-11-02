@@ -3,18 +3,29 @@
 #include <Plot/SceneShape/ISensor.h>
 #include <Plot/SceneShape/ILine.h>
 #include <Plot/Common/ISceneAttitudeGroup.h>
+#include <Plot/Common/ISceneScaleGroup.h>
 #include <Plot/IPlot.h>
+#include <Plot/SceneShape/ILine.h>
+#include <Plot/Common/ISceneModel.h>
+#include <Map/IMap.h>
+#include <SpaceEnv/ISpaceEnv.h>
 #include "SatelliteShow.h"
 
 string S_3DSatllite("ISatellite");
 
 void CSatelliteShow::InitNode()
 {
+    m_stNowPos.Resize(6);
     ImplSceneGroup<ISatellite>::InitNode();
 
     /// 加载模型
     m_pSatellite = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
+    m_pOribit = dynamic_cast<ILine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILine"));
     AddSceneNode(m_pSatellite);
+    AddSceneNode(m_pOribit);
+
+    ///添加到空间节点上去
+    m_pSceneGraph->GetMap()->GetSpaceEnv()->AddSceneNode(this);
 }
 
 
@@ -26,17 +37,43 @@ void CSatelliteShow::SetJ2000Oribit(const vector<double> &vTime, const vector<Ma
     m_dStart = vTime[0];
     m_dEnd = vTime[vTime.size()-1];
     m_dStep = vTime[1]-vTime[0];
+
+    vector<ScenePos> vTemp;
+    vTemp.resize(rOribitInfo.size());
+    int nIndex(0);
+    for(auto iter=rOribitInfo.begin();iter!=rOribitInfo.end();++iter,++nIndex)
+    {
+        vTemp[nIndex].fX = iter->GetX();
+        vTemp[nIndex].fY = iter->GetY();
+        vTemp[nIndex].fZ = iter->GetZ();
+    }
+    m_pOribit->SetMultPos(vTemp);
 }
 
 /// 增加传感器
 void CSatelliteShow::AddSensor(ISensor *pSensor)
 {
+    if(m_vSensor.find(pSensor) != m_vSensor.end())
+    {
+        return;
+    }
     m_pSatellite->AddSceneNode(pSensor);
+    m_vSensor.insert(pSensor);
 }
 
 /// 模型修改
 void CSatelliteShow::ModelChanged()
 {
+    if(nullptr != m_pModel)
+    {
+        m_pSatellite->RemoveSceneNode(m_pModel);
+    }
+
+    m_pModel = m_pSceneGraph->GetPlot()->LoadSceneNode(m_sModelPath)->AsSceneModel();
+    auto pGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
+    pGroup->AddSceneNode(m_pModel);
+    pGroup->SetScal(10000);
+    m_pSatellite->AddSceneNode(pGroup);
 }
 
 ///名称修改
@@ -94,6 +131,10 @@ void CSatelliteShow::NowTimeChanged()
     Math::CVector pos = m_stNowPos.slice(0,2);
     Math::CVector vPos = m_stNowPos.slice(3,5);
 
+    for(auto one:m_vSensor)
+    {
+        one->SetDistance(pos.Length());
+    }
     Math::CVector rZ = -pos;
     Math::CVector rY = vPos;
 
@@ -109,6 +150,10 @@ void CSatelliteShow::NowTimeChanged()
     rotate.SetRow(0,rX);
     rotate.SetRow(1,rY);
     rotate.SetRow(2,rZ);
+
+    /// 更新卫星的位置和旋转矩阵
+    m_pSatellite->SetPos(tmpPos);
+    m_pSatellite->SetAttitude(rotate);
 }
 
 void CSatelliteShow::OribitColorChanged()

@@ -1,22 +1,78 @@
-#include <Inner/ILoadResource.h>
-#include <osgText/Font>
+#include <osgEarth/NodeUtils>
 #include "QtViewHud.h"
-QtViewHud::QtViewHud(osg::View *pView)
-    :m_pView(pView)
-{
-    m_pControlCanvas = osgEarth::Controls::ControlCanvas::getOrCreate(m_pView.get());
 
-    //auto pLabel = new osgEarth::Controls::LabelControl("Hello world\n I'm fine");
-    //pLabel->setFont(osgText::readFontFile("E:/Git/Bin/fonts/msyh.ttf"));
-    //pLabel->setPosition(50,50);
-//    pLabel->setMargin(osgEarth::Controls::Control::SIDE_TOP,10);
-    //pLabel->setAlign(osgEarth::Controls::Control::ALIGN_CENTER,
-    //                 osgEarth::Controls::Control::ALIGN_BOTTOM);
-    //m_pControlCanvas->addControl(pLabel);
+QtViewHud::QtViewHud(osg::View *pView, ISceneGraph *pSceneGraph)
+    :ImplSceneNode<IViewHud>(pSceneGraph),m_pView(pView)
+{
 }
 
 QtViewHud::~QtViewHud()
 {
-    int n=0;
-    ++n;
+}
+
+/// 添加屏显节点
+bool QtViewHud::AddHudNode(IHudNode *pHudNode)
+{
+    if(m_pSceneGraph != pHudNode->GetBoundSceneGraph() ||
+      m_setHudNode.find(pHudNode) != m_setHudNode.end())
+    {
+        return(false);
+    }
+
+    m_setHudNode.insert(pHudNode);
+
+    AddControl(m_pControlCanvas.get(),dynamic_cast<osgEarth::Controls::Control*>(pHudNode->AsOsgSceneNode()->GetOsgNode()));
+    return(true);
+}
+
+/// 移除节点
+bool QtViewHud::RemoveHudNode(IHudNode *pHudNode)
+{
+    auto findOne = m_setHudNode.find(pHudNode);
+    if(findOne == m_setHudNode.end())
+    {
+        return(false);
+    }
+
+    DelControl(m_pControlCanvas.get(),dynamic_cast<osgEarth::Controls::Control*>(pHudNode->AsOsgSceneNode()->GetOsgNode()));
+    m_setHudNode.erase(pHudNode);
+    return(true);
+}
+
+/// 清空所有的
+void QtViewHud::Clear()
+{
+    for(auto one : m_setHudNode)
+    {
+        DelControl(m_pControlCanvas.get(),dynamic_cast<osgEarth::Controls::Control*>(one->AsOsgSceneNode()));
+    }
+
+    m_setHudNode.clear();
+}
+
+/// 初始化节点
+void QtViewHud::InitNode()
+{
+    osgEarth::Controls::ControlCanvas* canvas = osgEarth::findTopMostNodeOfType<osgEarth::Controls::ControlCanvas>(m_pView->getCamera());
+    if ( canvas )
+    {
+        m_pControlCanvas = canvas;
+    }
+    else
+    {
+
+        m_pControlCanvas = new osgEarth::Controls::ControlCanvas();
+    }
+
+    m_pRootNode = m_pControlCanvas.get();
+}
+
+void QtViewHud::AddControl(osgEarth::Util::Controls::ControlCanvas *pCanvas, osgEarth::Util::Controls::Control *pControl)
+{
+    m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyControl(pCanvas,pControl,true));
+}
+
+void QtViewHud::DelControl(osgEarth::Util::Controls::ControlCanvas *pCanvas, osgEarth::Util::Controls::Control *pControl)
+{
+    m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyControl(pCanvas,pControl,false));
 }

@@ -5,11 +5,12 @@
 #include "SceneGraph/QtViewPort.h"
 #include "SceneGraph/QtRender.h"
 
-QtWindow::QtWindow(QtRender *pRender, QThread* pThread):
+QtWindow::QtWindow(ISceneGraph *pSceneGraph, QtRender *pRender, QThread* pThread):
+    m_pSceneGraph(pSceneGraph),
     m_pThread(pThread),
+    m_pRender(pRender),
     m_pFBOWindow(new QtFBOWindow(&m_allWindowMessageObserver)),
-    m_pMainViewPoint(new QtViewPort(pRender)),
-    m_pRender(pRender)
+    m_pMainViewPoint(new QtViewPort(pRender,pSceneGraph))
 {
 }
 
@@ -45,7 +46,7 @@ IViewPort *QtWindow::GetMainViewPoint()
 /// 创建一个新的节点
 IViewPort *QtWindow::CreateViewPoint()
 {
-    auto newOne = new QtViewPort(m_pRender);
+    auto newOne = new QtViewPort(m_pRender,m_pSceneGraph);
 
     /// 创建新的视图
     auto pView = newOne->GetOsgView();

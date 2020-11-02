@@ -1,10 +1,7 @@
 #ifndef INCLUDE_HEADER_SCENERENDER_H
 #define INCLUDE_HEADER_SCENERENDER_H
 
-namespace osg
-{
-    class Operation;
-}
+#include <osg/OperationThread>
 
 /**
  * @brief 仿真运行控制器
