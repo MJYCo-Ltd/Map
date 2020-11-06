@@ -3,19 +3,20 @@
 
 #include <osgEarth/PlaceNode>
 
-#include <Map/Plot/IPersonInfo.h>
-#include <Inner/QtOsgEarthMapSceneNode.h>
+#include <Plot/PersonInfo/IPersonInfo.h>
+#include <Inner/ImplMapSceneNode.hpp>
 
-#include "PersonInfo_Global.h"
+#include <NoQt.h>
 
 class PersonInfoCallBack;
 
-class CPersonInfo:public QtOsgEarthMapSceneNode<IPersonInfo>
+class CPersonInfo:public ImplMapSceneNode<IPersonInfo>
 {
 public:
-    CPersonInfo(ISceneGraph*pSceneGraph);
+    CONSTRUCTOR(CPersonInfo,ImplMapSceneNode<IPersonInfo>)
     ~CPersonInfo();
 
+protected:
     /**
      * @brief 更新地图节点
      * @param pMapNode
@@ -25,38 +26,31 @@ public:
     /**
      * @brief 初始化节点
      */
-    void InitSceneNode();
+    void InitNode();
 
     /**
      * @brief 位置更新消息
      */
     void PosChanged();
+    void NameChanged();
+    void GroupChanged();
+    void StatusChanged();
 
-    /**
-     * @brief 设置人员名字
-     * @param strName
-     */
-    void SetName(const string& strName);
-    const string& GetName();
-
-    /**
-     * @brief 获取接口名称
-     * @return
-     */
-    static const string& GetInterFaceName(){return(S_sInterFace);}
+    void UpdateNode();
+    void changeImage();
 private:
-    osg::ref_ptr<osgEarth::PlaceNode> m_pPerson;
-    osg::ref_ptr<PersonInfoCallBack>  m_pCallBack;   ///
+    bool m_bPosChanged=false;
+    bool m_bNameChanged=false;
+    bool m_bGroupChanged=false;
+    bool m_bStatusChanged=false;
+    osg::observer_ptr<osgEarth::PlaceNode> m_pPerson;
     osgEarth::Style                   m_placeStyle;  /// 位置样式
-    string                            m_sName;       ///  名字
-    static string                     S_sInterFace;  /// 接口名字
 };
 
 extern "C"
 {
-    PERSONINFOSHARED_EXPORT IPersonInfo* CreateNode(ISceneGraph*,const string& );
-    PERSONINFOSHARED_EXPORT bool QueryInterface(string&);
-//    PERSONINFOSHARED_EXPORT bool DeleteNode(IMapSceneNode*);
+    Q_DECL_EXPORT IPersonInfo* CreateNode(ISceneGraph*,const string& );
+    Q_DECL_EXPORT bool QueryInterface(string&);
 }
 
 #endif // CPERSONINFO_H

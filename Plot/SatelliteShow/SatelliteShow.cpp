@@ -9,6 +9,7 @@
 #include <Plot/Common/ISceneModel.h>
 #include <Map/IMap.h>
 #include <SpaceEnv/ISpaceEnv.h>
+#include <Sofa/sofam.h>
 #include "SatelliteShow.h"
 
 string S_3DSatllite("ISatellite");
@@ -23,9 +24,6 @@ void CSatelliteShow::InitNode()
     m_pOribit = dynamic_cast<ILine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILine"));
     AddSceneNode(m_pSatellite);
     AddSceneNode(m_pOribit);
-
-    ///添加到空间节点上去
-    m_pSceneGraph->GetMap()->GetSpaceEnv()->AddSceneNode(this);
 }
 
 
@@ -57,6 +55,8 @@ void CSatelliteShow::AddSensor(ISensor *pSensor)
     {
         return;
     }
+
+
     m_pSatellite->AddSceneNode(pSensor);
     m_vSensor.insert(pSensor);
 }
@@ -133,7 +133,7 @@ void CSatelliteShow::NowTimeChanged()
 
     for(auto one:m_vSensor)
     {
-        one->SetDistance(pos.Length());
+        dynamic_cast<ISensor*>(one)->SetDistance(pos.Length()-6000.137e3);
     }
     Math::CVector rZ = -pos;
     Math::CVector rY = vPos;

@@ -50,6 +50,5 @@ void CHudText::UpdateNode()
         m_bOutColorChanged=false;
     }
 
-    m_pLabelControl->dirty();
     ImplHudNode<IHudText>::UpdateNode();
 }

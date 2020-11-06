@@ -69,9 +69,9 @@ contains(SDK_CONFIG,Satellite){
     win32:LIBS *= -L$${MathPath}/Lib
     unix:LIBS *= -L$$DESTDIR/stklib
     CONFIG (debug, debug|release){
-        LIBS *= -lSatellited -lMathd -lGisMathd
+        LIBS *= -lSatellited -lMathd -lGisMathd -lSatelliteToolKitd -lsofad
     }else{
-        LIBS *= -lSatellite -lMath -lGisMath
+        LIBS *= -lSatellite -lMath -lGisMath -lSatelliteToolKit -lsofa
     }
 }
 

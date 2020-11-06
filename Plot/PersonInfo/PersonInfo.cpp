@@ -5,117 +5,7 @@
 #include <Inner/OsgExtern/OsgExtern.h>
 #include "PersonInfo.h"
 
-//static QSet<IMapSceneNode*> g_allCreate;
-//static int g_num(0);
-
-//void my_init()
-//{
-//    ++g_num;
-//    qDebug()<<"my_init"<<g_num;
-//}
-
-//void my_fini()
-//{
-//    --g_num;
-//    qDebug()<<"my_fini"<<g_num;
-//    if(0==g_num)
-//    {
-//        for(auto one : g_allCreate)
-//        {
-//            qDebug()<<"my_fini delete";
-//            delete one;
-//        }
-//        g_allCreate.clear();
-//    }
-//}
-
-//#ifdef Q_OS_WIN
-//#include <qt_windows.h>
-//#undef LoadImage
-
-//BOOL WINAPI DllMain(
-//  _In_ HINSTANCE hinstDLL, /// 指向自身的句柄
-//  _In_ DWORD  fdwReason,   /// 调用原因
-//  _In_ LPVOID lpvReserved  /// 隐式加载和显式加载
-//)
-//{
-//    switch(fdwReason)
-//    {
-//    case DLL_PROCESS_ATTACH:
-//        my_init();
-//        break;
-//    case DLL_PROCESS_DETACH:
-//        my_fini();
-//        break;
-////    case DLL_THREAD_ATTACH:
-////        my_init();
-////        break;
-////    case DLL_THREAD_DETACH:
-////        my_fini();
-////        break;
-//    }
-
-//    return(TRUE);
-//}
-//#else
-//void my_init(void) __attribute__((constructor)); //告诉gcc把这个函数扔到init section
-//void my_fini(void) __attribute__((destructor));  //告诉gcc把这个函数扔到fini section
-//#endif
-
-string CPersonInfo::S_sInterFace("IPersonInfo");
-
-class PersonInfoCallBack:public osg::Callback
-{
-public:
-    PersonInfoCallBack(osgEarth::PlaceNode* pPlaceNode):m_pPlaceNode(pPlaceNode)
-    {
-    }
-
-    bool run(osg::Object* object, osg::Object* data)
-    {
-        if(m_bUpdatePos)
-        {
-            m_pPlaceNode->setPosition(osgEarth::GeoPoint(
-                                          osgEarth::SpatialReference::get("wgs84"),
-                                          m_stPos.fLon,m_stPos.fLat,m_stPos.fHeight));
-            m_bUpdatePos = false;
-        }
-
-        if(m_bUpdateName)
-        {
-            m_pPlaceNode->setText(m_sName);
-            m_bUpdateName = false;
-        }
-        return traverse(object, data);
-    }
-
-    /// 更新位置
-    void SetPotsion(const ScenePos & rScenPos)
-    {
-        m_stPos = rScenPos;
-        m_bUpdatePos = true;
-    }
-
-    /// 更新名字
-    void UpdateName(const string& sName)
-    {
-        m_sName = sName;
-        m_bUpdateName = true;
-    }
-protected:
-    virtual ~PersonInfoCallBack() {}
-private:
-    ScenePos m_stPos;
-    string   m_sName;
-    bool     m_bUpdatePos  = false;
-    bool     m_bUpdateName = false;
-    osg::observer_ptr<osgEarth::PlaceNode> m_pPlaceNode;
-};
-
-CPersonInfo::CPersonInfo(ISceneGraph*pSceneGraph):
-    QtOsgEarthMapSceneNode<IPersonInfo>(pSceneGraph)
-{
-}
+string S_sInterFace("IPersonInfo");
 
 CPersonInfo::~CPersonInfo()
 {
@@ -131,9 +21,9 @@ void CPersonInfo::UpdateMapNode(osgEarth::MapNode *pMapNode)
 }
 
 /// 初始化节点
-void CPersonInfo::InitSceneNode()
+void CPersonInfo::InitNode()
 {
-    QtOsgSceneNode<IPersonInfo>::InitSceneNode();
+    ImplMapSceneNode<IPersonInfo>::InitNode();
 
 
     m_placeStyle.getOrCreateSymbol<osgEarth::TextSymbol>()->encoding() = osgEarth::TextSymbol::ENCODING_UTF8;
@@ -156,40 +46,112 @@ void CPersonInfo::InitSceneNode()
     m_pPerson = new osgEarth::PlaceNode(osgEarth::GeoPoint(osgEarth::SpatialReference::get("wgs84"),0,0,0),
                                         m_sName,m_placeStyle,pImage);
     m_pPerson->setDynamic(true);
-    m_pCallBack = new PersonInfoCallBack(m_pPerson);
-    m_pPerson->addUpdateCallback(m_pCallBack);
-    m_pOsgNode->addChild(m_pPerson.get());
-
+    SetOsgNode(m_pPerson.get());
 }
 
 /// 位置更新消息
 void CPersonInfo::PosChanged()
 {
-    m_pCallBack->SetPotsion(m_stScenePos);
+    m_bPosChanged=true;
+    NodeChanged();
 }
 
-/// 设置名字
-void CPersonInfo::SetName(const string &strName)
+///名称更新
+void CPersonInfo::NameChanged()
 {
-    if(m_sName != strName)
+    m_bNameChanged = true;
+    NodeChanged();
+}
+
+///分组更新
+void CPersonInfo::GroupChanged()
+{
+    m_bGroupChanged=true;
+    NodeChanged();
+}
+
+///状态更新
+void CPersonInfo::StatusChanged()
+{
+    m_bStatusChanged=true;
+    NodeChanged();
+}
+
+///更新节点
+void CPersonInfo::UpdateNode()
+{
+    if(m_bPosChanged)
     {
-        m_sName = strName;
-        m_pCallBack->UpdateName(m_sName);
+        m_pPerson->setPosition(osgEarth::GeoPoint(
+                                   osgEarth::SpatialReference::get("wgs84"),
+                                   m_geoPos.fLon,m_geoPos.fLat,m_geoPos.fHeight));
+        m_bPosChanged=false;
+    }
+
+    if(m_bNameChanged)
+    {
+        m_pPerson->setText(m_sName);
+        m_bNameChanged=false;
+    }
+
+    if(m_bGroupChanged)
+    {
+        changeImage();
+        m_bGroupChanged=false;
+    }
+
+    if(m_bStatusChanged)
+    {
+        changeImage();
+        m_bStatusChanged=false;
     }
 }
 
-const string &CPersonInfo::GetName()
+/// 更新图片
+void CPersonInfo::changeImage()
 {
-    return(m_sName);
+    string sIconPath="ico/";
+    switch(m_emGroupType)
+    {
+    case RED_GROUP:
+        sIconPath += "red";
+        break;
+    case BLUE_GROUP:
+        sIconPath += "blue";
+        break;
+    default:
+        sIconPath += "white";
+        break;
+    }
+
+    switch (m_emPersonStatus)
+    {
+    case PERSON_HURT:
+        sIconPath += "_hurt";
+        break;
+    case PERSON_HIT:
+        sIconPath += "_fire";
+        break;
+    case PERSON_DATH:
+        sIconPath += "_death";
+        break;
+    case PERSON_UNLINE:
+        sIconPath += "_unline";
+        break;
+    default:
+        break;
+    }
+
+    sIconPath += ".png";
+    m_pPerson->setIconImage(m_pSceneGraph->ResouceLoader()->LoadImage(sIconPath,32,32));
 }
 
 /// 创建地图节点
 IPersonInfo* CreateNode(ISceneGraph* pSceneGraph, const string &sInterfaceName)
 {
-    if(sInterfaceName == CPersonInfo::GetInterFaceName())
+    if(sInterfaceName == S_sInterFace)
     {
         auto pPerson = new CPersonInfo(pSceneGraph);
-//        g_allCreate.insert(pPerson);
         return(pPerson);
     }
     else
@@ -198,20 +160,10 @@ IPersonInfo* CreateNode(ISceneGraph* pSceneGraph, const string &sInterfaceName)
     }
 }
 
-///// 删除地图节点
-//bool DeleteNode(IMapSceneNode * pMapSceneNode)
-//{
-//    if(g_allCreate.remove(pMapSceneNode))
-//    {
-//        delete pMapSceneNode;
-//    }
-//    qDebug()<<"delete";
-//    return(true);
-//}
 
 /// 查询接口
 bool QueryInterface(string& sInterfaceName)
 {
-    sInterfaceName = CPersonInfo::GetInterFaceName();
+    sInterfaceName = S_sInterFace;
     return(false);
 }

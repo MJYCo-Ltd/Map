@@ -25,6 +25,8 @@
 #include <GisMath/GisMath.h>
 #include <Satellite/Date.h>
 #include <Satellite/SGP4.h>
+#include <Satellite/CoorSys.h>
+#include <SatelliteToolKit/SatelliteToolKit.h>
 #include <Sofa/sofam.h>
 
 #include "mainwindow.h"
@@ -101,19 +103,27 @@ void MainWindow::on_actionchange_triggered()
 }
 
 bool bShowBackGround=false;
+IHudText* pHudText=nullptr;
 void MainWindow::on_action_triggered()
 {
-    IHudText* pHudText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
-    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudText);
+//    pHudText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
+//    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudText);
 
-    pHudText->SetText("Hello world");
-    return;
-    IMapLayer* pLayer = m_pSceneGraph->GetMap()->CreateLayer("test");
-    IMapLocation* pEarthLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
-    pLayer->AddSceneNode(pEarthLocation);
+    SceneColor color;
+//    color.fR=1.0f;
+//    pHudText->SetText("Hello world");
+//    pHudText->SetColor(color);
+
+//    color.fG=color.fB = 1.f;
+//    pHudText->SetOutColor(color);
+//    return;
+
+    IMapLayer* pLayer = nullptr;//m_pSceneGraph->GetMap()->CreateLayer("test");
+    IMapLocation* pEarthLocation = nullptr;//dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+//    pLayer->AddSceneNode(pEarthLocation);
 
     ISceneGroup* pSceneRoot = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
-    pEarthLocation->SetSceneNode(pSceneRoot);
+//    pEarthLocation->SetSceneNode(pSceneRoot);
 
     /// 绘制点
     auto pPoint = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
@@ -125,8 +135,7 @@ void MainWindow::on_action_triggered()
     pPoint2->SetPointSize(5.f);
     pPoint3->SetPointSize(5.f);
 
-    SceneColor color;
-    color.fR=1.0f;
+
     pPoint->SetColor(color);
     pPoint1->SetColor(color);
     pPoint2->SetColor(color);
@@ -194,9 +203,20 @@ void MainWindow::on_action_triggered()
     pRadarSensor->SetColor(color);
     //pRadarSensor->ShowFace(false);
     pSceneRoot->AddSceneNode(pAttitudeGroup1);
-//    m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);
+    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("model/AirPlane.ive");
+//    IMapLocation* pLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+    auto pScal = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP);
+    auto pFlash = m_pSceneGraph->GetPlot()->CreateSceneGroup(FLASH_GROUP)->AsSceneFlashGroup();
+//    pScal->AddSceneNode(pModel);
+    pFlash->AddSceneNode(pModel);
+    pFlash->SetFlash(true);
+    pFlash->SetFlashFreq(29);
+    pFlash->SetFlashColor(color);
+    pSceneRoot->AddSceneNode(pFlash);
+
+    m_pSceneGraph->GetRoot()->AddSceneNode(pFlash);
 //    m_pTrackNode = pPoint1;
-//    return;
+    return;
 
 //////////////////////测试地图上的模型///////////////////////////////////////////////////
 //    auto pAirPlane = m_pSceneGraph->GetPlot()->LoadSceneNode("model/AirPlane.ive");
@@ -313,10 +333,10 @@ void MainWindow::on_action_triggered()
 
 
     /// 添加模型
-    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("model/AirPlane.ive");
+//    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("model/AirPlane.ive");
     IMapLocation* pLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
-    auto pScal = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP);
-    auto pFlash = m_pSceneGraph->GetPlot()->CreateSceneGroup(FLASH_GROUP)->AsSceneFlashGroup();
+//    auto pScal = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP);
+//    auto pFlash = m_pSceneGraph->GetPlot()->CreateSceneGroup(FLASH_GROUP)->AsSceneFlashGroup();
 
     pFlash->SetFlashFreq(0.5f);
     pFlash->SetFlashColor(color);
@@ -351,25 +371,67 @@ void MainWindow::on_action_triggered()
         vPos.push_back(vPV);
     }
 
+    /// 转到地固系下
+    CVector vECF;
+    CCoorSys::TEME2ECF(dMJD,vPos[0],vECF);
+    PV satPV;
+    satPV.stP.dX = vECF(0);
+    satPV.stP.dY = vECF(1);
+    satPV.stP.dZ = vECF(2);
+
+    satPV.stV.dX = vECF(3);
+    satPV.stV.dY = vECF(4);
+    satPV.stV.dZ = vECF(5);
+
+    Pos satPRY,rPos;
+
+    MapGeoPos testPos;
+    CVector vOther;
+    GisMath::XYZ2LBH(vECF.slice(0,2),vOther);
+
+    vOther(1) += 10*DD2R;
+    vOther(2) = 0;
+    IMapLocation* pEarthLocationTest = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+    testPos.fLon = vOther(0)*DR2D;
+    testPos.fLat = vOther(1)*DR2D;
+    testPos.fHeight = 0;
+    pEarthLocationTest->SetGeoPos(testPos);
+    pEarthLocationTest->SetSceneNode(pPoint);
+    pLayer->AddSceneNode(pEarthLocationTest);
+
+    GisMath::LBH2XYZ(vOther(0),vOther(1),vOther(2),rPos.dX,rPos.dY,rPos.dZ);
+    CalPRY(satPV,rPos,Rota_RYP,satPRY);
+    SceneAttitude attitude;
+    attitude.dRoll = satPRY.dX*DR2D;
+    attitude.dPitch = satPRY.dY*DR2D;
+    attitude.dYaw = satPRY.dZ*DR2D;
+
+
+
     pSatellite->SetJ2000Oribit(vTime,vPos);
     pSatellite->SetModelPath("model/SJ-2/shixian-2.flt");
 
-    auto pSatelliteSensor = dynamic_cast<IConeSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IConeSensor"));
+    auto pSatelliteSensor = dynamic_cast<ISConeSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISConeSensor"));
     color.fG=1.f;
     color.fA=.6f;
-    pSatelliteSensor->SetAngle(10.f);
+    pSatelliteSensor->SetHAngle(.4f);
+    pSatelliteSensor->SetVAngle(1.f);
     pSatelliteSensor->SetColor(color);
     pSatellite->SetOribitColor(color);
     pSatellite->AddSensor(pSatelliteSensor);
-    pSatellite->UpdateData(dMJD+0.3);
+    pSatellite->UpdateData(dMJD);
+    m_pSceneGraph->GetMap()->GetSpaceEnv()->AddSceneNode(pSatellite);
+    m_pSceneGraph->GetMap()->GetSpaceEnv()->UpdateDate(dMJD);
 
     m_pTrackNode = pRadarSensor;
 
 }
 
+static int nIndex(0);
 void MainWindow::on_action_2_triggered()
 {
-    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->SetTrackNode(m_pTrackNode);
+    pHudText->SetText(QString::number(nIndex++).toStdString());
+//    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->SetTrackNode(m_pTrackNode);
 }
 
 void MainWindow::on_action_3_triggered()

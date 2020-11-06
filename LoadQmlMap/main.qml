@@ -24,7 +24,6 @@ Window
         id:areaPlan
     }
 
-    property int menuHeight: 42
     OsgItem
     {
         id:showOsg
