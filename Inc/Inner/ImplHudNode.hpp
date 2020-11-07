@@ -16,22 +16,22 @@ protected:
     void SetControlNode(osgEarth::Controls::Control* pControl)
     {
         m_pControl = pControl;
-        m_pRootNode = m_pControl.get();
-        m_pRootNode->addUpdateCallback(m_pUpdateCallBack);
+        ImplSceneNode<T>::m_pRootNode = m_pControl.get();
+        ImplSceneNode<T>::m_pRootNode->addUpdateCallback(ImplSceneNode<T>::m_pUpdateCallBack);
     }
 
     /// 位置更改
     void HudPosChanged()
     {
         m_bPosChanged = true;
-        NodeChanged();
+        ImplSceneNode<T>::NodeChanged();
     }
 
     /// 状态更改
     void HudTypeChanged()
     {
         m_bTypeChanged=true;
-        NodeChanged();
+        ImplSceneNode<T>::NodeChanged();
     }
 
     void UpdateNode()

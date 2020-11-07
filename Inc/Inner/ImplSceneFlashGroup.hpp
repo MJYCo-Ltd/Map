@@ -29,7 +29,7 @@ protected:
 
         {
             /// 设置着色器
-            auto pSate = m_pRootNode->getOrCreateStateSet();
+            auto pSate = ImplSceneGroup<T>::m_pRootNode->getOrCreateStateSet();
             auto pNodeProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
 
             /// 此处应该不知道
@@ -53,19 +53,19 @@ protected:
     void FlashStatusChanged()
     {
         T::m_bStatusChanged=true;
-        NodeChanged();
+        ImplSceneGroup<T>::NodeChanged();
     }
 
     void FlashColorChanged()
     {
         T::m_bColorChanged=true;
-        NodeChanged();
+        ImplSceneGroup<T>::NodeChanged();
     }
 
     void FlashFlashChanged()
     {
         T::m_bFlashChanged=true;
-        NodeChanged();
+        ImplSceneGroup<T>::NodeChanged();
     }
 
     void UpdateNode()
@@ -74,13 +74,13 @@ protected:
         {
             if(!T::m_bFlash)
             {
-                auto pSate = m_pRootNode->getOrCreateStateSet();
+                auto pSate = ImplSceneGroup<T>::m_pRootNode->getOrCreateStateSet();
                 auto pNodeProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
                 T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(pNodeProgram,"Data/GLSL/Flash.glsl");
             }
             else
             {
-                auto pSate = m_pRootNode->getOrCreateStateSet();
+                auto pSate = ImplSceneGroup<T>::m_pRootNode->getOrCreateStateSet();
                 auto pNodeProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
                 T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(pNodeProgram,"Data/GLSL/Flash.glsl");
             }

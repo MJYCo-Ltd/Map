@@ -83,14 +83,14 @@ public:
     {
         ImplSceneNode<T>::InitNode();
         m_pOsgAttitudeNode = new CMyPositionAttitudeTransform;
-        SetGroupNode(m_pOsgAttitudeNode.get());
+        ImplSceneGroup<T>::SetGroupNode(m_pOsgAttitudeNode.get());
     }
 
     /// 状态更改
-    void PosChanged(){NodeChanged();m_bPosChanged=true;}
-    void AttitudeChanged(){NodeChanged();m_bAttitudeChanged=true;}
-    void AttitudeMatrixChanged(){NodeChanged();m_bAttitudeMatrixChanged=true;}
-    void PivotPosChanged(){NodeChanged();m_bPivotChanged=true;}
+    void PosChanged(){ImplSceneGroup<T>::NodeChanged();m_bPosChanged=true;}
+    void AttitudeChanged(){ImplSceneGroup<T>::NodeChanged();m_bAttitudeChanged=true;}
+    void AttitudeMatrixChanged(){ImplSceneGroup<T>::NodeChanged();m_bAttitudeMatrixChanged=true;}
+    void PivotPosChanged(){ImplSceneGroup<T>::NodeChanged();m_bPivotChanged=true;}
 protected:
     bool m_bPosChanged=false;
     bool m_bAttitudeChanged=false;

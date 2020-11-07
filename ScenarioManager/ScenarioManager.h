@@ -14,7 +14,7 @@ class SCENARIOMANAGER_EXPORT ScenarioManager : public QObject
     Q_OBJECT
     Q_PROPERTY(QStringList scenarios READ scenarios NOTIFY scenarioListChanged)
 public:
-    ScenarioManager(QObject* parent);
+    ScenarioManager(QObject* parent=nullptr);
     QDir dir();
     QDir scenarioDir();
 

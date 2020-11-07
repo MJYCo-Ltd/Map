@@ -56,7 +56,7 @@ CMap::~CMap()
     }
 
     /// 清空根节点
-    m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pGroup));
+    m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pGroup.get()));
 }
 
 /// 订阅消息
@@ -329,7 +329,7 @@ void CMap::InitNode()
 
 void CMap::InitMap()
 {
-    m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CClearChildNode(m_pGroup));
+    m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CClearChildNode(m_pGroup.get()));
     switch (m_emType)
     {
     case MAP_2D:
@@ -364,7 +364,7 @@ void CMap::InitMap()
             osgEarth::GLUtils::setGlobalDefaults(m_p2DRoot->getOrCreateStateSet());
         }
 
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pGroup,m_p2DRoot,true));
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pGroup.get(),m_p2DRoot,true));
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapNodeChanged(m_pMap3DNode,m_pMap2DNode,this));
     }
         break;
@@ -379,15 +379,15 @@ void CMap::InitMap()
 #endif
             osgEarth::Util::LogarithmicDepthBuffer buffer;
             buffer.setUseFragDepth( true );
-            buffer.install(m_pGroup);
+            buffer.install(m_pGroup.get());
             m_pSpaceEnv->Init();
 
             osgEarth::GLUtils::setGlobalDefaults(m_pMap3DNode->getOrCreateStateSet());
         }
 
         /// 增加更新
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pGroup,m_pMap3DNode.get(),true));
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pGroup,m_pSpaceEnv->GetOsgNode(),true));
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pGroup.get(),m_pMap3DNode.get(),true));
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pGroup.get(),m_pSpaceEnv->GetOsgNode(),true));
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapNodeChanged(m_pMap2DNode,m_pMap3DNode,this));
     }
         break;

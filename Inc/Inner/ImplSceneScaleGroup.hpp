@@ -19,7 +19,7 @@ protected:
         ImplSceneNode<T>::InitNode();
         m_pAutoScaleTransform = new osg::AutoTransform;
         m_pAutoScaleTransform->setAutoScaleToScreen(true);
-        SetGroupNode(m_pAutoScaleTransform.get());
+        ImplSceneGroup<T>::SetGroupNode(m_pAutoScaleTransform.get());
     }
 
     /**
@@ -28,7 +28,7 @@ protected:
     void ScalChanged()
     {
         m_bScaleChanged = true;
-        NodeChanged();
+        ImplSceneGroup<T>::NodeChanged();
     }
 
     void AutoScalChanged()

@@ -16,16 +16,22 @@ public:
 
 protected:
 
+    /**
+    * @brief 显示类型修改
+    */
     void ShowTypeChanged()
     {
         m_bShowTypeChanged = true;
-        NodeChanged();
+        ImplSceneShape<T>::NodeChanged();
     }
 
+    /**
+     * @brief 显示距离修改
+     */
     void DistanceChanged()
     {
         m_bDistanceChanged = true;
-        NodeChanged();
+        ImplSceneShape<T>::NodeChanged();
     }
 
     void UpdateNode()
@@ -74,12 +80,14 @@ protected:
         m_pScalTransform->addChild(m_pLineGroup.get());
         m_pScalTransform->addChild(m_pFaceGroup.get());
 
-        m_pLineGroup->addChild(m_pGeometry.get());
-        m_pFaceGroup->addChild(m_pGeometry.get());
+        m_pLineGroup->addChild(ImplSceneShape<T>::m_pGeometry.get());
+        m_pFaceGroup->addChild(ImplSceneShape<T>::m_pGeometry.get());
+
+        /// 线模型只绘制线 面模型只绘制面
         m_pLineGroup->getOrCreateStateSet()->setAttributeAndModes(new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK,osg::PolygonMode::LINE));
         m_pFaceGroup->getOrCreateStateSet()->setAttributeAndModes(new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK,osg::PolygonMode::FILL));
 
-        auto pState = m_pGeometry->getOrCreateStateSet();
+        auto pState = ImplSceneShape<T>::m_pGeometry->getOrCreateStateSet();
         /// 开启颜色混合 关闭光照
         pState->setMode(GL_BLEND,osg::StateAttribute::ON);
         pState->setMode(GL_LIGHTING,osg::StateAttribute::OFF);
@@ -88,7 +96,7 @@ protected:
         pDepth->setWriteMask(false);
         pState->setAttribute(pDepth);
 
-        SetOsgNode(m_pScalTransform.get());
+        ImplSceneShape<T>::SetOsgNode(m_pScalTransform.get());
     }
 protected:
     osg::observer_ptr<osg::Group>    m_pFaceGroup;

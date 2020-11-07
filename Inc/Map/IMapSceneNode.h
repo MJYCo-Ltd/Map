@@ -1,7 +1,7 @@
 #ifndef INTERFACE_MAPSCENENODE_HEADER_H
 #define INTERFACE_MAPSCENENODE_HEADER_H
 #include <SceneGraph/ISceneNode.h>
-#include <MAP/MapType.h>
+#include <Map/MapType.h>
 
 /**
  * @brief 地图节点

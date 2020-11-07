@@ -20,7 +20,7 @@ protected:
     {
         ImplSceneNode<T>::InitNode();
         m_pLod = new osg::LOD;
-        SetGroupNode(m_pLod.get());
+        ImplSceneGroup<T>::SetGroupNode(m_pLod.get());
     }
 
     void ChangeTypeChanged(){}

@@ -2,7 +2,7 @@
 #define H_SCENE_TYPE_INCLUDE_H
 
 #include <cmath>
-#include <limits>
+#include <cfloat>
 
 #define JUDGE_DOUBLE_CALL_FUNCTION(VA,VB,VC) {if(fabs(VA-VB)>DBL_EPSILON){VB=VA;VC();}}
 #define JUDGE_FLOAT_CALL_FUNCTION(VA,VB,VC) {if(fabs(VA-VB)>FLT_EPSILON){VB=VA;VC();}}

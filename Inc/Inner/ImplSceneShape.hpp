@@ -36,7 +36,7 @@ public:
         CreateShape();
 
         ImplSceneNode<T>::InitNode();
-        SetOsgNode(m_pGeometry.get());
+        ImplSceneNode<T>::SetOsgNode(m_pGeometry.get());
     }
 
 protected:
@@ -47,14 +47,14 @@ protected:
     void ShapeChanged()
     {
         m_bShapeChanged=true;
-        NodeChanged();
+        ImplSceneNode<T>::NodeChanged();
     }
 
     /// 颜色更改
     void ColorChanged()
     {
         m_bColorChanged=true;
-        NodeChanged();
+        ImplSceneNode<T>::NodeChanged();
     }
 
     virtual void UpdateColor()

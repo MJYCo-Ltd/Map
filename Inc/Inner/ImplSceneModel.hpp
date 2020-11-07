@@ -68,7 +68,7 @@ protected:
     {
         ImplSceneNode<T>::InitNode();
         m_pInitAttitudeMatrix = new CMyMatrixTransform;
-        SetOsgNode(m_pInitAttitudeMatrix.get());
+        ImplSceneNode<T>::SetOsgNode(m_pInitAttitudeMatrix.get());
     }
 
     /**
@@ -76,7 +76,7 @@ protected:
      */
     void InitAttitudeChanged()
     {
-        NodeChanged();
+        ImplSceneNode<T>::NodeChanged();
     }
 
 protected:

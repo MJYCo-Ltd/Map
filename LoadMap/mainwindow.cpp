@@ -15,6 +15,7 @@
 #include <Plot/Common/ISceneModel.h>
 #include <Plot/MapShape/IMapLocation.h>
 #include <Plot/SceneShape/IPoint.h>
+#include <Plot/SceneShape/IPolygon.h>
 #include <Plot/SceneShape/IConeSensor.h>
 #include <Plot/SceneShape/ISConeSensor.h>
 #include <Plot/Common/ISceneFlashGroup.h>
@@ -106,12 +107,12 @@ bool bShowBackGround=false;
 IHudText* pHudText=nullptr;
 void MainWindow::on_action_triggered()
 {
-//    pHudText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
-//    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudText);
+    pHudText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
+    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudText);
 
     SceneColor color;
-//    color.fR=1.0f;
-//    pHudText->SetText("Hello world");
+    color.fR=1.0f;
+    pHudText->SetText("Hello world");
 //    pHudText->SetColor(color);
 
 //    color.fG=color.fB = 1.f;
@@ -166,6 +167,15 @@ void MainWindow::on_action_triggered()
     pLine->AddPoint(3,scenePos);
     pSceneRoot->AddSceneNode(pLine);
 
+    /// 绘制多边形
+    auto pPolygon = dynamic_cast<IPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPolygon"));
+    pPolygon->SetMultPos(pLine->GetMulPos());
+    scenePos.fX=50.f;
+    scenePos.fY=50.f;
+    pPolygon->AddPoint(4,scenePos);
+    pPolygon->SetColor(color);
+    pSceneRoot->AddSceneNode(pPolygon);
+
 
     /// 绘制锥形波
     auto pConSensor = dynamic_cast<IConeSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IConeSensor"));
@@ -214,7 +224,7 @@ void MainWindow::on_action_triggered()
     pFlash->SetFlashColor(color);
     pSceneRoot->AddSceneNode(pFlash);
 
-    m_pSceneGraph->GetRoot()->AddSceneNode(pFlash);
+    m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);
 //    m_pTrackNode = pPoint1;
     return;
 

@@ -1,6 +1,9 @@
 #include "SceneImage.h"
 
-CSceneImage::CSceneImage()
+void CSceneImage::ImageSizeChanged()
 {
+}
 
+void CSceneImage::ImagePathChanged()
+{
 }
