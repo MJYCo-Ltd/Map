@@ -15,7 +15,7 @@ void CMapCoverImage::UpdateMapNode(osgEarth::MapNode *pMapNode)
 
 void CMapCoverImage::InitNode()
 {
-
+    ImplMapSceneNode<IMapCoverImage>::InitNode();
     InitStyle();
 
     m_pCoverRoot = new osg::Group;

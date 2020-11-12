@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
 
 
 
-    auto pScene = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(SCENEGRAPH_USER);
+    auto pScene = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(SCENEGRAPH_3D);
     //pScene->GetMap()->GetSpaceEnv()->SetMilkywayVisible(false);
 //    for(auto one:pScene->GetMap()->GetMapLayers())
 //    {

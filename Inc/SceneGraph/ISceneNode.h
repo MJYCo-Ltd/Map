@@ -37,14 +37,6 @@ public:
     bool IsVisible() const{return(m_bVisible);}
 
     /**
-     * @brief 状态更改消息
-     */
-    virtual void VisibleChanged()
-    {
-        m_bVisibleChanged = true;
-    }
-
-    /**
      * @brief 转换成想要的类型
      * @return
      */
@@ -59,11 +51,11 @@ public:
     virtual IHudNode* AsHudNode(){return(nullptr);}
 protected:
     virtual ~ISceneNode(){}
+    virtual void VisibleChanged()=0;
 
 protected:
     ISceneGraph* m_pSceneGraph;
     bool         m_bVisible=true;
-    bool         m_bVisibleChanged=false;
 };
 
 #endif

@@ -55,6 +55,7 @@ void CMapLocation::UpdateMapNode(osgEarth::MapNode *pMapNode)
 /// 初始化节点
 void CMapLocation::InitNode()
 {
+    ImplMapSceneNode<IMapLocation>::InitNode();
     m_pGeoTransform = new CMyMatrixTransform;
     m_pHorizonCullBack = new osgEarth::HorizonCullCallback;
     m_pGeoTransform->addCullCallback(m_pHorizonCullBack);

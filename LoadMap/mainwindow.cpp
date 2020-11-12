@@ -105,6 +105,7 @@ void MainWindow::on_actionchange_triggered()
 
 bool bShowBackGround=false;
 IHudText* pHudText=nullptr;
+IMapLocation* pEarthLocation=nullptr;
 void MainWindow::on_action_triggered()
 {
     pHudText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
@@ -119,12 +120,12 @@ void MainWindow::on_action_triggered()
 //    pHudText->SetOutColor(color);
 //    return;
 
-    IMapLayer* pLayer = nullptr;//m_pSceneGraph->GetMap()->CreateLayer("test");
-    IMapLocation* pEarthLocation = nullptr;//dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
-//    pLayer->AddSceneNode(pEarthLocation);
+    IMapLayer* pLayer = m_pSceneGraph->GetMap()->CreateLayer("test");
+    pEarthLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+    pLayer->AddSceneNode(pEarthLocation);
 
     ISceneGroup* pSceneRoot = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
-//    pEarthLocation->SetSceneNode(pSceneRoot);
+    pEarthLocation->SetSceneNode(pSceneRoot);
 
     /// 绘制点
     auto pPoint = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
@@ -224,9 +225,7 @@ void MainWindow::on_action_triggered()
     pFlash->SetFlashColor(color);
     pSceneRoot->AddSceneNode(pFlash);
 
-    m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);
 //    m_pTrackNode = pPoint1;
-    return;
 
 //////////////////////测试地图上的模型///////////////////////////////////////////////////
 //    auto pAirPlane = m_pSceneGraph->GetPlot()->LoadSceneNode("model/AirPlane.ive");
@@ -440,6 +439,7 @@ void MainWindow::on_action_triggered()
 static int nIndex(0);
 void MainWindow::on_action_2_triggered()
 {
+    pEarthLocation->SetVisible(!pEarthLocation->IsVisible());
     pHudText->SetText(QString::number(nIndex++).toStdString());
 //    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->SetTrackNode(m_pTrackNode);
 }

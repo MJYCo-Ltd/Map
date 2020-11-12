@@ -51,8 +51,15 @@ protected:
     /// 重写子类的函数
     void VisibleChanged()
     {
-        T::VisibleChanged();
-        NodeChanged();
+        if(T::m_bVisible)
+        {
+            m_pRootNode->setNodeMask(m_preMask);
+        }
+        else
+        {
+            m_bVisibleChanged=true;
+            NodeChanged();
+        }
     }
 
     /**
@@ -60,19 +67,15 @@ protected:
      */
     void UpdateNode()
     {
-        if(T::m_bVisibleChanged)
+        if(m_bVisibleChanged)
         {
-            if(T::m_bVisible)
-            {
-                m_pRootNode->setNodeMask(m_preMask);
-            }
-            else
+            if(!T::m_bVisible)
             {
                 m_preMask = m_pRootNode->getNodeMask();
                 m_pRootNode->setNodeMask(0);
             }
 
-            T::m_bVisibleChanged=false;
+            m_bVisibleChanged=false;
         }
 
         IOsgSceneNode::UpdateNode();
@@ -90,6 +93,7 @@ protected:
 
 protected:
     osg::Node::NodeMask  m_preMask = 0xffffffffu;
+    bool         m_bVisibleChanged=false;
 };
 
 #endif // IMPL_SCENE_NODE_H
