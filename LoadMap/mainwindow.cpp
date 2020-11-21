@@ -439,8 +439,9 @@ void MainWindow::on_action_triggered()
 static int nIndex(0);
 void MainWindow::on_action_2_triggered()
 {
-    pEarthLocation->SetVisible(!pEarthLocation->IsVisible());
+//    pEarthLocation->SetVisible(!pEarthLocation->IsVisible());
     pHudText->SetText(QString::number(nIndex++).toStdString());
+    pEarthLocation->SetVisible(!pEarthLocation->IsVisible());
 //    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->SetTrackNode(m_pTrackNode);
 }
 
