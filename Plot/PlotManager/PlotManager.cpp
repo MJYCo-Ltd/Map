@@ -51,6 +51,7 @@ ISceneGroup *CPlotManager::CreateSceneGroup(SCENE_GROUP_TYPE emType)
     if(nullptr != pGroup)
     {
         pGroup->AsOsgSceneNode()->Init();
+        m_pCreateFactory->InsertNode(pGroup);
     }
 
     return(pGroup);
@@ -73,6 +74,7 @@ ISceneNode *CPlotManager::LoadSceneNode(const string &sPath)
         auto pNode = new ImplSceneModel<ISceneModel>(m_pSceneGraph);
         pNode->Init();
         pNode->SetModel(pOsgNode);
+        m_pCreateFactory->InsertNode(pNode);
         return(pNode);
     }
 

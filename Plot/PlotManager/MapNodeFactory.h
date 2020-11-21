@@ -33,6 +33,12 @@ public:
      */
     void InitFactory();
 
+    /**
+     * @brief 添加场景节点
+     * @param pNode
+     */
+    void InsertNode(ISceneNode* pNode);
+
 protected:
 
 	/**

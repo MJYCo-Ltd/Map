@@ -107,6 +107,12 @@ void CMapNodeFactory::InitFactory()
     m_nTimerID = startTimer(60000);
 }
 
+/// 插入场景节点
+void CMapNodeFactory::InsertNode(ISceneNode *pNode)
+{
+    m_allCreateNode.push_back(pNode);
+}
+
 /// 初始化类型
 void CMapNodeFactory::InitType(const string &sInterface)
 {

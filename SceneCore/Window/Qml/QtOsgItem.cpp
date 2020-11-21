@@ -17,7 +17,7 @@ QtOsgItem::QtOsgItem():
     m_unTextureID(0),
     m_pShow(nullptr)
 {
-    m_pSceneGraph = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(SCENEGRAPH_3D);
+    m_pSceneGraph = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(SCENEGRAPH_2D);
     m_pSceneGraph->SetQuickItem(this);
 
     m_pFBOWindow = static_cast<QtWindow*>(m_pSceneGraph->GetMainWindow())->GetOsgWindow();

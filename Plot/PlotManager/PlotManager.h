@@ -47,7 +47,7 @@ public:
      */
     void RegisterPlotType();
 private:
-    CMapNodeFactory*                   m_pCreateFactory=nullptr;/// 创建节点
+    CMapNodeFactory*     m_pCreateFactory=nullptr;/// 创建节点
 };
 
 extern "C"
