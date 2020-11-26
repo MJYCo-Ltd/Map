@@ -17,21 +17,12 @@ QtOsgItem::QtOsgItem():
     m_unTextureID(0),
     m_pShow(nullptr)
 {
-    m_pSceneGraph = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(SCENEGRAPH_2D);
-    m_pSceneGraph->SetQuickItem(this);
-
-    m_pFBOWindow = static_cast<QtWindow*>(m_pSceneGraph->GetMainWindow())->GetOsgWindow();
-
     /// 有节点
     setFlag(ItemHasContents, true);
     setAcceptHoverEvents(true);
     setAcceptedMouseButtons(Qt::AllButtons);
     setFlag(ItemAcceptsInputMethod,true);
     grabMouse();
-
-    QtRender* pRender = static_cast<QtRender*>(static_cast<QtSceneGraph*>(m_pSceneGraph)->SceneGraphRender());
-
-    connect(pRender,&QtRender::RenderAFrame,this,&QtOsgItem::UpdateTexture);
 }
 
 QtOsgItem::~QtOsgItem()
@@ -40,14 +31,28 @@ QtOsgItem::~QtOsgItem()
     GetSceneCore()->GetSceneGraphManager()->DeleteSceneGraph(m_pSceneGraph);
 }
 
-ISceneGraph *QtOsgItem::GetSceneGraph()
+void QtOsgItem::setType(QtOsgItem::ItemType type)
 {
-    return(m_pSceneGraph);
-}
+    m_emType = type;
+    switch (m_emType)
+    {
+    case Item_2DMAp:
+        m_pSceneGraph = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(SCENEGRAPH_2D);
+        break;
+    case Item_User:
+        m_pSceneGraph = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(SCENEGRAPH_USER);
+        break;
+    default:
+        m_pSceneGraph = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(SCENEGRAPH_3D);
+        break;
+    }
+    m_pSceneGraph->SetQuickItem(this);
 
-QtFBOWindow *QtOsgItem::GetFBOWindow()
-{
-    return(m_pFBOWindow);
+    m_pFBOWindow = static_cast<QtWindow*>(m_pSceneGraph->GetMainWindow())->GetOsgWindow();
+    QtRender* pRender = static_cast<QtRender*>(static_cast<QtSceneGraph*>(m_pSceneGraph)->SceneGraphRender());
+
+    connect(pRender,&QtRender::RenderAFrame,this,&QtOsgItem::UpdateTexture);
+
 }
 
 /// 已经准备好了

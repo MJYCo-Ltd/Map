@@ -77,7 +77,7 @@ void QtOsgWindow::initializeGL()
 
     static const char *vertexShaderSource=
             "#version 330\n"
-            "varying vec2 uv;\n"
+            "out vec2 uv;\n"
             "void main(void)\n"
             "{\n"
                 "vec2 pos[] = vec2[](vec2(-1.0, -1.0),\n"
@@ -93,7 +93,7 @@ void QtOsgWindow::initializeGL()
             "}\n";
 
     static const char *fragmentShaderSource =
-        "varying vec2 uv;\n"
+        "in vec2 uv;\n"
         "uniform sampler2D tex;\n"
         "void main() {\n"
         "   gl_FragColor = vec4(texture2D(tex, uv).rgb, 1.0);\n"
@@ -228,6 +228,9 @@ void QtOsgWindow::Init()
     format.setDepthBufferSize( traits.depth );
     format.setStencilBufferSize( traits.stencil );
     format.setSamples( traits.samples );
+//    format.setMajorVersion(3);
+//    format.setMinorVersion(3);
+    format.setProfile(QSurfaceFormat::CoreProfile);
 
     format.setSwapInterval( traits.vsync ? 1 : 0 );
     format.setStereo( traits.quadBufferStereo ? 1 : 0 );

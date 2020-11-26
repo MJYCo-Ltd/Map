@@ -6,7 +6,7 @@
  */
 
 #include <QQuickItem>
-#include "../SceneCore_Global.h"
+#include <SceneCore_Global.h>
 
 class QtFBOWindow;
 class ISceneGraph;
@@ -15,21 +15,27 @@ class QtOSGSimpleTextureNode;
 class SCENECORESHARED_EXPORT QtOsgItem:public QQuickItem
 {
     Q_OBJECT
+    Q_PROPERTY(ItemType type MEMBER m_emType WRITE setType)
+
 public:
+    enum ItemType
+    {
+        Item_2DMAp,
+        Item_3DMAP,
+        Item_User
+    };
+    Q_ENUM(ItemType)
+
     QtOsgItem();
     ~QtOsgItem();
 
     /**
-     * @brief 获取场景图
-     * @return
+     * @brief 设置qml显示的类型
+     * @param type
      */
-    ISceneGraph* GetSceneGraph();
+    void setType(ItemType type);
 
-    /**
-     * @brief 获取FBO窗口
-     * @return
-     */
-    QtFBOWindow* GetFBOWindow();
+    QtFBOWindow* GetFBOWindow(){return(m_pFBOWindow);}
 
 public slots:
     void Ready();
@@ -63,6 +69,7 @@ private:
     ISceneGraph*         m_pSceneGraph;/// 场景图
     QtFBOWindow*         m_pFBOWindow; /// 渲染窗口
     QtOSGSimpleTextureNode*m_pShow;    /// Item显示的节点
+    ItemType             m_emType=Item_3DMAP;/// 创建类型
 };
 
 #endif // OSGITEM_H

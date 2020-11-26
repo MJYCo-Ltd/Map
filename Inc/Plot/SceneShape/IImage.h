@@ -26,7 +26,7 @@ struct SceneImageSize
     /// 写bool操作
     operator bool()const
     {
-        return(0!=unWidth && 0!=unHeight);
+        return(0u !=unWidth && 0u !=unHeight);
     }
 };
 
