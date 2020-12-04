@@ -113,11 +113,14 @@ void MainWindow::on_action_triggered()
 
     SceneColor color;
     color.fR=1.0f;
+    color.fG=1.0f;
+    color.fB=1.0f;
     pHudText->SetText("Hello world");
-//    pHudText->SetColor(color);
+    pHudText->SetColor(color);
 
 //    color.fG=color.fB = 1.f;
-//    pHudText->SetOutColor(color);
+    color.fR = color.fG = color.fB=0.f;
+    pHudText->SetOutColor(color);
 //    return;
 
     IMapLayer* pLayer = m_pSceneGraph->GetMap()->CreateLayer("test");
@@ -276,7 +279,7 @@ void MainWindow::on_action_triggered()
     //m_pLine->SetTerrainType(RELATIVE_TERRAIN);
     pLayer->AddSceneNode(m_pLine);
 
-//    IMapCoverImage* pCover = dynamic_cast<IMapCoverImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapCoverImage"));
+    IMapCoverImage* pCover = dynamic_cast<IMapCoverImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapCoverImage"));
 //    if(nullptr != pCover)
 //    {
 //        QString sFileName = QFileDialog::getOpenFileName(nullptr,QString::fromUtf8("打开xyz文件"),QApplication::applicationDirPath(),"*.xyz");

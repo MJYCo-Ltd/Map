@@ -26,7 +26,7 @@ protected:
     /**
      * @brief 初始化style
      */
-    virtual void InitStyle(){}
+    virtual void InitStyle(){m_pNodeStyle=new osgEarth::Style;}
 
     /**
      * @brief 选中更改

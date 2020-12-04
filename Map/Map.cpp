@@ -92,10 +92,11 @@ bool CMap::ConvertCoord(int &nX, int &nY, MapGeoPos &geoPos, short TranType)
             return(false);
         }
 
+        osg::Viewport* pViewPort = pOsgViewPoint->GetOsgView()->getCamera()->getViewport();
         switch (m_emType)
         {
         case MAP_2D:
-            if(m_pMap2DNode->getTerrain()->getWorldCoordsUnderMouse(pOsgViewPoint->GetOsgView(), nX, nY, world))
+            if(m_pMap2DNode->getTerrain()->getWorldCoordsUnderMouse(pOsgViewPoint->GetOsgView(), nX, pViewPort ? pViewPort->height() - nY : nY, world))
             {
                 geoPoint.fromWorld(m_pMap2DNode->getMapSRS(),world);
                 geoPoint.makeGeographic();
@@ -106,7 +107,7 @@ bool CMap::ConvertCoord(int &nX, int &nY, MapGeoPos &geoPos, short TranType)
             }
             break;
         case MAP_3D:
-            if(m_pMap3DNode->getTerrain()->getWorldCoordsUnderMouse(pOsgViewPoint->GetOsgView(), nX, nY, world))
+            if(m_pMap3DNode->getTerrain()->getWorldCoordsUnderMouse(pOsgViewPoint->GetOsgView(), nX, pViewPort ? pViewPort->height() - nY : nY, world))
             {
                 geoPoint.fromWorld(m_pMap3DNode->getMapSRS(),world);
                 geoPoint.makeGeographic();

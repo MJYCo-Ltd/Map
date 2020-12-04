@@ -112,7 +112,7 @@ void CMyEarthManipulator::rotate(double dx, double dy)
 
 void CMyEarthManipulator::zoom(double dx, double dy, osg::View *view)
 {
-    osgEarth::Util::EarthManipulator::zoom(dx,dy,view);
+    osgEarth::Util::EarthManipulator::zoom(-dx,-dy,view);
     if(MAP_2D == m_emType)
     {
         AdjustViewPoint();
