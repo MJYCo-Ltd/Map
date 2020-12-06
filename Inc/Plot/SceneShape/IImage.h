@@ -7,6 +7,7 @@ struct SceneImageSize
 {
     unsigned int unWidth=0u;  /// 图片宽度
     unsigned int unHeight=0u; /// 图片高度
+    bool         bOutSet=false;///是否是外部设置
 
     bool operator == (const SceneImageSize& rOther)const
     {
@@ -15,7 +16,7 @@ struct SceneImageSize
             return (true);
         }
 
-        return(unWidth == rOther.unWidth && unHeight == rOther.unHeight);
+        return(unWidth == rOther.unWidth && unHeight == rOther.unHeight && bOutSet == rOther.bOutSet);
     }
 
     bool operator !=(const SceneImageSize& rOther)const
@@ -40,7 +41,7 @@ public:
     /**
      * @brief 设置图片的大小
      */
-    void SetImageSize(const SceneImageSize& stImageSize)JUDGE_EQUAL_CALL_FUNCTION(stImageSize,m_stImageSize,ImagePathChanged)
+    void SetImageSize(const SceneImageSize& stImageSize)JUDGE_EQUAL_CALL_FUNCTION(stImageSize,m_stImageSize,ImageSizeChanged)
     const SceneImageSize& ImageSize()const{return(m_stImageSize);}
 
     /**

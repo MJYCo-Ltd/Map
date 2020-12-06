@@ -28,9 +28,9 @@ enum Scene_ROTATE
 /// 场景颜色
 struct SceneColor
 {
-    float fR=0.f;
-    float fG=0.f;
-    float fB=0.f;
+    float fR=1.f;
+    float fG=1.f;
+    float fB=1.f;
     float fA=1.f;
 
     bool operator == (const SceneColor& rOther) const

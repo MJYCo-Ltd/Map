@@ -5,6 +5,7 @@
 #include "DrawShape/SceneLine.h"
 #include "DrawShape/SceneRadar.h"
 #include "DrawShape/ScenePolygon.h"
+#include "DrawShape/SceneImage.h"
 #include "SceneShape.h"
 
 static string s_sPoint("IPoint");
@@ -49,6 +50,10 @@ ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const string& sInterfaceName)
     else if(s_sPolygon == sInterfaceName)
     {
         return(new CScenePolygon(pSceneGraph));
+    }
+    else if(s_sImage == sInterfaceName)
+    {
+        return(new CSceneImage(pSceneGraph));
     }
 
     return(nullptr);

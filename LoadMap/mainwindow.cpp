@@ -29,6 +29,7 @@
 #include <Plot/SceneShape/IRadarSensor.h>
 #include <Plot/SatelliteShow/ISatellite.h>
 #include <Plot/Hud/IHudText.h>
+#include <Plot/SceneShape/IImage.h>
 #include <Hud/IViewHud.h>
 
 
@@ -109,8 +110,13 @@ bool bShowBackGround=false;
 IHudText* pHudText=nullptr;
 IMapLocation* pEarthLocation=nullptr;
 ISceneFlashGroup* pFlash=nullptr;
+IImage* pImage=nullptr;
+
 void MainWindow::on_action_triggered()
 {
+    pImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
+    pImage->SetImagePath("1.jpg");
+
     pHudText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
     m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudText);
 
@@ -133,6 +139,8 @@ void MainWindow::on_action_triggered()
 
     ISceneGroup* pSceneRoot = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
     pEarthLocation->SetSceneNode(pSceneRoot);
+
+    pSceneRoot->AddSceneNode(pImage);
 
     /// 绘制点
     auto pPoint = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
@@ -446,6 +454,9 @@ void MainWindow::on_action_triggered()
 static int nIndex(0);
 void MainWindow::on_action_2_triggered()
 {
+    SceneImageSize size;
+    size.unHeight = size.unWidth = 50;
+    pImage->SetImageSize(size);
     pFlash->SetFlash(!pFlash->IsFlash());
 //    pEarthLocation->SetVisible(!pEarthLocation->IsVisible());
     pHudText->SetText(QString::number(nIndex++).toStdString());
