@@ -108,6 +108,7 @@ void MainWindow::on_actionchange_triggered()
 bool bShowBackGround=false;
 IHudText* pHudText=nullptr;
 IMapLocation* pEarthLocation=nullptr;
+ISceneFlashGroup* pFlash=nullptr;
 void MainWindow::on_action_triggered()
 {
     pHudText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
@@ -123,6 +124,7 @@ void MainWindow::on_action_triggered()
 //    color.fG=color.fB = 1.f;
     color.fR = color.fG = color.fB=0.f;
     pHudText->SetOutColor(color);
+    color.fR = color.fG = 1.f;
 //    return;
 
     IMapLayer* pLayer = m_pSceneGraph->GetMap()->CreateLayer("test");
@@ -222,7 +224,7 @@ void MainWindow::on_action_triggered()
     ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("model/AirPlane.ive");
 //    IMapLocation* pLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     auto pScal = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP);
-    auto pFlash = m_pSceneGraph->GetPlot()->CreateSceneGroup(FLASH_GROUP)->AsSceneFlashGroup();
+    pFlash = m_pSceneGraph->GetPlot()->CreateSceneGroup(FLASH_GROUP)->AsSceneFlashGroup();
 //    pScal->AddSceneNode(pModel);
     pFlash->AddSceneNode(pModel);
     pFlash->SetFlash(true);
@@ -444,9 +446,10 @@ void MainWindow::on_action_triggered()
 static int nIndex(0);
 void MainWindow::on_action_2_triggered()
 {
+    pFlash->SetFlash(!pFlash->IsFlash());
 //    pEarthLocation->SetVisible(!pEarthLocation->IsVisible());
     pHudText->SetText(QString::number(nIndex++).toStdString());
-    pEarthLocation->SetVisible(!pEarthLocation->IsVisible());
+//    pEarthLocation->SetVisible(!pEarthLocation->IsVisible());
 //    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->SetTrackNode(m_pTrackNode);
 }
 

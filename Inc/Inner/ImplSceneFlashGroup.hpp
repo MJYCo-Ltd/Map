@@ -72,16 +72,14 @@ protected:
     {
         if(T::m_bFlashChanged)
         {
+            auto pSate = ImplSceneGroup<T>::m_pRootNode->getOrCreateStateSet();
+            auto pNodeProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
             if(!T::m_bFlash)
             {
-                auto pSate = ImplSceneGroup<T>::m_pRootNode->getOrCreateStateSet();
-                auto pNodeProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
-                T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(pNodeProgram,"Data/GLSL/Flash.glsl");
+                T::m_pSceneGraph->ResouceLoader()->RemoveVirtualProgram(pNodeProgram,"Data/GLSL/Flash.glsl");
             }
             else
             {
-                auto pSate = ImplSceneGroup<T>::m_pRootNode->getOrCreateStateSet();
-                auto pNodeProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
                 T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(pNodeProgram,"Data/GLSL/Flash.glsl");
             }
             T::m_bFlashChanged = false;
