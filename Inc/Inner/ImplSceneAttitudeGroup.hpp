@@ -1,6 +1,6 @@
 #ifndef IMPL_SCENE_ATTITUDE_GROUP_H
 #define IMPL_SCENE_ATTITUDE_GROUP_H
-#include <Sofa/sofam.h>
+#include <VersionMathCommon.h>
 #include <Inner/OsgExtern/MyPositionAttitudeTransform.h>
 #include <Math/YPRAngle.h>
 #include <Inner/ImplSceneGroup.hpp>

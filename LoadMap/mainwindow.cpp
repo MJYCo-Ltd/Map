@@ -1,6 +1,13 @@
 #include <QFileDialog>
 #include <QDebug>
 
+#include <VersionMathCommon.h>
+#include <GisMath/GisMath.h>
+#include <Satellite/Date.h>
+#include <Satellite/SGP4.h>
+#include <Satellite/CoorSys.h>
+#include <SatelliteToolKit/SatelliteToolKit.h>
+
 #include <SceneGraph/ISceneGraph.h>
 #include <SceneGraph/IWindow.h>
 #include <SceneGraph/IViewPort.h>
@@ -23,12 +30,7 @@
 #include <Plot/SatelliteShow/ISatellite.h>
 #include <Plot/Hud/IHudText.h>
 #include <Hud/IViewHud.h>
-#include <GisMath/GisMath.h>
-#include <Satellite/Date.h>
-#include <Satellite/SGP4.h>
-#include <Satellite/CoorSys.h>
-#include <SatelliteToolKit/SatelliteToolKit.h>
-#include <Sofa/sofam.h>
+
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"

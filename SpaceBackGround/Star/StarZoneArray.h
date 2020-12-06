@@ -7,7 +7,7 @@
   **************************************************************/
 #include <QFile>
 #include <QtEndian>
-#include "Sofa/sofam.h"
+#include <VersionMathCommon.h>
 #include "StarZoneArrayBase.h"
 #include "StarZoneData.h"
 

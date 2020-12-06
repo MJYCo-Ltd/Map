@@ -1,24 +1,27 @@
 #include <iostream>
 #include <iomanip>
-#include "mainwindow.h"
 #include <QApplication>
 #include <QWindow>
 #include <QDebug>
+
+#include <osgEarth/GeoData>
+#include <osg/Matrix>
+
 #include <ISceneCore.h>
 #include <SceneGraph/IWindow.h>
 #include <SpaceEnv/ISpaceEnv.h>
 #include <Map/IMap.h>
-#include <Sofa/sofa.h>
+#include <VersionMathCommon.h>
 #include <Math/VecMat.h>
+#include <Math/YPRAngle.h>
+#include <GisMath/GisMath.h>
 #include <Satellite/Date.h>
 #include <Satellite/SGP4.h>
 #include <Satellite/CoorSys.h>
-#include <Math/YPRAngle.h>
-#include <GisMath/GisMath.h>
 #include <SatelliteToolKit/SatelliteToolKit.h>
-#include <osgEarth/GeoData>
-#include <osg/Matrix>
 
+
+#include "mainwindow.h"
 
 /**
  * @brief 窗口消息定义

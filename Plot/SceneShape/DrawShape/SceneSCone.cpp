@@ -1,4 +1,4 @@
-#include <Sofa/sofam.h>
+#include <VersionMathCommon.h>
 #include "SceneSCone.h"
 
 /// 创建模型

@@ -1,6 +1,6 @@
 #ifndef IMPL_SCENE_MODEL_H
 #define IMPL_SCENE_MODEL_H
-#include <Sofa/sofam.h>
+#include <VersionMathCommon.h>
 #include <Math/Matrix.h>
 #include <Math/YPRAngle.h>
 #include <Inner/OsgExtern/MyMatrixTransform.h>

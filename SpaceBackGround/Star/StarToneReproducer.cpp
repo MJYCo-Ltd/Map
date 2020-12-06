@@ -1,5 +1,5 @@
 #include <cmath>
-#include "Sofa/sofam.h"
+#include <VersionMathCommon.h>
 #include "StarToneReproducer.h"
 
 #ifndef pow10

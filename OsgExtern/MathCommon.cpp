@@ -1,6 +1,6 @@
 ﻿#include <cmath>
 #include <osgEarth/SpatialReference>
-#include <Sofa/sofam.h>
+#include <VersionMathCommon.h>
 #include <Inner/OsgExtern/MathCommon.h>
 
 CMathCommon *CMathCommon::GetInstance()

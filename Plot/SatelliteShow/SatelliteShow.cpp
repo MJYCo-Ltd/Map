@@ -1,3 +1,4 @@
+#include <VersionMathCommon.h>
 #include <Math/Intpol.h>
 #include <Math/VecMat.h>
 #include <Plot/SceneShape/ISensor.h>
@@ -9,7 +10,6 @@
 #include <Plot/Common/ISceneModel.h>
 #include <Map/IMap.h>
 #include <SpaceEnv/ISpaceEnv.h>
-#include <Sofa/sofam.h>
 #include "SatelliteShow.h"
 
 string S_3DSatllite("ISatellite");
