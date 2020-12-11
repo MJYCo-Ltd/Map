@@ -42,9 +42,6 @@ protected:
         if(nullptr != pNode)
         {
             m_pRootNode = pNode;
-            auto pNodeProgram = osgEarth::VirtualProgram::getOrCreate(m_pRootNode->getOrCreateStateSet());
-            /// 此处应该不知道
-            T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(pNodeProgram,"Data/GLSL/Global.glsl");
             m_pRootNode->addUpdateCallback(m_pUpdateCallBack);
         }
     }

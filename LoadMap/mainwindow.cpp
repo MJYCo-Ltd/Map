@@ -115,7 +115,7 @@ IImage* pImage=nullptr;
 void MainWindow::on_action_triggered()
 {
     pImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
-    pImage->SetImagePath("1.jpg");
+    pImage->SetImagePath("Images/ship.png");
 
     pHudText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
     m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudText);

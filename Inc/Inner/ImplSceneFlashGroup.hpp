@@ -30,10 +30,12 @@ protected:
         {
             /// 设置着色器
             auto pSate = ImplSceneGroup<T>::m_pRootNode->getOrCreateStateSet();
-            auto pNodeProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
+            m_pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
+
+            T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(m_pVirutlProgram,"Data/GLSL/Global.glsl");
 
             /// 此处应该不知道
-            if(T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(pNodeProgram,"Data/GLSL/Flash.glsl"))
+            if(T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(m_pVirutlProgram,"Data/GLSL/Flash.glsl"))
             {
                 /// 获取闪烁变量
                 m_pFlashStartTime = pSate->getOrCreateUniform("flashStartTime",osg::Uniform::FLOAT);
@@ -72,15 +74,13 @@ protected:
     {
         if(T::m_bFlashChanged)
         {
-            auto pSate = ImplSceneGroup<T>::m_pRootNode->getOrCreateStateSet();
-            auto pNodeProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
             if(!T::m_bFlash)
             {
-                T::m_pSceneGraph->ResouceLoader()->RemoveVirtualProgram(pNodeProgram,"Data/GLSL/Flash.glsl");
+                T::m_pSceneGraph->ResouceLoader()->RemoveVirtualProgram(m_pVirutlProgram,"Data/GLSL/Flash.glsl");
             }
             else
             {
-                T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(pNodeProgram,"Data/GLSL/Flash.glsl");
+                T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(m_pVirutlProgram,"Data/GLSL/Flash.glsl");
             }
             T::m_bFlashChanged = false;
         }
@@ -112,6 +112,7 @@ protected:
     osg::ref_ptr<osg::Uniform>             m_pFlashDurTime;
     osg::ref_ptr<osg::Uniform>             m_pFlashIntervalTime;
     osg::ref_ptr<osg::Uniform>             m_pFlashColor;
+    osg::ref_ptr<osgEarth::VirtualProgram> m_pVirutlProgram;
 };
 
 #endif // IMPL_SCENE_FLASH_GROUP_H

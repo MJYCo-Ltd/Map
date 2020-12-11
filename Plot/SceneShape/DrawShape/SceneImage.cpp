@@ -34,6 +34,7 @@ void CSceneImage::CreateShape()
 
 void CSceneImage::UpdateShape()
 {
+
     if(m_bPathChanged)
     {
         auto pTexture = m_pSceneGraph->ResouceLoader()->LoadTexture(m_sImagePath);
@@ -48,6 +49,7 @@ void CSceneImage::UpdateShape()
                 m_bSizeChanged = true;
             }
         }
+
         m_bPathChanged=false;
     }
 
@@ -62,4 +64,5 @@ void CSceneImage::UpdateShape()
 
         m_bSizeChanged=false;
     }
+
 }

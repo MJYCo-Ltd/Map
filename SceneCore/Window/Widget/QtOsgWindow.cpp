@@ -219,7 +219,6 @@ void QtOsgWindow::wheelEvent(QWheelEvent *event)
 void QtOsgWindow::Init()
 {
     QSurfaceFormat format = QSurfaceFormat::defaultFormat();
-
     osg::GraphicsContext::Traits traits(osg::DisplaySettings::instance().get());
     format.setAlphaBufferSize( traits.alpha );
     format.setRedBufferSize( traits.red );

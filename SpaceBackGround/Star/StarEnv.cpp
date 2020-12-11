@@ -70,6 +70,7 @@ CStarEnv::CStarEnv(ISceneGraph *pSceneGraph):
     setProjectionMatrixAsPerspective(45.0,1.0,0.00011,1.1);
 
     osg::StateSet *state = getOrCreateStateSet();
+    state->setGlobalDefaults();
 
 
     state->setMode(GL_BLEND, osg::StateAttribute::ON);
