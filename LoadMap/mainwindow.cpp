@@ -133,12 +133,9 @@ void MainWindow::on_action_triggered()
     color.fR = color.fG = 1.f;
 //    return;
 
-    IMapLayer* pLayer = m_pSceneGraph->GetMap()->CreateLayer("test");
-    pEarthLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
-    pLayer->AddSceneNode(pEarthLocation);
+
 
     ISceneGroup* pSceneRoot = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
-    pEarthLocation->SetSceneNode(pSceneRoot);
 
     pSceneRoot->AddSceneNode(pImage);
 
@@ -239,6 +236,12 @@ void MainWindow::on_action_triggered()
     pFlash->SetFlashFreq(29);
     pFlash->SetFlashColor(color);
     pSceneRoot->AddSceneNode(pFlash);
+//    m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);
+//    return;
+    IMapLayer* pLayer = m_pSceneGraph->GetMap()->CreateLayer("test");
+    pEarthLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+    pLayer->AddSceneNode(pEarthLocation);
+    pEarthLocation->SetSceneNode(pSceneRoot);
 
 //    m_pTrackNode = pPoint1;
 

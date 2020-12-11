@@ -20,6 +20,15 @@ public:
         m_pGeometry = new osg::Geometry;
         m_pGeometry->setDataVariance(osg::Object::DYNAMIC);
 
+        auto pState = m_pGeometry->getOrCreateStateSet();
+        /// 开启颜色混合 关闭光照
+        pState->setMode(GL_BLEND,osg::StateAttribute::ON);
+        pState->setMode(GL_LIGHTING,osg::StateAttribute::OFF);
+        /// 关闭写深度缓存
+        osg::Depth* pDepth = new osg::Depth;
+        pDepth->setWriteMask(false);
+        pState->setAttribute(pDepth);
+
 
         /// 创建颜色
         m_pColorArray = new osg::Vec4Array;

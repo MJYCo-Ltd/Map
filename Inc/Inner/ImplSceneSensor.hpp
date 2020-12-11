@@ -1,7 +1,6 @@
 #ifndef IMPL_SCENE_SENSOR_H
 #define IMPL_SCENE_SENSOR_H
 #include <osg/PolygonMode>
-#include <osg/Depth>
 #include <osg/MatrixTransform>
 #include <Inner/ImplSceneShape.hpp>
 
@@ -86,15 +85,6 @@ protected:
         /// 线模型只绘制线 面模型只绘制面
         m_pLineGroup->getOrCreateStateSet()->setAttributeAndModes(new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK,osg::PolygonMode::LINE));
         m_pFaceGroup->getOrCreateStateSet()->setAttributeAndModes(new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK,osg::PolygonMode::FILL));
-
-        auto pState = ImplSceneShape<T>::m_pGeometry->getOrCreateStateSet();
-        /// 开启颜色混合 关闭光照
-        pState->setMode(GL_BLEND,osg::StateAttribute::ON);
-        pState->setMode(GL_LIGHTING,osg::StateAttribute::OFF);
-        /// 关闭写深度缓存
-        osg::Depth* pDepth = new osg::Depth;
-        pDepth->setWriteMask(false);
-        pState->setAttribute(pDepth);
 
         ImplSceneShape<T>::SetOsgNode(m_pScalTransform.get());
     }

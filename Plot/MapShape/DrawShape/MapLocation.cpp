@@ -57,6 +57,10 @@ void CMapLocation::InitNode()
 {
     ImplMapSceneNode<IMapLocation>::InitNode();
     m_pGeoTransform = new CMyMatrixTransform;
+
+    auto pSate = m_pGeoTransform->getOrCreateStateSet();
+    m_pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
+    m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(m_pVirutlProgram,"Data/GLSL/Global.glsl");
     m_pHorizonCullBack = new osgEarth::HorizonCullCallback;
     m_pGeoTransform->addCullCallback(m_pHorizonCullBack);
 

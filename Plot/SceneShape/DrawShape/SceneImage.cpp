@@ -40,7 +40,7 @@ void CSceneImage::UpdateShape()
         auto pTexture = m_pSceneGraph->ResouceLoader()->LoadTexture(m_sImagePath);
         if(nullptr != pTexture)
         {
-            m_pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(0,pTexture,osg::StateAttribute::ON);
+            m_pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(0,pTexture);
 
             if(!m_stImageSize || !m_stImageSize.bOutSet)
             {

@@ -37,6 +37,7 @@ protected:
     osg::observer_ptr<const osgEarth::SpatialReference> m_pMapSrs;
     osg::observer_ptr<osgEarth::Terrain>               m_pTerrain;
     osg::observer_ptr<CMyMatrixTransform>       m_pGeoTransform;
+    osg::ref_ptr<osgEarth::VirtualProgram>      m_pVirutlProgram;
     osg::ref_ptr<osgEarth::HorizonCullCallback> m_pHorizonCullBack;
 };
 
