@@ -30,6 +30,7 @@
 #include <Plot/SatelliteShow/ISatellite.h>
 #include <Plot/Hud/IHudText.h>
 #include <Plot/SceneShape/IImage.h>
+#include <Plot/Common/ISceneScaleGroup.h>
 #include <Hud/IViewHud.h>
 
 
@@ -117,6 +118,10 @@ void MainWindow::on_action_triggered()
     pImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
     pImage->SetImagePath("Images/ship.png");
 
+    auto pAutoImage = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
+    pAutoImage->SetMinScal(1.);
+    pAutoImage->AddSceneNode(pImage);
+
     pHudText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
     m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudText);
 
@@ -137,7 +142,7 @@ void MainWindow::on_action_triggered()
 
     ISceneGroup* pSceneRoot = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
 
-    pSceneRoot->AddSceneNode(pImage);
+    pSceneRoot->AddSceneNode(pAutoImage);
 
     /// 绘制点
     auto pPoint = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
@@ -458,7 +463,7 @@ static int nIndex(0);
 void MainWindow::on_action_2_triggered()
 {
     SceneImageSize size;
-    size.unHeight = size.unWidth = 50;
+    size.unHeight = size.unWidth = 100;
     pImage->SetImageSize(size);
     pFlash->SetFlash(!pFlash->IsFlash());
 //    pEarthLocation->SetVisible(!pEarthLocation->IsVisible());

@@ -33,15 +33,43 @@ protected:
 
     void AutoScalChanged()
     {
+        m_bAutoScalChanged = true;
+        ImplSceneGroup<T>::NodeChanged();
     }
 
     void UpdateNode()
     {
         if(m_bScaleChanged)
         {
-            //m_pAutoScaleTransform->setScale(T::m_dScalBit);
-            m_pAutoScaleTransform->setMinimumScale(T::m_dScalBit);
+            if(!T::m_bAutoScal)
+            {
+                m_pAutoScaleTransform->setScale(T::m_dScalBit);
+            }
             m_bScaleChanged = false;
+        }
+
+        if(m_bAutoScalChanged)
+        {
+            if(!T::m_bAutoScal)
+            {
+                m_pAutoScaleTransform->setScale(T::m_dScalBit);
+            }
+            m_pAutoScaleTransform->setAutoScaleToScreen(T::m_bAutoScal);
+
+
+            if(T::m_bMinScalChanged)
+            {
+                m_pAutoScaleTransform->setMinimumScale(T::m_dMinScal);
+                T::m_bMinScalChanged=false;
+            }
+
+            if(T::m_bMaxScalChanged)
+            {
+                m_pAutoScaleTransform->setMaximumScale(T::m_dMaxScal);
+                T::m_bMaxScalChanged=false;
+            }
+
+            m_bAutoScalChanged=false;
         }
         ImplSceneGroup<T>::UpdateNode();
     }
@@ -49,6 +77,7 @@ protected:
 protected:
     osg::observer_ptr<osg::AutoTransform> m_pAutoScaleTransform;
     bool m_bScaleChanged=false;
+    bool m_bAutoScalChanged=false;
 };
 
 #endif // IMPL_SCENE_MODEL_H
