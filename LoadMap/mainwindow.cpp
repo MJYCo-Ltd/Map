@@ -192,7 +192,7 @@ void MainWindow::on_action_triggered()
     scenePos.fY=50.f;
     pPolygon->AddPoint(4,scenePos);
     pPolygon->SetColor(color);
-    pSceneRoot->AddSceneNode(pPolygon);
+//    pSceneRoot->AddSceneNode(pPolygon);
 
 
     /// 绘制锥形波

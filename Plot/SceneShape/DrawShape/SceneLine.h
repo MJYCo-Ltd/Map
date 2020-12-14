@@ -3,6 +3,7 @@
 #include <list>
 #include <Plot/SceneShape/ILine.h>
 #include <Inner/ImplSceneShape.hpp>
+#include <osg/Uniform>
 class CSceneLine:public ImplSceneShape<ILine>
 {
 public:
@@ -35,7 +36,8 @@ protected:
     void UpdateShape();
 protected:
     osg::ref_ptr<osg::DrawArrays> m_pDrawArrays;
-    std::list<ScenePos>    m_listAllPos;
+    std::list<ScenePos>           m_listAllPos;
+    osg::ref_ptr<osg::Uniform>    m_pUniform;
 };
 
 #endif // CSCENELINE_H

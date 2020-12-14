@@ -31,6 +31,10 @@ TRANSLATIONS += \
 SDK_CONFIG *= SceneCore
 unix:SDK_CONFIG *= Satellite OsgExtern
 include(../SoftSDK.pri)
-LIBS *= -lScenarioManagerd -lAreaPlanManagerd
+CONFIG (debug, debug|release){
+    LIBS *= -lScenarioManagerd -lAreaPlanManagerd
+}else{
+    LIBS *= -lScenarioManager -lAreaPlanManager
+}
 
 DISTFILES +=

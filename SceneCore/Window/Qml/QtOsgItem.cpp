@@ -13,9 +13,7 @@
 
 #include <QTimer>
 
-QtOsgItem::QtOsgItem():
-    m_unTextureID(0),
-    m_pShow(nullptr)
+QtOsgItem::QtOsgItem()
 {
     /// 有节点
     setFlag(ItemHasContents, true);
@@ -133,8 +131,11 @@ void QtOsgItem::touchEvent(QTouchEvent *event)
 /// 窗口大小更改时，创建view
 void QtOsgItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
-    QtRender* pRender = static_cast<QtRender*>(static_cast<QtSceneGraph*>(m_pSceneGraph)->SceneGraphRender());
-    QCoreApplication::postEvent(pRender,new RenderResize(this,newGeometry.size().toSize()));
+    if(nullptr != m_pSceneGraph)
+    {
+        QtRender* pRender = static_cast<QtRender*>(static_cast<QtSceneGraph*>(m_pSceneGraph)->SceneGraphRender());
+        QCoreApplication::postEvent(pRender,new RenderResize(this,newGeometry.size().toSize()));
+    }
     QQuickItem::geometryChanged(newGeometry,oldGeometry);
 }
 

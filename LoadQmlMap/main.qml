@@ -26,7 +26,7 @@ Window
 
     OsgItem
     {
-        type: OsgItem.Item_3DMAp
+        type: OsgItem.Item_3DMAP
         id:showOsg
         focus: true
         anchors.fill: parent

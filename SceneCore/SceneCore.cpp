@@ -114,6 +114,7 @@ bool CheckPC()
         osgEarth::setNotifyLevel(osg::INFO);
         s_gBChecked = osgEarth::Registry::instance()->getCapabilities().supportsGLSL();
         osgEarth::Registry::instance()->unRefImageDataAfterApply() = false;
+        osg::setNotifyLevel(osg::WARN);
         osgEarth::setNotifyLevel(osg::NOTICE);
     }
 

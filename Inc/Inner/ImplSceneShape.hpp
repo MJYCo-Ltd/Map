@@ -3,6 +3,28 @@
 #include <osg/Geometry>
 #include <Inner/ImplSceneNode.hpp>
 
+struct MyDrawCallBack:public osg::Drawable::DrawCallback
+{
+    void drawImplementation(osg::RenderInfo& renderInfo,const osg::Drawable* drawable) const
+    {
+        drawable->drawImplementation(renderInfo);
+
+        auto pLastProgram=renderInfo.getState()->getLastAppliedProgramObject();
+        if(nullptr != pLastProgram)
+        {
+
+            auto pProgram = pLastProgram->getProgram();
+            osg::notify(osg::NOTICE)<<"====================================================="<<endl;
+            osg::notify(osg::NOTICE)<<pProgram->getName()<<"\n--------------------------------------------"<<endl;
+            for(int i=0;i<pProgram->getNumShaders();++i)
+            {
+                osg::notify(osg::NOTICE)<<pProgram->getShader(i)->getName()<<"\n--------------------------------------------"<<endl;
+                osg::notify(osg::NOTICE)<<pProgram->getShader(i)->getShaderSource()<<endl;
+            }
+        }
+    }
+};
+
 /**
  *  实现ISceneNode所有的接口
  */

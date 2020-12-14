@@ -31,8 +31,17 @@ public:
     virtual void SetMultPos(const std::vector<ScenePos>&)=0;
     virtual std::vector<ScenePos> GetMulPos()const=0;
 
+    /**
+     * @brief 设置线宽度
+     */
+    virtual void SetLineWidth(unsigned int nWidth)JUDGE_EQUAL_CALL_FUNCTION(nWidth,m_nLineWidth,LineWidthChanged)
+    virtual unsigned int GetLineWidth(){return(m_nLineWidth);}
+
 protected:
+    virtual void LineWidthChanged(){}
     virtual ~ILine(){}
+protected:
+    unsigned int m_nLineWidth=1u;
 };
 
 #endif // INTERFACE_LINE_HEARDER_H

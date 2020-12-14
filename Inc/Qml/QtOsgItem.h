@@ -64,12 +64,12 @@ protected slots:
     void UpdateTexture();
 
 private:
-    uint                 m_unTextureID;/// 需要更新的纹理
-    bool                 m_bUpdate=false;/// 是否更改
-    ISceneGraph*         m_pSceneGraph;/// 场景图
-    QtFBOWindow*         m_pFBOWindow; /// 渲染窗口
-    QtOSGSimpleTextureNode*m_pShow;    /// Item显示的节点
-    ItemType             m_emType=Item_3DMAP;/// 创建类型
+    uint                 m_unTextureID=0u;     /// 需要更新的纹理
+    bool                 m_bUpdate=false;      /// 是否更改
+    ISceneGraph*         m_pSceneGraph=nullptr;/// 场景图
+    QtFBOWindow*         m_pFBOWindow=nullptr; /// 渲染窗口
+    QtOSGSimpleTextureNode*m_pShow=nullptr;    /// Item显示的节点
+    ItemType             m_emType=Item_3DMAP;  /// 创建类型
 };
 
 #endif // OSGITEM_H
