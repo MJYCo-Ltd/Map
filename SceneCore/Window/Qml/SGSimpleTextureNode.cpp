@@ -10,8 +10,9 @@ QtOSGSimpleTextureNode::QtOSGSimpleTextureNode(QQuickWindow *pWindow)
 {
     /// 设置纹理属性
     setTextureCoordinatesTransform(QSGSimpleTextureNode::MirrorVertically);
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     m_pTexture = m_pWindow->createTextureFromId(m_nTextureID,m_stTextureSize);
+#endif
     setTexture(m_pTexture);
 
     setFiltering(QSGTexture::Linear);
@@ -34,7 +35,10 @@ void QtOSGSimpleTextureNode::RebuildTexture()
         {
             delete m_pTexture;
         }
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         m_pTexture = m_pWindow->createTextureFromId(m_nTextureID,m_stTextureSize);
+#endif
+
         m_bNeedUpdate = false;
         setTexture(m_pTexture);
         markDirty(DirtyMaterial);

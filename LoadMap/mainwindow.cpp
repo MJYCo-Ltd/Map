@@ -31,6 +31,7 @@
 #include <Plot/Hud/IHudText.h>
 #include <Plot/SceneShape/IImage.h>
 #include <Plot/Common/ISceneScaleGroup.h>
+#include <Plot/Common/ISceneLodGroup.h>
 #include <Hud/IViewHud.h>
 
 
@@ -125,6 +126,9 @@ void MainWindow::on_action_triggered()
     pHudText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
     m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudText);
 
+    auto pLod = m_pSceneGraph->GetPlot()->CreateSceneGroup(LOD_GROUP)->AsSceneLodGroup();
+    pLod->AddSceneNode(pAutoImage);
+
     SceneColor color;
     color.fR=1.0f;
     color.fG=1.0f;
@@ -142,7 +146,7 @@ void MainWindow::on_action_triggered()
 
     ISceneGroup* pSceneRoot = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
 
-    pSceneRoot->AddSceneNode(pAutoImage);
+    pSceneRoot->AddSceneNode(pLod);
 
     /// 绘制点
     auto pPoint = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
@@ -240,7 +244,12 @@ void MainWindow::on_action_triggered()
     pFlash->SetFlash(true);
     pFlash->SetFlashFreq(29);
     pFlash->SetFlashColor(color);
-    pSceneRoot->AddSceneNode(pFlash);
+    pLod->AddSceneNode(pFlash);
+
+    std::vector<float> vLevelInfo;
+    vLevelInfo.push_back(1e6);
+
+    pLod->SetLevelsInfo(vLevelInfo);
 //    m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);
 //    return;
     IMapLayer* pLayer = m_pSceneGraph->GetMap()->CreateLayer("test");

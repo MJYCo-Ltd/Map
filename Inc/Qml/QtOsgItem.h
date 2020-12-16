@@ -51,7 +51,11 @@ protected:
     void touchEvent(QTouchEvent* event);
 
 protected:
-   void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+#else
+    void geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry);
+#endif
 
 
     /**

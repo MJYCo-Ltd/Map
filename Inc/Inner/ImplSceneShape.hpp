@@ -14,12 +14,12 @@ struct MyDrawCallBack:public osg::Drawable::DrawCallback
         {
 
             auto pProgram = pLastProgram->getProgram();
-            osg::notify(osg::NOTICE)<<"====================================================="<<endl;
-            osg::notify(osg::NOTICE)<<pProgram->getName()<<"\n--------------------------------------------"<<endl;
+            osg::notify(osg::WARN)<<"====================================================="<<endl;
+            osg::notify(osg::WARN)<<pProgram->getName()<<"\n--------------------------------------------"<<endl;
             for(int i=0;i<pProgram->getNumShaders();++i)
             {
-                osg::notify(osg::NOTICE)<<pProgram->getShader(i)->getName()<<"\n--------------------------------------------"<<endl;
-                osg::notify(osg::NOTICE)<<pProgram->getShader(i)->getShaderSource()<<endl;
+                osg::notify(osg::WARN)<<pProgram->getShader(i)->getName()<<"\n--------------------------------------------"<<endl;
+                osg::notify(osg::WARN)<<pProgram->getShader(i)->getShaderSource()<<endl;
             }
         }
     }

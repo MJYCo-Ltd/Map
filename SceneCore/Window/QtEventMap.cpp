@@ -70,7 +70,7 @@ unsigned int QtEventdMap::ChangeMouseEvent(QMouseEvent *event)
 osgGA::GUIEventAdapter::ScrollingMotion QtEventdMap::ChangeWheelEvent(QWheelEvent *event)
 {
     static osgGA::GUIEventAdapter::ScrollingMotion emMotion;
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     if(event->orientation() == Qt::Vertical)
     {
         emMotion = event->delta() > 0 ? osgGA::GUIEventAdapter::SCROLL_UP : osgGA::GUIEventAdapter::SCROLL_DOWN;
@@ -79,7 +79,18 @@ osgGA::GUIEventAdapter::ScrollingMotion QtEventdMap::ChangeWheelEvent(QWheelEven
     {
         emMotion = event->delta() > 0 ? osgGA::GUIEventAdapter::SCROLL_LEFT : osgGA::GUIEventAdapter::SCROLL_RIGHT;
     }
+#else
+    QPoint point = event->angleDelta();
+    if(point.x() != 0)
+    {
+        emMotion = point.x() > 0 ? osgGA::GUIEventAdapter::SCROLL_LEFT : osgGA::GUIEventAdapter::SCROLL_RIGHT;
+    }
 
+    if(point.y() != 0)
+    {
+        emMotion = point.y() > 0 ? osgGA::GUIEventAdapter::SCROLL_UP : osgGA::GUIEventAdapter::SCROLL_DOWN;
+    }
+#endif
 
     return(emMotion);
 }

@@ -129,14 +129,22 @@ void QtOsgItem::touchEvent(QTouchEvent *event)
 }
 
 /// 窗口大小更改时，创建view
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void QtOsgItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+#else
+void QtOsgItem::geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry)
+#endif
 {
     if(nullptr != m_pSceneGraph)
     {
         QtRender* pRender = static_cast<QtRender*>(static_cast<QtSceneGraph*>(m_pSceneGraph)->SceneGraphRender());
         QCoreApplication::postEvent(pRender,new RenderResize(this,newGeometry.size().toSize()));
     }
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QQuickItem::geometryChanged(newGeometry,oldGeometry);
+#else
+    QQuickItem::geometryChange(newGeometry,oldGeometry);
+#endif
 }
 
 /// 获取渲染节点添加到渲染树上

@@ -91,12 +91,14 @@ std::vector<ScenePos> CSceneLine::GetMulPos() const
 /// 创建形状
 void CSceneLine::CreateShape()
 {
+    m_pGeometry->setDrawCallback(new MyDrawCallBack);
     auto pSate = m_pGeometry->getOrCreateStateSet();
     auto pNodeProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
     /// 此处应该不知道
     if(m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(pNodeProgram,"Data/GLSL/Line.glsl"))
     {
         m_pUniform = pSate->getOrCreateUniform("nLineWidth",osg::Uniform::INT);
+        m_pUniform->set(1);
     }
     m_pDrawArrays = new osg::DrawArrays(GL_TRIANGLE_STRIP,0,m_pVertexArray->size());
     m_pGeometry->addPrimitiveSet(m_pDrawArrays);
@@ -106,23 +108,23 @@ void CSceneLine::CreateShape()
 void CSceneLine::UpdateShape()
 {
     int nLineSize = m_listAllPos.size();
-    if(nLineSize < 2)
-    {
-        return;
-    }
+//    if(nLineSize < 2)
+//    {
+//        return;
+//    }
 
-    m_pVertexArray->resize(m_listAllPos.size());
+    m_pVertexArray->resize(nLineSize);
     int nIndex=0;
     for(auto one : m_listAllPos)
     {
         m_pVertexArray->at(nIndex++).set(one.fX,one.fY,one.fZ);
     }
 
-    /// 如果只有两个点
-    if(2 == nLineSize)
-    {
-        m_pVertexArray->push_back(m_pVertexArray->at(0));
-    }
+//    /// 如果只有两个点
+//    if(2 == nLineSize)
+//    {
+//        m_pVertexArray->push_back(m_pVertexArray->at(0));
+//    }
 
     m_pDrawArrays->setCount(m_pVertexArray->size());
 }
