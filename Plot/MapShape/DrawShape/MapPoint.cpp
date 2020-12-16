@@ -65,7 +65,6 @@ void CMapPoint::InitStyle()
 
     m_pNodeStyle->getOrCreate<osgEarth::AltitudeSymbol>()->binding()
             = osgEarth::AltitudeSymbol::BINDING_VERTEX;
-    ImplMapSceneNode<IMapPoint>::InitStyle();
 }
 
 /// 修改

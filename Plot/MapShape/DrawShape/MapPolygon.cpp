@@ -128,11 +128,7 @@ void CMapPolygon::InitStyle()
                                                 ,m_stPolygonColor.fB,m_stPolygonColor.fA);
 
     m_pNodeStyle->getOrCreate<osgEarth::AltitudeSymbol>()
-            ->clamping() = osgEarth::AltitudeSymbol::CLAMP_TO_TERRAIN;
-    m_pNodeStyle->getOrCreate<osgEarth::AltitudeSymbol>()
             ->technique() = osgEarth::AltitudeSymbol::TECHNIQUE_DRAPE;
     m_pNodeStyle->getOrCreate<osgEarth::AltitudeSymbol>()
             ->verticalOffset() = 0.1;
-
-    ImplMapSceneNode<IMapPolygon>::InitStyle();
 }

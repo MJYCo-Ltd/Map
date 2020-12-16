@@ -67,6 +67,7 @@ protected:
 
 private:
     osg::observer_ptr<osgEarth::FeatureNode> m_pFeatureNode;
+    bool     m_bPosChanged=false;
 };
 
 #endif // CSCENELINE_H

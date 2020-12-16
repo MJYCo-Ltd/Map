@@ -26,7 +26,11 @@ protected:
     /**
      * @brief 初始化style
      */
-    virtual void InitStyle(){m_pNodeStyle=new osgEarth::Style;}
+    void InitStyle(osgEarth::Style* pStyle)
+    {
+        m_pNodeStyle->getOrCreate<osgEarth::AltitudeSymbol>()
+                ->clamping() = osgEarth::AltitudeSymbol::CLAMP_TO_TERRAIN;
+    }
 
     /**
      * @brief 选中更改

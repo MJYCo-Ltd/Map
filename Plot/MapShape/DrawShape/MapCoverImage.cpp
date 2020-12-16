@@ -145,7 +145,8 @@ void CMapCoverImage::SetCeDian(const vector<CeDian> & vAllCedian)
 /// 初始化样式
 void CMapCoverImage::InitStyle()
 {
-    ImplMapSceneNode<IMapCoverImage>::InitStyle();
+    m_pNodeStyle = new osgEarth::Style;
+    ImplMapSceneNode<IMapCoverImage>::InitStyle(m_pNodeStyle);
 
     m_pNodeStyle->getOrCreateSymbol<osgEarth::TextSymbol>()->encoding() = osgEarth::TextSymbol::ENCODING_UTF8;
     m_pNodeStyle->getOrCreateSymbol<osgEarth::TextSymbol>()->alignment() = osgEarth::TextSymbol::ALIGN_LEFT_CENTER;

@@ -19,7 +19,8 @@ void CMapLine::AddPoint(int nIndex, const MapGeoPos &rScenePos)
         m_listAllPos.insert(pIter,rScenePos);
     }
 
-     NodeChanged();
+    m_bPosChanged=true;
+    NodeChanged();
 }
 
 /// 移除指定位置点
@@ -34,6 +35,7 @@ bool CMapLine::RemovePoint(int nIndex)
     for(int i=0; i<nIndex;++i,++pIter){}
     m_listAllPos.erase(pIter);
 
+    m_bPosChanged=true;
     NodeChanged();
     return(true);
 }
@@ -52,6 +54,7 @@ bool CMapLine::UpdatePoint(int nIndex, const MapGeoPos &rPos)
     if(*pIter != rPos)
     {
         *pIter = rPos;
+        m_bPosChanged=true;
         NodeChanged();
     }
 
@@ -68,8 +71,8 @@ void CMapLine::SetMultPos(const vector<MapGeoPos> & vAllPoints)
         m_listAllPos.push_back(one);
     }
 
+    m_bPosChanged=true;
     NodeChanged();
-
 }
 
 /// 获取位置点
@@ -93,12 +96,16 @@ std::vector<MapGeoPos> CMapLine::GetMulPos() const
 ///更新节点
 void CMapLine::UpdateNode()
 {
-    osgEarth::Geometry* pGeometry = m_pFeatureNode->getFeature()->getGeometry();
-    int nIndex(0);
-    pGeometry->resize(m_listAllPos.size());
-    for(auto one : m_listAllPos)
+    if(m_bPosChanged)
     {
-        pGeometry->at(nIndex++).set(one.fLon,one.fLat,one.fHeight);
+        osgEarth::Geometry* pGeometry = m_pFeatureNode->getFeature()->getGeometry();
+        int nIndex(0);
+        pGeometry->resize(m_listAllPos.size());
+        for(auto one : m_listAllPos)
+        {
+            pGeometry->at(nIndex++).set(one.fLon,one.fLat,one.fHeight);
+        }
+        m_bPosChanged=false;
     }
 
     ///此处dirty会重新加载style
@@ -158,7 +165,7 @@ void CMapLine::InitStyle()
     m_pNodeStyle->getOrCreate<osgEarth::AltitudeSymbol>()->binding()
             = osgEarth::AltitudeSymbol::BINDING_VERTEX;
 
-    ImplMapSceneNode<IMapLine>::InitStyle();
+    ImplMapSceneNode<IMapLine>::InitStyle(m_pNodeStyle);
 }
 
 /// 修改线宽
