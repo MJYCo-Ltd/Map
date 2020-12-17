@@ -1,8 +1,8 @@
 #ifndef INTERFACE_SCENE_CORE_H
 #define INTERFACE_SCENE_CORE_H
 
-#include "SceneCore_Global.h"
-#include "SceneGraph/ISceneGraphManager.h"
+#include <SceneCore_Global.h>
+#include <SceneGraph/ISceneGraphManager.h>
 
 struct ISceneCore
 {

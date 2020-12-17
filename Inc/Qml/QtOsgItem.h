@@ -5,15 +5,15 @@
  * @brief Qt Quick 的场景节点
  */
 
-#include <QQuickItem>
+#include <QQuickFramebufferObject>
 #include <SceneCore_Global.h>
+#include <SceneGraph/ISceneGraph.h>
 
-class QtFBOWindow;
-class ISceneGraph;
-class QtOSGSimpleTextureNode;
+class QtOsgRenderer;
 
-class SCENECORESHARED_EXPORT QtOsgItem:public QQuickItem
+class SCENECORESHARED_EXPORT QtOsgItem:public QQuickFramebufferObject
 {
+    friend QtOsgRenderer;
     Q_OBJECT
     Q_PROPERTY(ItemType type MEMBER m_emType WRITE setType)
 
@@ -26,7 +26,7 @@ public:
     };
     Q_ENUM(ItemType)
 
-    QtOsgItem();
+    QtOsgItem(QQuickItem *parent = nullptr);
     ~QtOsgItem();
 
     /**
@@ -35,9 +35,13 @@ public:
      */
     void setType(ItemType type);
 
-    QtFBOWindow* GetFBOWindow(){return(m_pFBOWindow);}
+    /**
+     * @brief 重写父类窗口
+     * @return
+     */
+    Renderer *createRenderer() const;
 
-public slots:
+protected slots:
     void Ready();
 
 protected:
@@ -50,30 +54,10 @@ protected:
     void wheelEvent(QWheelEvent *event);
     void touchEvent(QTouchEvent* event);
 
-protected:
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
-#else
-    void geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry);
-#endif
-
-
-    /**
-     * @brief 获取节点数据
-     * @return
-     */
-    QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *);
-
-protected slots:
-    void UpdateTexture();
-
 private:
-    uint                 m_unTextureID=0u;     /// 需要更新的纹理
-    bool                 m_bUpdate=false;      /// 是否更改
-    ISceneGraph*         m_pSceneGraph=nullptr;/// 场景图
-    QtFBOWindow*         m_pFBOWindow=nullptr; /// 渲染窗口
-    QtOSGSimpleTextureNode*m_pShow=nullptr;    /// Item显示的节点
-    ItemType             m_emType=Item_3DMAP;  /// 创建类型
+    ItemType       m_emType=Item_3DMAP;  /// 创建类型
+    ISceneGraph*   m_pSceneGraph=nullptr;/// 场景图
+    QtOsgRenderer* m_pRenderer=nullptr;
 };
 
 #endif // OSGITEM_H

@@ -1,7 +1,7 @@
 #ifndef INTERFACE_SCENE_MANAGER_HEARDER_H
 #define INTERFACE_SCENE_MANAGER_HEARDER_H
 #include <string>
-#include "ISceneGraph.h"
+#include <SceneGraph/ISceneGraph.h>
 
 using namespace std;
 /**

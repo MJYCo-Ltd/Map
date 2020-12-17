@@ -7,6 +7,7 @@
 #include <osg/Notify>
 #include "QtOsgWindow.h"
 #include "../QtFBOWindow.h"
+#include "../MyShader.h"
 #include "SceneGraph/QtRender.h"
 
 
@@ -23,6 +24,10 @@ QtOsgWindow::QtOsgWindow(QThread *pThread)
 QtOsgWindow::~QtOsgWindow()
 {
     killTimer(m_nTimerID);
+    context()->makeCurrent(this);
+    delete m_pProgram;
+    delete m_pVao;
+    context()->doneCurrent();
 }
 
 /// 设置渲染类
@@ -66,7 +71,7 @@ void QtOsgWindow::initializeGL()
     m_pFBOWindow->InitContext(context());
     m_pFBOWindow->InitSurface(m_pThread);
 
-    QCoreApplication::postEvent(m_pRender,new RenderResize(this,this->size()));
+    QCoreApplication::postEvent(m_pRender,new RenderResize(m_pFBOWindow,this->size()));
     QCoreApplication::postEvent(m_pRender,new QEvent(static_cast<QEvent::Type>(RENDER_START)));
 
     context()->makeCurrent(this);
@@ -74,30 +79,6 @@ void QtOsgWindow::initializeGL()
     m_pProgram = new QOpenGLShaderProgram;
     m_pVao = new QOpenGLVertexArrayObject;
     m_pVao->create();
-
-    static const char *vertexShaderSource=
-            "#version 330\n"
-            "out vec2 uv;\n"
-            "void main(void)\n"
-            "{\n"
-                "vec2 pos[] = vec2[](vec2(-1.0, -1.0),\n"
-                                    "vec2( 1.0, -1.0),\n"
-                                    "vec2(-1.0,  1.0),\n"
-                                    "vec2( 1.0,  1.0));\n"
-                "vec2 uvpos[] = vec2[](vec2(0, 0.0),\n"
-                                    "vec2( 1.0, 0.0),\n"
-                                    "vec2(0.0,  1.0),\n"
-                                    "vec2( 1.0,  1.0));\n"
-                "gl_Position = vec4(pos[gl_VertexID], 0.0, 1.0);\n"
-                "uv = uvpos[gl_VertexID];\n"
-            "}\n";
-
-    static const char *fragmentShaderSource =
-        "in vec2 uv;\n"
-        "uniform sampler2D tex;\n"
-        "void main() {\n"
-        "   gl_FragColor = vec4(texture2D(tex, uv).rgb, 1.0);\n"
-        "}\n";
 
     m_pProgram->addCacheableShaderFromSourceCode(QOpenGLShader::Vertex, vertexShaderSource);
     m_pProgram->addCacheableShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShaderSource);
@@ -160,7 +141,7 @@ void QtOsgWindow::keyReleaseEvent(QKeyEvent *event)
 
 void QtOsgWindow::resizeEvent(QResizeEvent *event)
 {
-    QCoreApplication::postEvent(m_pRender, new RenderResize(this,event->size()));
+    QCoreApplication::postEvent(m_pRender, new RenderResize(m_pFBOWindow,event->size()));
     QOpenGLWindow::resizeEvent(event);
 }
 

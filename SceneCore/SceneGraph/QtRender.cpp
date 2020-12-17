@@ -1,8 +1,6 @@
 #include <osg/OperationThread>
 #include "QtRender.h"
 #include "Window/QtFBOWindow.h"
-#include "Window/Widget/QtOsgWindow.h"
-#include "Qml/QtOsgItem.h"
 
 class CModifyView:public osg::Operation
 {
@@ -84,14 +82,7 @@ bool QtRender::event(QEvent *e)
 /// 重置窗口
 void QtRender::Resize(RenderResize* pRenderResize)
 {
-    if(auto pItem = qobject_cast<QtOsgItem*>(pRenderResize->GetSender()))
-    {
-        pItem->GetFBOWindow()->ReSize(pRenderResize->GetSize());
-    }
-    else if(auto pWindow = qobject_cast<QtOsgWindow*>(pRenderResize->GetSender()))
-    {
-        pWindow->GetFBOWindow()->ReSize(pRenderResize->GetSize());
-    }
+    pRenderResize->GetSender()->ReSize(pRenderResize->GetSize());
 }
 
 /// 渲染引擎
@@ -107,9 +98,9 @@ void QtRender::Release()
     m_pOsgViewer->done();
 }
 
-RenderResize::RenderResize(QObject *pSender, const QSize &rSize):
+RenderResize::RenderResize(QtFBOWindow *pFBOWindow, const QSize &rSize):
     QEvent(static_cast<Type>(RENDER_RESIZE)),
-    m_pSender(pSender),
+    m_pFBOWindow(pFBOWindow),
     m_stSize(rSize)
 {
 }

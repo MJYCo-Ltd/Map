@@ -27,7 +27,7 @@ SOURCES += \
     SceneGraph/ResourceLod.cpp \
     SceneGraph/SceneGraphManager.cpp \
     Window/Qml/QtOsgItem.cpp \
-    Window/Qml/SGSimpleTextureNode.cpp \
+    Window/Qml/QtOsgRenderer.cpp \
     Window/QtFBOWindow.cpp \
     Window/QtWindow.cpp \
     Window/QtEventMap.cpp \
@@ -45,7 +45,8 @@ HEADERS += \
     SceneGraph/QtViewPort.h \
     SceneGraph/ResourceLod.h \
     SceneGraph/SceneGraphManager.h \
-    Window/Qml/SGSimpleTextureNode.h \
+    Window/MyShader.h \
+    Window/Qml/QtOsgRenderer.h \
     Window/QtFBOWindow.h \
     Window/QtWindow.h \
     Window/QtEventMap.h \

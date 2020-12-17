@@ -19,12 +19,12 @@ enum RenderEvent
 class RenderResize:public QEvent
 {
 public:
-    RenderResize(QObject *pSender, const QSize& rSize);
+    RenderResize(QtFBOWindow *pFBOWindow, const QSize& rSize);
 
-    QObject* GetSender(){return(m_pSender);}
+    QtFBOWindow* GetSender(){return(m_pFBOWindow);}
     const QSize& GetSize(){return(m_stSize);}
 protected:
-    QObject *m_pSender;
+    QtFBOWindow *m_pFBOWindow;
     QSize    m_stSize;
 };
 
