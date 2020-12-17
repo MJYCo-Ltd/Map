@@ -59,7 +59,7 @@ bool CMapPolygon::UpdatePoint(int nIndex, const MapGeoPos &rPos)
 }
 
 /// 设置多个点
-void CMapPolygon::SetMultPos(const vector<MapGeoPos> &vAllPoints)
+void CMapPolygon::SetMultPos(const std::vector<MapGeoPos> &vAllPoints)
 {
     m_listAllPos.clear();
 

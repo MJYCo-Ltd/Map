@@ -4,8 +4,6 @@
 #include <list>
 #include <SceneGraph/IWindow.h>
 
-using namespace std;
-
 class QThread;
 class QtOsgWindow;
 class QtOsgItem;
@@ -91,8 +89,8 @@ protected:
     int             m_nFrameRate=60;          /// 帧率
     bool            m_bInit=false;
     bool            m_bCanChange=true;
-    list<QtViewPort*> m_vOtherViewPoint;
-    list<IWindowMessageObserver*> m_allWindowMessageObserver;
+    std::list<QtViewPort*> m_vOtherViewPoint;
+    std::list<IWindowMessageObserver*> m_allWindowMessageObserver;
 };
 
 #endif // CMYQTWINDOW_H

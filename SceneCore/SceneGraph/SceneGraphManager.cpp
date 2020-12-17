@@ -3,7 +3,6 @@
 #include "QtSceneGraph.h"
 #include "SceneGraph/ISceneGroup.h"
 
-using namespace std;
 CSceneGraphManager::CSceneGraphManager()
 {
 }

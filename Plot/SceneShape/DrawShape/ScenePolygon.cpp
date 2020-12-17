@@ -59,7 +59,7 @@ bool CScenePolygon::UpdatePoint(int nIndex, const ScenePos &rPos)
 }
 
 ///初始化多个位置点
-void CScenePolygon::SetMultPos(const vector<ScenePos> & vAllPoints)
+void CScenePolygon::SetMultPos(const std::vector<ScenePos> & vAllPoints)
 {
     m_listAllPos.clear();
 

@@ -3,7 +3,6 @@
 #include <vector>
 #include <string>
 #include <Map/IMapSceneNode.h>
-using namespace std;
 
 /**
  * @brief 位置信息
@@ -24,7 +23,7 @@ struct CoverInfo
     int    nYNum;
     double dMin;
     double dMax;
-    vector<PosValue>vPosInfo;
+    std::vector<PosValue>vPosInfo;
 };
 
 /**
@@ -34,7 +33,7 @@ struct CeDian
 {
     double dLon;
     double dLat;
-    string sName;
+    std::string sName;
 };
 
 /**
@@ -54,7 +53,7 @@ public:
     /**
      * @brief 设置测点信息
      */
-    virtual void SetCeDian(const vector<CeDian>&)=0;
+    virtual void SetCeDian(const std::vector<CeDian>&)=0;
 
     /**
      * @brief 设置最小值的颜色
@@ -69,7 +68,7 @@ public:
     /**
      * @brief 设置范围和图片
      */
-    virtual void SetBound(const MapGeoPos&,const MapGeoPos&,const string&)=0;
+    virtual void SetBound(const MapGeoPos&,const MapGeoPos&,const std::string&)=0;
 protected:
     virtual ~IMapCoverImage(){}
 };

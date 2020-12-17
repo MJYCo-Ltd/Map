@@ -31,7 +31,7 @@ public:
     /**
      * @brief 设置测点信息
      */
-    void SetCeDian(const vector<CeDian>&);
+    void SetCeDian(const std::vector<CeDian>&);
 
     /**
      * @brief 初始化样式
@@ -48,10 +48,10 @@ public:
      */
     void SetMaxValueColor(const SceneColor&);
 
-    void SetBound(const MapGeoPos&,const MapGeoPos&,const string&);
+    void SetBound(const MapGeoPos&,const MapGeoPos&,const std::string&);
 
 private:
-    vector<CeDian> m_vCedian;    //// 测点信息
+    std::vector<CeDian> m_vCedian;    //// 测点信息
     CoverInfo      m_rCoverInfo; /// 覆盖信息
     SceneColor     m_stMinColor;
     SceneColor     m_stMaxColor;

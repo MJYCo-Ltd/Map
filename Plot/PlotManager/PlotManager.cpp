@@ -60,13 +60,13 @@ ISceneGroup *CPlotManager::CreateSceneGroup(SCENE_GROUP_TYPE emType)
 
 
 /// 根据接口类型创建地图节点
-ISceneNode *CPlotManager::CreateSceneNode(const string& csInterfaceName)
+ISceneNode *CPlotManager::CreateSceneNode(const std::string& csInterfaceName)
 {
     return(m_pCreateFactory->CreateMapSceneNode(csInterfaceName));
 }
 
 /// 加载模型
-ISceneNode *CPlotManager::LoadSceneNode(const string &sPath)
+ISceneNode *CPlotManager::LoadSceneNode(const std::string &sPath)
 {
     osg::Node* pOsgNode = m_pSceneGraph->ResouceLoader()->LoadNode(sPath);
     if(nullptr != pOsgNode)

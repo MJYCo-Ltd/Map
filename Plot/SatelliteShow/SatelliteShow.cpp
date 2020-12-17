@@ -12,7 +12,7 @@
 #include <SpaceEnv/ISpaceEnv.h>
 #include "SatelliteShow.h"
 
-string S_3DSatllite("ISatellite");
+std::string S_3DSatllite("ISatellite");
 
 void CSatelliteShow::InitNode()
 {
@@ -28,7 +28,7 @@ void CSatelliteShow::InitNode()
 
 
 /// 设置卫星轨道
-void CSatelliteShow::SetJ2000Oribit(const vector<double> &vTime, const vector<Math::CVector> &rOribitInfo)
+void CSatelliteShow::SetJ2000Oribit(const std::vector<double> &vTime, const std::vector<Math::CVector> &rOribitInfo)
 {
     m_vOribit = rOribitInfo;
     m_vdMjd = vTime;
@@ -36,7 +36,7 @@ void CSatelliteShow::SetJ2000Oribit(const vector<double> &vTime, const vector<Ma
     m_dEnd = vTime[vTime.size()-1];
     m_dStep = vTime[1]-vTime[0];
 
-    vector<ScenePos> vTemp;
+    std::vector<ScenePos> vTemp;
     vTemp.resize(rOribitInfo.size());
     int nIndex(0);
     for(auto iter=rOribitInfo.begin();iter!=rOribitInfo.end();++iter,++nIndex)
@@ -72,7 +72,7 @@ void CSatelliteShow::ModelChanged()
     m_pModel = m_pSceneGraph->GetPlot()->LoadSceneNode(m_sModelPath)->AsSceneModel();
     auto pGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
     pGroup->AddSceneNode(m_pModel);
-    pGroup->SetScal(10000);
+    pGroup->SetMinScal(1);
     m_pSatellite->AddSceneNode(pGroup);
 }
 
@@ -174,7 +174,7 @@ double CSatelliteShow::CalItNewton(double *dX, double dT, int nDim)
 
 
 /// 创建节点
-ISatellite *CreateNode(ISceneGraph *pSceneGraph, const string &sInterfaceName)
+ISatellite *CreateNode(ISceneGraph *pSceneGraph, const std::string &sInterfaceName)
 {
     if(sInterfaceName == S_3DSatllite)
     {
@@ -186,7 +186,7 @@ ISatellite *CreateNode(ISceneGraph *pSceneGraph, const string &sInterfaceName)
     }
 }
 
-bool QueryInterface(string& sInterfaceName)
+bool QueryInterface(std::string& sInterfaceName)
 {
     sInterfaceName = S_3DSatllite;
     return(true);

@@ -2,7 +2,6 @@
 #define CSCENEGRAPHMANAGER_H
 #include <list>
 #include "SceneGraph/ISceneGraphManager.h"
-using namespace std;
 
 class QtSceneGraph;
 class CSceneGraphManager:public ISceneGraphManager
@@ -37,7 +36,7 @@ public:
      */
     bool DeleteSceneGraph(ISceneGraph*& rForDelete);
 private:
-    list<QtSceneGraph*> m_vSceneGraph; /// 保存所有创建的地图
+    std::list<QtSceneGraph*> m_vSceneGraph; /// 保存所有创建的地图
 };
 
 #endif // CSCENEGRAPHMANAGER_H

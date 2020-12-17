@@ -34,12 +34,12 @@ extern "C"
      * @brief 设置exe运行路径
      * @param sPath
      */
-    SCENECORESHARED_EXPORT void SetExePath(const string &sPath);
+    SCENECORESHARED_EXPORT void SetExePath(const std::string &sPath);
 
     /**
      * @brief 获取exe运行路径
      * @return
      */
-    SCENECORESHARED_EXPORT const string& GetExePath();
+    SCENECORESHARED_EXPORT const std::string& GetExePath();
 }
 #endif // ISCENCECORE_H

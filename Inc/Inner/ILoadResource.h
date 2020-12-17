@@ -1,7 +1,6 @@
 #ifndef INCLUDE_HEADER_LOADRESOURCE_H
 #define INCLUDE_HEADER_LOADRESOURCE_H
 #include <string>
-using namespace std;
 
 namespace osg
 {
@@ -31,8 +30,8 @@ public:
      * @brief 初始化路径
      * @param csAppPath
      */
-    virtual void InitPath(const string& csAppPath)=0;
-    virtual const string& GetPath()=0;
+    virtual void InitPath(const std::string& csAppPath)=0;
+    virtual const std::string& GetPath()=0;
 
     /**
      * @brief 加载模型
@@ -40,7 +39,7 @@ public:
      * @param bIsRef       是否是相对路径
      * @return
      */
-    virtual osg::Node* LoadNode(const string& sModelPath,bool bIsRef=true)=0;
+    virtual osg::Node* LoadNode(const std::string& sModelPath,bool bIsRef=true)=0;
 
     /**
      * @brief 加载纹理
@@ -48,7 +47,7 @@ public:
      * @param bIsRef       是否是相对路径
      * @return
      */
-    virtual osg::Texture2D* LoadTexture(const string& sTexturePath, bool bIsRef=true)=0;
+    virtual osg::Texture2D* LoadTexture(const std::string& sTexturePath, bool bIsRef=true)=0;
 
     /**
      * @brief 加载字体
@@ -56,7 +55,7 @@ public:
      * @param bIsRef    是否是相对路径
      * @return
      */
-    virtual osgText::Font*  LoadFont(const string& sFontPath,bool bIsRef=true)=0;
+    virtual osgText::Font*  LoadFont(const std::string& sFontPath,bool bIsRef=true)=0;
 
     /**
      * @brief 加载图片
@@ -64,7 +63,7 @@ public:
      * @param bIsRef
      * @return
      */
-    virtual osg::Image* LoadImage(const string& sImagePath, int nWidth=0, int nHeight=0,bool bIsRef=true)=0;
+    virtual osg::Image* LoadImage(const std::string& sImagePath, int nWidth=0, int nHeight=0,bool bIsRef=true)=0;
 
     /**
      * @brief 加载着色器
@@ -72,8 +71,8 @@ public:
      * @param bIsRef
      * @return
      */
-    virtual bool LoadVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const string& sGLSLPath,bool bIsRef=true)=0;
-    virtual bool RemoveVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const string& sGLSLPath,bool bIsRef=true)=0;
+    virtual bool LoadVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const std::string& sGLSLPath,bool bIsRef=true)=0;
+    virtual bool RemoveVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const std::string& sGLSLPath,bool bIsRef=true)=0;
 };
 
 #endif

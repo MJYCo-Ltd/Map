@@ -27,7 +27,7 @@ private:
 };
 
 /// 标绘图层
-CMapLayer::CMapLayer(const string &sLayerName, osgEarth::MapNode *pMapNode, ISceneGraph *pSceneGraph):
+CMapLayer::CMapLayer(const std::string &sLayerName, osgEarth::MapNode *pMapNode, ISceneGraph *pSceneGraph):
     m_pSceneGraph(pSceneGraph),
     m_pMapNode(pMapNode),
     m_sLayerName(sLayerName)

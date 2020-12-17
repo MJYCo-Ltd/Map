@@ -1,7 +1,6 @@
 #ifndef CPLOTMANAGER_H
 #define CPLOTMANAGER_H
 #include<map>
-using namespace std;
 
 #include <osg/ref_ptr>
 #include <osg/observer_ptr>
@@ -28,7 +27,7 @@ public:
      * @param csInterfaceName
      * @return
      */
-    ISceneNode * CreateSceneNode(const string& csInterfaceName);
+    ISceneNode * CreateSceneNode(const std::string& csInterfaceName);
 
     /**
      * @brief LoadSceneNode

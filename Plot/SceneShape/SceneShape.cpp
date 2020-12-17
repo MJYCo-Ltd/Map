@@ -8,20 +8,20 @@
 #include "DrawShape/SceneImage.h"
 #include "SceneShape.h"
 
-static string s_sPoint("IPoint");
-static string s_sLine("ILine");
-static string s_sEllipse("IEllipse");
-static string s_sArc("IArc");
-static string s_sRectangle("IRectangle");
-static string s_sPolygon("IPolygon");
-static string s_sCone("ICone");
-static string s_sImage("IImage");
-static string s_sConeSensor("IConeSensor");
-static string s_sSConeSensor("ISConeSensor");
-static string s_sPulseSensor("IPulseSensor");
-static string s_sRadarSensor("IRadarSensor");
+static std::string s_sPoint("IPoint");
+static std::string s_sLine("ILine");
+static std::string s_sEllipse("IEllipse");
+static std::string s_sArc("IArc");
+static std::string s_sRectangle("IRectangle");
+static std::string s_sPolygon("IPolygon");
+static std::string s_sCone("ICone");
+static std::string s_sImage("IImage");
+static std::string s_sConeSensor("IConeSensor");
+static std::string s_sSConeSensor("ISConeSensor");
+static std::string s_sPulseSensor("IPulseSensor");
+static std::string s_sRadarSensor("IRadarSensor");
 
-ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const string& sInterfaceName)
+ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName)
 {
     if(sInterfaceName == s_sConeSensor)
     {
@@ -59,7 +59,7 @@ ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const string& sInterfaceName)
     return(nullptr);
 }
 
-bool QueryInterface(string& sInterfaceName)
+bool QueryInterface(std::string& sInterfaceName)
 {
     sInterfaceName.clear();
 

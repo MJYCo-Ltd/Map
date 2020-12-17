@@ -4,7 +4,6 @@
 #include <list>
 #include <QMainWindow>
 
-using namespace std;
 namespace Ui {
 class MainWindow;
 }
@@ -46,7 +45,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     ISceneGraph*   m_pSceneGraph;
-    list<IMapSceneNode*> m_listNode;
+    std::list<IMapSceneNode*> m_listNode;
     int nTimerID=-1;
     int m_nTimes=0;
     double dL1;

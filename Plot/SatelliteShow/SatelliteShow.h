@@ -25,7 +25,7 @@ public:
     /**
      * @brief 设置轨道数据
      */
-    void SetJ2000Oribit(const vector<double> &, const vector<Math::CVector> &);
+    void SetJ2000Oribit(const std::vector<double> &, const std::vector<Math::CVector> &);
 
     /**
      * @brief 添加传感器
@@ -45,7 +45,7 @@ protected:
     double CalItNewtonEcf(double*,double,int);
 
 protected:
-    set<ISensor*>              m_vSensor;
+    std::set<ISensor*>              m_vSensor;
     ISceneAttitudeGroup*       m_pSatellite=nullptr;
     ISceneModel*               m_pModel=nullptr;
     ILine*                     m_pOribit=nullptr;
@@ -62,7 +62,7 @@ protected:
 
 extern "C"
 {
-    Q_DECL_EXPORT ISatellite* CreateNode(ISceneGraph*pSceneGraph,const string& sInterfaceName);
-    Q_DECL_EXPORT bool QueryInterface(string& sInterfaceName);
+    Q_DECL_EXPORT ISatellite* CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName);
+    Q_DECL_EXPORT bool QueryInterface(std::string& sInterfaceName);
 }
 #endif // CSATELLITESHOW_H

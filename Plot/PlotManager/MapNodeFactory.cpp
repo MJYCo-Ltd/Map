@@ -36,7 +36,7 @@ CMapNodeFactory::~CMapNodeFactory()
 }
 
 /// 创建一个节点
-ISceneNode *CMapNodeFactory::CreateMapSceneNode(const string& sInterface)
+ISceneNode *CMapNodeFactory::CreateMapSceneNode(const std::string& sInterface)
 {
     /// 没有找到接口函数，则初始化一下
     auto findOne = m_mapTypeFunc.find(sInterface);
@@ -86,15 +86,15 @@ void CMapNodeFactory::DeleteNoUseSceneNode()
 /// 初始化工厂
 void CMapNodeFactory::InitFactory()
 {
-    string sFilePath = GetExePath();
+    std::string sFilePath = GetExePath();
 #ifdef QT_NO_DEBUG
     sFilePath += "NodeFactory.dll";
 #else
     sFilePath += "NodeFactoryd.dll";
 #endif
-    ifstream in(sFilePath, ios::in);
-    string sInterfaceType;
-    string sDllName;
+    std::ifstream in(sFilePath, std::ios::in);
+    std::string sInterfaceType;
+    std::string sDllName;
     if(in.is_open())
     {
         while(!in.eof())
@@ -114,13 +114,13 @@ void CMapNodeFactory::InsertNode(ISceneNode *pNode)
 }
 
 /// 初始化类型
-void CMapNodeFactory::InitType(const string &sInterface)
+void CMapNodeFactory::InitType(const std::string &sInterface)
 {
     QLibrary loadDll;
     auto findOne = m_mapTypeDllName.find(sInterface);
     if (m_mapTypeDllName.end() != findOne)
     {
-        string sInterfaceNameList;
+        std::string sInterfaceNameList;
         loadDll.setFileName(findOne->second.c_str());
         auto pQueryFunc = reinterpret_cast<pQueryInterfaceFun>(loadDll.resolve("QueryInterface"));
         if(nullptr == pQueryFunc)
@@ -135,7 +135,7 @@ void CMapNodeFactory::InitType(const string &sInterface)
             if(pQueryFunc(sInterfaceNameList))
             {
                 std::istringstream is(sInterfaceNameList);
-                string sType;
+                std::string sType;
                 while(is)
                 {
                     is>>sType;

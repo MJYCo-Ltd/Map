@@ -123,8 +123,8 @@ osg::Image *CResourceLod::LoadImage(const std::string &sImagePath, int nWidth, i
         imagePath = sImagePath;
     }
 
-    string sForFind = imagePath;
-    std::map<string,osg::ref_ptr<osg::Image> >::iterator itor;
+    std::string sForFind = imagePath;
+    std::map<std::string,osg::ref_ptr<osg::Image> >::iterator itor;
     if(0 != nWidth && 0 != nHeight)
     {
         bScale = true;
@@ -170,7 +170,7 @@ osg::Image *CResourceLod::LoadImage(const std::string &sImagePath, int nWidth, i
 }
 
 /// 加载virtualProgram
-bool CResourceLod::LoadVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const string& sGLSLPath,bool bIsRef)
+bool CResourceLod::LoadVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const std::string& sGLSLPath,bool bIsRef)
 {
     std::string glslPath;
     if(bIsRef)
@@ -188,7 +188,7 @@ bool CResourceLod::LoadVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,
 }
 
 /// 移除virtualProgram
-bool CResourceLod::RemoveVirtualProgram(osgEarth::VirtualProgram *pVirtualProgram, const string &sGLSLPath, bool bIsRef)
+bool CResourceLod::RemoveVirtualProgram(osgEarth::VirtualProgram *pVirtualProgram, const std::string &sGLSLPath, bool bIsRef)
 {
     std::string glslPath;
     if(bIsRef)

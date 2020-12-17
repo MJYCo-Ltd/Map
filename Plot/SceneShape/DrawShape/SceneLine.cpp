@@ -59,7 +59,7 @@ bool CSceneLine::UpdatePoint(int nIndex, const ScenePos &rPos)
 }
 
 ///初始化多个位置点
-void CSceneLine::SetMultPos(const vector<ScenePos> & vAllPoints)
+void CSceneLine::SetMultPos(const std::vector<ScenePos> & vAllPoints)
 {
     m_listAllPos.clear();
 
@@ -91,7 +91,6 @@ std::vector<ScenePos> CSceneLine::GetMulPos() const
 /// 创建形状
 void CSceneLine::CreateShape()
 {
-    m_pGeometry->setDrawCallback(new MyDrawCallBack);
     auto pSate = m_pGeometry->getOrCreateStateSet();
     auto pNodeProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
     /// 此处应该不知道

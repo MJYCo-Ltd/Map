@@ -3,8 +3,6 @@
 #include<string>
 #include "IMapSceneNode.h"
 
-using namespace std;
-
 class IMapLayer
 {
 public:
@@ -12,7 +10,7 @@ public:
      * @brief 获取图层名字
      * @return
      */
-    virtual const string& GetLayerName()=0;
+    virtual const std::string& GetLayerName()=0;
 
     /**
      * @brief 添加节点

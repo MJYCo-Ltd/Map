@@ -17,7 +17,6 @@
 #include "ResourceLod.h"
 
 
-using namespace std;
 QtSceneGraph::QtSceneGraph(SceneGraphType type):
     ISceneGraph(type),
     m_pRender(new QtRender),

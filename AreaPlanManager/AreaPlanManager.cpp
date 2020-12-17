@@ -99,7 +99,11 @@ AreaPlan* AreaPlanManager::item(QString name)
 
 QQmlListProperty<AreaPlan> AreaPlanManager::itemList()
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     return QQmlListProperty<AreaPlan>(this, _itemList);
+#else
+    return QQmlListProperty<AreaPlan>(this, &_itemList);
+#endif
 }
 
 bool AreaPlanManager::isPlanDir(QString dirPath)

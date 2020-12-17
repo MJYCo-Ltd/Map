@@ -29,7 +29,7 @@ inline MouseButtonMask ChangeMouseType(QMouseEvent* event)
     return(button);
 }
 
-QtFBOWindow::QtFBOWindow(list<IWindowMessageObserver *> *pAllObserver)
+QtFBOWindow::QtFBOWindow(std::list<IWindowMessageObserver *> *pAllObserver)
     :osgViewer::GraphicsWindowEmbedded(0,0,C_WINDOW_WIDTH,C_WINDOW_HEIGHT)
     ,m_bInit(false)
     ,m_nInitFBO(0)

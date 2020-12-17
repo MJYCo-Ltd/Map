@@ -16,7 +16,7 @@ protected:
     void SetControlNode(osgEarth::Controls::Control* pControl)
     {
         m_pControl = pControl;
-        SetOsgNode(pControl);
+        ImplSceneNode<T>::SetOsgNode(pControl);
     }
 
     /// 位置更改

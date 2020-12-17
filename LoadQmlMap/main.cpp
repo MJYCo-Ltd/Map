@@ -50,8 +50,11 @@ int main(int argc, char *argv[])
     //engine.rootContext()->setContextProperty("scenarioManager", &scenarioManager);
     //AreaPlanManager areaPlanManager();
     //engine.rootContext()->setContextProperty("areaPlanManager", &areaPlanManager);
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     const QUrl url(QStringLiteral("qrc:/main.qml"));
+#else
+    const QUrl url(QStringLiteral("qrc:/main6.qml"));
+#endif
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
         if (!obj && url == objUrl)

@@ -126,10 +126,10 @@ void CMapCoverImage::SetCoverInfo(const CoverInfo & rstCoverInfo)
 }
 
 /// 设置测点信息
-void CMapCoverImage::SetCeDian(const vector<CeDian> & vAllCedian)
+void CMapCoverImage::SetCeDian(const std::vector<CeDian> & vAllCedian)
 {
 
-    string sImagePath = "ico/test.png";
+    std::string sImagePath = "ico/test.png";
     auto pImage = m_pSceneGraph->ResouceLoader()->LoadImage(sImagePath);
 
 
@@ -151,7 +151,7 @@ void CMapCoverImage::InitStyle()
     m_pNodeStyle->getOrCreateSymbol<osgEarth::TextSymbol>()->encoding() = osgEarth::TextSymbol::ENCODING_UTF8;
     m_pNodeStyle->getOrCreateSymbol<osgEarth::TextSymbol>()->alignment() = osgEarth::TextSymbol::ALIGN_LEFT_CENTER;
     m_pNodeStyle->getOrCreateSymbol<osgEarth::TextSymbol>()->size() = 20;
-    string sFontPath = GetExePath();
+    std::string sFontPath = GetExePath();
     sFontPath += "fonts/msyh.ttf";
     m_pNodeStyle->getOrCreateSymbol<osgEarth::TextSymbol>()->font() = sFontPath;
     m_pNodeStyle->getOrCreateSymbol<osgEarth::TextSymbol>()->fill()->color() = osgEarth::Color::White;
@@ -172,7 +172,7 @@ void CMapCoverImage::SetMaxValueColor(const SceneColor &rMaxColor)
     m_stMaxColor = rMaxColor;
 }
 #include <osgEarth/ImageOverlay>
-void CMapCoverImage::SetBound(const MapGeoPos &rLeftUp, const MapGeoPos &rRightDown, const string &sImagePath)
+void CMapCoverImage::SetBound(const MapGeoPos &rLeftUp, const MapGeoPos &rRightDown, const std::string &sImagePath)
 {
     if(!m_pImage.valid())
     {

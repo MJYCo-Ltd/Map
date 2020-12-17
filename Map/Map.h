@@ -11,7 +11,7 @@ class CSpaceEnv;
 class ISceneGraph;
 
 class CMapLayer;
-typedef map<string,CMapLayer*> UserLayers;
+typedef std::map<std::string,CMapLayer*> UserLayers;
 
 class CMap:public ImplSceneGroup<IMap>
 {
@@ -50,13 +50,13 @@ public:
      * @brief 控制地图图层显隐
      * @param
      */
-    virtual void SetLayerVisible(const string& sLayerName);
+    virtual void SetLayerVisible(const std::string& sLayerName);
 
     /**
      * @brief 创建图层
      * @return
      */
-    IMapLayer* CreateLayer(const string&);
+    IMapLayer* CreateLayer(const std::string&);
     bool RemoveLayer(IMapLayer*&);
 
     /**
@@ -89,7 +89,7 @@ protected:
     void InitMap();
 protected:
     bool   m_bSelfRotate=true;
-    list<IMapMessageObserver*> m_listObserver;
+    std::list<IMapMessageObserver*> m_listObserver;
     osg::ref_ptr<osg::Group>   m_p2DRoot;
 
     osg::ref_ptr<osgEarth::MapNode> m_pMap3DNode;

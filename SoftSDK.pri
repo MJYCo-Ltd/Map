@@ -10,6 +10,9 @@
 #Attention DLLDESTDIR only useful in windows
 #          This will only copy exe or dll to DLLDESTDIR
 
+lessThan(QT_MAJOR_VERSION, 6):CONFIG += c++11
+greaterThan(QT_MAJOR_VERSION, 5):CONFIG += c++17
+
 INCLUDEPATH *= $$PWD/Inc
 win32{
     DEFINES -= UNICODE

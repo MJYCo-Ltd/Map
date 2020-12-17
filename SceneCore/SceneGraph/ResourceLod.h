@@ -17,7 +17,7 @@ public:
      * @brief 初始化路径
      * @param csAppPath
      */
-    void InitPath(const string& csAppPath);
+    void InitPath(const std::string& csAppPath);
     const std::string& GetPath(){return(m_sAppPath);}
 
     /**
@@ -26,7 +26,7 @@ public:
      * @param bIsRef       是否是相对路径
      * @return
      */
-    osg::Node* LoadNode(const string& sModelPath,bool bIsRef);
+    osg::Node* LoadNode(const std::string& sModelPath,bool bIsRef);
 
     /**
      * @brief 加载纹理
@@ -34,7 +34,7 @@ public:
      * @param bIsRef       是否是相对路径
      * @return
      */
-    osg::Texture2D* LoadTexture(const string& sTexturePath, bool bIsRef);
+    osg::Texture2D* LoadTexture(const std::string& sTexturePath, bool bIsRef);
 
     /**
      * @brief 加载字体
@@ -42,7 +42,7 @@ public:
      * @param bIsRef    是否是相对路径
      * @return
      */
-    osgText::Font*  LoadFont(const string& sFontPath,bool bIsRef);
+    osgText::Font*  LoadFont(const std::string& sFontPath,bool bIsRef);
 
     /**
      * @brief 加载图片
@@ -50,7 +50,7 @@ public:
      * @param bIsRef
      * @return
      */
-    osg::Image* LoadImage(const string& sImagePath, int nWidth, int nHeight, bool bIsRef);
+    osg::Image* LoadImage(const std::string& sImagePath, int nWidth, int nHeight, bool bIsRef);
 
     /**
      * @brief 加载着色器
@@ -58,15 +58,15 @@ public:
      * @param bIsRef
      * @return
      */
-    bool LoadVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const string& sGLSLPath,bool bIsRef=true);
-    bool RemoveVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const string& sGLSLPath,bool bIsRef=true);
+    bool LoadVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const std::string& sGLSLPath,bool bIsRef=true);
+    bool RemoveVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const std::string& sGLSLPath,bool bIsRef=true);
 protected:
-    string m_sAppPath;
-    map<string,osg::observer_ptr<osg::Node>>      m_mapNode;    /// 模型映射
-    map<string,osg::ref_ptr<osg::Image>>     m_mapImage;   /// 图片映射
-    map<string,osg::observer_ptr<osg::Texture2D>> m_mapTexture; /// 纹理映射
-    map<string,osg::observer_ptr<osgText::Font>>  m_mapFont;    /// 字体映射
-    map<string,osg::observer_ptr<osgEarth::VirtualProgram>>m_mapProgram; /// 纹理
+    std::string m_sAppPath;
+    std::map<std::string,osg::observer_ptr<osg::Node>>      m_mapNode;    /// 模型映射
+    std::map<std::string,osg::ref_ptr<osg::Image>>     m_mapImage;   /// 图片映射
+    std::map<std::string,osg::observer_ptr<osg::Texture2D>> m_mapTexture; /// 纹理映射
+    std::map<std::string,osg::observer_ptr<osgText::Font>>  m_mapFont;    /// 字体映射
+    std::map<std::string,osg::observer_ptr<osgEarth::VirtualProgram>>m_mapProgram; /// 纹理
 };
 
 #endif // RESOURCELOD_H

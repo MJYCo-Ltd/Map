@@ -7,8 +7,6 @@
 class ISceneNode;
 class ISceneGraph;
 
-using namespace std;
-
 class CMapNodeFactory:public QObject
 {
     Q_OBJECT
@@ -21,7 +19,7 @@ public:
      * @param 接口名称
      * @return
      */
-    ISceneNode* CreateMapSceneNode(const string &sInterface);
+    ISceneNode* CreateMapSceneNode(const std::string &sInterface);
 
     /**
      * @brief 删除不再使用的地图节点
@@ -44,7 +42,7 @@ protected:
 	/**
 	 * @brief 初始化类型
 	 */
-    void InitType(const string& sInterface);
+    void InitType(const std::string& sInterface);
 
     /**
      * @brief 定时处理
@@ -54,9 +52,9 @@ private:
     int   m_nTimerID=-1;
     ISceneGraph* m_pSceneGraph=nullptr;
 
-    typedef ISceneNode* (*pCreateNodeFun)(ISceneGraph*,const string&);
+    typedef ISceneNode* (*pCreateNodeFun)(ISceneGraph*,const std::string&);
     typedef bool (*pDeleteNodeFun)(ISceneNode*);
-    typedef bool(*pQueryInterfaceFun)(string&);
+    typedef bool(*pQueryInterfaceFun)(std::string&);
 
     struct MapSceneFun
     {
@@ -64,11 +62,11 @@ private:
         pDeleteNodeFun pDelete=nullptr;
     };
 
-    map<string,MapSceneFun> m_mapTypeFunc;
-    map<ISceneNode*,string>m_mapDeleteFunc;
+    std::map<std::string,MapSceneFun> m_mapTypeFunc;
+    std::map<ISceneNode*,std::string>m_mapDeleteFunc;
 
-    map<string, string>        m_mapTypeDllName; /// 类型和dll的
-    list<ISceneNode*> m_allCreateNode;
+    std::map<std::string, std::string>        m_mapTypeDllName; /// 类型和dll的
+    std::list<ISceneNode*> m_allCreateNode;
 };
 
 #endif // CMAPNODEFACTORY_H

@@ -37,8 +37,8 @@ public:
     /**
      * @brief 设置名字
      */
-    void SetName(const string& rName)JUDGE_EQUAL_CALL_FUNCTION(rName,m_sName,NameChanged)
-    const string& GetName()const{return(m_sName);}
+    void SetName(const std::string& rName)JUDGE_EQUAL_CALL_FUNCTION(rName,m_sName,NameChanged)
+    const std::string& GetName()const{return(m_sName);}
 
     /**
      * @brief 设置分组
@@ -68,7 +68,7 @@ protected:
 
     virtual ~IPersonInfo(){}
 protected:
-    string m_sName;
+    std::string m_sName;
     GroupType    m_emGroupType=NONE_GROUP;
     PersonStatus m_emPersonStatus=PERSON_OK;
     MapGeoPos    m_geoPos;

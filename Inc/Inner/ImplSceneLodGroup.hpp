@@ -41,10 +41,10 @@ protected:
         {
             switch (T::m_emType)
             {
-            case NODE_EYE_DISTANCE:
+            case T::NODE_EYE_DISTANCE:
                 m_pLod->setRangeMode(osg::LOD::DISTANCE_FROM_EYE_POINT);
                 break;
-            case NODE_SCREEN_PIXEL:
+            case T::NODE_SCREEN_PIXEL:
                 m_pLod->setRangeMode(osg::LOD::DISTANCE_FROM_EYE_POINT);
                 break;
             }

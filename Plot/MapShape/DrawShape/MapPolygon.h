@@ -28,7 +28,7 @@ public:
     /**
      * @brief 设置多个位置
      */
-    virtual void SetMultPos(const vector<MapGeoPos> &);
+    virtual void SetMultPos(const std::vector<MapGeoPos> &);
 
     void PolygonColorChanged();
 

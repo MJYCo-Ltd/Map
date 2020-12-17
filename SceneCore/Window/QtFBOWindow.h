@@ -22,13 +22,11 @@ class  QTouchEvent;
 class QInputEvent;
 class IWindowMessageObserver;
 
-using namespace std;
-
 class QtFBOWindow:public osgViewer::GraphicsWindowEmbedded
 {
     friend class QtRender;
 public:
-    QtFBOWindow(list<IWindowMessageObserver*>* pAllObserver);
+    QtFBOWindow(std::list<IWindowMessageObserver*>* pAllObserver);
 
     ~QtFBOWindow();
 
@@ -103,7 +101,7 @@ private:
     QOpenGLContext                    *m_pOpenglContext=nullptr;    /// opengl设备上下文
     QOpenGLFramebufferObject *m_pRenderFbo=nullptr;            /// 渲染帧缓存对象
     QOpenGLFramebufferObject *m_pDisplayFbo=nullptr;           /// 显示帧缓存对象
-    list<IWindowMessageObserver*>*     m_pAllOserver;   /// 所有的消息订阅者
+    std::list<IWindowMessageObserver*>*     m_pAllOserver;   /// 所有的消息订阅者
 };
 
 #endif // FBOWINDOW_H

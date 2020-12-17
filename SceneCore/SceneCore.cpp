@@ -8,7 +8,7 @@
 static CSceneCore* s_gMapCore=nullptr;
 static int g_num;
 static bool        s_gBChecked(false);
-static string     s_strPath;
+static std::string     s_strPath;
 
 void my_init()
 {
@@ -122,7 +122,7 @@ bool CheckPC()
 }
 
 /// 配置路径
-void SetExePath(const string& sPath)
+void SetExePath(const std::string& sPath)
 {
     s_strPath = sPath;
 #ifdef Q_OS_WIN
@@ -133,7 +133,7 @@ void SetExePath(const string& sPath)
 }
 
 /// 获取路径
-const string& GetExePath()
+const std::string& GetExePath()
 {
     return(s_strPath);
 }

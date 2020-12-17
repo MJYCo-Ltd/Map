@@ -181,12 +181,12 @@ MapLayers CMap::GetMapLayers() const
 }
 
 /// 控制图层显隐
-void CMap::SetLayerVisible(const string & sLayerName)
+void CMap::SetLayerVisible(const std::string & sLayerName)
 {
 }
 
 /// 创建图层
-IMapLayer *CMap::CreateLayer(const string & sLayerName)
+IMapLayer *CMap::CreateLayer(const std::string & sLayerName)
 {
     auto findOne = m_userLayers.find(sLayerName);
     if(m_userLayers.end() != findOne)

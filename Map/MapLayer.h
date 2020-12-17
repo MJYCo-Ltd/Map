@@ -9,20 +9,19 @@
 class ISceneGraph;
 class CMapModelLayer;
 
-using namespace std;
 class CMapLayer : public IMapLayer
 {
     friend class MapLayerAddNode;
 
 public:
-    CMapLayer(const string& sLayerName,osgEarth::MapNode* pMapNode,ISceneGraph* pSceneGraph);
+    CMapLayer(const std::string& sLayerName,osgEarth::MapNode* pMapNode,ISceneGraph* pSceneGraph);
     ~CMapLayer();
 
     /**
      * @brief 获取图层名字
      * @return
      */
-    const string& GetLayerName(){return(m_sLayerName);}
+    const std::string& GetLayerName(){return(m_sLayerName);}
 
     /**
      * @brief 添加节点
@@ -70,10 +69,10 @@ private:
     ISceneGraph*                      m_pSceneGraph=nullptr;
     osg::observer_ptr<osgEarth::MapNode> m_pMapNode;
     osg::ref_ptr<CMapModelLayer> m_pModelLayer;
-    string       m_sLayerName;
+    std::string       m_sLayerName;
     unsigned int m_unID=0;
     bool         m_bVisible=true;
-    map<unsigned int,IMapSceneNode*> m_mapID2Node;
+    std::map<unsigned int,IMapSceneNode*> m_mapID2Node;
 };
 
 #endif // CPLOTLAYER_H

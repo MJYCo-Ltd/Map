@@ -5,16 +5,16 @@
 #include "DrawShape/MapLocation.h"
 #include "MapShape.h"
 
-static string s_sPoint("IMapPoint");
-static string s_sLine("IMapLine");
-static string s_sEllipse("IMapEllipse");
-static string s_sArc("IMapArc");
-static string s_sRectangle("IMapRectangle");
-static string s_sPolygon("IMapPolygon");
-static string s_sCoverImage("IMapCoverImage");
-static string s_sLocation("IMapLocation");
+static std::string s_sPoint("IMapPoint");
+static std::string s_sLine("IMapLine");
+static std::string s_sEllipse("IMapEllipse");
+static std::string s_sArc("IMapArc");
+static std::string s_sRectangle("IMapRectangle");
+static std::string s_sPolygon("IMapPolygon");
+static std::string s_sCoverImage("IMapCoverImage");
+static std::string s_sLocation("IMapLocation");
 
-ISceneNode *CreateNode(ISceneGraph*pSceneGraph,const string& sInterfaceName)
+ISceneNode *CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName)
 {
     if(sInterfaceName == s_sPoint)
     {
@@ -40,7 +40,7 @@ ISceneNode *CreateNode(ISceneGraph*pSceneGraph,const string& sInterfaceName)
     return(nullptr);
 }
 
-bool QueryInterface(string& sInterfaceName)
+bool QueryInterface(std::string& sInterfaceName)
 {
     sInterfaceName.clear();
 

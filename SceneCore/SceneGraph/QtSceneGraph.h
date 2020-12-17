@@ -2,7 +2,6 @@
 #define QTSCENEGRAPH_H
 #include <list>
 #include "SceneGraph/ISceneGraph.h"
-using namespace std;
 
 class IOsgSceneGroup;
 class QtWindow;
@@ -102,7 +101,7 @@ protected:
     QtRender*         m_pRender;
     QThread*          m_pThread;
     CResourceLod*     m_pResourceLod;
-    list<QtWindow*> m_vOtherWindow;
+    std::list<QtWindow*> m_vOtherWindow;
 };
 
 #endif // QTSCENEGRAPH_H

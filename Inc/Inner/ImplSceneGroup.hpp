@@ -3,7 +3,6 @@
 
 #include <set>
 #include "ImplSceneNode.hpp"
-using namespace std;
 
 /**
  *  实现ISceneGroup所有的接口
@@ -71,7 +70,7 @@ protected:
         ImplSceneNode<T>::SetOsgNode(m_pGroup.get());
     }
 protected:
-    set<IOsgSceneNode*>       m_setChildNode;/// 子节点
+    std::set<IOsgSceneNode*>       m_setChildNode;/// 子节点
     osg::observer_ptr<osg::Group>m_pGroup;      /// 本节点
 };
 

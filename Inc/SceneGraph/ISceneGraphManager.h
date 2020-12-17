@@ -3,7 +3,6 @@
 #include <string>
 #include <SceneGraph/ISceneGraph.h>
 
-using namespace std;
 /**
  * @brief 场景类
  */

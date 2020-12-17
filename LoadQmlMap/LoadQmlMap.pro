@@ -1,13 +1,5 @@
 QT += quick
 
-CONFIG += c++11
-
-# The following define makes your compiler emit warnings if you use
-# any Qt feature that has been marked deprecated (the exact warnings
-# depend on your compiler). Refer to the documentation for the
-# deprecated API to know how to port your code away from it.
-DEFINES += QT_DEPRECATED_WARNINGS
-
 INCLUDEPATH *= $$PWD/../Inc
 
 DESTDIR = $$PWD/../../Bin
@@ -22,8 +14,10 @@ SOURCES += \
         PlotMap.cpp \
         main.cpp
 
-RESOURCES += qml.qrc \
-    img.qrc
+RESOURCES += img.qrc
+lessThan(QT_MAJOR_VERSION, 6):RESOURCES += qml.qrc
+greaterThan(QT_MAJOR_VERSION, 5):RESOURCES += qml6.qrc
+
 
 TRANSLATIONS += \
     LoadQmlMap_zh_CN.ts
@@ -36,5 +30,3 @@ CONFIG (debug, debug|release){
 }else{
     LIBS *= -lScenarioManager -lAreaPlanManager
 }
-
-DISTFILES +=

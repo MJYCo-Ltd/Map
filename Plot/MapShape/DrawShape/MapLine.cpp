@@ -62,7 +62,7 @@ bool CMapLine::UpdatePoint(int nIndex, const MapGeoPos &rPos)
 }
 
 ///初始化多个位置点
-void CMapLine::SetMultPos(const vector<MapGeoPos> & vAllPoints)
+void CMapLine::SetMultPos(const std::vector<MapGeoPos> & vAllPoints)
 {
     m_listAllPos.clear();
 

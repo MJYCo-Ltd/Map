@@ -101,7 +101,11 @@ void AreaPlan::save(QString fn, QString format = "*.json")
 
 QQmlListProperty<AreaPlanLayer> AreaPlan::layers()
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     return QQmlListProperty<AreaPlanLayer>(this, _layerList);
+#else
+    return QQmlListProperty<AreaPlanLayer>(this, &_layerList);
+#endif
     //return _layerList;
 }
 

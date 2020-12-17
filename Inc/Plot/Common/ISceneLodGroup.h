@@ -2,14 +2,7 @@
 #define INTERFACE_SCENE_LOD_GROUP_HEARDER_H
 #include <vector>
 #include <SceneGraph/ISceneGroup.h>
-using namespace std;
 
-
-enum SCENE_NODE_CHANGE_TYPE
-{
-    NODE_EYE_DISTANCE, ///距离视点的距离
-    NODE_SCREEN_PIXEL  ///模型在屏幕上的像素大小(此方法对自动缩放的模型无效)
-};
 
 /**
  * @brief 场景切换节点，根据需要切换不同的显示
@@ -17,6 +10,12 @@ enum SCENE_NODE_CHANGE_TYPE
 class ISceneLodGroup:public ISceneGroup
 {
 public:
+    enum SCENE_NODE_CHANGE_TYPE
+    {
+        NODE_EYE_DISTANCE, ///距离视点的距离
+        NODE_SCREEN_PIXEL  ///模型在屏幕上的像素大小(此方法对自动缩放的模型无效)
+    };
+
     CONSTRUCTOR(ISceneLodGroup,ISceneGroup)
 
     /**
