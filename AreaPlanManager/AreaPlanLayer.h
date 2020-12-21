@@ -1,7 +1,7 @@
 /*************************************************
 * Copyright(C)
 * File name:    AreaPlanLayer
-* Author:       where2go
+* Author:       魏晓亮
 * Version:      1.0
 * Date:         2018/06/15
 * Description:  区域规划图的图层

@@ -1,199 +1,101 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
 import MyItem 1.0
+import "./Common"
+import "./Welcome"
 
 Window
 {
     id: mainWindow
-    property var $app: AppGlobal{}
-
     visible: true
-    width: 1024
-    height: 768
-    title: qsTr("Hello World")
-
+    x:100
+    y:100
+    width: 1920
+    height: 1080
+    title: qsTr("BIM GIS Platform v2.0.1")
+    property var $app: AppGlobal{}
     property int menuHeight: defaultStyle.menuHeight
     property int menuWidth: defaultStyle.menuWidth
+
+    OsgItem{
+        type: OsgItem.Item_3DMAP
+        id:showOsg
+        focus: true
+        anchors.fill: parent
+        Component.onCompleted:{
+            $app.setOsgItem(showOsg)
+        }
+    }
     ScenarioManager{
         id:scenarioManager
     }
     AreaPlanManager{
         id:areaPlanManager
     }
-    AreaPlan{
-        id:areaPlan
-    }
-
-    OsgItem
-    {
-        type: OsgItem.Item_3DMAP
-        id:showOsg
-        focus: true
-        anchors.fill: parent
-        Component.onCompleted:
-        {
-            $app.setOsgItem(showOsg)
-        }
-    }
-
     Style{
         id:defaultStyle
     }
-
-    ButtonA{
-        id: btnScenario
-        width: 128
+    // -- 导航条 -------------------------------------------------------
+    Rectangle{
+        id:navigationBar
+        width: mainWindow.width
         height: menuHeight
-        border.width: 0
-        BorderImg2
-        {
-            color:"transparent"
-            secondaryColor: Qt.rgba(250,250,255,250)
-            titleWidth: 0
-            titleHeight: 0
-            opacity:  0.2
-            margin : 3
+        color:"transparent"
+        Rectangle{// 背景
             anchors.fill: parent
+            opacity: 0.15
+            Image{
+                anchors.fill: parent
+                source: "Image/Common/TalkboxBG.png"
+            }
         }
-        text:qsTr("方案管理")
-        anchors.left: parent.left
-        anchors.top: parent.top
-        onClicked: {
-            scenarioListView.visible = ! scenarioListView.visible
+        Rectangle{// 左侧留白
+            id:marginLeft
+            width: (navigationBar.width - 5 * menuWidth) / 2
+            color:"transparent"
+        }
+        MenuButton{
+            id: btnWelcome
+            text:qsTr("WELCOME")
+            anchors.left: marginLeft.right
+            anchors.top: parent.top
+            onClicked: {
+                welcome.visible = ! welcome.visible
+            }
+        }
+        MenuButton{
+            id: btnEdit
+            anchors.left: btnWelcome.right
+            text:qsTr("EDIT")
+        }
+        MenuButton{
+            id: btnPlay
+            anchors.left: btnEdit.right
+            text:qsTr("PLAY")
+        }
+        MenuButton{
+            id: btnInfo
+            anchors.left: btnPlay.right
+            text:qsTr("INFO")
+            onClicked: {
+                testMsg.visible = ! testMsg.visible
+            }
+        }
+        MenuButton{
+            id: btnSystem
+            anchors.left: btnInfo.right
+            text:qsTr("SYSTEM")
+            onClicked: {
+                Qt.quit()
+            }
         }
     }
-    ButtonA{
-        id: btnDataTime
-        anchors.left: btnScenario.right
-        width: 128
-        height: menuHeight
-        border.width: 0
-        BorderImg2
-        {
-            color:"transparent"
-            secondaryColor: Qt.rgba(250,250,255,250)
-            titleWidth: 0
-            titleHeight: 0
-            opacity:  0.2
-            margin : 3
-            anchors.fill: parent
-        }
-        text:qsTr("日期时间设置")
-        onClicked: {
-            selectDataTime.visible = ! selectDataTime.visible
-        }
-    }
-    ButtonA{
-        id: btnMsgBox
-        anchors.left: btnDataTime.right
-        width: 128
-        height: menuHeight
-        border.width: 0
-        BorderImg2
-        {
-            color:"transparent"
-            secondaryColor: Qt.rgba(250,250,255,250)
-            titleWidth: 0
-            titleHeight: 0
-            opacity:  0.2
-            margin : 3
-            anchors.fill: parent
-        }
-        text:qsTr("消息框")
-        onClicked: {
-            testMsg.visible = ! testMsg.visible
-        }
-    }
-
-    ScenarioListView {
-        id: scenarioListView
-        x:0
-        y: menuHeight
-        width: 400
-        height: mainWindow.height - menuHeight
+    // -- 欢迎页 -------------------------------------------------------
+    Welcome {
+        id: welcome
         visible: false
     }
-
-    ListView{
-        id:areaPlanLayerListView
-        x: defaultStyle.margin
-        y: defaultStyle.margin + menuHeight
-        width: 400
-        height: mainWindow.height - y - defaultStyle.margin
-        visible : false
-        model:areaPlan.layers
-        delegate: Rectangle {
-            width:400
-            height: 48
-            color: "transparent"
-            border.color: defaultStyle.borderColor
-            border.width: 1
-            Rectangle{
-                anchors.fill: parent
-                opacity: 0.15
-                Image{
-                    anchors.fill: parent
-                    source: "Image/TalkboxBG.png"
-                }
-            }
-            Text{
-                color: defaultStyle.fontColorGold
-                font.family: defaultStyle.fontFamily
-                font.pointSize: defaultStyle.fontSize
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                anchors.fill: parent
-                text: modelData.name
-            }
-        }
-    }
-    ListView{
-        x: parent.width - width - defaultStyle.margin
-        y: defaultStyle.margin + menuHeight
-        width: 400
-        height: mainWindow.height - y - defaultStyle.margin
-        model:areaPlanManager.itemList
-        delegate: Rectangle {
-            width:400
-            height: 48
-            color: "transparent"
-            border.color: defaultStyle.borderColor
-            border.width: 1
-            Rectangle{
-                anchors.fill: parent
-                opacity: 0.15
-                Image{
-                    anchors.fill: parent
-                    source: "Image/TalkboxBG.png"
-                }
-            }
-            Text{
-                color: defaultStyle.fontColorGold
-                font.family: defaultStyle.fontFamily
-                font.pointSize: defaultStyle.fontSize
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                anchors.fill: parent
-                text: modelData.name
-            }
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    areaPlan = modelData
-                    areaPlanLayerListView.visible = true
-                }
-            }
-        }
-    }
-    DateTimeView {
-        id:selectDataTime
-        x: 0
-        y: menuHeight
-        visible: false
-        onDataTime:{
-            console.log(value)
-        }
-    }
+    // -- 测试消息框 ---------------------------------------------------
     Rectangle{
         id:testMsg
         x:(parent.width - width) / 2

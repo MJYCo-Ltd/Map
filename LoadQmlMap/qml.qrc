@@ -1,18 +1,17 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>ScenarioListView.qml</file>
-        <file>ButtonA.qml</file>
-        <file>DateTimeView.qml</file>
-        <file>SliderDataBar.qml</file>
-        <file>BorderImg.qml</file>
-        <file>Style.qml</file>
-        <file>BorderImg2.qml</file>
-        <file>BorderMsg.qml</file>
-        <file>MsgAlert.qml</file>
-        <file>MsgDone.qml</file>
-        <file>MsgGood.qml</file>
-        <file>MsgInfo.qml</file>
-        <file>MsgWarning.qml</file>
+        <file>Common/MenuButton.qml</file>
+        <file>Common/MsgAlert.qml</file>
+        <file>Common/MsgDone.qml</file>
+        <file>Common/MsgGood.qml</file>
+        <file>Common/MsgInfo.qml</file>
+        <file>Common/MsgWarning.qml</file>
+        <file>Common/Style.qml</file>
+        <file>Common/BorderMsg.qml</file>
+        <file>Welcome/Welcome.qml</file>
+        <file>Scenario/ScenarioOverView.qml</file>
+        <file>Scenario/ScenarioOverviewItem.qml</file>
+        <file>Scenario/ScenarioNew.qml</file>
     </qresource>
 </RCC>

@@ -1,10 +1,19 @@
 #include "ScenarioItem.h"
 #include "ScenarioManager.h"
 
-ScenarioItem::ScenarioItem(QString name, ScenarioManager* mgr)
-    :_name(name), _mgr(mgr)
+ScenarioItem::ScenarioItem()
 {
 
+}
+
+void ScenarioItem::setScenarioManager(ScenarioManager* mgr)
+{
+    _mgr = mgr;
+}
+
+void ScenarioItem::setName(const QString name)
+{
+    _name = name;
 }
 
 const QString ScenarioItem::name()
@@ -12,19 +21,13 @@ const QString ScenarioItem::name()
     return _name;
 }
 
-void ScenarioItem::saveAs(const QString newName)
-{
-    _name = newName;
-    save();
-}
-
 QDir ScenarioItem::dir()
 {
-    QString dirPath = _mgr->scenarioDir().path() + "/" + name();
+    QString dirPath = _mgr->currentScenario()->dir().path() + "/" + name();
     QDir dir(dirPath);
     if ( ! dir.exists())
     {
-        _mgr->scenarioDir().mkdir(name());
+        _mgr->currentScenario()->dir().mkdir(name());
     }
     return dir;
 }

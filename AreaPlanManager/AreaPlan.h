@@ -2,7 +2,7 @@
 /*************************************************
 * Copyright(C)
 * File name:    AreaPlan
-* Author:       where2go
+* Author:       魏晓亮
 * Version:      1.0
 * Date:         2020/06/23
 * Description:  

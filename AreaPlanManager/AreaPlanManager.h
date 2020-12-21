@@ -2,7 +2,7 @@
 /*************************************************
 * Copyright(C)
 * File name:    AreaPlanManager
-* Author:       where2go
+* Author:       魏晓亮
 * Version:      1.0
 * Date:         2020/06/21
 * Description:  区域规划管理
@@ -10,8 +10,8 @@
 *************************************************/
 #include "AreaPlanManager_global.h"
 #include "AreaPlan.h"
-#include <QObject>
 #include <QQmlListProperty>
+#include <QObject>
 #include <QList>
 
 Q_DECLARE_METATYPE(QQmlListProperty<AreaPlan>)

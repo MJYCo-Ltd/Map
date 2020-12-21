@@ -1,50 +1,81 @@
-#ifndef SCENARIOMANAGER_H
-#define SCENARIOMANAGER_H
-
+#pragma once
+/*************************************************
+* Copyright(C)
+* File name:    ScenarioManager
+* Author:       魏晓亮
+* Version:      1.0
+* Date:         2020/12/18
+* Description:  负责方案文件目录的管理、方案的加载和保存
+*               方案包含
+*               ①方案基础信息(Scenario：方案名称、目录、以及描述、图片等)和
+*               ②方案模块数据(ScenarioItem接口实现：演示动画、区域规划等)
+* History:
+*************************************************/
 #include "ScenarioManager_global.h"
+#include "Scenario.h"
+#include <QQmlListProperty>
 #include <QObject>
-#include <QStringList>
 #include <QString>
 #include <QList>
 #include <QDir>
 
+Q_DECLARE_METATYPE(QQmlListProperty<Scenario>)
 class ScenarioItem;
 class SCENARIOMANAGER_EXPORT ScenarioManager : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QStringList scenarios READ scenarios NOTIFY scenarioListChanged)
+    Q_PROPERTY(QQmlListProperty<Scenario> scenarios READ scenarios NOTIFY scenarioListChanged)    
+    Q_PROPERTY(QQmlListProperty<Scenario> favorites READ favorites NOTIFY favoriteListChanged)
 public:
     ScenarioManager(QObject* parent=nullptr);
+    void setDir(QString dirPath);
     QDir dir();
-    QDir scenarioDir();
 
-    QString currentScenario();
+    Scenario* currentScenario();
     void setCurrentScenario(QString name);
-    QStringList scenarios();
-
+    QList<Scenario*> scenarioList();
+    QList<Scenario*> favoriteList();
+    QQmlListProperty<Scenario> scenarios();
+    QQmlListProperty<Scenario> favorites();
     bool contains(QString name);
-    bool addScenario(QString name);
-    void addTempScenario(); // example : untitled_1
-    void removeScenario(QString name);
+    Q_INVOKABLE Scenario* scenario(QString name);
+
+    // 返回值
+    //        0 : 空指针
+    //       -1 : 不存在
+    //       -2 : 已存在
+    //       -3 : 文件目录操作失败
+    Q_INVOKABLE int addScenario(QString name);
+    Q_INVOKABLE int removeScenario(QString name);
+    int removeAllScenario();
+    Q_INVOKABLE int addFavorite(QString name);
+    Q_INVOKABLE int removeFavorite(QString name);
+
+    void init();
     void load();
     void save();
+    void loadFavorites();
+    void saveFavorites();
     void saveAs(QString newName);
 
     // scenario item
     Q_INVOKABLE void addItem(ScenarioItem*);
     bool contains(ScenarioItem*);
-
-    //void addItem(ScenarioItem*);
     //void removeScenarioItem(ScenarioItem*);
-    //bool contains(ScenarioItem*);
 
 signals:
-    void scenarioListChanged();
+    void scenarioListChanged(QQmlListProperty<Scenario>);
+    void favoriteListChanged(QQmlListProperty<Scenario>);
+
+protected:
+    void clear();
+    void clearScenarioList();
+    void clearFavoriteList();
 protected:
     QDir                    _dir;
-    QDir                    _scenarioDir;
-    QString                 _currentScenario;
-    QList<ScenarioItem*>	_itemList;
+    Scenario*               _currentScenario;
+    QList<Scenario*>        _scenarioList;
+    QList<Scenario*>        _favoriteList;
+    QList<ScenarioItem*>    _itemList;
 };
 
-#endif // SCENARIOMANAGER_H
