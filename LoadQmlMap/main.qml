@@ -46,7 +46,7 @@ Window
             opacity: 0.15
             Image{
                 anchors.fill: parent
-                source: "Image/Common/TalkboxBG.png"
+                source: "qrc:/Image/Common/TalkboxBG.png"
             }
         }
         Rectangle{// 左侧留白
