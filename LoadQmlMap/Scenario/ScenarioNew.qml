@@ -23,6 +23,9 @@ Rectangle
         width:256
         height:32
         color: "#FFFFFF"
+        onTextChanged: {
+            scenarioNewWarning.visible = false;
+        }
     }
     Text{
         id:scenarioNewWarning
@@ -48,9 +51,9 @@ Rectangle
             onClicked: {
                 //rectNew.scenarioNew(scenarioNewNameInput.text)
                 if(scenarioManager.addScenario(scenarioNewNameInput.text))
-                    scenarioNewWarning.visible = true
-                else
                     scenarioNewWarning.visible = false
+                else
+                    scenarioNewWarning.visible = true
             }
         }
         Button {

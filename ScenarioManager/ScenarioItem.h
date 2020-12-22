@@ -15,26 +15,37 @@
 #include <QList>
 #include <QDir>
 
-class ScenarioManager;
+//class ScenarioManager;
 class SCENARIOMANAGER_EXPORT ScenarioItem
 {
 public:
     ScenarioItem();
 
-    void setScenarioManager(ScenarioManager* mgr);
+    // 不同模块名称应当不同
     void setName(const QString name);
     const QString name();
+    // 设置模块使用的文件根目录（目录名同方案名称）
+    bool setScenarioDir(QString);
 
+    // create   : 新建方案时调用
+    virtual void create() = 0;
+    // clear    : 切换方案前清除，以便加载新方案
     virtual void clear() = 0;
+    // load     : 加载方案时调用
     virtual void load() = 0;
+    // load     : 保存方案时调用
     virtual void save() = 0;
 
 protected:
     QDir dir();
+signals:
+    void dataChanged();
 
 protected:
     QString                 _name;
-    ScenarioManager*        _mgr;
+    QDir                    _scenarioDir;
+    QDir                    _dir;
+    //ScenarioManager*        _mgr;
 };
 
 #endif // SCENARIOITEM_H

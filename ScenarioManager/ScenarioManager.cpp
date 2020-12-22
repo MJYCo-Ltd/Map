@@ -129,6 +129,10 @@ int ScenarioManager::addScenario(QString name)
     scenario->setName(name);
     _scenarioList.append(scenario);
     _currentScenario = scenario;
+    foreach (ScenarioItem* item, _itemList)
+    {
+        item->create();
+    }
     emit scenarioListChanged(scenarios());
     return 1;
 }
@@ -144,8 +148,8 @@ int ScenarioManager::removeScenario(QString name)
         return -3;
     _scenarioList.removeOne(s);
     delete s;
-    return true;
     emit scenarioListChanged(scenarios());
+    return true;
 }
 
 int ScenarioManager::removeAllScenario()

@@ -8,10 +8,10 @@ Window
 {
     id: mainWindow
     visible: true
-    x:100
-    y:100
-    width: 1920
-    height: 1080
+    x:0
+    y:0
+    //width: 1920
+    //height: 1080
     title: qsTr("BIM GIS Platform v2.0.1")
     property var $app: AppGlobal{}
     property int menuHeight: defaultStyle.menuHeight

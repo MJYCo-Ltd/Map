@@ -9,5 +9,6 @@ SUBDIRS =\
     ScenarioManager\
     AreaPlanManager\
     LoadMap\
-    LoadQmlMap
+    LoadQmlMap \
+    Test
 CONFIG *= ordered

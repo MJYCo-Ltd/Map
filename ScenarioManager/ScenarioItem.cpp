@@ -6,9 +6,10 @@ ScenarioItem::ScenarioItem()
 
 }
 
-void ScenarioItem::setScenarioManager(ScenarioManager* mgr)
+bool ScenarioItem::setScenarioDir(QString dirPath)
 {
-    _mgr = mgr;
+    _scenarioDir = QDir(dirPath);
+    return _scenarioDir.exists();
 }
 
 void ScenarioItem::setName(const QString name)
@@ -23,12 +24,12 @@ const QString ScenarioItem::name()
 
 QDir ScenarioItem::dir()
 {
-    QString dirPath = _mgr->currentScenario()->dir().path() + "/" + name();
-    QDir dir(dirPath);
-    if ( ! dir.exists())
+    QString dirPath = _scenarioDir.path() + "/" + name();
+    QDir _dir(dirPath);
+    if ( ! _dir.exists())
     {
-        _mgr->currentScenario()->dir().mkdir(name());
+        _scenarioDir.mkdir(name());
     }
-    return dir;
+    return _dir;
 }
 
