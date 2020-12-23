@@ -14,7 +14,8 @@ Item {
     property int scenarioNewWidth : 148*4 + margin*3
     property int scenarioNewHeight : scenarioItemHeight
     // font
-    property var fontFamily: "Helvetica"
+    property var fontFamilyCN: "华文中宋"
+    property var fontFamilyEN: "Helvetica"
     property int fontSize: 12
     property int fontSizeSmall: 10
     property color fontColor : Qt.rgba(255/255,255/255,255/255, 255/255)

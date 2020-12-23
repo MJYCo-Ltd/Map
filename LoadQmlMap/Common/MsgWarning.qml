@@ -71,7 +71,7 @@ BorderMsg{
     Text{
         x : parent.margin + iconSize + parent.spacing
         y: (parent.height - height) / 2
-        font.family: "Helvetica"
+        font.family: defaultStyle.fontFamilyEN
         font.pointSize: 13
         color: defaultStyle.fontColorMsgWarning
         text:parent.text

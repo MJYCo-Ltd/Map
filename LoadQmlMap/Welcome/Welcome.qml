@@ -34,6 +34,8 @@ Rectangle {
         width: buttonWidth + margin * 2
         Button {
             width: buttonWidth
+            font.family: defaultStyle.fontFamilyCN
+            font.pointSize: defaultStyle.fontSize
             text: "Scenarios"
             checkable:true
             checked:false
@@ -44,6 +46,8 @@ Rectangle {
         }
         Button {
             width: buttonWidth
+            font.family: defaultStyle.fontFamilyCN
+            font.pointSize: defaultStyle.fontSize
             text: "Tutorials"
             checkable:true
             checked:false
@@ -54,6 +58,8 @@ Rectangle {
         }
         Button {
             width: buttonWidth
+            font.family: defaultStyle.fontFamilyCN
+            font.pointSize: defaultStyle.fontSize
             text: "Examples"
             checkable:true
             checked:false

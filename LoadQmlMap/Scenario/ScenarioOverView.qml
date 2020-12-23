@@ -29,7 +29,7 @@ Rectangle
                 id:textNew
                 anchors.left: rectNew.left
                 color: defaultStyle.fontColor
-                font.family: defaultStyle.fontFamily
+                font.family: defaultStyle.fontFamilyCN
                 font.pointSize: defaultStyle.fontSize
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
@@ -48,7 +48,7 @@ Rectangle
                 Text {
                     color: defaultStyle.fontColor
                     text: "+ New Scenario"
-                    font.family: defaultStyle.fontFamily
+                    font.family: defaultStyle.fontFamilyCN
                     font.pointSize: defaultStyle.fontSize
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
@@ -91,9 +91,6 @@ Rectangle
                     y : margin / 2
                     width:parent.width - margin * 2 - rectNewButton.width
                     height:itemHeight - margin
-                    radius:8
-                    border.color: "#FFFFFF"
-                    border.width: 2
                     onScenarioAdded: {
                         gridViewRecent.model = scenarioManager.scenarios()
                     //    scenarioManager.addScenario(message)
@@ -114,7 +111,7 @@ Rectangle
                 id:textFavorite
                 anchors.left: rectFavorite.left
                 color: defaultStyle.fontColor
-                font.family: defaultStyle.fontFamily
+                font.family: defaultStyle.fontFamilyCN
                 font.pointSize: defaultStyle.fontSize
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
@@ -125,7 +122,7 @@ Rectangle
             {
                 anchors.right: rectFavorite.right
                 color: defaultStyle.fontColorLight
-                font.family: defaultStyle.fontFamily
+                font.family: defaultStyle.fontFamilyCN
                 font.pointSize: defaultStyle.fontSizeSmall
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignRight
@@ -160,7 +157,7 @@ Rectangle
                 id:textRecent
                 anchors.left: rectRecent.left
                 color: defaultStyle.fontColor
-                font.family: defaultStyle.fontFamily
+                font.family: defaultStyle.fontFamilyCN
                 font.pointSize: defaultStyle.fontSize
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
@@ -171,7 +168,7 @@ Rectangle
             {
                 anchors.right: rectRecent.right
                 color: defaultStyle.fontColorLight
-                font.family: defaultStyle.fontFamily
+                font.family: defaultStyle.fontFamilyCN
                 font.pointSize: defaultStyle.fontSizeSmall
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignRight

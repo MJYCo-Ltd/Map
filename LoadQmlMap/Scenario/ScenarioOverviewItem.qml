@@ -21,6 +21,7 @@ Rectangle{
         width:parent.width
         height:parent.height// - textHeight
         source:"file:///" + imageFilePath
+        visible:false
     }
     MouseArea {
         anchors.fill: parent
@@ -92,7 +93,7 @@ Rectangle{
         height:textHeight
         //color: defaultStyle.fontColor
         text: name
-        font.family: defaultStyle.fontFamily
+        font.family: defaultStyle.fontFamilyCN
         font.pointSize: defaultStyle.fontSize
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter

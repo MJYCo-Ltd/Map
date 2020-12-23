@@ -64,7 +64,7 @@ Rectangle {
             id:btnText
             color: defaultStyle.fontColorGold
             text: root.text
-            font.family: "华文中宋"
+            font.family: defaultStyle.fontFamilyCN
             font.pointSize: fontSize
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignLeft
