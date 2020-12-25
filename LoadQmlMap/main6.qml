@@ -15,7 +15,8 @@ Window
 
     OsgItem
     {
-        type: OsgItem.Item_3DMAP
+        type: OsgItem.Item_2DMAP
+        frameRate: 1000
         id:showOsg
         focus: true
         anchors.fill: parent

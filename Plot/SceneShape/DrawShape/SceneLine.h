@@ -1,13 +1,13 @@
 #ifndef CSCENELINE_H
 #define CSCENELINE_H
 #include <list>
+#include <osgEarth/LineDrawable>
 #include <Plot/SceneShape/ILine.h>
 #include <Inner/ImplSceneShape.hpp>
-#include <osg/Uniform>
-class CSceneLine:public ImplSceneShape<ILine>
+class CSceneLine:public ImplSceneNode<ILine>
 {
 public:
-    CONSTRUCTOR(CSceneLine,ImplSceneShape<ILine>)
+    CONSTRUCTOR(CSceneLine,ImplSceneNode<ILine>)
 
     /**
      * @brief增加一个点
@@ -31,13 +31,32 @@ public:
      */
     void SetMultPos(const std::vector<ScenePos>&);
     std::vector<ScenePos> GetMulPos()const;
+
 protected:
-    void CreateShape();
-    void UpdateShape();
+    /**
+     * @brief 形状更改
+     */
+    void ShapeChanged();
+
+    /**
+     * @brief 颜色修改
+     */
+    void ColorChanged();
+
+    /**
+     * @brief 初始化节点
+     */
+    void InitNode();
+
+    /**
+     * @brief 节点更新
+     */
+    void UpdateNode();
 protected:
-    osg::ref_ptr<osg::DrawArrays> m_pDrawArrays;
+    osg::ref_ptr<osgEarth::LineDrawable> m_pLine;
     std::list<ScenePos>           m_listAllPos;
-    osg::ref_ptr<osg::Uniform>    m_pUniform;
+    bool                          m_bColorChanged=false;
+    bool                          m_bShapeChanged=false;
 };
 
 #endif // CSCENELINE_H

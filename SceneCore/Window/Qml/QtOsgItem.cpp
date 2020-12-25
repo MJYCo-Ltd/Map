@@ -6,13 +6,7 @@ QtOsgItem::QtOsgItem(QQuickItem *parent):
     QQuickFramebufferObject(parent)
 {
     setMirrorVertically(true);
-    setTextureFollowsItemSize(true);
-    /// 有节点
-    //    setFlag(ItemHasContents, true);
-    //    setAcceptHoverEvents(true);
     setAcceptedMouseButtons(Qt::AllButtons);
-    //    setFlag(ItemAcceptsInputMethod,true);
-    //    grabMouse();
 }
 
 QtOsgItem::~QtOsgItem()
@@ -25,7 +19,7 @@ void QtOsgItem::setType(QtOsgItem::ItemType type)
     m_emType = type;
     switch (m_emType)
     {
-    case Item_2DMAp:
+    case Item_2DMAP:
         m_pSceneGraph = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(SCENEGRAPH_2D);
         break;
     case Item_User:
@@ -43,10 +37,26 @@ QQuickFramebufferObject::Renderer *QtOsgItem::createRenderer() const
     return(new QtOsgRenderer(m_pSceneGraph));
 }
 
+/// 设置帧率
+void QtOsgItem::setFrameRate(int nFrameRate)
+{
+    if(nFrameRate > 0 && nFrameRate != m_nFrameRate)
+    {
+        m_nFrameRate = nFrameRate;
+    }
+}
+
 /// 已经准备好了
 void QtOsgItem::Ready()
 {
     m_pRenderer->InitSurface();
+    QTimer::singleShot(1000/m_nFrameRate,this,&QtOsgItem::EvnetCall);
+}
+
+void QtOsgItem::EvnetCall()
+{
+    update();
+    QTimer::singleShot(1000/m_nFrameRate,this,&QtOsgItem::EvnetCall);
 }
 
 /// 按键按下

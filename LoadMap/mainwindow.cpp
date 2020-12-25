@@ -239,19 +239,19 @@ void MainWindow::on_action_triggered()
 //    IMapLocation* pLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     auto pScal = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP);
     pFlash = m_pSceneGraph->GetPlot()->CreateSceneGroup(FLASH_GROUP)->AsSceneFlashGroup();
-//    pScal->AddSceneNode(pModel);
+    pScal->AddSceneNode(pFlash);
     pFlash->AddSceneNode(pModel);
     pFlash->SetFlash(true);
     pFlash->SetFlashFreq(29);
     pFlash->SetFlashColor(color);
-    pLod->AddSceneNode(pFlash);
+    pLod->AddSceneNode(pScal);
 
     std::vector<float> vLevelInfo;
     vLevelInfo.push_back(1e6);
 
     pLod->SetLevelsInfo(vLevelInfo);
-//    m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);
-//    return;
+    m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);
+    return;
     IMapLayer* pLayer = m_pSceneGraph->GetMap()->CreateLayer("test");
     pEarthLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     pLayer->AddSceneNode(pEarthLocation);
@@ -374,15 +374,7 @@ void MainWindow::on_action_triggered()
 
 
     /// 添加模型
-//    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("model/AirPlane.ive");
     IMapLocation* pLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
-//    auto pScal = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP);
-//    auto pFlash = m_pSceneGraph->GetPlot()->CreateSceneGroup(FLASH_GROUP)->AsSceneFlashGroup();
-
-    pFlash->SetFlashFreq(0.5f);
-    pFlash->SetFlashColor(color);
-    pScal->AddSceneNode(pModel);
-    pFlash->AddSceneNode(pScal);
     pLocation->SetSceneNode(pFlash);
 
     pos.fLon=125.625319;

@@ -93,7 +93,7 @@ QOpenGLFramebufferObject *QtOsgRenderer::createFramebufferObject(const QSize &si
         pOpenGLContext->makeCurrent(pSurface);
         QMetaObject::invokeMethod(m_pOsgItem,"Ready");
     }
-    qDebug()<<size;
+
     QOpenGLFramebufferObjectFormat format;
     format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
     format.setSamples(4);
@@ -105,5 +105,4 @@ void QtOsgRenderer::UpdateTexture()
 {
     m_unTextureID = m_pFBOWindow->GetFBOTextureID();
     m_bUpdate = true;
-    QMetaObject::invokeMethod(m_pOsgItem,"update");
 }

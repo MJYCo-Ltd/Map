@@ -16,11 +16,12 @@ class SCENECORESHARED_EXPORT QtOsgItem:public QQuickFramebufferObject
     friend QtOsgRenderer;
     Q_OBJECT
     Q_PROPERTY(ItemType type MEMBER m_emType WRITE setType)
+    Q_PROPERTY(int frameRate MEMBER m_nFrameRate WRITE setFrameRate)
 
 public:
     enum ItemType
     {
-        Item_2DMAp,
+        Item_2DMAP,
         Item_3DMAP,
         Item_User
     };
@@ -41,8 +42,14 @@ public:
      */
     Renderer *createRenderer() const;
 
+    /**
+     * @brief 设置帧率
+     */
+    void setFrameRate(int nFrameRate);
+
 protected slots:
     void Ready();
+    void EvnetCall();
 
 protected:
     void keyPressEvent(QKeyEvent* event);
@@ -56,6 +63,7 @@ protected:
 
 private:
     ItemType       m_emType=Item_3DMAP;  /// 创建类型
+    int            m_nFrameRate=60;
     ISceneGraph*   m_pSceneGraph=nullptr;/// 场景图
     QtOsgRenderer* m_pRenderer=nullptr;
 };

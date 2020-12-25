@@ -1,4 +1,27 @@
+#include <osgEarth/CullingUtils>
 #include "SceneLine.h"
+
+struct MyDrawCallBack:public osg::Drawable::DrawCallback
+{
+    void drawImplementation(osg::RenderInfo& renderInfo,const osg::Drawable* drawable) const
+    {
+        drawable->drawImplementation(renderInfo);
+
+        auto pLastProgram=renderInfo.getState()->getLastAppliedProgramObject();
+        if(nullptr != pLastProgram)
+        {
+
+            auto pProgram = pLastProgram->getProgram();
+            osg::notify(osg::WARN)<<"====================================================="<<std::endl;
+            osg::notify(osg::WARN)<<pProgram->getName()<<"\n--------------------------------------------"<<std::endl;
+            for(int i=0;i<pProgram->getNumShaders();++i)
+            {
+                osg::notify(osg::WARN)<<pProgram->getShader(i)->getName()<<"\n--------------------------------------------"<<std::endl;
+                osg::notify(osg::WARN)<<pProgram->getShader(i)->getShaderSource()<<std::endl;
+            }
+        }
+    }
+};
 
 /// 添加点
 void CSceneLine::AddPoint(int nIndex, const ScenePos &rScenePos)
@@ -88,42 +111,55 @@ std::vector<ScenePos> CSceneLine::GetMulPos() const
     return(vTempPos);
 }
 
-/// 创建形状
-void CSceneLine::CreateShape()
+/// 形状更改
+void CSceneLine::ShapeChanged()
 {
-    auto pSate = m_pGeometry->getOrCreateStateSet();
-    auto pNodeProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
-    /// 此处应该不知道
-    if(m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(pNodeProgram,"Data/GLSL/Line.glsl"))
-    {
-        m_pUniform = pSate->getOrCreateUniform("nLineWidth",osg::Uniform::INT);
-        m_pUniform->set(1);
-    }
-    m_pDrawArrays = new osg::DrawArrays(GL_TRIANGLE_STRIP,0,m_pVertexArray->size());
-    m_pGeometry->addPrimitiveSet(m_pDrawArrays);
+    m_bShapeChanged=true;
+    ImplSceneNode<ILine>::NodeChanged();
 }
 
-/// 更新形状
-void CSceneLine::UpdateShape()
+/// 颜色更改
+void CSceneLine::ColorChanged()
 {
-    int nLineSize = m_listAllPos.size();
-//    if(nLineSize < 2)
-//    {
-//        return;
-//    }
+    m_bColorChanged=true;
+    ImplSceneNode<ILine>::NodeChanged();
+}
 
-    m_pVertexArray->resize(nLineSize);
-    int nIndex=0;
-    for(auto one : m_listAllPos)
+void CSceneLine::InitNode()
+{
+    osg::Group *pGroup = new osg::Group;
+    m_pLine = new osgEarth::LineDrawable;
+    pGroup->addChild(m_pLine);
+    pGroup->addCullCallback(new osgEarth::InstallCameraUniform);
+    m_pLine->setColor(osg::Vec4(m_stColor.fR,m_stColor.fG,m_stColor.fB,m_stColor.fA));
+    m_pLine->setLineWidth(m_nLineWidth);
+    m_pLine->setStipplePattern(0xffff);
+    m_pLine->setStippleFactor(2);
+    m_pLine->setLineSmooth(true);
+
+    ImplSceneNode<ILine>::InitNode();
+    ImplSceneNode<ILine>::SetOsgNode(pGroup);
+}
+
+void CSceneLine::UpdateNode()
+{
+    if(m_bColorChanged)
     {
-        m_pVertexArray->at(nIndex++).set(one.fX,one.fY,one.fZ);
+        m_pLine->setColor(osg::Vec4(m_stColor.fR,m_stColor.fG,m_stColor.fB,m_stColor.fA));
+        m_bColorChanged = false;
     }
 
-//    /// 如果只有两个点
-//    if(2 == nLineSize)
-//    {
-//        m_pVertexArray->push_back(m_pVertexArray->at(0));
-//    }
+    if(m_bShapeChanged)
+    {
+        m_pLine->clear();
+        for(auto one : m_listAllPos)
+        {
+            m_pLine->pushVertex(osg::Vec3(one.fX,one.fY,one.fZ));
+        }
+        m_pLine->setFirst(0);
+        m_pLine->finish();
+        m_bShapeChanged=false;
+    }
 
-    m_pDrawArrays->setCount(m_pVertexArray->size());
+    ImplSceneNode<ILine>::UpdateNode();
 }

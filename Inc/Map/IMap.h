@@ -14,7 +14,7 @@ typedef std::list<std::string> MapLayers;
 
 
 class ISpaceEnv;
-class IMapMessageObserver;
+struct IMapMessageObserver;
 class IMapLayer;
 
 /**

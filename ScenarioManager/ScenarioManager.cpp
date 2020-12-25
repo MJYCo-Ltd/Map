@@ -93,12 +93,20 @@ QList<Scenario*> ScenarioManager::favoriteList()
 
 QQmlListProperty<Scenario> ScenarioManager::scenarios()
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     return QQmlListProperty<Scenario>(this, _scenarioList);
+#else
+    return QQmlListProperty<Scenario>(this, &_scenarioList);
+#endif
 }
 
 QQmlListProperty<Scenario> ScenarioManager::favorites()
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     return QQmlListProperty<Scenario>(this, _favoriteList);
+#else
+    return QQmlListProperty<Scenario>(this, &_favoriteList);
+#endif
 }
 
 bool ScenarioManager::contains(QString name)
