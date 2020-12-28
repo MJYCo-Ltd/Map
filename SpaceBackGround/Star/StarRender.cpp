@@ -63,9 +63,9 @@ std::string s_getStarFragmentSource()
                 "  if ((maxMag > 0.0) && (magnitude > maxMag)) \n"
                 "    discard; \n"
                 "  if (pointSize > 2.0) \n"
-                "	   fragColor = color * texture2D(star0, gl_PointCoord); \n"
+                "	   fragColor = color * texture(star0, gl_PointCoord); \n"
                 "  else \n"
-                "    fragColor = color *  texture2D(star1, gl_PointCoord); \n"
+                "    fragColor = color *  texture(star1, gl_PointCoord); \n"
                 "  fragColor.a = 1; \n"
                 "} \n");
 }
@@ -208,7 +208,6 @@ void CStarRender::init()
 
     /// 设置点大小
     state->setMode(GL_PROGRAM_POINT_SIZE,osg::StateAttribute::ON);
-    state->setMode(GL_POINT_SMOOTH,osg::StateAttribute::ON);
 }
 
 void CStarRender::setupState()

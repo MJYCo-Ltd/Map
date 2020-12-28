@@ -119,9 +119,12 @@ void MainWindow::on_action_triggered()
     pImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
     pImage->SetImagePath("Images/ship.png");
 
+    ISceneGroup* pSceneRoot = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
+
     auto pAutoImage = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
     pAutoImage->SetMinScal(1.);
     pAutoImage->AddSceneNode(pImage);
+
 
     pHudText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
     m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudText);
@@ -142,9 +145,6 @@ void MainWindow::on_action_triggered()
     color.fR = color.fG = 1.f;
 //    return;
 
-
-
-    ISceneGroup* pSceneRoot = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
 
     pSceneRoot->AddSceneNode(pLod);
 
@@ -187,7 +187,7 @@ void MainWindow::on_action_triggered()
     scenePos.fX = 0.f;
     pPoint3->SetPos(scenePos);
     pLine->AddPoint(3,scenePos);
-//    pSceneRoot->AddSceneNode(pLine);
+    pSceneRoot->AddSceneNode(pLine);
     pLine->SetLineWidth(2);
 
     /// 绘制多边形
@@ -238,12 +238,12 @@ void MainWindow::on_action_triggered()
     pSceneRoot->AddSceneNode(pAttitudeGroup1);
     ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("model/AirPlane.ive");
 //    IMapLocation* pLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
-    auto pScal = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP);
+    auto pScal = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
     pFlash = m_pSceneGraph->GetPlot()->CreateSceneGroup(FLASH_GROUP)->AsSceneFlashGroup();
     pScal->AddSceneNode(pFlash);
     pFlash->AddSceneNode(pModel);
     pFlash->SetFlash(true);
-    pFlash->SetFlashFreq(29);
+    pFlash->SetFlashFreq(0.5);
     pFlash->SetFlashColor(color);
     pLod->AddSceneNode(pScal);
 

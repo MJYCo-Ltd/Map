@@ -5,8 +5,8 @@
 #include <Inner/OsgExtern/OsgExtern.h>
 #include "PersonInfo.h"
 
-static const std::string s_sPersonInfo("IPersonInfo");
-static const std::string s_sMineInfo("IMineInfo");
+static const char s_sPersonInfo[]="IPersonInfo";
+static const char s_sMineInfo[]="IMineInfo";
 
 CPersonInfo::~CPersonInfo()
 {

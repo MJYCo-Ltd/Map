@@ -194,28 +194,8 @@ void QtOsgWindow::wheelEvent(QWheelEvent *event)
     QOpenGLWindow::wheelEvent(event);
 }
 
-#include <osg/GraphicsContext>
-#include <osg/DisplaySettings>
 /// 初始化GraphicsView
 void QtOsgWindow::Init()
 {
-    QSurfaceFormat format = QSurfaceFormat::defaultFormat();
-    osg::GraphicsContext::Traits traits(osg::DisplaySettings::instance().get());
-    format.setAlphaBufferSize( traits.alpha );
-    format.setRedBufferSize( traits.red );
-    format.setGreenBufferSize( traits.green );
-    format.setBlueBufferSize( traits.blue );
-    format.setDepthBufferSize( traits.depth );
-    format.setStencilBufferSize( traits.stencil );
-    format.setSamples( traits.samples );
-//    format.setMajorVersion(3);
-//    format.setMinorVersion(3);
-    format.setProfile(QSurfaceFormat::CoreProfile);
-
-    format.setSwapInterval( traits.vsync ? 1 : 0 );
-    format.setStereo( traits.quadBufferStereo ? 1 : 0 );
-
-    setFormat(format);
-
     m_nTimerID = startTimer(16);
 }

@@ -1,4 +1,5 @@
 #include <QtCore>
+#include <QSurfaceFormat>
 #include <osgEarth/Registry>
 #include <osgEarth/Capabilities>
 #include <osgDB/ReadFile>
@@ -112,10 +113,41 @@ bool CheckPC()
     if(!s_gBChecked)
     {
         osgEarth::setNotifyLevel(osg::INFO);
-        s_gBChecked = osgEarth::Registry::instance()->getCapabilities().supportsGLSL();
+        const osgEarth::Capabilities& csCapabilities = osgEarth::Registry::instance()->getCapabilities();
+        s_gBChecked = csCapabilities.supportsGLSL();
+
         osgEarth::Registry::instance()->unRefImageDataAfterApply() = false;
         osg::setNotifyLevel(osg::WARN);
         osgEarth::setNotifyLevel(osg::NOTICE);
+
+        int nMax,nMin;
+        sscanf(csCapabilities.getVersion().data(),"%d.%d",&nMax,&nMin);
+
+        QSurfaceFormat format = QSurfaceFormat::defaultFormat();
+        osg::GraphicsContext::Traits traits(osg::DisplaySettings::instance().get());
+        format.setAlphaBufferSize( traits.alpha );
+        format.setRedBufferSize( traits.red );
+        format.setGreenBufferSize( traits.green );
+        format.setBlueBufferSize( traits.blue );
+        format.setDepthBufferSize( traits.depth );
+        format.setStencilBufferSize( traits.stencil );
+        format.setSamples( traits.samples );
+        format.setVersion(nMax,nMin);
+
+        /// 判断是否支持核心模式
+        if(csCapabilities.isCoreProfile())
+        {
+            format.setProfile(QSurfaceFormat::CoreProfile);
+        }
+        else
+        {
+            format.setProfile(QSurfaceFormat::CompatibilityProfile);
+        }
+
+        format.setSwapInterval( traits.vsync ? 1 : 0 );
+        format.setStereo( traits.quadBufferStereo ? 1 : 0 );
+
+        QSurfaceFormat::setDefaultFormat(format);
     }
 
     return(s_gBChecked);

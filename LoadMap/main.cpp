@@ -50,8 +50,6 @@ public:
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-
     bool bChecked = CheckPC();
 
     if(!bChecked)
@@ -71,6 +69,8 @@ int main(int argc, char *argv[])
     {
         std::cout<<sErrorInfo<<std::endl;
     }
+
+    QApplication a(argc, argv);
 
     MainWindow w;
     w.show();

@@ -1,28 +1,6 @@
 #include <osgEarth/CullingUtils>
 #include "SceneLine.h"
 
-struct MyDrawCallBack:public osg::Drawable::DrawCallback
-{
-    void drawImplementation(osg::RenderInfo& renderInfo,const osg::Drawable* drawable) const
-    {
-        drawable->drawImplementation(renderInfo);
-
-        auto pLastProgram=renderInfo.getState()->getLastAppliedProgramObject();
-        if(nullptr != pLastProgram)
-        {
-
-            auto pProgram = pLastProgram->getProgram();
-            osg::notify(osg::WARN)<<"====================================================="<<std::endl;
-            osg::notify(osg::WARN)<<pProgram->getName()<<"\n--------------------------------------------"<<std::endl;
-            for(int i=0;i<pProgram->getNumShaders();++i)
-            {
-                osg::notify(osg::WARN)<<pProgram->getShader(i)->getName()<<"\n--------------------------------------------"<<std::endl;
-                osg::notify(osg::WARN)<<pProgram->getShader(i)->getShaderSource()<<std::endl;
-            }
-        }
-    }
-};
-
 /// 添加点
 void CSceneLine::AddPoint(int nIndex, const ScenePos &rScenePos)
 {

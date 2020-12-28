@@ -8,18 +8,18 @@
 #include "DrawShape/SceneImage.h"
 #include "SceneShape.h"
 
-static const std::string s_sPoint("IPoint");
-static const std::string s_sLine("ILine");
-static const std::string s_sEllipse("IEllipse");
-static const std::string s_sArc("IArc");
-static const std::string s_sRectangle("IRectangle");
-static const std::string s_sPolygon("IPolygon");
-static const std::string s_sCone("ICone");
-static const std::string s_sImage("IImage");
-static const std::string s_sConeSensor("IConeSensor");
-static const std::string s_sSConeSensor("ISConeSensor");
-static const std::string s_sPulseSensor("IPulseSensor");
-static const std::string s_sRadarSensor("IRadarSensor");
+static const char s_sPoint[]="IPoint";
+static const char s_sLine[]="ILine";
+static const char s_sEllipse[]="IEllipse";
+static const char s_sArc[]="IArc";
+static const char s_sRectangle[]="IRectangle";
+static const char s_sPolygon[]="IPolygon";
+static const char s_sCone[]="ICone";
+static const char s_sImage[]="IImage";
+static const char s_sConeSensor[]="IConeSensor";
+static const char s_sSConeSensor[]="ISConeSensor";
+static const char s_sPulseSensor[]="IPulseSensor";
+static const char s_sRadarSensor[]="IRadarSensor";
 
 ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName)
 {

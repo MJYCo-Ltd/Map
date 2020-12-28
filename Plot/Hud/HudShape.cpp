@@ -1,8 +1,8 @@
 #include "HudShape.h"
 #include "HudText.h"
 #include "HudImage.h"
-static std::string s_sHudImage("IHudImage");
-static std::string s_sHudText("IHudText");
+static const char s_sHudImage[]="IHudImage";
+static const char s_sHudText[]="IHudText";
 
 ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName)
 {

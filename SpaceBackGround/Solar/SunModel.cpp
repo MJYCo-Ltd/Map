@@ -83,7 +83,6 @@ public:
         state->setAttributeAndModes(program, osg::StateAttribute::ON);
 
         // configure the stateset
-        state->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
         state->setTextureMode(0, GL_TEXTURE_2D, osg::StateAttribute::OFF);
         state->setAttributeAndModes(new osg::BlendFunc(
                                         osg::BlendFunc::SRC_ALPHA, osg::BlendFunc::ONE_MINUS_SRC_ALPHA),

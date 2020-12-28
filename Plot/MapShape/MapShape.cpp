@@ -5,14 +5,14 @@
 #include "DrawShape/MapLocation.h"
 #include "MapShape.h"
 
-static std::string s_sPoint("IMapPoint");
-static std::string s_sLine("IMapLine");
-static std::string s_sEllipse("IMapEllipse");
-static std::string s_sArc("IMapArc");
-static std::string s_sRectangle("IMapRectangle");
-static std::string s_sPolygon("IMapPolygon");
-static std::string s_sCoverImage("IMapCoverImage");
-static std::string s_sLocation("IMapLocation");
+static const char s_sPoint[]="IMapPoint";
+static const char s_sLine[]="IMapLine";
+static const char s_sEllipse[]="IMapEllipse";
+static const char s_sArc[]="IMapArc";
+static const char s_sRectangle[]="IMapRectangle";
+static const char s_sPolygon[]="IMapPolygon";
+static const char s_sCoverImage[]="IMapCoverImage";
+static const char s_sLocation[]="IMapLocation";
 
 ISceneNode *CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName)
 {

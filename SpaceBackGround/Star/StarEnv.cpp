@@ -74,7 +74,6 @@ CStarEnv::CStarEnv(ISceneGraph *pSceneGraph):
 
 
     state->setMode(GL_BLEND, osg::StateAttribute::ON);
-    state->setMode(GL_LIGHTING,osg::StateAttribute::OFF);
 
     state->setAttributeAndModes(
                 new osg::BlendFunc(osg::BlendFunc::SRC_ALPHA,

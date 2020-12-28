@@ -12,7 +12,7 @@
 #include <SpaceEnv/ISpaceEnv.h>
 #include "SatelliteShow.h"
 
-std::string S_3DSatllite("ISatellite");
+static char S_3DSatllite[]="ISatellite";
 
 void CSatelliteShow::InitNode()
 {

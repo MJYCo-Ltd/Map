@@ -19,10 +19,12 @@ static const char *vertexShaderSource=
         "}\n";
 
 static const char *fragmentShaderSource =
+        "#version 330\n"
         "in vec2 uv;\n"
         "uniform sampler2D tex;\n"
+        "out vec4 vFragColor;"
         "void main() {\n"
-        "   gl_FragColor = vec4(texture2D(tex, uv).rgb, 1.0);\n"
+        "   vFragColor = vec4(texture(tex, uv).rgb, 1.0);\n"
         "}\n";
 
 #endif // MYSHADER_H
