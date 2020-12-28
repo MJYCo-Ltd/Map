@@ -52,7 +52,7 @@ public:
     MAP_LINE_TYPE GetLineType()const {return(m_emLineType);}
 
     /**
-     * @brief 设置点的大小
+     * @brief 设置线的颜色
      */
     void SetLineColor(const SceneColor& lineColor)JUDGE_EQUAL_CALL_FUNCTION(lineColor,m_stLineColor,LineColorChanged)
     const SceneColor& LineColor()const{return(m_stLineColor);}

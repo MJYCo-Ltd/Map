@@ -33,6 +33,12 @@ public:
     std::vector<ScenePos> GetMulPos()const;
 
 protected:
+
+    /**
+     * @brief 线宽更改
+     */
+    void LineWidthChanged();
+
     /**
      * @brief 形状更改
      */
@@ -57,6 +63,7 @@ protected:
     std::list<ScenePos>           m_listAllPos;
     bool                          m_bColorChanged=false;
     bool                          m_bShapeChanged=false;
+    bool                          m_bWidthChanged=false;
 };
 
 #endif // CSCENELINE_H

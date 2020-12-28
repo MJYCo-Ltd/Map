@@ -3,7 +3,6 @@
 #include <string>
 
 #include <Map/IMapSceneNode.h>
-using namespace std;
 
 /**
  * @brief 分组类型

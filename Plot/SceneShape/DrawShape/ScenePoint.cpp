@@ -44,6 +44,7 @@ void CScenePoint::CreateShape()
         /// 获取闪烁变量
         m_ufPointSize = pSate->getOrCreateUniform("pointSize",osg::Uniform::FLOAT);
         m_ufPointSize->set(1.f);
+        pSate->setTextureAttributeAndModes(0, new osg::PointSprite());
     }
 
     m_pVertexArray->push_back(osg::Vec3(m_stPos.fX,m_stPos.fY,m_stPos.fZ));

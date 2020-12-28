@@ -16,7 +16,9 @@ SDK_CONFIG *= OSG OsgExtern SceneCore Satellite
 include($$PWD/../../SoftSDK.pri)
 
 HEADERS += \
+    MineInfo.h \
     PersonInfo.h
 
 SOURCES += \
+    MineInfo.cpp \
     PersonInfo.cpp

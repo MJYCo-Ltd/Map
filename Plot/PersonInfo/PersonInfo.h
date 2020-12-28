@@ -8,8 +8,6 @@
 
 #include <NoQt.h>
 
-class PersonInfoCallBack;
-
 class CPersonInfo:public ImplMapSceneNode<IPersonInfo>
 {
 public:
@@ -49,8 +47,8 @@ private:
 
 extern "C"
 {
-    Q_DECL_EXPORT IPersonInfo* CreateNode(ISceneGraph*,const string& );
-    Q_DECL_EXPORT bool QueryInterface(string&);
+    Q_DECL_EXPORT ISceneNode* CreateNode(ISceneGraph*,const std::string&);
+    Q_DECL_EXPORT bool QueryInterface(std::string&);
 }
 
 #endif // CPERSONINFO_H

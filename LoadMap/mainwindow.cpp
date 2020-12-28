@@ -153,10 +153,10 @@ void MainWindow::on_action_triggered()
     auto pPoint1 = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
     auto pPoint2 = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
     auto pPoint3 = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
-    pPoint->SetPointSize(5.f);
-    pPoint1->SetPointSize(5.f);
-    pPoint2->SetPointSize(5.f);
-    pPoint3->SetPointSize(5.f);
+    pPoint->SetPointSize(10.f);
+    pPoint1->SetPointSize(20.f);
+    pPoint2->SetPointSize(30.f);
+    pPoint3->SetPointSize(40.f);
 
 
     pPoint->SetColor(color);
@@ -187,7 +187,8 @@ void MainWindow::on_action_triggered()
     scenePos.fX = 0.f;
     pPoint3->SetPos(scenePos);
     pLine->AddPoint(3,scenePos);
-    pSceneRoot->AddSceneNode(pLine);
+//    pSceneRoot->AddSceneNode(pLine);
+    pLine->SetLineWidth(2);
 
     /// 绘制多边形
     auto pPolygon = dynamic_cast<IPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPolygon"));
@@ -250,8 +251,8 @@ void MainWindow::on_action_triggered()
     vLevelInfo.push_back(1e6);
 
     pLod->SetLevelsInfo(vLevelInfo);
-    m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);
-    return;
+//    m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);
+//    return;
     IMapLayer* pLayer = m_pSceneGraph->GetMap()->CreateLayer("test");
     pEarthLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     pLayer->AddSceneNode(pEarthLocation);
@@ -293,7 +294,7 @@ void MainWindow::on_action_triggered()
 
     m_pLine->AddPoint(0,pos);
     pos.fLon = 110.0606607;
-    pos.fLat = 19.910152;
+    pos.fLat = 25.910152;
 
     m_pLine->AddPoint(1,pos);
     pos.fLon = 116.358510;
@@ -305,6 +306,7 @@ void MainWindow::on_action_triggered()
 
     m_pLine->AddPoint(3,pos);
     m_pLine->SetLineColor(color);
+//    m_pLine->SetLineWidth(100.f);
     //m_pLine->SetTerrainType(RELATIVE_TERRAIN);
     pLayer->AddSceneNode(m_pLine);
 

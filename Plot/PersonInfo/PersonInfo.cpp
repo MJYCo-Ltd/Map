@@ -5,7 +5,8 @@
 #include <Inner/OsgExtern/OsgExtern.h>
 #include "PersonInfo.h"
 
-string S_sInterFace("IPersonInfo");
+static const std::string s_sPersonInfo("IPersonInfo");
+static const std::string s_sMineInfo("IMineInfo");
 
 CPersonInfo::~CPersonInfo()
 {
@@ -29,7 +30,7 @@ void CPersonInfo::InitNode()
     m_placeStyle.getOrCreateSymbol<osgEarth::TextSymbol>()->encoding() = osgEarth::TextSymbol::ENCODING_UTF8;
     m_placeStyle.getOrCreateSymbol<osgEarth::TextSymbol>()->alignment() = osgEarth::TextSymbol::ALIGN_LEFT_CENTER;
     m_placeStyle.getOrCreateSymbol<osgEarth::TextSymbol>()->size() = 20;
-    string sFontPath = GetExePath();
+    std::string sFontPath = GetExePath();
     sFontPath += "fonts/msyh.ttf";
     m_placeStyle.getOrCreateSymbol<osgEarth::TextSymbol>()->font() = sFontPath;
     m_placeStyle.getOrCreateSymbol<osgEarth::TextSymbol>()->fill()->color() = osgEarth::Color::White;
@@ -39,7 +40,7 @@ void CPersonInfo::InitNode()
     m_placeStyle.getOrCreate<osgEarth::IconSymbol>()->declutter() = false;
     m_placeStyle.getOrCreate<osgEarth::IconSymbol>()->alignment() = osgEarth::IconSymbol::ALIGN_RIGHT_CENTER;
 
-    string sImagePath = "ico/red.png";
+    std::string sImagePath = "ico/red.png";
     auto pImage = m_pSceneGraph->ResouceLoader()->LoadImage(sImagePath,32,32);
 
 
@@ -105,12 +106,14 @@ void CPersonInfo::UpdateNode()
         changeImage();
         m_bStatusChanged=false;
     }
+
+    ImplMapSceneNode<IPersonInfo>::UpdateNode();
 }
 
 /// 更新图片
 void CPersonInfo::changeImage()
 {
-    string sIconPath="ico/";
+    std::string sIconPath="ico/";
     switch(m_emGroupType)
     {
     case RED_GROUP:
@@ -146,13 +149,17 @@ void CPersonInfo::changeImage()
     m_pPerson->setIconImage(m_pSceneGraph->ResouceLoader()->LoadImage(sIconPath,32,32));
 }
 
+#include "MineInfo.h"
 /// 创建地图节点
-IPersonInfo* CreateNode(ISceneGraph* pSceneGraph, const string &sInterfaceName)
+ISceneNode* CreateNode(ISceneGraph* pSceneGraph, const std::string &sInterfaceName)
 {
-    if(sInterfaceName == S_sInterFace)
+    if(sInterfaceName == s_sPersonInfo)
     {
-        auto pPerson = new CPersonInfo(pSceneGraph);
-        return(pPerson);
+        return(new CPersonInfo(pSceneGraph));
+    }
+    else if(sInterfaceName == s_sMineInfo)
+    {
+        return(new CMineInfo(pSceneGraph));
     }
     else
     {
@@ -162,8 +169,11 @@ IPersonInfo* CreateNode(ISceneGraph* pSceneGraph, const string &sInterfaceName)
 
 
 /// 查询接口
-bool QueryInterface(string& sInterfaceName)
+bool QueryInterface(std::string& sInterfaceName)
 {
-    sInterfaceName = S_sInterFace;
+    sInterfaceName.clear();
+    sInterfaceName += s_sPersonInfo;
+    sInterfaceName += " ";
+    sInterfaceName += s_sMineInfo;
     return(false);
 }

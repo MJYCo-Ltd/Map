@@ -111,6 +111,12 @@ std::vector<ScenePos> CSceneLine::GetMulPos() const
     return(vTempPos);
 }
 
+void CSceneLine::LineWidthChanged()
+{
+    m_bWidthChanged=true;
+    ImplSceneNode<ILine>::NodeChanged();
+}
+
 /// 形状更改
 void CSceneLine::ShapeChanged()
 {
@@ -133,8 +139,7 @@ void CSceneLine::InitNode()
     pGroup->addCullCallback(new osgEarth::InstallCameraUniform);
     m_pLine->setColor(osg::Vec4(m_stColor.fR,m_stColor.fG,m_stColor.fB,m_stColor.fA));
     m_pLine->setLineWidth(m_nLineWidth);
-    m_pLine->setStipplePattern(0xffff);
-    m_pLine->setStippleFactor(2);
+    m_pLine->setStipplePattern(0xffffu);
     m_pLine->setLineSmooth(true);
 
     ImplSceneNode<ILine>::InitNode();
@@ -143,6 +148,12 @@ void CSceneLine::InitNode()
 
 void CSceneLine::UpdateNode()
 {
+    if(m_bWidthChanged)
+    {
+        m_pLine->setLineWidth(m_nLineWidth);
+        m_bWidthChanged=false;
+    }
+
     if(m_bColorChanged)
     {
         m_pLine->setColor(osg::Vec4(m_stColor.fR,m_stColor.fG,m_stColor.fB,m_stColor.fA));
