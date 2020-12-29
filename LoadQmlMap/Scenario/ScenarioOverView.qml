@@ -78,10 +78,9 @@ Rectangle
                     onClicked: {
                         scenarioNew.visible = true
                         //fileDlg.visible = true
-                        var currentDate = new Date()
-
-                        scenarioManager.addScenario("test")
-                        console.log("clicked : New Scenario,", currentDate.toLocaleTimeString(Qt.locale("de_DE")))
+                        //var currentDate = new Date()
+                        //scenarioManager.addScenario("test")
+                        //console.log("clicked : New Scenario,", currentDate.toLocaleTimeString(Qt.locale("de_DE")))
                     }
                 }
                 ScenarioNew{
@@ -91,10 +90,10 @@ Rectangle
                     y : margin / 2
                     width:parent.width - margin * 2 - rectNewButton.width
                     height:itemHeight - margin
-                    onScenarioAdded: {
-                        gridViewRecent.model = scenarioManager.scenarios()
-                    //    scenarioManager.addScenario(message)
-                    }
+                    //onScenarioAdded: {
+                    //    gridViewRecent.model = scenarioManager.scenarios()
+                    ////    scenarioManager.addScenario(message)
+                    //}
                 }
             }
         }
@@ -189,12 +188,12 @@ Rectangle
                     imageFilePath: modelData.image
                     color:Qt.rgba(0.1+0.04*(index%20),0.9-0.05*(index%12),0.3+0.06*(index%10),0.9)
                 }
-                Connections {
-                    target: scenarioManager
-                    function onScenarioListChanged() {
-                        gridViewRecent.model = scenarioManager.scenarios
-                    }
-                }
+                //Connections {
+                //    target: scenarioManager
+                //    function onScenarioListChanged() {
+                //        gridViewRecent.model = scenarioManager.scenarios
+                //    }
+                //}
             }
         }
     }

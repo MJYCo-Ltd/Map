@@ -8,7 +8,7 @@ Rectangle
     property int buttonHeight : 42
     width: defaultStyle.scenarioNewWidth
     height: defaultStyle.scenarioNewHeight
-    signal scenarioAdded()
+    //signal scenarioAdded()
 
     border.color: "#FFA0B0"
     border.width: 10
@@ -50,10 +50,12 @@ Rectangle
     Text{
         id:scenarioNewWarning
         x:margin
-        y:margin + scenarioNewNameLabel.height
+        y:margin * 2 + scenarioNewNameLabel.height
         width: 48
         height: 32
-        color: defaultStyle.bgColorMsgAlert
+        color: defaultStyle.fontColorMsgWarning
+        font.family: defaultStyle.fontFamilyCN
+        font.pointSize: defaultStyle.fontSize
         text:" This name is already exist! "
         visible:false
     }
@@ -71,11 +73,15 @@ Rectangle
             font.pointSize: defaultStyle.fontSize
             text: "OK"
             onClicked: {
-                //rectNew.scenarioNew(scenarioNewNameInput.text)
-                if(scenarioManager.addScenario(scenarioNewNameInput.text))
+                var res = scenarioManager.addScenario(scenarioNewNameInput.text)
+                if(res > 0)
+                {
                     scenarioNewWarning.visible = false
+                }
                 else
+                {
                     scenarioNewWarning.visible = true
+                }
             }
         }
         Button {
