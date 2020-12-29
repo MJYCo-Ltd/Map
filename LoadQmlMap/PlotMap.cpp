@@ -1,6 +1,6 @@
 #include <QDebug>
 #include <SceneGraph/ISceneGraph.h>
-#include <Map/IMap.h>
+#include <Plot/Map/IMap.h>
 
 #include "PlotMap.h"
 

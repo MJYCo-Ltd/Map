@@ -19,19 +19,13 @@
 #include <Inner/OsgExtern/OsgExtern.h>
 #include <SceneGraph/IWindow.h>
 #include <SceneGraph/IViewPort.h>
-#include <Map/IMapObserver.h>
+#include <Plot/Map/IMapObserver.h>
 #include "MapNodeChanged.h"
 #include "MapModifyLayer.h"
 #include "SpaceEnv.h"
 #include "Map.h"
 #include "MapLayer.h"
 #include "MapModelLayer.h"
-
-CMap::CMap(MapType type, ISceneGraph *pSceneGraph):
-    ImplSceneGroup<IMap>(pSceneGraph),
-    m_emType(type)
-{
-}
 
 /// 析构函数
 CMap::~CMap()
@@ -395,7 +389,32 @@ void CMap::InitMap()
     }
 }
 
-IMap* CreateMap(MapType emType, ISceneGraph* pSceneGraph)
+static const char s_sMap2D[]="IMap2D";
+static const char s_sMap3D[]="IMap3D";
+ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName)
 {
-    return(new CMap(emType,pSceneGraph));
+    if(sInterfaceName == s_sMap2D)
+    {
+        auto pMap = new CMap(pSceneGraph);
+        pMap->SetType(MAP_2D);
+        return(pMap);
+    }
+    else if(sInterfaceName == s_sMap3D)
+    {
+        auto pMap = new CMap(pSceneGraph);
+        pMap->SetType(MAP_3D);
+        return(pMap);
+    }
+    else
+    {
+        return(nullptr);
+    }
+}
+
+bool QueryInterface(std::string& sInterfaceName)
+{
+    sInterfaceName = s_sMap2D;
+    sInterfaceName += " ";
+    sInterfaceName += s_sMap3D;
+    return(true);
 }

@@ -10,7 +10,7 @@ TARGET = SceneShape
 TEMPLATE = lib
 
 SDK_CONFIG *= OSG Satellite OsgExtern
-include($$PWD/../../SoftSDK.pri)
+include($$PWD/../MapPlot.pri)
 
 HEADERS += \
     DrawShape/SceneCone.h \

@@ -13,7 +13,7 @@ DEFINES += SPACEENV_LIBRARY
 
 SDK_CONFIG *= OSG Satellite OsgExtern SceneCore
 
-include(../SoftSDK.pri)
+include($$PWD/../MapPlot.pri)
 
 HEADERS += \
     Solar/PlanetModel.h \

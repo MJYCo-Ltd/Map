@@ -1,7 +1,7 @@
 #ifndef H_HEADER_MAP_POINT_H
 #define H_HEADER_MAP_POINT_H
 
-#include <Plot/MapShape/IMapPoint.h>
+#include <Plot/Map/IMapPoint.h>
 #include <osgEarth/FeatureNode>
 #include <Inner/ImplMapSceneNode.hpp>
 class PointCallBack;

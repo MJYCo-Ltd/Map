@@ -1,4 +1,4 @@
-#include <Map/IMapSceneNode.h>
+#include <Plot/Map/IMapSceneNode.h>
 #include <SceneGraph/ISceneGraph.h>
 #include <Inner/IRender.h>
 #include <Inner/OsgExtern/OsgExtern.h>

@@ -1,7 +1,7 @@
 #ifndef INTERFACE_POLYGON_HEARDER_H
 #define INTERFACE_POLYGON_HEARDER_H
 #include <list>
-#include <Map/IMapSceneNode.h>
+#include <Plot/Map/IMapSceneNode.h>
 
 
 /**

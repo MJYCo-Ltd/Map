@@ -2,7 +2,7 @@
 #define INTERFACE_MAP_COVER_IMAGE_HEARDER_H
 #include <vector>
 #include <string>
-#include <Map/IMapSceneNode.h>
+#include <Plot/Map/IMapSceneNode.h>
 
 /**
  * @brief 位置信息

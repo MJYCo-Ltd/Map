@@ -10,7 +10,7 @@ TARGET = Hud
 TEMPLATE = lib
 
 SDK_CONFIG *= OSG OsgExtern
-include($$PWD/../../SoftSDK.pri)
+include($$PWD/../MapPlot.pri)
 
 HEADERS += \
     HudImage.h \

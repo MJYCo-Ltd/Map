@@ -9,7 +9,7 @@
 #include <osgEarthUtil/EarthManipulator>
 #endif
 
-#include "Map/IMap.h"
+#include <Plot/Map/IMap.h>
 
 class CMyEarthManipulator : public osgEarth::Util::EarthManipulator
 {

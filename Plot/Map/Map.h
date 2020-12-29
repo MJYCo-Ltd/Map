@@ -5,7 +5,7 @@
 #include <osgEarth/MapNode>
 #include <Map/IMap.h>
 #include <Inner/ImplSceneGroup.hpp>
-#include "Map_Global.h"
+#include <NoQt.h>
 
 class CSpaceEnv;
 class ISceneGraph;
@@ -17,9 +17,10 @@ class CMap:public ImplSceneGroup<IMap>
 {
     friend class CMapNodeChanged;
 public:
-    CMap(MapType type,ISceneGraph* pSceneGraph);
+    CONSTRUCTOR(CMap,ImplSceneGroup<IMap>)
     ~CMap();
 
+    void SetType(MapType type){m_emType = type;}
     /**
      * @brief 注册消息
      */
@@ -97,12 +98,13 @@ protected:
 
     UserLayers   m_userLayers;
     MapLayers    m_earthFileLayers;
-    MapType      m_emType;
+    MapType      m_emType=MAP_3D;
     CSpaceEnv   *m_pSpaceEnv=nullptr;/// 空间背景
 };
 
 extern "C"
 {
-    MAPSHARED_EXPORT IMap* CreateMap(MapType, ISceneGraph*);
+    Q_DECL_EXPORT ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName);
+    Q_DECL_EXPORT bool QueryInterface(std::string& sInterfaceName);
 }
 #endif // CEARTH_H

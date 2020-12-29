@@ -1,7 +1,7 @@
 #ifndef INTERFACE_MAP_LINE_HEARDER_H
 #define INTERFACE_MAP_LINE_HEARDER_H
 #include <list>
-#include <Map/IMapSceneNode.h>
+#include <Plot/Map/IMapSceneNode.h>
 
 
 enum MAP_LINE_TYPE

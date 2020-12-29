@@ -2,7 +2,7 @@
 #define CMAPLOCATION_H
 #include <osgEarth/Horizon>
 #include <osgEarth/GeoPositionNode>
-#include <Plot/MapShape/IMapLocation.h>
+#include <Plot/Map/IMapLocation.h>
 #include <Inner/ImplMapSceneNode.hpp>
 #include <Inner/OsgExtern/MyMatrixTransform.h>
 class CMapLocation:public ImplMapSceneNode<IMapLocation>

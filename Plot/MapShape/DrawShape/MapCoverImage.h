@@ -2,7 +2,7 @@
 #define CSCENECOVER_H
 #include <osgEarth/DrapeableNode>
 #include <osgEarth/ImageOverlay>
-#include <Plot/MapShape/IMapCoverImage.h>
+#include <Plot/Map/IMapCoverImage.h>
 #include <Inner/ImplMapSceneNode.hpp>
 
 class CMapCoverImage:public ImplMapSceneNode<IMapCoverImage>

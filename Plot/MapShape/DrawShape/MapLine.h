@@ -2,7 +2,7 @@
 #define H_HEADER_CSCENELINE_H
 
 #include <osgEarth/FeatureNode>
-#include <Plot/MapShape/IMapLine.h>
+#include <Plot/Map/IMapLine.h>
 #include <Inner/ImplMapSceneNode.hpp>
 
 class CMapLine:public ImplMapSceneNode<IMapLine>

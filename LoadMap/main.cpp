@@ -9,8 +9,8 @@
 
 #include <ISceneCore.h>
 #include <SceneGraph/IWindow.h>
-#include <SpaceEnv/ISpaceEnv.h>
-#include <Map/IMap.h>
+#include <Plot/Map/SpaceEnv/ISpaceEnv.h>
+#include <Plot/Map/IMap.h>
 #include <VersionMathCommon.h>
 #include <Math/VecMat.h>
 #include <Math/YPRAngle.h>

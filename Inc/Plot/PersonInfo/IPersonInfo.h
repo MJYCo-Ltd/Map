@@ -2,7 +2,7 @@
 #define INTERFACE_PERSONINFO_HEARDER_H
 #include <string>
 
-#include <Map/IMapSceneNode.h>
+#include <Plot/Map/IMapSceneNode.h>
 
 /**
  * @brief 分组类型

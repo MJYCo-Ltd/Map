@@ -6,7 +6,7 @@ DEFINES += MAP_LIBRARY
 
 SDK_CONFIG *= OSG OsgExtern SceneCore Satellite
 
-include(../SoftSDK.pri)
+include($$PWD/../MapPlot.pri)
 
 HEADERS += \
     Map.h \
@@ -14,7 +14,6 @@ HEADERS += \
     MapModelLayer.h \
     MapModifyLayer.h \
     MapNodeChanged.h \
-    Map_Global.h \
     SpaceEnv.h
 
 SOURCES += \

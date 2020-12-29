@@ -70,13 +70,29 @@ void CSpaceBackGround::InitNode()
     m_pOsgNode->addChild(m_pSolarEnv);
 }
 
+/// 更新矩阵
 void CSpaceBackGround::UpdateMatrix(const Math::CMatrix &rRotate)
 {
     m_pStarEnv->UpdateMatrix(rRotate);
 }
 
+static const char s_sSpaceBackGround[]="ISpaceBackGround";
+
 /// 创建空间背景
-ISpaceBackGround *CreateSpaceBackGround(ISceneGraph* pSceneGraph)
+ISceneNode *CreateNode(ISceneGraph* pSceneGraph,const std::string& sInterfaceName)
 {
-    return(new CSpaceBackGround(pSceneGraph));
+    if(sInterfaceName == s_sSpaceBackGround)
+    {
+        return(new CSpaceBackGround(pSceneGraph));
+    }
+    else
+    {
+        return(nullptr);
+    }
+}
+
+bool QueryInterface(std::string& sInterfaceName)
+{
+    sInterfaceName = s_sSpaceBackGround;
+    return(false);
 }

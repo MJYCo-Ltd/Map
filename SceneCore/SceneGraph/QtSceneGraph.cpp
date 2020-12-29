@@ -7,7 +7,7 @@
 #include <Inner/IOsgSceneNode.h>
 #include <SceneGraph/ISceneGroup.h>
 #include <Plot/IPlot.h>
-#include <Map/IMap.h>
+#include <Plot/Map/IMap.h>
 
 
 #include "QtRender.h"
@@ -201,23 +201,9 @@ IWindow *QtSceneGraph::GetMainWindow()
 void QtSceneGraph::LoadPlot()
 {
     typedef IPlot* (*CreatePlotFnc)(ISceneGraph*);
-#ifdef Q_OS_WIN
-
-#ifdef QT_NO_DEBUG
-        QLibrary loadPlot("Plot.dll");
-#else
-        QLibrary loadPlot("Plotd.dll");
-#endif
-
-#else
-
-#ifdef QT_NO_DEBUG
-        QLibrary loadPlot("libPlot.so");
-#else
-        QLibrary loadPlot("libPlotd.so");
-#endif
-
-#endif
+    QString sPlotName("Plot");
+    sPlotName += s_sSuffix;
+    QLibrary loadPlot(sPlotName);
     if(loadPlot.load())
     {
         CreatePlotFnc pCreatePlot = reinterpret_cast<CreatePlotFnc>(loadPlot.resolve("CreatePlot"));
@@ -231,39 +217,13 @@ void QtSceneGraph::LoadPlot()
 /// 加载地图
 void QtSceneGraph::LoadMap()
 {
-    typedef IMap* (*CreateMapFun)(MapType,ISceneGraph*);
-
-#ifdef Q_OS_WIN
-
-#ifdef QT_NO_DEBUG
-        QLibrary loadMap("Map.dll");
-#else
-        QLibrary loadMap("Mapd.dll");
-#endif
-
-#else
-
-#ifdef QT_NO_DEBUG
-        QLibrary loadMap("libMap.so");
-#else
-        QLibrary loadMap("libMapd.so");
-#endif
-
-#endif
-    if(loadMap.load())
+    switch(m_emType)
     {
-        CreateMapFun pCreateMap = reinterpret_cast<CreateMapFun>(loadMap.resolve("CreateMap"));
-        if(nullptr != pCreateMap)
-        {
-            switch (m_emType)
-            {
-            case SCENEGRAPH_2D:
-                m_pMap = pCreateMap(MAP_2D,this);
-                break;
-            default:
-                m_pMap = pCreateMap(MAP_3D,this);
-                break;
-            }
-        }
+    case SCENEGRAPH_2D:
+        m_pMap = dynamic_cast<IMap*>(m_pPlot->CreateSceneNode("IMap2D"));
+        break;
+    case SCENEGRAPH_3D:
+        m_pMap = dynamic_cast<IMap*>(m_pPlot->CreateSceneNode("IMap3D"));
+        break;
     }
 }

@@ -86,21 +86,22 @@ void CMapNodeFactory::DeleteNoUseSceneNode()
 /// 初始化工厂
 void CMapNodeFactory::InitFactory()
 {
+    static std::string sPrefix = "MapPlot/";
+
     std::string sFilePath = GetExePath();
-#ifdef QT_NO_DEBUG
-    sFilePath += "NodeFactory.dll";
-#else
-    sFilePath += "NodeFactoryd.dll";
-#endif
+    sFilePath += sPrefix + "NodeFactory.dll";
     std::ifstream in(sFilePath, std::ios::in);
     std::string sInterfaceType;
     std::string sDllName;
+
+    sFilePath = GetExePath();
     if(in.is_open())
     {
         while(!in.eof())
         {
             in>>sInterfaceType>>sDllName;
-            m_mapTypeDllName[sInterfaceType] = sDllName;
+            sDllName += s_sSuffix;
+            m_mapTypeDllName[sInterfaceType] = sFilePath + sPrefix + sDllName;
         }
     }
 
@@ -125,7 +126,7 @@ void CMapNodeFactory::InitType(const std::string &sInterface)
         auto pQueryFunc = reinterpret_cast<pQueryInterfaceFun>(loadDll.resolve("QueryInterface"));
         if(nullptr == pQueryFunc)
         {
-            osg::notify(osg::NOTICE)<<loadDll.errorString().toStdString();
+            osg::notify(osg::WARN)<<loadDll.errorString().toStdString();
         }
 
         auto pCreateFun = reinterpret_cast<pCreateNodeFun>(loadDll.resolve("CreateNode"));

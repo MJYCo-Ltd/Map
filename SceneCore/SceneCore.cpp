@@ -6,59 +6,10 @@
 #include "MyNotify.h"
 #include "SceneCore.h"
 #include "SceneGraph/SceneGraphManager.h"
+
 static CSceneCore* s_gMapCore=nullptr;
-static int g_num;
 static bool        s_gBChecked(false);
-static std::string     s_strPath;
-
-void my_init()
-{
-    ++g_num;
-    osg::notify(osg::NOTICE)<<"my_init scenecore"<<g_num;
-}
-
-void my_fini()
-{
-    --g_num;
-    osg::notify(osg::NOTICE)<<"my_fini scenecore"<<g_num;
-    if(0==g_num)
-    {
-        delete s_gMapCore;
-    }
-}
-
-#ifdef Q_OS_WIN
-#include <qt_windows.h>
-#undef LoadImage
-
-BOOL WINAPI DllMain(
-  _In_ HINSTANCE hinstDLL, /// 指向自身的句柄
-  _In_ DWORD  fdwReason,   /// 调用原因
-  _In_ LPVOID lpvReserved  /// 隐式加载和显式加载
-)
-{
-    switch(fdwReason)
-    {
-    case DLL_PROCESS_ATTACH:
-        my_init();
-        break;
-    case DLL_PROCESS_DETACH:
-        my_fini();
-        break;
-//    case DLL_THREAD_ATTACH:
-//        my_init();
-//        break;
-//    case DLL_THREAD_DETACH:
-//        my_fini();
-//        break;
-    }
-
-    return(TRUE);
-}
-#else
-void my_init(void) __attribute__((constructor)); //告诉gcc把这个函数扔到init section
-void my_fini(void) __attribute__((destructor));  //告诉gcc把这个函数扔到fini section
-#endif
+static std::string s_strPath(".");
 
 CSceneCore::CSceneCore():
     m_pSceneGraphManger(new CSceneGraphManager)
@@ -121,7 +72,7 @@ bool CheckPC()
         osgEarth::setNotifyLevel(osg::NOTICE);
 
         int nMax,nMin;
-        sscanf(csCapabilities.getVersion().data(),"%d.%d",&nMax,&nMin);
+        sscanf_s(csCapabilities.getVersion().data(),"%d.%d",&nMax,&nMin);
 
         QSurfaceFormat format = QSurfaceFormat::defaultFormat();
         osg::GraphicsContext::Traits traits(osg::DisplaySettings::instance().get());

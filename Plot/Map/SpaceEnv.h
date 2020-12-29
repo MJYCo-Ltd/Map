@@ -3,7 +3,7 @@
 #include <osg/Camera>
 #include <Inner/IOsgSceneNode.h>
 #include <Inner/ImplSceneAttitudeGroup.hpp>
-#include <SpaceEnv/ISpaceEnv.h>
+#include <Plot/Map/SpaceEnv/ISpaceEnv.h>
 #include <Plot/Common/ISceneAttitudeGroup.h>
 
 class CSpaceEnv:public ImplSceneAttitudeGroup<ISpaceEnv>

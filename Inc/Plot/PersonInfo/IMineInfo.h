@@ -2,7 +2,7 @@
 #define INTERFACE_MINEINFO_HEARDER_H
 #include <string>
 
-#include <Map/IMapSceneNode.h>
+#include <Plot/Map/IMapSceneNode.h>
 
 /**
  * @brief 场景节点类

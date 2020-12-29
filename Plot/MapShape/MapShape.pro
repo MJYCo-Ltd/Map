@@ -11,7 +11,7 @@ TEMPLATE = lib
 
 SDK_CONFIG *= OSG OsgExtern SceneCore Satellite
 
-include($$PWD/../../SoftSDK.pri)
+include($$PWD/../MapPlot.pri)
 
 HEADERS += \
     DrawShape/MapCoverImage.h \

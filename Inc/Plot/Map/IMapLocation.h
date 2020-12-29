@@ -1,7 +1,7 @@
 #ifndef INTERFACE_MAP_LOCATION_HEARDER_H
 #define INTERFACE_MAP_LOCATION_HEARDER_H
 
-#include <Map/IMapSceneNode.h>
+#include <Plot/Map/IMapSceneNode.h>
 /**
  * @brief 地图位置定位模型
  */

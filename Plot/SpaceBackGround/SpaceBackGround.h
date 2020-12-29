@@ -1,9 +1,9 @@
 #ifndef SPACEENV_H
 #define SPACEENV_H
 
-#include <SpaceEnv/ISpaceBackGround.h>
+#include <Map/SpaceEnv/ISpaceBackGround.h>
 #include <Inner/ImplSceneNode.hpp>
-#include "SpaceEnv_Global.h"
+#include <NoQt.h>
 
 class CSolarEnv;
 class CStarEnv;
@@ -77,8 +77,10 @@ protected:
     double                  m_dMJD=0.0;       /// 约简儒略日
 };
 
+
 extern "C"
 {
-    SPACEENVSHARED_EXPORT ISpaceBackGround* CreateSpaceBackGround(ISceneGraph* pSceneGraph);
+    Q_DECL_EXPORT ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName);
+    Q_DECL_EXPORT bool QueryInterface(std::string& sInterfaceName);
 }
 #endif // SPACEENV_H

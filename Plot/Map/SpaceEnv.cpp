@@ -4,7 +4,7 @@
 #include <Math/YPRAngle.h>
 #include <Math/Quaternion.h>
 #include <Satellite/Date.h>
-#include <SpaceEnv/ISpaceBackGround.h>
+#include <Map/SpaceEnv/ISpaceBackGround.h>
 #include <Inner/IRender.h>
 #include <Inner/OsgExtern/OsgExtern.h>
 #include "SpaceEnv.h"
@@ -49,7 +49,7 @@ void CSpaceEnv::ShowSpaceBackGround(bool bShow)
 /// 初始化节点
 void CSpaceEnv::InitNode()
 {
-    LoadBackGround();
+    m_pSpaceBackGround = dynamic_cast<ISpaceBackGround*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISpaceBackGround"));
 
     ImplSceneAttitudeGroup<ISpaceEnv>::InitNode();
     /// 判断是否加载成功
@@ -89,32 +89,5 @@ void CSpaceEnv::LoadBackGround()
 {
     if(nullptr == m_pSpaceBackGround)
     {
-        typedef ISpaceBackGround* (*CreateSpaceBackGround)(ISceneGraph*);
-#ifdef Q_OS_WIN
-
-#ifdef QT_NO_DEBUG
-        QLibrary loadMap("SpaceBackGround.dll");
-#else
-        QLibrary loadMap("SpaceBackGroundd.dll");
-#endif
-
-#else
-
-#ifdef QT_NO_DEBUG
-        QLibrary loadMap("libSpaceBackGround.so");
-#else
-        QLibrary loadMap("libSpaceBackGroundd.so");
-#endif
-
-#endif
-        if(loadMap.load())
-        {
-            CreateSpaceBackGround pCreateSpaceEnv = reinterpret_cast<CreateSpaceBackGround>(loadMap.resolve("CreateSpaceBackGround"));
-            if(nullptr != pCreateSpaceEnv)
-            {
-                m_pSpaceBackGround = pCreateSpaceEnv(m_pSceneGraph);
-                m_pSpaceBackGround->AsOsgSceneNode()->Init();
-            }
-        }
     }
 }

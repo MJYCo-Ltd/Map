@@ -4,6 +4,20 @@
 #include <SceneCore_Global.h>
 #include <SceneGraph/ISceneGraphManager.h>
 
+#ifdef Q_OS_WIN
+#ifdef QT_NO_DEBUG
+static const char s_sSuffix[]=".dll";
+#else
+static const char s_sSuffix[]="d.dll";
+#endif
+#else
+#ifdef QT_NO_DEBUG
+static const char s_sSuffix[]=".so";
+#else
+static const char s_sSuffix[]="d.so";
+#endif
+#endif
+
 struct ISceneCore
 {
     virtual ~ISceneCore(){}

@@ -1,7 +1,7 @@
 #ifndef SCENCECORE_HEADER_H
 #define SCENCECORE_HEADER_H
 
-#include "ISceneCore.h"
+#include <ISceneCore.h>
 
 class CSceneGraphManager;
 /**

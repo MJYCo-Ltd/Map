@@ -4,7 +4,7 @@
 #include <string>
 #include <osg/Group>
 #include <osgEarth/MapNode>
-#include <Map/IMapLayer.h>
+#include <Plot/Map/IMapLayer.h>
 
 class ISceneGraph;
 class CMapModelLayer;

@@ -4,7 +4,7 @@
 #include <list>
 #include <string>
 #include <SceneGraph/ISceneGroup.h>
-#include <Map/MapType.h>
+#include <Plot/Map/MapType.h>
 
 /**
  * @brief 如果图层名称是中文

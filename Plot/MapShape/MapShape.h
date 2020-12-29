@@ -3,7 +3,6 @@
 #include <string>
 #include <NoQt.h>
 #include <SceneGraph/ISceneGraph.h>
-#include <Plot/MapShape/IMapPoint.h>
 
 extern "C"
 {

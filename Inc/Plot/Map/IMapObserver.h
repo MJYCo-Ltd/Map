@@ -2,7 +2,7 @@
 #define INTERFACE_MAP_OBSERVER_HEARDER_H
 
 #include <string>
-#include <Map/MapType.h>
+#include <Plot/Map/MapType.h>
 
 /// 地图消息观察者
 struct IMapMessageObserver

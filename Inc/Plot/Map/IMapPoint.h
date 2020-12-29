@@ -1,7 +1,7 @@
 #ifndef INTERFACE_MAP_POINT_HEARDER_H
 #define INTERFACE_MAP_POINT_HEARDER_H
 
-#include <Map/IMapSceneNode.h>
+#include <Plot/Map/IMapSceneNode.h>
 /**
  * @brief 场景节点类
  */

@@ -6,8 +6,8 @@
 
 #include <SceneGraph/IViewPort.h>
 #include <Inner/IOsgViewPoint.h>
-#include <Map/IMap.h>
-#include <Map/IMapObserver.h>
+#include <Plot/Map/IMap.h>
+#include <Plot/Map/IMapObserver.h>
 
 class IRender;
 class IOsgSceneNode;

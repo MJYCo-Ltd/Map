@@ -2,7 +2,7 @@
 #define CHEADER_SENEPOLYGON_H
 
 #include <osgEarth/FeatureNode>
-#include <Plot/MapShape/IMapPolygon.h>
+#include <Plot/Map/IMapPolygon.h>
 #include <Inner/ImplMapSceneNode.hpp>
 
 class CMapPolygon:public ImplMapSceneNode<IMapPolygon>
@@ -30,6 +30,7 @@ public:
      */
     virtual void SetMultPos(const std::vector<MapGeoPos> &);
 
+protected:
     void PolygonColorChanged();
 
     void UpdateNode();
