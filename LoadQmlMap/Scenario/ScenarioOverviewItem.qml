@@ -26,11 +26,9 @@ Rectangle{
     MouseArea {
         anchors.fill: parent
         hoverEnabled: true
-        onEntered: {
-            rectButtonsScenario.visible = true
-        }
-        onExited: {
-        }
+        //onEntered: {
+        //    rectButtonsScenario.visible = true
+        //}
         onDoubleClicked: {
             scenarioManager.setCurrentScenario(name)
             scenarioManager.load()
@@ -41,7 +39,7 @@ Rectangle{
         id:rectButtonsScenario
         x : parent.width - width
         width: buttonWidth
-        visible:false
+        //visible:false
         Column{
             Button{
                 id:btnRemoveFav
@@ -50,9 +48,8 @@ Rectangle{
                 text: qsTr("removeFavorite")
                 visible: favorite
                 onClicked: {
-                    // 先提示是否删除
-                    scenarioManager.removeFavorite(name)
                     console.log("scenarioManager.removeFavorite : " + name)
+                    scenarioManager.removeFavorite(name)
                 }
             }
             Button{
@@ -73,16 +70,10 @@ Rectangle{
                 text: qsTr("removeScenario")
                 visible: true
                 onClicked: {
-                    scenarioManager.removeScenario(name)
+                    // 先提示是否删除
                     console.log("scenarioManager.removeScenario : " + name)
+                    scenarioManager.removeScenario(name)
                 }
-            }
-        }
-        MouseArea{
-            anchors.fill: parent
-            hoverEnabled: true
-            onExited: {
-                rectButtonsScenario.visible = false
             }
         }
     }

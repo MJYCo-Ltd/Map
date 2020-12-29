@@ -147,13 +147,17 @@ int ScenarioManager::addScenario(QString name)
 
 int ScenarioManager::removeScenario(QString name)
 {
+    removeFavorite(name);
     //
     Scenario* s = scenario(name);
     if(s == nullptr)
         return 0;
     // 移除目录失败
-    if(! dir().rmdir(name))
-        return -3;
+    //if(! dir().rmdir(name))
+    //    return -3;
+    QString path = dir().path() + "/" + name;
+    QDir dir(path);
+    dir.removeRecursively();
     _scenarioList.removeOne(s);
     delete s;
     emit scenarioListChanged(scenarios());
@@ -191,7 +195,7 @@ int ScenarioManager::addFavorite(QString name)
     }
     _favoriteList.append(s);
     saveFavorites();
-    emit scenarioListChanged(scenarios());
+    emit favoriteListChanged(favorites());
     return true;
 }
 
@@ -204,7 +208,7 @@ int ScenarioManager::removeFavorite(QString name)
         return -1;
     _favoriteList.removeOne(s);
     saveFavorites();
-    emit scenarioListChanged(scenarios());
+    emit favoriteListChanged(favorites());
     return 1;
 }
 
