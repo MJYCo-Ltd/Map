@@ -44,16 +44,24 @@ private:
     void init();
     void updateEye(float fov);
     void setupState();
+    float pointSourceMagToLnLuminance(float mag) const;
+    void computeRCMag(float mag, float rcMag[2], float scalar) const;
+    float computeLimitMagnitude(float scalar) const;
+    float computeLimitLuminance() const;
 private:
-    ISceneGraph*                       m_pSceneGraph;
-    ZoneArrayRenderVector                           m_vRenderVector;
+    ISceneGraph*           m_pSceneGraph;
+    GeodesicGrid*          m_pGeodesicGrid;
+    ZoneArrayRenderVector  m_vRenderVector;
 
     CStarToneReproducer m_StarTR;   /// 更改星星颜色
-    Frustum                     m_Frustum; /// 更新裁剪体
+    Frustum             m_Frustum; /// 更新裁剪体
 
-    int                   m_nMaxLevel;
-    float                m_fShowMaxMag;  /// 最大的视星等
-    GeodesicGrid* m_pGeodesicGrid;
+    int   m_nMaxLevel;
+    float m_fShowMaxMag;                 /// 最大的视星等
+    float m_fLnfovFactor;
+    float m_fStarLinearScale = 19.569f;
+    float m_fLimitMagnitude=-100.f;
+    float m_fLimitLuminance=0.f;
 };
 
 #endif // STARRENDER_H

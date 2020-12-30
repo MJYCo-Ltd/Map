@@ -142,7 +142,7 @@ void MainWindow::on_action_triggered()
 //    color.fG=color.fB = 1.f;
     color.fR = color.fG = color.fB=0.f;
     pHudText->SetOutColor(color);
-    color.fR = color.fG = 1.f;
+    color.fG = 1.f;
 //    return;
 
 
@@ -154,9 +154,9 @@ void MainWindow::on_action_triggered()
     auto pPoint2 = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
     auto pPoint3 = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
     pPoint->SetPointSize(10.f);
-    pPoint1->SetPointSize(20.f);
-    pPoint2->SetPointSize(30.f);
-    pPoint3->SetPointSize(40.f);
+    pPoint1->SetPointSize(25.f);
+    pPoint2->SetPointSize(50.f);
+    pPoint3->SetPointSize(100.f);
 
 
     pPoint->SetColor(color);
@@ -187,7 +187,7 @@ void MainWindow::on_action_triggered()
     scenePos.fX = 0.f;
     pPoint3->SetPos(scenePos);
     pLine->AddPoint(3,scenePos);
-    pSceneRoot->AddSceneNode(pLine);
+    //pSceneRoot->AddSceneNode(pLine);
     pLine->SetLineWidth(2);
 
     /// 绘制多边形

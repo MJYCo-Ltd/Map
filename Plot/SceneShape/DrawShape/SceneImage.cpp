@@ -43,7 +43,10 @@ void CSceneImage::ImagePathChanged()
 
 void CSceneImage::CreateShape()
 {
-    m_pGeometry->setDrawCallback(new MyDrawCallBack);
+    auto pSate = m_pGeometry->getOrCreateStateSet();
+    auto m_pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
+    m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(m_pVirutlProgram,"Data/GLSL/Global.glsl");
+//    m_pGeometry->setDrawCallback(new MyDrawCallBack);
     m_pTexCoordArray = new osg::Vec2Array;
     m_pVertexArray->resize(4);
     m_pTexCoordArray->resize(4);
