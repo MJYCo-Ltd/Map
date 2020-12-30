@@ -55,7 +55,7 @@ WelcomPage(欢迎页)-->|按下示例标签|ExamplePage(示例标签页);
 
 原型图如下：
 
-![welcome_scenario](D:\map.git\Image\Axure\welcome_scenario.png)
+![welcome_scenario](../Image/Axure/welcome_scenario.png)
 
 当鼠标在方案列表项悬停时，将方案缩略图切换为显示方案文字描述，同时显示删除按钮、添加/移除收藏按钮。
 
@@ -80,7 +80,7 @@ SwitchCurrentScenario-->SkipToEditPage(跳转到编辑页);
 
 原型图如下：
 
-![welcome_scenario_new](D:\map.git\Image\Axure\welcome_scenario_new.png)
+![welcome_scenario_new](..\Image\Axure\welcome_scenario_new.png)
 
 ### 编辑页
 
@@ -95,7 +95,7 @@ EditPage-->|按下路径按钮|PathPage(路径规划工具);
 
 一个方案中可以添加若干条动画，动画按开始时间顺序列表显示。
 
-![edit_animation](D:\map.git\Image\Axure\edit_animation.png)
+![edit_animation](..\Image\Axure\edit_animation.png)
 
 #### 区域规划
 
@@ -123,7 +123,7 @@ AreaPlanDlgShow(查看模式)-->|取消居住用地复选按钮|HideArea(隐藏�
 AreaPlanDlgShow-->|勾选居住用地复选按钮|ShowArea(显示居住用地区域); 
 ```
 **原型图**
-![edit_areaplan](D:\map.git\Image\Axure\edit_areaplan.png)
+![edit_areaplan](..\Image\Axure\edit_areaplan.png)
 
 ### 演示页
 
@@ -140,7 +140,7 @@ PlayPage(演示页)-->|输入时间比|SetRatio(设置演示速度);
 PlayPage(演示页)-->|拖动时间滑块|Skip(跳转到指定时间); 
 ```
 
-![play](D:\map.git\Image\Axure\play.png)
+![play](..\Image\Axure\play.png)
 
 ### 信息页
 
