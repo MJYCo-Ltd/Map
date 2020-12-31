@@ -47,10 +47,8 @@ bool compare(QString fp1, QString fp2)
     return res;
 }
 
-int main(int argc, char *argv[])
+int testScenarioManager()
 {
-    QCoreApplication a(argc, argv);
-
     // -- 测试方案管理类 -------------------------------------------------
     ScenarioManager mgr;
     mgr.setDir(QCoreApplication::applicationDirPath() + "/Test/Scenarios");
@@ -123,11 +121,21 @@ int main(int argc, char *argv[])
     if(compare(dir.path() + "/test.txt", dir.path() + "/StandardAnswer.txt"))
     {
         qDebug() << "Succeed!";
+        return 1;
     }
     else
     {
         qDebug() << "Failed!";
+        return -1;
     }
+}
+
+int main(int argc, char *argv[])
+{
+    QCoreApplication a(argc, argv);
+
+    // -- 测试方案管理类 --
+    testScenarioManager();
 
     return a.exec();
 }

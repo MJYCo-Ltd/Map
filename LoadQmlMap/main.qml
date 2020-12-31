@@ -43,7 +43,7 @@ Window
         color:"transparent"
         Rectangle{// 背景
             anchors.fill: parent
-            opacity: 0.15
+            opacity: 0.65
             Image{
                 anchors.fill: parent
                 source: "qrc:/Image/Common/TalkboxBG.png"
