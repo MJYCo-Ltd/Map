@@ -14,6 +14,7 @@
 #include <QTime>
 #include <QList>
 #include "Process.h"
+#include "ProcessSimulation_global.h"
 
 //模拟的时间比率 天/秒
 const float SIMULATION_DEFAULT_TIMERATIO = (24.0 * 60.0 * 60.0) / 1.0; 	// sim : real
@@ -26,7 +27,7 @@ enum Simulation_State
 	Simulation_Stop
 };
 
-class Simulation : public QObject
+class PROCESSSIMULATION_EXPORT Simulation : public QObject
 {
 	Q_OBJECT
 public:

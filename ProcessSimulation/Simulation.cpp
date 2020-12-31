@@ -133,11 +133,14 @@ void Simulation::executeProcess()
 		}
 	}
 	
-	_curDateTime = _curDateTime.addMSecs(_timeRatio * _timer->interval());
-	if (_curDateTime > _endDateTime)
-	{
-		stop();
-	}
+    if (_state == Simulation_Run)
+    {
+        _curDateTime = _curDateTime.addMSecs(_timeRatio * _timer->interval());
+        if (_curDateTime > _endDateTime)
+        {
+            stop();
+        }
+    }
 }
 
 void Simulation::goTo(QDateTime& dt)

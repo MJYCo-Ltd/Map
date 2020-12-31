@@ -28,7 +28,7 @@ INCLUDEPATH *= $$PWD/../Inc
 DESTDIR = $$PWD/../../Bin
 
 CONFIG (debug, debug|release){
-    LIBS *= -lScenarioManagerd -lAreaPlanManagerd
+    LIBS *= -lScenarioManagerd -lAreaPlanManagerd -lProcessSimulationd
 }else{
-    LIBS *= -lScenarioManager -lAreaPlanManager
+    LIBS *= -lScenarioManager -lAreaPlanManager -lProcessSimulation
 }
