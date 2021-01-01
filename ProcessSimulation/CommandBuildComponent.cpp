@@ -12,12 +12,12 @@ CommandBuildComponent::~CommandBuildComponent()
 
 void CommandBuildComponent::execute()
 {
-
+    // YTY 查询名为name()的构件，并显示
 }
 
 void CommandBuildComponent::undo()
 {
-
+    // YTY 查询名为name()的构件，并隐藏
 }
 
 void CommandBuildComponent::setExpense(double exp)

@@ -19,6 +19,14 @@ ProcessBuild::ProcessBuild()
 
 ProcessBuild::~ProcessBuild()
 {
+    for (int i = 0; i < _data.count(); i++)
+    {
+        if (_data[i])
+        {
+            delete _data[i];
+        }
+    }
+    _data.clear();
 }
 /*
 bool init(QString dbFilePath, QString tableName)
@@ -73,6 +81,7 @@ void ProcessBuild::goTo(QDateTime dt)
             if (dt < currentDateTime())
                 break;
             (_data[_curRow])->execute();
+            qDebug() << "ProcessBuild::goTo " << _data[_curRow]->dateTime() << "," << _data[_curRow]->name();
         }
     }
     else if (dt > currentDateTime())            // 当前日期时间比目标时间早，撤回
@@ -83,6 +92,7 @@ void ProcessBuild::goTo(QDateTime dt)
             if (dt > currentDateTime())
                 break;
             (_data[_curRow])->undo();
+            qDebug() << "ProcessBuild::goTo," << _data[_curRow]->dateTime() << "," << _data[_curRow]->name();
         }
     }
 }
@@ -107,7 +117,7 @@ const QDateTime ProcessBuild::currentDateTime()
     return (_data[_curRow])->dateTime();
 }
 
-void ProcessBuild::addDataItem(CommandBuildComponent* cmd)
+void ProcessBuild::addComponent(CommandBuildComponent* cmd)
 {
     for (int i = 0; i < _data.count() - 1; i++)
     {

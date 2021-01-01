@@ -10,6 +10,9 @@
 #include "../ScenarioManager/ScenarioManager.h"
 #include "../AreaPlanManager/AreaPlan.h"
 #include "../AreaPlanManager/AreaPlanManager.h"
+#include "../ProcessSimulation/Simulation.h"
+#include "../ProcessSimulation/ProcessBuild.h"
+#include "../ProcessSimulation/CommandBuildComponent.h"
 
 int main(int argc, char *argv[])
 {
@@ -42,6 +45,9 @@ int main(int argc, char *argv[])
     qmlRegisterType<AreaPlanManager>("MyItem",1,0,"AreaPlanManager");
     qmlRegisterType<Scenario>("MyItem",1,0,"Scenario");
     qmlRegisterType<AreaPlan>("MyItem",1,0,"AreaPlan");
+    qmlRegisterType<Simulation>("MyItem",1,0,"Simulation");
+    qmlRegisterType<ProcessBuild>("MyItem",1,0,"ProcessBuild");
+    qmlRegisterType<CommandBuildComponent>("MyItem",1,0,"CommandBuildComponent");
 
     QQmlApplicationEngine engine;
 

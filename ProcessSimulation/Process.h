@@ -15,6 +15,8 @@
 class Process
 {
 public:
+    virtual ~Process(){}
+
     // 跳转到该时间的状态
     virtual void goTo(QDateTime dt) = 0;
 

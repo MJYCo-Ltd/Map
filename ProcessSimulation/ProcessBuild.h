@@ -9,11 +9,14 @@
 * 				读取表中的施工进度，模拟展示建造过程。
 * History:      2018/07/28 v1.0
 *************************************************/
+#include "ProcessSimulation_global.h"
 #include "Process.h"
+#include <QObject>
 
 class CommandBuildComponent;
-class ProcessBuild : public Process
+class PROCESSSIMULATION_EXPORT ProcessBuild : public QObject, public Process
 {
+    Q_OBJECT
 public:
     ProcessBuild();
     ~ProcessBuild();
@@ -23,8 +26,7 @@ public:
     virtual const QDateTime endDateTime();
     virtual const QDateTime currentDateTime();
 
-private:
-    void addDataItem(CommandBuildComponent*);
+    void addComponent(CommandBuildComponent*);
 private:
     QList<CommandBuildComponent*>   _data;              // 进度数据（按日期时间排序）
     int                             _curRow;            // 模拟进度

@@ -10,13 +10,13 @@
 *               支持设置虚拟/现实时间跳动速率比
 * History:      2018/07/28 v1.0
 *************************************************/
+#include "ProcessSimulation_global.h"
+#include "Process.h"
 #include <QObject>
 #include <QDateTime>
 #include <QTimer>
 #include <QTime>
 #include <QList>
-#include "Process.h"
-#include "ProcessSimulation_global.h"
 
 // 模拟时间速率/现实时间速率 默认：1天/秒
 const float SIMULATION_DEFAULT_TIMERATIO = (24.0 * 60.0 * 60.0) / 1.0; 	// sim : real

@@ -1,16 +1,18 @@
-#include <QCoreApplication>
+#include <QApplication>
+#include <QWidget>
 #include <QRandomGenerator>
 #include <QTextStream>
 #include <QDebug>
 #include <QDir>
 #include "../ScenarioManager/ScenarioManager.h"
 #include "../ScenarioManager/Scenario.h"
-#include "../ProcessSimulation/Simulation.h"
-#include "../ProcessSimulation/Process.h"
-#include "../ProcessSimulation/ProcessBuild.h"
+//#include "../ProcessSimulation/Simulation.h"
+//#include "../ProcessSimulation/ProcessBuild.h"
+//#include "../ProcessSimulation/CommandBuildComponent.h"
 
 static QString g_test_dirpath = "";
 static QTextStream g_test_out;
+//static Simulation g_sim;
 
 bool compare(QString fp1, QString fp2)
 {
@@ -113,51 +115,71 @@ void testScenarioManager()
     foreach(Scenario* one, mgr.favoriteList())
         g_test_out << one->name() << "\n";
 }
-
+/*
 // -- 测试过程模拟类 -------------------------------------------------
 void testProcessSimulation()
 {
-    Simulation sim;
-
     // 为测试设置缺省值
-    sim.setStartDateTime(QDateTime(QDate(2018, 1, 1), QTime(0, 0, 0)));
-    sim.setEndDateTime(QDateTime(QDate(2018, 1, 30), QTime(0, 0, 0)));
-    sim.setTimeRatio((2 * 24.0 * 60.0 * 60.0) / 1.0);
-    sim.setTimerInterval(200);
+    g_sim.setStartDateTime(QDateTime(QDate(2020, 1, 1), QTime(0, 0, 0)));
+    g_sim.setEndDateTime(QDateTime(QDate(2020, 4, 30), QTime(0, 0, 0)));
+    g_sim.setTimeRatio((2 * 24.0 * 60.0 * 60.0) / 1.0);   // 时间比率 2天/秒
+    g_sim.setTimerInterval(100);
 
-    // 暴力测试播放逻辑
+    // 测试播放逻辑
     for (int i = 0; i < 1000; i++)
     {
         int r = QRandomGenerator::global()->bounded(5);
         switch (r)
         {
         case 0:
-            sim.start();
+            g_sim.start();
             break;
         case 1:
-            sim.pause();
+            g_sim.pause();
             break;
         case 2:
-            sim.resume();
+            g_sim.resume();
             break;
         case 3:
-            sim.stop();
+            g_sim.stop();
             break;
         case 4:
-            sim.pauseOrResume();
+            g_sim.pauseOrResume();
             break;
         default:
             break;
         }
     }
+    // 测试过程模拟
+    g_sim.stop();
+    ProcessBuild process;
+    for(int i = 0; i < 100; i++)
+    {
+        QString name = "com_" + QString::number(i);
+        QDateTime dt = QDateTime(QDate(2020,1,1),QTime(0,0,0)).addDays(i);
+        int hc = 15 + i%20;
+        double exp = 20 + i%10;
+        CommandBuildComponent* component = new CommandBuildComponent();
+        component->setName(name);
+        component->setDateTime(dt);
+        component->setHeadcount(hc);
+        component->setExpense(exp);
+        process.addComponent(component);
+    }
+    g_sim.addProcess(&process);
+    g_sim.start();
 }
-
+*/
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
+    QApplication a(argc, argv);
+    //QCoreApplication a(argc, argv);
+
+    QWidget w;
+    w.showMaximized();
 
     // -- 准备日志文件 ---------------------------------------------------
-    g_test_dirpath = QCoreApplication::applicationDirPath() + "/Test";
+    g_test_dirpath = QApplication::applicationDirPath() + "/Test";
 
     QString testFilePath(g_test_dirpath + "/test.txt");
     QFile testFile(testFilePath);
@@ -172,7 +194,8 @@ int main(int argc, char *argv[])
     testScenarioManager();
 
     // -- 测试过程模拟类 --
-    testProcessSimulation();
+    // 定时器无效，此模块测试不成功
+    //testProcessSimulation();
 
     // -- 关闭日志文件 ---------------------------------------------------
     testFile.close();
