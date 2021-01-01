@@ -6,14 +6,13 @@ DEFINES += PROCESSSIMULATION_LIBRARY
 include(../SoftSDK.pri)
 
 SOURCES += \
-    Simulation.cpp \
-    Process.cpp \
-    ProcessConstruction.cpp \
-    ProcessConstructionJson.cpp 
+    CommandBuildComponent.cpp \
+    ProcessBuild.cpp \
+    Simulation.cpp
 	
 HEADERS += \
+    CommandBuildComponent.h \
+    ProcessBuild.h \
     ProcessSimulation_global.h \
     Simulation.h \     
-    Process.h \
-    ProcessConstruction.h \
-    ProcessConstructionJson.h
+    Process.h

@@ -2,11 +2,13 @@
 /*************************************************
 * Copyright(C)
 * File name:    Simulation
-* Author:       where2go
-* Version:      1.0
-* Date:         2018/07/28
-* Description:  模拟。启动或停止定时器来控制模拟的进行。
-* History:
+* Author:       魏晓亮
+* Version:      1.1
+* Date:         2020/12/31
+* Description:  使用定时器控制模拟的开始、暂停、恢复、停止、跳转
+*               通过Process接口调用实现具体的过程模拟
+*               支持设置虚拟/现实时间跳动速率比
+* History:      2018/07/28 v1.0
 *************************************************/
 #include <QObject>
 #include <QDateTime>
@@ -16,9 +18,10 @@
 #include "Process.h"
 #include "ProcessSimulation_global.h"
 
-//模拟的时间比率 天/秒
+// 模拟时间速率/现实时间速率 默认：1天/秒
 const float SIMULATION_DEFAULT_TIMERATIO = (24.0 * 60.0 * 60.0) / 1.0; 	// sim : real
-const int   SIMULATION_DEFAULT_TIMERINTERVAL = 100;						// unit: msec
+// 计时器跳动的时间间隔 默认：30毫秒
+const int   SIMULATION_DEFAULT_TIMERINTERVAL = 30;						// unit: msec
 
 enum Simulation_State
 {
@@ -46,13 +49,15 @@ public:
 	void setTimerInterval(int msec);					// set period of tick 
 	int timerInterval() const; 							// period of tick, unit : msec
 	Simulation_State state() { return _state; }
+
 public slots:
 	void start();
 	void pause();
 	void resume();
 	void stop();
-	void pauseOrResume();
+    void pauseOrResume();                               // switch state (by pushing button) repeatedly
 	void goTo(QDateTime& dt);
+
 private slots:
 	void executeProcess();
 private:

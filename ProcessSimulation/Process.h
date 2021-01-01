@@ -3,43 +3,25 @@
 * Copyright(C)
 * File name:    Process
 * Author:       魏晓亮
-* Version:      1.0
-* Date:         2018/07/28
-* Description:  （模拟）过程抽象类
-* 				子类化并实现execute来完成想要模拟的过程
-* History:
+* Version:      1.1
+* Date:         2021/1/1
+* Description:  模拟过程接口
+* 				子类化并实现goTo等接口来完成想要模拟的过程
+*               模拟时间在startDateTime和endDateTime之间goTo将被调用
+* History:      2018/07/28 v1.0
 *************************************************/
-#include <QObject>
 #include <QDateTime>
-#include <QVariant>
 
-struct ProcessData		// 进度数据
-{
-	QDateTime dt;		// 日期	
-	QString items;		// 施工内容	
-	double exp;			// 费用合计（万元）	
-	int stuff;			// 人员
-};
-
-class Process : public QObject
-{
-	Q_OBJECT
-public:
-	Process();
-	virtual void start();
-	virtual void execute(QDateTime dt) = 0;
-	virtual bool isFinished();
-protected:
-	virtual void setFinished(bool finished);
-signals:
-	void stateChanged(const QMap<QString, QString> &);
-private:
-	bool		_finished;
-};
-/*
-class ProcessDebug : public Process
+class Process
 {
 public:
-	virtual void execute(QDateTime dt);
-};*/
+    // 跳转到该时间的状态
+    virtual void goTo(QDateTime dt) = 0;
+
+    // 获取开始时间
+    virtual const QDateTime startDateTime() = 0;
+
+    // 获取结束时间
+    virtual const QDateTime endDateTime() = 0;
+};
 

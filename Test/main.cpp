@@ -7,7 +7,7 @@
 #include "../ScenarioManager/Scenario.h"
 #include "../ProcessSimulation/Simulation.h"
 #include "../ProcessSimulation/Process.h"
-#include "../ProcessSimulation/ProcessConstruction.h"
+#include "../ProcessSimulation/ProcessBuild.h"
 
 static QString g_test_dirpath = "";
 static QTextStream g_test_out;
@@ -118,8 +118,14 @@ void testScenarioManager()
 void testProcessSimulation()
 {
     Simulation sim;
-    sim.setTimeRatio(20);
-    sim.setStartDateTime(QDateTime(QDate(2020,1,1),QTime::currentTime()));
+
+    // 为测试设置缺省值
+    sim.setStartDateTime(QDateTime(QDate(2018, 1, 1), QTime(0, 0, 0)));
+    sim.setEndDateTime(QDateTime(QDate(2018, 1, 30), QTime(0, 0, 0)));
+    sim.setTimeRatio((2 * 24.0 * 60.0 * 60.0) / 1.0);
+    sim.setTimerInterval(200);
+
+    // 暴力测试播放逻辑
     for (int i = 0; i < 1000; i++)
     {
         int r = QRandomGenerator::global()->bounded(5);
