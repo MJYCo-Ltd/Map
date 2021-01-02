@@ -26,6 +26,9 @@ Item {
     // menu
     property int menuWidth : 240
     property int menuHeight: 42
+    // button
+    property int buttonWidth : 160
+    property int buttonHeight : 42
     // margin
     property int margin: 16    
     //

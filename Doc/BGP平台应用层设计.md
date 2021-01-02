@@ -108,6 +108,10 @@ EditPage-->|按下路径按钮|PathPage(路径规划工具);
 
 ![edit_process_simulation](..\Image\Axure\edit_process_simulation.png)
 
+
+
+![edit_process_simulation](..\Image\Axure\edit_process_simulation_b.png)
+
 #### 区域规划
 
 对话框打开时，可以切换查看、编辑状态。以镇区现状图为例：

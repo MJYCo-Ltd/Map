@@ -3,6 +3,7 @@ import QtQuick.Window 2.12
 import MyItem 1.0
 import "./Common"
 import "./Welcome"
+import "./Edit"
 
 Window
 {
@@ -67,6 +68,9 @@ Window
             id: btnEdit
             anchors.left: btnWelcome.right
             text:qsTr("EDIT")
+            onClicked: {
+                edit.visible = ! edit.visible
+            }
         }
         MenuButton{
             id: btnPlay
@@ -93,6 +97,10 @@ Window
     // -- 欢迎页 -------------------------------------------------------
     Welcome {
         id: welcome
+        visible: false
+    }
+    Edit {
+        id: edit
         visible: false
     }
     // -- 测试消息框 ---------------------------------------------------

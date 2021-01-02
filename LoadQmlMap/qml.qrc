@@ -13,5 +13,8 @@
         <file>Scenario/ScenarioOverView.qml</file>
         <file>Scenario/ScenarioOverviewItem.qml</file>
         <file>Scenario/ScenarioNew.qml</file>
+        <file>Edit/Edit.qml</file>
+        <file>Animation/Animation.qml</file>
+        <file>Animation/BuildProcess.qml</file>
     </qresource>
 </RCC>
