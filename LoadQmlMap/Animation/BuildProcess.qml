@@ -8,7 +8,7 @@ Rectangle
     id:buildprocess
     property int buttonWidth : defaultStyle.buttonWidth
     property int buttonHeight : defaultStyle.buttonHeight
-    property int labelWidth : 64
+    property int labelWidth : 128
     property int textInputWidth : 512
     property int itemHeight : buttonHeight
     color: "transparent"
@@ -46,6 +46,8 @@ Rectangle
             width:textInputWidth
             height:itemHeight
             color: "#FFFFFF"
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignLeft
             font.family: defaultStyle.fontFamilyCN
             font.pointSize: defaultStyle.fontSize
             onTextChanged: {
@@ -94,6 +96,8 @@ Rectangle
             width:textInputWidth
             height:itemHeight
             color: "#FFFFFF"
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignLeft
             font.family: defaultStyle.fontFamilyCN
             font.pointSize: defaultStyle.fontSize
             onTextChanged: {

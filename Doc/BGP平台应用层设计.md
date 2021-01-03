@@ -425,6 +425,39 @@ sequenceDiagram
 
 ### 区域规划
 
+#### 接口
+
+区域规划接口类主要有**区域规划管理（AreaPlanManager）**、**区域规划（AreaPlan）**、**区域规划图层（AreaPlanLayer)**
+**区域规划管理**：负责区域规划的统一管理，调用AreaPlan进行新建、编辑、保存、加载等功能。
+**区域规划**：每套区域规划方案，都会给出一系列的图例及对应的若干区域。区域规划类负责所有区域整体的显示和隐藏，还允许用户选择某一特定区域（图层）进行显示或编辑。
+**区域规划图层**：每个图层对应业务上的一种规划区域（如农业用地），他具有名称、图例、颜色等属性，可以控制地图上该类区域的创建、删除、显示和隐藏。
+
+```mermaid
+classDiagram
+class AreaPlanLayer
+AreaPlanLayer : void setVisible(bool)
+AreaPlanLayer : QString			_name
+AreaPlanLayer : QIcon			_legend			
+AreaPlanLayer : QColor			_color
+class AreaPlan
+AreaPlan : QString               _name
+AreaPlan : QList<AreaPlanLayer*> _layerList
+AreaPlan : AreaPlan(QString name)
+AreaPlan : void setCurrentLayer(QString layerName)
+AreaPlan : void setVisible(QString layerName, bool)
+AreaPlan : void load(QString dirPath)
+AreaPlan : void save()
+AreaPlanLayer "*" *-- "1" AreaPlan
+class AreaPlanManager
+AreaPlanManager : void addItem(AreaPlan*)
+AreaPlanManager : void load(QString dirPath)
+AreaPlanManager : void save()
+AreaPlanManager : QList<AreaPlan*> itemList()
+AreaPlanManager : QList<AreaPlan*> _planList
+AreaPlan "*" *-- "1" AreaPlanManager
+```
+#### 功能
+
 区域规划模块包含（多边形）区域的**加载**、**查看**、**编辑**、**保存**等功能。
 
 **编辑**
@@ -533,34 +566,6 @@ sequenceDiagram
 
 *扩展：为高级用户提供**图例编辑**功能。*
 
-#### 接口
-
-```mermaid
-classDiagram
-class AreaPlanLayer
-AreaPlanLayer : void setVisible(bool)
-AreaPlanLayer : node* createFeatureNode()
-AreaPlanLayer : QString			_name
-AreaPlanLayer : QIcon			_legend			
-AreaPlanLayer : QColor			_color
-AreaPlanLayer : QList<node*>    _nodeList
-class AreaPlan
-AreaPlan : QString               _name
-AreaPlan : QList<AreaPlanLayer*> _layerList
-AreaPlan : AreaPlan(QString name)
-AreaPlan : void setCurrentLayer(QString layerName)
-AreaPlan : void setVisible(QString layerName, bool)
-AreaPlan : void load(QString dirPath)
-AreaPlan : void save()
-AreaPlanLayer "*" *-- "1" AreaPlan
-class AreaPlanManager
-AreaPlanManager : void addItem(AreaPlan*)
-AreaPlanManager : void load(QString dirPath)
-AreaPlanManager : void save()
-AreaPlanManager : QList<AreaPlan*> itemList()
-AreaPlanManager : QList<AreaPlan*> _planList
-AreaPlan "*" *-- "1" AreaPlanManager
-```
 
 ### 路径规划
 
