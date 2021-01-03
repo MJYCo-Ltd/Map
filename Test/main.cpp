@@ -1,9 +1,18 @@
-#include <QCoreApplication>
+#include <QApplication>
+#include <QWidget>
+#include <QRandomGenerator>
 #include <QTextStream>
 #include <QDebug>
 #include <QDir>
 #include "../ScenarioManager/ScenarioManager.h"
 #include "../ScenarioManager/Scenario.h"
+//#include "../ProcessSimulation/Simulation.h"
+//#include "../ProcessSimulation/ProcessBuild.h"
+//#include "../ProcessSimulation/CommandBuildComponent.h"
+
+static QString g_test_dirpath = "";
+static QTextStream g_test_out;
+//static Simulation g_sim;
 
 bool compare(QString fp1, QString fp2)
 {
@@ -47,86 +56,161 @@ bool compare(QString fp1, QString fp2)
     return res;
 }
 
-int main(int argc, char *argv[])
+// -- 测试方案管理类 -------------------------------------------------
+void testScenarioManager()
 {
-    QCoreApplication a(argc, argv);
-
-    // -- 测试方案管理类 -------------------------------------------------
     ScenarioManager mgr;
-    mgr.setDir(QCoreApplication::applicationDirPath() + "/Test/Scenarios");
+    mgr.setDir(g_test_dirpath + "/Scenarios");
     mgr.init();
     mgr.removeAllScenario();
-    QDir dir = mgr.dir();
-    QFile testFile(dir.path() + "/test.txt");
-    if ( ! testFile.open(QIODevice::Text | QIODevice::WriteOnly))
-    {
-        qDebug() << "Failed to Open File:" << testFile.fileName();
-        return -1;
-    }
-    QTextStream out(&testFile);
 
     // 添加方案
-    out << "-- test add new scenario --\n";
+    g_test_out << "-- test add new scenario --\n";
     for(int i = 0; i < 10; i++)
     {
         QString name = "scenario_" + QString::number(i);
         if ( mgr.addScenario(name) <= 0)
-            out << "Failed to add scenario:" << name << "\n";
+            g_test_out << "Failed to add scenario:" << name << "\n";
     }
     // 重复添加方案：名称已存在
     for(int i = 0; i < 2; i++)
     {
         QString name = "scenario_" + QString::number(i);
         if ( mgr.addScenario(name)  <= 0)
-            out << "Failed to add scenario:" << name << "\n";
+            g_test_out << "Failed to add scenario:" << name << "\n";
     }
     foreach(Scenario* one, mgr.scenarioList())
-        out << one->name() << "\n";
+        g_test_out << one->name() << "\n";
 
     // 移除方案
-    out << "-- test remove scenario --\n";
+    g_test_out << "-- test remove scenario --\n";
     for(int i = 7; i < 13; i++)
     {
         QString name = "scenario_" + QString::number(i);
         if (mgr.removeScenario(name) <= 0)
-            out << "Failed to remove scenario:" << name << "\n";
+            g_test_out << "Failed to remove scenario:" << name << "\n";
     }
     foreach(Scenario* one, mgr.scenarioList())
-        out << one->name() << "\n";
+        g_test_out << one->name() << "\n";
 
     // 添加收藏
-    out << "-- test add favorite --\n";
+    g_test_out << "-- test add favorite --\n";
     for(int i = 4; i < 8; i++)
     {
         QString name = "scenario_" + QString::number(i);
         if (mgr.addFavorite(name) <= 0)
-            out << "Failed to add favorite:" << name << "\n";
+            g_test_out << "Failed to add favorite:" << name << "\n";
     }
     foreach(Scenario* one, mgr.favoriteList())
-        out << one->name() << "\n";
+        g_test_out << one->name() << "\n";
 
     // 移除收藏
-    out << "-- test remove favorite --\n";
+    g_test_out << "-- test remove favorite --\n";
     for(int i = 5; i < 9; i++)
     {
         QString name = "scenario_" + QString::number(i);
         if (mgr.removeFavorite(name) <= 0)
-            out << "Failed to remove favorite:" << name << "\n";
+            g_test_out << "Failed to remove favorite:" << name << "\n";
     }
     foreach(Scenario* one, mgr.favoriteList())
-        out << one->name() << "\n";
+        g_test_out << one->name() << "\n";
+}
+/*
+// -- 测试过程模拟类 -------------------------------------------------
+void testProcessSimulation()
+{
+    // 为测试设置缺省值
+    g_sim.setStartDateTime(QDateTime(QDate(2020, 1, 1), QTime(0, 0, 0)));
+    g_sim.setEndDateTime(QDateTime(QDate(2020, 4, 30), QTime(0, 0, 0)));
+    g_sim.setTimeRatio((2 * 24.0 * 60.0 * 60.0) / 1.0);   // 时间比率 2天/秒
+    g_sim.setTimerInterval(100);
 
-    mgr.scenarios();
+    // 测试播放逻辑
+    for (int i = 0; i < 1000; i++)
+    {
+        int r = QRandomGenerator::global()->bounded(5);
+        switch (r)
+        {
+        case 0:
+            g_sim.start();
+            break;
+        case 1:
+            g_sim.pause();
+            break;
+        case 2:
+            g_sim.resume();
+            break;
+        case 3:
+            g_sim.stop();
+            break;
+        case 4:
+            g_sim.pauseOrResume();
+            break;
+        default:
+            break;
+        }
+    }
+    // 测试过程模拟
+    g_sim.stop();
+    ProcessBuild process;
+    for(int i = 0; i < 100; i++)
+    {
+        QString name = "com_" + QString::number(i);
+        QDateTime dt = QDateTime(QDate(2020,1,1),QTime(0,0,0)).addDays(i);
+        int hc = 15 + i%20;
+        double exp = 20 + i%10;
+        CommandBuildComponent* component = new CommandBuildComponent();
+        component->setName(name);
+        component->setDateTime(dt);
+        component->setHeadcount(hc);
+        component->setExpense(exp);
+        process.addComponent(component);
+    }
+    g_sim.addProcess(&process);
+    g_sim.start();
+}
+*/
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv);
+    //QCoreApplication a(argc, argv);
+
+    QWidget w;
+    w.showMaximized();
+
+    // -- 准备日志文件 ---------------------------------------------------
+    g_test_dirpath = QApplication::applicationDirPath() + "/Test";
+
+    QString testFilePath(g_test_dirpath + "/test.txt");
+    QFile testFile(testFilePath);
+    if ( ! testFile.open(QIODevice::Text | QIODevice::WriteOnly))
+    {
+        qDebug() << "Failed to Open File:" << testFile.fileName();
+        return -1;
+    }
+    g_test_out.setDevice(&testFile);
+
+    // -- 测试方案管理类 --
+    testScenarioManager();
+
+    // -- 测试过程模拟类 --
+    // 定时器无效，此模块测试不成功
+    //testProcessSimulation();
+
+    // -- 关闭日志文件 ---------------------------------------------------
     testFile.close();
 
     // -- 比较文件,显示测试结果 --------------------------------------------
-    if(compare(dir.path() + "/test.txt", dir.path() + "/StandardAnswer.txt"))
+    QString stdAnswerFilePath(g_test_dirpath + "/StandardAnswer.txt");
+    if(compare(testFilePath, stdAnswerFilePath))
     {
         qDebug() << "Succeed!";
+        return 1;
     }
     else
     {
         qDebug() << "Failed!";
+        return -1;
     }
 
     return a.exec();

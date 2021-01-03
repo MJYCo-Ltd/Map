@@ -6,6 +6,7 @@ SUBDIRS =\
     Plot\
     ScenarioManager\
     AreaPlanManager\
+    ProcessSimulation\
     LoadMap\
     LoadQmlMap \
     Test

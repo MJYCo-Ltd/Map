@@ -26,7 +26,7 @@ SDK_CONFIG *= SceneCore
 unix:SDK_CONFIG *= Satellite OsgExtern
 include(../SoftSDK.pri)
 CONFIG (debug, debug|release){
-    LIBS *= -lScenarioManagerd -lAreaPlanManagerd
+    LIBS *= -lScenarioManagerd -lAreaPlanManagerd -lProcessSimulationd
 }else{
-    LIBS *= -lScenarioManager -lAreaPlanManager
+    LIBS *= -lScenarioManager -lAreaPlanManager -lProcessSimulation
 }

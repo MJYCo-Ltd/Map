@@ -1,9 +1,10 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.15
 import "../Common"
-import "../Scenario"
+import "../Animation"
 
 Rectangle {
+    id:edit
     property int buttonWidth : 160
     property int buttonHeight : 42
     property int margin: defaultStyle.margin
@@ -28,63 +29,69 @@ Rectangle {
     }
     Column {
         id: column
-        x:margin
         y:margin
         spacing:margin
         width: buttonWidth + margin * 2
         Button {
+            x:margin
             width: buttonWidth
             font.family: defaultStyle.fontFamilyCN
             font.pointSize: defaultStyle.fontSize
-            text: "Scenarios"
+            text: "AreaPlan"
             checkable:true
             checked:false
             onToggled: {
-                scenarioOverView.visible = true
-                tutorials.visible = false
+                pathplan.visible = true
+                animation.visible = false
             }
         }
         Button {
+            x:margin
             width: buttonWidth
             font.family: defaultStyle.fontFamilyCN
             font.pointSize: defaultStyle.fontSize
-            text: "Tutorials"
+            text: "PathPlan"
             checkable:true
             checked:false
             onToggled: {
-                tutorials.visible = true
-                scenarioOverView.visible = false
+                pathplan.visible = true
+                animation.visible = false
             }
         }
         Button {
+            x:margin
             width: buttonWidth
             font.family: defaultStyle.fontFamilyCN
             font.pointSize: defaultStyle.fontSize
-            text: "Examples"
+            text: "Animation"
             checkable:true
             checked:false
+            onToggled: {
+                animation.visible = true
+                pathplan.visible = false
+            }
         }
     }
     Rectangle{
-        id:welcomeSplitLine
+        id:editSplitLine
         anchors.left: column.right
         width:1
-        height:parent.height
+        height:edit.height
         color:Qt.rgba(1,1,1,1)
     }
-    ScenarioOverView {
-        id: scenarioOverView
-        anchors.left: welcomeSplitLine.right
+    Animation {
+        id: animation
+        anchors.left: editSplitLine.right
         margin:defaultStyle.margin
-        width: parent.width - column.width - welcomeSplitLine.width
-        height: parent.height
+        width: edit.width - column.width - editSplitLine.width
+        height: edit.height
         visible: false
     }
     Rectangle {
-        id: tutorials
-        anchors.left: welcomeSplitLine.right
-        width: parent.width - column.width - welcomeSplitLine.width
-        height: parent.height
+        id: pathplan
+        anchors.left: editSplitLine.right
+        width: edit.width - column.width - editSplitLine.width
+        height: edit.height
         visible: false
         color:"transparent"
     }
