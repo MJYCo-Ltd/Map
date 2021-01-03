@@ -150,8 +150,6 @@ void CStarRender::setupState()
     state->getOrCreateUniform("lnfovFactor", osg::Uniform::FLOAT)->set(m_fLnfovFactor);
     state->getOrCreateUniform("lnInputScale", osg::Uniform::FLOAT)->set(m_StarTR.lnInputScale);
     state->getOrCreateUniform("lnOneOverMaxdL", osg::Uniform::FLOAT)->set(m_StarTR.lnOneOverMaxdL);
-    state->getOrCreateUniform("fRelativeFact", osg::Uniform::FLOAT)->set(
-                option->getRelativeScalar());
     state->getOrCreateUniform("fLinearScale", osg::Uniform::FLOAT)->set(m_fStarLinearScale);
     state->getOrCreateUniform("maxMag", osg::Uniform::FLOAT)->set(m_fShowMaxMag);
     state->getOrCreateUniform("alphaWaOverAlphaDa", osg::Uniform::FLOAT)->set(m_StarTR.alphaWaOverAlphaDa);

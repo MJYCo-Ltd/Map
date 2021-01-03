@@ -48,7 +48,7 @@ void CMilkyway::makeMilkyway()
     osg::ref_ptr<osg::Sphere> pShape = new osg::Sphere(osg::Vec3(),1.0999f);
     m_pMilkyway = new osg::ShapeDrawable(pShape,pHints);
 
-    m_pMilkyway->setColor(osg::Vec4f(1.0,1.0,1.0,1.0));
+    m_pMilkyway->setColor(osg::Vec4f(1.0f, 1.0f, 1.0f,1.0f));
 
     osg::StateSet *state = m_pMilkyway->getOrCreateStateSet();
 
