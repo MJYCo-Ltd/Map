@@ -15,6 +15,40 @@ ProcessBuild::ProcessBuild()
     _curRow         = 0;
     _startDateTime  = QDateTime::currentDateTime();
     _endDateTime    = QDateTime::currentDateTime();
+    //init();
+
+    QString dbFilePath = QCoreApplication::applicationDirPath() + "/Data/Scenarios/Scenario.db";
+    QString tableName = "ChangChun";
+    //打开数据库（获取数据库接口）
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(dbFilePath);
+    if (!db.open())
+    {
+        qDebug() << "database is error";
+    }
+    QSqlQuery query(db);
+    QSqlQueryModel* querymodel = new QSqlQueryModel();
+    querymodel->setQuery("SELECT * FROM " + tableName, db);
+    while (querymodel->canFetchMore())
+    {
+        querymodel->fetchMore();
+    }
+    for (int i = 0; i < querymodel->rowCount(); i++)
+    {
+        //ProcessData data;
+        //data.dt = QDateTime::fromString(querymodel->data(querymodel->index(i, 0), Qt::DisplayRole).toString(),
+        //	"yyyy/MM/dd");																			//第1列：日期
+        //data.items = querymodel->data(querymodel->index(i, 1), Qt::DisplayRole).toString();			//第2列：施工内容
+        //data.exp = querymodel->data(querymodel->index(i, 2), Qt::DisplayRole).toDouble();			//第3列：费用合计（万元）
+        //data.stuff = querymodel->data(querymodel->index(i, 3), Qt::DisplayRole).toInt();			//第4列：人员
+        //_table.append(data);
+    }
+
+    ////关闭数据库
+    db.close();
+    //
+    ////删除数据库
+    //QFile::remove("database.db");
 }
 
 ProcessBuild::~ProcessBuild()
@@ -28,10 +62,11 @@ ProcessBuild::~ProcessBuild()
     }
     _data.clear();
 }
-/*
-bool init(QString dbFilePath, QString tableName)
+
+bool ProcessBuild::init()//QString dbFilePath, QString tableName)
 {
-    //QString dbFilePath = QCoreApplication::applicationDirPath() + "/../Data/Scenario/Scenario.db";
+    QString dbFilePath = QCoreApplication::applicationDirPath() + "/../Data/Scenarios/Scenario.db";
+    QString tableName = "ChangChun";
 	//打开数据库（获取数据库接口）
 	QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(dbFilePath);
@@ -49,22 +84,23 @@ bool init(QString dbFilePath, QString tableName)
 	}
 	for (int i = 0; i < querymodel->rowCount(); i++)
 	{
-		ProcessData data;
-		data.dt = QDateTime::fromString(querymodel->data(querymodel->index(i, 0), Qt::DisplayRole).toString(),
-			"yyyy/MM/dd");																			//第1列：日期	
-		data.items = querymodel->data(querymodel->index(i, 1), Qt::DisplayRole).toString();			//第2列：施工内容	
-		data.exp = querymodel->data(querymodel->index(i, 2), Qt::DisplayRole).toDouble();			//第3列：费用合计（万元）	
-		data.stuff = querymodel->data(querymodel->index(i, 3), Qt::DisplayRole).toInt();			//第4列：人员
-		_table.append(data);
+        //ProcessData data;
+        //data.dt = QDateTime::fromString(querymodel->data(querymodel->index(i, 0), Qt::DisplayRole).toString(),
+        //	"yyyy/MM/dd");																			//第1列：日期
+        //data.items = querymodel->data(querymodel->index(i, 1), Qt::DisplayRole).toString();			//第2列：施工内容
+        //data.exp = querymodel->data(querymodel->index(i, 2), Qt::DisplayRole).toDouble();			//第3列：费用合计（万元）
+        //data.stuff = querymodel->data(querymodel->index(i, 3), Qt::DisplayRole).toInt();			//第4列：人员
+        //_table.append(data);
     }
 
 	////关闭数据库  
-	//database.close();
+    db.close();
 	//
 	////删除数据库  
-	//QFile::remove("database.db");	
+    //QFile::remove("database.db");
+    return true;
 }
-*/
+
 void ProcessBuild::goTo(QDateTime dt)
 {
     if (dt < startDateTime() || dt > endDateTime()) // 日期时间超出范围

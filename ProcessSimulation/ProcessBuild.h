@@ -20,6 +20,7 @@ class PROCESSSIMULATION_EXPORT ProcessBuild : public QObject, public Process
 public:
     ProcessBuild();
     ~ProcessBuild();
+    Q_INVOKABLE bool init();//QString dbFilePath, QString tableName);
 
     virtual void goTo(QDateTime dt);
     virtual const QDateTime startDateTime();

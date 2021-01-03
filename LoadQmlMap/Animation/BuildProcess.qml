@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.3
+import MyItem 1.0
 
 Rectangle
 {
@@ -158,6 +159,9 @@ Rectangle
             font.pointSize: defaultStyle.fontSize
             text: "OK"
             onClicked: {
+                //processBuild.init()
+                simulation.addProcess(processBuild)
+                simulation.start()
             }
         }
     }

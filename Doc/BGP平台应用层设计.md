@@ -104,11 +104,19 @@ EditPage-->|按下路径按钮|PathPage(路径规划工具);
 
 ![edit_animation](..\Image\Axure\edit_animation.png)
 
-施工进度模拟
+**添加动画**
+
+按下添加按钮，显示添加动画对话框，默认时间为按下前选中项的时间（如无选中项，默认为最末项时间）。
+
+对话框包含**文字**、**相机**、**图片**、**模型**等标签。
+
+**施工进度模拟**文件导入
+
+原型图
 
 ![edit_process_simulation](..\Image\Axure\edit_process_simulation.png)
 
-
+实图
 
 ![edit_process_simulation](..\Image\Axure\edit_process_simulation_b.png)
 
@@ -381,15 +389,15 @@ sequenceDiagram
 | 2018/01/03 | 1F\|基本墙  | 92.8                  | 10        |
 | 2018/01/04 | 1F\|上悬窗  | 116.5                 | 15        |
 
-**建筑构件**是指构成建筑物各个要素。如果把建筑物看成是一个产品，那建筑构件就是指这个产品当中的零件。建筑物当中的构件主要有：楼（屋）面、墙体、柱子、基础等。在本系统中，**构件（Component)**指的是三维建筑模型的**子节点（child）**。模拟时，表现为到达指定时间点时，对应的模型构件才会显示。
+**建筑构件**是指构成建筑物各个要素。如果把建筑物看成是一个产品，那建筑构件就是指这个产品当中的零件。建筑物当中的构件主要有：楼（屋）面、墙体、柱子、基础等。
 
-施工数据被封装到**建造构件命令**CommandBuildComponent，它实现了命令接口execute和undo，表示构件的建造和拆除。
+在本系统中，**构件（Component)**指的是三维建筑模型的**子节点（child）**。模拟时，表现为到达指定时间点时，对应的模型构件才会显示。施工数据被封装到**建造构件命令**CommandBuildComponent，它实现了命令接口execute和undo，表示构件的建造和拆除。
 
 ```C++
 	void execute();     // 建造，调用模型接口显示构件
 	void undo();        // 拆除，调用模型接口隐藏构件
 ```
-模拟（Simulation）接口定义了模拟和现实间的时间比率以及类似播放器的开始、暂停、恢复、停止、跳转功能，如下
+**模拟（Simulation）**接口定义了模拟和现实间的时间比率以及类似播放器的开始、暂停、恢复、停止、跳转功能，如下
 
 ```C++
 	void setTimeRatio(float ratio);						// sim : real
@@ -403,13 +411,17 @@ sequenceDiagram
 	void goTo(QDateTime& dt);
 ```
 
-模拟过程（Process）定义了到达某时间就会被模拟器调用的接口，如下
+**过程（Process）**定义了到达某时间就会被模拟器调用的接口，如下
 
 ```C++
 	virtual void goTo(QDateTime dt) = 0;
 ```
 
-要实现一个模拟过程（如施工过程ProcessBuild），应当子类化Process，并按时间序列准备施工数据，以备goTo调用。此外还应该记录已执行execute的时间进度，以便下次调用goTo时根据时间判断应该前进还是后退。
+**施工过程（ProcessBuild）**实现了Process接口。要点如下：
+
+1. 模拟前从数据库读取过程数据，并支持从文件导入数据。
+2. 按时间序列准备施工数据，以备goTo调用。
+3. 记录当前模拟时间进度，以便下次调用goTo时根据时间调整前进或后退。
 
 ### 区域规划
 

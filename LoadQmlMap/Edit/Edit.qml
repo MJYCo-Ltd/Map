@@ -4,6 +4,7 @@ import "../Common"
 import "../Animation"
 
 Rectangle {
+    id:edit
     property int buttonWidth : 160
     property int buttonHeight : 42
     property int margin: defaultStyle.margin
@@ -28,11 +29,11 @@ Rectangle {
     }
     Column {
         id: column
-        x:margin
         y:margin
         spacing:margin
         width: buttonWidth + margin * 2
         Button {
+            x:margin
             width: buttonWidth
             font.family: defaultStyle.fontFamilyCN
             font.pointSize: defaultStyle.fontSize
@@ -45,6 +46,7 @@ Rectangle {
             }
         }
         Button {
+            x:margin
             width: buttonWidth
             font.family: defaultStyle.fontFamilyCN
             font.pointSize: defaultStyle.fontSize
@@ -57,6 +59,7 @@ Rectangle {
             }
         }
         Button {
+            x:margin
             width: buttonWidth
             font.family: defaultStyle.fontFamilyCN
             font.pointSize: defaultStyle.fontSize
@@ -73,22 +76,22 @@ Rectangle {
         id:editSplitLine
         anchors.left: column.right
         width:1
-        height:parent.height
+        height:edit.height
         color:Qt.rgba(1,1,1,1)
     }
     Animation {
         id: animation
         anchors.left: editSplitLine.right
         margin:defaultStyle.margin
-        width: parent.width - column.width - editSplitLine.width
-        height: parent.height
+        width: edit.width - column.width - editSplitLine.width
+        height: edit.height
         visible: false
     }
     Rectangle {
         id: pathplan
         anchors.left: editSplitLine.right
-        width: parent.width - column.width - editSplitLine.width
-        height: parent.height
+        width: edit.width - column.width - editSplitLine.width
+        height: edit.height
         visible: false
         color:"transparent"
     }

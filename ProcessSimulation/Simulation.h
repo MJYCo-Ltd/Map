@@ -37,7 +37,7 @@ public:
 	Simulation();
 	~Simulation();
 
-	void addProcess(Process* process);
+    Q_INVOKABLE void addProcess(Process* process);
 	void removeProcess(Process* process);
 
 	void setTimeRatio(float ratio);						// sim : real
@@ -51,7 +51,7 @@ public:
 	Simulation_State state() { return _state; }
 
 public slots:
-	void start();
+    Q_INVOKABLE void start();
 	void pause();
 	void resume();
 	void stop();
