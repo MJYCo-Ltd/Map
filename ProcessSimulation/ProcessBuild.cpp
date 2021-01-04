@@ -1,9 +1,5 @@
 #include "ProcessBuild.h"
 #include "CommandBuildComponent.h"
-#include <QCoreApplication>
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QSqlQueryModel>
 #include <QFile>
 #include <QDebug>
 #include <QDateTime>
@@ -15,40 +11,6 @@ ProcessBuild::ProcessBuild()
     _curRow         = 0;
     _startDateTime  = QDateTime::currentDateTime();
     _endDateTime    = QDateTime::currentDateTime();
-    //init();
-
-    QString dbFilePath = QCoreApplication::applicationDirPath() + "/Data/Scenarios/Scenario.db";
-    QString tableName = "ChangChun";
-    //打开数据库（获取数据库接口）
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName(dbFilePath);
-    if (!db.open())
-    {
-        qDebug() << "database is error";
-    }
-    QSqlQuery query(db);
-    QSqlQueryModel* querymodel = new QSqlQueryModel();
-    querymodel->setQuery("SELECT * FROM " + tableName, db);
-    while (querymodel->canFetchMore())
-    {
-        querymodel->fetchMore();
-    }
-    for (int i = 0; i < querymodel->rowCount(); i++)
-    {
-        //ProcessData data;
-        //data.dt = QDateTime::fromString(querymodel->data(querymodel->index(i, 0), Qt::DisplayRole).toString(),
-        //	"yyyy/MM/dd");																			//第1列：日期
-        //data.items = querymodel->data(querymodel->index(i, 1), Qt::DisplayRole).toString();			//第2列：施工内容
-        //data.exp = querymodel->data(querymodel->index(i, 2), Qt::DisplayRole).toDouble();			//第3列：费用合计（万元）
-        //data.stuff = querymodel->data(querymodel->index(i, 3), Qt::DisplayRole).toInt();			//第4列：人员
-        //_table.append(data);
-    }
-
-    ////关闭数据库
-    db.close();
-    //
-    ////删除数据库
-    //QFile::remove("database.db");
 }
 
 ProcessBuild::~ProcessBuild()
@@ -63,53 +25,23 @@ ProcessBuild::~ProcessBuild()
     _data.clear();
 }
 
-bool ProcessBuild::init()//QString dbFilePath, QString tableName)
-{
-    QString dbFilePath = QCoreApplication::applicationDirPath() + "/../Data/Scenarios/Scenario.db";
-    QString tableName = "ChangChun";
-	//打开数据库（获取数据库接口）
-	QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName(dbFilePath);
-	if (!db.open())
-	{
-		qDebug() << "database is error";
-		return false;
-	}
-	QSqlQuery query(db);
-	QSqlQueryModel* querymodel = new QSqlQueryModel();
-	querymodel->setQuery("SELECT * FROM " + tableName, db);
-	while (querymodel->canFetchMore())
-	{
-		querymodel->fetchMore();
-	}
-	for (int i = 0; i < querymodel->rowCount(); i++)
-	{
-        //ProcessData data;
-        //data.dt = QDateTime::fromString(querymodel->data(querymodel->index(i, 0), Qt::DisplayRole).toString(),
-        //	"yyyy/MM/dd");																			//第1列：日期
-        //data.items = querymodel->data(querymodel->index(i, 1), Qt::DisplayRole).toString();			//第2列：施工内容
-        //data.exp = querymodel->data(querymodel->index(i, 2), Qt::DisplayRole).toDouble();			//第3列：费用合计（万元）
-        //data.stuff = querymodel->data(querymodel->index(i, 3), Qt::DisplayRole).toInt();			//第4列：人员
-        //_table.append(data);
-    }
-
-	////关闭数据库  
-    db.close();
-	//
-	////删除数据库  
-    //QFile::remove("database.db");
-    return true;
-}
 
 void ProcessBuild::goTo(QDateTime dt)
 {
+    //qDebug() << "== ProcessBuild::goTo ==========";
+    //qDebug() << "dt ：" << dt;
+    //qDebug() << "ProcessBuild::startDateTime ：" << startDateTime();
+    //qDebug() << "ProcessBuild::startDateTime ：" << endDateTime();
+    //qDebug() << "ProcessBuild::_curRow ：" << _curRow;
+    //qDebug() << "ProcessBuild::currentDateTime ：" << currentDateTime();
+    //qDebug() << "================================";
     if (dt < startDateTime() || dt > endDateTime()) // 日期时间超出范围
 	{
 		return;
 	}
     if (dt == currentDateTime())                // 日期时间不变，无需跳转
         return;
-    else if (dt < currentDateTime())            // 当前日期时间比目标时间晚，前进
+    else if (dt > currentDateTime())            // 目标时间比当前日期时间晚，前进
     {
         for (int r = _curRow; r < _data.count(); r++)
         {
@@ -117,10 +49,14 @@ void ProcessBuild::goTo(QDateTime dt)
             if (dt < currentDateTime())
                 break;
             (_data[_curRow])->execute();
-            qDebug() << "ProcessBuild::goTo " << _data[_curRow]->dateTime() << "," << _data[_curRow]->name();
+
+            qDebug() << "-------------------------------";
+            qDebug() << "日期： " << _data[_curRow]->dateTime() ;
+            qDebug() << "构件："<< _data[_curRow]->name() << ", 花费：" << _data[_curRow]->expense() << ",人员：" << _data[_curRow]->headcount();
+            qDebug() << "-------------------------------";
         }
     }
-    else if (dt > currentDateTime())            // 当前日期时间比目标时间早，撤回
+    else if (dt < currentDateTime())            // 目标时间比当前日期时间晚早，撤回
     {
         for (int r = _curRow; r >= 0; r--)
         {
@@ -143,6 +79,16 @@ const QDateTime ProcessBuild::endDateTime()
     return _endDateTime;
 }
 
+void ProcessBuild::setStartDateTime(const QDateTime dt)
+{
+    _startDateTime = dt;
+}
+
+void ProcessBuild::setEndDateTime(const QDateTime dt)
+{
+    _endDateTime = dt;
+}
+
 const QDateTime ProcessBuild::currentDateTime()
 {
     if(_curRow < 0 || _curRow >= _data.count())
@@ -155,16 +101,45 @@ const QDateTime ProcessBuild::currentDateTime()
 
 void ProcessBuild::addComponent(CommandBuildComponent* cmd)
 {
-    for (int i = 0; i < _data.count() - 1; i++)
+    // 第一条数据，直接插入即可
+    if (_data.count() == 0)
     {
-        if (cmd == _data[i])    // 不重复添加命令
-            return;
-        if (cmd->dateTime() >= _data[i]->dateTime()
-                && cmd->dateTime() < _data[i+1]->dateTime())
-        {
-            _data.insert(i+1, cmd);
-            return;
-        }
+        _data.append(cmd);
+        // 更新时间范围
+        setStartDateTime(cmd->dateTime());
+        setEndDateTime(cmd->dateTime());
+        return;
     }
-    _data.append(cmd);
+    else
+    {
+        // 更新时间范围
+        if (startDateTime() > cmd->dateTime())
+            setStartDateTime(cmd->dateTime());
+        if (endDateTime() < cmd->dateTime())
+            setEndDateTime(cmd->dateTime());
+        qDebug() << "==========";
+        qDebug() << "cmd->dateTime() :" << cmd->dateTime();
+        qDebug() << "startDateTime:" << startDateTime();
+        qDebug() << "endDateTime:" << endDateTime();
+        for (int i = 0; i < _data.count(); i++)
+        {
+            if (cmd == _data[i])    // 不重复添加命令
+                return;
+            if (cmd->dateTime() < _data[i]->dateTime()) // 比当前日期时间早则插入
+            {
+                _data.insert(i, cmd);
+                return;
+            }
+        }
+        // 比所有项日期都晚，加在末尾
+        _data.append(cmd);
+    }
+}
+
+void ProcessBuild::addComponents(QList<CommandBuildComponent*> list)
+{
+    for(int i = 0; i < list.count(); i++)
+    {
+        addComponent(list[i]);
+    }
 }

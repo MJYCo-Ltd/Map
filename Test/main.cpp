@@ -1,18 +1,20 @@
 #include <QApplication>
-#include <QWidget>
 #include <QRandomGenerator>
 #include <QTextStream>
 #include <QDebug>
 #include <QDir>
 #include "../ScenarioManager/ScenarioManager.h"
 #include "../ScenarioManager/Scenario.h"
-//#include "../ProcessSimulation/Simulation.h"
-//#include "../ProcessSimulation/ProcessBuild.h"
-//#include "../ProcessSimulation/CommandBuildComponent.h"
+#include "../AreaPlanManager/AreaPlanManager.h"
+#include "../AreaPlanManager/AreaPlan.h"
+#include "../ProcessSimulation/Simulation.h"
+#include "../ProcessSimulation/ProcessBuild.h"
+#include "../ProcessSimulation/CommandBuildComponent.h"
 
 static QString g_test_dirpath = "";
 static QTextStream g_test_out;
-//static Simulation g_sim;
+static Simulation g_sim;
+static ScenarioManager g_mgr;
 
 bool compare(QString fp1, QString fp2)
 {
@@ -59,27 +61,26 @@ bool compare(QString fp1, QString fp2)
 // -- 测试方案管理类 -------------------------------------------------
 void testScenarioManager()
 {
-    ScenarioManager mgr;
-    mgr.setDir(g_test_dirpath + "/Scenarios");
-    mgr.init();
-    mgr.removeAllScenario();
+    g_mgr.setDir(g_test_dirpath + "/Scenarios");
+    g_mgr.init();
+    g_mgr.removeAllScenario();
 
     // 添加方案
     g_test_out << "-- test add new scenario --\n";
     for(int i = 0; i < 10; i++)
     {
         QString name = "scenario_" + QString::number(i);
-        if ( mgr.addScenario(name) <= 0)
+        if ( g_mgr.addScenario(name) <= 0)
             g_test_out << "Failed to add scenario:" << name << "\n";
     }
     // 重复添加方案：名称已存在
     for(int i = 0; i < 2; i++)
     {
         QString name = "scenario_" + QString::number(i);
-        if ( mgr.addScenario(name)  <= 0)
+        if ( g_mgr.addScenario(name)  <= 0)
             g_test_out << "Failed to add scenario:" << name << "\n";
     }
-    foreach(Scenario* one, mgr.scenarioList())
+    foreach(Scenario* one, g_mgr.scenarioList())
         g_test_out << one->name() << "\n";
 
     // 移除方案
@@ -87,10 +88,10 @@ void testScenarioManager()
     for(int i = 7; i < 13; i++)
     {
         QString name = "scenario_" + QString::number(i);
-        if (mgr.removeScenario(name) <= 0)
+        if (g_mgr.removeScenario(name) <= 0)
             g_test_out << "Failed to remove scenario:" << name << "\n";
     }
-    foreach(Scenario* one, mgr.scenarioList())
+    foreach(Scenario* one, g_mgr.scenarioList())
         g_test_out << one->name() << "\n";
 
     // 添加收藏
@@ -98,10 +99,10 @@ void testScenarioManager()
     for(int i = 4; i < 8; i++)
     {
         QString name = "scenario_" + QString::number(i);
-        if (mgr.addFavorite(name) <= 0)
+        if (g_mgr.addFavorite(name) <= 0)
             g_test_out << "Failed to add favorite:" << name << "\n";
     }
-    foreach(Scenario* one, mgr.favoriteList())
+    foreach(Scenario* one, g_mgr.favoriteList())
         g_test_out << one->name() << "\n";
 
     // 移除收藏
@@ -109,13 +110,13 @@ void testScenarioManager()
     for(int i = 5; i < 9; i++)
     {
         QString name = "scenario_" + QString::number(i);
-        if (mgr.removeFavorite(name) <= 0)
+        if (g_mgr.removeFavorite(name) <= 0)
             g_test_out << "Failed to remove favorite:" << name << "\n";
     }
-    foreach(Scenario* one, mgr.favoriteList())
+    foreach(Scenario* one, g_mgr.favoriteList())
         g_test_out << one->name() << "\n";
 }
-/*
+
 // -- 测试过程模拟类 -------------------------------------------------
 void testProcessSimulation()
 {
@@ -169,14 +170,10 @@ void testProcessSimulation()
     g_sim.addProcess(&process);
     g_sim.start();
 }
-*/
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    //QCoreApplication a(argc, argv);
-
-    QWidget w;
-    w.showMaximized();
 
     // -- 准备日志文件 ---------------------------------------------------
     g_test_dirpath = QApplication::applicationDirPath() + "/Test";

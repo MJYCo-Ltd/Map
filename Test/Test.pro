@@ -1,8 +1,6 @@
 QT += core qml gui widgets
 
-TEMPLATE = app
-
-CONFIG += c++11 #console
+CONFIG += c++11 console
 #CONFIG -= app_bundle
 
 # The following define makes your compiler emit warnings if you use
@@ -30,7 +28,7 @@ INCLUDEPATH *= $$PWD/../Inc
 DESTDIR = $$PWD/../../Bin
 
 CONFIG (debug, debug|release){
-    LIBS *= -lScenarioManagerd -lAreaPlanManagerd #-lProcessSimulationd
+    LIBS *= -lScenarioManagerd -lAreaPlanManagerd -lProcessSimulationd
 }else{
-    LIBS *= -lScenarioManager -lAreaPlanManager #-lProcessSimulation
+    LIBS *= -lScenarioManager -lAreaPlanManager -lProcessSimulation
 }

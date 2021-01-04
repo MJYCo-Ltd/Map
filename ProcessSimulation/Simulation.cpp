@@ -111,6 +111,11 @@ void Simulation::executeProcess()
             continue;
         if ( _curDateTime > p->startDateTime() && _curDateTime < p->endDateTime() )
         {
+            //qDebug() << "--Simulation---------------";
+            //qDebug() << "Current DT: " << _curDateTime;
+            //qDebug() << "Process Start DT:" << p->startDateTime();
+            //qDebug() << "Process END DT:" << p->endDateTime();
+            //qDebug() << "---------------------------";
             p->goTo(_curDateTime);
         }
 	}
@@ -118,8 +123,9 @@ void Simulation::executeProcess()
     if (_state == Simulation_Run)
     {
         _curDateTime = _curDateTime.addMSecs(_timeRatio * _timer->interval());
-        if (_curDateTime > _endDateTime)
+        if (_curDateTime >= _endDateTime)
         {
+            qDebug() << "        STOP ：   " << _curDateTime;
             stop();
         }
     }
@@ -154,13 +160,35 @@ void Simulation::goTo(QDateTime& dt)
     pause();			// 跳转后暂停在当前时间
 }
 
-void Simulation::addProcess(Process* process)
+void Simulation::addProcess(Process* p)
 {
-	if (_processes.indexOf(process) < 0)
-		_processes.append(process);
+    if (_processes.indexOf(p) < 0)
+    {
+        _processes.append(p);
+
+        // 更新日期时间
+        if (_processes.count() == 1)
+        {
+            setStartDateTime(p->startDateTime());
+            setEndDateTime(p->endDateTime());
+        }
+        else
+        {
+            if(startDateTime() > p->startDateTime())
+            {
+                setStartDateTime(p->startDateTime());
+            }
+            if(endDateTime() < p->endDateTime())
+            {
+                setEndDateTime(p->endDateTime());
+            }
+        }
+    }
 }
 
 void Simulation::removeProcess(Process* process)
 {
 	_processes.removeAt(_processes.indexOf(process));
+    // 更新模拟时间
+    // ...
 }

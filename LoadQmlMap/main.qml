@@ -33,6 +33,10 @@ Window
     AreaPlanManager{
         id:areaPlanManager
     }
+    ProcessSimulationBuild
+    {
+        id:animationBuild
+    }
     Style{
         id:defaultStyle
     }
@@ -76,6 +80,10 @@ Window
             id: btnPlay
             anchors.left: btnEdit.right
             text:qsTr("PLAY")
+            onClicked: {
+                animationBuild.start()
+                console.log("PLAY")
+            }
         }
         MenuButton{
             id: btnInfo

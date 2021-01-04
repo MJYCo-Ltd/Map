@@ -20,7 +20,6 @@ class PROCESSSIMULATION_EXPORT ProcessBuild : public QObject, public Process
 public:
     ProcessBuild();
     ~ProcessBuild();
-    Q_INVOKABLE bool init();//QString dbFilePath, QString tableName);
 
     virtual void goTo(QDateTime dt);
     virtual const QDateTime startDateTime();
@@ -28,6 +27,11 @@ public:
     virtual const QDateTime currentDateTime();
 
     void addComponent(CommandBuildComponent*);
+    void addComponents(QList<CommandBuildComponent*>);
+
+protected:
+    virtual void setStartDateTime(const QDateTime);
+    virtual void setEndDateTime(const QDateTime);
 private:
     QList<CommandBuildComponent*>   _data;              // 进度数据（按日期时间排序）
     int                             _curRow;            // 模拟进度
