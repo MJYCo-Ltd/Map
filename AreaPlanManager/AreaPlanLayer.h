@@ -15,6 +15,7 @@
 #include <QTimer>
 #include <QTime>
 
+class AreaPolygon;
 class AreaPlanLayer : public QObject
 {
     Q_OBJECT
@@ -38,4 +39,5 @@ private:
 	QString										_name;
 	QIcon										_legend;			
     QColor										_color;
+    QList<AreaPolygon*>                         _areaList;
 };

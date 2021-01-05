@@ -427,18 +427,24 @@ sequenceDiagram
 
 #### 接口
 
-区域规划接口类主要有**区域规划管理（AreaPlanManager）**、**区域规划（AreaPlan）**、**区域规划图层（AreaPlanLayer)**
+**区域规划管理（AreaPlanManager）**、**区域规划（AreaPlan）**、**区域规划图层（AreaPlanLayer)**、**区域AreaPolygon**。
 **区域规划管理**：负责区域规划的统一管理，调用AreaPlan进行新建、编辑、保存、加载等功能。
 **区域规划**：每套区域规划方案，都会给出一系列的图例及对应的若干区域。区域规划类负责所有区域整体的显示和隐藏，还允许用户选择某一特定区域（图层）进行显示或编辑。
-**区域规划图层**：每个图层对应业务上的一种规划区域（如农业用地），他具有名称、图例、颜色等属性，可以控制地图上该类区域的创建、删除、显示和隐藏。
+**区域规划图层**：每个图层对应业务上的一种规划区域（多边形区域AreaPolygon，如农业用地）。他具有名称、图例、颜色等属性，可以控制地图上该类区域的创建、删除、显示和隐藏。
+
+**区域**：即多边形区域AreaPolygon，可以调用三维接口进行多边形的显示和编辑，同时支持从Json读取和保存到Json。
 
 ```mermaid
 classDiagram
+class AreaPolygon
+AreaPolygon : fromJson(Json)
+AreaPolygon : toJson()
 class AreaPlanLayer
 AreaPlanLayer : void setVisible(bool)
 AreaPlanLayer : QString			_name
 AreaPlanLayer : QIcon			_legend			
 AreaPlanLayer : QColor			_color
+AreaPolygon "*" *-- "1" AreaPlanLayer
 class AreaPlan
 AreaPlan : QString               _name
 AreaPlan : QList<AreaPlanLayer*> _layerList
