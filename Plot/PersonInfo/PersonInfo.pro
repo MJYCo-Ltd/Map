@@ -13,7 +13,7 @@ DEFINES += PERSONINFO_LIBRARY
 
 SDK_CONFIG *= OSG OsgExtern SceneCore Satellite
 
-include($$PWD/../../SoftSDK.pri)
+include($$PWD/../MapPlot.pri)
 
 HEADERS += \
     MineInfo.h \

@@ -7,10 +7,12 @@ DESTDIR = $$PWD/../../Bin
 
 HEADERS += \
     AppGlobal.h \
+    DealWindowsMessage.h \
     PlotMap.h
 
 SOURCES += \
         AppGlobal.cpp \
+        DealWindowsMessage.cpp \
         PlotMap.cpp \
         main.cpp
 

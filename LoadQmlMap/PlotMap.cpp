@@ -1,80 +1,81 @@
 #include <QDebug>
 #include <SceneGraph/ISceneGraph.h>
 #include <Plot/Map/IMap.h>
+#include <Plot/IPlot.h>
+#include <Plot/PersonInfo/IPersonInfo.h>
+#include <Plot/Map/IMapPoint.h>
+#include <Plot/Map/IMapLine.h>
+#include <Plot/Map/IMapLayer.h>
+#include <Plot/Map/IMapPolygon.h>
+#include <SceneGraph/IWindow.h>
 
+#include "DealWindowsMessage.h"
 #include "PlotMap.h"
 
 CPlotMap::CPlotMap()
 {
-
+    m_pDealWindowMessage = new CDealWindowsMessage;
 }
 
 void CPlotMap::SetSceneGraph(ISceneGraph *pSceneGraph)
 {
     m_pSceneGraph = pSceneGraph;
+    PlotLine();
+
+    m_pSceneGraph->GetMainWindow()->SubMessage(m_pDealWindowMessage);
 }
 
 void CPlotMap::PlotLine()
 {
-//    auto pLayer = m_pSceneGraph->GetMap()->GetPlotManager()->FindOrCreateLayer("test");
-//    /// 绘制人
-//    auto m_pPersonInfo = dynamic_cast<IPersonInfo*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IPersonInfo"));
+    auto pLayer = m_pSceneGraph->GetMap()->CreateLayer("test");
+    /// 绘制人
+//    auto m_pPersonInfo = dynamic_cast<IPersonInfo*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPersonInfo"));
 //    m_pPersonInfo->SetName("123");
-//    ScenePos pos;
+    MapGeoPos pos;
 //    pos.fLon = 120;
 //    pos.fLat = 24;
 //    pos.fHeight = 100;
-//    pos.bIsGeo = true;
+
 //    m_pPersonInfo->SetPos(pos);
 //    pLayer->AddSceneNode(m_pPersonInfo);
 
-//    /// 绘制点
-//    auto m_pPoint = dynamic_cast<IPoint*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IPoint"));
-//    pos.fLon = 121;
-//    pos.fLat = 25;
-//    pos.fHeight = 1000;
-//    pos.bIsGeo = true;
-//    m_pPoint->SetPos(pos);
-//    SceneColor color;
-//    color.fR = 1.0f;
-//    m_pPoint->SetColor(color);
-//    pLayer->AddSceneNode(m_pPoint);
+    /// 绘制点
+    auto m_pPoint = dynamic_cast<IMapPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPoint"));
+    pos.fLon = 121;
+    pos.fLat = 25;
+    pos.fHeight = 0;
+    m_pPoint->SetGeoPos(pos);
+    SceneColor color;
+    color.fG = .0f;
+    color.fB = .0f;
+    m_pPoint->SetPointColor(color);
+    pLayer->AddSceneNode(m_pPoint);
 
-//    /// 绘制线
-//    auto m_pLine = dynamic_cast<ILine*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("ILine"));
-//    m_pLine->AddPoint(0,pos);
-//    pos.fLon = 122;
-//    pos.fLat = 26;
-//    pos.fHeight = 1000;
-//    pos.bIsGeo = true;
-//    m_pLine->AddPoint(0,pos);
-//    pos.fLon = 123;
-//    pos.fLat = 27;
-//    pos.fHeight = 1000;
-//    pos.bIsGeo = true;
-//    m_pLine->AddPoint(0,pos);
-//    m_pLine->SetColor(color);
-//    pLayer->AddSceneNode(m_pLine);
+    /// 绘制线
+    auto m_pLine = dynamic_cast<IMapLine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLine"));
+    m_pLine->AddPoint(0,pos);
+    pos.fLon = 122;
+    pos.fLat = 26;
+    m_pLine->AddPoint(0,pos);
+    pos.fLon = 123;
+    pos.fLat = 27;
+    m_pLine->AddPoint(0,pos);
+    m_pLine->SetLineColor(color);
+    pLayer->AddSceneNode(m_pLine);
 
-//    /// 绘制区域
-//    auto m_pPolygon = dynamic_cast<IPolygon*>(m_pSceneGraph->GetMap()->GetPlotManager()->CreateMapSceneNode("IPolygon"));
-//    m_pPolygon->AddPoint(0,pos);
-//    pos.fLon = 123;
-//    pos.fLat = 26;
-//    pos.fHeight = 1000;
-//    pos.bIsGeo = true;
-//    m_pPolygon->AddPoint(1,pos);
-//    pos.fLon = 121;
-//    pos.fLat = 26.5;
-//    pos.fHeight = 1000;
-//    pos.bIsGeo = true;
-//    m_pPolygon->AddPoint(2,pos);
-//    m_pPolygon->SetColor(color);
-//    pLayer->AddSceneNode(m_pPolygon);
+    /// 绘制区域
+    auto m_pPolygon = dynamic_cast<IMapPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPolygon"));
+    m_pPolygon->AddPoint(0,pos);
+    pos.fLon = 123;
+    pos.fLat = 26;
+    m_pPolygon->AddPoint(1,pos);
+    pos.fLon = 121;
+    pos.fLat = 26.5;
+    m_pPolygon->AddPoint(2,pos);
+    m_pPolygon->SetPolygonColor(color);
+    pLayer->AddSceneNode(m_pPolygon);
 }
 
 void CPlotMap::ClearLayer()
 {
-//    auto pLayer = m_pSceneGraph->GetMap()->GetPlotManager()->FindOrCreateLayer("test");
-//    pLayer->Clear();
 }
