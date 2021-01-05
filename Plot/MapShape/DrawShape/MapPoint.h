@@ -37,9 +37,7 @@ public:
     void PointSizeChanged();
     void ColorChanged();
 protected:
-    float  m_fPointSize=10.0f;
     bool   m_bUpdate=false;
-    SceneColor m_stColor;
     osg::observer_ptr<PointCallBack> m_pPointCallBack;
     osg::observer_ptr<osgEarth::FeatureNode> m_pFeatureNode;
 };

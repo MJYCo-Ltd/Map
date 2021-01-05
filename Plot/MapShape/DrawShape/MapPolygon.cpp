@@ -19,7 +19,7 @@ void CMapPolygon::AddPoint(int nIndex, const MapGeoPos &rScenePos)
         m_listAllPos.insert(pIter,rScenePos);
     }
 
-    NodeChanged();
+    ImplMapSceneNode<IMapPolygon>::NodeChanged();
 }
 
 /// 移除指定位置点
@@ -34,7 +34,7 @@ bool CMapPolygon::RemovePoint(int nIndex)
     for(int i=0; i<nIndex;++i,++pIter){}
     m_listAllPos.erase(pIter);
 
-    NodeChanged();
+    ImplMapSceneNode<IMapPolygon>::NodeChanged();
     return(true);
 }
 
@@ -52,7 +52,7 @@ bool CMapPolygon::UpdatePoint(int nIndex, const MapGeoPos &rPos)
     if(*pIter != rPos)
     {
         *pIter = rPos;
-        NodeChanged();
+        ImplMapSceneNode<IMapPolygon>::NodeChanged();
     }
 
     return(true);
@@ -67,15 +67,16 @@ void CMapPolygon::SetMultPos(const std::vector<MapGeoPos> &vAllPoints)
     {
         m_listAllPos.push_back(one);
     }
-    NodeChanged();
+
+    ImplMapSceneNode<IMapPolygon>::NodeChanged();
 }
 
 /// 多边形颜色修改
 void CMapPolygon::PolygonColorChanged()
 {
     m_pNodeStyle->getOrCreate<osgEarth::PolygonSymbol>()
-            ->fill()->color() = osgEarth::Color(m_stPolygonColor.fR,m_stPolygonColor.fG
-                                                ,m_stPolygonColor.fB,m_stPolygonColor.fA);
+            ->fill()->color().set(m_stPolygonColor.fR,m_stPolygonColor.fG
+                                  ,m_stPolygonColor.fB,m_stPolygonColor.fA);
 }
 
 /// 更新回调
@@ -124,11 +125,12 @@ void CMapPolygon::InitStyle()
 {
     /// 多边形颜色
     m_pNodeStyle->getOrCreate<osgEarth::PolygonSymbol>()
-            ->fill()->color() = osgEarth::Color(m_stPolygonColor.fR,m_stPolygonColor.fG
-                                                ,m_stPolygonColor.fB,m_stPolygonColor.fA);
+            ->fill()->color().set(m_stPolygonColor.fR,m_stPolygonColor.fG
+                                  ,m_stPolygonColor.fB,m_stPolygonColor.fA);
 
     m_pNodeStyle->getOrCreate<osgEarth::AltitudeSymbol>()
             ->technique() = osgEarth::AltitudeSymbol::TECHNIQUE_DRAPE;
-    m_pNodeStyle->getOrCreate<osgEarth::AltitudeSymbol>()
-            ->verticalOffset() = 0.1;
+//    m_pNodeStyle->getOrCreate<osgEarth::AltitudeSymbol>()
+//            ->verticalOffset() = 0.1;
+    ImplMapSceneNode<IMapPolygon>::InitStyle(m_pNodeStyle);
 }

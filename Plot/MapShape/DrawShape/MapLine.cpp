@@ -152,24 +152,17 @@ void CMapLine::InitNode()
 void CMapLine::InitStyle()
 {
     m_pNodeStyle->getOrCreate<osgEarth::LineSymbol>()
-            ->stroke()->color() = osgEarth::Color(m_stLineColor.fR,m_stLineColor.fG
-                                                  ,m_stLineColor.fB,m_stLineColor.fA);
+            ->stroke()->color().set(m_stLineColor.fR,m_stLineColor.fG
+                                    ,m_stLineColor.fB,m_stLineColor.fA);
     m_pNodeStyle->getOrCreate<osgEarth::LineSymbol>()
             ->stroke()->width() = m_fLineWidth;
-    m_pNodeStyle->getOrCreate<osgEarth::LineSymbol>()
-            ->stroke()->widthUnits() = osgEarth::Units::KILOMETERS;
 
     m_pNodeStyle->getOrCreate<osgEarth::LineSymbol>()
             ->stroke()->stipplePattern() = MAP_DOTTED_LINE == m_emLineType ? 0xF0F0 : 0xFFFF;
 
-    m_pNodeStyle->getOrCreate<osgEarth::LineSymbol>()->imageURI() = osgEarth::StringExpression("E:/Git/Bin/Images/road.png");
 
     m_pNodeStyle->getOrCreate<osgEarth::AltitudeSymbol>()
             ->technique() = osgEarth::AltitudeSymbol::TECHNIQUE_DRAPE;
-    m_pNodeStyle->getOrCreate<osgEarth::AltitudeSymbol>()
-            ->clamping() = osgEarth::AltitudeSymbol::CLAMP_RELATIVE_TO_TERRAIN;
-//    m_pNodeStyle->getOrCreate<osgEarth::AltitudeSymbol>()->binding()
-//            = osgEarth::AltitudeSymbol::BINDING_VERTEX;
 
     ImplMapSceneNode<IMapLine>::InitStyle(m_pNodeStyle);
 }
@@ -191,6 +184,5 @@ void CMapLine::LineTypeChanged()
 /// 修改颜色
 void CMapLine::LineColorChanged()
 {
-    m_pNodeStyle->getOrCreate<osgEarth::LineSymbol>()->stroke()->color()
-            = osgEarth::Color(m_stLineColor.fR,m_stLineColor.fG,m_stLineColor.fB,m_stLineColor.fA);
+    m_pNodeStyle->getOrCreate<osgEarth::LineSymbol>()->stroke()->color().set(m_stLineColor.fR,m_stLineColor.fG,m_stLineColor.fB,m_stLineColor.fA);
 }

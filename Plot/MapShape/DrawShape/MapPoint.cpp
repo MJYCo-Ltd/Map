@@ -45,9 +45,9 @@ void CMapPoint::PosChanged()
     }
     else
     {
-        pGeometry->at(0) = osg::Vec3(m_stGeoPos.fLon,
-                                      m_stGeoPos.fLat,
-                                      m_stGeoPos.fHeight);
+        pGeometry->at(0).set(m_stGeoPos.fLon,
+                             m_stGeoPos.fLat,
+                             m_stGeoPos.fHeight);
     }
 
     /// 重新构建futureNode
@@ -58,13 +58,12 @@ void CMapPoint::PosChanged()
 /// 初始化样式
 void CMapPoint::InitStyle()
 {
-    m_pNodeStyle->getOrCreate<osgEarth::PointSymbol>()->fill()->color() = osgEarth::Color(m_stColor.fR,m_stColor.fG
-                                                                                        ,m_stColor.fB,m_stColor.fA);
+    m_pNodeStyle->getOrCreate<osgEarth::PointSymbol>()->fill()->color().set(m_stPointColor.fR,m_stPointColor.fG
+                                                                            ,m_stPointColor.fB,m_stPointColor.fA);
     m_pNodeStyle->getOrCreate<osgEarth::PointSymbol>()->size() = m_fPointSize;
-    m_pNodeStyle->getOrCreate<osgEarth::PointSymbol>()->smooth() = true;
+    m_pNodeStyle->getOrCreate<osgEarth::PointSymbol>()->smooth()=true;
 
-    m_pNodeStyle->getOrCreate<osgEarth::AltitudeSymbol>()->binding()
-            = osgEarth::AltitudeSymbol::BINDING_VERTEX;
+    ImplMapSceneNode<IMapPoint>::InitStyle(m_pNodeStyle);
 }
 
 /// 修改
@@ -82,6 +81,6 @@ void CMapPoint::PointSizeChanged()
 /// 颜色修改
 void CMapPoint::ColorChanged()
 {
-    m_pNodeStyle->getOrCreate<osgEarth::PointSymbol>()->fill()->color() = osgEarth::Color(m_stColor.fR,m_stColor.fG
-                                                                                        ,m_stColor.fB,m_stColor.fA);
+    m_pNodeStyle->getOrCreate<osgEarth::PointSymbol>()->fill()->color().set(m_stPointColor.fR,m_stPointColor.fG
+                                                                            ,m_stPointColor.fB,m_stPointColor.fA);
 }

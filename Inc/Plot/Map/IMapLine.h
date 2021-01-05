@@ -56,6 +56,11 @@ public:
      */
     void SetLineColor(const SceneColor& lineColor)JUDGE_EQUAL_CALL_FUNCTION(lineColor,m_stLineColor,LineColorChanged)
     const SceneColor& LineColor()const{return(m_stLineColor);}
+
+    /**
+     * @brief 获取线上的点的个数
+     */
+    int GetPointCount()const{return(m_listAllPos.size());}
 protected:
     virtual ~IMapLine(){}
 

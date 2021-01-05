@@ -38,9 +38,13 @@ public:
      */
     void SetPolygonColor(const SceneColor& polygonColor)JUDGE_EQUAL_CALL_FUNCTION(polygonColor,m_stPolygonColor,PolygonColorChanged)
     const SceneColor& PolygonColor(){return(m_stPolygonColor);}
+
+    /**
+     * @brief 获取多边形点的个数
+     */
+    int GetPointCount()const{return(m_listAllPos.size());}
 protected:
     virtual ~IMapPolygon(){}
-
     virtual void PolygonColorChanged()=0;
 protected:
     SceneColor             m_stPolygonColor;

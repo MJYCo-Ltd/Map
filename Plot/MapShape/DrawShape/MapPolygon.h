@@ -31,8 +31,14 @@ public:
     virtual void SetMultPos(const std::vector<MapGeoPos> &);
 
 protected:
+    /**
+     * @brief 多边形颜色更改
+     */
     void PolygonColorChanged();
 
+    /**
+     * @brief 更新回调
+     */
     void UpdateNode();
 
     /**

@@ -61,6 +61,7 @@ void CPlotMap::PlotLine()
     pos.fLat = 27;
     m_pLine->AddPoint(0,pos);
     m_pLine->SetLineColor(color);
+    m_pLine->SetLineWidth(10.f);
     pLayer->AddSceneNode(m_pLine);
 
     /// 绘制区域
