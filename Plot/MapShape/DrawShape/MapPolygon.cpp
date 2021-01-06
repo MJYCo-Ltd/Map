@@ -113,11 +113,11 @@ void CMapPolygon::InitNode()
                 osgEarth::SpatialReference::get("wgs84"));
 
     m_pNodeStyle = pFeature->style().operator->();
+    InitStyle();
     m_pFeatureNode = new osgEarth::FeatureNode(pFeature);
     m_pFeatureNode->setDynamic(true);
 
     SetOsgNode(m_pFeatureNode.get());
-    InitStyle();
 }
 
 /// 初始化样式
@@ -130,7 +130,5 @@ void CMapPolygon::InitStyle()
 
     m_pNodeStyle->getOrCreate<osgEarth::AltitudeSymbol>()
             ->technique() = osgEarth::AltitudeSymbol::TECHNIQUE_DRAPE;
-//    m_pNodeStyle->getOrCreate<osgEarth::AltitudeSymbol>()
-//            ->verticalOffset() = 0.1;
     ImplMapSceneNode<IMapPolygon>::InitStyle(m_pNodeStyle);
 }

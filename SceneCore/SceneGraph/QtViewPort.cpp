@@ -147,6 +147,7 @@ IViewHud *QtViewPort::GetHud()
     return(m_pHud);
 }
 
+#include <QDebug>
 /// 设置视点
 void QtViewPort::SetViewPoint(const SceneViewPoint & rViewPoint)
 {
@@ -163,7 +164,8 @@ void QtViewPort::SetViewPoint(const SceneViewPoint & rViewPoint)
                                                        m_rViewPoint.stPos.fY,m_rViewPoint.stPos.fZ));
             viewPoint.setRange(osgEarth::Distance(m_rViewPoint.fDistance,osgEarth::Units::METERS));
             viewPoint.setHeading(osgEarth::Angle(m_rViewPoint.fAzimuth,osgEarth::Units::DEGREES));
-            viewPoint.setPitch(osgEarth::Angle(90.0-m_rViewPoint.fElev,osgEarth::Units::DEGREES));
+            viewPoint.setPitch(osgEarth::Angle(0-m_rViewPoint.fElev,osgEarth::Units::DEGREES));
+            qDebug()<<m_rViewPoint.fElev;
 
             m_p3DEarthManipulator->setViewpoint(viewPoint,3);
         }
@@ -179,9 +181,11 @@ void QtViewPort::SetViewPoint(const SceneViewPoint & rViewPoint)
         }
             break;
         case View_Node:
+        {
             m_pTrackManipulator->setDistance(m_rViewPoint.fDistance);
             m_pTrackManipulator->setHeading(osg::DegreesToRadians(m_rViewPoint.fAzimuth));
             m_pTrackManipulator->setElevation(osg::DegreesToRadians(m_rViewPoint.fElev));
+        }
             break;
         case View_User:
             break;

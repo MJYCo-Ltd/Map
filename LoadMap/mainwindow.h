@@ -15,6 +15,7 @@ class IPoint;
 class IMapLine;
 class IModel;
 class ISceneNode;
+class IMapLayer;
 
 class MainWindow : public QMainWindow
 {
@@ -42,6 +43,9 @@ private slots:
 
     void on_action_6_triggered();
 
+protected:
+    void PlotMap();
+
 private:
     Ui::MainWindow *ui;
     ISceneGraph*   m_pSceneGraph;
@@ -54,6 +58,7 @@ private:
     double dA2;
     double dL3;
     double dA3;
+    IMapLayer* m_pLayer=nullptr;
     IPersonInfo*  m_pPersonInfo=nullptr;
     IPoint*       m_pPoint = nullptr;
     IMapLine*        m_pLine = nullptr;
