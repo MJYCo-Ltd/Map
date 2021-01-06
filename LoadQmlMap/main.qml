@@ -28,12 +28,12 @@ Window
             $app.init()
         }
     }
-    ScenarioManager{
-        id:scenarioManager
-    }
-    AreaPlanManager{
-        id:areaPlanManager
-    }
+    //ScenarioManager{
+    //    id:scenarioManager
+    //}
+    //AreaPlanManager{
+    //    id:areaPlanManager
+    //}
     ProcessSimulationBuild
     {
         id:animationBuild

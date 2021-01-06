@@ -47,11 +47,6 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-    //QString sPath = QCoreApplication::applicationDirPath() + "/Data/Scenarios";
-    //ScenarioManager scenarioManager();
-    //engine.rootContext()->setContextProperty("scenarioManager", &scenarioManager);
-    //AreaPlanManager areaPlanManager();
-    //engine.rootContext()->setContextProperty("areaPlanManager", &areaPlanManager);
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     const QUrl url(QStringLiteral("qrc:/main.qml"));
 #else

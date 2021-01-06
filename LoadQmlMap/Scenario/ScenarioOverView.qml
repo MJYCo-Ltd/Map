@@ -90,10 +90,6 @@ Rectangle
                     y : margin / 2
                     width:parent.width - margin * 2 - rectNewButton.width
                     height:itemHeight - margin
-                    //onScenarioAdded: {
-                    //    gridViewRecent.model = scenarioManager.scenarios()
-                    ////    scenarioManager.addScenario(message)
-                    //}
                 }
             }
         }
@@ -135,11 +131,18 @@ Rectangle
                 height:cellHeight + margin * 2
                 cellWidth: itemWidth
                 cellHeight: itemHeight
-                model: scenarioManager.favorites
+                model: $app.scenarioManager().favorites
                 delegate: ScenarioOverviewItem{
                     favorite:true
                     name: modelData.name
                     imageFilePath: modelData.image
+                }
+                Connections {
+                    target: $app.scenarioManager()
+                    function onFavoriteListChanged() {
+                        gridViewFavorite.model = $app.scenarioManager().favorites
+                        //console.log("onFavoriteListChanged exec")
+                    }
                 }
             }
         }
@@ -181,19 +184,20 @@ Rectangle
                 height:cellHeight + margin * 2
                 cellWidth: itemWidth
                 cellHeight: itemHeight
-                model: scenarioManager.scenarios
+                model: $app.scenarioManager().scenarios
                 delegate: ScenarioOverviewItem{                    
                     favorite:false
                     name: modelData.name
                     imageFilePath: modelData.image
                     color:Qt.rgba(0.1+0.04*(index%20),0.9-0.05*(index%12),0.3+0.06*(index%10),0.9)
                 }
-                //Connections {
-                //    target: scenarioManager
-                //    function onScenarioListChanged() {
-                //        gridViewRecent.model = scenarioManager.scenarios
-                //    }
-                //}
+                Connections {
+                    target: $app.scenarioManager()
+                    function onScenarioListChanged() {
+                        gridViewRecent.model = $app.scenarioManager().scenarios
+                        //console.log("onScenarioListChanged exec")
+                    }
+                }
             }
         }
     }

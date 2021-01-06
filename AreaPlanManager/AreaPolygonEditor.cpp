@@ -114,10 +114,12 @@ void AreaPolygonEditor::createPolygon(AreaPolygon* ap, AreaPlanLayer* layer)
 {
     //qDebug() << "create polygon:";
     QList<QVector3D> vertices = ap->vertices();
-    auto iMapPolygon = dynamic_cast<IMapPolygon*>(_sceneGraph->GetPlot()->CreateSceneNode("IMapPolygon"));
+    auto iMapPolygon = dynamic_cast<IMapPolygon*>(_sceneGraph->GetPlot()->CreateSceneNode("IMapPolygon"));    
     SceneColor color;
-    color.fG = .0f;
-    color.fB = .0f;
+    color.fR = layer->color().red() / 255.0;
+    color.fG = layer->color().green() / 255.0;
+    color.fB = layer->color().blue() / 255.0;
+    color.fA = layer->color().alpha() / 255.0;
     iMapPolygon->SetPolygonColor(color);
 
     IMap* map = _sceneGraph->GetMap();

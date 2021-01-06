@@ -30,8 +30,11 @@ Rectangle{
         //    rectButtonsScenario.visible = true
         //}
         onDoubleClicked: {
-            scenarioManager.setCurrentScenario(name)
-            scenarioManager.load()
+            console.log("$app.scenarioManager().setCurrentScenario(name) exec, name:", name)
+            $app.scenarioManager().setCurrentScenario(name)
+            console.log("$app.scenarioManager().load() exec")
+            $app.scenarioManager().load()
+            console.log("$app.scenarioManager().load() end")
             //welcome.visible = false
         }
     }
@@ -49,7 +52,7 @@ Rectangle{
                 visible: favorite
                 onClicked: {
                     console.log("scenarioManager.removeFavorite : " + name)
-                    scenarioManager.removeFavorite(name)
+                    $app.scenarioManager().removeFavorite(name)
                 }
             }
             Button{
@@ -59,7 +62,7 @@ Rectangle{
                 text: qsTr("addFavorite")
                 visible: !favorite
                 onClicked: {
-                    scenarioManager.addFavorite(name)
+                    $app.scenarioManager().addFavorite(name)
                     console.log("scenarioManager.addFavorite : " + name)
                 }
             }
@@ -72,7 +75,7 @@ Rectangle{
                 onClicked: {
                     // 先提示是否删除
                     console.log("scenarioManager.removeScenario : " + name)
-                    scenarioManager.removeScenario(name)
+                    $app.scenarioManager().removeScenario(name)
                 }
             }
         }

@@ -13,19 +13,19 @@ Rectangle
     property int itemHeight : buttonHeight
     color: "transparent"
 
-    FileDialog{
-        id:fileDlg
-        nameFilters: [ "Image files (*.jpg *.png)", "All files (*)" ]
-        Component.onCompleted: visible = false
-        onAccepted: {
-             console.log("You chose: " + fileDlg.fileUrls)
-             visible = false
-         }
-        onRejected: {
-            console.log("Canceled")
-            visible = false
-        }
-    }
+    //FileDialog{
+    //    id:fileDlg
+    //    nameFilters: [ "Image files (*.jpg *.png)", "All files (*)" ]
+    //    Component.onCompleted: visible = false
+    //    onAccepted: {
+    //         console.log("You chose: " + fileDlg.fileUrls)
+    //         visible = false
+    //     }
+    //    onRejected: {
+    //        console.log("Canceled")
+    //        visible = false
+    //    }
+    //}
     // -- 模型文件 --------------------------------
     Row{
         x:margin
@@ -66,7 +66,7 @@ Rectangle
             font.pointSize: defaultStyle.fontSize
             text: "..."
             onClicked: {
-                fileDlg.visible = true
+                //fileDlg.visible = true
             }
             Rectangle{
                 y:parent.height - 1
@@ -116,7 +116,7 @@ Rectangle
             font.pointSize: defaultStyle.fontSize
             text: "..."
             onClicked: {
-                fileDlg.visible = true
+                //fileDlg.visible = true
             }
             Rectangle{
                 y:parent.height - 1

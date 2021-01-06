@@ -73,7 +73,7 @@ Rectangle
             font.pointSize: defaultStyle.fontSize
             text: "OK"
             onClicked: {
-                var res = scenarioManager.addScenario(scenarioNewNameInput.text)
+                var res = $app.scenarioManager().addScenario(scenarioNewNameInput.text)
                 if(res > 0)
                 {
                     scenarioNewWarning.visible = false

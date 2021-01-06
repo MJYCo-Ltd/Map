@@ -21,6 +21,7 @@
 
 Q_DECLARE_METATYPE(QQmlListProperty<Scenario>)
 class ScenarioItem;
+class ISceneGraph;
 class SCENARIOMANAGER_EXPORT ScenarioManager : public QObject
 {
     Q_OBJECT
@@ -28,13 +29,16 @@ class SCENARIOMANAGER_EXPORT ScenarioManager : public QObject
     Q_PROPERTY(QQmlListProperty<Scenario> favorites READ favorites NOTIFY favoriteListChanged)
 public:
     ScenarioManager(QObject* parent=nullptr);
-    void setDir(QString dirPath);
-    QDir dir();
+    ScenarioManager(const ScenarioManager&);
+    void operator=(const ScenarioManager&);
+    Q_INVOKABLE void setSceneGraph(ISceneGraph*);   // 设置场景图形接口，以实现方案场景定位功能
+    void setDir(QString dirPath);                   // 设置方案目录，并初始化
+    QDir dir() const;
 
-    Scenario* currentScenario();
-    void setCurrentScenario(QString name);
-    QList<Scenario*> scenarioList();
-    QList<Scenario*> favoriteList();
+    Q_INVOKABLE Scenario* currentScenario() const;
+    Q_INVOKABLE void setCurrentScenario(QString name);
+    QList<Scenario*> scenarioList() const;
+    QList<Scenario*> favoriteList() const;
     QQmlListProperty<Scenario> scenarios();
     QQmlListProperty<Scenario> favorites();
     bool contains(QString name);
@@ -51,23 +55,26 @@ public:
     Q_INVOKABLE int addFavorite(QString name);
     Q_INVOKABLE int removeFavorite(QString name);
 
-    void init();
-    void load();
-    void save();
+    Q_INVOKABLE void load();
+    Q_INVOKABLE void save();
     void loadFavorites();
     void saveFavorites();
     void saveAs(QString newName);
 
-    // scenario item
+    QList<ScenarioItem*> itemList() const;
     Q_INVOKABLE void addItem(ScenarioItem*);
     bool contains(ScenarioItem*);
     //void removeScenarioItem(ScenarioItem*);
 
+    ISceneGraph* sceneGraph() const;
+public slots:
+    void locate();
 signals:
     void scenarioListChanged(QQmlListProperty<Scenario>);
     void favoriteListChanged(QQmlListProperty<Scenario>);
 
 protected:
+    void init();
     void clear();
     void clearScenarioList();
     void clearFavoriteList();
@@ -77,5 +84,6 @@ protected:
     QList<Scenario*>        _scenarioList;
     QList<Scenario*>        _favoriteList;
     QList<ScenarioItem*>    _itemList;
+    ISceneGraph*            _sceneGraph;
 };
 

@@ -23,7 +23,7 @@ void AreaPlanManager::setSceneGraph(ISceneGraph* sceneGraph)
 {
     AreaPolygonEditor* editor = AreaPolygonEditor::getInstance();
     editor->setSceneGraph(sceneGraph);
-    connect(editor, SIGNAL(addArea(AreaPolygon)), this, SLOT(onAddArea(AreaPolygon)));
+    connect(editor, SIGNAL(addArea(AreaPolygon*)), this, SLOT(onAddArea(AreaPolygon*)));
 }
 
 void AreaPlanManager::load(QString dirPath)

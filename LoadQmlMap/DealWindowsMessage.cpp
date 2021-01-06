@@ -1,12 +1,12 @@
 #include "DealWindowsMessage.h"
+#include <QDebug>
 
 CDealWindowsMessage::CDealWindowsMessage()
 {
 
 }
 
-#include <QDebug>
 void CDealWindowsMessage::MouseDown(MouseButtonMask, int, int)
 {
-    qDebug()<<"hello Mouse Dow";
+    //qDebug()<<"hello Mouse Dow";
 }
