@@ -3,6 +3,7 @@ QT += core qml
 TEMPLATE = lib
 DEFINES += SCENARIOMANAGER_LIBRARY
 
+SDK_CONFIG *= Satellite OSG
 include(../SoftSDK.pri)
 
 SOURCES += \

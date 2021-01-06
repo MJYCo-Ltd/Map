@@ -1,14 +1,48 @@
 #include "ScenarioManager.h"
 #include "ScenarioItem.h"
+#include <SceneGraph/ISceneGraph.h>
+#include <SceneGraph/IWindow.h>
+#include <SceneGraph/IViewPort.h>
+#include <GisMath/GisMath.h>
 #include <QCoreApplication>
 #include <QTextStream>
+#include <QVector3D>
+#include <QDebug>
 #include <QDir>
 
 ScenarioManager::ScenarioManager(QObject* parent):QObject(parent)
 {
     _currentScenario    = nullptr;
-    setDir(QCoreApplication::applicationDirPath() + "/Data/Scenarios");
-    init();
+    _sceneGraph         = nullptr;
+    //setDir(QCoreApplication::applicationDirPath() + "/Data/Scenarios");
+    //init();
+}
+
+ScenarioManager::ScenarioManager(const ScenarioManager& other)
+{
+    qDebug() << "ScenarioManager::ScenarioManager(const ScenarioManager& other) exec";
+    _dir = other.dir();
+    _currentScenario = other.currentScenario();
+    _scenarioList = other.scenarioList();
+    _favoriteList = other.favoriteList();
+    _itemList = other.itemList();
+    _sceneGraph = other.sceneGraph();
+}
+
+void ScenarioManager::operator=(const ScenarioManager& other)
+{
+    qDebug() << "ScenarioManager::operator=(const ScenarioManager& other) exec";
+    _dir = other.dir();
+    _currentScenario = other.currentScenario();
+    _scenarioList = other.scenarioList();
+    _favoriteList = other.favoriteList();
+    _itemList = other.itemList();
+    _sceneGraph = other.sceneGraph();
+}
+
+void ScenarioManager::setSceneGraph(ISceneGraph* sceneGraph)
+{
+    _sceneGraph = sceneGraph;
 }
 
 void ScenarioManager::init()
@@ -26,7 +60,8 @@ void ScenarioManager::init()
         Scenario* scenario = new Scenario();
         scenario->setScenarioManager(this);
         scenario->setName(subDirName);
-        _scenarioList.append(scenario);
+        _scenarioList.append(scenario);        
+        emit scenarioListChanged(scenarios());
     }
     // 加载收藏列表
     loadFavorites();
@@ -41,14 +76,15 @@ void ScenarioManager::clear()
 void ScenarioManager::setDir(QString dirPath)
 {
     _dir = QDir(dirPath);
+    init();
 }
 
-QDir ScenarioManager::dir()
+QDir ScenarioManager::dir() const
 {
     return _dir;
 }
 
-Scenario* ScenarioManager::currentScenario()
+Scenario* ScenarioManager::currentScenario() const
 {
     return _currentScenario;
 }
@@ -56,7 +92,7 @@ Scenario* ScenarioManager::currentScenario()
 void ScenarioManager::setCurrentScenario(QString name)
 {
     // 没有切换方案
-    if (QString::compare(name, _currentScenario->name()) == 0)
+    if (_currentScenario && QString::compare(name, _currentScenario->name()) == 0)
         return;
     // 方案名不存在
     if (! contains(name))
@@ -81,12 +117,12 @@ Scenario* ScenarioManager::scenario(QString name)
     return nullptr;
 }
 
-QList<Scenario*> ScenarioManager::scenarioList()
+QList<Scenario*> ScenarioManager::scenarioList() const
 {
     return _scenarioList;
 }
 
-QList<Scenario*> ScenarioManager::favoriteList()
+QList<Scenario*> ScenarioManager::favoriteList() const
 {
     return _favoriteList;
 }
@@ -214,9 +250,16 @@ int ScenarioManager::removeFavorite(QString name)
 
 void ScenarioManager::load()
 {
+    qDebug() << "ScenarioManager load : _currentScenario->load ------";
     // 基本信息（如名称、缩略图、描述等）
     if (_currentScenario)
+    {
         _currentScenario->load();
+    }
+
+    qDebug() << "ScenarioManager load : locate ------";
+    // 定位
+    locate();
 
     // 按模块（如演示动画、区域规划等）加载
     foreach (ScenarioItem* one, _itemList)
@@ -249,6 +292,11 @@ void ScenarioManager::saveAs(QString newName)
     }
 }
 
+QList<ScenarioItem*> ScenarioManager::itemList() const
+{
+    return _itemList;
+}
+
 void ScenarioManager::addItem(ScenarioItem* item)
 {
     foreach (ScenarioItem* one, _itemList)
@@ -271,6 +319,29 @@ bool ScenarioManager::contains(ScenarioItem* item)
         }
     }
     return false;
+}
+
+void ScenarioManager::locate()
+{
+    if(currentScenario() == nullptr)
+        return;
+    if(_sceneGraph == nullptr)
+        return;
+    QVector3D loc = currentScenario()->location();
+    IViewPort* vp = _sceneGraph->GetMainWindow()->GetMainViewPoint();
+    SceneViewPoint svp;
+    //double x,y,z;
+    //GisMath::LBH2XYZ(loc.x(), loc.y(), loc.z(), x, y, z);
+    //svp.stPos.fX = x;
+    //svp.stPos.fY = y;
+    //svp.stPos.fZ = z;
+    svp.stPos.fX = loc.x();
+    svp.stPos.fY = loc.y();
+    svp.stPos.fZ = loc.z();
+    svp.fElev = 0.0;
+    //svp.fAzimuth = 89.0;
+    svp.fDistance = 3000;
+    vp->SetViewPoint(svp);
 }
 
 void ScenarioManager::loadFavorites()
@@ -331,4 +402,9 @@ void ScenarioManager::clearScenarioList()
 void ScenarioManager::clearFavoriteList()
 {
     _favoriteList.clear();
+}
+
+ISceneGraph* ScenarioManager::sceneGraph() const
+{
+    return _sceneGraph;
 }

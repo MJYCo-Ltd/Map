@@ -58,7 +58,6 @@ bool compare(QString fp1, QString fp2)
 void testScenarioManager()
 {
     g_mgr.setDir(g_test_dirpath + "/Scenarios");
-    g_mgr.init();
     g_mgr.removeAllScenario();
 
     // 添加方案

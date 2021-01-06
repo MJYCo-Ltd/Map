@@ -11,6 +11,7 @@
 *************************************************/
 
 #include "ScenarioManager_global.h"
+#include <QVector3D>
 #include <QObject>
 #include <QDir>
 
@@ -18,7 +19,6 @@ class ScenarioManager;
 class SCENARIOMANAGER_EXPORT Scenario : public QObject
 {
     //friend ScenarioManager;
-
     Q_OBJECT
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString image READ image WRITE setImage NOTIFY imageChanged)
@@ -32,6 +32,9 @@ public:
     Q_INVOKABLE void setName(QString);
     Q_INVOKABLE QString image();
     Q_INVOKABLE void setImage(QString);
+    // 方案中心位置：经纬高
+    void setLocation(QVector3D);
+    QVector3D location();
 
     void save();
     void load();
@@ -43,5 +46,6 @@ private:
     QDir                _dir;
     QString             _name;
     QString             _image;
+    QVector3D           _location;
     ScenarioManager*    _mgr;
 };
