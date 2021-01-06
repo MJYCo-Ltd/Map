@@ -7,13 +7,9 @@
 #include "../ScenarioManager/Scenario.h"
 #include "../AreaPlanManager/AreaPlanManager.h"
 #include "../AreaPlanManager/AreaPlan.h"
-#include "../ProcessSimulation/Simulation.h"
-#include "../ProcessSimulation/ProcessBuild.h"
-#include "../ProcessSimulation/CommandBuildComponent.h"
 
 static QString g_test_dirpath = "";
 static QTextStream g_test_out;
-static Simulation g_sim;
 static ScenarioManager g_mgr;
 
 bool compare(QString fp1, QString fp2)
@@ -117,60 +113,6 @@ void testScenarioManager()
         g_test_out << one->name() << "\n";
 }
 
-// -- 测试过程模拟类 -------------------------------------------------
-void testProcessSimulation()
-{
-    // 为测试设置缺省值
-    g_sim.setStartDateTime(QDateTime(QDate(2020, 1, 1), QTime(0, 0, 0)));
-    g_sim.setEndDateTime(QDateTime(QDate(2020, 4, 30), QTime(0, 0, 0)));
-    g_sim.setTimeRatio((2 * 24.0 * 60.0 * 60.0) / 1.0);   // 时间比率 2天/秒
-    g_sim.setTimerInterval(100);
-
-    // 测试播放逻辑
-    for (int i = 0; i < 1000; i++)
-    {
-        int r = QRandomGenerator::global()->bounded(5);
-        switch (r)
-        {
-        case 0:
-            g_sim.start();
-            break;
-        case 1:
-            g_sim.pause();
-            break;
-        case 2:
-            g_sim.resume();
-            break;
-        case 3:
-            g_sim.stop();
-            break;
-        case 4:
-            g_sim.pauseOrResume();
-            break;
-        default:
-            break;
-        }
-    }
-    // 测试过程模拟
-    g_sim.stop();
-    ProcessBuild process;
-    for(int i = 0; i < 100; i++)
-    {
-        QString name = "com_" + QString::number(i);
-        QDateTime dt = QDateTime(QDate(2020,1,1),QTime(0,0,0)).addDays(i);
-        int hc = 15 + i%20;
-        double exp = 20 + i%10;
-        CommandBuildComponent* component = new CommandBuildComponent();
-        component->setName(name);
-        component->setDateTime(dt);
-        component->setHeadcount(hc);
-        component->setExpense(exp);
-        process.addComponent(component);
-    }
-    g_sim.addProcess(&process);
-    g_sim.start();
-}
-
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -189,10 +131,6 @@ int main(int argc, char *argv[])
 
     // -- 测试方案管理类 --
     testScenarioManager();
-
-    // -- 测试过程模拟类 --
-    // 定时器无效，此模块测试不成功
-    //testProcessSimulation();
 
     // -- 关闭日志文件 ---------------------------------------------------
     testFile.close();

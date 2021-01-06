@@ -9,11 +9,15 @@ SOURCES += \
     AreaPlan.cpp \
     AreaPlanLayer.cpp \
     AreaPlanManager.cpp \
-    AreaPolygon.cpp
+    AreaPolygon.cpp \
+    AreaPolygonEditor.cpp \
+    AreaPolygonLoader.cpp
 
 HEADERS += \
     AreaPlan.h \
     AreaPlanLayer.h \
     AreaPlanManager_global.h \
     AreaPlanManager.h \
-    AreaPolygon.h
+    AreaPolygon.h \
+    AreaPolygonEditor.h \
+    AreaPolygonLoader.h

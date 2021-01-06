@@ -6,9 +6,7 @@
 * Author:       魏晓亮
 * Version:      1.0
 * Date:         2021/01/05
-* Description:  区域规划图的多边形区域
-*				编辑多边形顶点，在三维地球上绘制图形
-*               支持从Json读取和保存到Json
+* Description:  区域规划图的多边形区域，包含顶点数据
 * History:
 *************************************************/
 #include <QJsonArray>
@@ -16,22 +14,33 @@
 #include <QObject>
 #include <QList>
 
+class IMapPolygon;
 class AreaPolygon : public QObject
 {
     Q_OBJECT
 public:
     explicit AreaPolygon(QObject *parent = nullptr);
-
-    QJsonArray toJson();
-    void fromJson(QJsonArray);
-
+    //AreaPolygon(const AreaPolygon&);
+    //void operator=(const AreaPolygon&);
+    //bool isNull();
+    const QList<QVector3D> vertices() const;
+    void setVertices(const QList<QVector3D>);
+    // 多边形场景图形节点
+    void setIMapPolygon(IMapPolygon*);
+    IMapPolygon* getIMapPolygon();
+    // 创建场景图形
+    //void create();
+    // 删除场景图形
+    //void release();
 signals:
 
 public slots:
-    //addPoint(osg::Vec3d(x,y,z));
 
 private:
-    // YTY 保存多边形节点以获取或添加顶点
+
+private:
+    // 保存多边形的场景图形节点
+    IMapPolygon*           _iMapPolygon;
     QList<QVector3D>       _vertices;
 };
 

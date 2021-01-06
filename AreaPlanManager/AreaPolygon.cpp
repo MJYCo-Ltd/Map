@@ -1,42 +1,54 @@
 #include "AreaPolygon.h"
-#include <QJsonObject>
-#include <QJsonValue>
+#include "AreaPolygonEditor.h"
+#include <Plot/Map/IMapPolygon.h>
 
 AreaPolygon::AreaPolygon(QObject *parent) : QObject(parent)
 {
-
+    _iMapPolygon = nullptr;
 }
-
-QJsonArray AreaPolygon::toJson()
+/*
+AreaPolygon::AreaPolygon(const AreaPolygon& other)
 {
-    QJsonArray arr;
-    // ...
-    for (int i = 0; i < _vertices.count(); i++)
-    {
-        QJsonObject obj;
-        obj.insert("lon", _vertices[i].x());
-        QJsonObject y;
-        obj.insert("lat", _vertices[i].y());
-        QJsonObject z;
-        obj.insert("alt", _vertices[i].z());
-        arr.append(obj);
-    }
-    return arr;
+    setPoints(other.points());
 }
 
-void AreaPolygon::fromJson(QJsonArray arrayPoint)
+void AreaPolygon::operator=(const AreaPolygon& other)
 {
-    for (int j = 0; j < arrayPoint.size(); j++)
-    {
-        QJsonValue value = arrayPoint.at(j);
-        if (value.isObject())
-        {
-            double x = value.toObject().value("lon").toDouble();
-            double y = value.toObject().value("lat").toDouble();
-            double z = value.toObject().value("alt").toDouble();
-            // YTY 此处添加多边形顶点
-            //addPoint(osg::Vec3d(x,y,z));
-            _vertices.append(QVector3D(x,y,z));
-        }
-    }
+    setPoints(other.points());
+}*/
+
+//bool AreaPolygon::isNull()
+//{
+//    return (_vertices.count() > 2);
+//}
+
+const QList<QVector3D> AreaPolygon::vertices() const
+{
+    return _vertices;
 }
+
+void AreaPolygon::setVertices(const QList<QVector3D> list)
+{
+    _vertices = list;
+}
+
+void AreaPolygon::setIMapPolygon(IMapPolygon* p)
+{
+    _iMapPolygon = p;
+}
+
+IMapPolygon* AreaPolygon::getIMapPolygon()
+{
+    return _iMapPolygon;
+}
+/*
+void AreaPolygon::create()
+{
+    AreaPolygonEditor::getInstance()->createPolygon(this);
+}
+
+void AreaPolygon::release()
+{
+    AreaPolygonEditor::getInstance()->deletePolygon(this);
+}
+*/

@@ -117,10 +117,10 @@ void ProcessBuild::addComponent(CommandBuildComponent* cmd)
             setStartDateTime(cmd->dateTime());
         if (endDateTime() < cmd->dateTime())
             setEndDateTime(cmd->dateTime());
-        qDebug() << "==========";
-        qDebug() << "cmd->dateTime() :" << cmd->dateTime();
-        qDebug() << "startDateTime:" << startDateTime();
-        qDebug() << "endDateTime:" << endDateTime();
+        //qDebug() << "==========";
+        //qDebug() << "cmd->dateTime() :" << cmd->dateTime();
+        //qDebug() << "startDateTime:" << startDateTime();
+        //qDebug() << "endDateTime:" << endDateTime();
         for (int i = 0; i < _data.count(); i++)
         {
             if (cmd == _data[i])    // 不重复添加命令

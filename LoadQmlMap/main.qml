@@ -25,6 +25,7 @@ Window
         anchors.fill: parent
         Component.onCompleted:{
             $app.setOsgItem(showOsg)
+            $app.init()
         }
     }
     ScenarioManager{

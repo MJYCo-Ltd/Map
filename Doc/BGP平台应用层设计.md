@@ -227,15 +227,15 @@ signals:
 ```
 *注：清除是为了切换方案，而删除文件是由方案管理直接负责。*
 
-**方案子模块**，通俗讲，是由方案管理模块统一管理的其他模块（如动画管理、区域规划等）；而在代码层面，**方案子模块**是指**方案项（ScenarioItem）**接口的实现（其他模块与方案管理模块间的适配器）。
+**方案子模块**，通俗讲，是由方案管理模块统一管理的其他模块（如动画管理、区域规划等）；而在代码层面，**方案子模块**是指**方案项（ScenarioItem）**接口的实现（可能是模块间的适配器）。
 
 ```mermaid
 classDiagram
 class ScenarioManager
 ScenarioManager : QDir _dir
-ScenarioManager : Scenario* _currentScenario
-ScenarioManager : QList<Scenario*>  _scenarioList
-ScenarioManager : QList<ScenarioItem*>  _itemList
+ScenarioManager : Scenario _currentScenario
+ScenarioManager : QList<Scenario>  _scenarioList
+ScenarioManager : QList<ScenarioItem>  _itemList
 ScenarioManager : setDir(QString)
 ScenarioManager : dir()
 ScenarioManager : currentScenario()
@@ -248,8 +248,8 @@ ScenarioManager : load()
 ScenarioManager : save()
 ScenarioManager : saveAs(QString name)
 ScenarioManager : addItem(ScenarioItem* item)
-ScenarioManager  "1"-- * "*" ScenarioItem
-ScenarioManager  "1"-- * "*" Scenario
+ScenarioManager  "1" o-- "*" ScenarioItem
+ScenarioManager  "1" o-- "*" Scenario
 class Scenario
 Scenario : QDir  _dir
 Scenario : QString  _name
@@ -376,11 +376,9 @@ sequenceDiagram
 
 **内容**在图片动画中体现为图片文件地址；在文本动画中体现为文字内容；镜头动画内容是三维坐标（经度纬度高度），模型动画的内容包括模型名、是否显示等信息（字符串列表形式存储）。此外图片动画中图片还需要提供尺寸数据（左、上、宽、高）。
 
+#### 接口
 
-
-#### 施工进度模拟
-
-施工进度模拟由一系列时间点及相对应的BIM信息描述。**施工数据**采用数据库形式存储，支持EXCEL和JSON格式导入，示例如下：
+**施工进度模拟**由一系列时间点及相对应的BIM信息描述。**施工数据**采用数据库形式存储，支持EXCEL和JSON格式导入，示例如下：
 
 | DT         | Content     | Expense(Unit-10000￥) | Headcount |
 | ---------- | ----------- | --------------------- | --------- |
@@ -391,7 +389,7 @@ sequenceDiagram
 
 **建筑构件**是指构成建筑物各个要素。如果把建筑物看成是一个产品，那建筑构件就是指这个产品当中的零件。建筑物当中的构件主要有：楼（屋）面、墙体、柱子、基础等。
 
-在本系统中，**构件（Component)**指的是三维建筑模型的**子节点（child）**。模拟时，表现为到达指定时间点时，对应的模型构件才会显示。施工数据被封装到**建造构件命令**CommandBuildComponent，它实现了命令接口execute和undo，表示构件的建造和拆除。
+在本系统中，**构件（Component)**指的是三维建筑模型的**子节点（child）**。模拟时，表现为到达指定时间点时，对应的模型构件才会显示。施工数据被封装到**建造构件命令（CommandBuildComponent）**，它实现了命令接口execute和undo，表示构件的建造和拆除。
 
 ```C++
 	void execute();     // 建造，调用模型接口显示构件
@@ -417,50 +415,101 @@ sequenceDiagram
 	virtual void goTo(QDateTime dt) = 0;
 ```
 
-**施工过程（ProcessBuild）**实现了Process接口。要点如下：
+**施工过程（ProcessBuild）**实现了**过程（Process）**接口。要点如下：
 
 1. 模拟前从数据库读取过程数据，并支持从文件导入数据。
+
 2. 按时间序列准备施工数据，以备goTo调用。
+
 3. 记录当前模拟时间进度，以便下次调用goTo时根据时间调整前进或后退。
 
+   
+```mermaid
+classDiagram
+class Command
+Command : execute()*
+Command : undo()*
+class CommandBuildComponent
+CommandBuildComponent : +execute()
+CommandBuildComponent : +undo()
+Command <|.. CommandBuildComponent
+class Process
+class ProcessBuild
+Process <|.. ProcessBuild
+class Simulation
+Simulation : +void setTimeRatio()
+Simulation : +void setStartDateTime()
+Simulation : +void setEndDateTime()
+Simulation : +void start()
+Simulation : +void pause()
+Simulation : +void resume()
+Simulation : +void stop()
+Simulation : +void pauseOrResume()
+Simulation : +void goTo(QDateTime& dt)
+Simulation "1" o-- "*" Process
+```
 ### 区域规划
+
+
 
 #### 接口
 
-**区域规划管理（AreaPlanManager）**、**区域规划（AreaPlan）**、**区域规划图层（AreaPlanLayer)**、**区域AreaPolygon**。
-**区域规划管理**：负责区域规划的统一管理，调用AreaPlan进行新建、编辑、保存、加载等功能。
-**区域规划**：每套区域规划方案，都会给出一系列的图例及对应的若干区域。区域规划类负责所有区域整体的显示和隐藏，还允许用户选择某一特定区域（图层）进行显示或编辑。
+**依赖**：通过以下方法为模块设置三维场景图形接口，以编辑区域（绘制点、线、多边形）。
+
+```C++
+void AreaPlanManager::setSceneGraph(ISceneGraph*);
+```
+
+**区域规划管理**：管理所有区域规划方案的新建、编辑、保存、加载等功能。
+
+**区域规划**：包含若干区域规划图层，负责所有区域整体的显示和隐藏，还允许用户选择某一特定区域（图层）进行显示或编辑。
+
 **区域规划图层**：每个图层对应业务上的一种规划区域（多边形区域AreaPolygon，如农业用地）。他具有名称、图例、颜色等属性，可以控制地图上该类区域的创建、删除、显示和隐藏。
 
-**区域**：即多边形区域AreaPolygon，可以调用三维接口进行多边形的显示和编辑，同时支持从Json读取和保存到Json。
+**区域**：即多边形区域AreaPolygon，可以通过区域编辑器或区域加载器添加区域。
+
+区域编辑器：调用三维接口进行多边形的显示和编辑。
+
+区域加载器：从Json读取和保存到Json。
 
 ```mermaid
 classDiagram
+class IWindowMessageObserver
+class AreaPolygonEditor
+AreaPolygonEditor : +getInstance() AreaPolygonEditor
+AreaPolygonEditor : +void setSceneGraph(ISceneGraph sceneGraph)
+AreaPolygonEditor : +void start()
+AreaPolygonEditor : +void MouseDown(MouseButtonMask, int, int)
+AreaPolygonEditor : +void MouseMove(MouseButtonMask, int, int)
+AreaPolygonEditor : +void addArea(AreaPolygon)
+IWindowMessageObserver <|.. AreaPolygonEditor
 class AreaPolygon
-AreaPolygon : fromJson(Json)
-AreaPolygon : toJson()
 class AreaPlanLayer
-AreaPlanLayer : void setVisible(bool)
+AreaPlanLayer : +void setVisible(bool)
 AreaPlanLayer : QString			_name
 AreaPlanLayer : QIcon			_legend			
 AreaPlanLayer : QColor			_color
-AreaPolygon "*" *-- "1" AreaPlanLayer
+AreaPolygon "*" --o "1" AreaPlanLayer
 class AreaPlan
 AreaPlan : QString               _name
-AreaPlan : QList<AreaPlanLayer*> _layerList
-AreaPlan : AreaPlan(QString name)
-AreaPlan : void setCurrentLayer(QString layerName)
-AreaPlan : void setVisible(QString layerName, bool)
-AreaPlan : void load(QString dirPath)
-AreaPlan : void save()
-AreaPlanLayer "*" *-- "1" AreaPlan
+AreaPlan : QList<AreaPlanLayer> _layerList
+AreaPlan : +AreaPlan(QString name)
+AreaPlan : +void setCurrentLayer(QString layerName)
+AreaPlan : +void setVisible(QString layerName, bool)
+AreaPlan : +void load(QString dirPath)
+AreaPlan : +void save()
+AreaPlanLayer "*" --o "1" AreaPlan
 class AreaPlanManager
-AreaPlanManager : void addItem(AreaPlan*)
-AreaPlanManager : void load(QString dirPath)
-AreaPlanManager : void save()
-AreaPlanManager : QList<AreaPlan*> itemList()
-AreaPlanManager : QList<AreaPlan*> _planList
-AreaPlan "*" *-- "1" AreaPlanManager
+AreaPlanManager : +void addItem(AreaPlan)
+AreaPlanManager : +void load(QString dirPath)
+AreaPlanManager : +void save()
+AreaPlanManager : QList<AreaPlan> planList()
+AreaPlanManager : QList<AreaPlan> _planList
+AreaPlan "*" --o "1" AreaPlanManager
+class AreaPolygonLoader
+AreaPolygonLoader : +getInstance() AreaPolygonLoader
+AreaPolygonLoader : +toJson(AreaPolygon) QJsonArray
+AreaPolygonLoader : +fromJson(QJsonArray) AreaPolygon
 ```
 #### 功能
 

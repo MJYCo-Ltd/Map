@@ -16,26 +16,40 @@
 
 Q_DECLARE_METATYPE(QQmlListProperty<AreaPlan>)
 //class AreaPlan;
+class ISceneGraph;
+class AreaPolygon;
 class AREAPLANMANAGER_EXPORT AreaPlanManager : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QQmlListProperty<AreaPlan> itemList READ itemList NOTIFY itemListChanged)
+    Q_PROPERTY(QQmlListProperty<AreaPlan> planList READ planList NOTIFY planListChanged)
 public:
     AreaPlanManager(QObject* parent = nullptr);
 	~AreaPlanManager();
 
-	void load(QString dirPath);
-	void save();
-    Q_INVOKABLE AreaPlan* item(QString name);
-    QQmlListProperty<AreaPlan> itemList();
+    Q_INVOKABLE void setSceneGraph(ISceneGraph*);
+    Q_INVOKABLE void load(QString dirPath);
+    Q_INVOKABLE void save();
+
+    Q_INVOKABLE AreaPlan* plan(QString name);
+    QQmlListProperty<AreaPlan> planList();
+
+    AreaPlan* currentPlan();
+    void setCurrentPlan(QString planName);
+
+public slots:
+    // 响应区域编辑器，在当前规划方案=>当前图层添加多边形区域
+    void onAddArea(AreaPolygon*);
+
 signals:
-    void itemListChanged();
+    void planListChanged();
+
 private:
-	void addItem(QString planDir);
+    void addPlan(QString planDir);
 	void clear();
 	bool has(QString);
 	bool has(AreaPlan*);
 	bool isPlanDir(QString dirPath);
 private:
     QList<AreaPlan*>		_itemList;
+    AreaPlan*       		_currentPlan;
 };

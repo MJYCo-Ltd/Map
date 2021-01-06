@@ -33,6 +33,9 @@ public:
 
 	void load(QString jsonFilePath);
 	void save(QString jsonFilePath);
+
+    void addAreaPolygon(AreaPolygon*);
+    void removeAreaPlanPolygon(AreaPolygon*);
 signals:
     void nameChanged();
 private:

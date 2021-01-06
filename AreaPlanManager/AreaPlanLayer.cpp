@@ -1,5 +1,7 @@
 #include "AreaPlanLayer.h"
 #include "AreaPolygon.h"
+#include "AreaPolygonLoader.h"
+#include "AreaPolygonEditor.h"
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QJsonObject>
@@ -76,9 +78,8 @@ void AreaPlanLayer::load(QString jsonFilePath)
                     qDebug() << "file:" << jsonFilePath << ", " << debug_point_not_enough << ":point not enough!";
                     continue;
                 }
-                AreaPolygon* area = new AreaPolygon;
-                area->fromJson(arrayPoint);
-                _areaList.append(area);
+                AreaPolygon* ap = AreaPolygonLoader::getInstance()->fromJson(arrayPoint);
+                addAreaPolygon(ap);
             }
         }
 	}
@@ -95,8 +96,9 @@ void AreaPlanLayer::save(QString jsonFilePath)
 	QTextStream in(&file);        
     QJsonArray areaArray;
     for(int i = 0; i < _areaList.count(); i++)
-    {
-        QJsonValue value(_areaList[i]->toJson());
+    {        
+        QJsonArray jsonArray = AreaPolygonLoader::getInstance()->toJson(_areaList[i]);
+        QJsonValue value(jsonArray);
         areaArray.append(value);
     }
 
@@ -105,5 +107,17 @@ void AreaPlanLayer::save(QString jsonFilePath)
 
 	in << document.toJson();
 	file.close();
+}
+
+void AreaPlanLayer::addAreaPolygon(AreaPolygon* ap)
+{
+    AreaPolygonEditor::getInstance()->createPolygon(ap, this);
+    _areaList.append(ap);
+}
+
+void AreaPlanLayer::removeAreaPlanPolygon(AreaPolygon* ap)
+{
+    AreaPolygonEditor::getInstance()->deletePolygon(ap, this);
+    _areaList.removeOne(ap);
 }
 

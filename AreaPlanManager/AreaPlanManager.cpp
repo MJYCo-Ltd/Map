@@ -1,4 +1,5 @@
 #include "AreaPlanManager.h"
+#include "AreaPolygonEditor.h"
 #include "AreaPlan.h"
 #include <QCoreApplication>
 #include <QFileInfo>
@@ -8,7 +9,9 @@
 
 AreaPlanManager::AreaPlanManager(QObject* parent)
 {
-    load(QCoreApplication::applicationDirPath() + "/Data/AreaPlan");
+    _currentPlan = nullptr;
+
+    //load(QCoreApplication::applicationDirPath() + "/Data/AreaPlan");
 }
 
 AreaPlanManager::~AreaPlanManager()
@@ -16,8 +19,16 @@ AreaPlanManager::~AreaPlanManager()
 //	clear();
 }
 
+void AreaPlanManager::setSceneGraph(ISceneGraph* sceneGraph)
+{
+    AreaPolygonEditor* editor = AreaPolygonEditor::getInstance();
+    editor->setSceneGraph(sceneGraph);
+    connect(editor, SIGNAL(addArea(AreaPolygon)), this, SLOT(onAddArea(AreaPolygon)));
+}
+
 void AreaPlanManager::load(QString dirPath)
 {
+    qDebug() << "AreaPlanManager load:" << dirPath;
 	QDir dir(dirPath);
 	QStringList entryList = dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
     foreach (QString str, entryList)
@@ -25,7 +36,7 @@ void AreaPlanManager::load(QString dirPath)
 		QString path = dir.path() + "/" + str;
 		if (isPlanDir(path))
 		{
-			addItem(path);
+            addPlan(path);
 		}
 	}
 }
@@ -38,7 +49,7 @@ void AreaPlanManager::save()
 	}
 }
 
-void AreaPlanManager::addItem(QString planDir)
+void AreaPlanManager::addPlan(QString planDir)
 {
 	QDir dirPlan(planDir);
 	if (!dirPlan.exists())
@@ -70,7 +81,7 @@ void AreaPlanManager::clear()
 
 bool AreaPlanManager::has(QString name)
 {
-	if (nullptr == item(name))
+        if (nullptr == plan(name))
 		return false;
 	else
 		return true;
@@ -87,7 +98,7 @@ bool AreaPlanManager::has(AreaPlan* plan)
 	return res;
 }
 
-AreaPlan* AreaPlanManager::item(QString name)
+AreaPlan* AreaPlanManager::plan(QString name)
 {
     foreach (AreaPlan* one, _itemList)
 	{
@@ -97,13 +108,33 @@ AreaPlan* AreaPlanManager::item(QString name)
 	return nullptr;
 }
 
-QQmlListProperty<AreaPlan> AreaPlanManager::itemList()
+QQmlListProperty<AreaPlan> AreaPlanManager::planList()
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     return QQmlListProperty<AreaPlan>(this, _itemList);
 #else
     return QQmlListProperty<AreaPlan>(this, &_itemList);
 #endif
+}
+
+AreaPlan* AreaPlanManager::currentPlan()
+{
+    return _currentPlan;
+}
+
+void AreaPlanManager::setCurrentPlan(QString name)
+{
+    _currentPlan = plan(name);
+}
+
+void AreaPlanManager::onAddArea(AreaPolygon* ap)
+{
+    if (_currentPlan == nullptr)
+        return;
+    AreaPlanLayer* cl = _currentPlan->currentLayer();
+    if (cl == nullptr)
+        return;
+    cl->addAreaPolygon(ap);
 }
 
 bool AreaPlanManager::isPlanDir(QString dirPath)
