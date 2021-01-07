@@ -21,10 +21,10 @@ class SCENARIOMANAGER_EXPORT ScenarioItem
 public:
     ScenarioItem();
 
-    // 不同模块名称应当不同
-    void setName(const QString name);
+    // -- 模板方法 ------------------------------
+    void setName(const QString name);// 不同模块名称应当不同
     const QString name();
-    // 设置模块使用的文件根目录（目录名同方案名称）
+    // 设置方案目录，即根目录
     bool setScenarioDir(QString);
 
     // create   : 新建方案时调用
@@ -33,11 +33,11 @@ public:
     virtual void clear() = 0;
     // load     : 加载方案时调用
     virtual void load() = 0;
-    // load     : 保存方案时调用
+    // save     : 保存方案时调用
     virtual void save() = 0;
 
 protected:
-    QDir dir();
+    QDir dir(); // 模块目录为scenarioDir/name
 signals:
     void dataChanged();
 
@@ -45,7 +45,6 @@ protected:
     QString                 _name;
     QDir                    _scenarioDir;
     QDir                    _dir;
-    //ScenarioManager*        _mgr;
 };
 
 #endif // SCENARIOITEM_H

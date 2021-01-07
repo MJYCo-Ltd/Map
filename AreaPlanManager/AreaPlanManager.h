@@ -10,6 +10,7 @@
 *************************************************/
 #include "AreaPlanManager_global.h"
 #include "AreaPlan.h"
+#include "../ScenarioManager/ScenarioItem.h"
 #include <QQmlListProperty>
 #include <QObject>
 #include <QList>
@@ -18,7 +19,7 @@ Q_DECLARE_METATYPE(QQmlListProperty<AreaPlan>)
 //class AreaPlan;
 class ISceneGraph;
 class AreaPolygon;
-class AREAPLANMANAGER_EXPORT AreaPlanManager : public QObject
+class AREAPLANMANAGER_EXPORT AreaPlanManager : public QObject, public ScenarioItem
 {
     Q_OBJECT
     Q_PROPERTY(QQmlListProperty<AreaPlan> planList READ planList NOTIFY planListChanged)
@@ -27,8 +28,15 @@ public:
 	~AreaPlanManager();
 
     Q_INVOKABLE void setSceneGraph(ISceneGraph*);
-    Q_INVOKABLE void load(QString dirPath);
-    Q_INVOKABLE void save();
+
+    // create   : 新建方案时调用
+    virtual void create(){}
+    // clear    : 切换方案前清除，以便加载新方案
+    virtual void clear();
+    // load     : 加载方案时调用
+    virtual void load();
+    // save     : 保存方案时调用
+    virtual void save();
 
     Q_INVOKABLE AreaPlan* plan(QString name);
     QQmlListProperty<AreaPlan> planList();
@@ -45,7 +53,7 @@ signals:
 
 private:
     void addPlan(QString planDir);
-	void clear();
+    //void clear();
 	bool has(QString);
 	bool has(AreaPlan*);
 	bool isPlanDir(QString dirPath);

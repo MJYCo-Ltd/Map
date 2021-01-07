@@ -17,7 +17,7 @@ ScenarioManager::ScenarioManager(QObject* parent):QObject(parent)
     //setDir(QCoreApplication::applicationDirPath() + "/Data/Scenarios");
     //init();
 }
-
+/*
 ScenarioManager::ScenarioManager(const ScenarioManager& other)
 {
     qDebug() << "ScenarioManager::ScenarioManager(const ScenarioManager& other) exec";
@@ -39,7 +39,7 @@ void ScenarioManager::operator=(const ScenarioManager& other)
     _itemList = other.itemList();
     _sceneGraph = other.sceneGraph();
 }
-
+*/
 void ScenarioManager::setSceneGraph(ISceneGraph* sceneGraph)
 {
     _sceneGraph = sceneGraph;
@@ -250,20 +250,20 @@ int ScenarioManager::removeFavorite(QString name)
 
 void ScenarioManager::load()
 {
-    qDebug() << "ScenarioManager load : _currentScenario->load ------";
     // 基本信息（如名称、缩略图、描述等）
     if (_currentScenario)
     {
         _currentScenario->load();
     }
 
-    qDebug() << "ScenarioManager load : locate ------";
     // 定位
     locate();
 
     // 按模块（如演示动画、区域规划等）加载
     foreach (ScenarioItem* one, _itemList)
     {
+        one->clear();
+        one->setScenarioDir(_currentScenario->dir().path());
         one->load();
     }
 }
@@ -299,14 +299,9 @@ QList<ScenarioItem*> ScenarioManager::itemList() const
 
 void ScenarioManager::addItem(ScenarioItem* item)
 {
-    foreach (ScenarioItem* one, _itemList)
-    {
-        if (one == item)
-        {
-            _itemList.removeOne(one);
-            return;
-        }
-    }
+    if (contains(item))
+        return;
+    _itemList.append(item);
 }
 
 bool ScenarioManager::contains(ScenarioItem* item)
@@ -330,6 +325,7 @@ void ScenarioManager::locate()
     QVector3D loc = currentScenario()->location();
     IViewPort* vp = _sceneGraph->GetMainWindow()->GetMainViewPoint();
     SceneViewPoint svp;
+    // 无地图时使用xyz，有地图使用经纬高即可
     //double x,y,z;
     //GisMath::LBH2XYZ(loc.x(), loc.y(), loc.z(), x, y, z);
     //svp.stPos.fX = x;
@@ -338,9 +334,9 @@ void ScenarioManager::locate()
     svp.stPos.fX = loc.x();
     svp.stPos.fY = loc.y();
     svp.stPos.fZ = loc.z();
-    svp.fElev = 0.0;
+    svp.fElev = 45.0;
     //svp.fAzimuth = 89.0;
-    svp.fDistance = 3000;
+    svp.fDistance = 4000;
     vp->SetViewPoint(svp);
 }
 
@@ -404,7 +400,7 @@ void ScenarioManager::clearFavoriteList()
     _favoriteList.clear();
 }
 
-ISceneGraph* ScenarioManager::sceneGraph() const
-{
-    return _sceneGraph;
-}
+//ISceneGraph* ScenarioManager::sceneGraph() const
+//{
+//    return _sceneGraph;
+//}

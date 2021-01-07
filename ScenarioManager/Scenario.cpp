@@ -65,7 +65,6 @@ void Scenario::save()
 void Scenario::load()
 {
     QFile file(dir().path() + "/location.json");
-    qDebug() << "Scenario - file open:" << file.fileName();
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         qDebug() << "File open error";

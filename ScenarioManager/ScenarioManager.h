@@ -29,8 +29,8 @@ class SCENARIOMANAGER_EXPORT ScenarioManager : public QObject
     Q_PROPERTY(QQmlListProperty<Scenario> favorites READ favorites NOTIFY favoriteListChanged)
 public:
     ScenarioManager(QObject* parent=nullptr);
-    ScenarioManager(const ScenarioManager&);
-    void operator=(const ScenarioManager&);
+    //ScenarioManager(const ScenarioManager&);
+    //void operator=(const ScenarioManager&);
     Q_INVOKABLE void setSceneGraph(ISceneGraph*);   // 设置场景图形接口，以实现方案场景定位功能
     void setDir(QString dirPath);                   // 设置方案目录，并初始化
     QDir dir() const;
@@ -66,7 +66,7 @@ public:
     bool contains(ScenarioItem*);
     //void removeScenarioItem(ScenarioItem*);
 
-    ISceneGraph* sceneGraph() const;
+    //ISceneGraph* sceneGraph() const;
 public slots:
     void locate();
 signals:
