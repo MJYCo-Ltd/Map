@@ -3,9 +3,9 @@
 /// 更新形状
 void CSceneRadar::UpdateShape()
 {
-    m_pDrawFace->clear();
+    m_pGeometry->removePrimitiveSet(0,m_pGeometry->getNumPrimitiveSets());
+
     m_pDrawSideFace->clear();
-    m_pDrawLine->clear();
 
 
     double azimuthMin=osg::DegreesToRadians(m_dMinAzim);
@@ -49,85 +49,51 @@ void CSceneRadar::UpdateShape()
         }
     }
 
+    for (int i=0;i!=row;++i)
+    {
+        auto pDrawFace = new osg::DrawElementsUShort(GL_TRIANGLE_STRIP);
+        for (int j=0;j!=column;++j)
+        {
+            pDrawFace->push_back(i*column+j);
+            pDrawFace->push_back((i+1)*column+j);
+        }
+
+        m_pGeometry->addPrimitiveSet(pDrawFace);
+    }
+
+
     for (int i=0;i!=row-1;++i)
     {
-        for (int j=0;j!=column-1;++j)
-        {
-            m_pDrawFace->push_back(i*column+j);
-            m_pDrawFace->push_back(i*column+j+1);
-            m_pDrawFace->push_back((i+1)*column+j+1);
-            m_pDrawFace->push_back((i+1)*column+j);
-        }
+        m_pDrawSideFace->push_back(i*column);
+        m_pDrawSideFace->push_back((i+1)*column);
+        m_pDrawSideFace->push_back(m_pVertexArray->size()-1);
+
+        m_pDrawSideFace->push_back((i+2)*column-1);
+        m_pDrawSideFace->push_back((i+1)*column-1);
+        m_pDrawSideFace->push_back(m_pVertexArray->size()-1);
     }
 
-    for(int i=0;i<row;++i)
+
+    for (int i=0;i!=column-1;++i)
     {
-        for (int j=0;j<column-1;++j)
-        {
-            m_pDrawLine->push_back(i*column+j);
-            m_pDrawLine->push_back(i*column+j+1);
-        }
+        m_pDrawSideFace->push_back(i);
+        m_pDrawSideFace->push_back(i+1);
+        m_pDrawSideFace->push_back(m_pVertexArray->size()-1);
 
-        if(0==i || row-1 == i)
-        {
-            for(int j=0;j<column;++j)
-            {
-                m_pDrawLine->push_back(i*column+j);
-                m_pDrawLine->push_back(m_pVertexArray->size()-1);
-            }
-        }
+        m_pDrawSideFace->push_back((row-1)*column+i);
+        m_pDrawSideFace->push_back((row-1)*column+i+1);
+        m_pDrawSideFace->push_back(m_pVertexArray->size()-1);
     }
 
-    for(int i=0;i<row-1;++i)
-    {
-        for(int j=0;j<column;++j)
-        {
-            m_pDrawLine->push_back(i*column+j);
-            m_pDrawLine->push_back((i+1)*column+j);
-        }
-    }
-
-    if ((azimuthMax-azimuthMin)<osg::DegreesToRadians(360.0))
-    {
-        for (int i=0;i!=row-1;++i)
-        {
-            m_pDrawSideFace->push_back(i*column);
-            m_pDrawSideFace->push_back((i+1)*column);
-            m_pDrawSideFace->push_back(m_pVertexArray->size()-1);
-
-            m_pDrawSideFace->push_back((i+2)*column-1);
-            m_pDrawSideFace->push_back((i+1)*column-1);
-            m_pDrawSideFace->push_back(m_pVertexArray->size()-1);
-        }
-    }
-
-    if (elevationMax-elevationMin<osg::DegreesToRadians(180.0))
-    {
-        for (int i=0;i!=column-1;++i)
-        {
-            m_pDrawSideFace->push_back(i);
-            m_pDrawSideFace->push_back(i+1);
-            m_pDrawSideFace->push_back(m_pVertexArray->size()-1);
-
-            m_pDrawSideFace->push_back((row-1)*column+i);
-            m_pDrawSideFace->push_back((row-1)*column+i+1);
-            m_pDrawSideFace->push_back(m_pVertexArray->size()-1);
-        }
-    }
-
-    m_pDrawFace->dirty();
     m_pDrawSideFace->dirty();
-    m_pDrawLine->dirty();
+    m_pGeometry->addPrimitiveSet(m_pDrawSideFace);
 }
 
 /// 创建形状
 void CSceneRadar::CreateShape()
 {
-    m_pDrawFace = new osg::DrawElementsUShort(GL_QUADS);
     m_pDrawSideFace = new osg::DrawElementsUShort(GL_TRIANGLES);
-    m_pDrawLine = new osg::DrawElementsUShort(GL_LINES);
 
-    m_pGeometry->addPrimitiveSet(m_pDrawFace);
     m_pGeometry->addPrimitiveSet(m_pDrawSideFace);
 
 

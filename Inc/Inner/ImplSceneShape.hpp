@@ -23,6 +23,7 @@ public:
         auto pState = m_pGeometry->getOrCreateStateSet();
         /// 开启颜色混合 关闭光照
         pState->setMode(GL_BLEND,osg::StateAttribute::ON);
+        pState->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
         /// 关闭写深度缓存
         osg::Depth* pDepth = new osg::Depth;
         pDepth->setWriteMask(false);
