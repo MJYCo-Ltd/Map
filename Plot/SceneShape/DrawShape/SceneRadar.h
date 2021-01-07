@@ -19,9 +19,7 @@ protected:
      */
     void CreateShape();
 protected:
-    osg::ref_ptr<osg::DrawElementsUShort> m_pDrawFace;
     osg::ref_ptr<osg::DrawElementsUShort> m_pDrawSideFace;
-    osg::ref_ptr<osg::DrawElementsUShort> m_pDrawLine;
 };
 
 #endif // CSCENERADAR_H

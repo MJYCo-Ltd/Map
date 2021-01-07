@@ -222,6 +222,10 @@ void MainWindow::on_action_triggered()
     pSConSensor->SetVAngle(10.f);
     pAttitudeGroup->AddSceneNode(pSConSensor);
     pAttitudeGroup->SetPos(scenePos);
+
+    SceneAttitude attitue;
+    attitue.dPitch = 90;
+    pAttitudeGroup->SetAttitude(attitue);
     pSceneRoot->AddSceneNode(pAttitudeGroup);
 
     /// 绘制雷达波
@@ -231,8 +235,8 @@ void MainWindow::on_action_triggered()
     pAttitudeGroup1->AddSceneNode(pRadarSensor);
     pAttitudeGroup1->SetPos(pPoint2->Pos());
     pRadarSensor->SetDistance(100.);
-//    pRadarSensor->SetAzimuth(0,150);
-//    pRadarSensor->SetElevation(-10,10);
+    pRadarSensor->SetAzimuth(0,150);
+    pRadarSensor->SetElevation(-10,10);
     pRadarSensor->SetColor(color);
     //pRadarSensor->ShowFace(false);
     pSceneRoot->AddSceneNode(pAttitudeGroup1);
@@ -388,7 +392,8 @@ void MainWindow::on_action_triggered()
 
     /// 标绘卫星
     ISatellite* pSatellite= dynamic_cast<ISatellite*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISatellite"));
-    CDate mjBein(2020,3,2,1,0,0,UTC);
+
+    CDate mjBein(2021,1,7,17,29,0);
     Satellite::CSGP4 spg41("1 91001U          20061.66666667 -.00000001  00000-0 -13106-2 0 00008",
                           "2 91001 045.0073 000.0048 0004655 268.5152 091.4846 07.15404217000017");
 
