@@ -7,16 +7,16 @@
 #include <QDir>
 #include <QDebug>
 
-AreaPlanManager::AreaPlanManager(QObject* parent)
+AreaPlanManager::AreaPlanManager(QObject* parent):QObject(parent)
 {
     _currentPlan = nullptr;
-
+    setName("AreaPlan");
     //load(QCoreApplication::applicationDirPath() + "/Data/AreaPlan");
 }
 
 AreaPlanManager::~AreaPlanManager()
 {
-//	clear();
+    clear();
 }
 
 void AreaPlanManager::setSceneGraph(ISceneGraph* sceneGraph)
@@ -26,19 +26,17 @@ void AreaPlanManager::setSceneGraph(ISceneGraph* sceneGraph)
     connect(editor, SIGNAL(addArea(AreaPolygon*)), this, SLOT(onAddArea(AreaPolygon*)));
 }
 
-void AreaPlanManager::load(QString dirPath)
+void AreaPlanManager::load()
 {
-    qDebug() << "AreaPlanManager load:" << dirPath;
-	QDir dir(dirPath);
-	QStringList entryList = dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
+    QStringList entryList = dir().entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
     foreach (QString str, entryList)
-	{
-		QString path = dir.path() + "/" + str;
-		if (isPlanDir(path))
-		{
+    {
+        QString path = dir().path() + "/" + str;
+        if (isPlanDir(path))
+        {
             addPlan(path);
-		}
-	}
+        }
+    }
 }
 
 void AreaPlanManager::save()

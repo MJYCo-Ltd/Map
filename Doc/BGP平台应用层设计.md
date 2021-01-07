@@ -4,9 +4,8 @@
 | ------ | -------- | ---------- |
 | 魏晓亮 | v0.0.0.1 | 2020/08/31 |
 | 魏晓亮 | v0.0.0.2 | 2020/12/16 |
-| 魏晓亮 | v0.0.0.3 | 2020/12/19 |
 | 魏晓亮 | v0.0.0.4 | 2020/12/25 |
-|        |          |            |
+| 魏晓亮 | v0.0.0.6 | 2021/01/07 |
 
 ## 目录
 
@@ -17,7 +16,7 @@
 
 系统应用层包含方案管理、模型管理、动画管理、区域规划、路径规划、专题数据、信息统计、量算分析等模块。
 
-用户界面包含欢迎页（方案、教程、示例）、编辑页（动画、区域、路径）、演示页（演示模拟过程、动画）、信息页（统计图表）、设置页（专题数据、日期设置、界面选项）。
+用户界面包含欢迎页（方案、教程、示例）、编辑页（动画、区域、路径）、演示页（演示模拟过程、动画）、信息页（统计图表）、设置页（专题数据、日期设置、界面选项）等主要页面。
 
 ## 界面
 
@@ -62,7 +61,7 @@ WelcomPage(欢迎页)-->|按下示例标签|ExamplePage(示例标签页);
 
 ![welcome_scenario](../Image/Axure/welcome_scenario.png)
 
-当鼠标在方案列表项悬停时，将方案缩略图切换为显示方案文字描述，同时显示删除按钮、添加/移除收藏按钮。
+~~当鼠标在方案列表项悬停时，将方案缩略图切换为显示方案文字描述，同时显示删除按钮、添加/移除收藏按钮。~~
 
 **新建方案**
 
@@ -174,6 +173,14 @@ PlayPage(演示页)-->|拖动时间滑块|Skip(跳转到指定时间);
 用户可以切换GIS专题数据（人口分布、高程数据等等）、设置当前时间（可观察到光照效果变化）等。
 
 ## 模块
+
+### 场景图形
+
+几乎所有模块都需要使用场景图形。所以各模块应当实现以下接口：
+
+```C++
+	void setSceneGraph(ISceneGraph*);
+```
 
 ### 方案管理
 
@@ -454,23 +461,34 @@ Simulation "1" o-- "*" Process
 
 #### 接口
 
-**依赖**：通过以下方法为模块设置三维场景图形接口，以编辑区域（绘制点、线、多边形）。
+**区域规划管理（AreaPlanManager）**：管理所有区域规划方案的新建、编辑、保存、加载等功能。
+
+通过以下方法为区域规划模块设置三维场景图形接口，以编辑区域（绘制点、线、多边形）。
 
 ```C++
 void AreaPlanManager::setSceneGraph(ISceneGraph*);
 ```
+通过以下方法为区域规划管理实现了**方案项（ScenarioItem）**接口，由方案管理模块统一负责根目录、加载、保存等。
 
-**区域规划管理**：管理所有区域规划方案的新建、编辑、保存、加载等功能。
+```C++
+    // create   : 新建方案时调用
+    virtual void create(){}
+    // clear    : 切换方案前清除，以便加载新方案
+    virtual void clear();
+    // load     : 加载方案时调用
+    virtual void load();
+    // save     : 保存方案时调用
+    virtual void save();
+```
+**区域规划（AreaPlan）**：或称区域规划方案，包含若干区域规划图层，负责所有区域整体的显示和隐藏，还允许用户选择某一特定图层进行显示或编辑。
 
-**区域规划**：包含若干区域规划图层，负责所有区域整体的显示和隐藏，还允许用户选择某一特定区域（图层）进行显示或编辑。
+**区域规划图层（AreaPlanLayer)**：每个图层对应业务上的一种**区域（AreaPolygon）**类型（如农业用地）。具有名称、图例、颜色等属性，可以控制地图上该类区域显示和隐藏，通过调用**区域编辑器**和**区域加载器**进行区域的创建和删除。
 
-**区域规划图层**：每个图层对应业务上的一种规划区域（多边形区域AreaPolygon，如农业用地）。他具有名称、图例、颜色等属性，可以控制地图上该类区域的创建、删除、显示和隐藏。
+**区域(AreaPolygon)**：即多边形区域，可以通过**区域编辑器**或**区域加载器**添加区域。
 
-**区域**：即多边形区域AreaPolygon，可以通过区域编辑器或区域加载器添加区域。
+**区域编辑器(AreaPolygonEditor)**：调用三维接口进行多边形的创建和编辑。
 
-区域编辑器：调用三维接口进行多边形的显示和编辑。
-
-区域加载器：从Json读取和保存到Json。
+**区域加载器(AreaPolygonLoader)**：从Json读取多边形数据和将数据保存到Json。
 
 ```mermaid
 classDiagram
@@ -579,35 +597,20 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
+    ScenairoManager->>AreaPlanManager: clear()
+    ScenairoManager->>AreaPlanManager: setScenarioDir(dirPath)
     ScenairoManager->>AreaPlanManager: load()
-    AreaPlanManager->>AreaPlanManager: load(dirPath)
     loop plan
     	AreaPlanManager->>AreaPlan: load()
         Note right of AreaPlan: load plan name etc.
     	loop layer
         	AreaPlan->>AreaPlanLayer: load(filePath)
-    		loop pointArray
-        		AreaPlanLayer->>AreaPlanLayer: createFeatureNode()
-    			loop point
-        		AreaPlanLayer->>AreaPlanLayer: addPoint(point)
-        		end
+    		loop arrayPoint
+        		AreaPlanLayer->>AreaPolygonLoader: fromJson(arrayPoint)
         	end
     	end
     end
 ```
-
-```mermaid
-sequenceDiagram
-    ScenarioManager->>ScenarioManager: setCurrentScenario(name)  
-    	Note right of ScenarioManager: * for each scenario item
-    ScenarioManager->>AreaPlanManager: setScenarioDir()   
-    ScenarioManager->>AreaPlanManager: load()       
-    loop plan    
-    	AreaPlanManager->>AreaPlan: load() 
-    end   
-```
-
-
 
 **查看**
 

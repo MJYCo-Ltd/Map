@@ -21,3 +21,9 @@ HEADERS += \
     AreaPolygon.h \
     AreaPolygonEditor.h \
     AreaPolygonLoader.h
+
+CONFIG (debug, debug|release){
+    LIBS *= -lScenarioManagerd
+}else{
+    LIBS *= -lScenarioManager
+}

@@ -47,7 +47,8 @@ void QAppGlobal::init()
     m_pScenarioManager->setDir(QCoreApplication::applicationDirPath() + "/Data/Scenarios");
     if (m_pScenarioManager->scenarioList().count() == 0)
         qDebug() << "NO SCENARIO!";
-    m_pAreaPlanManager->load(QGuiApplication::applicationDirPath() + "/Data/AreaPlan");
+    m_pScenarioManager->addItem(m_pAreaPlanManager);
+    //m_pAreaPlanManager->load(QGuiApplication::applicationDirPath() + "/Data/AreaPlan");
 }
 
 Q_INVOKABLE ScenarioManager* QAppGlobal::scenarioManager()
