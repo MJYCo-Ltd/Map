@@ -25,7 +25,7 @@ public:
     const float& PointSize()const{return(m_fPointSize);}
 
     /**
-     * @brief 设置点的大小
+     * @brief 设置点的颜色
      */
     void SetPointColor(const SceneColor& rColor)JUDGE_EQUAL_CALL_FUNCTION(rColor,m_stPointColor,ColorChanged)
     const SceneColor& PointColor() const{return(m_stPointColor);}

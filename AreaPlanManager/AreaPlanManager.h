@@ -42,7 +42,9 @@ public:
     QQmlListProperty<AreaPlan> planList();
 
     AreaPlan* currentPlan();
-    void setCurrentPlan(QString planName);
+    Q_INVOKABLE void setCurrentPlan(QString planName);
+    Q_INVOKABLE void setCurrentLayer(QString layerName);
+    Q_INVOKABLE void startEdit();
 
 public slots:
     // 响应区域编辑器，在当前规划方案=>当前图层添加多边形区域

@@ -30,12 +30,14 @@ Rectangle{
         //    rectButtonsScenario.visible = true
         //}
         onDoubleClicked: {
-            console.log("$app.scenarioManager().setCurrentScenario(name) exec, name:", name)
+            //console.log("$app.scenarioManager().setCurrentScenario(name) exec, name:", name)
             $app.scenarioManager().setCurrentScenario(name)
-            console.log("$app.scenarioManager().load() exec")
+            //console.log("$app.scenarioManager().load() exec")
             $app.scenarioManager().load()
-            console.log("$app.scenarioManager().load() end")
+            //console.log("$app.scenarioManager().load() end")
             //welcome.visible = false
+            welcome.visible = false
+            $app.areaPlanManager().startEdit()
         }
     }
     Rectangle{
@@ -51,7 +53,7 @@ Rectangle{
                 text: qsTr("removeFavorite")
                 visible: favorite
                 onClicked: {
-                    console.log("scenarioManager.removeFavorite : " + name)
+                    //console.log("scenarioManager.removeFavorite : " + name)
                     $app.scenarioManager().removeFavorite(name)
                 }
             }
@@ -63,7 +65,7 @@ Rectangle{
                 visible: !favorite
                 onClicked: {
                     $app.scenarioManager().addFavorite(name)
-                    console.log("scenarioManager.addFavorite : " + name)
+                    //console.log("scenarioManager.addFavorite : " + name)
                 }
             }
             Button{
@@ -74,7 +76,7 @@ Rectangle{
                 visible: true
                 onClicked: {
                     // 先提示是否删除
-                    console.log("scenarioManager.removeScenario : " + name)
+                    //console.log("scenarioManager.removeScenario : " + name)
                     $app.scenarioManager().removeScenario(name)
                 }
             }

@@ -36,6 +36,7 @@ public:
 
     Q_INVOKABLE void init();
     Q_INVOKABLE ScenarioManager* scenarioManager();
+    Q_INVOKABLE AreaPlanManager* areaPlanManager();
 //signals:
 //    void scenarioManagerChanged();
 private:

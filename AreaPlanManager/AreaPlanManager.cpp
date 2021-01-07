@@ -125,6 +125,18 @@ void AreaPlanManager::setCurrentPlan(QString name)
     _currentPlan = plan(name);
 }
 
+void AreaPlanManager::setCurrentLayer(QString layerName)
+{
+    if (currentPlan() == nullptr)
+        return;
+    currentPlan()->setCurrentLayer(layerName);
+}
+
+void AreaPlanManager::startEdit()
+{
+    AreaPolygonEditor::getInstance()->start();
+}
+
 void AreaPlanManager::onAddArea(AreaPolygon* ap)
 {
     if (_currentPlan == nullptr)

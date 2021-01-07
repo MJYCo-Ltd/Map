@@ -51,8 +51,14 @@ void QAppGlobal::init()
     //m_pAreaPlanManager->load(QGuiApplication::applicationDirPath() + "/Data/AreaPlan");
 }
 
-Q_INVOKABLE ScenarioManager* QAppGlobal::scenarioManager()
+ScenarioManager* QAppGlobal::scenarioManager()
 {
-    qDebug() << "QAppGlobal::scenarioManager() :" << m_pScenarioManager;
+    //qDebug() << "QAppGlobal::scenarioManager() :" << m_pScenarioManager;
     return m_pScenarioManager;
+}
+
+AreaPlanManager* QAppGlobal::areaPlanManager()
+{
+    qDebug() << "QAppGlobal::areaPlanManager() :" << m_pAreaPlanManager;
+    return m_pAreaPlanManager;
 }

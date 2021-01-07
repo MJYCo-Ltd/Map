@@ -14,6 +14,7 @@ AreaPolygonEditor::AreaPolygonEditor() : QObject()
 void AreaPolygonEditor::setSceneGraph(ISceneGraph* sg)
 {
     _sceneGraph = sg;
+    _sceneGraph->GetMainWindow()->SubMessage(this);
 }
 
 //ISceneGraph* AreaPolygonEditor::SceneGraph()
@@ -66,23 +67,33 @@ bool AreaPolygonEditor::isEnable()
     return _enable;
 }
 
-void AreaPolygonEditor::MouseDown(MouseButtonMask, int, int)
+void AreaPolygonEditor::MouseDown(MouseButtonMask mask, int x, int y)
 {
+    qDebug() << "AreaPolygonEditor::MouseDown!";
     if (!_enable)
         return;
-    /*
-    /// 绘制点
-    auto m_pPoint = dynamic_cast<IMapPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPoint"));
-    pos.fLon = 121;
-    pos.fLat = 25;
-    pos.fHeight = 0;
-    m_pPoint->SetGeoPos(pos);
-    //SceneColor color;
-    //color.fG = .0f;
-    //color.fB = .0f;
-    //m_pPoint->SetPointColor(color);
-    pLayer->AddSceneNode(m_pPoint);
-    */
+    if (mask == LEFT_MOUSE_BUTTON)
+    {
+        // 在temp图层 绘制点
+        MapGeoPos pos;
+        _sceneGraph->GetMap()->ConvertCoord(x, y, pos, 0);
+        qDebug() << "pos:" << pos.fLon << "," << pos.fLat << "," << pos.fHeight;
+        auto point = dynamic_cast<IMapPoint*>(_sceneGraph->GetPlot()->CreateSceneNode("IMapPoint"));
+        point->SetGeoPos(pos);
+        SceneColor color;
+        color.fR = .8f;
+        color.fG = .2f;
+        color.fB = .1f;
+        point->SetPointColor(color);
+        point->SetPointSize(20.0);
+        IMapLayer* layer = _sceneGraph->GetMap()->CreateLayer("temp");
+        layer->AddSceneNode(point);
+    }
+    else if (mask == RIGHT_MOUSE_BUTTON)
+    {
+        IMapLayer* layer = _sceneGraph->GetMap()->CreateLayer("temp");
+        layer->Clear();
+    }
 }
 
 void AreaPolygonEditor::MouseMove(MouseButtonMask, int, int)

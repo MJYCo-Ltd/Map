@@ -38,6 +38,7 @@ public:
     // 设置场景接口(必须)
     void setSceneGraph(ISceneGraph*);
     //ISceneGraph* sceneGraph();
+    void setLayer(AreaPlanLayer*);
 
     // 开始编辑：接收鼠标事件，直到点击鼠标右键完成编辑
     void start();
@@ -65,7 +66,6 @@ private:
     // 编辑缓存
     QList<IMapPoint*>   _points;
     QList<IMapLine*>    _lines;
-    IMapPolygon*        _polygon;
     IMapLayer*          _layer;
 };
 
