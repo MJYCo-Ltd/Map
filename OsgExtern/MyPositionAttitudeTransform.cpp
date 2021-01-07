@@ -41,8 +41,8 @@ bool CMyPositionAttitudeTransform::computeLocalToWorldMatrix(Matrix& matrix,Node
 
 bool CMyPositionAttitudeTransform::computeWorldToLocalMatrix(Matrix& matrix,NodeVisitor*) const
 {
-    if (_scale.x() == 0.0 || _scale.y() == 0.0 || _scale.z() == 0.0)
-        return false;
+//    if (_scale.x() == 0.0 || _scale.y() == 0.0 || _scale.z() == 0.0)
+//        return false;
 
     if (_referenceFrame==RELATIVE_RF)
     {

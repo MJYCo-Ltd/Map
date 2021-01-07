@@ -52,7 +52,7 @@ void CMapPoint::PosChanged()
 
     /// 重新构建futureNode
     m_pFeatureNode->dirty();
-    NodeChanged();
+    ImplMapSceneNode<IMapPoint>::NodeChanged();
 }
 
 /// 初始化样式

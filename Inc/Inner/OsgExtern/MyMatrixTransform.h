@@ -8,10 +8,16 @@ class OSGEXTERNSHARED_EXPORT CMyMatrixTransform:public osg::MatrixTransform
 public:
     CMyMatrixTransform();
 
+    /**
+     * @brief 设置姿态矩阵
+     * @param rMatrix
+     */
     void SetMatrix(const Math::CMatrix& rMatrix);
 
+    /**
+     * @brief 重写虚函数
+     */
     virtual bool computeLocalToWorldMatrix(osg::Matrix& matrix,osg::NodeVisitor*) const;
-
     virtual bool computeWorldToLocalMatrix(osg::Matrix& matrix, osg::NodeVisitor*nv) const;
 };
 

@@ -33,11 +33,11 @@ void CSceneRadar::UpdateShape()
 
     osg::Vec3 axis(0,1,0);
 
-    for (int i=0;i!=row;++i)
+    for (int i=0;i<row;++i)
     {
         float curElev=std::min(i*angleSegmentMax+elevationMin,elevationMax);
 
-        for (int j=0;j!=column;++j)
+        for (int j=0;j<column;++j)
         {
             float curAzimuth=std::min(j*angleSegmentMax+azimuthMin,azimuthMax);
 
@@ -49,10 +49,10 @@ void CSceneRadar::UpdateShape()
         }
     }
 
-    for (int i=0;i!=row;++i)
+    for (int i=row-2;i>-1;--i)
     {
         auto pDrawFace = new osg::DrawElementsUShort(GL_TRIANGLE_STRIP);
-        for (int j=0;j!=column;++j)
+        for (int j=0;j<column;++j)
         {
             pDrawFace->push_back(i*column+j);
             pDrawFace->push_back((i+1)*column+j);
@@ -62,7 +62,7 @@ void CSceneRadar::UpdateShape()
     }
 
 
-    for (int i=0;i!=row-1;++i)
+    for (int i=row-2;i>-1;--i)
     {
         m_pDrawSideFace->push_back(i*column);
         m_pDrawSideFace->push_back((i+1)*column);
@@ -74,7 +74,7 @@ void CSceneRadar::UpdateShape()
     }
 
 
-    for (int i=0;i!=column-1;++i)
+    for (int i=column-2;i>-1;--i)
     {
         m_pDrawSideFace->push_back(i);
         m_pDrawSideFace->push_back(i+1);
@@ -94,7 +94,7 @@ void CSceneRadar::CreateShape()
 {
     m_pDrawSideFace = new osg::DrawElementsUShort(GL_TRIANGLES);
 
-    m_pGeometry->addPrimitiveSet(m_pDrawSideFace);
+//    m_pGeometry->addPrimitiveSet(m_pDrawSideFace);
 
 
     UpdateShape();

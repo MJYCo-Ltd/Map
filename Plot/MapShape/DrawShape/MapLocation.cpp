@@ -52,6 +52,33 @@ void CMapLocation::UpdateMapNode(osgEarth::MapNode *pMapNode)
     }
 }
 
+/// 更新
+void CMapLocation::UpdateNode()
+{
+    if (m_pMapSrs.valid() && !m_pMapSrs->isEquivalentTo(m_pGeoPoint.getSRS()))
+    {
+        osgEarth::GeoPoint p = m_pGeoPoint.transform(m_pMapSrs.get());
+
+        /// 如果有高程
+        if(m_pTerrain.valid())
+        {
+            p.makeAbsolute(m_pTerrain.get());
+        }
+
+        osg::Matrixd local2world;
+        p.createLocalToWorld( local2world );
+        m_pGeoTransform->setMatrix(local2world);
+    }
+    else
+    {
+        osg::Matrixd local2world;
+        m_pGeoPoint.createLocalToWorld(local2world );
+        m_pGeoTransform->setMatrix(local2world);
+    }
+
+    ImplMapSceneNode<IMapLocation>::UpdateNode();
+}
+
 /// 初始化节点
 void CMapLocation::InitNode()
 {
@@ -78,24 +105,5 @@ void CMapLocation::PosChanged()
         m_pGeoPoint.z() = m_stGeoPos.fHeight;
     }
 
-    if (m_pMapSrs.valid() && !m_pMapSrs->isEquivalentTo(m_pGeoPoint.getSRS()))
-    {
-        osgEarth::GeoPoint p = m_pGeoPoint.transform(m_pMapSrs.get());
-
-        /// 如果有高程
-        if(m_pTerrain.valid())
-        {
-            p.makeAbsolute(m_pTerrain.get());
-        }
-
-        osg::Matrixd local2world;
-        p.createLocalToWorld( local2world );
-        m_pGeoTransform->setMatrix(local2world);
-    }
-    else
-    {
-        osg::Matrixd local2world;
-        m_pGeoPoint.createLocalToWorld(local2world );
-        m_pGeoTransform->setMatrix(local2world);
-    }
+    ImplMapSceneNode<IMapLocation>::NodeChanged();
 }

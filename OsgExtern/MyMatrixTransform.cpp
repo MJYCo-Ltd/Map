@@ -2,7 +2,6 @@
 
 CMyMatrixTransform::CMyMatrixTransform()
 {
-
 }
 
 void CMyMatrixTransform::SetMatrix(const Math::CMatrix &rMatrix)
