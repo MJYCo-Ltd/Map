@@ -10,11 +10,11 @@ AreaPolygonEditor::AreaPolygonEditor() : QObject()
     _line               = nullptr;
     _polygon            = nullptr;
 
-    _pointColor.fR      = .8f;
-    _pointColor.fG      = .15f;
-    _pointColor.fB      = .15f;
+    _pointColor.fR      = .1f;
+    _pointColor.fG      = .8f;
+    _pointColor.fB      = .1f;
     _lineColor.fR       = .9f;
-    _lineColor.fG       = .85f;
+    _lineColor.fG       = .0f;
     _lineColor.fB       = .2f;
     _polygonColor.fR    = .9f;
     _polygonColor.fG    = .85f;
@@ -91,8 +91,10 @@ void AreaPolygonEditor::MouseDown(MouseButtonMask mask, int x, int y)
     {
         // 在temp图层绘制点
         MapGeoPos pos;
-        _sceneGraph->GetMap()->ConvertCoord(x, y, pos, 0);
-        addPoint(pos);
+        if(_sceneGraph->GetMap()->ConvertCoord(x, y, pos, 0))
+        {
+            addPoint(pos);
+        }
     }
     else if (mask == RIGHT_MOUSE_BUTTON)
     {
@@ -120,8 +122,10 @@ void AreaPolygonEditor::MouseMove(MouseButtonMask, int x, int y)
     if (!_enable)
         return;
     MapGeoPos pos;
-    _sceneGraph->GetMap()->ConvertCoord(x, y, pos, 0);
-    updatePoint(pos);
+    if(_sceneGraph->GetMap()->ConvertCoord(x, y, pos, 0))
+    {
+        updatePoint(pos);
+    }
 }
 
 void AreaPolygonEditor::KeyDown(char key)
@@ -162,12 +166,12 @@ void AreaPolygonEditor::addPoint(MapGeoPos pos)
     {
         //qDebug() << "_line->AddPoint(0)";
         _polygon->AddPoint(0, pos);
-        _polygon->AddPoint(1, pos);    // 第二个点用于编辑
+//        _polygon->AddPoint(1, pos);    // 第二个点用于编辑
     }
-    else if (_polygon->GetPointCount() > 1)    // 插入到倒数第二位置（末尾的点MouseMove编辑用）
+    else if (_polygon->GetPointCount() > 0)    // 插入到倒数第二位置（末尾的点MouseMove编辑用）
     {
         //qDebug() << QString("_line->AddPoint(%1)").arg(_polygon->GetPointCount() - 1);
-        _polygon->AddPoint(_polygon->GetPointCount() - 1, pos);
+        _polygon->AddPoint(_polygon->GetPointCount(), pos);
     }
     // 绘制线
     if (_line == nullptr)
@@ -182,12 +186,12 @@ void AreaPolygonEditor::addPoint(MapGeoPos pos)
     {
         //qDebug() << "_line->AddPoint(0)";
         _line->AddPoint(0, pos);
-        _line->AddPoint(1, pos);    // 第二个点用于编辑
+//        _line->AddPoint(1, pos);    // 第二个点用于编辑
     }
-    else if (_line->GetPointCount() > 1)    // 插入到倒数第二位置（末尾的点MouseMove编辑用）
+    else if (_line->GetPointCount() > 0)    // 插入到倒数第二位置（末尾的点MouseMove编辑用）
     {
         //qDebug() << QString("_line->AddPoint(%1)").arg(_line->GetPointCount() - 1);
-        _line->AddPoint(_line->GetPointCount() - 1, pos);
+        _line->AddPoint(_line->GetPointCount(), pos);
     }
 }
 
