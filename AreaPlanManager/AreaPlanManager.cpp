@@ -133,7 +133,19 @@ void AreaPlanManager::setCurrentLayer(QString layerName)
 }
 
 void AreaPlanManager::startEdit()
-{
+{    
+    // 完成区域编辑界面QML后解开此注释
+    /*
+    AreaPlanLayer* cl = _currentPlan->currentLayer();
+    if (cl == nullptr)
+        return;
+    SceneColor c;
+    c.fR = cl->color().red() / 255.0;
+    c.fG = cl->color().green() / 255.0;
+    c.fB = cl->color().blue() / 255.0;
+    c.fA = cl->color().alpha() / 255.0;
+    AreaPolygonEditor::getInstance()->setColor(c);
+    */
     AreaPolygonEditor::getInstance()->start();
 }
 

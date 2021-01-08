@@ -7,7 +7,18 @@ AreaPolygonEditor* AreaPolygonEditor::_self = nullptr;
 
 AreaPolygonEditor::AreaPolygonEditor() : QObject()
 {
+    _line               = nullptr;
+    _polygon            = nullptr;
 
+    _pointColor.fR      = .8f;
+    _pointColor.fG      = .15f;
+    _pointColor.fB      = .15f;
+    _lineColor.fR       = .9f;
+    _lineColor.fG       = .85f;
+    _lineColor.fB       = .2f;
+    _polygonColor.fR    = .9f;
+    _polygonColor.fG    = .85f;
+    _polygonColor.fB    = .2f;
 }
 
 // 设置场景
@@ -15,12 +26,19 @@ void AreaPolygonEditor::setSceneGraph(ISceneGraph* sg)
 {
     _sceneGraph = sg;
     _sceneGraph->GetMainWindow()->SubMessage(this);
+
+    _layer = _sceneGraph->GetMap()->CreateLayer("temp");
 }
 
 //ISceneGraph* AreaPolygonEditor::SceneGraph()
 //{
 //    return _sceneGraph;
 //}
+
+void AreaPolygonEditor::setColor(const SceneColor& c)
+{
+    _polygonColor = c;
+}
 
 void AreaPolygonEditor::start()
 {
@@ -49,12 +67,10 @@ void AreaPolygonEditor::stop()
 
 void AreaPolygonEditor::clear()
 {
-    // 删除点
-    // YTY ...
+    _layer->Clear();
     _points.clear();
-    // 删除线
-    // YTY ...
-    _lines.clear();
+    _line = nullptr;
+    _polygon = nullptr;
 }
 
 void AreaPolygonEditor::setEnable(bool e)
@@ -69,56 +85,131 @@ bool AreaPolygonEditor::isEnable()
 
 void AreaPolygonEditor::MouseDown(MouseButtonMask mask, int x, int y)
 {
-    qDebug() << "AreaPolygonEditor::MouseDown!";
     if (!_enable)
         return;
     if (mask == LEFT_MOUSE_BUTTON)
     {
-        // 在temp图层 绘制点
+        // 在temp图层绘制点
         MapGeoPos pos;
         _sceneGraph->GetMap()->ConvertCoord(x, y, pos, 0);
-        qDebug() << "pos:" << pos.fLon << "," << pos.fLat << "," << pos.fHeight;
-        auto point = dynamic_cast<IMapPoint*>(_sceneGraph->GetPlot()->CreateSceneNode("IMapPoint"));
-        point->SetGeoPos(pos);
-        SceneColor color;
-        color.fR = .8f;
-        color.fG = .2f;
-        color.fB = .1f;
-        point->SetPointColor(color);
-        point->SetPointSize(20.0);
-        IMapLayer* layer = _sceneGraph->GetMap()->CreateLayer("temp");
-        layer->AddSceneNode(point);
+        addPoint(pos);
     }
     else if (mask == RIGHT_MOUSE_BUTTON)
     {
-        IMapLayer* layer = _sceneGraph->GetMap()->CreateLayer("temp");
-        layer->Clear();
+        // -- 使用缓存点数据，创建多边形 --------------------------
+        IMapPolygon* polygon = dynamic_cast<IMapPolygon*>(_sceneGraph->GetPlot()->CreateSceneNode("IMapPolygon"));
+        AreaPolygon* ap = new AreaPolygon;
+        ap->setIMapPolygon(polygon);
+        QList<QVector3D> list;
+        for(int i = 0; i < _points.count(); i++)
+        {
+            MapGeoPos pos = _points[i]->GeoPos();
+            list.append(QVector3D(pos.fLon, pos.fLat, pos.fHeight));
+        }
+        ap->setVertices(list);
+        emit addArea(ap);
+        // -- 清除缓存 ----------------------------------------
+        clear();
+        //----------------------------------------------------
+        //setEnable(false);
     }
 }
 
-void AreaPolygonEditor::MouseMove(MouseButtonMask, int, int)
+void AreaPolygonEditor::MouseMove(MouseButtonMask, int x, int y)
 {
     if (!_enable)
         return;
-    if (_lines.count() == 0)
-        return;
-    // 更新最后一条线
-    IMapLine* _line = _lines[_lines.count() - 1];
-    if (_line == nullptr)
-        return;
+    MapGeoPos pos;
+    _sceneGraph->GetMap()->ConvertCoord(x, y, pos, 0);
+    updatePoint(pos);
+}
 
-    // 更新
-    /*
-    auto m_pLine = dynamic_cast<IMapLine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLine"));
-    m_pLine->AddPoint(0,pos);
-    pos.fLon = 122;
-    pos.fLat = 26;
-    m_pLine->AddPoint(0,pos);
-    pos.fLon = 123;
-    pos.fLat = 27;
-    m_pLine->AddPoint(0,pos);
-    m_pLine->SetLineColor(color);
-    pLayer->AddSceneNode(m_pLine);*/
+void AreaPolygonEditor::KeyDown(char key)
+{
+    qDebug() << "key:" << key;
+    // 如果按下Ctrl+Z
+    if (key == 'z')
+    {
+        if (_polygon && _polygon->GetPointCount() > 0)
+            _polygon->RemovePoint(_polygon->GetPointCount() - 1);
+        if (_line && _line->GetPointCount() > 0)
+            _line->RemovePoint(_line->GetPointCount() - 1);
+        if (_points.count() > 0)
+        {
+            _layer->RemoveSceneNode(_points.last());
+            _points.removeLast();
+        }
+    }
+}
+
+void AreaPolygonEditor::addPoint(MapGeoPos pos)
+{
+    // 绘制点
+    auto point = dynamic_cast<IMapPoint*>(_sceneGraph->GetPlot()->CreateSceneNode("IMapPoint"));
+    point->SetGeoPos(pos);
+    point->SetPointColor(_pointColor);
+    point->SetPointSize(6.0);
+    _layer->AddSceneNode(point);
+    _points.append(point);
+    // 绘制多边形
+    if (_polygon == nullptr)
+    {
+        _polygon = dynamic_cast<IMapPolygon*>(_sceneGraph->GetPlot()->CreateSceneNode("IMapPolygon"));
+        _polygon->SetPolygonColor(_polygonColor);
+        _layer->AddSceneNode(_polygon);
+    }
+    if (_polygon->GetPointCount() == 0)
+    {
+        //qDebug() << "_line->AddPoint(0)";
+        _polygon->AddPoint(0, pos);
+        _polygon->AddPoint(1, pos);    // 第二个点用于编辑
+    }
+    else if (_polygon->GetPointCount() > 1)    // 插入到倒数第二位置（末尾的点MouseMove编辑用）
+    {
+        //qDebug() << QString("_line->AddPoint(%1)").arg(_polygon->GetPointCount() - 1);
+        _polygon->AddPoint(_polygon->GetPointCount() - 1, pos);
+    }
+    // 绘制线
+    if (_line == nullptr)
+    {
+        _line = dynamic_cast<IMapLine*>(_sceneGraph->GetPlot()->CreateSceneNode("IMapLine"));
+        _line->SetLineColor(_lineColor);
+        _line->SetLineWidth(4.0);
+        _layer->AddSceneNode(_line);
+    }
+    //qDebug() << "_line->GetPointCount()：" << _line->GetPointCount();
+    if (_line->GetPointCount() == 0)
+    {
+        //qDebug() << "_line->AddPoint(0)";
+        _line->AddPoint(0, pos);
+        _line->AddPoint(1, pos);    // 第二个点用于编辑
+    }
+    else if (_line->GetPointCount() > 1)    // 插入到倒数第二位置（末尾的点MouseMove编辑用）
+    {
+        //qDebug() << QString("_line->AddPoint(%1)").arg(_line->GetPointCount() - 1);
+        _line->AddPoint(_line->GetPointCount() - 1, pos);
+    }
+}
+
+void AreaPolygonEditor::updatePoint(MapGeoPos pos)
+{
+    if (_line->GetPointCount() == 0)
+        return;
+    else if (_line->GetPointCount() >= 2)
+    {
+        // 更新最后一点
+        //qDebug() << QString("_line->UpdatePoint(%1)").arg(_line->GetPointCount() - 1);
+        _line->UpdatePoint(_line->GetPointCount() - 1, pos);
+    }
+
+    if (_polygon->GetPointCount() == 0)
+        return;
+    else if (_polygon->GetPointCount() >= 3)
+    {
+        // 更新最后一点
+        //qDebug() << QString("_polygon->UpdatePoint(%1)").arg(_polygon->GetPointCount() - 1);
+        _polygon->UpdatePoint(_polygon->GetPointCount() - 1, pos);
+    }
 }
 
 void AreaPolygonEditor::createPolygon(AreaPolygon* ap, AreaPlanLayer* layer)
@@ -138,17 +229,16 @@ void AreaPolygonEditor::createPolygon(AreaPolygon* ap, AreaPlanLayer* layer)
     pLayer->AddSceneNode(iMapPolygon);
     for (int i = 0; i < vertices.count(); i++)
     {
-        //qDebug() << vertices[i].x() << "," << vertices[i].y() << "," << vertices[i].z();
-
         MapGeoPos pos;
         pos.fLon = vertices[i].x();
         pos.fLat = vertices[i].y();
         pos.fHeight = vertices[i].z();
         iMapPolygon->AddPoint(0, pos);
     }
+    ap->setIMapPolygon(iMapPolygon);
 }
 
-void AreaPolygonEditor::deletePolygon(AreaPolygon*, AreaPlanLayer*)
+void AreaPolygonEditor::deletePolygon(AreaPolygon* polygon, AreaPlanLayer* layer)
 {
-    // ...
+    _sceneGraph->GetMap()->CreateLayer(layer->name().toStdString())->RemoveSceneNode(polygon->getIMapPolygon());
 }

@@ -34,7 +34,7 @@ public:
     const std::list<MapGeoPos>& GetMulPos(){return(m_listAllPos);}
 
     /**
-     * @brief 设置点的大小
+     * @brief 设置颜色
      */
     void SetPolygonColor(const SceneColor& polygonColor)JUDGE_EQUAL_CALL_FUNCTION(polygonColor,m_stPolygonColor,PolygonColorChanged)
     const SceneColor& PolygonColor(){return(m_stPolygonColor);}
