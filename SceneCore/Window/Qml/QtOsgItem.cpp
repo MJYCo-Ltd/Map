@@ -1,6 +1,8 @@
 #include "../QtFBOWindow.h"
 #include "QtOsgRenderer.h"
 #include <QTimer>
+#include <QQuickWindow>
+#include <QScreen>
 
 QtOsgItem::QtOsgItem(QQuickItem *parent):
     QQuickFramebufferObject(parent)
@@ -84,7 +86,7 @@ void QtOsgItem::mousePressEvent(QMouseEvent * event)
 {
     if(nullptr != m_pRenderer)
     {
-        m_pRenderer->GetFBOWindow()->MousePress(event);
+        m_pRenderer->GetFBOWindow()->MousePress(event,window()->devicePixelRatio());
     }
     event->accept();
 }
@@ -94,7 +96,7 @@ void QtOsgItem::mouseReleaseEvent(QMouseEvent *event)
 {
     if(nullptr != m_pRenderer)
     {
-        m_pRenderer->GetFBOWindow()->MouseUp(event);
+        m_pRenderer->GetFBOWindow()->MouseUp(event,window()->devicePixelRatio());
     }
     event->accept();
 }
@@ -103,7 +105,7 @@ void QtOsgItem::mouseMoveEvent(QMouseEvent *event)
 {
     if(nullptr != m_pRenderer)
     {
-        m_pRenderer->GetFBOWindow()->MouseMove(event);
+        m_pRenderer->GetFBOWindow()->MouseMove(event,window()->devicePixelRatio());
     }
     event->accept();
 }
@@ -113,7 +115,7 @@ void QtOsgItem::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if(nullptr != m_pRenderer)
     {
-        m_pRenderer->GetFBOWindow()->MouseDouble(event);
+        m_pRenderer->GetFBOWindow()->MouseDouble(event,window()->devicePixelRatio());
     }
     QQuickItem::mouseDoubleClickEvent(event);
 }

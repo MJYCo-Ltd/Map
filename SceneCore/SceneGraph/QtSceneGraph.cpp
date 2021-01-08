@@ -201,7 +201,7 @@ IWindow *QtSceneGraph::GetMainWindow()
 void QtSceneGraph::LoadPlot()
 {
     typedef IPlot* (*CreatePlotFnc)(ISceneGraph*);
-    QString sPlotName("Plot");
+    QString sPlotName=QString("%1Plot").arg(GetExePath().c_str());
     sPlotName += s_sSuffix;
     QLibrary loadPlot(sPlotName);
     if(loadPlot.load())

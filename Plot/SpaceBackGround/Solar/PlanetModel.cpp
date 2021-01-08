@@ -1,7 +1,5 @@
 #include <sstream>
 #include <QString>
-#include <QDebug>
-
 #include <osgDB/ReadFile>
 #include <osg/Texture2D>
 #include <osg/Geometry>
