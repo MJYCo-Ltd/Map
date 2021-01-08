@@ -1,5 +1,4 @@
 #include <QSet>
-#include <QDebug>
 #include <ISceneCore.h>
 #include <Inner/ILoadResource.h>
 #include <Inner/OsgExtern/OsgExtern.h>

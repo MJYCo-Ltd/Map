@@ -149,7 +149,7 @@ void QtOsgWindow::mousePressEvent(QMouseEvent *event)
 {
     if(nullptr != m_pFBOWindow)
     {
-        m_pFBOWindow->MousePress(event);
+        m_pFBOWindow->MousePress(event,devicePixelRatio());
     }
     QOpenGLWindow::mousePressEvent(event);
 }
@@ -158,7 +158,7 @@ void QtOsgWindow::mouseReleaseEvent(QMouseEvent *event)
 {
     if(nullptr != m_pFBOWindow)
     {
-        m_pFBOWindow->MouseUp(event);
+        m_pFBOWindow->MouseUp(event,devicePixelRatio());
     }
 
     QOpenGLWindow::mouseReleaseEvent(event);
@@ -168,7 +168,7 @@ void QtOsgWindow::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if(nullptr != m_pFBOWindow)
     {
-        m_pFBOWindow->MouseDouble(event);
+        m_pFBOWindow->MouseDouble(event,devicePixelRatio());
     }
 
     QOpenGLWindow::mouseDoubleClickEvent(event);
@@ -178,7 +178,7 @@ void QtOsgWindow::mouseMoveEvent(QMouseEvent *event)
 {
     if(nullptr != m_pFBOWindow)
     {
-        m_pFBOWindow->MouseMove(event);
+        m_pFBOWindow->MouseMove(event,devicePixelRatio());
     }
 
     QOpenGLWindow::mouseMoveEvent(event);

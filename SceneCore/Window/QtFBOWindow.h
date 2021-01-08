@@ -69,10 +69,10 @@ public:
     void keyboardModifiers(QInputEvent* event);
     void KeyPress(QKeyEvent* event);
     void KeyUp(QKeyEvent* event);
-    void MouseDouble(QMouseEvent* event);
-    void MousePress(QMouseEvent *event);
-    void MouseUp(QMouseEvent* event);
-    void MouseMove(QMouseEvent* event);
+    void MouseDouble(QMouseEvent* event,qreal rScal);
+    void MousePress(QMouseEvent *event, qreal rScal);
+    void MouseUp(QMouseEvent* event, qreal rScal);
+    void MouseMove(QMouseEvent* event, qreal rScal);
     void WheelEvent(QWheelEvent* event);
     void TouchEvent(QTouchEvent* event);
     ////////////// 鼠标/键盘/触摸屏 消息处理 ////////////////////////////////////////////
@@ -96,6 +96,8 @@ private:
     uint                                           m_nTextureID;    /// 纹理ID
     QSize                                          m_stWinSize;      /// 窗口大小
     QSize                                          m_stTextureSize;  /// 纹理大小
+    qreal                                          m_rMouseX;
+    qreal                                          m_rMouseY;
 
     QOffscreenSurface                 *m_pOffScreenSurface=nullptr; /// 离屏渲染表面
     QOpenGLContext                    *m_pOpenglContext=nullptr;    /// opengl设备上下文

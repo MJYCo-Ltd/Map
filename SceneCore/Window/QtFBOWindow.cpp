@@ -201,51 +201,61 @@ void QtFBOWindow::KeyUp(QKeyEvent *event)
     getEventQueue()->keyRelease(QtEventdMap::GetInstance()->ChangeKeyEvent(event));
 }
 
-void QtFBOWindow::MouseDouble(QMouseEvent *event)
+void QtFBOWindow::MouseDouble(QMouseEvent *event, qreal rScal)
 {
+    m_rMouseX = event->x()*rScal;
+    m_rMouseY = event->y()*rScal;
     for(auto one : *m_pAllOserver)
     {
-        one->MouseDblClick(ChangeMouseType(event),event->x(),event->y());
+        one->MouseDblClick(ChangeMouseType(event),m_rMouseX,m_rMouseY);
     }
 
     keyboardModifiers(event);
-    getEventQueue()->mouseDoubleButtonPress(event->x(),event->y(),QtEventdMap::GetInstance()->ChangeMouseEvent(event));
+    getEventQueue()->mouseDoubleButtonPress(m_rMouseX,m_rMouseY,QtEventdMap::GetInstance()->ChangeMouseEvent(event));
 }
 
 /// 鼠标按下
-void QtFBOWindow::MousePress(QMouseEvent *event)
+void QtFBOWindow::MousePress(QMouseEvent *event,qreal rScal)
 {
+    m_rMouseX = event->x()*rScal;
+    m_rMouseY = event->y()*rScal;
+
     for(auto one : *m_pAllOserver)
     {
-        one->MouseDown(ChangeMouseType(event),event->x(),event->y());
+        one->MouseDown(ChangeMouseType(event),m_rMouseX,m_rMouseY);
     }
 
     keyboardModifiers(event);
-    getEventQueue()->mouseButtonPress(event->x(), event->y(), QtEventdMap::GetInstance()->ChangeMouseEvent(event));
+    getEventQueue()->mouseButtonPress(m_rMouseX, m_rMouseY, QtEventdMap::GetInstance()->ChangeMouseEvent(event));
 }
 
 /// 鼠标弹起
-void QtFBOWindow::MouseUp(QMouseEvent *event)
+void QtFBOWindow::MouseUp(QMouseEvent *event,qreal rScal)
 {
+    m_rMouseX = event->x()*rScal;
+    m_rMouseY = event->y()*rScal;
     for(auto one : *m_pAllOserver)
     {
-        one->MouseUp(ChangeMouseType(event),event->x(),event->y());
+        one->MouseUp(ChangeMouseType(event),m_rMouseX,m_rMouseY);
     }
 
     keyboardModifiers(event);
-    getEventQueue()->mouseButtonRelease(event->x(), event->y(), QtEventdMap::GetInstance()->ChangeMouseEvent(event));
+    getEventQueue()->mouseButtonRelease(m_rMouseX, m_rMouseY, QtEventdMap::GetInstance()->ChangeMouseEvent(event));
 }
 
 /// 鼠标移动
-void QtFBOWindow::MouseMove(QMouseEvent *event)
+void QtFBOWindow::MouseMove(QMouseEvent *event,qreal rScal)
 {
+    m_rMouseX = event->x()*rScal;
+    m_rMouseY = event->y()*rScal;
+
     for(auto one : *m_pAllOserver)
     {
-        one->MouseMove(ChangeMouseType(event),event->x(),event->y());
+        one->MouseMove(ChangeMouseType(event),m_rMouseX,m_rMouseY);
     }
 
     keyboardModifiers(event);
-    getEventQueue()->mouseMotion(event->x(), event->y());
+    getEventQueue()->mouseMotion(m_rMouseX, m_rMouseY);
 }
 
 void QtFBOWindow::WheelEvent(QWheelEvent *event)
@@ -269,13 +279,15 @@ void QtFBOWindow::TouchEvent(QTouchEvent *event)
             if (!osgEvent.valid())
             {
                 keyboardModifiers(event);
-                osgEvent = getEventQueue()->touchBegan(id, osgGA::GUIEventAdapter::TOUCH_BEGAN
-                                                       , static_cast<float>(touchPoint.pos().x()), static_cast<float>(touchPoint.pos().y()));
+                osgEvent = getEventQueue()->touchBegan(id, osgGA::GUIEventAdapter::TOUCH_BEGAN,
+                                                       static_cast<float>(touchPoint.pos().x()),
+                                                       static_cast<float>(touchPoint.pos().y()));
             }
             else
             {
                 osgEvent->addTouchPoint(id, osgGA::GUIEventAdapter::TOUCH_BEGAN,
-                                        static_cast<float>(touchPoint.pos().x()), static_cast<float>(touchPoint.pos().y()));
+                                        static_cast<float>(touchPoint.pos().x()),
+                                        static_cast<float>(touchPoint.pos().y()));
             }
             id++;
         }
@@ -293,12 +305,14 @@ void QtFBOWindow::TouchEvent(QTouchEvent *event)
             {
                 keyboardModifiers(event);
                 osgEvent = getEventQueue()->touchEnded(id, osgGA::GUIEventAdapter::TOUCH_ENDED,
-                                                       static_cast<float>(touchPoint.pos().x()), static_cast<float>(touchPoint.pos().y()), tap_count);
+                                                       static_cast<float>(touchPoint.pos().x()),
+                                                       static_cast<float>(touchPoint.pos().y()), tap_count);
             }
             else
             {
                 osgEvent->addTouchPoint(id, osgGA::GUIEventAdapter::TOUCH_ENDED,
-                                        static_cast<float>(touchPoint.pos().x()), static_cast<float>(touchPoint.pos().y()));
+                                        static_cast<float>(touchPoint.pos().x()),
+                                        static_cast<float>(touchPoint.pos().y()));
             }
             ++id;
         }
@@ -316,12 +330,14 @@ void QtFBOWindow::TouchEvent(QTouchEvent *event)
             {
                 keyboardModifiers(event);
                 osgEvent = getEventQueue()->touchMoved(id, osgGA::GUIEventAdapter::TOUCH_MOVED,
-                                                       static_cast<float>(touchPoint.pos().x()), static_cast<float>(touchPoint.pos().y()));
+                                                       static_cast<float>(touchPoint.pos().x()),
+                                                       static_cast<float>(touchPoint.pos().y()));
             }
             else
             {
                 osgEvent->addTouchPoint(id, osgGA::GUIEventAdapter::TOUCH_MOVED,
-                                        static_cast<float>(touchPoint.pos().x()), static_cast<float>(touchPoint.pos().y()));
+                                        static_cast<float>(touchPoint.pos().x()),
+                                        static_cast<float>(touchPoint.pos().y()));
             }
             ++id;
         }
@@ -339,12 +355,14 @@ void QtFBOWindow::TouchEvent(QTouchEvent *event)
             {
                 keyboardModifiers(event);
                 osgEvent = getEventQueue()->touchMoved(id, osgGA::GUIEventAdapter::TOUCH_STATIONERY,
-                                                       static_cast<float>(touchPoint.pos().x()), static_cast<float>(touchPoint.pos().y()));
+                                                       static_cast<float>(touchPoint.pos().x()),
+                                                       static_cast<float>(touchPoint.pos().y()));
             }
             else
             {
                 osgEvent->addTouchPoint(id, osgGA::GUIEventAdapter::TOUCH_STATIONERY,
-                                        static_cast<float>(touchPoint.pos().x()), static_cast<float>(touchPoint.pos().y()));
+                                        static_cast<float>(touchPoint.pos().x()),
+                                        static_cast<float>(touchPoint.pos().y()));
             }
             ++id;
         }
