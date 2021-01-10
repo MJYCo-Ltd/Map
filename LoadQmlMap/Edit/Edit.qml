@@ -2,6 +2,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.15
 import "../Common"
 import "../Animation"
+import "../AreaPlan"
 
 Rectangle {
     id:edit
@@ -41,7 +42,8 @@ Rectangle {
             checkable:true
             checked:false
             onToggled: {
-                pathplan.visible = true
+                areaPlan.visible = true
+                pathplan.visible = false
                 animation.visible = false
             }
         }
@@ -55,6 +57,7 @@ Rectangle {
             checked:false
             onToggled: {
                 pathplan.visible = true
+                areaPlan.visible = false
                 animation.visible = false
             }
         }
@@ -68,6 +71,7 @@ Rectangle {
             checked:false
             onToggled: {
                 animation.visible = true
+                areaPlan.visible = false
                 pathplan.visible = false
             }
         }
@@ -78,6 +82,14 @@ Rectangle {
         width:1
         height:edit.height
         color:Qt.rgba(1,1,1,1)
+    }
+    AreaPlan {
+        id: areaPlan
+        anchors.left: editSplitLine.right
+        margin:defaultStyle.margin
+        width: edit.width - column.width - editSplitLine.width
+        height: edit.height
+        visible: false
     }
     Animation {
         id: animation

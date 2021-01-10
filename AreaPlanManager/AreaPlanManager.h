@@ -9,6 +9,7 @@
 * History:
 *************************************************/
 #include "AreaPlanManager_global.h"
+#include "AreaPlanLayer.h"
 #include "AreaPlan.h"
 #include "../ScenarioManager/ScenarioItem.h"
 #include <QQmlListProperty>
@@ -16,13 +17,15 @@
 #include <QList>
 
 Q_DECLARE_METATYPE(QQmlListProperty<AreaPlan>)
+Q_DECLARE_METATYPE(QQmlListProperty<AreaPlanLayer>)
 //class AreaPlan;
 class ISceneGraph;
 class AreaPolygon;
 class AREAPLANMANAGER_EXPORT AreaPlanManager : public QObject, public ScenarioItem
 {
     Q_OBJECT
-    Q_PROPERTY(QQmlListProperty<AreaPlan> planList READ planList NOTIFY planListChanged)
+    Q_PROPERTY(QQmlListProperty<AreaPlan> plans READ plans NOTIFY planListChanged)
+    Q_PROPERTY(QQmlListProperty<AreaPlanLayer> layers READ layers NOTIFY layerListChanged)
 public:
     AreaPlanManager(QObject* parent = nullptr);
 	~AreaPlanManager();
@@ -39,9 +42,12 @@ public:
     virtual void save();
 
     Q_INVOKABLE AreaPlan* plan(QString name);
-    QQmlListProperty<AreaPlan> planList();
+    QList<AreaPlan*> planList();
+    QQmlListProperty<AreaPlan> plans();
+    QQmlListProperty<AreaPlanLayer> layers();
 
-    AreaPlan* currentPlan();
+    Q_INVOKABLE bool isCurrentPlan(QString planName);
+    Q_INVOKABLE AreaPlan* currentPlan();
     Q_INVOKABLE void setCurrentPlan(QString planName);
     Q_INVOKABLE void setCurrentLayer(QString layerName);
     Q_INVOKABLE void startEdit();
@@ -52,6 +58,8 @@ public slots:
 
 signals:
     void planListChanged();
+    void layerListChanged();
+    void currentPlanChanged();
 
 private:
     void addPlan(QString planDir);
@@ -61,5 +69,6 @@ private:
 	bool isPlanDir(QString dirPath);
 private:
     QList<AreaPlan*>		_itemList;
+    QList<AreaPlanLayer*>	_layerList;
     AreaPlan*       		_currentPlan;
 };

@@ -9,6 +9,7 @@
 #include "../ScenarioManager/Scenario.h"
 #include "../ScenarioManager/ScenarioManager.h"
 #include "../AreaPlanManager/AreaPlan.h"
+#include "../AreaPlanManager/AreaPlanLayer.h"
 #include "../AreaPlanManager/AreaPlanManager.h"
 #include "../ProcessSimulation/ProcessSimulationBuild.h"
 
@@ -40,9 +41,10 @@ int main(int argc, char *argv[])
     qmlRegisterType<QAppGlobal>("MyItem",1,0,"AppGlobal");
     qmlRegisterType<QtOsgItem>("MyItem",1,0,"OsgItem");
     qmlRegisterType<ScenarioManager>("MyItem",1,0,"ScenarioManager");
-    qmlRegisterType<AreaPlanManager>("MyItem",1,0,"AreaPlanManager");
     qmlRegisterType<Scenario>("MyItem",1,0,"Scenario");
+    qmlRegisterType<AreaPlanManager>("MyItem",1,0,"AreaPlanManager");
     qmlRegisterType<AreaPlan>("MyItem",1,0,"AreaPlan");
+    qmlRegisterType<AreaPlanLayer>("MyItem",1,0,"AreaPlanLayer");
     qmlRegisterType<ProcessSimulationBuild>("MyItem",1,0,"ProcessSimulationBuild");
 
     QQmlApplicationEngine engine;

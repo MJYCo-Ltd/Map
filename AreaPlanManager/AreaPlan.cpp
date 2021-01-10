@@ -26,6 +26,11 @@ void AreaPlan::load(QString jsonDir)
 	return;
 }
 
+QString AreaPlan::dirPath()
+{
+    return _dirPath;
+}
+
 void AreaPlan::setDirPath(QString dirPath)
 {
 	_dirPath = dirPath;
@@ -72,7 +77,9 @@ void AreaPlan::load(QString fn, QString format)
 						QString name = object_layer.value("name").toString();
 						QString legend = object_layer.value("legend").toString();
 						QColor color(object_layer.value("color").toString());
-						this->addLayer(name, icon(legend), color);
+                        //this->addLayer(name, icon(legend), color);
+                        //qDebug() << "legend:" << legend;
+                        this->addLayer(name, legend, color);
 					}
 				}
 			}
@@ -99,6 +106,11 @@ void AreaPlan::save(QString fn, QString format = "*.json")
 	// 此文件不会被程序修改，暂时不需要保存
 }
 
+QList<AreaPlanLayer*> AreaPlan::layerList()
+{
+    return _layerList;
+}
+/*
 QQmlListProperty<AreaPlanLayer> AreaPlan::layers()
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -108,7 +120,7 @@ QQmlListProperty<AreaPlanLayer> AreaPlan::layers()
 #endif
     //return _layerList;
 }
-
+*/
 AreaPlanLayer* AreaPlan::currentLayer()
 {
 	return _currentLayer;
@@ -153,6 +165,22 @@ AreaPlanLayer* AreaPlan::layer(QString layerName)
 	return nullptr;
 }
 
+AreaPlanLayer* AreaPlan::addLayer(QString name, QString legend, QColor color)
+{
+    AreaPlanLayer* res = layer(name);
+    if (nullptr == layer(name))
+    {
+        res = new AreaPlanLayer();
+        res->setName(name);
+        res->setLegend(dirPath() + "/" + legend);
+        res->setColor(color);
+        res->load(layerDirPath() + "/" + name + ".json");
+        _layerList.append(res);
+        emit layerListChanged();
+    }
+    return res;
+}
+/*
 AreaPlanLayer* AreaPlan::addLayer(QString name, QIcon legend, QColor color)
 {
 	AreaPlanLayer* res = layer(name);
@@ -164,7 +192,7 @@ AreaPlanLayer* AreaPlan::addLayer(QString name, QIcon legend, QColor color)
 		res->setColor(color);
 		res->load(layerDirPath() + "/" + name + ".json");
 		_layerList.append(res);
-        emit layerChanged();
+        emit layerListChanged();
 	}
 	return res;
 }
@@ -173,4 +201,4 @@ QIcon AreaPlan::icon(QString filename)
 {
 	QString iconFilePath = _dirPath + "/" + filename;
 	return QIcon(iconFilePath);
-}
+}*/

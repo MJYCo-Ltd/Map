@@ -9,7 +9,7 @@
 #include <QDebug>
 #include <QFile>
 
-AreaPlanLayer::AreaPlanLayer()
+AreaPlanLayer::AreaPlanLayer(QObject* parent):QObject(parent)
 {
 }
 
@@ -27,6 +27,16 @@ void AreaPlanLayer::setName(QString name)
 	_name = name;
 }
 
+QString AreaPlanLayer::legend()
+{
+    return _legend;
+}
+
+void AreaPlanLayer::setLegend(QString legend)
+{
+    _legend = legend;
+}
+/*
 QIcon AreaPlanLayer::legend()
 {
 	return _legend;
@@ -35,7 +45,7 @@ QIcon AreaPlanLayer::legend()
 void AreaPlanLayer::setLegend(QIcon legend)
 {
 	_legend = legend;
-}
+}*/
 
 QColor AreaPlanLayer::color()
 {

@@ -131,7 +131,7 @@ void AreaPolygonEditor::MouseMove(MouseButtonMask, int x, int y)
 void AreaPolygonEditor::KeyDown(char key)
 {
     qDebug() << "key:" << key;
-    // 如果按下Ctrl+Z
+    // 如果按下z // Ctrl+Z
     if (key == 'z')
     {
         if (_polygon && _polygon->GetPointCount() > 0)

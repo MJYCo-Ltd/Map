@@ -16,13 +16,13 @@
 #include <QIcon>
 #include <QColor>
 
-Q_DECLARE_METATYPE(QQmlListProperty<AreaPlanLayer>)
+//Q_DECLARE_METATYPE(QQmlListProperty<AreaPlanLayer>)
 //class AreaPlanLayer;
 class AREAPLANMANAGER_EXPORT AreaPlan : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-    Q_PROPERTY(QQmlListProperty<AreaPlanLayer> layers READ layers NOTIFY layerChanged)
+    //Q_PROPERTY(QQmlListProperty<AreaPlanLayer> layers READ layers NOTIFY layerListChanged)
 public:
     AreaPlan(QObject* parent = nullptr);
 	virtual ~AreaPlan();
@@ -32,20 +32,23 @@ public:
 
 	QString name();
     void setName(QString name);
-    QQmlListProperty<AreaPlanLayer> layers();
+    QList<AreaPlanLayer*> layerList();
+    //QQmlListProperty<AreaPlanLayer> layers();
 	AreaPlanLayer* currentLayer(); 
 	void setCurrentLayer(QString layerName);
     //void setVisible(bool);
     //void setLayerVisible(QString layerName, bool);
 signals:
     void nameChanged();
-    void layerChanged();
+    void layerListChanged();
 private:
 	AreaPlanLayer* layer(QString layerName);
-	AreaPlanLayer* addLayer(QString name, QIcon legend, QColor color = QColor(255,255,255));
+    AreaPlanLayer* addLayer(QString name, QString legend, QColor color = QColor(255,255,255));
+    //AreaPlanLayer* addLayer(QString name, QIcon legend, QColor color = QColor(255,255,255));
 	QIcon icon(QString filename);
 	QString jsonFileName(QString dirPath);
 
+    QString dirPath();
 	void setDirPath(QString dirPath);
 	QString layerDirPath();
 	void load();

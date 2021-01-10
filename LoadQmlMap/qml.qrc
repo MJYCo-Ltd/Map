@@ -16,5 +16,6 @@
         <file>Edit/Edit.qml</file>
         <file>Animation/Animation.qml</file>
         <file>Animation/BuildProcess.qml</file>
+        <file>AreaPlan/AreaPlan.qml</file>
     </qresource>
 </RCC>

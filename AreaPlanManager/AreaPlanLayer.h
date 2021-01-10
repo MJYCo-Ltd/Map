@@ -1,3 +1,4 @@
+#pragma once
 /*************************************************
 * Copyright(C)
 * File name:    AreaPlanLayer
@@ -8,7 +9,7 @@
 *				包含图层名、图例、区域多边形的顶点数据、显隐控制
 * History:
 *************************************************/
-#pragma once
+#include "AreaPlanManager_global.h"
 #include <QObject>
 #include <QString>
 #include <QIcon>
@@ -16,18 +17,22 @@
 #include <QTime>
 
 class AreaPolygon;
-class AreaPlanLayer : public QObject
+class AREAPLANMANAGER_EXPORT AreaPlanLayer : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+    Q_PROPERTY(QString legend READ legend WRITE setLegend NOTIFY legendChanged)
+    Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
 public:
-	AreaPlanLayer();
+    AreaPlanLayer(QObject* parent = nullptr);
 	virtual ~AreaPlanLayer();
 
 	QString name();
 	void setName(QString);
-	QIcon legend();
-	void setLegend(QIcon);
+    QString legend();
+    void setLegend(QString);
+    //QIcon legend();
+    //void setLegend(QIcon);
 	QColor color();
 	void setColor(QColor);
 
@@ -36,11 +41,15 @@ public:
 
     void addAreaPolygon(AreaPolygon*);
     void removeAreaPlanPolygon(AreaPolygon*);
+
 signals:
     void nameChanged();
+    void legendChanged();
+    void colorChanged();
+
 private:
 	QString										_name;
-	QIcon										_legend;			
+    QString										_legend;
     QColor										_color;
     QList<AreaPolygon*>                         _areaList;
 };

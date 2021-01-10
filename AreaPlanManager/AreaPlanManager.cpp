@@ -11,7 +11,6 @@ AreaPlanManager::AreaPlanManager(QObject* parent):QObject(parent)
 {
     _currentPlan = nullptr;
     setName("AreaPlan");
-    //load(QCoreApplication::applicationDirPath() + "/Data/AreaPlan");
 }
 
 AreaPlanManager::~AreaPlanManager()
@@ -60,6 +59,8 @@ void AreaPlanManager::addPlan(QString planDir)
             plan->setName(dirPlan.dirName());
             plan->load(planDir);
             _itemList.append(plan);
+            emit planListChanged();
+            //qDebug() << "add plan:" << plan->name();
         }
 	}	
 }
@@ -75,6 +76,8 @@ void AreaPlanManager::clear()
 		}
 	}
     _itemList.clear();
+
+    emit planListChanged();
 }
 
 bool AreaPlanManager::has(QString name)
@@ -106,13 +109,52 @@ AreaPlan* AreaPlanManager::plan(QString name)
 	return nullptr;
 }
 
-QQmlListProperty<AreaPlan> AreaPlanManager::planList()
+QList<AreaPlan*> AreaPlanManager::planList()
+{
+    return _itemList;
+}
+
+QQmlListProperty<AreaPlan> AreaPlanManager::plans()
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     return QQmlListProperty<AreaPlan>(this, _itemList);
 #else
     return QQmlListProperty<AreaPlan>(this, &_itemList);
 #endif
+}
+
+QQmlListProperty<AreaPlanLayer> AreaPlanManager::layers()
+{
+    if (currentPlan())
+    {
+        _layerList = currentPlan()->layerList();
+        //qDebug() << "LAYER LIST COUNT:" << _layerList.count();
+    }
+    else
+    {
+        _layerList.clear();
+        qDebug() << "CURRENT PLAN IS NULL!";
+    }
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    return QQmlListProperty<AreaPlanLayer>(this, _layerList);
+#else
+    return QQmlListProperty<AreaPlanLayer>(this, &_layerList);
+#endif
+}
+
+bool AreaPlanManager::isCurrentPlan(QString planName)
+{
+    //qDebug() << "AreaPlanManager::isCurrentPlan exec";
+    if (currentPlan() == nullptr)
+    {
+        //qDebug() << "currentPlan() == nullptr";
+        return false;
+    }
+    else
+    {
+        //qDebug() << "currentPlan()->name():" << currentPlan()->name();
+        return (QString::compare(currentPlan()->name(), planName) == 0);
+    }
 }
 
 AreaPlan* AreaPlanManager::currentPlan()
@@ -122,7 +164,24 @@ AreaPlan* AreaPlanManager::currentPlan()
 
 void AreaPlanManager::setCurrentPlan(QString name)
 {
-    _currentPlan = plan(name);
+    //qDebug() << "set current plan:" << name;
+    AreaPlan* newPlan = plan(name);
+    if (newPlan == nullptr)
+        return;
+    if (_currentPlan &&
+            (_currentPlan->name() == name))
+        return;
+    else
+    {
+        if (_currentPlan)
+            disconnect(_currentPlan,SIGNAL(layerListChanged()), this, SIGNAL(layerListChanged()));
+
+        _currentPlan = newPlan;
+
+        connect(_currentPlan,SIGNAL(layerListChanged()), this, SIGNAL(layerListChanged()));
+
+        emit currentPlanChanged();
+    }
 }
 
 void AreaPlanManager::setCurrentLayer(QString layerName)
@@ -135,8 +194,9 @@ void AreaPlanManager::setCurrentLayer(QString layerName)
 void AreaPlanManager::startEdit()
 {    
     // 完成区域编辑界面QML后解开此注释
-    /*
-    AreaPlanLayer* cl = _currentPlan->currentLayer();
+    if (currentPlan() == nullptr)
+        return;
+    AreaPlanLayer* cl = currentPlan()->currentLayer();
     if (cl == nullptr)
         return;
     SceneColor c;
@@ -144,8 +204,7 @@ void AreaPlanManager::startEdit()
     c.fG = cl->color().green() / 255.0;
     c.fB = cl->color().blue() / 255.0;
     c.fA = cl->color().alpha() / 255.0;
-    AreaPolygonEditor::getInstance()->setColor(c);
-    */
+    AreaPolygonEditor::getInstance()->setColor(c);    
     AreaPolygonEditor::getInstance()->start();
 }
 
