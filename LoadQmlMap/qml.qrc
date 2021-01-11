@@ -17,5 +17,6 @@
         <file>Animation/Animation.qml</file>
         <file>Animation/BuildProcess.qml</file>
         <file>AreaPlan/AreaPlan.qml</file>
+        <file>Common/PopupMenuButton.qml</file>
     </qresource>
 </RCC>

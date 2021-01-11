@@ -6,6 +6,7 @@ import MyItem 1.0
 
 Rectangle
 {
+    id:scenarioOverView
     property int itemWidth: defaultStyle.scenarioItemWidth
     property int itemHeight: defaultStyle.scenarioItemHeight
     property int margin: defaultStyle.margin
@@ -199,6 +200,12 @@ Rectangle
                     }
                 }
             }
+        }
+    }
+    Connections {
+        target: $app.scenarioManager()
+        function onScenarioLoaded() {
+            scenarioOverView.visible = false
         }
     }
 }

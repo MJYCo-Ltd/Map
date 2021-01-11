@@ -69,9 +69,11 @@ public:
     //ISceneGraph* sceneGraph() const;
 public slots:
     void locate();
+
 signals:
     void scenarioListChanged(QQmlListProperty<Scenario>);
     void favoriteListChanged(QQmlListProperty<Scenario>);
+    void scenarioLoaded();
 
 protected:
     void init();

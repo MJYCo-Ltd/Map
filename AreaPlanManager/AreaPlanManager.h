@@ -25,6 +25,7 @@ class AREAPLANMANAGER_EXPORT AreaPlanManager : public QObject, public ScenarioIt
 {
     Q_OBJECT
     Q_PROPERTY(QQmlListProperty<AreaPlan> plans READ plans NOTIFY planListChanged)
+    Q_PROPERTY(QStringList planNames READ planNames NOTIFY planListChanged)
     Q_PROPERTY(QQmlListProperty<AreaPlanLayer> layers READ layers NOTIFY layerListChanged)
 public:
     AreaPlanManager(QObject* parent = nullptr);
@@ -42,12 +43,16 @@ public:
     Q_INVOKABLE void save();
 
     Q_INVOKABLE AreaPlan* plan(QString name);
+    Q_INVOKABLE AreaPlan* plan(int index);
     QList<AreaPlan*> planList();
+    QStringList planNames();
     QQmlListProperty<AreaPlan> plans();
     QQmlListProperty<AreaPlanLayer> layers();
 
     Q_INVOKABLE bool isCurrentPlan(QString planName);
     Q_INVOKABLE AreaPlan* currentPlan();
+    Q_INVOKABLE void setCurrentPlan(AreaPlan*);
+    Q_INVOKABLE void setCurrentPlan(int index);
     Q_INVOKABLE void setCurrentPlan(QString planName);
     Q_INVOKABLE void setCurrentLayer(QString layerName);
     Q_INVOKABLE void setEditMode(bool editMode);
@@ -61,6 +66,7 @@ signals:
     void planListChanged();
     void layerListChanged();
     void currentPlanChanged();
+    void startEditMode();
 
 private:
     void addPlan(QString planDir);

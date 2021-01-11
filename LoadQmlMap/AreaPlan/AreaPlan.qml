@@ -4,19 +4,22 @@ import QtQuick.Controls 2.15
 Rectangle{
     id:areaPlan
     property int margin: defaultStyle.margin
-    property int textHeight: defaultStyle.scenarioTextHeight
-    property int planWidth: 200
+    property int planWidth: layerWidth
     property int planHeight: 42
-    property int layerWidth: legendWidth * 2 + margin
+    property int layerWidth: legendWidth + textWidth + margin
     property int layerHeight: legendHeight
-    property int legendWidth: 128
+    property int legendWidth: 80
     property int legendHeight: 32
+    property int textWidth: 120
+    property int textHeight: defaultStyle.scenarioTextHeight
     property bool editMode: checkBoxAreaPlanEdit.checked // default mode : show
     color: "transparent"
 
     Rectangle{
         x:margin
         y:margin
+        width: planWidth
+        height: planHeight
         Row{
             Button {
                 id : buttonNew
@@ -47,58 +50,25 @@ Rectangle{
             }
         }
     }
-    ListView {
-        id:listViewPlan
+    ComboBox {
+        id:comboxAreaPlan
         x:margin
-        y:margin + buttonNew.height + margin
-        width:planWidth + margin
-        height:areaPlan.height - y
-        highlight: Rectangle { color: "lightsteelblue"; radius: 1 }
-        highlightFollowsCurrentItem: true;
-        focus: true
-        model: $app.areaPlanManager().plans
-        delegate: Rectangle{
-            id:rectPlan
-            width: planWidth
-            height: planHeight
-            color: "transparent"
-            Text{
-                anchors.fill: parent
-                font.family: defaultStyle.fontFamilyCN
-                font.pointSize: defaultStyle.fontSize
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
-                text: modelData.name
-            }
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    $app.areaPlanManager().setCurrentPlan(modelData.name)
-                    console.log(modelData.name)
-                    rectPlan.ListView.view.currentIndex = index;
-                }
-            }
+        y:margin+planHeight
+        currentIndex: -1
+        model: $app.areaPlanManager().planNames
+        width: planWidth
+        height:planHeight
+        onCurrentIndexChanged: {
+            $app.areaPlanManager().setCurrentPlan(comboxAreaPlan.currentIndex)
         }
-        Connections {
-            target: $app.areaPlanManager()
-            function onPlanListChanged() {
-                listViewPlan.model = $app.areaPlanManager().plans
-            }
-        }
-    }
-    Rectangle{
-        id:areaPlanSplitLine
-        anchors.left: listViewPlan.right
-        width:1
-        height:areaPlan.height
-        color:"#FFFFFF"
     }
     ListView {
         id:listViewPlanLayer
-        x:listViewPlan.width + areaPlanSplitLine.width + margin * 2
-        y:margin
+        //x:listViewPlan.width + areaPlanSplitLine.width + margin * 2
+        x:margin
+        y:margin*2 + planHeight*2
         width: layerWidth + margin * 2
-        height:areaPlan.height - margin * 2
+        height:areaPlan.height - y
         highlight: Rectangle {
             color: "darkgray";
             border.color: "lightsteelblue"; border.width: 1
@@ -126,8 +96,8 @@ Rectangle{
             Text{
                 id:listViewPlanLayerText
                 anchors.left: rectSpace.right
-                width: legendWidth
-                height: legendHeight
+                width: textWidth
+                height: textHeight
                 font.family: defaultStyle.fontFamilyCN
                 font.pointSize: defaultStyle.fontSize
                 verticalAlignment: Text.AlignVCenter
@@ -140,9 +110,12 @@ Rectangle{
                 onClicked: {
                     rectLayer.ListView.view.currentIndex = index;
                     $app.areaPlanManager().setCurrentLayer(modelData.name)
-                    edit.visible = false
                     $app.areaPlanManager().setEditMode(areaPlan.editMode)
-                    $app.areaPlanManager().startEdit()
+                    if (editMode)
+                    {
+                        $app.areaPlanManager().startEdit()
+                    }
+
                 }
             }
         }
@@ -154,10 +127,13 @@ Rectangle{
         }
         Connections {
             target: $app.areaPlanManager()
-            function layerListChanged() {
-                listViewPlan.model = $app.areaPlanManager().plans
+            function onStartEditMode() {
+                areaPlan.visible = false
             }
         }
     }
 
+    Component.onCompleted:{
+        $app.areaPlanManager().setCurrentPlan(comboxAreaPlan.currentIndex)
+    }
 }

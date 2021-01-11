@@ -2,8 +2,10 @@ import QtQuick 2.12
 import QtQuick.Window 2.12
 import MyItem 1.0
 import "./Common"
-import "./Welcome"
-import "./Edit"
+//import "./Welcome"
+//import "./Edit"
+import "./Scenario"
+import "./AreaPlan"
 
 Window
 {
@@ -28,12 +30,6 @@ Window
             $app.init()
         }
     }
-    //ScenarioManager{
-    //    id:scenarioManager
-    //}
-    //AreaPlanManager{
-    //    id:areaPlanManager
-    //}
     ProcessSimulationBuild
     {
         id:animationBuild
@@ -62,11 +58,14 @@ Window
         }
         MenuButton{
             id: btnWelcome
-            text:qsTr("WELCOME")
+            text:qsTr("SCENARIO")
             anchors.left: marginLeft.right
             anchors.top: parent.top
             onClicked: {
-                welcome.visible = ! welcome.visible
+                //welcome.visible = ! welcome.visible
+                scenarioMenus.x = btnWelcome.x
+                scenarioMenus.y = btnWelcome.y + btnWelcome.height
+                scenarioMenus.visible = true
             }
         }
         MenuButton{
@@ -74,7 +73,8 @@ Window
             anchors.left: btnWelcome.right
             text:qsTr("EDIT")
             onClicked: {
-                edit.visible = ! edit.visible
+                //edit.visible = ! edit.visible
+                areaPlan.visible = true
             }
         }
         MenuButton{
@@ -103,15 +103,72 @@ Window
             }
         }
     }
+    // -- 弹出菜单 -----------------------------------------------------
+    Rectangle{
+        id:scenarioMenus
+        visible: false
+        Column{
+            PopupMenuButton{
+                //iconSource : "qrc:/Image/Common/TalkboxBG.png"
+                text:qsTr("Scenario")
+                onClicked: {
+                    scenarioMenus.visible = false
+                    scenarioOverView.visible = true
+                }
+            }
+            PopupMenuButton{
+                //iconSource : "qrc:/Image/Common/TalkboxBG.png"
+                text:qsTr("Tutorials")
+                onClicked: {
+                    scenarioMenus.visible = false
+                    // test
+                    scenarioOverView.visible = false
+                }
+            }
+            PopupMenuButton{
+                //iconSource : "qrc:/Image/Common/TalkboxBG.png"
+                text:qsTr("Examples")
+                onClicked: {
+                    //scenarioOverView.visible = true
+                    scenarioMenus.visible = false
+                }
+            }
+        }
+        MouseArea{
+            anchors.fill: parent
+            hoverEnabled: true
+            onExited: {
+                scenarioMenus.visible = false
+            }
+        }
+    }
+    // -- 方案列表 -----------------------------------------
+    ScenarioOverView {
+        id: scenarioOverView
+        y:menuHeight
+        margin:defaultStyle.margin
+        width: parent.width
+        height: parent.height - menuHeight
+        visible: false
+    }
+    // -- 区域编辑-----------------------------------------
+    AreaPlan {
+        id: areaPlan
+        y:menuHeight
+        margin:defaultStyle.margin
+        width: parent.width
+        height: parent.height - menuHeight
+        visible: false
+    }
     // -- 欢迎页 -------------------------------------------------------
-    Welcome {
-        id: welcome
-        visible: false
-    }
-    Edit {
-        id: edit
-        visible: false
-    }
+    //Welcome {
+    //    id: welcome
+    //    visible: false
+    //}
+    //Edit {
+    //    id: edit
+    //    visible: false
+    //}
     // -- 测试消息框 ---------------------------------------------------
     Rectangle{
         id:testMsg

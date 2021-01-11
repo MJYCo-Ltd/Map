@@ -9,6 +9,7 @@ AreaPolygonEditor::AreaPolygonEditor() : QObject()
 {
     _line               = nullptr;
     _polygon            = nullptr;
+    _enable             = false;
 
     _pointColor.fR      = .1f;
     _pointColor.fG      = .8f;
@@ -67,7 +68,8 @@ void AreaPolygonEditor::stop()
 
 void AreaPolygonEditor::clear()
 {
-    _layer->Clear();
+    if (_layer)
+        _layer->Clear();
     _points.clear();
     _line = nullptr;
     _polygon = nullptr;

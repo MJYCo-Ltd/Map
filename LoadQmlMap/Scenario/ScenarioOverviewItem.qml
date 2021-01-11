@@ -32,7 +32,7 @@ Rectangle{
         onDoubleClicked: {
             $app.scenarioManager().setCurrentScenario(name)
             $app.scenarioManager().load()
-            welcome.visible = false
+            //welcome.visible = false
             // test
             //$app.areaPlanManager().startEdit()
         }

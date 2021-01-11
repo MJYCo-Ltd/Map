@@ -99,6 +99,14 @@ bool AreaPlanManager::has(AreaPlan* plan)
 	return res;
 }
 
+AreaPlan* AreaPlanManager::plan(int index)
+{
+    if (planList().count() > index)
+        return planList()[index];
+    else
+        return nullptr;
+}
+
 AreaPlan* AreaPlanManager::plan(QString name)
 {
     foreach (AreaPlan* one, _itemList)
@@ -112,6 +120,16 @@ AreaPlan* AreaPlanManager::plan(QString name)
 QList<AreaPlan*> AreaPlanManager::planList()
 {
     return _itemList;
+}
+
+QStringList AreaPlanManager::planNames()
+{
+    QStringList list;
+    for(int i = 0; i < planList().count(); i++)
+    {
+        list.append(planList()[i]->name());
+    }
+    return list;
 }
 
 QQmlListProperty<AreaPlan> AreaPlanManager::plans()
@@ -162,14 +180,12 @@ AreaPlan* AreaPlanManager::currentPlan()
     return _currentPlan;
 }
 
-void AreaPlanManager::setCurrentPlan(QString name)
+void AreaPlanManager::setCurrentPlan(AreaPlan* newPlan)
 {
-    //qDebug() << "set current plan:" << name;
-    AreaPlan* newPlan = plan(name);
     if (newPlan == nullptr)
         return;
     if (_currentPlan &&
-            (_currentPlan->name() == name))
+            (_currentPlan->name() == newPlan->name()))
         return;
     else
     {
@@ -186,6 +202,16 @@ void AreaPlanManager::setCurrentPlan(QString name)
     }
 }
 
+void AreaPlanManager::setCurrentPlan(int index)
+{
+    setCurrentPlan(plan(index));
+}
+
+void AreaPlanManager::setCurrentPlan(QString name)
+{
+    setCurrentPlan(plan(name));
+}
+
 void AreaPlanManager::setCurrentLayer(QString layerName)
 {
     if (currentPlan() == nullptr)
@@ -196,6 +222,8 @@ void AreaPlanManager::setCurrentLayer(QString layerName)
 void AreaPlanManager::setEditMode(bool editMode)
 {
     AreaPolygonEditor::getInstance()->setEnable(editMode);
+    if (editMode)
+        emit startEditMode();
 }
 
 void AreaPlanManager::startEdit()
