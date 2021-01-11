@@ -50,6 +50,7 @@ public:
     Q_INVOKABLE AreaPlan* currentPlan();
     Q_INVOKABLE void setCurrentPlan(QString planName);
     Q_INVOKABLE void setCurrentLayer(QString layerName);
+    Q_INVOKABLE void setEditMode(bool editMode);
     Q_INVOKABLE void startEdit();
 
 public slots:

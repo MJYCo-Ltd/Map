@@ -36,7 +36,7 @@ public:
     //QQmlListProperty<AreaPlanLayer> layers();
 	AreaPlanLayer* currentLayer(); 
 	void setCurrentLayer(QString layerName);
-    //void setVisible(bool);
+    void setVisible(bool);
     //void setLayerVisible(QString layerName, bool);
 signals:
     void nameChanged();

@@ -57,6 +57,16 @@ void AreaPlanLayer::setColor(QColor color)
 	_color = color;
 }
 
+bool AreaPlanLayer::isVisible()
+{
+    return AreaPolygonEditor::getInstance()->isVisible(this);
+}
+
+void AreaPlanLayer::setVisible(bool visible)
+{
+    AreaPolygonEditor::getInstance()->setVisible(this, visible);
+}
+
 void AreaPlanLayer::load(QString jsonFilePath)
 {
 	QFile file(jsonFilePath);

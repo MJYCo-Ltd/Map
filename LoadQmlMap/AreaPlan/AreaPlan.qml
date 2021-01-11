@@ -11,21 +11,42 @@ Rectangle{
     property int layerHeight: legendHeight
     property int legendWidth: 128
     property int legendHeight: 32
+    property bool editMode: checkBoxAreaPlanEdit.checked // default mode : show
     color: "transparent"
 
-    Button {
-        id : buttonNew
+    Rectangle{
         x:margin
         y:margin
-        width: planWidth
-        font.family: defaultStyle.fontFamilyCN
-        font.pointSize: defaultStyle.fontSize
-        text: qsTr("New")
-        onClicked: {
-            //$app.areaPlanManager.newPlan()
+        Row{
+            Button {
+                id : buttonNew
+                width: planWidth / 2
+                height:planHeight
+                font.family: defaultStyle.fontFamilyCN
+                font.pointSize: defaultStyle.fontSize
+                text: qsTr("New")
+                onClicked: {
+                    //$app.areaPlanManager.newPlan()
+                }
+            }
+            Text {
+                id: textEdit
+                width: planWidth / 2 - planHeight
+                height:planHeight
+                font.family: defaultStyle.fontFamilyCN
+                font.pointSize: defaultStyle.fontSize
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignRight
+                text: qsTr("Edit")
+            }
+            CheckBox{
+                id:checkBoxAreaPlanEdit
+                width:planHeight
+                height:planHeight
+                checked:false
+            }
         }
     }
-
     ListView {
         id:listViewPlan
         x:margin
@@ -46,7 +67,7 @@ Rectangle{
                 font.family: defaultStyle.fontFamilyCN
                 font.pointSize: defaultStyle.fontSize
                 verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
+                horizontalAlignment: Text.AlignLeft
                 text: modelData.name
             }
             MouseArea {
@@ -120,6 +141,7 @@ Rectangle{
                     rectLayer.ListView.view.currentIndex = index;
                     $app.areaPlanManager().setCurrentLayer(modelData.name)
                     edit.visible = false
+                    $app.areaPlanManager().setEditMode(areaPlan.editMode)
                     $app.areaPlanManager().startEdit()
                 }
             }

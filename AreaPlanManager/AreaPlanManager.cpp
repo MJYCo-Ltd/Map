@@ -133,7 +133,7 @@ QQmlListProperty<AreaPlanLayer> AreaPlanManager::layers()
     else
     {
         _layerList.clear();
-        qDebug() << "CURRENT PLAN IS NULL!";
+        //qDebug() << "CURRENT PLAN IS NULL!";
     }
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     return QQmlListProperty<AreaPlanLayer>(this, _layerList);
@@ -174,10 +174,12 @@ void AreaPlanManager::setCurrentPlan(QString name)
     else
     {
         if (_currentPlan)
+        {
+            _currentPlan->setVisible(false);
             disconnect(_currentPlan,SIGNAL(layerListChanged()), this, SIGNAL(layerListChanged()));
-
+        }
         _currentPlan = newPlan;
-
+        _currentPlan->setVisible(true);
         connect(_currentPlan,SIGNAL(layerListChanged()), this, SIGNAL(layerListChanged()));
 
         emit currentPlanChanged();
@@ -191,8 +193,13 @@ void AreaPlanManager::setCurrentLayer(QString layerName)
     currentPlan()->setCurrentLayer(layerName);
 }
 
+void AreaPlanManager::setEditMode(bool editMode)
+{
+    AreaPolygonEditor::getInstance()->setEnable(editMode);
+}
+
 void AreaPlanManager::startEdit()
-{    
+{
     // 完成区域编辑界面QML后解开此注释
     if (currentPlan() == nullptr)
         return;
@@ -204,8 +211,9 @@ void AreaPlanManager::startEdit()
     c.fG = cl->color().green() / 255.0;
     c.fB = cl->color().blue() / 255.0;
     c.fA = cl->color().alpha() / 255.0;
-    AreaPolygonEditor::getInstance()->setColor(c);    
-    AreaPolygonEditor::getInstance()->start();
+    AreaPolygonEditor::getInstance()->setColor(c);
+
+    //AreaPolygonEditor::getInstance()->start();
 }
 
 void AreaPlanManager::onAddArea(AreaPolygon* ap)

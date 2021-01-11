@@ -24,7 +24,7 @@ Rectangle {
     }
     ButtonGroup {
         buttons: column.children
-        onClicked: console.log("clicked:", button.text)
+        //onClicked: console.log("clicked:", button.text)
     }
     Column {
         id: column

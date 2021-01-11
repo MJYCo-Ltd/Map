@@ -133,6 +133,14 @@ void AreaPlan::setCurrentLayer(QString layerName)
 		_currentLayer = res;
 }
 
+void AreaPlan::setVisible(bool visible)
+{
+    for (int i = 0; i < layerList().count(); i++)
+    {
+        layerList()[i]->setVisible(visible);
+    }
+}
+
 QString AreaPlan::name()
 {
 	return _name;

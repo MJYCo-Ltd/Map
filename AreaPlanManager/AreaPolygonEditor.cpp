@@ -246,3 +246,21 @@ void AreaPolygonEditor::deletePolygon(AreaPolygon* polygon, AreaPlanLayer* layer
 {
     _sceneGraph->GetMap()->CreateLayer(layer->name().toStdString())->RemoveSceneNode(polygon->getIMapPolygon());
 }
+
+bool AreaPolygonEditor::isVisible(AreaPlanLayer* layer)
+{
+    IMap* map = _sceneGraph->GetMap();
+    if (map == nullptr)
+        return false;
+    IMapLayer* pLayer = map->CreateLayer(layer->name().toStdString());
+    if (pLayer == nullptr)
+        return false;
+    return pLayer->IsVisible();
+}
+
+void AreaPolygonEditor::setVisible(AreaPlanLayer* layer, bool visible)
+{
+    IMap* map = _sceneGraph->GetMap();
+    IMapLayer* pLayer = map->CreateLayer(layer->name().toStdString());
+    pLayer->SetVisible(visible);
+}
