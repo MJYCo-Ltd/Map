@@ -97,6 +97,7 @@ void AreaPlanLayer::load(QString jsonFilePath)
 
 void AreaPlanLayer::save(QString jsonFilePath)
 {
+    qDebug() << "AreaPlanLayer::save file:" << jsonFilePath;
 	QFile file(jsonFilePath);
 	if (!file.open(QIODevice::ReadWrite | QIODevice::Text | QIODevice::Truncate))
 	{

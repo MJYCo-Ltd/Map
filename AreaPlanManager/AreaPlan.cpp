@@ -43,10 +43,10 @@ QString AreaPlan::layerDirPath()
 
 void AreaPlan::load()
 {
-	QDir dir(_dirPath);
+    QDir dir(dirPath());
 	if (!dir.exists())
 		return;
-	QString _jsonFileName = jsonFileName(_dirPath);
+    QString _jsonFileName = jsonFileName(dirPath());
 	load(_jsonFileName, "*.json");
 	return;
 }
@@ -56,7 +56,7 @@ void AreaPlan::load(QString fn, QString format)
 	_jsonFileName = fn;
 	if (format.endsWith(".json") || format.endsWith(".JSON"))
 	{
-		QFile file(QString(_dirPath + "/" + _jsonFileName));
+        QFile file(QString(dirPath() + "/" + _jsonFileName));
 		if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 		{
 			qDebug() << "File open error";
@@ -89,10 +89,10 @@ void AreaPlan::load(QString fn, QString format)
 
 void AreaPlan::save()
 {
-	QDir dir(_dirPath);
+    QDir dir(dirPath());
 	if (!dir.exists())
 		return;
-	// QString _jsonFileName = jsonFileName(_dirPath);
+    // QString _jsonFileName = jsonFileName(dirPath());
 	// save(_jsonFileName, "*.json");
     foreach (AreaPlanLayer* one, _layerList)
 	{
@@ -199,6 +199,6 @@ AreaPlanLayer* AreaPlan::addLayer(QString name, QIcon legend, QColor color)
 
 QIcon AreaPlan::icon(QString filename)
 {
-	QString iconFilePath = _dirPath + "/" + filename;
+    QString iconFilePath = dirPath() + "/" + filename;
 	return QIcon(iconFilePath);
 }*/

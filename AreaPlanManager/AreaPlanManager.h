@@ -39,7 +39,7 @@ public:
     // load     : 加载方案时调用
     virtual void load();
     // save     : 保存方案时调用
-    virtual void save();
+    Q_INVOKABLE void save();
 
     Q_INVOKABLE AreaPlan* plan(QString name);
     QList<AreaPlan*> planList();

@@ -12,12 +12,26 @@ Rectangle{
     property int legendWidth: 128
     property int legendHeight: 32
     color: "transparent"
+
+    Button {
+        id : buttonNew
+        x:margin
+        y:margin
+        width: planWidth
+        font.family: defaultStyle.fontFamilyCN
+        font.pointSize: defaultStyle.fontSize
+        text: qsTr("New")
+        onClicked: {
+            //$app.areaPlanManager.newPlan()
+        }
+    }
+
     ListView {
         id:listViewPlan
         x:margin
-        y:margin
-        width: planWidth + margin
-        height:areaPlan.height - margin
+        y:margin + buttonNew.height + margin
+        width:planWidth + margin
+        height:areaPlan.height - y
         highlight: Rectangle { color: "lightsteelblue"; radius: 1 }
         highlightFollowsCurrentItem: true;
         focus: true
@@ -105,8 +119,8 @@ Rectangle{
                 onClicked: {
                     rectLayer.ListView.view.currentIndex = index;
                     $app.areaPlanManager().setCurrentLayer(modelData.name)
-                    $app.areaPlanManager().startEdit()
                     edit.visible = false
+                    $app.areaPlanManager().startEdit()
                 }
             }
         }
