@@ -5,12 +5,12 @@ Rectangle{
     id:areaPlan
     property int margin: defaultStyle.margin
     property int planWidth: layerWidth
-    property int planHeight: 42
+    property int planHeight: 32
     property int layerWidth: legendWidth + textWidth + margin
     property int layerHeight: legendHeight
-    property int legendWidth: 80
+    property int legendWidth: 64
     property int legendHeight: 32
-    property int textWidth: 120
+    property int textWidth: 128
     property int textHeight: defaultStyle.scenarioTextHeight
     property bool editMode: checkBoxAreaPlanEdit.checked // default mode : show
     color: "transparent"
@@ -26,7 +26,7 @@ Rectangle{
                 width: planWidth / 2
                 height:planHeight
                 font.family: defaultStyle.fontFamilyCN
-                font.pointSize: defaultStyle.fontSize
+                font.pointSize: defaultStyle.fontSizeSmall
                 text: qsTr("New")
                 onClicked: {
                     //$app.areaPlanManager.newPlan()
@@ -37,7 +37,7 @@ Rectangle{
                 width: planWidth / 2 - planHeight
                 height:planHeight
                 font.family: defaultStyle.fontFamilyCN
-                font.pointSize: defaultStyle.fontSize
+                font.pointSize: defaultStyle.fontSizeSmall
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignRight
                 text: qsTr("Edit")
@@ -58,6 +58,24 @@ Rectangle{
         model: $app.areaPlanManager().planNames
         width: planWidth
         height:planHeight
+        delegate:ItemDelegate {
+            width: planWidth
+            contentItem: Text {
+                text: modelData
+                font.family: defaultStyle.fontFamilyCN
+                font.pointSize: defaultStyle.fontSizeSmall
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+            }
+        }
+        contentItem: Text {
+            leftPadding: 5
+            text: comboxAreaPlan.displayText
+            font.family: defaultStyle.fontFamilyCN
+            font.pointSize: defaultStyle.fontSizeSmall
+            horizontalAlignment: Text.AlignLeft
+            verticalAlignment: Text.AlignVCenter
+        }
         onCurrentIndexChanged: {
             $app.areaPlanManager().setCurrentPlan(comboxAreaPlan.currentIndex)
         }
@@ -99,7 +117,7 @@ Rectangle{
                 width: textWidth
                 height: textHeight
                 font.family: defaultStyle.fontFamilyCN
-                font.pointSize: defaultStyle.fontSize
+                font.pointSize: defaultStyle.fontSizeSmall
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
                 color:modelData.color

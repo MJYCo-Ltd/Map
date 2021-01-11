@@ -62,7 +62,6 @@ Window
             anchors.left: marginLeft.right
             anchors.top: parent.top
             onClicked: {
-                //welcome.visible = ! welcome.visible
                 scenarioMenus.x = btnWelcome.x
                 scenarioMenus.y = btnWelcome.y + btnWelcome.height
                 scenarioMenus.visible = true
@@ -73,8 +72,9 @@ Window
             anchors.left: btnWelcome.right
             text:qsTr("EDIT")
             onClicked: {
-                //edit.visible = ! edit.visible
-                areaPlan.visible = true
+                editMenus.x = btnEdit.x
+                editMenus.y = btnEdit.y + btnEdit.height
+                editMenus.visible = true
             }
         }
         MenuButton{
@@ -82,8 +82,9 @@ Window
             anchors.left: btnEdit.right
             text:qsTr("PLAY")
             onClicked: {
-                animationBuild.start()
-                console.log("PLAY")
+                playMenus.x = btnPlay.x
+                playMenus.y = btnPlay.y + btnPlay.height
+                playMenus.visible = true
             }
         }
         MenuButton{
@@ -105,11 +106,66 @@ Window
     }
     // -- 弹出菜单 -----------------------------------------------------
     Rectangle{
+        id:playMenus
+        visible: false
+        width:columnPlayMenu.children.width
+        height:columnPlayMenu.children.height
+        Column{
+            id:columnPlayMenu
+            PopupMenuButton{
+                text:qsTr("Animation")
+                onClicked: {
+                    playMenus.visible = false
+                }
+            }
+            PopupMenuButton{
+                text:qsTr("Simulation")
+                onClicked: {
+                    playMenus.visible = false
+
+                    animationBuild.start()
+                    console.log("Simulation")
+                }
+            }
+        }
+    }
+    Rectangle{
+        id:editMenus
+        visible: false
+        width:columnEditMenu.children.width
+        height:columnEditMenu.children.height
+        Column{
+            id:columnEditMenu
+            PopupMenuButton{
+                text:qsTr("AreaPlan")
+                onClicked: {
+                    editMenus.visible = false
+                    areaPlan.visible = true
+                }
+            }
+            PopupMenuButton{
+                text:qsTr("PathPlan")
+                onClicked: {
+                    editMenus.visible = false
+                    areaPlan.visible = false
+                }
+            }
+            PopupMenuButton{
+                text:qsTr("AnimationEdit")
+                onClicked: {
+                    editMenus.visible = false
+                }
+            }
+        }
+    }
+    Rectangle{
         id:scenarioMenus
         visible: false
+        width:columnScenarioMenu.children.width
+        height:columnScenarioMenu.children.height
         Column{
+            id:columnScenarioMenu
             PopupMenuButton{
-                //iconSource : "qrc:/Image/Common/TalkboxBG.png"
                 text:qsTr("Scenario")
                 onClicked: {
                     scenarioMenus.visible = false
@@ -117,28 +173,17 @@ Window
                 }
             }
             PopupMenuButton{
-                //iconSource : "qrc:/Image/Common/TalkboxBG.png"
                 text:qsTr("Tutorials")
                 onClicked: {
                     scenarioMenus.visible = false
-                    // test
                     scenarioOverView.visible = false
                 }
             }
             PopupMenuButton{
-                //iconSource : "qrc:/Image/Common/TalkboxBG.png"
                 text:qsTr("Examples")
                 onClicked: {
-                    //scenarioOverView.visible = true
                     scenarioMenus.visible = false
                 }
-            }
-        }
-        MouseArea{
-            anchors.fill: parent
-            hoverEnabled: true
-            onExited: {
-                scenarioMenus.visible = false
             }
         }
     }
