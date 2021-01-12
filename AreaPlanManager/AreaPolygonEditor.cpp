@@ -1,5 +1,6 @@
 #include "AreaPolygonEditor.h"
 #include <SceneGraph/ISceneGraph.h>
+#include <SceneGraph/IViewPort.h>
 #include <Plot/Map/IMap.h>
 #include <QDebug>
 
@@ -249,6 +250,29 @@ void AreaPolygonEditor::deletePolygon(AreaPolygon* polygon, AreaPlanLayer* layer
     _sceneGraph->GetMap()->CreateLayer(layer->name().toStdString())->RemoveSceneNode(polygon->getIMapPolygon());
 }
 
+void AreaPolygonEditor::locatePolygon(AreaPolygon* polygon)
+{
+    if (polygon == nullptr)
+        return;
+    if (polygon->vertices().count() < 1)
+        return;
+    SceneViewPoint svp;
+    int vc = polygon->vertices().count();
+    float m = 1.0 / vc;
+    for (int i = 0; i < vc; i++)        // 取平均数
+    {
+        svp.stPos.fX += m * polygon->vertices()[i].x();
+        svp.stPos.fY += m * polygon->vertices()[i].y();
+        svp.stPos.fZ += m * polygon->vertices()[i].z();
+    }
+    svp.fElev = 45.0;
+    //svp.fAzimuth = 89.0;
+    svp.fDistance = 3000;
+
+    IViewPort* vp = _sceneGraph->GetMainWindow()->GetMainViewPoint();
+    vp->SetViewPoint(svp);
+}
+
 bool AreaPolygonEditor::isVisible(AreaPlanLayer* layer)
 {
     IMap* map = _sceneGraph->GetMap();
@@ -266,3 +290,11 @@ void AreaPolygonEditor::setVisible(AreaPlanLayer* layer, bool visible)
     IMapLayer* pLayer = map->CreateLayer(layer->name().toStdString());
     pLayer->SetVisible(visible);
 }
+/*
+void AreaPolygonEditor::setVisible(int index, AreaPlanLayer* layer, bool)
+{
+    IMap* map = _sceneGraph->GetMap();
+    IMapLayer* pLayer = map->CreateLayer(layer->name().toStdString());
+    //pLayer->SetVisible(index, visible);
+}
+*/

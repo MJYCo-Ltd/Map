@@ -37,7 +37,8 @@ public:
 	void setColor(QColor);
 
     bool isVisible();
-    void setVisible(bool);
+    void setVisible(bool);    
+    //void setVisible(int index, bool);
 
 	void load(QString jsonFilePath);
 	void save(QString jsonFilePath);

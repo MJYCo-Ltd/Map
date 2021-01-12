@@ -32,6 +32,7 @@ public:
     //void create();
     // 删除场景图形
     //void release();
+    void setVisible(bool);
 
 signals:
 

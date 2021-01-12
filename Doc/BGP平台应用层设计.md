@@ -22,11 +22,11 @@
 
 ### **主界面**
 
-导航栏由欢迎、编辑、演示、信息、设置五项组成，分别对应同名的五大页面（如下图）。
+导航栏由方案、编辑、演示、信息、设置五项组成，分别对应同名的五大页面（如下图）。
 
 ```mermaid
 graph TD; 
-MainWindow(主界面)-->|按下欢迎按钮|WelcomPage(欢迎页); 
+MainWindow(主界面)-->|按下方案按钮|ScenarioPage(方案页); 
 MainWindow(主界面)-->|按下编辑按钮|EditPage(编辑页); 
 MainWindow(主界面)-->|按下演示按钮|PlayPage(演示页); 
 MainWindow(主界面)-->|按下信息按钮|InfoPage(信息页); 
@@ -35,7 +35,11 @@ MainWindow(主界面)-->|按下设置按钮|SettingPage(设置页);
 
 ### 欢迎页
 
-用户启动时，默认打开欢迎页面。欢迎页包含方案、教程、示例三个标签页。
+用户启动时，默认打开欢迎页面。
+
+### 方案页
+
+方案页包含方案、教程、示例三个页面页。
 
 在方案标签页进行新建或加载操作将跳转到编辑页面。编辑页面中有修改时，可以通过快捷键或按下方案页的保存按钮进行保存。
 
@@ -43,16 +47,17 @@ MainWindow(主界面)-->|按下设置按钮|SettingPage(设置页);
 
 ```mermaid
 graph TD; 
-WelcomPage(欢迎页)-->|按下方案标签|ScenarioPage(方案标签页); 
+ScenarioButton(方案菜单)-->|按下|PopupMenu(弹出下拉菜单)
+PopupMenu-->|按下方案按钮|ScenarioPage(方案页); 
 ScenarioPage-->|按下新建方案按钮|Add(新建方案); 
 Add-->EditPage(编辑页); 
-ScenarioPage-->|选中方案列表项并点击加载按钮|Load(加载方案); 
+ScenarioPage-->|双击方案列表项|Load(加载方案); 
 Load-->EditPage(编辑页); 
 EditPage-->|按下保存快捷键|Save; 
 ScenarioPage-->|按下方案保存按钮|Save(保存当前方案); 
 ScenarioPage-->|选中方案列表项并点击删除按钮|Remove(删除方案); 
-WelcomPage(欢迎页)-->|按下教程标签|TutorialPage(教程标签页); 
-WelcomPage(欢迎页)-->|按下示例标签|ExamplePage(示例标签页); 
+PopupMenu-->|按下教程按钮|TutorialPage(教程页); 
+PopupMenu-->|按下示例按钮|ExamplePage(示例页); 
 ```
 
 **方案标签页**：包含新建方案（按钮/对话框）、我的收藏列表（预览/更多）、我的方案列表（预览/更多）。

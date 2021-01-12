@@ -20,7 +20,7 @@
 #include <QObject>
 #include "AreaPlanLayer.h"
 #include "AreaPolygon.h"
-
+/*
 // 命令接口
 class CommandEdit{
 public:
@@ -35,7 +35,7 @@ public:
     virtual void execute() = 0;
     virtual void undo() = 0;
 };
-
+*/
 
 class AREAPLANMANAGER_EXPORT AreaPolygonEditor : public QObject, public IWindowMessageObserver
 {
@@ -69,9 +69,11 @@ public:
 
     void createPolygon(AreaPolygon*, AreaPlanLayer*);
     void deletePolygon(AreaPolygon*, AreaPlanLayer*);
+    void locatePolygon(AreaPolygon*);
 
     bool isVisible(AreaPlanLayer*);
     void setVisible(AreaPlanLayer*, bool);
+    //void setVisible(int index, AreaPlanLayer*, bool);
 signals:
     void addArea(AreaPolygon*);                 // 编辑完成后发出此信号
 

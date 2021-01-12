@@ -326,6 +326,23 @@ void AreaPlanManager::startEdit()
     //AreaPolygonEditor::getInstance()->start();
 }
 
+void AreaPlanManager::locateArea(int index)
+{
+    AreaPolygonEditor::getInstance()->locatePolygon(area(index));
+}
+
+void AreaPlanManager::locateArea(AreaPolygon* polygon)
+{
+    AreaPolygonEditor::getInstance()->locatePolygon(polygon);
+}
+
+void AreaPlanManager::setAreaVisible(int index, bool v)
+{
+    AreaPolygon* polygon = area(index);
+    if (polygon)
+        polygon->setVisible(v);
+}
+
 void AreaPlanManager::onAddArea(AreaPolygon* ap)
 {
     if (_currentPlan == nullptr)
@@ -350,3 +367,15 @@ bool AreaPlanManager::isPlanDir(QString dirPath)
 		return false;
 }
 
+AreaPolygon* AreaPlanManager::area(int index)
+{
+    if (index < 0)
+        return nullptr;
+    if (currentPlan() == nullptr)
+        return nullptr;
+    if (currentPlan()->currentLayer() == nullptr)
+        return nullptr;
+    if (currentPlan()->currentLayer()->areaList().count() < index)
+        return nullptr;
+    return currentPlan()->currentLayer()->areaList()[index];
+}

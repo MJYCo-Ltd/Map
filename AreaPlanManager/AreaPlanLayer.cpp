@@ -66,7 +66,12 @@ void AreaPlanLayer::setVisible(bool visible)
 {
     AreaPolygonEditor::getInstance()->setVisible(this, visible);
 }
-
+/*
+void AreaPlanLayer::setVisible(int index, bool visible)
+{
+    AreaPolygonEditor::getInstance()->setVisible(index, this, visible);
+}
+*/
 void AreaPlanLayer::load(QString jsonFilePath)
 {
 	QFile file(jsonFilePath);

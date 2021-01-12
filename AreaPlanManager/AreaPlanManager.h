@@ -53,6 +53,8 @@ public:
     QQmlListProperty<AreaPlanLayer> layers();
     //QQmlListProperty<AreaPolygon> areas();
     Q_INVOKABLE int areaCount();
+    Q_INVOKABLE void locateArea(int index);
+    Q_INVOKABLE void setAreaVisible(int index, bool);
 
     Q_INVOKABLE bool isCurrentPlan(QString planName);
     AreaPlan* currentPlan();
@@ -86,6 +88,8 @@ private:
 	bool has(AreaPlan*);
 	bool isPlanDir(QString dirPath);
 
+    AreaPolygon* area(int index);
+    void locateArea(AreaPolygon*);
 private:
     QList<AreaPlan*>		_itemList;
     AreaPlan*       		_currentPlan;

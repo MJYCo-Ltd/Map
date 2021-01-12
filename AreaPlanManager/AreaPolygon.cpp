@@ -52,3 +52,11 @@ void AreaPolygon::release()
     AreaPolygonEditor::getInstance()->deletePolygon(this);
 }
 */
+
+
+void AreaPolygon::setVisible(bool v)
+{
+    if (_iMapPolygon)
+        _iMapPolygon->SetVisible(v);
+}
+

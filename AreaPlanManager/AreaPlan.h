@@ -5,7 +5,7 @@
 * Author:       魏晓亮
 * Version:      1.0
 * Date:         2020/06/23
-* Description:  
+* Description:  规划图，包含名称、若干图例，支持json读写
 * History:
 *************************************************/
 #include "AreaPlanManager_global.h"
