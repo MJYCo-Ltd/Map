@@ -48,6 +48,11 @@ void CSatelliteShow::SetJ2000Oribit(const std::vector<double> &vTime, const std:
     m_pOribit->SetMultPos(vTemp);
 }
 
+void CSatelliteShow::SetECFOribit(const std::vector<Math::CVector>& vOribitInfo)
+{
+    m_vEcfOribit = vOribitInfo;
+}
+
 /// 增加传感器
 void CSatelliteShow::AddSensor(ISensor *pSensor)
 {
@@ -59,6 +64,16 @@ void CSatelliteShow::AddSensor(ISensor *pSensor)
 
     m_pSatellite->AddSceneNode(pSensor);
     m_vSensor.insert(pSensor);
+}
+
+ScenePos CSatelliteShow::GetSatellitePos()
+{
+    return m_satelliteWgs84Pos;
+}
+
+Math::CMatrix CSatelliteShow::GetSatelliteInitAtt()
+{
+    return m_satelliteInitAtt;
 }
 
 /// 模型修改
@@ -110,6 +125,10 @@ void CSatelliteShow::NowTimeChanged()
 
     m_nIndex = nIndex;
 
+    //当前位置
+    m_satelliteWgs84Pos.fX = m_vEcfOribit[m_nIndex - 1](0);
+    m_satelliteWgs84Pos.fY = m_vEcfOribit[m_nIndex - 1](1);
+    m_satelliteWgs84Pos.fZ = m_vEcfOribit[m_nIndex - 1](2);
 
     /// 赋值
     dTime[0] = m_vdMjd[m_nIndex-1];
@@ -150,6 +169,8 @@ void CSatelliteShow::NowTimeChanged()
     rotate.SetRow(0,rX);
     rotate.SetRow(1,rY);
     rotate.SetRow(2,rZ);
+
+    m_satelliteInitAtt = rotate;
 
     /// 更新卫星的位置和旋转矩阵
     m_pSatellite->SetPos(tmpPos);

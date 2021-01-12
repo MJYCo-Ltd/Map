@@ -28,11 +28,27 @@ public:
     void SetJ2000Oribit(const std::vector<double> &, const std::vector<Math::CVector> &);
 
     /**
+     * @brief 更新轨道数据
+     */
+    void SetECFOribit(const std::vector<Math::CVector>&);
+
+    /**
      * @brief 添加传感器
      * @param pSensor
      */
     void AddSensor(ISensor*pSensor);
 
+    /// <summary>
+    /// 获取卫星位置
+    /// </summary>
+    /// <returns></returns>
+    ScenePos GetSatellitePos();
+
+    /// <summary>
+    /// 获取卫星初始姿态
+    /// </summary>
+    /// <returns></returns>
+    Math::CMatrix GetSatelliteInitAtt();
 protected:
     void ModelChanged();
     void NameChanged();
@@ -50,8 +66,11 @@ protected:
     ISceneModel*               m_pModel=nullptr;
     ILine*                     m_pOribit=nullptr;
     std::vector<Math::CVector> m_vOribit;    /// J2000坐标系下的数据
+    std::vector<Math::CVector> m_vEcfOribit; /// 地固系下的轨道数据
     std::vector<double>        m_vdMjd;      /// 坐标对应的时间
-    Math::CVector              m_stNowPos; /// 当前卫星的位置
+    Math::CVector              m_stNowPos; /// 当前卫星的位置(j2000)
+    ScenePos                   m_satelliteWgs84Pos;  // 当前卫星的位置(wgs84)
+    Math::CMatrix              m_satelliteInitAtt;      //卫星初始姿态
 
 
     double                     m_dStart = 0.0;

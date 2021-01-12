@@ -39,6 +39,23 @@ public:
      virtual void SetJ2000Oribit(const std::vector<double> &, const std::vector<Math::CVector> &)=0;
 
     /**
+     * @brief 设置卫星的地固系的位置
+     */
+    virtual void SetECFOribit(const std::vector<Math::CVector>&) = 0;
+
+    /// <summary>
+    /// 获取卫星位置
+    /// </summary>
+    /// <returns></returns>
+    virtual ScenePos GetSatellitePos() = 0;
+
+    /// <summary>
+    /// 获取卫星初始姿态
+    /// </summary>
+    /// <returns></returns>
+    virtual Math::CMatrix GetSatelliteInitAtt() = 0;
+
+    /**
      * @brief 更新时间
      */
     void UpdateData(double dMJD)JUDGE_DOUBLE_CALL_FUNCTION(dMJD,m_dNowMJD,NowTimeChanged)
