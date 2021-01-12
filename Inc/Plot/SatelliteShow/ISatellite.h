@@ -49,6 +49,12 @@ public:
     /// <returns></returns>
     virtual ScenePos GetSatellitePos() = 0;
 
+    /// <summary>
+    /// 获取卫星初始姿态
+    /// </summary>
+    /// <returns></returns>
+    virtual Math::CMatrix GetSatelliteInitAtt() = 0;
+
     /**
      * @brief 更新时间
      */
