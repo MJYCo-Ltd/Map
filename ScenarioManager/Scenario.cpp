@@ -3,6 +3,7 @@
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QJsonObject>
+#include <QDebug>
 
 Scenario::Scenario(QObject *parent) : QObject(parent)
 {
