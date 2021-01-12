@@ -36,7 +36,7 @@ public:
      * @brief 添加传感器
      * @param pSensor
      */
-    void AddSensor(ISensor*pSensor);
+    void AddSensor(int id, ISensor*pSensor);
 
     /// <summary>
     /// 获取卫星位置
@@ -44,11 +44,30 @@ public:
     /// <returns></returns>
     ScenePos GetSatellitePos();
 
+
     /// <summary>
-    /// 获取卫星初始姿态
+    /// 设置卫星缩放
     /// </summary>
-    /// <returns></returns>
-    Math::CMatrix GetSatelliteInitAtt();
+    /// <param name="dScale"></param>
+    void SetScale(double dScale);
+
+    /// <summary>
+    /// 设置卫星3D模型的矫正姿态
+    /// </summary>
+    /// <param name="rAttitude"></param>
+    void SetCorrectAttitude(const SceneAttitude& rAttitude);
+
+    /// <summary>
+    /// 设置卫星姿态
+    /// </summary>
+    /// <param name="rAttitude"></param>
+    void SetAttitude(const SceneAttitude& rAttitude);
+
+    /// <summary>
+    /// 设置卫星传感器姿态
+    /// </summary>
+    /// <param name="rAttitude"></param>
+    void SetSensorAttitude(int id, const SceneAttitude& rAttitude);
 protected:
     void ModelChanged();
     void NameChanged();
@@ -61,16 +80,23 @@ protected:
     double CalItNewtonEcf(double*,double,int);
 
 protected:
-    std::set<ISensor*>              m_vSensor;
-    ISceneAttitudeGroup*       m_pSatellite=nullptr;
+    ISceneAttitudeGroup*       m_pSatellite = nullptr;      //卫星根节点
+
+    ISceneAttitudeGroup*       m_pSatelliteAtt=nullptr;     //卫星调姿节点
+    ISceneScaleGroup*          m_pSatelliteScale = nullptr; //卫星缩放节点
     ISceneModel*               m_pModel=nullptr;
+
     ILine*                     m_pOribit=nullptr;
     std::vector<Math::CVector> m_vOribit;    /// J2000坐标系下的数据
     std::vector<Math::CVector> m_vEcfOribit; /// 地固系下的轨道数据
+
+    std::set<ISensor*>              m_vSensor;
+    std::map<int, ISceneAttitudeGroup*> m_SensorAttMap; //传感器调姿map
+
     std::vector<double>        m_vdMjd;      /// 坐标对应的时间
     Math::CVector              m_stNowPos; /// 当前卫星的位置(j2000)
     ScenePos                   m_satelliteWgs84Pos;  // 当前卫星的位置(wgs84)
-    Math::CMatrix              m_satelliteInitAtt;      //卫星初始姿态
+    SceneAttitude              m_satelliteCorrectAttitude;  //卫星模型矫正姿态
 
 
     double                     m_dStart = 0.0;
