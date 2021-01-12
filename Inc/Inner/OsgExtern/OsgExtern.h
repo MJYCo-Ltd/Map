@@ -72,6 +72,9 @@ private:
     bool                     m_bAdd;    /// 是否增加
 };
 
+/**
+ * @brief 修改界面控制节点
+ */
 class CModifyControl:public osg::Operation
 {
 public:
@@ -94,6 +97,36 @@ private:
     osg::ref_ptr<osgEarth::Controls::ControlCanvas> m_pCanvas;
     osg::ref_ptr<osgEarth::Controls::Control> m_pControl;
     bool                                      m_bAdd;
+};
+
+/**
+ * @brief 将节点绑定到指定节点的父节点上
+ */
+class COSGAttachNode:public osg::Operation
+{
+public:
+    COSGAttachNode(osg::Node* pNode,osg::Node* pAttachNode,bool bAdd):
+        m_pToAttachNode(pNode),m_pAttachNode(pAttachNode),m_bAdd(bAdd){}
+
+    void operator()(osg::Object*)
+    {
+        auto parents = m_pToAttachNode->getParents();
+        for(auto one : parents)
+        {
+            if(m_bAdd)
+            {
+                one->addChild(m_pAttachNode);
+            }
+            else
+            {
+                one->removeChild(m_pAttachNode);
+            }
+        }
+    }
+private:
+    osg::ref_ptr<osg::Node> m_pToAttachNode;
+    osg::ref_ptr<osg::Node> m_pAttachNode;
+    bool                    m_bAdd;
 };
 
 #endif // MAP_GLOBAL_H

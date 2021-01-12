@@ -6,6 +6,7 @@
 #include "DrawShape/SceneRadar.h"
 #include "DrawShape/ScenePolygon.h"
 #include "DrawShape/SceneImage.h"
+#include "DrawShape/SceneLabel.h"
 #include "SceneShape.h"
 
 static const char s_sPoint[]="IPoint";
@@ -20,6 +21,7 @@ static const char s_sConeSensor[]="IConeSensor";
 static const char s_sSConeSensor[]="ISConeSensor";
 static const char s_sPulseSensor[]="IPulseSensor";
 static const char s_sRadarSensor[]="IRadarSensor";
+static const char s_sLabel[]="ILabel";
 
 ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName)
 {
@@ -55,6 +57,10 @@ ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName
     {
         return(new CSceneImage(pSceneGraph));
     }
+    else if(s_sLabel == sInterfaceName)
+    {
+        return(new CSceneLabel(pSceneGraph));
+    }
 
     return(nullptr);
 }
@@ -86,6 +92,8 @@ bool QueryInterface(std::string& sInterfaceName)
     sInterfaceName += s_sPulseSensor;
     sInterfaceName += " ";
     sInterfaceName += s_sRadarSensor;
+    sInterfaceName += " ";
+    sInterfaceName += s_sLabel;
 
     return(true);
 }
