@@ -11,6 +11,9 @@ AreaPlanManager::AreaPlanManager(QObject* parent):QObject(parent)
 {
     _currentPlan = nullptr;
     setName("AreaPlan");
+
+    connect(this, SIGNAL(currentPlanChanged()), this, SIGNAL(areaListChanged()));
+    connect(this, SIGNAL(currentLayerChanged()), this, SIGNAL(areaListChanged()));
 }
 
 AreaPlanManager::~AreaPlanManager()
@@ -159,6 +162,40 @@ QQmlListProperty<AreaPlanLayer> AreaPlanManager::layers()
     return QQmlListProperty<AreaPlanLayer>(this, &_layerList);
 #endif
 }
+/*
+QQmlListProperty<AreaPolygon> AreaPlanManager::areas()
+{
+    qDebug() << "AreaPlanManager::areas exec";
+    if (currentPlan() && currentPlan()->currentLayer())
+    {
+        _polygonList = currentPlan()->currentLayer()->areaList();
+        qDebug() << "_polygonList.count()" << _polygonList.count();
+    }
+    else
+    {
+        _polygonList.clear();
+        qDebug() << "_polygonList.clear()";
+    }
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    return QQmlListProperty<AreaPolygon>(this, _polygonList);
+#else
+    return QQmlListProperty<AreaPolygon>(this, &_polygonList);
+#endif
+}*/
+
+int AreaPlanManager::areaCount()
+{
+    qDebug() << "AreaPlanManager::areaCount exec";
+    if (currentPlan() && currentPlan()->currentLayer())
+    {
+        return currentLayer()->areaList().count();
+    }
+    else
+    {
+        return 0;
+        qDebug() << "_polygonList.clear()";
+    }
+}
 
 bool AreaPlanManager::isCurrentPlan(QString planName)
 {
@@ -212,11 +249,56 @@ void AreaPlanManager::setCurrentPlan(QString name)
     setCurrentPlan(plan(name));
 }
 
+AreaPlanLayer* AreaPlanManager::currentLayer()
+{
+    if (currentPlan() == nullptr)
+        return nullptr;
+    else
+        return currentPlan()->currentLayer();
+}
+
+void AreaPlanManager::setCurrentLayer(AreaPlanLayer* newLayer)
+{
+    if (newLayer == nullptr)
+        return;
+    if (currentPlan() == nullptr)
+        return;
+    if (currentPlan()->currentLayer()
+            && currentPlan()->currentLayer()->name() == newLayer->name())
+        return;
+    else{
+        if (currentPlan()->currentLayer())
+        {
+            disconnect(currentPlan()->currentLayer(), SIGNAL(areaListChanged()), this, SIGNAL(areaListChanged()));
+        }
+        currentPlan()->setCurrentLayer(newLayer->name());
+        connect( currentPlan()->currentLayer(), SIGNAL(areaListChanged()), this, SIGNAL(areaListChanged()));
+        emit currentLayerChanged();
+        emit areaListChanged();
+    }
+}
+
+void AreaPlanManager::setCurrentLayer(int index)
+{
+    if (currentPlan() == nullptr)
+        return;
+    setCurrentLayer(currentPlan()->layer(index));
+}
+
 void AreaPlanManager::setCurrentLayer(QString layerName)
 {
     if (currentPlan() == nullptr)
         return;
-    currentPlan()->setCurrentLayer(layerName);
+    setCurrentLayer(currentPlan()->layer(layerName));
+}
+
+QColor AreaPlanManager::currentLayerColor()
+{
+    if (currentPlan() == nullptr)
+        return QColor("transparent");
+    if (currentPlan()->currentLayer() == nullptr)
+        return QColor("transparent");
+    return currentPlan()->currentLayer()->color();
 }
 
 void AreaPlanManager::setEditMode(bool editMode)

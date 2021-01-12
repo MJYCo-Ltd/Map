@@ -36,13 +36,15 @@ public:
     //QQmlListProperty<AreaPlanLayer> layers();
 	AreaPlanLayer* currentLayer(); 
 	void setCurrentLayer(QString layerName);
+    AreaPlanLayer* layer(QString layerName);
+    AreaPlanLayer* layer(int index);
     void setVisible(bool);
     //void setLayerVisible(QString layerName, bool);
 signals:
     void nameChanged();
     void layerListChanged();
+
 private:
-	AreaPlanLayer* layer(QString layerName);
     AreaPlanLayer* addLayer(QString name, QString legend, QColor color = QColor(255,255,255));
     //AreaPlanLayer* addLayer(QString name, QIcon legend, QColor color = QColor(255,255,255));
 	QIcon icon(QString filename);

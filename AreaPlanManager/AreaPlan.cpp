@@ -173,6 +173,14 @@ AreaPlanLayer* AreaPlan::layer(QString layerName)
 	return nullptr;
 }
 
+AreaPlanLayer* AreaPlan::layer(int index)
+{
+    if (layerList().count() > index)
+        return layerList()[index];
+    else
+        return nullptr;
+}
+
 AreaPlanLayer* AreaPlan::addLayer(QString name, QString legend, QColor color)
 {
     AreaPlanLayer* res = layer(name);

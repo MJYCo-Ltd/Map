@@ -45,10 +45,12 @@ public:
     void addAreaPolygon(AreaPolygon*);
     void removeAreaPlanPolygon(AreaPolygon*);
 
+    QList<AreaPolygon*>  areaList();
 signals:
     void nameChanged();
     void legendChanged();
-    void colorChanged();
+    void colorChanged();    
+    void areaListChanged();
 
 private:
 	QString										_name;

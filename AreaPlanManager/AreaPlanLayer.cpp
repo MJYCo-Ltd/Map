@@ -134,6 +134,8 @@ void AreaPlanLayer::addAreaPolygon(AreaPolygon* ap)
 {
     AreaPolygonEditor::getInstance()->createPolygon(ap, this);
     _areaList.append(ap);
+
+    emit areaListChanged();
 }
 
 void AreaPlanLayer::removeAreaPlanPolygon(AreaPolygon* ap)
@@ -142,3 +144,7 @@ void AreaPlanLayer::removeAreaPlanPolygon(AreaPolygon* ap)
     _areaList.removeOne(ap);
 }
 
+QList<AreaPolygon*>  AreaPlanLayer::areaList()
+{
+    return _areaList;
+}

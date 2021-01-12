@@ -71,13 +71,6 @@ Rectangle {
             anchors.fill: parent
         }
     }
-    Rectangle
-    {
-        id:rightBorder
-        anchors.left: label.right
-        x:margin
-        y:defaultStyle.height
-    }
     MouseArea {
         id: mouseAreaBtn
         anchors.fill: parent

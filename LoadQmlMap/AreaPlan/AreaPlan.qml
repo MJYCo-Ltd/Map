@@ -10,6 +10,8 @@ Rectangle{
     property int layerHeight: legendHeight
     property int legendWidth: 64
     property int legendHeight: 32
+    property int polygonWidth: 64
+    property int polygonHeight: 24
     property int textWidth: 128
     property int textHeight: defaultStyle.scenarioTextHeight
     property bool editMode: checkBoxAreaPlanEdit.checked // default mode : show
@@ -82,14 +84,14 @@ Rectangle{
     }
     ListView {
         id:listViewPlanLayer
-        //x:listViewPlan.width + areaPlanSplitLine.width + margin * 2
         x:margin
         y:margin*2 + planHeight*2
+        currentIndex: -1
         width: layerWidth + margin * 2
         height:areaPlan.height - y
         highlight: Rectangle {
-            color: "darkgray";
-            border.color: "lightsteelblue"; border.width: 1
+            color: "lightsteelblue";
+            //border.color: "lightsteelblue"; border.width: 1
         }
         highlightFollowsCurrentItem: true;
         focus: true
@@ -112,7 +114,7 @@ Rectangle{
                 color: "transparent"
             }
             Text{
-                id:listViewPlanLayerText
+                id:textLayer
                 anchors.left: rectSpace.right
                 width: textWidth
                 height: textHeight
@@ -147,6 +149,58 @@ Rectangle{
             target: $app.areaPlanManager()
             function onStartEditMode() {
                 areaPlan.visible = false
+            }
+        }
+    }
+    Rectangle{
+        x: listViewPlanLayer.width + margin
+        y: margin
+        width:1
+        height:areaPlan.height - y
+        color:"white"
+    }
+    ListView {
+        id:listViewAreaPolygon
+        x: listViewPlanLayer.width + margin * 2 + 1
+        y: listViewPlanLayer.y
+        width: polygonWidth
+        height:areaPlan.height - y - margin
+        currentIndex: -1
+        model:$app.areaPlanManager().areaCount()
+        delegate: Rectangle{
+            id:rectPolygon
+            width: polygonWidth
+            height: polygonHeight
+            color: $app.areaPlanManager().currentLayerColor()
+            Text{
+            //    id:textPolygon
+                anchors.centerIn: parent
+                width: textWidth
+                height: textHeight
+                font.family: defaultStyle.fontFamilyCN
+                font.pointSize: defaultStyle.fontSizeSmall
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                color: "#000000"
+                text: index.toString()
+            }
+            Rectangle{
+                anchors.bottom: parent.bottom
+                color: "white"
+                height: 1
+            }
+            //MouseArea {
+            //    anchors.fill: parent
+            //    onClicked: {
+            //        rectPolygon.ListView.view.currentIndex = index;
+            //    }
+            //}
+        }
+        Connections {
+            target: $app.areaPlanManager()
+            function onAreaListChanged() {
+                listViewAreaPolygon.model = $app.areaPlanManager().areaCount()
+                console.log("listViewAreaPolygon onAreaListChanged")
             }
         }
     }
