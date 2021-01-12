@@ -9,6 +9,7 @@
 #include <Inner/ILoadResource.h>
 #include <SceneGraph/ISceneGraph.h>
 #include <SceneGraph/SceneType.h>
+
 /**
  *  实现ISceneNode所有的接口
  */
@@ -56,28 +57,15 @@ protected:
         }
         else
         {
-            m_bVisibleChanged=true;
-            NodeChanged();
+            m_preMask = m_pRootNode->getNodeMask();
+            m_pRootNode->setNodeMask(0);
         }
-    }
 
-    /**
-     * @brief 显隐状态更改
-     */
-    void UpdateNode()
-    {
-        if(m_bVisibleChanged)
+        /// 更改显隐状态
+        for(auto one : m_allAttach)
         {
-            if(!T::m_bVisible)
-            {
-                m_preMask = m_pRootNode->getNodeMask();
-                m_pRootNode->setNodeMask(0);
-            }
-
-            m_bVisibleChanged=false;
+            one->NodeVisibleChanged(T::m_bVisible);
         }
-
-        IOsgSceneNode::UpdateNode();
     }
 
     void AddNode(osg::Group* pGroup,osg::Node* pNode)
@@ -92,7 +80,6 @@ protected:
 
 protected:
     osg::Node::NodeMask  m_preMask = 0xffffffffu;
-    bool         m_bVisibleChanged=false;
 };
 
 #endif // IMPL_SCENE_NODE_H

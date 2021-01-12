@@ -15,6 +15,7 @@ include($$PWD/../MapPlot.pri)
 HEADERS += \
     DrawShape/SceneCone.h \
     DrawShape/SceneImage.h \
+    DrawShape/SceneLabel.h \
     DrawShape/SceneLine.h \
     DrawShape/ScenePoint.h \
     DrawShape/ScenePolygon.h \
@@ -26,6 +27,7 @@ HEADERS += \
 SOURCES += \
     DrawShape/SceneCone.cpp \
     DrawShape/SceneImage.cpp \
+    DrawShape/SceneLabel.cpp \
     DrawShape/SceneLine.cpp \
     DrawShape/ScenePoint.cpp \
     DrawShape/ScenePolygon.cpp \

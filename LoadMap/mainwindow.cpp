@@ -32,6 +32,7 @@
 #include <Plot/SceneShape/IImage.h>
 #include <Plot/Common/ISceneScaleGroup.h>
 #include <Plot/Common/ISceneLodGroup.h>
+#include <Plot/SceneShape/ILabel.h>
 #include <Hud/IViewHud.h>
 
 
@@ -250,6 +251,17 @@ void MainWindow::on_action_triggered()
     pFlash->SetFlashFreq(0.5);
     pFlash->SetFlashColor(color);
     pLod->AddSceneNode(pScal);
+
+    ILabel* pLabel = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
+    pLabel->SetAttachNode(pModel);
+    pLabel->SetFont("fonts/msyh.ttf");
+    pLabel->SetText("飞机");
+
+    auto pAttitudeAirplane = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
+    pAttitudeAirplane->SetPos(pPoint1->Pos());
+    pAttitudeAirplane->AddSceneNode(pModel);
+    pSceneRoot->AddSceneNode(pAttitudeAirplane);
+
 
     std::vector<float> vLevelInfo;
     vLevelInfo.push_back(1e6);

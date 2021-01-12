@@ -3,6 +3,31 @@
 #include <osg/Node>
 
 /**
+ * @brief 场景依附节点
+ */
+class ISceneNodeAttach
+{
+public:
+    ISceneNodeAttach(){}
+    virtual ~ISceneNodeAttach(){}
+
+    /**
+     * @brief 显隐状态修改
+     */
+    virtual void NodeVisibleChanged(bool){}
+
+    /**
+     * @brief 增加到父节点
+     */
+    virtual void AddIntoParent(osg::Group*){}
+
+    /**
+     * @brief 从父节点移除
+     */
+    virtual void DelFromParent(osg::Group*){}
+};
+
+/**
  * @brief Osg类型的场景节点
  */
 class IOsgSceneNode
@@ -39,8 +64,62 @@ public:
      * @return
      */
     bool NeedUpdate(){return(m_bNeedUpdate);}
-protected:
 
+    /**
+     * @brief BindAttach
+     */
+    bool BindAttach(ISceneNodeAttach* pAttachNode)
+    {
+        if(m_allAttach.end() == m_allAttach.find(pAttachNode))
+        {
+            m_allAttach.insert(pAttachNode);
+            return(true);
+        }
+        else
+        {
+            return(false);
+        }
+    }
+
+    /**
+     * @brief 移除依附者
+     */
+    bool RemoveAttach(ISceneNodeAttach* pAttachNode)
+    {
+        auto pFindOne = m_allAttach.find(pAttachNode);
+        if(m_allAttach.end() != pFindOne)
+        {
+            m_allAttach.erase(pFindOne);
+            return(true);
+        }
+        else
+        {
+            return(false);
+        }
+    }
+
+    /**
+     * @brief 添加到场景节点
+     */
+    void AddToGroup(osg::Group* pParent)
+    {
+        for(auto one : m_allAttach)
+        {
+            one->AddIntoParent(pParent);
+        }
+    }
+
+    /**
+     * @brief 从场景中移除节点
+     */
+    void DelFromGroup(osg::Group* pParent)
+    {
+        for(auto one : m_allAttach)
+        {
+            one->DelFromParent(pParent);
+        }
+    }
+protected:
     /**
      * @brief 节点更改消息
      */
@@ -92,6 +171,7 @@ protected:
 protected:
     osg::ref_ptr<osg::Node> m_pRootNode;
     osg::ref_ptr<COsgSceneNodeUpdateCallback> m_pUpdateCallBack;
+    std::set<ISceneNodeAttach*> m_allAttach; ///依附的点
     bool                    m_bInit=false;
     bool                    m_bCanDelete=true;
     bool                    m_bNeedUpdate=false;

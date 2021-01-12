@@ -55,6 +55,7 @@ unsigned int CMapLayer::AddSceneNode(IMapSceneNode *pSceneNode)
     m_mapID2Node[++m_unID] = pSceneNode;
 
 
+    pSceneNode->AsOsgSceneNode()->AddToGroup(m_pModelLayer->getGroup());
     /// 添加到场景中去
     m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new MapLayerAddNode(this,dynamic_cast<IOsgMapSceneNode*>(pSceneNode)));
 
@@ -117,6 +118,7 @@ void CMapLayer::UpdateMapNode(osgEarth::MapNode *pMapNode)
 /// 删除节点
 void CMapLayer::RemoveNode(IMapSceneNode *pSceneNode)
 {
+    pSceneNode->AsOsgSceneNode()->DelFromGroup(m_pModelLayer->getGroup());
     /// 从场景中移除
     m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
                 new CModifyNode(m_pModelLayer->getGroup(),pSceneNode->AsOsgSceneNode()->GetOsgNode(),false));
