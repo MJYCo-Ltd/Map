@@ -48,17 +48,57 @@ void CSatelliteShow::SetJ2000Oribit(const std::vector<double> &vTime, const std:
     m_pOribit->SetMultPos(vTemp);
 }
 
+void CSatelliteShow::SetECFOribit(const std::vector<Math::CVector>& vOribitInfo)
+{
+    m_vEcfOribit = vOribitInfo;
+}
+
 /// 增加传感器
-void CSatelliteShow::AddSensor(ISensor *pSensor)
+void CSatelliteShow::AddSensor(int id, ISensor *pSensor)
 {
     if(m_vSensor.find(pSensor) != m_vSensor.end())
     {
         return;
     }
 
+    auto pAtt = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
+    pAtt->AddSceneNode(pSensor);
+    m_pSatellite->AddSceneNode(pAtt);
 
-    m_pSatellite->AddSceneNode(pSensor);
     m_vSensor.insert(pSensor);
+    m_SensorAttMap[id] = pAtt;
+}
+
+ScenePos CSatelliteShow::GetSatellitePos()
+{
+    return m_satelliteWgs84Pos;
+}
+
+void CSatelliteShow::SetScale(double dScale)
+{
+    m_pSatelliteScale->SetScal(dScale);
+}
+
+void CSatelliteShow::SetCorrectAttitude(const SceneAttitude& rAttitude)
+{
+    m_satelliteCorrectAttitude = rAttitude;
+}
+
+void CSatelliteShow::SetAttitude(const SceneAttitude& rAttitude)
+{
+    SceneAttitude att;
+    att.dYaw = m_satelliteCorrectAttitude.dYaw + rAttitude.dYaw;
+    att.dPitch = m_satelliteCorrectAttitude.dPitch + rAttitude.dPitch;
+    att.dRoll = m_satelliteCorrectAttitude.dRoll + rAttitude.dRoll;
+    m_pSatelliteAtt->SetAttitude(att);
+}
+
+void CSatelliteShow::SetSensorAttitude(int id, const SceneAttitude& rAttitude)
+{
+    if (m_SensorAttMap.find(id) != m_SensorAttMap.end())
+    {
+        m_SensorAttMap[id]->SetAttitude(rAttitude);
+    }
 }
 
 /// 模型修改
@@ -70,10 +110,13 @@ void CSatelliteShow::ModelChanged()
     }
 
     m_pModel = m_pSceneGraph->GetPlot()->LoadSceneNode(m_sModelPath)->AsSceneModel();
-    auto pGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
-    pGroup->AddSceneNode(m_pModel);
-    pGroup->SetMinScal(1);
-    m_pSatellite->AddSceneNode(pGroup);
+    m_pSatelliteAtt = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
+    m_pSatelliteScale = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
+    m_pSatelliteScale->AddSceneNode(m_pModel);
+    m_pSatelliteScale->SetAutoScal(false);
+    m_pSatelliteScale->SetMinScal(1);
+    m_pSatelliteAtt->AddSceneNode(m_pSatelliteScale);
+    m_pSatellite->AddSceneNode(m_pSatelliteAtt);
 }
 
 ///名称修改
@@ -110,6 +153,13 @@ void CSatelliteShow::NowTimeChanged()
 
     m_nIndex = nIndex;
 
+    //当前位置
+    if (m_vEcfOribit.size() > 1)
+    {
+        m_satelliteWgs84Pos.fX = m_vEcfOribit[m_nIndex - 1](0);
+        m_satelliteWgs84Pos.fY = m_vEcfOribit[m_nIndex - 1](1);
+        m_satelliteWgs84Pos.fZ = m_vEcfOribit[m_nIndex - 1](2);
+    }
 
     /// 赋值
     dTime[0] = m_vdMjd[m_nIndex-1];

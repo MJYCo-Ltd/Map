@@ -93,7 +93,10 @@ void ScenarioManager::setCurrentScenario(QString name)
 {
     // 没有切换方案
     if (_currentScenario && QString::compare(name, _currentScenario->name()) == 0)
+    {
+        emit scenarioLoaded();
         return;
+    }
     // 方案名不存在
     if (! contains(name))
         return;
@@ -104,6 +107,7 @@ void ScenarioManager::setCurrentScenario(QString name)
     {
         one->clear();
         one->load();
+        emit scenarioLoaded();
     }
 }
 

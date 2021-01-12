@@ -9,6 +9,7 @@
 * History:
 *************************************************/
 #include "AreaPlanManager_global.h"
+#include "AreaPlanLayer.h"
 #include "AreaPlan.h"
 #include "../ScenarioManager/ScenarioItem.h"
 #include <QQmlListProperty>
@@ -16,13 +17,19 @@
 #include <QList>
 
 Q_DECLARE_METATYPE(QQmlListProperty<AreaPlan>)
+Q_DECLARE_METATYPE(QQmlListProperty<AreaPlanLayer>)
+//Q_DECLARE_METATYPE(QQmlListProperty<AreaPolygon>)
+
 //class AreaPlan;
 class ISceneGraph;
 class AreaPolygon;
 class AREAPLANMANAGER_EXPORT AreaPlanManager : public QObject, public ScenarioItem
 {
     Q_OBJECT
-    Q_PROPERTY(QQmlListProperty<AreaPlan> planList READ planList NOTIFY planListChanged)
+    Q_PROPERTY(QStringList planNames READ planNames NOTIFY planListChanged)
+    Q_PROPERTY(QQmlListProperty<AreaPlan> plans READ plans NOTIFY planListChanged)
+    Q_PROPERTY(QQmlListProperty<AreaPlanLayer> layers READ layers NOTIFY layerListChanged)
+    //Q_PROPERTY(QQmlListProperty<AreaPolygon> areas READ areas NOTIFY areaListChanged)
 public:
     AreaPlanManager(QObject* parent = nullptr);
 	~AreaPlanManager();
@@ -36,14 +43,28 @@ public:
     // load     : 加载方案时调用
     virtual void load();
     // save     : 保存方案时调用
-    virtual void save();
+    Q_INVOKABLE void save();
 
     Q_INVOKABLE AreaPlan* plan(QString name);
-    QQmlListProperty<AreaPlan> planList();
+    Q_INVOKABLE AreaPlan* plan(int index);
+    QList<AreaPlan*> planList();
+    QStringList planNames();
+    QQmlListProperty<AreaPlan> plans();
+    QQmlListProperty<AreaPlanLayer> layers();
+    //QQmlListProperty<AreaPolygon> areas();
+    Q_INVOKABLE int areaCount();
 
+    Q_INVOKABLE bool isCurrentPlan(QString planName);
     AreaPlan* currentPlan();
+    Q_INVOKABLE void setCurrentPlan(AreaPlan*);
+    Q_INVOKABLE void setCurrentPlan(int index);
     Q_INVOKABLE void setCurrentPlan(QString planName);
+    AreaPlanLayer* currentLayer();
+    Q_INVOKABLE void setCurrentLayer(AreaPlanLayer*);
+    Q_INVOKABLE void setCurrentLayer(int index);
     Q_INVOKABLE void setCurrentLayer(QString layerName);
+    Q_INVOKABLE QColor currentLayerColor();
+    Q_INVOKABLE void setEditMode(bool editMode);
     Q_INVOKABLE void startEdit();
 
 public slots:
@@ -52,6 +73,11 @@ public slots:
 
 signals:
     void planListChanged();
+    void layerListChanged();
+    void areaListChanged();
+    void currentPlanChanged();
+    void currentLayerChanged();
+    void startEditMode();
 
 private:
     void addPlan(QString planDir);
@@ -59,7 +85,11 @@ private:
 	bool has(QString);
 	bool has(AreaPlan*);
 	bool isPlanDir(QString dirPath);
+
 private:
     QList<AreaPlan*>		_itemList;
     AreaPlan*       		_currentPlan;
+    // 使用临时的列表是为了统一外部接口，避免外部调用manager以为的其他（空）对象时造成崩溃
+    QList<AreaPlanLayer*>	_layerList;     // temp
+    QList<AreaPolygon*>     _polygonList;   // temp
 };

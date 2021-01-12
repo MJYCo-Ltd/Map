@@ -117,7 +117,7 @@ EditPage-->|按下路径按钮|PathPage(路径规划工具);
 
 实图
 
-![edit_process_simulation](..\Image\Axure\edit_process_simulation_b.png)
+![edit_process_simulation](..\Image\ScreenShot\edit_process_simulation.png)
 
 #### 区域规划
 
@@ -144,8 +144,12 @@ graph TD;
 AreaPlanDlgShow(查看模式)-->|取消居住用地复选按钮|HideArea(隐藏居住用地区域); 
 AreaPlanDlgShow-->|勾选居住用地复选按钮|ShowArea(显示居住用地区域); 
 ```
-**原型图**
+原型图
 ![edit_areaplan](..\Image\Axure\edit_areaplan.png)
+
+实图
+
+![edit_areaplan](..\Image\ScreenShot\edit_areaplan.png)
 
 ### 演示页
 
@@ -161,6 +165,8 @@ Play-->|按下快退按钮|Backward(快退15秒);
 PlayPage(演示页)-->|输入时间比|SetRatio(设置演示速度); 
 PlayPage(演示页)-->|拖动时间滑块|Skip(跳转到指定时间); 
 ```
+
+原型图
 
 ![play](..\Image\Axure\play.png)
 

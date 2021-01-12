@@ -8,7 +8,7 @@
 * Date:         2021/01/05
 * Description:  AreaPolygon的三维编辑器
 *               编辑过程中更新缓存数据，实时显示已添加的点和线
-*               编辑完成清空缓存，发送完整的多边形数据
+*               编辑完成清空缓存(temp图层)，发送完整的多边形数据
 * History:
 *************************************************/
 #include "AreaPlanManager_global.h"
@@ -58,6 +58,8 @@ public:
 
     // 开始编辑：接收鼠标事件，直到点击鼠标右键完成编辑
     void start();
+    void setEnable(bool);
+    bool isEnable();
 
     // 处理鼠标事件
     void MouseDown(MouseButtonMask, int, int);  // 左键添加点（并绘制线），右键结束编辑
@@ -68,6 +70,8 @@ public:
     void createPolygon(AreaPolygon*, AreaPlanLayer*);
     void deletePolygon(AreaPolygon*, AreaPlanLayer*);
 
+    bool isVisible(AreaPlanLayer*);
+    void setVisible(AreaPlanLayer*, bool);
 signals:
     void addArea(AreaPolygon*);                 // 编辑完成后发出此信号
 
@@ -75,15 +79,13 @@ public slots:
 
 private:
     void stop();
-    void setEnable(bool);
-    bool isEnable();
     void clear();
     void addPoint(MapGeoPos);
     void updatePoint(MapGeoPos);
 
 private:
     ISceneGraph*        _sceneGraph;
-    bool                _enable;
+    bool                _enable;        // edit mode switch
 
     SceneColor          _pointColor;
     SceneColor          _lineColor;

@@ -35,7 +35,7 @@ Rectangle {
     Rectangle
     {
         id:leftBorder
-        x:defaultStyle.margin
+        x:defaultStyle.menuWidth - defaultStyle.menuHeight - label.width
         y:defaultStyle.height
     }
     Rectangle
@@ -57,7 +57,7 @@ Rectangle {
     {
         id:label
         anchors.left: iconRect.right
-        width: defaultStyle.menuWidth - defaultStyle.menuHeight - 2 * margin
+        width: 128
         height:defaultStyle.menuHeight
         color: "transparent"
         Text {
@@ -70,13 +70,6 @@ Rectangle {
             horizontalAlignment: Text.AlignLeft
             anchors.fill: parent
         }
-    }
-    Rectangle
-    {
-        id:rightBorder
-        anchors.left: label.right
-        x:margin
-        y:defaultStyle.height
     }
     MouseArea {
         id: mouseAreaBtn

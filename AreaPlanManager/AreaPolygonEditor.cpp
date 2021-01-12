@@ -9,6 +9,7 @@ AreaPolygonEditor::AreaPolygonEditor() : QObject()
 {
     _line               = nullptr;
     _polygon            = nullptr;
+    _enable             = false;
 
     _pointColor.fR      = .1f;
     _pointColor.fG      = .8f;
@@ -67,7 +68,8 @@ void AreaPolygonEditor::stop()
 
 void AreaPolygonEditor::clear()
 {
-    _layer->Clear();
+    if (_layer)
+        _layer->Clear();
     _points.clear();
     _line = nullptr;
     _polygon = nullptr;
@@ -131,7 +133,7 @@ void AreaPolygonEditor::MouseMove(MouseButtonMask, int x, int y)
 void AreaPolygonEditor::KeyDown(char key)
 {
     qDebug() << "key:" << key;
-    // 如果按下Ctrl+Z
+    // 如果按下z // Ctrl+Z
     if (key == 'z')
     {
         if (_polygon && _polygon->GetPointCount() > 0)
@@ -245,4 +247,22 @@ void AreaPolygonEditor::createPolygon(AreaPolygon* ap, AreaPlanLayer* layer)
 void AreaPolygonEditor::deletePolygon(AreaPolygon* polygon, AreaPlanLayer* layer)
 {
     _sceneGraph->GetMap()->CreateLayer(layer->name().toStdString())->RemoveSceneNode(polygon->getIMapPolygon());
+}
+
+bool AreaPolygonEditor::isVisible(AreaPlanLayer* layer)
+{
+    IMap* map = _sceneGraph->GetMap();
+    if (map == nullptr)
+        return false;
+    IMapLayer* pLayer = map->CreateLayer(layer->name().toStdString());
+    if (pLayer == nullptr)
+        return false;
+    return pLayer->IsVisible();
+}
+
+void AreaPolygonEditor::setVisible(AreaPlanLayer* layer, bool visible)
+{
+    IMap* map = _sceneGraph->GetMap();
+    IMapLayer* pLayer = map->CreateLayer(layer->name().toStdString());
+    pLayer->SetVisible(visible);
 }

@@ -19,8 +19,8 @@ Rectangle{
     property int textHeight: defaultStyle.scenarioTextHeight
     Image{
         width:parent.width
-        height:parent.height// - textHeight
-        source:"file:///" + imageFilePath
+        height:parent.height
+        //source:"file:///" + imageFilePath
         visible:false
     }
     MouseArea {
@@ -30,14 +30,11 @@ Rectangle{
         //    rectButtonsScenario.visible = true
         //}
         onDoubleClicked: {
-            //console.log("$app.scenarioManager().setCurrentScenario(name) exec, name:", name)
             $app.scenarioManager().setCurrentScenario(name)
-            //console.log("$app.scenarioManager().load() exec")
             $app.scenarioManager().load()
-            //console.log("$app.scenarioManager().load() end")
             //welcome.visible = false
-            welcome.visible = false
-            $app.areaPlanManager().startEdit()
+            // test
+            //$app.areaPlanManager().startEdit()
         }
     }
     Rectangle{
@@ -53,7 +50,6 @@ Rectangle{
                 text: qsTr("removeFavorite")
                 visible: favorite
                 onClicked: {
-                    //console.log("scenarioManager.removeFavorite : " + name)
                     $app.scenarioManager().removeFavorite(name)
                 }
             }
@@ -65,7 +61,6 @@ Rectangle{
                 visible: !favorite
                 onClicked: {
                     $app.scenarioManager().addFavorite(name)
-                    //console.log("scenarioManager.addFavorite : " + name)
                 }
             }
             Button{
@@ -76,7 +71,6 @@ Rectangle{
                 visible: true
                 onClicked: {
                     // 先提示是否删除
-                    //console.log("scenarioManager.removeScenario : " + name)
                     $app.scenarioManager().removeScenario(name)
                 }
             }

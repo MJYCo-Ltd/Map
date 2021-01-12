@@ -59,6 +59,6 @@ ScenarioManager* QAppGlobal::scenarioManager()
 
 AreaPlanManager* QAppGlobal::areaPlanManager()
 {
-    qDebug() << "QAppGlobal::areaPlanManager() :" << m_pAreaPlanManager;
+    //qDebug() << "QAppGlobal::areaPlanManager() :" << m_pAreaPlanManager;
     return m_pAreaPlanManager;
 }

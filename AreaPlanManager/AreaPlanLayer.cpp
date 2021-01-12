@@ -9,7 +9,7 @@
 #include <QDebug>
 #include <QFile>
 
-AreaPlanLayer::AreaPlanLayer()
+AreaPlanLayer::AreaPlanLayer(QObject* parent):QObject(parent)
 {
 }
 
@@ -27,6 +27,16 @@ void AreaPlanLayer::setName(QString name)
 	_name = name;
 }
 
+QString AreaPlanLayer::legend()
+{
+    return _legend;
+}
+
+void AreaPlanLayer::setLegend(QString legend)
+{
+    _legend = legend;
+}
+/*
 QIcon AreaPlanLayer::legend()
 {
 	return _legend;
@@ -35,7 +45,7 @@ QIcon AreaPlanLayer::legend()
 void AreaPlanLayer::setLegend(QIcon legend)
 {
 	_legend = legend;
-}
+}*/
 
 QColor AreaPlanLayer::color()
 {
@@ -45,6 +55,16 @@ QColor AreaPlanLayer::color()
 void AreaPlanLayer::setColor(QColor color)
 {
 	_color = color;
+}
+
+bool AreaPlanLayer::isVisible()
+{
+    return AreaPolygonEditor::getInstance()->isVisible(this);
+}
+
+void AreaPlanLayer::setVisible(bool visible)
+{
+    AreaPolygonEditor::getInstance()->setVisible(this, visible);
 }
 
 void AreaPlanLayer::load(QString jsonFilePath)
@@ -87,6 +107,7 @@ void AreaPlanLayer::load(QString jsonFilePath)
 
 void AreaPlanLayer::save(QString jsonFilePath)
 {
+    qDebug() << "AreaPlanLayer::save file:" << jsonFilePath;
 	QFile file(jsonFilePath);
 	if (!file.open(QIODevice::ReadWrite | QIODevice::Text | QIODevice::Truncate))
 	{
@@ -113,6 +134,8 @@ void AreaPlanLayer::addAreaPolygon(AreaPolygon* ap)
 {
     AreaPolygonEditor::getInstance()->createPolygon(ap, this);
     _areaList.append(ap);
+
+    emit areaListChanged();
 }
 
 void AreaPlanLayer::removeAreaPlanPolygon(AreaPolygon* ap)
@@ -121,3 +144,7 @@ void AreaPlanLayer::removeAreaPlanPolygon(AreaPolygon* ap)
     _areaList.removeOne(ap);
 }
 
+QList<AreaPolygon*>  AreaPlanLayer::areaList()
+{
+    return _areaList;
+}

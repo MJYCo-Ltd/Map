@@ -2,6 +2,10 @@ import QtQuick 2.0
 
 Item {
     id : defaultStyle
+    // close button
+    property int buttonCloseWidth: 64
+    property int buttonCloseHeight: 64
+    property var buttonCloseSourse: ""
     // title
     property int titleWidth : 240
     property int titleHeight : 42

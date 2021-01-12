@@ -39,14 +39,49 @@ public:
      virtual void SetJ2000Oribit(const std::vector<double> &, const std::vector<Math::CVector> &)=0;
 
     /**
-     * @brief 更新时间
+     * @brief 设置卫星的地固系的位置
      */
-    void UpdateData(double dMJD)JUDGE_DOUBLE_CALL_FUNCTION(dMJD,m_dNowMJD,NowTimeChanged)
+    virtual void SetECFOribit(const std::vector<Math::CVector>&) = 0;
+
+    /// <summary>
+    /// 获取卫星位置
+    /// </summary>
+    /// <returns></returns>
+    virtual ScenePos GetSatellitePos() = 0;
+
+    /// <summary>
+    /// 设置卫星缩放
+    /// </summary>
+    /// <param name="dScale"></param>
+    virtual void SetScale(double dScale) = 0;
+
+    /// <summary>
+    /// 设置卫星3D模型的矫正姿态
+    /// </summary>
+    /// <param name="rAttitude"></param>
+    virtual void SetCorrectAttitude(const SceneAttitude& rAttitude) = 0;
+
+    /// <summary>
+    /// 设置卫星姿态
+    /// </summary>
+    /// <param name="rAttitude"></param>
+    virtual void SetAttitude(const SceneAttitude& rAttitude) = 0;
+
+    /// <summary>
+    /// 设置卫星传感器姿态
+    /// </summary>
+    /// <param name="rAttitude"></param>
+    virtual void SetSensorAttitude(int id, const SceneAttitude& rAttitude) = 0;
 
     /**
-     * @brief添加传感器
+     * @brief 更新时间
      */
-    virtual void AddSensor(ISensor*)=0;
+    void UpdateData(double dMJD)JUDGE_DOUBLE_CALL_FUNCTION(dMJD, m_dNowMJD, NowTimeChanged)
+
+	/**
+	* @brief添加传感器
+	*/
+	virtual void AddSensor(int id, ISensor*) = 0;
 protected:
     virtual ~ISatellite(){}
     virtual void ModelChanged()=0;

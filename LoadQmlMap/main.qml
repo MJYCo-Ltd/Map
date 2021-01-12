@@ -2,8 +2,10 @@ import QtQuick 2.12
 import QtQuick.Window 2.12
 import MyItem 1.0
 import "./Common"
-import "./Welcome"
-import "./Edit"
+//import "./Welcome"
+//import "./Edit"
+import "./Scenario"
+import "./AreaPlan"
 
 Window
 {
@@ -28,12 +30,6 @@ Window
             $app.init()
         }
     }
-    //ScenarioManager{
-    //    id:scenarioManager
-    //}
-    //AreaPlanManager{
-    //    id:areaPlanManager
-    //}
     ProcessSimulationBuild
     {
         id:animationBuild
@@ -62,11 +58,13 @@ Window
         }
         MenuButton{
             id: btnWelcome
-            text:qsTr("WELCOME")
+            text:qsTr("SCENARIO")
             anchors.left: marginLeft.right
             anchors.top: parent.top
             onClicked: {
-                welcome.visible = ! welcome.visible
+                scenarioMenus.x = btnWelcome.x
+                scenarioMenus.y = btnWelcome.y + btnWelcome.height
+                scenarioMenus.visible = true
             }
         }
         MenuButton{
@@ -74,7 +72,9 @@ Window
             anchors.left: btnWelcome.right
             text:qsTr("EDIT")
             onClicked: {
-                edit.visible = ! edit.visible
+                editMenus.x = btnEdit.x
+                editMenus.y = btnEdit.y + btnEdit.height
+                editMenus.visible = true
             }
         }
         MenuButton{
@@ -82,8 +82,9 @@ Window
             anchors.left: btnEdit.right
             text:qsTr("PLAY")
             onClicked: {
-                animationBuild.start()
-                console.log("PLAY")
+                playMenus.x = btnPlay.x
+                playMenus.y = btnPlay.y + btnPlay.height
+                playMenus.visible = true
             }
         }
         MenuButton{
@@ -103,15 +104,116 @@ Window
             }
         }
     }
+    // -- 弹出菜单 -----------------------------------------------------
+    Rectangle{
+        id:playMenus
+        visible: false
+        width:columnPlayMenu.children.width
+        height:columnPlayMenu.children.height
+        Column{
+            id:columnPlayMenu
+            PopupMenuButton{
+                text:qsTr("Animation")
+                onClicked: {
+                    playMenus.visible = false
+                }
+            }
+            PopupMenuButton{
+                text:qsTr("Simulation")
+                onClicked: {
+                    playMenus.visible = false
+
+                    animationBuild.start()
+                    console.log("Simulation")
+                }
+            }
+        }
+    }
+    Rectangle{
+        id:editMenus
+        visible: false
+        width:columnEditMenu.children.width
+        height:columnEditMenu.children.height
+        Column{
+            id:columnEditMenu
+            PopupMenuButton{
+                text:qsTr("AreaPlan")
+                onClicked: {
+                    editMenus.visible = false
+                    areaPlan.visible = true
+                }
+            }
+            PopupMenuButton{
+                text:qsTr("PathPlan")
+                onClicked: {
+                    editMenus.visible = false
+                    areaPlan.visible = false
+                }
+            }
+            PopupMenuButton{
+                text:qsTr("AnimationEdit")
+                onClicked: {
+                    editMenus.visible = false
+                }
+            }
+        }
+    }
+    Rectangle{
+        id:scenarioMenus
+        visible: false
+        width:columnScenarioMenu.children.width
+        height:columnScenarioMenu.children.height
+        Column{
+            id:columnScenarioMenu
+            PopupMenuButton{
+                text:qsTr("Scenario")
+                onClicked: {
+                    scenarioMenus.visible = false
+                    scenarioOverView.visible = true
+                }
+            }
+            PopupMenuButton{
+                text:qsTr("Tutorials")
+                onClicked: {
+                    scenarioMenus.visible = false
+                    scenarioOverView.visible = false
+                }
+            }
+            PopupMenuButton{
+                text:qsTr("Examples")
+                onClicked: {
+                    scenarioMenus.visible = false
+                }
+            }
+        }
+    }
+    // -- 方案列表 -----------------------------------------
+    ScenarioOverView {
+        id: scenarioOverView
+        y:menuHeight
+        margin:defaultStyle.margin
+        width: parent.width
+        height: parent.height - menuHeight
+        visible: false
+    }
+    // -- 区域编辑-----------------------------------------
+    AreaPlan {
+        id: areaPlan
+        y:menuHeight
+        margin:defaultStyle.margin
+        width: parent.width
+        height: parent.height - menuHeight
+        visible: false
+    }
     // -- 欢迎页 -------------------------------------------------------
-    Welcome {
-        id: welcome
-        visible: false
-    }
-    Edit {
-        id: edit
-        visible: false
-    }
+    //Welcome {
+    //    id: welcome
+    //    visible: false
+    //}
+    //Edit {
+    //    id: edit
+    //    visible: false
+    //}
     // -- 测试消息框 ---------------------------------------------------
     Rectangle{
         id:testMsg
