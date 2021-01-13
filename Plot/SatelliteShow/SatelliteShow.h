@@ -64,10 +64,22 @@ public:
     void SetAttitude(const SceneAttitude& rAttitude);
 
     /// <summary>
+    /// 获取卫星姿态
+    /// </summary>
+    /// <param name="rAttitude"></param>
+    SceneAttitude GetAttitude();
+
+    /// <summary>
     /// 设置卫星传感器姿态
     /// </summary>
     /// <param name="rAttitude"></param>
     void SetSensorAttitude(int id, const SceneAttitude& rAttitude);
+
+    /// <summary>
+    /// 获取卫星传感器姿态
+    /// </summary>
+    /// <param name="rAttitude"></param>
+    SceneAttitude GetSensorAttitude(int id);
 protected:
     void ModelChanged();
     void NameChanged();
@@ -92,11 +104,13 @@ protected:
 
     std::set<ISensor*>              m_vSensor;
     std::map<int, ISceneAttitudeGroup*> m_SensorAttMap; //传感器调姿map
+    std::map<int, SceneAttitude> m_SensorAttValueMap;   //传感器姿态map
 
     std::vector<double>        m_vdMjd;      /// 坐标对应的时间
     Math::CVector              m_stNowPos; /// 当前卫星的位置(j2000)
     ScenePos                   m_satelliteWgs84Pos;  // 当前卫星的位置(wgs84)
     SceneAttitude              m_satelliteCorrectAttitude;  //卫星模型矫正姿态
+    SceneAttitude              m_satelliteAttitude;         //卫星姿态
 
 
     double                     m_dStart = 0.0;

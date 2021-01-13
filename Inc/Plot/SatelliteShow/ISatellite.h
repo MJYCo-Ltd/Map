@@ -68,10 +68,22 @@ public:
     virtual void SetAttitude(const SceneAttitude& rAttitude) = 0;
 
     /// <summary>
+    /// 获取卫星姿态
+    /// </summary>
+    /// <param name="rAttitude"></param>
+    virtual SceneAttitude GetAttitude() = 0;
+
+    /// <summary>
     /// 设置卫星传感器姿态
     /// </summary>
     /// <param name="rAttitude"></param>
     virtual void SetSensorAttitude(int id, const SceneAttitude& rAttitude) = 0;
+
+    /// <summary>
+    /// 获取卫星传感器姿态
+    /// </summary>
+    /// <param name="rAttitude"></param>
+    virtual SceneAttitude GetSensorAttitude(int id) = 0;
 
     /**
      * @brief 更新时间

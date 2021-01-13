@@ -87,10 +87,17 @@ void CSatelliteShow::SetCorrectAttitude(const SceneAttitude& rAttitude)
 void CSatelliteShow::SetAttitude(const SceneAttitude& rAttitude)
 {
     SceneAttitude att;
+    att.rotaOrder = SR_YPR;
     att.dYaw = m_satelliteCorrectAttitude.dYaw + rAttitude.dYaw;
     att.dPitch = m_satelliteCorrectAttitude.dPitch + rAttitude.dPitch;
     att.dRoll = m_satelliteCorrectAttitude.dRoll + rAttitude.dRoll;
     m_pSatelliteAtt->SetAttitude(att);
+    m_satelliteAttitude = rAttitude;
+}
+
+SceneAttitude CSatelliteShow::GetAttitude()
+{
+    return m_satelliteAttitude;
 }
 
 void CSatelliteShow::SetSensorAttitude(int id, const SceneAttitude& rAttitude)
@@ -98,7 +105,13 @@ void CSatelliteShow::SetSensorAttitude(int id, const SceneAttitude& rAttitude)
     if (m_SensorAttMap.find(id) != m_SensorAttMap.end())
     {
         m_SensorAttMap[id]->SetAttitude(rAttitude);
+        m_SensorAttValueMap[id] = rAttitude;
     }
+}
+
+SceneAttitude CSatelliteShow::GetSensorAttitude(int id)
+{
+    return m_SensorAttValueMap[id];
 }
 
 /// 模型修改
