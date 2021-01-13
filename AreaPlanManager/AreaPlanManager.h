@@ -29,7 +29,7 @@ class AREAPLANMANAGER_EXPORT AreaPlanManager : public QObject, public ScenarioIt
     Q_PROPERTY(QStringList planNames READ planNames NOTIFY planListChanged)
     Q_PROPERTY(QQmlListProperty<AreaPlan> plans READ plans NOTIFY planListChanged)
     Q_PROPERTY(QQmlListProperty<AreaPlanLayer> layers READ layers NOTIFY layerListChanged)
-    //Q_PROPERTY(QQmlListProperty<AreaPolygon> areas READ areas NOTIFY areaListChanged)
+    Q_PROPERTY(int areaCount READ areaCount NOTIFY areaListChanged)
 public:
     AreaPlanManager(QObject* parent = nullptr);
 	~AreaPlanManager();
@@ -52,9 +52,11 @@ public:
     QQmlListProperty<AreaPlan> plans();
     QQmlListProperty<AreaPlanLayer> layers();
     //QQmlListProperty<AreaPolygon> areas();
-    Q_INVOKABLE int areaCount();
+    int areaCount();
     Q_INVOKABLE void locateArea(int index);
+    Q_INVOKABLE void removeArea(int index);
     Q_INVOKABLE void setAreaVisible(int index, bool);
+    Q_INVOKABLE void setLayerVisible(int index, bool);
 
     Q_INVOKABLE bool isCurrentPlan(QString planName);
     AreaPlan* currentPlan();
@@ -89,11 +91,13 @@ private:
 	bool isPlanDir(QString dirPath);
 
     AreaPolygon* area(int index);
+    AreaPlanLayer* layer(int index);
     void locateArea(AreaPolygon*);
+    void removeArea(AreaPolygon*);
 private:
     QList<AreaPlan*>		_itemList;
     AreaPlan*       		_currentPlan;
     // 使用临时的列表是为了统一外部接口，避免外部调用manager以为的其他（空）对象时造成崩溃
     QList<AreaPlanLayer*>	_layerList;     // temp
-    QList<AreaPolygon*>     _polygonList;   // temp
+    //QList<AreaPolygon*>     _polygonList;   // temp
 };

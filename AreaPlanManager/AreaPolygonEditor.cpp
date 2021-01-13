@@ -245,7 +245,7 @@ void AreaPolygonEditor::createPolygon(AreaPolygon* ap, AreaPlanLayer* layer)
     ap->setIMapPolygon(iMapPolygon);
 }
 
-void AreaPolygonEditor::deletePolygon(AreaPolygon* polygon, AreaPlanLayer* layer)
+void AreaPolygonEditor::removePolygon(AreaPolygon* polygon, AreaPlanLayer* layer)
 {
     _sceneGraph->GetMap()->CreateLayer(layer->name().toStdString())->RemoveSceneNode(polygon->getIMapPolygon());
 }

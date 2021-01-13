@@ -199,10 +199,11 @@ Window
     // -- 区域编辑-----------------------------------------
     AreaPlan {
         id: areaPlan
-        y:menuHeight
         margin:defaultStyle.margin
-        width: parent.width
-        height: parent.height - menuHeight
+        x: margin
+        y: menuHeight + margin
+        //width: parent.width
+        //height: parent.height - menuHeight
         visible: false
     }
     // -- 欢迎页 -------------------------------------------------------

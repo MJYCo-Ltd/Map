@@ -39,6 +39,8 @@ void AreaPlanManager::load()
             addPlan(path);
         }
     }
+    if(planList().count() > 0)
+        setCurrentPlan(0);
 }
 
 void AreaPlanManager::save()
@@ -185,7 +187,6 @@ QQmlListProperty<AreaPolygon> AreaPlanManager::areas()
 
 int AreaPlanManager::areaCount()
 {
-    qDebug() << "AreaPlanManager::areaCount exec";
     if (currentPlan() && currentPlan()->currentLayer())
     {
         return currentLayer()->areaList().count();
@@ -336,11 +337,32 @@ void AreaPlanManager::locateArea(AreaPolygon* polygon)
     AreaPolygonEditor::getInstance()->locatePolygon(polygon);
 }
 
+void AreaPlanManager::removeArea(int index)
+{
+    if (currentLayer() == nullptr)
+        return;
+    currentLayer()->removeAreaPlanPolygon(index);
+}
+
+void AreaPlanManager::removeArea(AreaPolygon* polygon)
+{
+    if (currentLayer() == nullptr)
+        return;
+    currentLayer()->removeAreaPlanPolygon(polygon);
+}
+
 void AreaPlanManager::setAreaVisible(int index, bool v)
 {
     AreaPolygon* polygon = area(index);
     if (polygon)
         polygon->setVisible(v);
+}
+
+void AreaPlanManager::setLayerVisible(int index, bool v)
+{
+    AreaPlanLayer* l = layer(index);
+    if (l)
+        l->setVisible(v);
 }
 
 void AreaPlanManager::onAddArea(AreaPolygon* ap)
@@ -378,4 +400,15 @@ AreaPolygon* AreaPlanManager::area(int index)
     if (currentPlan()->currentLayer()->areaList().count() < index)
         return nullptr;
     return currentPlan()->currentLayer()->areaList()[index];
+}
+
+AreaPlanLayer* AreaPlanManager::layer(int index)
+{
+    if (index < 0)
+        return nullptr;
+    if (currentPlan() == nullptr)
+        return nullptr;
+    if (currentPlan()->layerList().count() < index)
+        return nullptr;
+    return currentPlan()->layerList()[index];
 }

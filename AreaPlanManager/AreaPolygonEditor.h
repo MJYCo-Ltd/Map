@@ -68,7 +68,7 @@ public:
     virtual void KeyDown(char);
 
     void createPolygon(AreaPolygon*, AreaPlanLayer*);
-    void deletePolygon(AreaPolygon*, AreaPlanLayer*);
+    void removePolygon(AreaPolygon*, AreaPlanLayer*);
     void locatePolygon(AreaPolygon*);
 
     bool isVisible(AreaPlanLayer*);

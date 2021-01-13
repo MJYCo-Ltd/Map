@@ -45,6 +45,7 @@ public:
 
     void addAreaPolygon(AreaPolygon*);
     void removeAreaPlanPolygon(AreaPolygon*);
+    void removeAreaPlanPolygon(int index);
 
     QList<AreaPolygon*>  areaList();
 signals:
