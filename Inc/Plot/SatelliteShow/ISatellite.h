@@ -36,7 +36,7 @@ public:
      * @param 第一个参数 各个计算点对应的 约简儒略日 时间
      * @param 第二个参数 卫星的 J2000下的位置和速度   [m,m,m,m/s,m/s,m/s]
      */
-     virtual void SetJ2000Oribit(const std::vector<double> &, const std::vector<Math::CVector> &)=0;
+    virtual void SetJ2000Oribit(const std::vector<double> &, const std::vector<Math::CVector> &)=0;
 
     /**
      * @brief 设置卫星的地固系的位置
@@ -78,10 +78,10 @@ public:
      */
     void UpdateData(double dMJD)JUDGE_DOUBLE_CALL_FUNCTION(dMJD, m_dNowMJD, NowTimeChanged)
 
-	/**
-	* @brief添加传感器
-	*/
-	virtual void AddSensor(int id, ISensor*) = 0;
+    /**
+     * @brief添加传感器
+     */
+    virtual void AddSensor(int id, ISensor*) = 0;
 protected:
     virtual ~ISatellite(){}
     virtual void ModelChanged()=0;

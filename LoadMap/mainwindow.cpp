@@ -405,6 +405,8 @@ void MainWindow::on_action_triggered()
     /// 标绘卫星
     ISatellite* pSatellite= dynamic_cast<ISatellite*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISatellite"));
 
+    pSatellite->SetName("长江");
+    pSatellite->SetScale(10000.);
     CDate mjBein(2021,1,7,17,29,0);
     Satellite::CSGP4 spg41("1 91001U          20061.66666667 -.00000001  00000-0 -13106-2 0 00008",
                           "2 91001 045.0073 000.0048 0004655 268.5152 091.4846 07.15404217000017");

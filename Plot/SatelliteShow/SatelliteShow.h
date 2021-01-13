@@ -7,6 +7,7 @@
  */
 
 #include <Plot/SatelliteShow/ISatellite.h>
+#include <Plot/SceneShape/ILabel.h>
 
 #include <Inner/ImplSceneGroup.hpp>
 
@@ -85,6 +86,7 @@ protected:
     ISceneAttitudeGroup*       m_pSatelliteAtt=nullptr;     //卫星调姿节点
     ISceneScaleGroup*          m_pSatelliteScale = nullptr; //卫星缩放节点
     ISceneModel*               m_pModel=nullptr;
+    ILabel*                    m_pSatelliteName=nullptr;
 
     ILine*                     m_pOribit=nullptr;
     std::vector<Math::CVector> m_vOribit;    /// J2000坐标系下的数据

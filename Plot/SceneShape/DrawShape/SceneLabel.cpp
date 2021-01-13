@@ -63,10 +63,6 @@ bool CSceneLabel::SetAttachNode(ISceneNode *pSceneNode)
         m_stPos.fY = pos.y();
         m_stPos.fZ = pos.z();
 
-        osg::notify(osg::WARN)<<"Center:"<<m_stPos.fX<<','
-                              <<m_stPos.fY<<','
-                              <<m_stPos.fZ<<std::endl;
-
         ImplSceneNode<ILabel>::NodeChanged();
 
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
@@ -129,8 +125,7 @@ void CSceneLabel::InitNode()
     m_pText->setAlignment(osgText::Text::LEFT_CENTER);
     m_pText->setAxisAlignment(osgText::Text::SCREEN);
     m_pText->setCharacterSizeMode(osgText::Text::SCREEN_COORDS);
-    m_pText->setDrawMode(osgText::Text::TEXT|osgText::Text::BOUNDINGBOX
-                        |osgText::Text::FILLEDBOUNDINGBOX);
+    m_pText->setDrawMode(osgText::Text::TEXT);
     m_pText->setBoundingBoxColor(osg::Vec4(m_stBoundingBoxColor.fR,m_stBoundingBoxColor.fG
                                            ,m_stBoundingBoxColor.fB,m_stBoundingBoxColor.fA));
     m_pText->setAutoRotateToScreen(true);
@@ -183,6 +178,27 @@ void CSceneLabel::UpdateNode()
     {
         m_pText->setPosition(osg::Vec3(m_stPos.fX,m_stPos.fY,m_stPos.fZ));
         m_bPosChanged = false;
+    }
+
+    if(m_bBoundingBoxVisibleChanged)
+    {
+        if(m_bShowBoundingBox)
+        {
+            m_pText->setDrawMode(osgText::Text::TEXT|osgText::Text::BOUNDINGBOX
+                                 |osgText::Text::FILLEDBOUNDINGBOX);
+        }
+        else
+        {
+            m_pText->setDrawMode(osgText::Text::TEXT);
+        }
+        m_bBoundingBoxVisibleChanged=false;
+    }
+
+    if(m_bBoudingBoxColorChanged)
+    {
+        m_pText->setBoundingBoxColor(osg::Vec4(m_stBoundingBoxColor.fR,m_stBoundingBoxColor.fG
+                                               ,m_stBoundingBoxColor.fB,m_stBoundingBoxColor.fA));
+        m_bBoudingBoxColorChanged=false;
     }
     ImplSceneNode<ILabel>::UpdateNode();
 }

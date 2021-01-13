@@ -21,6 +21,14 @@ void CSatelliteShow::InitNode()
 
     /// 加载模型
     m_pSatellite = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
+    m_pSatelliteAtt = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
+    m_pSatelliteScale = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
+
+    m_pSatelliteScale->SetAutoScal(false);
+    m_pSatelliteScale->SetMinScal(1);
+    m_pSatelliteAtt->AddSceneNode(m_pSatelliteScale);
+    m_pSatellite->AddSceneNode(m_pSatelliteAtt);
+
     m_pOribit = dynamic_cast<ILine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILine"));
     AddSceneNode(m_pSatellite);
     AddSceneNode(m_pOribit);
@@ -82,15 +90,15 @@ void CSatelliteShow::SetScale(double dScale)
 void CSatelliteShow::SetCorrectAttitude(const SceneAttitude& rAttitude)
 {
     m_satelliteCorrectAttitude = rAttitude;
+    if(nullptr != m_pModel)
+    {
+        m_pModel->InitAttitude(m_satelliteCorrectAttitude);
+    }
 }
 
 void CSatelliteShow::SetAttitude(const SceneAttitude& rAttitude)
 {
-    SceneAttitude att;
-    att.dYaw = m_satelliteCorrectAttitude.dYaw + rAttitude.dYaw;
-    att.dPitch = m_satelliteCorrectAttitude.dPitch + rAttitude.dPitch;
-    att.dRoll = m_satelliteCorrectAttitude.dRoll + rAttitude.dRoll;
-    m_pSatelliteAtt->SetAttitude(att);
+    m_pSatelliteAtt->SetAttitude(rAttitude);
 }
 
 void CSatelliteShow::SetSensorAttitude(int id, const SceneAttitude& rAttitude)
@@ -106,22 +114,35 @@ void CSatelliteShow::ModelChanged()
 {
     if(nullptr != m_pModel)
     {
-        m_pSatellite->RemoveSceneNode(m_pModel);
+        if(nullptr != m_pSatelliteName)
+        {
+            m_pSatelliteName->DisAttachNode(m_pModel);
+        }
+
+        m_pSatelliteScale->RemoveSceneNode(m_pModel);
     }
 
     m_pModel = m_pSceneGraph->GetPlot()->LoadSceneNode(m_sModelPath)->AsSceneModel();
-    m_pSatelliteAtt = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
-    m_pSatelliteScale = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
     m_pSatelliteScale->AddSceneNode(m_pModel);
-    m_pSatelliteScale->SetAutoScal(false);
-    m_pSatelliteScale->SetMinScal(1);
-    m_pSatelliteAtt->AddSceneNode(m_pSatelliteScale);
-    m_pSatellite->AddSceneNode(m_pSatelliteAtt);
+
+
+    if(nullptr == m_pSatelliteName)
+    {
+        m_pSatelliteName = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
+        m_pSatelliteName->SetText(m_sName);
+        m_pSatelliteName->SetFont("fonts/msyh.ttf");
+    }
+
+    m_pSatelliteName->SetAttachNode(m_pModel);
 }
 
 ///名称修改
 void CSatelliteShow::NameChanged()
 {
+    if(nullptr != m_pSatelliteName)
+    {
+        m_pSatelliteName->SetText(m_sName);
+    }
 }
 
 ///更新位置
