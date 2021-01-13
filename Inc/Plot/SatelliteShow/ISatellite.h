@@ -47,7 +47,7 @@ public:
     /// 获取卫星位置
     /// </summary>
     /// <returns></returns>
-    virtual ScenePos GetSatellitePos() = 0;
+    virtual const ScenePos& GetSatellitePos()const = 0;
 
     /// <summary>
     /// 设置卫星缩放
@@ -68,10 +68,22 @@ public:
     virtual void SetAttitude(const SceneAttitude& rAttitude) = 0;
 
     /// <summary>
+    /// 获取卫星姿态
+    /// </summary>
+    /// <param name="rAttitude"></param>
+    virtual const SceneAttitude& GetAttitude()const = 0;
+
+    /// <summary>
     /// 设置卫星传感器姿态
     /// </summary>
     /// <param name="rAttitude"></param>
     virtual void SetSensorAttitude(int id, const SceneAttitude& rAttitude) = 0;
+
+    /// <summary>
+    /// 获取卫星传感器姿态
+    /// </summary>
+    /// <param name="rAttitude"></param>
+    virtual const SceneAttitude& GetSensorAttitude(int id) const = 0;
 
     /**
      * @brief 更新时间

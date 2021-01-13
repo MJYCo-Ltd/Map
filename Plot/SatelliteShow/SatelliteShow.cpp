@@ -77,7 +77,7 @@ void CSatelliteShow::AddSensor(int id, ISensor *pSensor)
     m_SensorAttMap[id] = pAtt;
 }
 
-ScenePos CSatelliteShow::GetSatellitePos()
+const ScenePos &CSatelliteShow::GetSatellitePos() const
 {
     return m_satelliteWgs84Pos;
 }
@@ -98,7 +98,13 @@ void CSatelliteShow::SetCorrectAttitude(const SceneAttitude& rAttitude)
 
 void CSatelliteShow::SetAttitude(const SceneAttitude& rAttitude)
 {
+    m_satelliteAttitude = rAttitude;
     m_pSatelliteAtt->SetAttitude(rAttitude);
+}
+
+const SceneAttitude &CSatelliteShow::GetAttitude() const
+{
+    return(m_satelliteAttitude);
 }
 
 void CSatelliteShow::SetSensorAttitude(int id, const SceneAttitude& rAttitude)
@@ -106,6 +112,21 @@ void CSatelliteShow::SetSensorAttitude(int id, const SceneAttitude& rAttitude)
     if (m_SensorAttMap.find(id) != m_SensorAttMap.end())
     {
         m_SensorAttMap[id]->SetAttitude(rAttitude);
+        m_SensorAttValueMap[id] = rAttitude;
+    }
+}
+
+const SceneAttitude &CSatelliteShow::GetSensorAttitude(int id) const
+{
+    auto pFindOne = m_SensorAttValueMap.find(id);
+    if (pFindOne != m_SensorAttValueMap.end())
+    {
+        return(pFindOne->second);
+    }
+    else
+    {
+        static SceneAttitude s_Attitude;
+        return(s_Attitude);
     }
 }
 
