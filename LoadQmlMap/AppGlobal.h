@@ -2,7 +2,6 @@
 #define APPGLOBAL_H
 
 #include <QObject>
-#include "../ScenarioManager/ScenarioManager.h"
 
 class QQuickItem;
 class CPlotMap;
@@ -33,17 +32,9 @@ public:
      * @brief 清空标绘
      */
     Q_INVOKABLE void clearPlot();
-
-    Q_INVOKABLE void init();
-    Q_INVOKABLE ScenarioManager* scenarioManager();
-    Q_INVOKABLE AreaPlanManager* areaPlanManager();
-//signals:
-//    void scenarioManagerChanged();
 private:
     CPlotMap*        m_pPlotMap=nullptr; /// 在map上绘制
     QQuickItem*      m_pOsgItem=nullptr; /// 设置绑定的osg显示
-    ScenarioManager* m_pScenarioManager;
-    AreaPlanManager* m_pAreaPlanManager;
 };
 
 

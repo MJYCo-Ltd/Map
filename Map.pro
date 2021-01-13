@@ -4,10 +4,6 @@ SUBDIRS =\
     OsgExtern\
     SceneCore\
     Plot\
-    ScenarioManager\
-    AreaPlanManager\
-    ProcessSimulation\
     LoadMap\
-    LoadQmlMap \
-    Test
+    LoadQmlMap 
 CONFIG *= ordered

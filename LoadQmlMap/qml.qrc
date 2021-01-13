@@ -1,22 +1,5 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>Common/MenuButton.qml</file>
-        <file>Common/MsgAlert.qml</file>
-        <file>Common/MsgDone.qml</file>
-        <file>Common/MsgGood.qml</file>
-        <file>Common/MsgInfo.qml</file>
-        <file>Common/MsgWarning.qml</file>
-        <file>Common/Style.qml</file>
-        <file>Common/BorderMsg.qml</file>
-        <file>Welcome/Welcome.qml</file>
-        <file>Scenario/ScenarioOverView.qml</file>
-        <file>Scenario/ScenarioOverviewItem.qml</file>
-        <file>Scenario/ScenarioNew.qml</file>
-        <file>Edit/Edit.qml</file>
-        <file>Animation/Animation.qml</file>
-        <file>Animation/BuildProcess.qml</file>
-        <file>AreaPlan/AreaPlan.qml</file>
-        <file>Common/PopupMenuButton.qml</file>
     </qresource>
 </RCC>
