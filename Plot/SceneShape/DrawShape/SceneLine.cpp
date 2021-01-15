@@ -89,26 +89,6 @@ std::vector<ScenePos> CSceneLine::GetMulPos() const
     return(vTempPos);
 }
 
-void CSceneLine::LineWidthChanged()
-{
-    m_bWidthChanged=true;
-    ImplSceneNode<ILine>::NodeChanged();
-}
-
-/// 形状更改
-void CSceneLine::ShapeChanged()
-{
-    m_bShapeChanged=true;
-    ImplSceneNode<ILine>::NodeChanged();
-}
-
-/// 颜色更改
-void CSceneLine::ColorChanged()
-{
-    m_bColorChanged=true;
-    ImplSceneNode<ILine>::NodeChanged();
-}
-
 void CSceneLine::InitNode()
 {
     osg::Group *pGroup = new osg::Group;

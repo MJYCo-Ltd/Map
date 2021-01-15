@@ -9,9 +9,12 @@ public:
     CONSTRUCTOR(CHudImage,ImplHudNode<IHudImage>)
 
 protected:
-    void ImageChanged();
+    void ImageChanged()SET_TRUE_NODE_UPDATE(m_bImageChanged)
+    void InitNode();
+    void UpdateNode();
 protected:
     bool m_bImageChanged=false;
+    osg::observer_ptr<osgEarth::Controls::ImageControl> m_pImageControl;
 };
 
 #endif // CHUDIMAGE_H

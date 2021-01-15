@@ -9,7 +9,7 @@ public:
     CONSTRUCTOR(CSceneImage,ImplSceneShape<IImage>)
 protected:
     void ImageSizeChanged();
-    void ImagePathChanged();
+    void ImagePathChanged()SET_TRUE_NODE_UPDATE(m_bPathChanged)
 
     /**
      * @brief 初始化节点

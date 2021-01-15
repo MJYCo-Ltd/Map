@@ -37,17 +37,17 @@ protected:
     /**
      * @brief 线宽更改
      */
-    void LineWidthChanged();
+    void LineWidthChanged()SET_TRUE_NODE_UPDATE(m_bWidthChanged)
 
     /**
      * @brief 形状更改
      */
-    void ShapeChanged();
+    void ShapeChanged()SET_TRUE_NODE_UPDATE(m_bShapeChanged)
 
     /**
      * @brief 颜色修改
      */
-    void ColorChanged();
+    void ColorChanged()SET_TRUE_NODE_UPDATE(m_bColorChanged)
 
     /**
      * @brief 初始化节点

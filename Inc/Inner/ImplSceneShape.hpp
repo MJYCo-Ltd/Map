@@ -53,18 +53,10 @@ protected:
     virtual void UpdateShape()=0;
 
     /// 形状更改
-    void ShapeChanged()
-    {
-        m_bShapeChanged=true;
-        ImplSceneNode<T>::NodeChanged();
-    }
+    void ShapeChanged()SET_TRUE_NODE_UPDATE(m_bShapeChanged)
 
     /// 颜色更改
-    void ColorChanged()
-    {
-        m_bColorChanged=true;
-        ImplSceneNode<T>::NodeChanged();
-    }
+    void ColorChanged()SET_TRUE_NODE_UPDATE(m_bColorChanged)
 
     virtual void UpdateColor()
     {

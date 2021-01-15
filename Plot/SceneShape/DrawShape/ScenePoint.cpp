@@ -1,19 +1,6 @@
 #include <osg/PointSprite>
 #include "ScenePoint.h"
 
-/// 点大小更改
-void CScenePoint::PosChanged()
-{
-    m_bPosChanged=true;
-    ShapeChanged();
-}
-
-void CScenePoint::PointSizeChanged()
-{
-    m_bPointSizeChanged=true;
-    ShapeChanged();
-}
-
 /// 更新形状
 void CScenePoint::UpdateShape()
 {

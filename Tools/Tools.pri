@@ -13,7 +13,7 @@
 lessThan(QT_MAJOR_VERSION, 6):CONFIG += c++11
 greaterThan(QT_MAJOR_VERSION, 5):CONFIG += c++17
 
-INCLUDEPATH *= $$PWD/../Inc $$PWD/../Inc/Plot
+INCLUDEPATH *= $$PWD/../Inc $$PWD/../Inc/Tools
 win32{
     DEFINES -= UNICODE
     # 开启utf-8 编码方式支持
@@ -21,11 +21,11 @@ win32{
     QMAKE_CXXFLAGS += /wd"4100"
 
     LIBS *= -L$$PWD/../Lib
-    DLLDESTDIR = $$PWD/../../Bin/MapPlugin/Plot
+    DLLDESTDIR = $$PWD/../../Bin/MapPlugin/Tools
 }
 
 unix{
-    DESTDIR = $$PWD/../../Bin/MapPlugin/Plot
+    DESTDIR = $$PWD/../../Bin/MapPlugin/Tools
     LIBS *= -L$$DESTDIR
     contains(TEMPLATE, "app"){
         QMAKE_LFLAGS += -Wl,-rpath=.:./osglib:./stklib

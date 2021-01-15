@@ -21,7 +21,7 @@ class IPlot
     friend class ISceneGraph;
 public:
 
-    IPlot(ISceneGraph* pSceneGraph):m_pSceneGraph(pSceneGraph){}
+    CONSTRUCTOR(IPlot,m_pSceneGraph)
 
     /**
      * @brief 注册标绘类型

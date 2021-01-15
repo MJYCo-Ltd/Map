@@ -12,12 +12,12 @@ protected:
     /**
      * @brief 位置更改
      */
-    void PosChanged();
+    void PosChanged()SET_TRUE_NODE_UPDATE(m_bPosChanged)
 
     /**
      * @brief 点大小更改
      */
-    void PointSizeChanged();
+    void PointSizeChanged()SET_TRUE_NODE_UPDATE(m_bPointSizeChanged)
 
     /**
      * @brief 更新形状

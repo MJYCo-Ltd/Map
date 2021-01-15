@@ -20,18 +20,10 @@ protected:
     }
 
     /// 位置更改
-    void HudPosChanged()
-    {
-        m_bPosChanged = true;
-        ImplSceneNode<T>::NodeChanged();
-    }
+    void HudPosChanged()SET_TRUE_NODE_UPDATE(m_bPosChanged)
 
     /// 状态更改
-    void HudTypeChanged()
-    {
-        m_bTypeChanged=true;
-        ImplSceneNode<T>::NodeChanged();
-    }
+    void HudTypeChanged()SET_TRUE_NODE_UPDATE(m_bTypeChanged)
 
     void UpdateNode()
     {

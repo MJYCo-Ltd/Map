@@ -24,14 +24,14 @@ protected:
     void InitNode();
     void UpdateNode();
 
-    void FontChanged(){m_bFontChanged=true;ImplSceneNode<ILabel>::NodeChanged();}
-    void InfoChanged(){m_bInfoChanged=true;ImplSceneNode<ILabel>::NodeChanged();}
-    void PosChanged(){m_bPosChanged=true;ImplSceneNode<ILabel>::NodeChanged();}
-    void BoundingBoxVisibleChanged(){m_bBoundingBoxVisibleChanged=true;ImplSceneNode<ILabel>::NodeChanged();}
-    void FontSizeChanged(){m_bFontSizeChanged=true;ImplSceneNode<ILabel>::NodeChanged();}
-    void FillColorChanged(){m_bFillColorChanged=true;ImplSceneNode<ILabel>::NodeChanged();}
-    void OutColorChanged(){m_bOutColorChanged=true;ImplSceneNode<ILabel>::NodeChanged();}
-    void BoundingBoxColorChanged(){m_bBoudingBoxColorChanged=true;ImplSceneNode<ILabel>::NodeChanged();}
+    void FontChanged()SET_TRUE_NODE_UPDATE(m_bFontChanged)
+    void InfoChanged()SET_TRUE_NODE_UPDATE(m_bInfoChanged)
+    void PosChanged()SET_TRUE_NODE_UPDATE(m_bPosChanged)
+    void BoundingBoxVisibleChanged()SET_TRUE_NODE_UPDATE(m_bBoundingBoxVisibleChanged)
+    void FontSizeChanged()SET_TRUE_NODE_UPDATE(m_bFontSizeChanged)
+    void FillColorChanged()SET_TRUE_NODE_UPDATE(m_bFillColorChanged)
+    void OutColorChanged()SET_TRUE_NODE_UPDATE(m_bOutColorChanged)
+    void BoundingBoxColorChanged()SET_TRUE_NODE_UPDATE(m_bBoudingBoxColorChanged)
 protected:
     bool m_bInfoChanged=false;
     bool m_bBoundingBoxVisibleChanged=false;

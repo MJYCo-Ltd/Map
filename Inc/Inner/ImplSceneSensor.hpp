@@ -18,20 +18,12 @@ protected:
     /**
     * @brief 显示类型修改
     */
-    void ShowTypeChanged()
-    {
-        m_bShowTypeChanged = true;
-        ImplSceneShape<T>::NodeChanged();
-    }
+    void ShowTypeChanged()SET_TRUE_NODE_UPDATE(m_bShowTypeChanged)
 
     /**
      * @brief 显示距离修改
      */
-    void DistanceChanged()
-    {
-        m_bDistanceChanged = true;
-        ImplSceneShape<T>::NodeChanged();
-    }
+    void DistanceChanged()SET_TRUE_NODE_UPDATE(m_bDistanceChanged)
 
     void UpdateNode()
     {

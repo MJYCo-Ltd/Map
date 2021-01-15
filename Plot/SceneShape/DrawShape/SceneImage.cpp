@@ -11,12 +11,6 @@ void CSceneImage::ImageSizeChanged()
     }
 }
 
-void CSceneImage::ImagePathChanged()
-{
-    m_bPathChanged=true;
-    ShapeChanged();
-}
-
 void CSceneImage::CreateShape()
 {
     auto pSate = m_pGeometry->getOrCreateStateSet();

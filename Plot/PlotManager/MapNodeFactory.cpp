@@ -86,7 +86,7 @@ void CMapNodeFactory::DeleteNoUseSceneNode()
 /// 初始化工厂
 void CMapNodeFactory::InitFactory()
 {
-    static std::string sPrefix = "MapPlot/";
+    static std::string sPrefix = "MapPlugin/Plot/";
 
     std::string sFilePath = GetExePath();
     sFilePath += sPrefix + "NodeFactory.dll";

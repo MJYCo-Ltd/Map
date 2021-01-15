@@ -29,6 +29,7 @@
 #include <Plot/SceneShape/IRadarSensor.h>
 #include <Plot/SatelliteShow/ISatellite.h>
 #include <Plot/Hud/IHudText.h>
+#include <Plot/Hud/IHudImage.h>
 #include <Plot/SceneShape/IImage.h>
 #include <Plot/Common/ISceneScaleGroup.h>
 #include <Plot/Common/ISceneLodGroup.h>
@@ -129,6 +130,10 @@ void MainWindow::on_action_triggered()
 
     pHudText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
     m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudText);
+
+    auto pHudImage = dynamic_cast<IHudImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudImage"));
+    pHudImage->SetImage("Images/ship.png");
+    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudImage);
 
     auto pLod = m_pSceneGraph->GetPlot()->CreateSceneGroup(LOD_GROUP)->AsSceneLodGroup();
     pLod->AddSceneNode(pAutoImage);
