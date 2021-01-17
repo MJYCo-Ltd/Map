@@ -5,8 +5,6 @@ void CHudImage::InitNode()
     ImplHudNode<IHudImage>::InitNode();
     m_pImageControl = new osgEarth::Controls::ImageControl;
 
-    m_pImageControl->setAlign(osgEarth::Controls::Control::ALIGN_LEFT,osgEarth::Controls::Control::ALIGN_BOTTOM);
-
     SetControlNode(m_pImageControl.get());
 }
 

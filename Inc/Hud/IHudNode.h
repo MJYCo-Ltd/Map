@@ -23,11 +23,12 @@ public:
      */
     void SetPosType(HUD_POS_TYPE type)JUDGE_EQUAL_CALL_FUNCTION(type,m_emHudPosType,HudTypeChanged)
     const HUD_POS_TYPE PosType()const{return(m_emHudPosType);}
+
+    virtual void HudTypeChanged()=0;
 protected:
     virtual ~IHudNode(){}
 
     virtual void HudPosChanged()=0;
-    virtual void HudTypeChanged()=0;
 
 protected:
     HudPos       m_stHudPos;

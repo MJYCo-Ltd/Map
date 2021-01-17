@@ -12,7 +12,6 @@ void CHudText::InitNode()
     m_pLabelControl->setForeColor(m_stColor.fR,m_stColor.fG,m_stColor.fB,m_stColor.fA);
     m_pLabelControl->setFontSize(m_nFontSize);
     m_pLabelControl->setHaloColor(osg::Vec4(m_stOutLineColor.fR,m_stOutLineColor.fG,m_stOutLineColor.fB,m_stOutLineColor.fA));
-    m_pLabelControl->setAlign(osgEarth::Controls::Control::ALIGN_LEFT,osgEarth::Controls::Control::ALIGN_BOTTOM);
 
     SetControlNode(m_pLabelControl.get());
 }

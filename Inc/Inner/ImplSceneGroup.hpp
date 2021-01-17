@@ -2,7 +2,7 @@
 #define IMPL_SCENE_GROUP_H
 
 #include <set>
-#include "ImplSceneNode.hpp"
+#include <Inner/ImplSceneNode.hpp>
 
 /**
  *  实现ISceneGroup所有的接口
@@ -44,6 +44,11 @@ public:
     /// 移除节点
     bool RemoveSceneNode(ISceneNode* pSceneNode)
     {
+        if (nullptr == pSceneNode)
+        {
+            return(false);
+        }
+
         IOsgSceneNode* pOsgSceneNode = pSceneNode->AsOsgSceneNode();
         auto findItor = m_setChildNode.find(pOsgSceneNode);
         if (findItor != m_setChildNode.end())

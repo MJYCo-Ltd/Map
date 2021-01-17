@@ -90,13 +90,71 @@ public:
         }
         else
         {
-            m_pCanvas->removeControl(m_pControl);
+            m_pCanvas->removeControl(m_pControl.get());
         }
     }
 private:
     osg::ref_ptr<osgEarth::Controls::ControlCanvas> m_pCanvas;
     osg::ref_ptr<osgEarth::Controls::Control> m_pControl;
     bool                                      m_bAdd;
+};
+
+/**
+ * @brief 给布局节点添加节点
+ */
+class CAddControl2Container:public osg::Operation
+{
+public:
+    CAddControl2Container(osgEarth::Controls::Container* pContainer,
+                          osgEarth::Controls::Control* pControl):
+        m_pContainer(pContainer),
+        m_pControl(pControl){}
+
+    void operator()(osg::Object*)
+    {
+        m_pControl->setAlign(osgEarth::Controls::Control::ALIGN_NONE,osgEarth::Controls::Control::ALIGN_NONE);
+        m_pContainer->addControl(m_pControl.get());
+    }
+private:
+    osg::ref_ptr<osgEarth::Controls::Container> m_pContainer;
+    osg::ref_ptr<osgEarth::Controls::Control> m_pControl;
+};
+
+/**
+ * @brief 修改界面布局节点
+ */
+class CAddControls2Container:public osg::Operation
+{
+public:
+    CAddControls2Container(osgEarth::Controls::Container* pContainer
+                   ,osgEarth::Controls::ControlVector pControl):
+        m_pContainer(pContainer)
+       ,m_pControl(pControl){}
+
+    void operator()(osg::Object*)
+    {
+        m_pContainer->addControls(m_pControl);
+    }
+private:
+    osg::ref_ptr<osgEarth::Controls::Container> m_pContainer;
+    osgEarth::Controls::ControlVector m_pControl;
+};
+
+/**
+ * @brief 清空所有的子节点
+ */
+class CClearContainer:public osg::Operation
+{
+public:
+    CClearContainer(osgEarth::Controls::Container* pContainer):
+    m_pContainer(pContainer){}
+
+    void operator()(osg::Object*)
+    {
+        m_pContainer->clearControls();
+    }
+private:
+    osg::ref_ptr<osgEarth::Controls::Container> m_pContainer;
 };
 
 /**

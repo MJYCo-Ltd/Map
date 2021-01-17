@@ -30,6 +30,7 @@
 #include <Plot/SatelliteShow/ISatellite.h>
 #include <Plot/Hud/IHudText.h>
 #include <Plot/Hud/IHudImage.h>
+#include <Plot/Hud/IHudLayout.h>
 #include <Plot/SceneShape/IImage.h>
 #include <Plot/Common/ISceneScaleGroup.h>
 #include <Plot/Common/ISceneLodGroup.h>
@@ -111,7 +112,7 @@ void MainWindow::on_actionchange_triggered()
 }
 
 bool bShowBackGround=false;
-IHudText* pHudText=nullptr;
+IHudLayout* pHudLayout=nullptr;
 IMapLocation* pEarthLocation=nullptr;
 ISceneFlashGroup* pFlash=nullptr;
 IImage* pImage=nullptr;
@@ -127,13 +128,16 @@ void MainWindow::on_action_triggered()
     pAutoImage->SetMinScal(1.);
     pAutoImage->AddSceneNode(pImage);
 
+    pHudLayout = dynamic_cast<IHudLayout*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudLayout"));
 
-    pHudText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
-    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudText);
+    auto pHudText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
+    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudLayout);
 
     auto pHudImage = dynamic_cast<IHudImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudImage"));
     pHudImage->SetImage("Images/ship.png");
-    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudImage);
+    pHudLayout->AddHudNode(pHudImage);
+    pHudLayout->AddHudNode(pHudText);
+//    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudImage);
 
     auto pLod = m_pSceneGraph->GetPlot()->CreateSceneGroup(LOD_GROUP)->AsSceneLodGroup();
     pLod->AddSceneNode(pAutoImage);
@@ -494,7 +498,7 @@ void MainWindow::on_action_2_triggered()
     pImage->SetImageSize(size);
     pFlash->SetFlash(!pFlash->IsFlash());
 //    pEarthLocation->SetVisible(!pEarthLocation->IsVisible());
-    pHudText->SetText(QString::number(nIndex++).toStdString());
+    pHudLayout->SetLayoutType(IHudLayout::LAYOUT_VERTICAL);
 //    pEarthLocation->SetVisible(!pEarthLocation->IsVisible());
     SceneViewPoint viewPoint;
     viewPoint.stPos.fX = 123;

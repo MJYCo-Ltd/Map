@@ -14,10 +14,12 @@ include($$PWD/../MapPlot.pri)
 
 HEADERS += \
     HudImage.h \
+    HudLayout.h \
     HudShape.h \
     HudText.h
 
 SOURCES += \
     HudImage.cpp \
+    HudLayout.cpp \
     HudShape.cpp \
     HudText.cpp
