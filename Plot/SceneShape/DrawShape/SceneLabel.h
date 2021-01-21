@@ -1,6 +1,6 @@
 #ifndef CSCENELABEL_H
 #define CSCENELABEL_H
-#include <osgText/Text>
+#include <osgEarth/Text>
 
 #include <Plot/SceneShape/ILabel.h>
 #include <Inner/ImplSceneNode.hpp>
@@ -41,7 +41,7 @@ protected:
     bool m_bBoudingBoxColorChanged=false;
     bool m_bPosChanged=false;
     bool m_bFontChanged=false;
-    osg::observer_ptr<osgText::Text> m_pText;
+    osg::observer_ptr<osgEarth::Text> m_pText;
 };
 
 #endif // CSCENELABEL_H

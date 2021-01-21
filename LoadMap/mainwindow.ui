@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>468</width>
-     <height>26</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>
@@ -47,17 +47,17 @@
   </action>
   <action name="action">
    <property name="text">
-    <string>添加人</string>
+    <string>测试</string>
    </property>
   </action>
   <action name="action_2">
    <property name="text">
-    <string>删除</string>
+    <string>测试更改</string>
    </property>
   </action>
   <action name="action_3">
    <property name="text">
-    <string>开始</string>
+    <string>开始点选</string>
    </property>
   </action>
   <action name="action_4">

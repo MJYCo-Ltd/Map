@@ -149,6 +149,10 @@ void QtSceneGraph::InitSceneGraph()
     LoadPlot();
     m_pPlot->RegisterPlotType();
 
+    /// 加载工具接口
+    LoadTool();
+    m_pTool->RegisterTool();
+
     /// 如果是Map则加载earth文件
     if(SCENEGRAPH_USER != m_emType)
     {
@@ -185,11 +189,6 @@ void QtSceneGraph::InitSceneGraph()
 
     ///将主视图关联到渲染器
     m_pRender->m_pOsgViewer->addView(pView);
-
-    LoadTool();
-    m_pTool->RegisterTool();
-    m_pTool->SelecteTool("IPointPick");
-
 
     /// 开始渲染循环
     m_pRender->moveToThread(m_pThread);

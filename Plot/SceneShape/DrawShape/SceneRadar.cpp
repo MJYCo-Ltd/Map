@@ -130,9 +130,6 @@ void CSceneRadar::UpdateShape()
 void CSceneRadar::CreateShape()
 {
     m_pDrawSideFace = new osg::DrawElementsUShort(GL_TRIANGLES);
-//    m_pGeometry->setDrawCallback(new MyDrawCallBack);
-//    m_pGeometry->addPrimitiveSet(m_pDrawSideFace);
-
 
     UpdateShape();
 }

@@ -72,7 +72,8 @@ void CSceneLabel::InitNode()
 {
     ImplSceneNode<ILabel>::InitNode();
 
-    m_pText = new osgText::Text;
+    m_pText = new osgEarth::Text;
+    m_pText->setDataVariance(osg::Object::DYNAMIC);
 
     /// 设置初始颜色
     m_stOutColor.fR=m_stOutColor.fG=m_stOutColor.fB=0.f;
@@ -88,7 +89,6 @@ void CSceneLabel::InitNode()
                                            ,m_stBoundingBoxColor.fB,m_stBoundingBoxColor.fA));
     m_pText->setAutoRotateToScreen(true);
     m_pText->setBackdropType(osgText::Text::OUTLINE);
-    m_pText->setDataVariance(osg::Object::DYNAMIC);
 
     ImplSceneNode<ILabel>::SetOsgNode(m_pText.get());
 }

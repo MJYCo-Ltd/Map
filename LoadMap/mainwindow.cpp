@@ -116,6 +116,7 @@ IHudLayout* pHudLayout=nullptr;
 IHudText*   pHudText=nullptr;
 IMapLocation* pEarthLocation=nullptr;
 ISceneFlashGroup* pFlash=nullptr;
+ISatellite*  pSatellite = nullptr;
 IImage* pImage=nullptr;
 
 void MainWindow::on_action_triggered()
@@ -138,7 +139,7 @@ void MainWindow::on_action_triggered()
     pHudImage->SetImage("Images/ship.png");
     pHudLayout->AddHudNode(pHudImage);
     pHudLayout->AddHudNode(pHudText);
-    pHudLayout->SetPosType(HUD_CENTER_CENTER);
+    pHudLayout->SetPosType(HUD_DOWN_RIGHT);
 //    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudImage);
 
     auto pLod = m_pSceneGraph->GetPlot()->CreateSceneGroup(LOD_GROUP)->AsSceneLodGroup();
@@ -414,7 +415,7 @@ void MainWindow::on_action_triggered()
     pEarthLocation->SetGeoPos(pos);
 
     /// 标绘卫星
-    ISatellite* pSatellite= dynamic_cast<ISatellite*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISatellite"));
+    pSatellite= dynamic_cast<ISatellite*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISatellite"));
 
     pSatellite->SetName("长江");
     pSatellite->SetScale(10000.);
@@ -494,6 +495,9 @@ void MainWindow::on_action_triggered()
 
 void MainWindow::on_action_2_triggered()
 {
+    SceneColor color;
+    color.fG=color.fB=0.0f;
+    pSatellite->SetOribitColor(color);
     SceneImageSize size;
     size.unHeight = size.unWidth = 100;
     pImage->SetImageSize(size);
@@ -511,17 +515,19 @@ void MainWindow::on_action_2_triggered()
     m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->SetViewPoint(viewPoint);
 }
 
+#include <Tool/ITool.h>
 void MainWindow::on_action_3_triggered()
 {
-    nTimerID = startTimer(100);
+    m_pSceneGraph->GetTool()->SelecteTool("IPointPick");
+//    nTimerID = startTimer(100);
 }
 
 void MainWindow::on_action_4_triggered()
 {
-    if(-1 != nTimerID)
-    {
-        killTimer(nTimerID);
-    }
+//    if(-1 != nTimerID)
+//    {
+//        killTimer(nTimerID);
+//    }
 }
 
 /// 增加帧率

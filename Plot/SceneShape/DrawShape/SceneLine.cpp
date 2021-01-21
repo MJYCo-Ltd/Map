@@ -93,6 +93,7 @@ void CSceneLine::InitNode()
 {
     osg::Group *pGroup = new osg::Group;
     m_pLine = new osgEarth::LineDrawable;
+    m_pLine->setDataVariance(osg::Object::DYNAMIC);
     pGroup->addChild(m_pLine);
     pGroup->addCullCallback(new osgEarth::InstallCameraUniform);
     m_pLine->setColor(osg::Vec4(m_stColor.fR,m_stColor.fG,m_stColor.fB,m_stColor.fA));
