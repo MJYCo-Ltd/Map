@@ -2,6 +2,8 @@
 #include <osgDB/ReadFile>
 #include <osg/Group>
 #include <osgEarth/Shaders>
+#include <osgEarth/MapNode>
+
 #include "ResourceLod.h"
 
 /// 初始化路径
@@ -34,6 +36,11 @@ osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
 
         if(nullptr != pNode)
         {
+            if(nullptr == osgEarth::MapNode::findMapNode(pNode))
+            {
+                auto pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(pNode->getOrCreateStateSet());
+                LoadVirtualProgram(pVirutlProgram,"Data/GLSL/Global.glsl");
+            }
             m_mapNode[modelPath] = pNode;
         }
 

@@ -32,8 +32,6 @@ protected:
             auto pSate = ImplSceneGroup<T>::m_pRootNode->getOrCreateStateSet();
             m_pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
 
-            T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(m_pVirutlProgram,"Data/GLSL/Global.glsl");
-
             /// 此处应该不知道
             if(T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(m_pVirutlProgram,"Data/GLSL/Flash.glsl"))
             {

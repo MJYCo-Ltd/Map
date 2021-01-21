@@ -272,7 +272,15 @@ void MainWindow::on_action_triggered()
     auto pAttitudeAirplane = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
     pAttitudeAirplane->SetPos(pPoint1->Pos());
     pAttitudeAirplane->AddSceneNode(pModel);
-    pSceneRoot->AddSceneNode(pAttitudeAirplane);
+    auto pFlashttt = m_pSceneGraph->GetPlot()->CreateSceneGroup(FLASH_GROUP)->AsSceneFlashGroup();
+    pFlashttt->AddSceneNode(pAttitudeAirplane);
+    pFlashttt->SetFlash(true);
+    color.fR=1.f;
+    color.fG=color.fB=0.f;
+    pFlashttt->SetFlashColor(color);
+    pFlashttt->SetFlashFreq(3);
+
+    pSceneRoot->AddSceneNode(pFlashttt);
 
 
     std::vector<float> vLevelInfo;
@@ -310,8 +318,8 @@ void MainWindow::on_action_triggered()
     MapGeoPos pos;
 
     color.fR=1.f;
-    color.fG=1.f;
-    color.fB=0.f;
+    color.fG=0.f;
+    color.fB=1.f;
     color.fA=1.f;
 
     /// 添加线
