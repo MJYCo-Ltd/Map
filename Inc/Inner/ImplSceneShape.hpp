@@ -2,6 +2,8 @@
 #define IMPL_SCENE_SHAPE_H
 #include <osg/Geometry>
 #include <Inner/ImplSceneNode.hpp>
+#include <osgEarth/Registry>
+#include <osgEarth/ObjectIndex>
 
 /**
  *  实现ISceneNode所有的接口
@@ -44,6 +46,8 @@ public:
          */
         CreateShape();
 
+        m_unNodeID = osgEarth::Registry::instance()->objectIndex()->tagNode(m_pGeometry.get(),m_pGeometry.get());
+        osg::notify(osg::WARN)<<"Create Shape:\t"<<m_unNodeID<<std::endl;
         ImplSceneNode<T>::InitNode();
         ImplSceneNode<T>::SetOsgNode(m_pGeometry.get());
     }
@@ -90,6 +94,7 @@ protected:
     osg::observer_ptr<osg::Geometry> m_pGeometry;
     osg::ref_ptr<osg::Vec3Array>     m_pVertexArray;
     osg::ref_ptr<osg::Vec4Array>     m_pColorArray;
+    osgEarth::ObjectID               m_unNodeID=0;
     bool       m_bColorChanged=false;
     bool       m_bShapeChanged=false;
 };

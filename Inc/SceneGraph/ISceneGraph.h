@@ -1,6 +1,7 @@
 #ifndef INTERFACE_SCENE_GRAPH_HEARDER_H
 #define INTERFACE_SCENE_GRAPH_HEARDER_H
 #include <Plot/IPlot.h>
+#include <Tool/ITool.h>
 class QQuickItem;
 class ILoadResouce;
 class IRender;
@@ -81,6 +82,12 @@ public:
     virtual IPlot* GetPlot(){return(m_pPlot);}
 
     /**
+     * @brief 获取工具接口
+     * @return
+     */
+    virtual ITool* GetTool(){return(m_pTool);}
+
+    /**
      * @brief 资源加载器
      * @return
      */
@@ -103,11 +110,13 @@ protected:
     void Relase()
     {
         delete m_pPlot;
+        delete m_pTool;
     }
 protected:
     bool              m_bUnderQml=false;
     SceneGraphType    m_emType;
     IPlot*            m_pPlot=nullptr;
+    ITool*            m_pTool=nullptr;
 };
 
 #endif

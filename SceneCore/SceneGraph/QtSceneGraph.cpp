@@ -186,6 +186,10 @@ void QtSceneGraph::InitSceneGraph()
     ///将主视图关联到渲染器
     m_pRender->m_pOsgViewer->addView(pView);
 
+    LoadTool();
+    m_pTool->RegisterTool();
+    m_pTool->SelecteTool("IPointPick");
+
 
     /// 开始渲染循环
     m_pRender->moveToThread(m_pThread);
@@ -210,6 +214,23 @@ void QtSceneGraph::LoadPlot()
         if(nullptr != pCreatePlot)
         {
             m_pPlot = pCreatePlot(this);
+        }
+    }
+}
+
+/// 加载工具
+void QtSceneGraph::LoadTool()
+{
+    typedef ITool* (*CreateToolFnc)(ISceneGraph*);
+    QString sPlotName=QString("%1Tool").arg(GetExePath().c_str());
+    sPlotName += s_sSuffix;
+    QLibrary loadPlot(sPlotName);
+    if(loadPlot.load())
+    {
+        CreateToolFnc pCreateTool = reinterpret_cast<CreateToolFnc>(loadPlot.resolve("CreateToolSelector"));
+        if(nullptr != pCreateTool)
+        {
+            m_pTool = pCreateTool(this);
         }
     }
 }

@@ -19,7 +19,7 @@ public:
      * @param 接口名称
      * @return
      */
-    ISceneNode* CreateMapSceneNode(const std::string &sInterface);
+    ISceneNode* CreateSceneNode(const std::string &sInterface);
 
     /**
      * @brief 删除不再使用的地图节点
@@ -63,9 +63,8 @@ private:
     };
 
     std::map<std::string,MapSceneFun> m_mapTypeFunc;
-    std::map<ISceneNode*,std::string>m_mapDeleteFunc;
 
-    std::map<std::string, std::string>        m_mapTypeDllName; /// 类型和dll的
+    std::map<std::string, std::string> m_mapTypeDllName; /// 类型和dll的
     std::list<ISceneNode*> m_allCreateNode;
 };
 

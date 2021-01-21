@@ -1,8 +1,9 @@
 QT -= gui
-TARGET = Measure
+TARGET = Tool
 TEMPLATE = lib
 
-include($$PWD/../Tools.pri)
+SDK_CONFIG *= SceneCore OSG
+include($$PWD/../../SoftSDK.pri)
 
 HEADERS += \
     ToolSelector.h

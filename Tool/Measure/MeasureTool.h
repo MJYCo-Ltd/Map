@@ -3,7 +3,7 @@
 
 #include <string>
 #include <NoQt.h>
-#include <Tools/ITool.h>
+#include <Tool/ITool.h>
 class CMeasureTool
 {
 public:

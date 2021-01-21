@@ -113,6 +113,7 @@ void MainWindow::on_actionchange_triggered()
 
 bool bShowBackGround=false;
 IHudLayout* pHudLayout=nullptr;
+IHudText*   pHudText=nullptr;
 IMapLocation* pEarthLocation=nullptr;
 ISceneFlashGroup* pFlash=nullptr;
 IImage* pImage=nullptr;
@@ -130,13 +131,14 @@ void MainWindow::on_action_triggered()
 
     pHudLayout = dynamic_cast<IHudLayout*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudLayout"));
 
-    auto pHudText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
+    pHudText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
     m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudLayout);
 
     auto pHudImage = dynamic_cast<IHudImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudImage"));
     pHudImage->SetImage("Images/ship.png");
     pHudLayout->AddHudNode(pHudImage);
     pHudLayout->AddHudNode(pHudText);
+    pHudLayout->SetPosType(HUD_CENTER_CENTER);
 //    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudImage);
 
     auto pLod = m_pSceneGraph->GetPlot()->CreateSceneGroup(LOD_GROUP)->AsSceneLodGroup();
@@ -490,7 +492,6 @@ void MainWindow::on_action_triggered()
     PlotMap();
 }
 
-static int nIndex(0);
 void MainWindow::on_action_2_triggered()
 {
     SceneImageSize size;
@@ -498,7 +499,8 @@ void MainWindow::on_action_2_triggered()
     pImage->SetImageSize(size);
     pFlash->SetFlash(!pFlash->IsFlash());
 //    pEarthLocation->SetVisible(!pEarthLocation->IsVisible());
-    pHudLayout->SetLayoutType(IHudLayout::LAYOUT_VERTICAL);
+    pHudLayout->RemoveHudNode(pHudText);
+    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudText);
 //    pEarthLocation->SetVisible(!pEarthLocation->IsVisible());
     SceneViewPoint viewPoint;
     viewPoint.stPos.fX = 123;

@@ -88,6 +88,11 @@ protected:
     void LoadPlot();
 
     /**
+     * @brief 加载工具
+     */
+    void LoadTool();
+
+    /**
      * @brief 加载地图
      */
     void LoadMap();

@@ -36,7 +36,7 @@ CMapNodeFactory::~CMapNodeFactory()
 }
 
 /// 创建一个节点
-ISceneNode *CMapNodeFactory::CreateMapSceneNode(const std::string& sInterface)
+ISceneNode *CMapNodeFactory::CreateSceneNode(const std::string& sInterface)
 {
     /// 没有找到接口函数，则初始化一下
     auto findOne = m_mapTypeFunc.find(sInterface);
@@ -51,8 +51,6 @@ ISceneNode *CMapNodeFactory::CreateMapSceneNode(const std::string& sInterface)
         ISceneNode* pNode = findOne->second.pCrete(m_pSceneGraph,sInterface);
         if(nullptr != pNode)
         {
-            m_mapDeleteFunc[pNode] = findOne->first;
-
             pNode->AsOsgSceneNode()->Init();
             m_allCreateNode.push_back(pNode);
         }

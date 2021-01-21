@@ -4,7 +4,7 @@ SUBDIRS =\
     OsgExtern\
     SceneCore\
     Plot\
-	Tools\
+    Tool\
     LoadMap\
     LoadQmlMap 
 CONFIG *= ordered

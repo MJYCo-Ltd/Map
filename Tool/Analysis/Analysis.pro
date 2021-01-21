@@ -2,7 +2,7 @@ QT -= gui
 TARGET = Analysis
 TEMPLATE = lib
 
-include($$PWD/../Tools.pri)
+include($$PWD/../Tool.pri)
 
 HEADERS += \
     AnalysisTool.h

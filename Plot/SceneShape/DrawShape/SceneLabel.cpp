@@ -1,48 +1,6 @@
 #include <Inner/OsgExtern/OsgExtern.h>
 #include "SceneLabel.h"
 
-//struct MyDrawCallBack:public osg::Drawable::DrawCallback
-//{
-//    MyDrawCallBack(CSceneLabel* pLabel):m_pLabebl(pLabel){}
-
-//    void drawImplementation(osg::RenderInfo& renderInfo,const osg::Drawable* drawable) const
-//    {
-//        if(nullptr != m_pLabebl->m_pAttachNode)
-//        {
-//            auto pNode = m_pLabebl->m_pAttachNode->AsOsgSceneNode()->GetOsgNode();
-//            const osg::BoundingSphere& bound = pNode->getBound();
-//            osg::notify(osg::WARN)<<"Center:"<<bound._center._v[0]<<','
-//                                  <<bound._center._v[1]<<','
-//                                  <<bound._center._v[2]<<std::endl;
-//            osg::notify(osg::WARN)<<"Radius:"<<bound._radius<<std::endl;
-
-//            osg::ref_ptr<osg::RefMatrix> oldProjectionMatrix = new osg::RefMatrix;
-//            oldProjectionMatrix->set(renderInfo.getState()->getProjectionMatrix());
-
-//        }
-//        drawable->drawImplementation(renderInfo);
-
-//        // auto pLastProgram=renderInfo.getState()->getLastAppliedProgramObject();
-//        //        if(nullptr != pLastProgram)
-//        //        {
-
-//        //            auto pProgram = pLastProgram->getProgram();
-//        //            osg::notify(osg::WARN)<<"====================================================="<<std::endl;
-//        //            osg::notify(osg::WARN)<<pProgram->getName()<<"\n--------------------------------------------"<<std::endl;
-//        //            for(int i=0;i<pProgram->getNumShaders();++i)
-//        //            {
-//        //                osg::notify(osg::WARN)<<pProgram->getShader(i)->getName()<<"\n--------------------------------------------"<<std::endl;
-//        //                osg::notify(osg::WARN)<<pProgram->getShader(i)->getShaderSource()<<std::endl;
-//        //            }
-
-//        //            osg::notify(osg::WARN)<<renderInfo.getState()->getUniformMap().at("baseTexture").uniformVec[0].second<<std::endl;
-//        //        }
-//    }
-
-//private:
-//    CSceneLabel* m_pLabebl;
-//};
-
 /// 设置绑定的节点
 bool CSceneLabel::SetAttachNode(ISceneNode *pSceneNode)
 {

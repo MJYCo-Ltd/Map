@@ -2,7 +2,7 @@ QT -= gui
 TARGET = Measure
 TEMPLATE = lib
 
-include($$PWD/../Tools.pri)
+include($$PWD/../Tool.pri)
 
 HEADERS += \
     MeasureTool.h

@@ -38,7 +38,7 @@ bool CHudLayout::RemoveHudNode(IHudNode *pNode)
 
     IOsgSceneNode* pOsgSceneNode = pNode->AsOsgSceneNode();
     auto findItor = std::find(m_pAllChild.begin(),m_pAllChild.end(),pOsgSceneNode);
-    if (findItor == m_pAllChild.end())
+    if (findItor != m_pAllChild.end())
     {
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
                     new CClearContainer(
