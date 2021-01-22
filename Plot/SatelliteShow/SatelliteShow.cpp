@@ -130,6 +130,32 @@ const SceneAttitude &CSatelliteShow::GetSensorAttitude(int id) const
     }
 }
 
+void CSatelliteShow::UpdateJ2000OribitShow(double duration)
+{
+    if (m_vdMjd.size() > 2)
+    {
+        double dStart = m_vdMjd[0];
+        double dEnd = m_vdMjd[m_vdMjd.size() - 1];
+        double dStep = m_vdMjd[1] - m_vdMjd[0];
+        double dTimeCount = 0;
+
+        std::vector<ScenePos> vTemp;
+        for (auto iter = m_vOribit.begin();iter != m_vOribit.end();++iter)
+        {
+            ScenePos pos;
+            pos.fX = iter->GetX();
+            pos.fY = iter->GetY();
+            pos.fZ = iter->GetZ();
+            dTimeCount += dStep;
+            if (dTimeCount * 86400 > duration)
+                break;
+            else
+                vTemp.push_back(pos);
+        }
+        m_pOribit->SetMultPos(vTemp);
+    }
+}
+
 /// 模型修改
 void CSatelliteShow::ModelChanged()
 {

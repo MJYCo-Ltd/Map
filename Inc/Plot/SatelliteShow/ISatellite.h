@@ -85,6 +85,12 @@ public:
     /// <param name="rAttitude"></param>
     virtual const SceneAttitude& GetSensorAttitude(int id) const = 0;
 
+    /// <summary>
+    /// 按给定的时长更新轨道的显示
+    /// </summary>
+    /// <param name="duration">时长</param>
+    virtual void UpdateJ2000OribitShow(double duration) = 0;
+
     /**
      * @brief 更新时间
      */
