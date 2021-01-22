@@ -254,6 +254,7 @@ void MainWindow::on_action_triggered()
     //pRadarSensor->ShowFace(false);
     pSceneRoot->AddSceneNode(pAttitudeGroup1);
     ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("model/AirPlane.ive");
+    pModel->SetCanPick(true);
 //    IMapLocation* pLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     auto pScal = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
     pFlash = m_pSceneGraph->GetPlot()->CreateSceneGroup(FLASH_GROUP)->AsSceneFlashGroup();
@@ -265,6 +266,7 @@ void MainWindow::on_action_triggered()
     pLod->AddSceneNode(pScal);
 
     ILabel* pLabel = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
+    pLabel->SetCanPick(true);
     pLabel->SetAttachNode(pModel);
     pLabel->SetFont("fonts/msyh.ttf");
     pLabel->SetText("飞机");
@@ -524,8 +526,19 @@ void MainWindow::on_action_2_triggered()
 }
 
 #include <Tool/ITool.h>
+
+class SubPointPick: public PickMessage
+{
+public:
+    void PickID(unsigned int unID)
+    {
+        qDebug()<<unID;
+    }
+};
+
 void MainWindow::on_action_3_triggered()
 {
+    m_pSceneGraph->GetTool()->SubPickMessage(new SubPointPick);
     m_pSceneGraph->GetTool()->SelecteTool("IPointPick");
 //    nTimerID = startTimer(100);
 }

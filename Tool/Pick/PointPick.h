@@ -1,18 +1,24 @@
 #ifndef CPOINTPICK_H
 #define CPOINTPICK_H
+#include <QObject>
 #include <osgEarth/RTTPicker>
-#include <Tool/Pick/IPointPick.h>
+#include "PickTool.h"
 
-class CPointPick:public IPointPick
+class CToolSelector;
+class CPointPick:public QObject,public IToolBase
 {
+    Q_OBJECT
 public:
-    CONSTRUCTOR(CPointPick,IPointPick)
+    CPointPick(ISceneGraph* pSceneGraph,CToolSelector*pToolSelector);
 
     /**
      * @brief 初始化工具
      */
-    void InitTool();
+    bool InitTool();
     void ReleaseTool();
+
+public slots:
+    void HitId(unsigned int);
 protected:
     osg::ref_ptr<osgEarth::Util::RTTPicker> m_pPicker;
 };

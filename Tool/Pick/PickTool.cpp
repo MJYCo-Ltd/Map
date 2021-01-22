@@ -1,13 +1,11 @@
 #include "PickTool.h"
 #include "PointPick.h"
 
-CPickTool::CPickTool()
+IToolBase *CreateTool(ISceneGraph *pSceneGraph,
+                      CToolSelector *pToolSelector,
+                      const std::string &sInterfaceName)
 {
-}
-
-IToolBase *CreateTool(ISceneGraph *pSceneGraph, const std::string &sInterfaceName)
-{
-    return(new CPointPick(pSceneGraph));
+    return(new CPointPick(pSceneGraph,pToolSelector));
 }
 
 bool QueryInterface(std::string& sInterfaceName)

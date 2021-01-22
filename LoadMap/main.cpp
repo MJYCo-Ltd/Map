@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QWindow>
 #include <QDebug>
+#include <QThread>
 
 #include <osgEarth/GeoData>
 #include <osg/Matrix>
@@ -93,6 +94,7 @@ int main(int argc, char *argv[])
     {
         w.setCentralWidget(pWindow);
     }
+//    qDebug()<<QThread::currentThread();
 
     pScene->Run();
 

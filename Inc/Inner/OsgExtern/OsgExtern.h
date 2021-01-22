@@ -187,4 +187,30 @@ private:
     bool                    m_bAdd;
 };
 
+/**
+ * @brief 给视图添加回调
+ */
+class CModifyViewHandler:public osg::Operation
+{
+public:
+    CModifyViewHandler(osgViewer::View* pView,osgGA::GUIEventHandler* pEventHandler,bool bAdd):
+        m_pView(pView),m_pEventHandler(pEventHandler),m_bAdd(bAdd){}
+
+    void operator()(osg::Object*)
+    {
+
+        if(m_bAdd)
+        {
+            m_pView->addEventHandler(m_pEventHandler);
+        }
+        else
+        {
+            m_pView->removeEventHandler(m_pEventHandler);
+        }
+    }
+private:
+    osg::ref_ptr<osgViewer::View> m_pView;
+    osg::ref_ptr<osgGA::GUIEventHandler> m_pEventHandler;
+    bool                    m_bAdd;
+};
 #endif // MAP_GLOBAL_H

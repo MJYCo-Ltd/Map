@@ -37,6 +37,13 @@ public:
     bool IsVisible() const{return(m_bVisible);}
 
     /**
+     * @brief 设置节点是否可以被点选
+     */
+    void SetCanPick(bool bCanPick)JUDGE_EQUAL_CALL_FUNCTION(bCanPick,m_bCanPick,PickStateChanged)
+    bool CanPick(){return(m_bCanPick);}
+    unsigned int PickID(){return(m_unID);}
+
+    /**
      * @brief 转换成想要的类型
      * @return
      */
@@ -52,10 +59,13 @@ public:
 protected:
     virtual ~ISceneNode(){}
     virtual void VisibleChanged()=0;
+    virtual void PickStateChanged()=0;
 
 protected:
     ISceneGraph* m_pSceneGraph;
     bool         m_bVisible=true;
+    bool         m_bCanPick=false;
+    unsigned int m_unID=0;
 };
 
 #endif

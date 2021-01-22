@@ -1,5 +1,3 @@
-#include <osgEarth/Registry>
-#include <osgEarth/ObjectIndex>
 #include "MapLine.h"
 
 /// 添加点
@@ -146,9 +144,6 @@ void CMapLine::InitNode()
     m_pFeatureNode->setDynamic(true);
 
     m_pFeatureNode->dirty();
-
-    osgEarth::ObjectID id = osgEarth::Registry::instance()->objectIndex()->tagNode(m_pFeatureNode.get(),m_pFeatureNode.get());
-    osg::notify(osg::WARN)<<"Create MapLine:\t"<<id<<std::endl;
     SetOsgNode(m_pFeatureNode.get());
 }
 

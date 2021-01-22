@@ -5,6 +5,12 @@
 
 #include <SceneGraph/SceneType.h>
 
+struct PickMessage
+{
+    virtual ~PickMessage(){}
+    virtual void PickID(unsigned int){}
+};
+
 /**
  * @brief 工具类
  */
@@ -25,12 +31,17 @@ public:
     virtual std::vector<std::string> AllTool()const=0;
 
     /**
-     * @brief 选择工具
+     * @brief 选择/取消工具
      */
     virtual bool SelecteTool(const std::string& sToolID)=0;
     virtual void UnSelecteTool()=0;
     virtual const std::string& CurrentTool()=0;
 
+    /**
+     * @brief 注册消息
+     */
+    virtual void SubPickMessage(PickMessage* pSub)=0;
+    virtual void UnSubPickMessage(PickMessage* pSub)=0;
 protected:
     virtual ~ITool(){}
 protected:

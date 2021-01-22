@@ -3,6 +3,8 @@
 #include <iostream>
 #include <osg/Depth>
 #include <osgEarth/VirtualProgram>
+#include <osgEarth/Registry>
+#include <osgEarth/ObjectIndex>
 #include <Inner/OsgExtern/OsgExtern.h>
 #include <Inner/IOsgSceneNode.h>
 #include <Inner/IRender.h>
@@ -44,8 +46,38 @@ protected:
         if(nullptr != pNode)
         {
             m_pRootNode = pNode;
+            m_preMask = m_pRootNode->getNodeMask();
             m_pRootNode->addUpdateCallback(m_pUpdateCallBack);
         }
+    }
+
+    void UpdateNode()
+    {
+        if(m_bPickStateChanged)
+        {
+            if(T::m_bCanPick)
+            {
+                T::m_unID = osgEarth::Registry::instance()->getObjectIndex()->tagNode(m_pRootNode.get(),m_pRootNode.get());
+                if(T::m_bVisible)
+                {
+                    m_pRootNode->setNodeMask(PICK_MASK);
+                }
+            }
+            else
+            {
+                if(T::m_bVisible)
+                {
+                    m_pRootNode->setNodeMask(m_preMask);
+                }
+                else
+                {
+                    m_pRootNode->setNodeMask(0);
+                }
+                osgEarth::Registry::instance()->getObjectIndex()->remove(T::m_unID);
+                T::m_unID = 0;
+            }
+        }
+        IOsgSceneNode::UpdateNode();
     }
 
     /// 重写子类的函数
@@ -53,11 +85,17 @@ protected:
     {
         if(T::m_bVisible)
         {
-            m_pRootNode->setNodeMask(m_preMask);
+            if(T::m_bCanPick)
+            {
+                m_pRootNode->setNodeMask(PICK_MASK);
+            }
+            else
+            {
+                m_pRootNode->setNodeMask(m_preMask);
+            }
         }
         else
         {
-            m_preMask = m_pRootNode->getNodeMask();
             m_pRootNode->setNodeMask(0);
         }
 
@@ -67,6 +105,8 @@ protected:
             one->NodeVisibleChanged(T::m_bVisible);
         }
     }
+
+    void PickStateChanged()SET_TRUE_NODE_UPDATE(m_bPickStateChanged)
 
     void AddNode(osg::Group* pGroup,osg::Node* pNode)
     {
@@ -80,6 +120,7 @@ protected:
 
 protected:
     osg::Node::NodeMask  m_preMask = 0xffffffffu;
+    bool m_bPickStateChanged=false;
 };
 
 #endif // IMPL_SCENE_NODE_H

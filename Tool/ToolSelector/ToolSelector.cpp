@@ -3,7 +3,8 @@
 #include <fstream>
 #include <sstream>
 #include <ISceneCore.h>
-#include <Tool/IToolBase.h>
+
+#include "../IToolBase.h"
 #include "ToolSelector.h"
 
 ITool* CreateToolSelector(ISceneGraph* pSceneGraph)
@@ -69,8 +70,34 @@ bool CToolSelector::SelecteTool(const std::string &sToolID)
 /// 取消工具
 void CToolSelector::UnSelecteTool()
 {
-    delete m_pCurrentTool;
-    m_pCurrentTool = nullptr;
+    if(nullptr != m_pCurrentTool)
+    {
+        m_pCurrentTool->ReleaseTool();
+        delete m_pCurrentTool;
+        m_pCurrentTool = nullptr;
+    }
+}
+
+void CToolSelector::SubPickMessage(PickMessage* pSub)
+{
+    m_listPickMessage.push_back(pSub);
+}
+
+void CToolSelector::UnSubPickMessage(PickMessage* pSub)
+{
+    auto pFindOne = std::find(m_listPickMessage.begin(),m_listPickMessage.end(),pSub);
+    if(m_listPickMessage.end() != pFindOne)
+    {
+        m_listPickMessage.erase(pFindOne);
+    }
+}
+
+void CToolSelector::PickID(unsigned int unID)
+{
+    for(auto one : m_listPickMessage)
+    {
+        one->PickID(unID);
+    }
 }
 
 /// 创建工具
@@ -91,7 +118,7 @@ void CToolSelector::CreateTool(const std::string &sInterface)
             delete m_pCurrentTool;
         }
 
-        m_pCurrentTool = findOne->second(m_pSceneGraph,sInterface);
+        m_pCurrentTool = findOne->second(m_pSceneGraph,this,sInterface);
         if(nullptr != m_pCurrentTool)
         {
             m_pCurrentTool->InitTool();
