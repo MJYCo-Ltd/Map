@@ -3,6 +3,7 @@
 #include <osg/BlendFunc>
 #include <osg/Depth>
 #include <osg/FrontFace>
+#include <osg/MatrixTransform>
 #include "SunModel.h"
 
 std::string s_getSunVertexSource()
@@ -65,8 +66,8 @@ public:
         for (int i = 0; i <= segments; i ++)
         {
             double angle = deltaAngle * float(i);
-            double x = cos(angle);
-            double y = sin(angle);
+            double x = 10*SUN_RADIUS * cos(angle);
+            double y = 10*SUN_RADIUS * sin(angle);
             verts->push_back(osg::Vec3(x, 0, y));
         }
 
@@ -94,105 +95,27 @@ public:
         depth->setWriteMask(false);
         state->setAttributeAndModes(depth.get(), osg::StateAttribute::ON);
     }
-    /// Implementation of the draw function
-    virtual void drawImplementation(osg::RenderInfo &renderInfo) const
-    {
-        osg::Camera *camera = renderInfo.getCurrentCamera();
-        if (!camera)
-        {
-            osg::Geometry::drawImplementation(renderInfo);
-            return;
-        }
-
-        double s = SUN_RADIUS;
-
-        // Get the current camera position.
-        osg::Vec3 eye, center, up;
-        camera->getViewMatrixAsLookAt(eye, center, up);
-
-        // Save old values.
-        osg::ref_ptr<osg::RefMatrix> oldProjectionMatrix = new osg::RefMatrix;
-        oldProjectionMatrix->set(renderInfo.getState()->getProjectionMatrix());
-
-        // Get the individual values
-        double left, right, bottom, top, zNear, zFar;
-        oldProjectionMatrix->getFrustum(left, right, bottom, top, zNear, zFar);
-
-        // Save the model view matrix
-        static osg::Matrix oldModelView;
-        oldModelView.set(renderInfo.getState()->getModelViewMatrix());
-
-        // Get the max distance we need the far plane to be at,
-        // which is the distance between the eye and the origin
-        // plus the distant from the origin to the object (star sphere
-        // radius, sun distance etc), and then some.
-        double distance = eye.length() + s * 2.0;
-
-        // Build a new projection matrix with a modified far plane
-        osg::ref_ptr<osg::RefMatrix> projectionMatrix = new osg::RefMatrix;
-
-        if (distance > zFar * 0.8)
-        {
-            double zNearNew = fmax(distance * 5e-3, 1);
-            //offset = (zFar * 0.99 - distance);
-            double aspect = zNearNew / zNear;
-            projectionMatrix->makeFrustum(
-                        left * aspect, right * aspect, bottom * aspect, top * aspect,
-                        zNearNew, distance * 1.25);
-            renderInfo.getState()->applyProjectionMatrix(projectionMatrix.get());
-        }
-
-        // Scale the model
-        static osg::Matrix mat;
-        mat.set(oldModelView);
-        mat.preMult(osg::Matrix::scale(s, s, s));
-        renderInfo.getState()->applyModelViewMatrix(mat);
-
-        renderInfo.getState()->applyModelViewAndProjectionUniformsIfRequired();
-        // Draw the drawable
-        osg::Geometry::drawImplementation(renderInfo);
-
-        // Reset the far plane to the old value.
-        renderInfo.getState()->applyProjectionMatrix(oldProjectionMatrix.get());
-        renderInfo.getState()->applyModelViewMatrix(oldModelView);
-        renderInfo.getState()->applyModelViewAndProjectionUniformsIfRequired();
-    }
-};
-
-class SunUpdateCallback:public osg::Callback
-{
-public:
-
-    SunUpdateCallback(CSunModel* pParent):m_pParent(pParent){}
-
-    /// 回调
-    bool run(osg::Object* object, osg::Object* data)
-    {
-        if(m_pParent->m_bNeedUpdate)
-        {
-            m_pParent->setMatrix(osg::Matrix::translate(m_pParent->m_rECIPostion));
-            m_pParent->m_bNeedUpdate = false;
-        }
-        return traverse(object, data);
-    }
-private:
-    CSunModel* m_pParent;
 };
 
 /// 太阳模型
 CSunModel::CSunModel():m_bNeedUpdate(false)
 {
-    this->addUpdateCallback(new SunUpdateCallback(this));
+
+    m_pTrans = new osg::Camera;
+    m_pTrans->getOrCreateStateSet()->setRenderBinDetails( -100001, "RenderBin" );
+    m_pTrans->setRenderOrder(osg::Camera::NESTED_RENDER);
+    m_pTrans->setComputeNearFarMode(osg::CullSettings::COMPUTE_NEAR_FAR_USING_BOUNDING_VOLUMES);
 
     osg::ref_ptr<osg::Billboard> bd = new osg::Billboard;
     bd->setMode(osg::Billboard::POINT_ROT_EYE);
     bd->addDrawable(new SunGeometry);
-    addChild(bd.get());
+    m_pTrans->addChild(bd);
+    addChild(m_pTrans);
 }
 
 /// 更新位置
 void CSunModel::UpdatePostion(const osg::Vec3 &rPos)
 {
     m_rECIPostion = rPos;
-    m_bNeedUpdate = true;
+    setMatrix(osg::Matrix::translate(rPos));
 }

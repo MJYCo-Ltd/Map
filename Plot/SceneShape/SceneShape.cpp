@@ -3,7 +3,7 @@
 #include "DrawShape/ScenePulse.h"
 #include "DrawShape/ScenePoint.h"
 #include "DrawShape/SceneLine.h"
-#include "DrawShape/SceneRadar.h"
+#include "DrawShape/SceneEllipsoid.h"
 #include "DrawShape/ScenePolygon.h"
 #include "DrawShape/SceneImage.h"
 #include "DrawShape/SceneLabel.h"
@@ -11,7 +11,6 @@
 
 static const char s_sPoint[]="IPoint";
 static const char s_sLine[]="ILine";
-static const char s_sEllipse[]="IEllipse";
 static const char s_sArc[]="IArc";
 static const char s_sRectangle[]="IRectangle";
 static const char s_sPolygon[]="IPolygon";
@@ -20,7 +19,7 @@ static const char s_sImage[]="IImage";
 static const char s_sConeSensor[]="IConeSensor";
 static const char s_sSConeSensor[]="ISConeSensor";
 static const char s_sPulseSensor[]="IPulseSensor";
-static const char s_sRadarSensor[]="IRadarSensor";
+static const char s_sEllipsoidSensor[]="IEllipsoidSensor";
 static const char s_sLabel[]="ILabel";
 
 ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName)
@@ -45,9 +44,9 @@ ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName
     {
         return(new CSceneLine(pSceneGraph));
     }
-    else if(sInterfaceName == s_sRadarSensor)
+    else if(sInterfaceName == s_sEllipsoidSensor)
     {
-        return(new CSceneRadar(pSceneGraph));
+        return(new CSceneEllipsoid(pSceneGraph));
     }
     else if(s_sPolygon == sInterfaceName)
     {
@@ -73,8 +72,6 @@ bool QueryInterface(std::string& sInterfaceName)
     sInterfaceName += " ";
     sInterfaceName += s_sLine;
     sInterfaceName += " ";
-    sInterfaceName += s_sEllipse;
-    sInterfaceName += " ";
     sInterfaceName += s_sArc;
     sInterfaceName += " ";
     sInterfaceName += s_sRectangle;
@@ -91,7 +88,7 @@ bool QueryInterface(std::string& sInterfaceName)
     sInterfaceName += " ";
     sInterfaceName += s_sPulseSensor;
     sInterfaceName += " ";
-    sInterfaceName += s_sRadarSensor;
+    sInterfaceName += s_sEllipsoidSensor;
     sInterfaceName += " ";
     sInterfaceName += s_sLabel;
 

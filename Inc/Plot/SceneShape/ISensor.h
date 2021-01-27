@@ -27,6 +27,7 @@ public:
      */
     void SetDistance(double dDistance)JUDGE_DOUBLE_CALL_FUNCTION(dDistance,m_dDistance,DistanceChanged)
     double Distance()const{return(m_dDistance);}
+
 protected:
     virtual ~ISensor(){}
 

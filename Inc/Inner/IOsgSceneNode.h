@@ -151,7 +151,10 @@ protected:
      */
     virtual void InitNode()
     {
-        m_pUpdateCallBack = new COsgSceneNodeUpdateCallback(this);
+        if(!m_pUpdateCallBack.valid())
+        {
+            m_pUpdateCallBack = new COsgSceneNodeUpdateCallback(this);
+        }
     }
 
     /**

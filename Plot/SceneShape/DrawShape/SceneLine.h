@@ -48,6 +48,7 @@ protected:
      * @brief 颜色修改
      */
     void ColorChanged()SET_TRUE_NODE_UPDATE(m_bColorChanged)
+    void ShowBackChanged(){}
 
     /**
      * @brief 初始化节点

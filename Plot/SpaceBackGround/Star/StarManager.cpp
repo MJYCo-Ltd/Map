@@ -47,7 +47,7 @@ CStarManager::~CStarManager()
 void CStarManager::ReadStar(int nMaxLevel, TYPE_STAR_DATA type)
 {
     /// 设置文件夹
-    std::string sStarsPath = GetExePath() +"SpaceResource/stars";
+    std::string sStarsPath = GetExePath() +"Data/Space/stars";
     QDir containDir(QString::fromLocal8Bit(sStarsPath.c_str()));
 
     QStringList tmpFiters;
@@ -218,7 +218,7 @@ void CStarManager::SetConstellation(bool bVisible)
 /// 读取星星名字
 bool CStarManager::ReadStarNames()
 {
-    std::string s = GetExePath() +"SpaceResource/stars/names";
+    std::string s = GetExePath() +"Data/Space/stars/names";
 
     FILE *file=fopen(s.c_str(), "rb");
     if (!file)

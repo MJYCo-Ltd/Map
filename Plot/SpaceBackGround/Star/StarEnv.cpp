@@ -54,12 +54,6 @@ private:
 CStarEnv::CStarEnv(ISceneGraph *pSceneGraph):
     m_pSceneGraph(pSceneGraph)
 {
-    /// 初始化IERS文件
-    if(!Aerospace::CIRESInfo::GetInstance()->IsInit())
-    {
-        Aerospace::CIRESInfo::GetInstance()->Init(GetExePath() + "SpaceResource/dynamics/finals2000A.data");
-    }
-
     /// 优先渲染
     setRenderOrder(osg::Camera::PRE_RENDER);
     setAllowEventFocus(false);

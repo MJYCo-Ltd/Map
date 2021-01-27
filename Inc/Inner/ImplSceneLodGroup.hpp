@@ -45,7 +45,7 @@ protected:
                 m_pLod->setRangeMode(osg::LOD::DISTANCE_FROM_EYE_POINT);
                 break;
             case T::NODE_SCREEN_PIXEL:
-                m_pLod->setRangeMode(osg::LOD::DISTANCE_FROM_EYE_POINT);
+                m_pLod->setRangeMode(osg::LOD::PIXEL_SIZE_ON_SCREEN);
                 break;
             }
             m_bTypeChanged =false;

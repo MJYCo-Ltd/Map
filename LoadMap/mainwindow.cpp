@@ -26,7 +26,7 @@
 #include <Plot/SceneShape/IConeSensor.h>
 #include <Plot/SceneShape/ISConeSensor.h>
 #include <Plot/Common/ISceneFlashGroup.h>
-#include <Plot/SceneShape/IRadarSensor.h>
+#include <Plot/SceneShape/IEllipsoidSensor.h>
 #include <Plot/SatelliteShow/ISatellite.h>
 #include <Plot/Hud/IHudText.h>
 #include <Plot/Hud/IHudImage.h>
@@ -244,14 +244,22 @@ void MainWindow::on_action_triggered()
     /// 绘制雷达波
     /// 绘制方波
     auto pAttitudeGroup1 = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
-    auto pRadarSensor = dynamic_cast<IRadarSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IRadarSensor"));
+    auto pRadarSensor = dynamic_cast<IEllipsoidSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IEllipsoidSensor"));
+    SceneColor radarColor;
     pAttitudeGroup1->AddSceneNode(pRadarSensor);
     pAttitudeGroup1->SetPos(pPoint2->Pos());
     pRadarSensor->SetDistance(100.);
     pRadarSensor->SetAzimuth(0,150);
     pRadarSensor->SetElevation(-10,10);
-    pRadarSensor->SetColor(color);
-    //pRadarSensor->ShowFace(false);
+    pRadarSensor->SetSConeHAngle(20);
+    pRadarSensor->SetSConeVAngle(40);
+    pRadarSensor->SetConeAngle(90);
+    pRadarSensor->SetColor(radarColor);
+    pRadarSensor->SetEquator(1.0);
+    pRadarSensor->SetPolar(1.2);
+    pRadarSensor->SetDrawType(IEllipsoidSensor::FULL_PART);
+    pRadarSensor->SetShowBack(false);
+    pRadarSensor->SetImage("Data/Space/pixmaps/venus.jpg");
     pSceneRoot->AddSceneNode(pAttitudeGroup1);
     ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("model/AirPlane.ive");
     pModel->SetCanPick(true);

@@ -11,11 +11,6 @@ public:
     CONSTRUCTOR(ImplMapSceneNode,ImplSceneNode<T>)
 
     /**
-     * @brief 判断地图节点是否在多边形内
-     */
-    void JudgeInPolygon(const MapPolygon&){}
-
-    /**
      * @brief  更新地图节点
      * @param pMapNode
      */
@@ -31,11 +26,6 @@ protected:
         m_pNodeStyle->getOrCreate<osgEarth::AltitudeSymbol>()
                 ->clamping() = osgEarth::AltitudeSymbol::CLAMP_TO_TERRAIN;
     }
-
-    /**
-     * @brief 选中更改
-     */
-    void SelecteChanged(){}
 
     /**
      * @brief 贴地类型修改

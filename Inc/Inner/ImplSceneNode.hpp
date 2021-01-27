@@ -43,6 +43,11 @@ protected:
      */
     void SetOsgNode(osg::Node* pNode)
     {
+        if(m_pRootNode.valid())
+        {
+            m_pRootNode->removeUpdateCallback(m_pUpdateCallBack);
+        }
+
         if(nullptr != pNode)
         {
             m_pRootNode = pNode;

@@ -129,10 +129,10 @@ void CStarRender::init()
 {
     osg::StateSet *state = getOrCreateStateSet();
 
-    osg::ref_ptr<osg::Texture2D> starTexture1 = m_pSceneGraph->ResouceLoader()->LoadTexture("SpaceResource/pixmaps/asterism.png");
+    osg::ref_ptr<osg::Texture2D> starTexture1 = m_pSceneGraph->ResouceLoader()->LoadTexture("Data/Space/pixmaps/asterism.png");
     state->setTextureAttributeAndModes(0, starTexture1.get());
 
-    osg::ref_ptr<osg::Texture2D> starTexture2 = m_pSceneGraph->ResouceLoader()->LoadTexture("SpaceResource/pixmaps/star.png");
+    osg::ref_ptr<osg::Texture2D> starTexture2 = m_pSceneGraph->ResouceLoader()->LoadTexture("Data/Space/pixmaps/star.png");
     state->setTextureAttributeAndModes(1, starTexture2.get());
 
     state->getOrCreateUniform("baseTexture", osg::Uniform::SAMPLER_2D)->set(0);

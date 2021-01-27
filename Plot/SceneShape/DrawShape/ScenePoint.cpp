@@ -36,7 +36,7 @@ void CScenePoint::CreateShape()
     m_pVertexArray->push_back(osg::Vec3(m_stPos.fX,m_stPos.fY,m_stPos.fZ));
     m_pGeometry->addPrimitiveSet(new osg::DrawArrays(GL_POINTS,0,m_pVertexArray->size()));
 
-    osg::ref_ptr<osg::Texture2D> starTexture1 = m_pSceneGraph->ResouceLoader()->LoadTexture("SpaceResource/pixmaps/asterism.png");
+    osg::ref_ptr<osg::Texture2D> starTexture1 = m_pSceneGraph->ResouceLoader()->LoadTexture("Data/Space/pixmaps/asterism.png");
     pSate->setTextureAttributeAndModes(0, starTexture1.get());
     pSate->setMode(GL_PROGRAM_POINT_SIZE,osg::StateAttribute::ON);
 }

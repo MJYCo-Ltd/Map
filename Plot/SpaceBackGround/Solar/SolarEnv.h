@@ -7,7 +7,7 @@
 
 class ISceneGraph;
 
-class CSolarEnv:public osg::MatrixTransform
+class CSolarEnv:public osg::Group
 {
 public:
     CSolarEnv(ISceneGraph* pSceneGraph);
@@ -28,12 +28,6 @@ public:
      * @param dMJD
      */
     void UpdateTime(const double& dMJD);
-
-    /**
-     * @brief 更新
-     * @param nv
-     */
-    void traverse(osg::NodeVisitor &nv);
 
     /**
      * @brief 设置行星名称显隐

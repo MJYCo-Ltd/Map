@@ -16,6 +16,7 @@ SDK_CONFIG *= OSG Satellite OsgExtern SceneCore
 include($$PWD/../MapPlot.pri)
 
 HEADERS += \
+    SkyNode.h \
     Solar/PlanetModel.h \
     Solar/SolarEnv.h \
     Solar/SunModel.h \
@@ -37,6 +38,7 @@ HEADERS += \
     Star/StarZoneDataBase.h
 
 SOURCES += \
+    SkyNode.cpp \
     Solar/PlanetModel.cpp \
     Solar/SolarEnv.cpp \
     Solar/SunModel.cpp \

@@ -3,19 +3,18 @@
 #include <list>
 #include <Plot/Map/IMapSceneNode.h>
 
-
-enum MAP_LINE_TYPE
-{
-    MAP_SOLID_LINE, /// 实线
-    MAP_DOTTED_LINE /// 虚线
-};
-
 /**
  * @brief 场景节点类
  */
 class IMapLine:public IMapSceneNode
 {
 public:
+    enum MAP_LINE_TYPE
+    {
+        MAP_SOLID_LINE, /// 实线
+        MAP_DOTTED_LINE /// 虚线
+    };
+
     CONSTRUCTOR(IMapLine,IMapSceneNode)
 
     /**

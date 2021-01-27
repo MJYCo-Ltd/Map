@@ -1,16 +1,14 @@
-#ifndef SPACEENV_H
-#define SPACEENV_H
+#ifndef CSKYNODE_H
+#define CSKYNODE_H
+#include <osg/Group>
+#include "Solar/SolarEnv.h"
+#include "Star/StarEnv.h"
 
-#include <Map/SpaceEnv/ISpaceBackGround.h>
-#include <Inner/ImplSceneNode.hpp>
-#include <NoQt.h>
-#include "SkyNode.h"
-
-class CSpaceBackGround:public ImplSceneNode<ISpaceBackGround>
+class CSkyNode:public osg::Group
 {
 public:
-    CONSTRUCTOR(CSpaceBackGround,ImplSceneNode<ISpaceBackGround>)
-    ~CSpaceBackGround();
+    CSkyNode(ISceneGraph* pSceneGraph);
+
     /**
      * @brief 设置显示最大星等 默认为 6 最大星等为 20
      * @param nMax
@@ -59,22 +57,22 @@ public:
     void UpdateDate(double dMJD);
 
     /**
-     * @brief 初始化节点
-     */
-    void InitNode();
-
-    /**
      * @brief 更新矩阵
      */
     void UpdateMatrix(const Math::CMatrix& rRotate);
-protected:
-    osg::observer_ptr<CSkyNode> m_pSkyNode;
+
+public:
+    ///////////////// 重写父类方法 ///////////////////
+    void traverse(osg::NodeVisitor&);
+    osg::BoundingSphere computeBound() const;
+    void releaseGLObjects(osg::State* state) const;
+    void resizeGLObjectBuffers(unsigned maxSize);
+    ///////////////// 重写父类方法 end///////////////////
+private:
+    osg::ref_ptr<osg::Group> m_pSpaceBackGroundRoot;
+    osg::ref_ptr<CSolarEnv>  m_pSolarEnv;  /// 行星背景
+    osg::ref_ptr<CStarEnv>   m_pStarEnv;   /// 星空背景
+    double                   m_dMJD=0.0;       /// 约简儒略日
 };
 
-
-extern "C"
-{
-    Q_DECL_EXPORT ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName);
-    Q_DECL_EXPORT bool QueryInterface(std::string& sInterfaceName);
-}
-#endif // SPACEENV_H
+#endif // CSKYNODE_H
