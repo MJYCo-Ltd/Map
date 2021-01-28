@@ -49,23 +49,22 @@ public:
     virtual void SetConstellationNamesVisible(bool)=0;
 
     /**
-     * @brief 设置行星名称是否可见
-     * @param bShow
-     */
-    virtual void SetPlanetsNamesVisible(bool)=0;
-
-    /**
      * @brief 更新时间
      * @param 约简儒略日
      */
-    virtual void UpdateDate(double)=0;
+    void UpdateDate(double dMJD)JUDGE_DOUBLE_CALL_FUNCTION(dMJD,m_dMJD,DateChanged)
 
     /**
      * @brief 更新矩阵
      */
-    virtual void UpdateMatrix(const Math::CMatrix&)=0;
+    virtual void UpdateMatrix(const Math::CMatrix& rRotate)JUDGE_EQUAL_CALL_FUNCTION(rRotate,m_matRotate,MatrixChanged)
 protected:
     virtual ~ISpaceBackGround(){}
+    virtual void DateChanged()=0;
+    virtual void MatrixChanged()=0;
+protected:
+    double m_dMJD=0;
+    Math::CMatrix m_matRotate;
 };
 
 #endif

@@ -122,7 +122,7 @@ IImage* pImage=nullptr;
 void MainWindow::on_action_triggered()
 {
     pImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
-    pImage->SetImagePath("Images/ship.png");
+    pImage->SetImagePath("Image/ship.png");
 
     ISceneGroup* pSceneRoot = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
 
@@ -136,7 +136,7 @@ void MainWindow::on_action_triggered()
     m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudLayout);
 
     auto pHudImage = dynamic_cast<IHudImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudImage"));
-    pHudImage->SetImage("Images/ship.png");
+    pHudImage->SetImage("Image/ship.png");
     pHudLayout->AddHudNode(pHudImage);
     pHudLayout->AddHudNode(pHudText);
     pHudLayout->SetPosType(HUD_DOWN_RIGHT);
@@ -169,7 +169,8 @@ void MainWindow::on_action_triggered()
     pPoint->SetPointSize(5.f);
     pPoint1->SetPointSize(5.f);
     pPoint2->SetPointSize(5.f);
-    pPoint3->SetPointSize(5.f);
+    pPoint3->SetPointSize(50.f);
+    pPoint3->SetImage("Space/pixmaps/star.png");
 
 
     pPoint->SetColor(color);
@@ -200,7 +201,7 @@ void MainWindow::on_action_triggered()
     scenePos.fX = 0.f;
     pPoint3->SetPos(scenePos);
     pLine->AddPoint(3,scenePos);
-    //pSceneRoot->AddSceneNode(pLine);
+    pSceneRoot->AddSceneNode(pLine);
     pLine->SetLineWidth(2);
 
     /// 绘制多边形
@@ -248,7 +249,7 @@ void MainWindow::on_action_triggered()
     SceneColor radarColor;
     pAttitudeGroup1->AddSceneNode(pRadarSensor);
     pAttitudeGroup1->SetPos(pPoint2->Pos());
-    pRadarSensor->SetDistance(100.);
+    pRadarSensor->SetDistance(1.);
     pRadarSensor->SetAzimuth(0,150);
     pRadarSensor->SetElevation(-10,10);
     pRadarSensor->SetSConeHAngle(20);
@@ -259,9 +260,9 @@ void MainWindow::on_action_triggered()
     pRadarSensor->SetPolar(1.2);
     pRadarSensor->SetDrawType(IEllipsoidSensor::FULL_PART);
     pRadarSensor->SetShowBack(false);
-    pRadarSensor->SetImage("Data/Space/pixmaps/venus.jpg");
+    pRadarSensor->SetImage("Space/pixmaps/venus.png");
     pSceneRoot->AddSceneNode(pAttitudeGroup1);
-    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("model/AirPlane.ive");
+    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("Model/AirPlane.ive");
     pModel->SetCanPick(true);
 //    IMapLocation* pLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     auto pScal = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
@@ -276,7 +277,7 @@ void MainWindow::on_action_triggered()
     ILabel* pLabel = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
     pLabel->SetCanPick(true);
     pLabel->SetAttachNode(pModel);
-    pLabel->SetFont("fonts/msyh.ttf");
+    pLabel->SetFont("Fonts/msyh.ttf");
     pLabel->SetText("飞机");
 
     auto pAttitudeAirplane = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();

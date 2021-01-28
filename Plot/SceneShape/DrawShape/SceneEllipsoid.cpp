@@ -60,7 +60,7 @@ void CSceneEllipsoid::UpdateShape()
             /// 如果VP中没有函数则添加
             if(!checkFunctions(m_pVirutlProgram))
             {
-                m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(m_pVirutlProgram,"Data/GLSL/Global.glsl");
+                m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(m_pVirutlProgram,"GLSL/Global.glsl");
             }
         }
         else
@@ -72,7 +72,7 @@ void CSceneEllipsoid::UpdateShape()
             /// 如果VP中有函数则移除
             if(checkFunctions(m_pVirutlProgram))
             {
-                m_pSceneGraph->ResouceLoader()->RemoveVirtualProgram(m_pVirutlProgram,"Data/GLSL/Global.glsl");
+                m_pSceneGraph->ResouceLoader()->RemoveVirtualProgram(m_pVirutlProgram,"GLSL/Global.glsl");
             }
         }
     }

@@ -55,5 +55,11 @@ extern "C"
      * @return
      */
     SCENECORESHARED_EXPORT const std::string& GetExePath();
+
+    /**
+     * @brief 获取资源所在路径
+     * @return
+     */
+    SCENECORESHARED_EXPORT const std::string& GetDataPath();
 }
 #endif // ISCENCECORE_H

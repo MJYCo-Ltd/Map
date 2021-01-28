@@ -45,12 +45,6 @@ void CSpaceBackGround::SetPlanetsNamesVisible(bool bShow)
     m_pSkyNode->SetPlanetsNamesVisible(bShow);
 }
 
-/// 更新时间
-void CSpaceBackGround::UpdateDate(double dMJD)
-{
-    m_pSkyNode->UpdateDate(dMJD);
-}
-
 /// 初始化场景节点
 void CSpaceBackGround::InitNode()
 {
@@ -60,10 +54,22 @@ void CSpaceBackGround::InitNode()
     SetOsgNode(m_pSkyNode.get());
 }
 
-/// 更新矩阵
-void CSpaceBackGround::UpdateMatrix(const Math::CMatrix &rRotate)
+/// 更新节点
+void CSpaceBackGround::UpdateNode()
 {
-    m_pSkyNode->UpdateMatrix(rRotate);
+    if(m_bDateChanged)
+    {
+        m_pSkyNode->UpdateDate(m_dMJD);
+        m_bDateChanged=false;
+    }
+
+    if(m_bMatrixChanged)
+    {
+        m_pSkyNode->UpdateMatrix(m_matRotate);
+        m_bMatrixChanged=false;
+    }
+
+    ImplSceneNode<ISpaceBackGround>::UpdateNode();
 }
 
 static const char s_sSpaceBackGround[]="ISpaceBackGround";

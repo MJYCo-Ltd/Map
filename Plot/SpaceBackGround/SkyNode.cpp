@@ -11,7 +11,6 @@ CSkyNode::CSkyNode(ISceneGraph *pSceneGraph)
 
     m_pSpaceBackGroundRoot->addChild(m_pStarEnv);
     m_pSpaceBackGroundRoot->addChild(m_pSolarEnv);
-//    this->addChild(m_pSpaceBackGroundRoot.get());
 }
 
 void CSkyNode::SetMaxVisibleMagnitude(int nMax)
@@ -92,6 +91,11 @@ void CSkyNode::traverse(osg::NodeVisitor & nv)
             cv->setInheritanceMask(
                         cv->getInheritanceMask()|osg::CullSettings::CLAMP_PROJECTION_MATRIX_CALLBACK);
         }
+    }
+
+    if(nv.getVisitorType() == nv.UPDATE_VISITOR)
+    {
+        m_pSpaceBackGroundRoot->accept(nv);
     }
 
     osg::Group::traverse(nv);

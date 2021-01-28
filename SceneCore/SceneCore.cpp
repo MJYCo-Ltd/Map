@@ -7,9 +7,15 @@
 #include "SceneCore.h"
 #include "SceneGraph/SceneGraphManager.h"
 
+#ifdef Q_OS_WIN
+static const char s_cSeparator('\\');
+#else
+static const char s_cSeparator('/');
+#endif
 static CSceneCore* s_gMapCore=nullptr;
 static bool        s_gBChecked(false);
-static std::string s_strPath(".");
+static std::string s_strPath("./");
+static std::string s_strData("./Data/");
 
 CSceneCore::CSceneCore():
     m_pSceneGraphManger(new CSceneGraphManager)
@@ -108,15 +114,21 @@ bool CheckPC()
 void SetExePath(const std::string& sPath)
 {
     s_strPath = sPath;
-#ifdef Q_OS_WIN
-	s_strPath += '\\';
-#else
-    s_strPath += '/';
-#endif
+    s_strPath += s_cSeparator;
+
+    /// 获取数据路径
+    s_strData = s_strPath;
+    s_strData += "Data";
+    s_strData += s_cSeparator;
 }
 
 /// 获取路径
 const std::string& GetExePath()
 {
     return(s_strPath);
+}
+
+const std::string& GetDataPath()
+{
+    return(s_strData);
 }

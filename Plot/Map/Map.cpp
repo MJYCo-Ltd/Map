@@ -331,7 +331,7 @@ void CMap::InitMap()
     {
         if(!m_p2DRoot.valid())
         {
-            auto node = m_pSceneGraph->ResouceLoader()->LoadNode("Projected.earth");
+            auto node = m_pSceneGraph->ResouceLoader()->LoadNode("Earth/Projected.earth");
             m_pMap2DNode = osgEarth::MapNode::findMapNode(node);
 #if OSGEARTH_VERSION_GREATER_OR_EQUAL(3,0,0)
             m_pMap2DNode->open();
@@ -367,7 +367,7 @@ void CMap::InitMap()
     {
         if(!m_pMap3DNode.valid())
         {
-            auto node = m_pSceneGraph->ResouceLoader()->LoadNode("Geocentric.earth");
+            auto node = m_pSceneGraph->ResouceLoader()->LoadNode("Earth/Geocentric.earth");
             m_pMap3DNode = osgEarth::MapNode::findMapNode(node);
 #if OSGEARTH_VERSION_GREATER_OR_EQUAL(3,0,0)
             m_pMap3DNode->open();

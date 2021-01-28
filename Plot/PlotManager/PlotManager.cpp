@@ -2,12 +2,14 @@
 #include <Inner/ImplSceneFlashGroup.hpp>
 #include <Inner/ImplSceneLodGroup.hpp>
 #include <Inner/ImplSceneScaleGroup.hpp>
+#include <Inner/ImplSceneCameraGroup.hpp>
 #include <Inner/ImplSceneModel.hpp>
 
 #include <Plot/Common/ISceneAttitudeGroup.h>
 #include <Plot/Common/ISceneFlashGroup.h>
 #include <Plot/Common/ISceneLodGroup.h>
 #include <Plot/Common/ISceneScaleGroup.h>
+#include <Plot/Common/ISceneCameraGroup.h>
 #include <Plot/Common/ISceneModel.h>
 
 #include "MapNodeFactory.h"
@@ -42,6 +44,9 @@ ISceneGroup *CPlotManager::CreateSceneGroup(SCENE_GROUP_TYPE emType)
         break;
     case SCALE_GROUP:
         pGroup = new ImplSceneScaleGroup<ISceneScaleGroup>(m_pSceneGraph);
+        break;
+    case CAMERA_GROUP:
+        pGroup = new ImplSceneCameraGroup<ISceneCameraGroup>(m_pSceneGraph);
         break;
     default:
         pGroup = new ImplSceneGroup<ISceneGroup>(m_pSceneGraph);

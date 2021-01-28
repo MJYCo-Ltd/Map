@@ -56,19 +56,19 @@ public:
     /**
      * @brief UpdateDate
      */
-    void UpdateDate(double dMJD);
+    void DateChanged()SET_TRUE_NODE_UPDATE(m_bDateChanged)
+    void MatrixChanged()SET_TRUE_NODE_UPDATE(m_bMatrixChanged)
 
     /**
      * @brief 初始化节点
      */
     void InitNode();
-
-    /**
-     * @brief 更新矩阵
-     */
-    void UpdateMatrix(const Math::CMatrix& rRotate);
+protected:
+    void UpdateNode();
 protected:
     osg::observer_ptr<CSkyNode> m_pSkyNode;
+    bool  m_bDateChanged=false;
+    bool  m_bMatrixChanged=false;
 };
 
 

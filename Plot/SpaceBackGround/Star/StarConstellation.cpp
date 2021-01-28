@@ -112,7 +112,7 @@ CStarConstellation::CStarConstellation(ISceneGraph *pSceneGraph):
 
 bool CStarConstellation::ReadConstellation()
 {
-    std::string s = GetExePath() +"Data/Space/stars/constellations";
+    std::string s = GetDataPath() +"Space/stars/constellations";
 
     FILE *file=fopen(s.c_str(), "rb");
     if (!file)

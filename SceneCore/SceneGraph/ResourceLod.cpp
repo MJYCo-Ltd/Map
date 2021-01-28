@@ -39,7 +39,7 @@ osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
             if(!osgDB::equalCaseInsensitive(osgDB::getFileExtension(modelPath),"earth"))
             {
                 auto pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(pNode->getOrCreateStateSet());
-                LoadVirtualProgram(pVirutlProgram,"Data/GLSL/Global.glsl");
+                LoadVirtualProgram(pVirutlProgram,"GLSL/Global.glsl");
             }
             m_mapNode[modelPath] = pNode;
         }

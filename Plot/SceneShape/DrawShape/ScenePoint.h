@@ -12,12 +12,17 @@ protected:
     /**
      * @brief 位置更改
      */
-    void PosChanged()SET_TRUE_NODE_UPDATE(m_bPosChanged)
+    void PosChanged(){m_bPosChanged=true;ShapeChanged();}
 
     /**
      * @brief 点大小更改
      */
-    void PointSizeChanged()SET_TRUE_NODE_UPDATE(m_bPointSizeChanged)
+    void PointSizeChanged(){m_bPointSizeChanged=true;ShapeChanged();}
+
+    /**
+     * @brief 图片路径更改
+     */
+    void ImagePathChanged(){m_bImageChanged=true;ShapeChanged();}
 
     /**
      * @brief 更新形状
@@ -32,6 +37,7 @@ protected:
     osg::ref_ptr<osg::Uniform> m_ufPointSize;
     bool     m_bPointSizeChanged=false;
     bool     m_bPosChanged=false;
+    bool     m_bImageChanged=false;
 };
 
 #endif // CSCENEPOINT_H

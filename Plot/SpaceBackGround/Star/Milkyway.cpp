@@ -53,7 +53,7 @@ void CMilkyway::makeMilkyway()
     osg::StateSet *state = m_pMilkyway->getOrCreateStateSet();
 
     /// 添加纹理
-    osg::Texture2D *txt = m_pSceneGraph->ResouceLoader()->LoadTexture("Data/Space/pixmaps/milkyway.png");
+    osg::Texture2D *txt = m_pSceneGraph->ResouceLoader()->LoadTexture("Space/pixmaps/milkyway.png");
 
     state->setTextureAttributeAndModes(0, txt);
 }

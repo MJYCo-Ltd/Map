@@ -10,6 +10,7 @@ enum SCENE_GROUP_TYPE
     FLASH_GROUP,    /// 闪烁
     LOD_GROUP,      /// 分级显示
     SCALE_GROUP,    /// 自动缩放
+    CAMERA_GROUP,   /// 防止裁剪的节点
     STANDARD_GROUP  /// 只是一个容器
 };
 

@@ -138,7 +138,7 @@ void QtSceneGraph::InitSceneGraph()
 {
     /// 创建资源加载器
     m_pResourceLod = new CResourceLod;
-    m_pResourceLod->InitPath(GetExePath());
+    m_pResourceLod->InitPath(GetDataPath());
 
     /// 创建主视口
     m_pMainWindow = new QtWindow(this,m_pRender,m_pThread);

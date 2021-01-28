@@ -14,8 +14,7 @@ class ImplSceneAttitudeGroup:public ImplSceneGroup<T>
 public:
     CONSTRUCTOR(ImplSceneAttitudeGroup,ImplSceneGroup<T>)
 
-    protected:
-
+protected:
     void UpdateNode()
     {
         if(m_bPosChanged)

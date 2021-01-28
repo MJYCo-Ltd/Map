@@ -31,6 +31,17 @@ CSolarEnv::CSolarEnv(ISceneGraph *pSceneGraph)
                 osg::StateAttribute::ON);
 }
 
+CSolarEnv::~CSolarEnv()
+{
+    for(auto itor = m_mapPlanet.begin();
+        itor != m_mapPlanet.end();
+        ++itor)
+    {
+        delete itor->second;
+    }
+    m_mapPlanet.clear();
+}
+
 /// 构建太阳系
 void CSolarEnv::CreateSolar()
 {
@@ -43,7 +54,7 @@ void CSolarEnv::CreateSolar()
         CPlanetModel* pPlanet = new CPlanetModel(m_pSceneGraph,i);
 
         m_mapPlanet[i] = pPlanet;
-        this->addChild(pPlanet);
+        this->addChild(pPlanet->GetNode());
     }
 
     m_pSun = new CSunModel;
@@ -56,14 +67,15 @@ void CSolarEnv::UpdateTime(const double &dMJD)
     Aerospace::CTimeSys timeSys(dMJD);
     double dMJDTT = timeSys.GetTT();
 
-    for(std::map<int,osg::ref_ptr<CPlanetModel> >::iterator itor = m_mapPlanet.begin();
-        itor != m_mapPlanet.end(); ++itor)
+    for(auto itor = m_mapPlanet.begin();
+        itor != m_mapPlanet.end();
+        ++itor)
     {
         Math::CVector tmpPos = Aerospace::CJPLEphemeris::GetInstance()
                 ->GetPos(dMJDTT,PLANET_TYPE(itor->first+1),Earth);
         if(tmpPos)
         {
-            itor->second->UpdatePostion(osg::Vec3(tmpPos.GetX(),tmpPos.GetY(),tmpPos.GetZ()));
+            itor->second->UpdatePostion(tmpPos);
         }
     }
 

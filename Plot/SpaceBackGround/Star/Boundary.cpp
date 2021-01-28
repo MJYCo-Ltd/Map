@@ -44,7 +44,7 @@ CBoundary::~CBoundary()
 
 void CBoundary::makeBoundray()
 {
-    std::string sBoundName = GetExePath() + "Data/Space/stars/boundaries";
+    std::string sBoundName = GetDataPath() + "Space/stars/boundaries";
     FILE *file = fopen(sBoundName.c_str(), "rb");
     if (!file)
     {

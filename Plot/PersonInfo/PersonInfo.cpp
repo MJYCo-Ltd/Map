@@ -29,7 +29,7 @@ void CPersonInfo::InitNode()
     m_placeStyle.getOrCreateSymbol<osgEarth::TextSymbol>()->encoding() = osgEarth::TextSymbol::ENCODING_UTF8;
     m_placeStyle.getOrCreateSymbol<osgEarth::TextSymbol>()->alignment() = osgEarth::TextSymbol::ALIGN_LEFT_CENTER;
     m_placeStyle.getOrCreateSymbol<osgEarth::TextSymbol>()->size() = 20;
-    std::string sFontPath = GetExePath();
+    std::string sFontPath = GetDataPath();
     sFontPath += "fonts/msyh.ttf";
     m_placeStyle.getOrCreateSymbol<osgEarth::TextSymbol>()->font() = sFontPath;
     m_placeStyle.getOrCreateSymbol<osgEarth::TextSymbol>()->fill()->color() = osgEarth::Color::White;
