@@ -6,8 +6,6 @@
 
 class CSunModel:public osg::MatrixTransform
 {
-    friend class SunGeometry;
-    friend class SunUpdateCallback;
 public:
     CSunModel();
 

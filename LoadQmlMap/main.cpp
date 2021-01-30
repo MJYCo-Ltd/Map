@@ -1,7 +1,9 @@
+#include <iostream>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickWindow>
+#include <SatelliteToolKit/SatelliteToolKit.h>
 #include "Qml/QtOsgItem.h"
 #include "ISceneCore.h"
 #include "AppGlobal.h"
@@ -30,6 +32,12 @@ int main(int argc, char *argv[])
 #endif
     pStr[0] = 0;
     SetExePath(argv[0]);
+
+    std::string sErrorInfo;
+    if(!InitSatelliteToolKit(GetExePath(),sErrorInfo))
+    {
+        std::cout<<sErrorInfo<<std::endl;
+    }
 
     qmlRegisterType<QAppGlobal>("MyItem",1,0,"AppGlobal");
     qmlRegisterType<QtOsgItem>("MyItem",1,0,"OsgItem");

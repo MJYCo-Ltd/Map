@@ -6,6 +6,46 @@
 #include <osg/MatrixTransform>
 #include "SunModel.h"
 
+struct MyDrawCallBack:public osg::Drawable::DrawCallback
+{
+    MyDrawCallBack(std::string sName):m_sName(sName){}
+    std::string m_sName;
+
+    void drawImplementation(osg::RenderInfo& renderInfo,const osg::Drawable* drawable) const
+    {
+        drawable->drawImplementation(renderInfo);
+        const osg::Matrix& oldProjectionMatrix = renderInfo.getState()->getProjectionMatrix();
+
+        /// 获取视角，纵横比，远近裁剪面
+        double fovy, aspectRatio, zNear, zFar;
+        oldProjectionMatrix.getPerspective(fovy, aspectRatio, zNear, zFar);
+        const osg::Matrix& oldModelViewMatrix = renderInfo.getState()->getModelViewMatrix();
+
+        osg::Vec3 vEye,vCenter,vUp;
+        oldModelViewMatrix.getLookAt(vEye,vCenter,vUp);
+        osg::notify(osg::WARN)<<"--------------"<<m_sName<<"--------------"<<std::endl;
+        osg::notify(osg::WARN)<<"near,far:"<<zNear<<'\t'<<zFar<<std::endl;
+        osg::notify(osg::WARN)<<"eye:"<<vEye.x()<<','<<vEye.y()<<','<<vEye.z()<<std::endl;
+        osg::notify(osg::WARN)<<"center:"<<vCenter.x()<<','<<vCenter.y()<<','<<vCenter.z()<<std::endl;
+        osg::notify(osg::WARN)<<"==============="<<m_sName<<"==============="<<std::endl;
+//        auto pLastProgram=renderInfo.getState()->getLastAppliedProgramObject();
+//        if(nullptr != pLastProgram)
+//        {
+
+//            auto pProgram = pLastProgram->getProgram();
+//            osg::notify(osg::WARN)<<"====================================================="<<std::endl;
+//            osg::notify(osg::WARN)<<pProgram->getName()<<"\n--------------------------------------------"<<std::endl;
+//            for(int i=0;i<pProgram->getNumShaders();++i)
+//            {
+//                osg::notify(osg::WARN)<<pProgram->getShader(i)->getName()<<"\n--------------------------------------------"<<std::endl;
+//                osg::notify(osg::WARN)<<pProgram->getShader(i)->getShaderSource()<<std::endl;
+//            }
+
+//            osg::notify(osg::WARN)<<renderInfo.getState()->getUniformMap().at("baseTexture").uniformVec[0].second<<std::endl;
+//        }
+    }
+};
+
 std::string s_getSunVertexSource()
 {
     static std::string sunVertex(
@@ -51,6 +91,7 @@ class SunGeometry: public osg::Geometry
 public:
     SunGeometry()
     {
+//        this->setDrawCallback(new MyDrawCallBack("Sun"));
         setCullingActive(false);
         int segments = 50;
         float deltaAngle = osg::PI * 2.0 / float(segments);

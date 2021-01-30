@@ -36,7 +36,7 @@ protected:
 protected:
     bool       m_bShowLine=true;
     bool       m_bShowFace=true;
-    double     m_dDistance=1000.;
+    double     m_dDistance=1.;
 };
 
 #endif

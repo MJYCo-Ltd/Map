@@ -109,15 +109,15 @@ void CPlanetModel::MakePlanet()
     m_pEllipsoid=dynamic_cast<IEllipsoidSensor*>(pPlot->CreateSceneNode("IEllipsoidSensor"));
 
     m_pAttitudeNode->AddSceneNode(m_pCameraNode);
-    m_pCameraNode->AddSceneNode(m_pEllipsoid);
-    m_pLodNode->AddSceneNode(m_pPointNode);
+    m_pCameraNode->AddSceneNode(m_pLodNode);
     m_pLodNode->AddSceneNode(m_pEllipsoid);
+    m_pLodNode->AddSceneNode(m_pPointNode);
     m_pLodNode->SetNodeChangeType(m_pLodNode->NODE_SCREEN_PIXEL);
 
     m_pCameraNode->SetRenderIndex(m_nRenderBin);
     /// 设置显示层级
     std::vector<float> vLevelInfo;
-    vLevelInfo.push_back(50);
+    vLevelInfo.push_back(20.f);
     m_pLodNode->SetLevelsInfo(vLevelInfo);
 
     SceneColor sceneColor;
