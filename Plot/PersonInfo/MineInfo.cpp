@@ -19,7 +19,7 @@ void CMineInfo::InitNode()
     m_placeStyle.getOrCreateSymbol<osgEarth::TextSymbol>()->alignment() = osgEarth::TextSymbol::ALIGN_LEFT_CENTER;
     m_placeStyle.getOrCreateSymbol<osgEarth::TextSymbol>()->size() = 20;
     std::string sFontPath = GetDataPath();
-    sFontPath += "fonts/msyh.ttf";
+    sFontPath += "Fonts/msyh.ttf";
     m_placeStyle.getOrCreateSymbol<osgEarth::TextSymbol>()->font() = sFontPath;
     m_placeStyle.getOrCreateSymbol<osgEarth::TextSymbol>()->fill()->color() = osgEarth::Color::White;
     m_placeStyle.getOrCreateSymbol<osgEarth::TextSymbol>()->halo()->color() = osgEarth::Color::Black;
@@ -28,7 +28,7 @@ void CMineInfo::InitNode()
     m_placeStyle.getOrCreate<osgEarth::IconSymbol>()->declutter() = false;
     m_placeStyle.getOrCreate<osgEarth::IconSymbol>()->alignment() = osgEarth::IconSymbol::ALIGN_RIGHT_CENTER;
 
-    std::string sImagePath = "ico/17.png";
+    std::string sImagePath = "Image/Mine/17.png";
     auto pImage = m_pSceneGraph->ResouceLoader()->LoadImage(sImagePath,32,32);
 
 

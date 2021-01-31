@@ -81,6 +81,7 @@ protected:
                 osgEarth::Registry::instance()->getObjectIndex()->remove(T::m_unID);
                 T::m_unID = 0;
             }
+            m_bPickStateChanged=false;
         }
         IOsgSceneNode::UpdateNode();
     }

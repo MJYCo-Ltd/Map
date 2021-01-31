@@ -216,7 +216,7 @@ void MainWindow::on_action_triggered()
 
     /// 绘制锥形波
     auto pConSensor = dynamic_cast<IConeSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IConeSensor"));
-    pConSensor->SetDistance(10.);
+    pConSensor->SetDistance(1000.);
     color.fG=1.f;
     color.fA=.6f;
     pConSensor->SetAngle(50.f);
@@ -226,7 +226,7 @@ void MainWindow::on_action_triggered()
     /// 绘制方波
     auto pAttitudeGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
     auto pSConSensor = dynamic_cast<ISConeSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISConeSensor"));
-    pSConSensor->SetDistance(100.);
+    pSConSensor->SetDistance(1000.);
     color.fG=0.f;
     color.fB=1.f;
     color.fA=0.3f;
@@ -249,18 +249,19 @@ void MainWindow::on_action_triggered()
     SceneColor radarColor;
     pAttitudeGroup1->AddSceneNode(pRadarSensor);
     pAttitudeGroup1->SetPos(pPoint2->Pos());
-    pRadarSensor->SetDistance(1.);
+    pRadarSensor->SetDistance(10000.);
     pRadarSensor->SetAzimuth(0,150);
     pRadarSensor->SetElevation(-10,10);
     pRadarSensor->SetSConeHAngle(20);
     pRadarSensor->SetSConeVAngle(40);
-    pRadarSensor->SetConeAngle(90);
-    pRadarSensor->SetColor(radarColor);
+    pRadarSensor->SetConeAngle(30);
+    pRadarSensor->SetColor(color);
     pRadarSensor->SetEquator(1.0);
     pRadarSensor->SetPolar(1.2);
-    pRadarSensor->SetDrawType(IEllipsoidSensor::FULL_PART);
+    pRadarSensor->SetDrawType(IEllipsoidSensor::CONE_PART);
     pRadarSensor->SetShowBack(false);
-    pRadarSensor->SetImage("Space/pixmaps/venus.png");
+//    pRadarSensor->SetImage("Space/pixmaps/venus.png");
+    pRadarSensor->SetCanPick(true);
     pSceneRoot->AddSceneNode(pAttitudeGroup1);
     ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("Model/AirPlane.ive");
     pModel->SetCanPick(true);

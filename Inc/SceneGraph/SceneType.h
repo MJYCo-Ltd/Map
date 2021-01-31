@@ -106,5 +106,5 @@ struct ScenePos
     }
 };
 
-static unsigned int const PICK_MASK=2u;
+static unsigned int const PICK_MASK=1u;
 #endif
