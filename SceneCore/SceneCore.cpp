@@ -65,13 +65,31 @@ ISceneCore *GetSceneCore()
 }
 
 /// 检查硬件是否满足要求
-bool CheckPC()
+bool CheckPC(char *argv[])
 {
     if(!s_gBChecked)
     {
+        const char *pStr = strrchr(argv[0],s_cSeparator);
+
+        if(nullptr == pStr)
+        {
+            return(false);
+        }
+
+        s_strPath = std::string(argv[0],pStr-argv[0]+1);
+
+        /// 获取数据路径
+        s_strData = s_strPath;
+        s_strData += "Data";
+        s_strData += s_cSeparator;
+
         osgEarth::setNotifyLevel(osg::INFO);
         const osgEarth::Capabilities& csCapabilities = osgEarth::Registry::instance()->getCapabilities();
         s_gBChecked = csCapabilities.supportsGLSL();
+        if(!s_gBChecked)
+        {
+            return(s_gBChecked);
+        }
 
         osgEarth::Registry::instance()->unRefImageDataAfterApply() = false;
         osg::setNotifyLevel(osg::WARN);
@@ -108,18 +126,6 @@ bool CheckPC()
     }
 
     return(s_gBChecked);
-}
-
-/// 配置路径
-void SetExePath(const std::string& sPath)
-{
-    s_strPath = sPath;
-    s_strPath += s_cSeparator;
-
-    /// 获取数据路径
-    s_strData = s_strPath;
-    s_strData += "Data";
-    s_strData += s_cSeparator;
 }
 
 /// 获取路径

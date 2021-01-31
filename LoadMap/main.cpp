@@ -51,25 +51,7 @@ public:
 
 int main(int argc, char *argv[])
 {
-    bool bChecked = CheckPC();
-
-    if(!bChecked)
-    {
-        return(1);
-    }
-#ifdef Q_OS_WIN
-    char * pStr = strrchr(argv[0],'\\');
-#else
-    char * pStr = strrchr(argv[0],'/');
-#endif
-    pStr[0] = 0;
-    SetExePath(argv[0]);
-
-    std::string sErrorInfo;
-    if(!InitSatelliteToolKit(GetExePath(),sErrorInfo))
-    {
-        std::cout<<sErrorInfo<<std::endl;
-    }
+    bool bChecked = CheckPC(argv);
 
     QApplication a(argc, argv);
 

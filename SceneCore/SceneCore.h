@@ -26,7 +26,4 @@ protected:
 protected:
     CSceneGraphManager*  m_pSceneGraphManger;
 };
-
-ISceneCore* GetMapCore();
-bool         CheckPC();
 #endif // SCENCECORE_H

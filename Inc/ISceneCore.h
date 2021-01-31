@@ -40,15 +40,11 @@ extern "C"
 
     /**
      * @brief 检查电脑配置是否支持
+     * @param argv 为mian函数中第二个参数
      * @return
      */
-    SCENECORESHARED_EXPORT bool         CheckPC();
+    SCENECORESHARED_EXPORT bool CheckPC(char *argv[]);
 
-    /**
-     * @brief 设置exe运行路径
-     * @param sPath
-     */
-    SCENECORESHARED_EXPORT void SetExePath(const std::string &sPath);
 
     /**
      * @brief 获取exe运行路径

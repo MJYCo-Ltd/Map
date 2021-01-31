@@ -19,24 +19,10 @@ int main(int argc, char *argv[])
     QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGLRhi);
 #endif
 
-    bool bChecked = CheckPC();
+    bool bChecked = CheckPC(argv);
     if(!bChecked)
     {
         return(-1);
-    }
-
-#ifdef Q_OS_WIN
-    char * pStr = strrchr(argv[0],'\\');
-#else
-    char * pStr = strrchr(argv[0],'/');
-#endif
-    pStr[0] = 0;
-    SetExePath(argv[0]);
-
-    std::string sErrorInfo;
-    if(!InitSatelliteToolKit(GetExePath(),sErrorInfo))
-    {
-        std::cout<<sErrorInfo<<std::endl;
     }
 
     qmlRegisterType<QAppGlobal>("MyItem",1,0,"AppGlobal");
