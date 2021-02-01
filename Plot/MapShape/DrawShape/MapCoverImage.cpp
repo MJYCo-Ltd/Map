@@ -30,7 +30,7 @@ void CMapCoverImage::SetCoverInfo(const CoverInfo & rstCoverInfo)
     if(m_pCoverage.valid())
     {
         /// 去掉之前的数据
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pDrapeableNode,m_pCoverage,false));
+        DelNode(m_pDrapeableNode,m_pCoverage);
     }
 
     CGrid2TriangleStrip m_Grid2TriangleStrip(rstCoverInfo.nXNum,rstCoverInfo.nYNum);
@@ -122,7 +122,7 @@ void CMapCoverImage::SetCoverInfo(const CoverInfo & rstCoverInfo)
     }
 
     /// 增加显示
-    m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pDrapeableNode,m_pCoverage,true));
+    AddNode(m_pDrapeableNode,m_pCoverage);
 }
 
 /// 设置测点信息
@@ -138,7 +138,7 @@ void CMapCoverImage::SetCeDian(const std::vector<CeDian> & vAllCedian)
     {
         auto pPlaceNode = new osgEarth::PlaceNode(osgEarth::GeoPoint(osgEarth::SpatialReference::get("wgs84"),one.dLon,one.dLat,10),
                                                   one.sName,osgEarth::Style(),pImage);
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pCoverRoot.get(),pPlaceNode,true));
+        AddNode(m_pCoverRoot.get(),pPlaceNode);
     }
 }
 
@@ -178,7 +178,7 @@ void CMapCoverImage::SetBound(const MapGeoPos &rLeftUp, const MapGeoPos &rRightD
     {
         m_pImage= new osgEarth::ImageOverlay(osgEarth::Config(),0);
         m_pImage->setDynamic(true);
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pCoverRoot.get(),m_pImage,true));
+        AddNode(m_pCoverRoot.get(),m_pImage);
     }
 
     m_pImage->setWest(rLeftUp.fLon);

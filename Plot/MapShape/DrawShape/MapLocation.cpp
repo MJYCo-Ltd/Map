@@ -6,8 +6,7 @@ void CMapLocation::SetSceneNode(ISceneNode *pNode)
 {
     if(nullptr != m_pSceneNode)
     {
-        auto update = new CModifyNode(m_pGeoTransform.get(), m_pSceneNode->AsOsgSceneNode()->GetOsgNode(),false);
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(update);
+        DelNode(m_pGeoTransform.get(),m_pSceneNode->AsOsgSceneNode()->GetOsgNode());
     }
 
     /// 如果两者不是同一个渲染器,则返回
@@ -18,8 +17,7 @@ void CMapLocation::SetSceneNode(ISceneNode *pNode)
 
     m_pSceneNode = pNode;
 
-    auto update = new CModifyNode(m_pGeoTransform.get(), pNode->AsOsgSceneNode()->GetOsgNode(),true);
-    m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(update);
+    AddNode(m_pGeoTransform.get(),pNode->AsOsgSceneNode()->GetOsgNode());
 }
 
 void CMapLocation::UpdateMapNode(osgEarth::MapNode *pMapNode)

@@ -359,7 +359,7 @@ void CMap::InitMap()
             osgEarth::GLUtils::setGlobalDefaults(m_p2DRoot->getOrCreateStateSet());
         }
 
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pGroup.get(),m_p2DRoot,true));
+        AddNode(m_pGroup.get(),m_p2DRoot);
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapNodeChanged(m_pMap3DNode,m_pMap2DNode,this));
     }
         break;
@@ -381,8 +381,8 @@ void CMap::InitMap()
         }
 
         /// 增加更新
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pGroup.get(),m_pMap3DNode.get(),true));
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(m_pGroup.get(),m_pSpaceEnv->GetOsgNode(),true));
+        AddNode(m_pGroup.get(),m_pMap3DNode.get());
+        AddNode(m_pGroup.get(),m_pSpaceEnv->GetOsgNode());
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapNodeChanged(m_pMap2DNode,m_pMap3DNode,this));
     }
         break;
