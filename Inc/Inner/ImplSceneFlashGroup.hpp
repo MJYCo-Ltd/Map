@@ -33,7 +33,7 @@ protected:
             m_pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
 
             /// 此处应该不知道
-            if(T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(m_pVirutlProgram,"Data/GLSL/Flash.glsl"))
+            if(T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(m_pVirutlProgram,"GLSL/Flash.glsl"))
             {
                 /// 获取闪烁变量
                 m_pFlashStartTime = pSate->getOrCreateUniform("flashStartTime",osg::Uniform::FLOAT);

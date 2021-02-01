@@ -23,13 +23,6 @@ public:
     void UpdatePostion(const Math::CVector& rPos);
     const osg::Vec3& GetUpdatePostion(){return(m_rECIPostion);}
 
-
-    /**
-     * @brief 设置名字是否可见
-     * @param bVisble
-     */
-    void SetNameVisible(bool bVisble);
-
     osg::Node* GetNode();
 
 protected:
@@ -50,7 +43,7 @@ private:
     float       m_fPolarRadius;                     /// 极半径
     osg::Vec3    m_rECIPostion;                     /// 位置
     osg::Vec4    m_rColor;                          /// 颜色
-    std::wstring m_wsPlanetName;                    /// 行星显示名称
+    std::string  m_cnPlanetName;                    /// 行星显示名称
     std::string  m_sPlanetImage;                    /// 行星图片名称
 };
 

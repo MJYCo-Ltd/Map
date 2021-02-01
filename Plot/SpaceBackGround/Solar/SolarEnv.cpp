@@ -89,8 +89,4 @@ void CSolarEnv::UpdateTime(const double &dMJD)
 
 void CSolarEnv::SetPlanetNameShow(bool bVisible)
 {
-    for(auto one : m_mapPlanet)
-    {
-        one.second->SetNameVisible(bVisible);
-    }
 }

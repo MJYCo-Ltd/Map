@@ -15,6 +15,7 @@
 
 #define CONSTRUCTOR(VA,VB) VA(ISceneGraph* pSceneGraph):VB(pSceneGraph){}
 #define SET_TRUE_NODE_UPDATE(VA) {VA=true;NodeChanged();}
+#define SET_TRUE_SHAPE_UPDATE(VA) {VA=true;ShapeChanged();}
 
 /**
  * @brief 俯仰翻滚偏航的旋转类型

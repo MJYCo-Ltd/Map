@@ -12,17 +12,17 @@ protected:
     /**
      * @brief 位置更改
      */
-    void PosChanged(){m_bPosChanged=true;ShapeChanged();}
+    void PosChanged()SET_TRUE_SHAPE_UPDATE(m_bPosChanged)
 
     /**
      * @brief 点大小更改
      */
-    void PointSizeChanged(){m_bPointSizeChanged=true;ShapeChanged();}
+    void PointSizeChanged()SET_TRUE_SHAPE_UPDATE(m_bPointSizeChanged)
 
     /**
      * @brief 图片路径更改
      */
-    void ImagePathChanged(){m_bImageChanged=true;ShapeChanged();}
+    void ImagePathChanged()SET_TRUE_SHAPE_UPDATE(m_bImageChanged)
 
     /**
      * @brief 更新形状

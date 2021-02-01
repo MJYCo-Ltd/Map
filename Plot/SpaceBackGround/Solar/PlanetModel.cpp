@@ -16,7 +16,7 @@
 #include <Inner/IOsgSceneNode.h>
 #include "PlanetModel.h"
 
-static std::map<int, const wchar_t *> g_mapPlanetName;
+static std::map<int, const char*> g_mapPlanetName;
 void InitSolarName()
 {
     if(!g_mapPlanetName.empty())
@@ -24,17 +24,17 @@ void InitSolarName()
         return;
     }
 
-    g_mapPlanetName[0] = L"  水星";
-    g_mapPlanetName[1] = L"  金星";
-    g_mapPlanetName[2] = L"  地球";
-    g_mapPlanetName[3] = L"  火星";
-    g_mapPlanetName[4] = L"  木星";
-    g_mapPlanetName[5] = L"  土星";
-    g_mapPlanetName[6] = L"  天王星";
-    g_mapPlanetName[7] = L"  海王星";
-    g_mapPlanetName[8] = L"  冥王星";
-    g_mapPlanetName[9] = L"  月球";
-    g_mapPlanetName[10] = L"  太阳";
+    g_mapPlanetName[0] = "水星";
+    g_mapPlanetName[1] = "金星";
+    g_mapPlanetName[2] = "地球";
+    g_mapPlanetName[3] = "火星";
+    g_mapPlanetName[4] = "木星";
+    g_mapPlanetName[5] = "土星";
+    g_mapPlanetName[6] = "天王星";
+    g_mapPlanetName[7] = "海王星";
+    g_mapPlanetName[8] = "冥王星";
+    g_mapPlanetName[9] = "月球";
+    g_mapPlanetName[10] = "太阳";
 }
 
 /// 行星纹理名称
@@ -85,7 +85,7 @@ CPlanetModel::CPlanetModel(ISceneGraph *pSceneGraph, int nIndex)
     :m_pSceneGraph(pSceneGraph),m_nRenderBin(-1000*nIndex-100)
 {
     /// 设置点的大小
-    m_wsPlanetName = g_mapPlanetName[nIndex];
+    m_cnPlanetName = g_mapPlanetName[nIndex];
     m_sPlanetImage = s_planetNames[nIndex];
     m_rColor = s_planetColors[nIndex];
 
@@ -134,6 +134,7 @@ void CPlanetModel::MakePlanet()
     m_pEllipsoid->SetDrawType(m_pEllipsoid->FULL_PART);
     m_pEllipsoid->SetEquator(m_fEquatorRadius);
     m_pEllipsoid->SetPolar(m_fPolarRadius);
+    m_pEllipsoid->ShowLine(false);
     std::string sPath = "Space/pixmaps/";
     sPath += m_sPlanetImage;
     sPath += ".png";
@@ -148,10 +149,6 @@ void CPlanetModel::UpdatePostion(const Math::CVector &rPos)
     pos.fY = rPos.GetY();
     pos.fZ = rPos.GetZ();
     m_pAttitudeNode->SetPos(pos);
-}
-
-void CPlanetModel::SetNameVisible(bool bVisble)
-{
 }
 
 osg::Node *CPlanetModel::GetNode()
