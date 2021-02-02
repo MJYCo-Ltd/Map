@@ -343,13 +343,14 @@ void QtViewPort::FrameEvent()
         {
             ds =new osg::DisplaySettings(*osg::DisplaySettings::instance());
             m_pView->setDisplaySettings(ds);
-            ds->setSplitStereoAutoAdjustAspectRatio(true);
+//            ds->setSplitStereoAutoAdjustAspectRatio(true);
         }
 
         ds->setStereo(false);
         if(m_bOpenStereo)
         {
             ds->setStereo(true);
+            ds->setStereoMode(osg::DisplaySettings::StereoMode(m_emStereo));
 
             int nWidth(C_WINDOW_WIDTH),nHeight(C_WINDOW_HEIGHT);
             auto pViewport = m_pView->getCamera()->getViewport();
@@ -395,8 +396,8 @@ void QtViewPort::FrameEvent()
             case HORIZONTAL_SPLIT:
             {
                 bool left_eye_left_viewport = ds->getSplitStereoHorizontalEyeMapping()==osg::DisplaySettings::LEFT_EYE_LEFT_VIEWPORT;
-                int left_start = (left_eye_left_viewport) ? 0 : nWidth/2;
-                int right_start = (left_eye_left_viewport) ? nWidth/2 : 0;
+                int left_start = left_eye_left_viewport ? 0 : nWidth/2;
+                int right_start = left_eye_left_viewport ? nWidth/2 : 0;
 
                 m_listStereoCamera.push_back(m_pView->assignStereoCamera(ds,gc,left_start,0,nWidth/2,nHeight,GL_BACK,-1.0));
                 m_listStereoCamera.push_back(m_pView->assignStereoCamera(ds,gc,right_start,0,nWidth/2,nHeight,GL_BACK,1.0));
@@ -405,8 +406,8 @@ void QtViewPort::FrameEvent()
             case VERTICAL_SPLIT:
             {
                 bool left_eye_bottom_viewport = ds->getSplitStereoVerticalEyeMapping()==osg::DisplaySettings::LEFT_EYE_BOTTOM_VIEWPORT;
-                int left_start = (left_eye_bottom_viewport) ? 0 : nHeight/2;
-                int right_start = (left_eye_bottom_viewport) ? nHeight/2 : 0;
+                int left_start = left_eye_bottom_viewport ? 0 : nHeight/2;
+                int right_start = left_eye_bottom_viewport ? nHeight/2 : 0;
 
                 m_listStereoCamera.push_back(m_pView->assignStereoCamera(ds,gc,0,left_start,nWidth,nHeight/2,GL_BACK,-1.0));
                 m_listStereoCamera.push_back(m_pView->assignStereoCamera(ds,gc,0,right_start,nWidth,nHeight/2,GL_BACK,1.0));
