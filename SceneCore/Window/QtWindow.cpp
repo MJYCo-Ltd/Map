@@ -5,12 +5,13 @@
 #include "SceneGraph/QtViewPort.h"
 #include "SceneGraph/QtRender.h"
 
-QtWindow::QtWindow(ISceneGraph *pSceneGraph, QtRender *pRender, QThread* pThread):
+QtWindow::QtWindow(ISceneGraph *pSceneGraph, QtRender *pRender, QThread* pThread, int nType):
     m_pSceneGraph(pSceneGraph),
     m_pThread(pThread),
     m_pRender(pRender),
     m_pFBOWindow(new QtFBOWindow(&m_allWindowMessageObserver)),
-    m_pMainViewPoint(new QtViewPort(pRender,pSceneGraph))
+    m_pMainViewPoint(new QtViewPort(pRender,pSceneGraph)),
+    m_nType(nType)
 {
 }
 
@@ -82,7 +83,7 @@ QWidget *QtWindow::ToWidget()
 {
     if(m_bCanChange)
     {
-        m_pWindow = new QtOsgWindow(m_pThread);
+        m_pWindow = new QtOsgWindow(m_pThread,m_nType);
         m_pWindow->ChangeTimer(1000/m_nFrameRate);
 
         m_pWindow->ConnectRender(m_pRender);
@@ -99,7 +100,7 @@ QWindow *QtWindow::ToWindow()
 {
     if(m_bCanChange)
     {
-        m_pWindow = new QtOsgWindow(m_pThread);
+        m_pWindow = new QtOsgWindow(m_pThread,m_nType);
         m_pWindow->ChangeTimer(1000/m_nFrameRate);
 
         m_pWindow->ConnectRender(m_pRender);

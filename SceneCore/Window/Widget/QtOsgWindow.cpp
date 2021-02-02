@@ -11,12 +11,9 @@
 #include "SceneGraph/QtRender.h"
 
 
-QtOsgWindow::QtOsgWindow(QThread *pThread)
-    :m_pThread(pThread)
-    ,m_unTextureID(0)
-    ,m_nTimerID(0)
-    ,m_bInit(false)
-    ,m_bUpdate(false)
+QtOsgWindow::QtOsgWindow(QThread *pThread, int nType)
+    :m_pOsgRenderThread(pThread)
+    ,m_nType(nType)
 {
     Init();
 }
@@ -33,8 +30,8 @@ QtOsgWindow::~QtOsgWindow()
 /// 设置渲染类
 void QtOsgWindow::ConnectRender(QtRender *pRender)
 {
-    m_pRender = pRender;
-    connect(m_pRender,&QtRender::RenderAFrame,this,&QtOsgWindow::UpdateTexture);
+    m_pOsgRender = pRender;
+    connect(m_pOsgRender,&QtRender::RenderAFrame,this,&QtOsgWindow::UpdateTexture);
 }
 
 void QtOsgWindow::SetFBOWindow(QtFBOWindow *pFBOWindow)
@@ -69,10 +66,14 @@ void QtOsgWindow::initializeGL()
     /// 初始化设备上下文
     context()->doneCurrent();
     m_pFBOWindow->InitContext(context());
-    m_pFBOWindow->InitSurface(m_pThread);
+    m_pFBOWindow->InitSurface(m_pOsgRenderThread);
 
-    QCoreApplication::postEvent(m_pRender,new RenderResize(m_pFBOWindow,this->size()));
-    QCoreApplication::postEvent(m_pRender,new QEvent(static_cast<QEvent::Type>(RENDER_START)));
+    QCoreApplication::postEvent(m_pOsgRender,new RenderResize(m_pFBOWindow,this->size()));
+
+    if(0 == m_nType)
+    {
+        QCoreApplication::postEvent(m_pOsgRender,new QEvent(static_cast<QEvent::Type>(RENDER_START)));
+    }
 
     context()->makeCurrent(this);
 
@@ -105,7 +106,7 @@ void QtOsgWindow::paintUnderGL()
         /// 需要更新的时候
         if(m_bUpdate)
         {
-            QCoreApplication::postEvent(m_pRender,new QEvent(static_cast<QEvent::Type>(RENDER_START)));
+            QCoreApplication::postEvent(m_pOsgRender,new QEvent(static_cast<QEvent::Type>(RENDER_START)));
             m_bUpdate = false;
         }
     }
@@ -141,7 +142,7 @@ void QtOsgWindow::keyReleaseEvent(QKeyEvent *event)
 
 void QtOsgWindow::resizeEvent(QResizeEvent *event)
 {
-    QCoreApplication::postEvent(m_pRender, new RenderResize(m_pFBOWindow,event->size()));
+    QCoreApplication::postEvent(m_pOsgRender, new RenderResize(m_pFBOWindow,event->size()));
     QOpenGLWindow::resizeEvent(event);
 }
 

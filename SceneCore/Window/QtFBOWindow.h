@@ -91,16 +91,16 @@ protected:
     void InitFBO();
 
 private:
-    bool                                           m_bInit;          /// 是否已经初始化
-    uint                                           m_nInitFBO;       /// 是否初始化 FBO
-    uint                                           m_nTextureID;    /// 纹理ID
+    bool                                           m_bInit=false;          /// 是否已经初始化
+    uint                                           m_bInitFBO=false;       /// 是否初始化 FBO
+    uint                                           m_nTextureID=0;    /// 纹理ID
     QSize                                          m_stWinSize;      /// 窗口大小
     QSize                                          m_stTextureSize;  /// 纹理大小
     qreal                                          m_rMouseX;
     qreal                                          m_rMouseY;
 
-    QOffscreenSurface                 *m_pOffScreenSurface=nullptr; /// 离屏渲染表面
-    QOpenGLContext                    *m_pOpenglContext=nullptr;    /// opengl设备上下文
+    QOffscreenSurface    *m_pOffScreenSurface=nullptr; /// 离屏渲染表面
+    QOpenGLContext       *m_pOpenglContext=nullptr;    /// opengl设备上下文
     QOpenGLFramebufferObject *m_pRenderFbo=nullptr;            /// 渲染帧缓存对象
     QOpenGLFramebufferObject *m_pDisplayFbo=nullptr;           /// 显示帧缓存对象
     std::list<IWindowMessageObserver*>*     m_pAllOserver;   /// 所有的消息订阅者

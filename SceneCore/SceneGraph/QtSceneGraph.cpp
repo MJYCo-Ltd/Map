@@ -63,7 +63,16 @@ IWindow *QtSceneGraph::CreateNewWindow()
         return(nullptr);
     }
 
-    auto newWindow = new QtWindow(this,m_pRender,m_pThread);
+    auto newWindow = new QtWindow(this,m_pRender,m_pThread,1);
+    newWindow->InitWindow();
+    auto pViewPoint = static_cast<QtViewPort*>(newWindow->GetMainViewPoint());
+    osgViewer::View* pView = pViewPoint->GetOsgView();
+    auto pOsgNode = m_pRoot->AsOsgSceneNode()->GetOsgNode();
+    pView->setSceneData(pOsgNode);
+
+    ///将主视图关联到渲染器
+    m_pRender->AddView(pView);
+
     m_vOtherWindow.push_back(newWindow);
 
     return(newWindow);
@@ -141,7 +150,7 @@ void QtSceneGraph::InitSceneGraph()
     m_pResourceLod->InitPath(GetDataPath());
 
     /// 创建主视口
-    m_pMainWindow = new QtWindow(this,m_pRender,m_pThread);
+    m_pMainWindow = new QtWindow(this,m_pRender,m_pThread,0);
     m_pMainWindow->InitWindow();
     auto pViewPoint = static_cast<QtViewPort*>(m_pMainWindow->GetMainViewPoint());
 

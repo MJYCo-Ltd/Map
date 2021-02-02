@@ -234,13 +234,14 @@ bool CMap::RemoveLayer(IMapLayer *& pLayer)
             /// 从map中移除节点
             m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(pMapNode,one->second->GetModelLayer(),false));
             delete one->second;
-            m_userLayers.erase(one);
 
             /// 通知观察者
             for(auto oneObserver:m_listObserver)
             {
                 oneObserver->RemoveLayer(one->first);
             }
+
+            m_userLayers.erase(one);
             return(true);
         }
     }

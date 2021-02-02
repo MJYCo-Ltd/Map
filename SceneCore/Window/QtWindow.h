@@ -15,7 +15,7 @@ class ISceneGraph;
 class QtWindow:public IWindow
 {
 public:
-    QtWindow(ISceneGraph* pSceneGraph,QtRender* pRender, QThread* pThread);
+    QtWindow(ISceneGraph* pSceneGraph,QtRender* pRender, QThread* pThread,int nType);
     ~QtWindow();
 
     /**
@@ -86,6 +86,7 @@ protected:
     QWidget*        m_pWidget=nullptr;        /// 返回Widget窗口
     QtFBOWindow*    m_pFBOWindow=nullptr;     /// osg窗口
     QtViewPort*    m_pMainViewPoint=nullptr;
+    int             m_nType;
     int             m_nFrameRate=60;          /// 帧率
     bool            m_bInit=false;
     bool            m_bCanChange=true;

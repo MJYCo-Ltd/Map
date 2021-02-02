@@ -72,6 +72,9 @@ int main(int argc, char *argv[])
     //pScene->GetMainWindow()->SubMessage(new WindowMessage);
 
     QWidget* pWindow = pScene->GetMainWindow()->ToWidget();
+//    auto pNewWindow = pScene->CreateNewWindow();
+//    auto pOtherWidget = pNewWindow->ToWidget();
+//    pOtherWidget->show();
     if(nullptr != pWindow)
     {
         w.setCentralWidget(pWindow);

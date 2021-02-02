@@ -31,14 +31,9 @@ inline MouseButtonMask ChangeMouseType(QMouseEvent* event)
 
 QtFBOWindow::QtFBOWindow(std::list<IWindowMessageObserver *> *pAllObserver)
     :osgViewer::GraphicsWindowEmbedded(0,0,C_WINDOW_WIDTH,C_WINDOW_HEIGHT)
-    ,m_bInit(false)
-    ,m_nInitFBO(0)
-    ,m_nTextureID(0)
     ,m_stWinSize(C_WINDOW_WIDTH,C_WINDOW_HEIGHT)
     ,m_pOffScreenSurface(new QOffscreenSurface)
     ,m_pOpenglContext(new QOpenGLContext)
-    ,m_pRenderFbo(nullptr)
-    ,m_pDisplayFbo(nullptr)
     ,m_pAllOserver(pAllObserver)
 {
     getEventQueue()->windowResize(0, 0, m_stWinSize.width() , m_stWinSize.height());
@@ -49,7 +44,7 @@ QtFBOWindow::~QtFBOWindow()
     if(m_bInit)
     {
         /// 关联设备上下文
-        if(0 != m_nInitFBO)
+        if(m_bInitFBO)
         {
             m_pOpenglContext->makeCurrent(m_pOffScreenSurface);
             delete m_pRenderFbo;
@@ -77,7 +72,7 @@ void QtFBOWindow::ReSize(const QSize &rWinSize)
         /// 重置窗口大小
         getEventQueue()->windowResize(0,0,m_stWinSize.width(),m_stWinSize.height());
         resized(0,0,m_stWinSize.width(),m_stWinSize.height());
-        m_nInitFBO = 0;
+        m_bInitFBO = false;
     }
 }
 
@@ -112,7 +107,8 @@ void QtFBOWindow::InitSurface(QThread *pThread)
 /// 关联设备上下文
 bool QtFBOWindow::makeCurrentImplementation()
 {
-    if(2 != m_nInitFBO)
+    m_pOpenglContext->makeCurrent(m_pOffScreenSurface);
+    if(!m_bInitFBO)
     {
         InitFBO();
     }
@@ -129,7 +125,7 @@ bool QtFBOWindow::releaseContextImplementation()
 {
     /// 调用默认的设备
     QOpenGLFramebufferObject::bindDefault();
-
+    m_pOpenglContext->doneCurrent();
     return(true);
 }
 
@@ -139,14 +135,13 @@ void QtFBOWindow::swapBuffersImplementation()
     m_pOpenglContext->functions()->glFlush();
     qSwap(m_pRenderFbo, m_pDisplayFbo);
     m_nTextureID = m_pDisplayFbo->texture();
-    m_stTextureSize = m_pDisplayFbo->size();
 }
 
 
 /// 初始化 帧缓存对象
 void QtFBOWindow::InitFBO()
 {
-    if(2 == m_nInitFBO)
+    if(m_bInitFBO)
     {
         return;
     }
@@ -156,15 +151,20 @@ void QtFBOWindow::InitFBO()
         delete m_pRenderFbo;
         m_pRenderFbo = nullptr;
     }
-
-    m_pOpenglContext->makeCurrent(m_pOffScreenSurface);
+    if(nullptr != m_pDisplayFbo)
+    {
+        delete m_pDisplayFbo;
+        m_pDisplayFbo=nullptr;
+    }
 
     /// 设置FBO的格式
     QOpenGLFramebufferObjectFormat format;
     format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
     m_pRenderFbo = new QOpenGLFramebufferObject(m_stWinSize, format);
+    m_pDisplayFbo = new QOpenGLFramebufferObject(m_stWinSize,format);
+    m_stTextureSize=m_stWinSize;
 
-    ++m_nInitFBO;
+    m_bInitFBO=true;
 }
 
 /// 键盘消息
@@ -181,9 +181,13 @@ void QtFBOWindow::keyboardModifiers(QInputEvent *event)
 
 void QtFBOWindow::KeyPress(QKeyEvent *event)
 {
-    for(auto one : *m_pAllOserver)
+    auto iter = m_pAllOserver->begin();
+    auto tmpIter = iter;
+    for(;iter != m_pAllOserver->end(); )
     {
-        one->KeyDown(QtEventdMap::GetInstance()->ChangeKeyEvent(event));
+        ++tmpIter;
+        (*iter)->KeyDown(QtEventdMap::GetInstance()->ChangeKeyEvent(event));
+        iter = tmpIter;
     }
 
     keyboardModifiers(event);
@@ -192,9 +196,13 @@ void QtFBOWindow::KeyPress(QKeyEvent *event)
 
 void QtFBOWindow::KeyUp(QKeyEvent *event)
 {
-    for(auto one : *m_pAllOserver)
+    auto iter = m_pAllOserver->begin();
+    auto tmpIter = iter;
+    for(;iter != m_pAllOserver->end(); )
     {
-        one->KeyUp(QtEventdMap::GetInstance()->ChangeKeyEvent(event));
+        ++tmpIter;
+        (*iter)->KeyUp(QtEventdMap::GetInstance()->ChangeKeyEvent(event));
+        iter = tmpIter;
     }
 
     keyboardModifiers(event);
@@ -205,9 +213,14 @@ void QtFBOWindow::MouseDouble(QMouseEvent *event, qreal rScal)
 {
     m_rMouseX = event->x()*rScal;
     m_rMouseY = event->y()*rScal;
-    for(auto one : *m_pAllOserver)
+
+    auto iter = m_pAllOserver->begin();
+    auto tmpIter = iter;
+    for(;iter != m_pAllOserver->end(); )
     {
-        one->MouseDblClick(ChangeMouseType(event),m_rMouseX,m_rMouseY);
+        ++tmpIter;
+        (*iter)->MouseDblClick(ChangeMouseType(event),m_rMouseX,m_rMouseY);
+        iter = tmpIter;
     }
 
     keyboardModifiers(event);
@@ -220,9 +233,13 @@ void QtFBOWindow::MousePress(QMouseEvent *event,qreal rScal)
     m_rMouseX = event->x()*rScal;
     m_rMouseY = event->y()*rScal;
 
-    for(auto one : *m_pAllOserver)
+    auto iter = m_pAllOserver->begin();
+    auto tmpIter = iter;
+    for(;iter != m_pAllOserver->end(); )
     {
-        one->MouseDown(ChangeMouseType(event),m_rMouseX,m_rMouseY);
+        ++tmpIter;
+        (*iter)->MouseDown(ChangeMouseType(event),m_rMouseX,m_rMouseY);
+        iter = tmpIter;
     }
 
     keyboardModifiers(event);
@@ -234,9 +251,14 @@ void QtFBOWindow::MouseUp(QMouseEvent *event,qreal rScal)
 {
     m_rMouseX = event->x()*rScal;
     m_rMouseY = event->y()*rScal;
-    for(auto one : *m_pAllOserver)
+
+    auto iter = m_pAllOserver->begin();
+    auto tmpIter = iter;
+    for(;iter != m_pAllOserver->end(); )
     {
-        one->MouseUp(ChangeMouseType(event),m_rMouseX,m_rMouseY);
+        ++tmpIter;
+        (*iter)->MouseUp(ChangeMouseType(event),m_rMouseX,m_rMouseY);
+        iter = tmpIter;
     }
 
     keyboardModifiers(event);
@@ -249,9 +271,13 @@ void QtFBOWindow::MouseMove(QMouseEvent *event,qreal rScal)
     m_rMouseX = event->x()*rScal;
     m_rMouseY = event->y()*rScal;
 
-    for(auto one : *m_pAllOserver)
+    auto iter = m_pAllOserver->begin();
+    auto tmpIter = iter;
+    for(;iter != m_pAllOserver->end(); )
     {
-        one->MouseMove(ChangeMouseType(event),m_rMouseX,m_rMouseY);
+        ++tmpIter;
+        (*iter)->MouseMove(ChangeMouseType(event),m_rMouseX,m_rMouseY);
+        iter = tmpIter;
     }
 
     keyboardModifiers(event);
