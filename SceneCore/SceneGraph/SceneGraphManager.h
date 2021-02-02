@@ -14,7 +14,7 @@ public:
      * @brief 创建一个场景图
      * @return
      */
-    ISceneGraph* CreateSceneGraph(SceneGraphType typeScene);
+    ISceneGraph* CreateSceneGraph(ISceneGraph::SceneGraphType typeScene);
 
     /**
      * @brief 查找绑定的场景图

@@ -22,13 +22,13 @@ void QtOsgItem::setType(QtOsgItem::ItemType type)
     switch (m_emType)
     {
     case Item_2DMAP:
-        m_pSceneGraph = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(SCENEGRAPH_2D);
+        m_pSceneGraph = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(ISceneGraph::SCENEGRAPH_2D);
         break;
     case Item_User:
-        m_pSceneGraph = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(SCENEGRAPH_USER);
+        m_pSceneGraph = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(ISceneGraph::SCENEGRAPH_USER);
         break;
     default:
-        m_pSceneGraph = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(SCENEGRAPH_3D);
+        m_pSceneGraph = GetSceneCore()->GetSceneGraphManager()->CreateSceneGraph(ISceneGraph::SCENEGRAPH_3D);
         break;
     }
     m_pSceneGraph->SetQuickItem(this);

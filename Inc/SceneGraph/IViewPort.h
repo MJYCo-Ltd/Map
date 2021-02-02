@@ -10,16 +10,36 @@ class ISceneNode;
 class IViewPort
 {
 public:
+    /// 立体模式
+    enum StereoType
+    {
+        QUAD_BUFFER,
+        ANAGLYPHIC,
+        HORIZONTAL_SPLIT,
+        VERTICAL_SPLIT,
+        LEFT_EYE,
+        RIGHT_EYE,
+        HORIZONTAL_INTERLACE,
+        VERTICAL_INTERLACE,
+        CHECKERBOARD
+    };
+
+    /**
+     * @brief 是否开启立体
+     */
+    virtual void OpenStereo(bool)=0;
+
+    /**
+     * @brief 设置立体模式
+     * @param type
+     */
+    virtual void SetStereoMode(StereoType)=0;
+
     /**
      * @brief 设置跟踪的节点
      */
     virtual bool SetTrackNode(ISceneNode*)=0;
-
-    /**
-     * @brief 获取跟踪的节点
-     * @return
-     */
-    virtual ISceneNode* GetTrackNode()=0;
+    virtual ISceneNode* GetTrackNode()const=0;
 
     /**
      * @brief 获取视口的屏显控制类
@@ -31,34 +51,19 @@ public:
      * @brief 设置视点位置
      */
     virtual void SetViewPoint(const SceneViewPoint&)=0;
-
-    /**
-     * @brief 获取视点位置
-     * @return
-     */
-    virtual const SceneViewPoint& GetViewPoint()=0;
+    virtual const SceneViewPoint& GetViewPoint()const=0;
 
     /**
      * @brief 设置视口大小
      */
     virtual void SetViewPort(const CameraViewPort&)=0;
-
-    /**
-     * @brief 获取视口大小
-     * @return 视口大小
-     */
-    virtual const CameraViewPort& GetViewPort()=0;
+    virtual const CameraViewPort& GetViewPort()const=0;
 
     /**
      * @brief 设置投影类型
      */
     virtual void SetProjectType(ProjectType)=0;
-
-    /**
-     * @brief 获取投影类型
-     * @return 投影类型
-     */
-    virtual ProjectType GetProjectType()=0;
+    virtual ProjectType GetProjectType()const=0;
 protected:
     virtual ~IViewPort(){}
 };

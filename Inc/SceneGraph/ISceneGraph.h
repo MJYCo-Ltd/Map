@@ -9,18 +9,24 @@ class IWindow;
 class ISceneGroup;
 class IMap;
 
-enum SceneGraphType
-{
-    SCENEGRAPH_3D,   /// 默认加载三维地图场景
-    SCENEGRAPH_2D,   /// 默认加载二维地图场景
-    SCENEGRAPH_USER  /// 用户自定义场景
-};
-
 /**
  * @brief 场景类
  */
 class ISceneGraph
 {
+public:
+    enum SceneGraphType
+    {
+        SCENEGRAPH_3D,   /// 默认加载三维地图场景
+        SCENEGRAPH_2D,   /// 默认加载二维地图场景
+        SCENEGRAPH_USER  /// 用户自定义场景
+    };
+
+    enum WindowType
+    {
+        VR_WINDOW, /// 适合VR观看的窗口
+    };
+
 public:
     ISceneGraph(SceneGraphType emType):m_emType(emType){}
     /**

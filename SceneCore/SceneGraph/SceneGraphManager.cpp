@@ -17,7 +17,7 @@ CSceneGraphManager::~CSceneGraphManager()
 }
 
 /// 初始化
-ISceneGraph *CSceneGraphManager::CreateSceneGraph(SceneGraphType typeScene)
+ISceneGraph *CSceneGraphManager::CreateSceneGraph(ISceneGraph::SceneGraphType typeScene)
 {
     auto pSceneGraph = new QtSceneGraph(typeScene);
     pSceneGraph->InitSceneGraph();

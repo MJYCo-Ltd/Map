@@ -16,7 +16,7 @@ public:
      * @param 场景类型
      * @return 创建好的场景图
      */
-    virtual ISceneGraph* CreateSceneGraph(SceneGraphType)=0;
+    virtual ISceneGraph* CreateSceneGraph(ISceneGraph::SceneGraphType)=0;
 
     /**
      * @brief 根据窗口查找关联的SceneGraph

@@ -553,12 +553,23 @@ void MainWindow::on_action_3_triggered()
 //    nTimerID = startTimer(100);
 }
 
+int g_nTest=0;
 void MainWindow::on_action_4_triggered()
 {
-//    if(-1 != nTimerID)
-//    {
-//        killTimer(nTimerID);
-//    }
+    auto pViewPort = m_pSceneGraph->GetMainWindow()->GetMainViewPoint();
+
+    if(g_nTest > IViewPort::CHECKERBOARD)
+    {
+        g_nTest = 0;
+        pViewPort->OpenStereo(false);
+    }
+    else
+    {
+        pViewPort->SetStereoMode(IViewPort::StereoType(g_nTest));
+        ++g_nTest;
+        pViewPort->OpenStereo(true);
+    }
+
 }
 
 /// 增加帧率

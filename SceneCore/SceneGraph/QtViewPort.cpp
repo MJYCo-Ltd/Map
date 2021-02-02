@@ -1,3 +1,5 @@
+#include <osg/Stencil>
+#include <osg/PolygonStipple>
 #include <osgEarth/GeoData>
 #include <osgViewer/ViewerEventHandlers>
 
@@ -8,6 +10,98 @@
 #include "QtViewPort.h"
 #include "QtViewHud.h"
 #include "DealViewPortChange.h"
+class ViewPortEventCallback:public osgGA::GUIEventHandler
+{
+public:
+    ViewPortEventCallback(QtViewPort* pViewPort):m_pViewPort(pViewPort){}
+    virtual bool handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter&,
+                        osg::Object*, osg::NodeVisitor*)
+    {
+        if(ea.FRAME == ea.getEventType())
+        {
+            m_pViewPort->FrameEvent();
+        }
+        return(false);
+    }
+
+protected:
+    QtViewPort* m_pViewPort;
+};
+
+static const GLubyte patternVertEven[] = {
+    0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55,
+    0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55,
+    0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55,
+    0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55,
+    0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55,
+    0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55,
+    0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55,
+    0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55,
+    0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55,
+    0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55,
+    0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55,
+    0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55,
+    0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55,
+    0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55,
+    0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55,
+    0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55};
+
+
+static const GLubyte patternHorzEven[] = {
+    0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
+    0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
+    0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
+    0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
+    0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
+    0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
+    0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
+    0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
+    0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
+    0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
+    0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
+    0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
+    0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
+    0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
+    0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
+    0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00};
+
+// 32 x 32 bit array every row is a horizontal line of pixels
+//  and the (bitwise) columns a vertical line
+//  The following is a checkerboard pattern
+static const GLubyte patternCheckerboard[] = {
+    0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA,
+    0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA,
+    0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA,
+    0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA,
+    0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA,
+    0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA,
+    0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA,
+    0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA,
+    0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA,
+    0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA,
+    0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA,
+    0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA,
+    0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA,
+    0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA,
+    0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA,
+    0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA};
+
 /// 视点
 QtViewPort::QtViewPort(IRender *pRender,ISceneGraph *pSceneGraph, ProjectType emProject):
     m_pSceneGraph(pSceneGraph),
@@ -18,6 +112,9 @@ QtViewPort::QtViewPort(IRender *pRender,ISceneGraph *pSceneGraph, ProjectType em
 
     m_pView->getCamera()->setViewport(0,0,C_WINDOW_WIDTH,C_WINDOW_HEIGHT);
     m_pView->getCamera()->setClearColor(osg::Vec4(0,0,0,1));
+
+    m_pView->getCamera()->setDrawBuffer(GL_BACK);
+    m_pView->getCamera()->setReadBuffer(GL_BACK);
     switch(m_emProjectType)
     {
     case Perspective:
@@ -31,6 +128,7 @@ QtViewPort::QtViewPort(IRender *pRender,ISceneGraph *pSceneGraph, ProjectType em
 
     m_pView->getCamera()->addUpdateCallback(m_pCameraUpdate);
     m_pView->addEventHandler(new osgViewer::StatsHandler);
+    m_pView->addEventHandler(new ViewPortEventCallback(this));
 
     m_pSelfManipulator = new osgGA::TrackballManipulator;
     m_pView->setCameraManipulator(m_pSelfManipulator);
@@ -83,10 +181,6 @@ bool QtViewPort::SetTrackNode(ISceneNode *pTrackNode)
 
     if(pOsgNode)
     {
-//        osgEarth::Viewpoint viewPoint = m_p3DEarthManipulator->getViewpoint();
-//        viewPoint.setNode(pOsgNode->GetOsgNode());
-//        viewPoint.setRange(osgEarth::Distance(1000,osgEarth::Units::METERS));
-//        m_p3DEarthManipulator->setViewpoint(viewPoint,3);
         if(!m_pTrackManipulator.valid())
         {
             m_pTrackManipulator = new osgGA::NodeTrackerManipulator;
@@ -131,7 +225,7 @@ bool QtViewPort::SetTrackNode(ISceneNode *pTrackNode)
 }
 
 /// 获取场景根节点
-ISceneNode *QtViewPort::GetTrackNode()
+ISceneNode *QtViewPort::GetTrackNode()const
 {
     return(dynamic_cast<ISceneNode*>(m_pTrackNode));
 }
@@ -194,7 +288,7 @@ void QtViewPort::SetViewPoint(const SceneViewPoint & rViewPoint)
 }
 
 /// 获取视点位置
-const SceneViewPoint &QtViewPort::GetViewPoint()
+const SceneViewPoint &QtViewPort::GetViewPoint() const
 {
     return(m_rViewPoint);
 }
@@ -211,7 +305,7 @@ void QtViewPort::SetViewPort(const CameraViewPort &rViewPort)
 }
 
 /// 获取窗口大小
-const CameraViewPort &QtViewPort::GetViewPort()
+const CameraViewPort &QtViewPort::GetViewPort()const
 {
     return(m_rViewPort);
 }
@@ -227,7 +321,7 @@ void QtViewPort::SetProjectType(ProjectType emProject)
 }
 
 /// 返回投影类型
-ProjectType QtViewPort::GetProjectType()
+ProjectType QtViewPort::GetProjectType()const
 {
     return(m_emProjectType);
 }
@@ -236,4 +330,191 @@ ProjectType QtViewPort::GetProjectType()
 osgViewer::View *QtViewPort::GetOsgView()
 {
     return(m_pView.get());
+}
+
+void QtViewPort::FrameEvent()
+{
+    if(m_bStereoChanged)
+    {
+        RemoveSlave();
+
+        osg::DisplaySettings* ds= m_pView->getDisplaySettings();
+        if(nullptr == ds)
+        {
+            ds =new osg::DisplaySettings(*osg::DisplaySettings::instance());
+            m_pView->setDisplaySettings(ds);
+            ds->setSplitStereoAutoAdjustAspectRatio(true);
+        }
+
+        ds->setStereo(false);
+        if(m_bOpenStereo)
+        {
+            ds->setStereo(true);
+
+            int nWidth(C_WINDOW_WIDTH),nHeight(C_WINDOW_HEIGHT);
+            auto pViewport = m_pView->getCamera()->getViewport();
+            if(pViewport)
+            {
+                nWidth=pViewport->width();
+                nHeight=pViewport->height();
+            }
+
+            auto gc = m_pView->getCamera()->getGraphicsContext();
+            switch(m_emStereo)
+            {
+            case QUAD_BUFFER:
+            {
+                osg::ref_ptr<osg::Camera> left_camera = m_pView->assignStereoCamera(ds, gc,0, 0, nWidth, nHeight, GL_BACK_LEFT, -1.0);
+                left_camera->setClearMask(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+                left_camera->setRenderOrder(osg::Camera::NESTED_RENDER, 0);
+
+                m_listStereoCamera.push_back(left_camera);
+                osg::ref_ptr<osg::Camera> right_camera = m_pView->assignStereoCamera(ds, gc,0, 0, nWidth, nHeight,GL_BACK_RIGHT, 1.0);
+                right_camera->setClearMask(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+                right_camera->setRenderOrder(osg::Camera::NESTED_RENDER, 1);
+                m_listStereoCamera.push_back(right_camera);
+                break;
+            }
+            case ANAGLYPHIC:
+            {
+                osg::ref_ptr<osg::Camera> left_camera = m_pView->assignStereoCamera(ds, gc,0, 0,nWidth, nHeight, GL_BACK, -1.0);
+                left_camera->setClearMask(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+                left_camera->getOrCreateStateSet()->setAttribute(new osg::ColorMask(true, false, false, true));
+                left_camera->setRenderOrder(osg::Camera::NESTED_RENDER, 0);
+
+                m_listStereoCamera.push_back(left_camera);
+
+                // right Camera right buffer
+                osg::ref_ptr<osg::Camera> right_camera = m_pView->assignStereoCamera(ds, gc, 0, 0,nWidth, nHeight, GL_BACK, 1.0);
+                right_camera->setClearMask(GL_DEPTH_BUFFER_BIT);
+                right_camera->getOrCreateStateSet()->setAttribute(new osg::ColorMask(false, true, true, true));
+                right_camera->setRenderOrder(osg::Camera::NESTED_RENDER, 1);
+                m_listStereoCamera.push_back(right_camera);
+                break;
+            }
+            case HORIZONTAL_SPLIT:
+            {
+                bool left_eye_left_viewport = ds->getSplitStereoHorizontalEyeMapping()==osg::DisplaySettings::LEFT_EYE_LEFT_VIEWPORT;
+                int left_start = (left_eye_left_viewport) ? 0 : nWidth/2;
+                int right_start = (left_eye_left_viewport) ? nWidth/2 : 0;
+
+                m_listStereoCamera.push_back(m_pView->assignStereoCamera(ds,gc,left_start,0,nWidth/2,nHeight,GL_BACK,-1.0));
+                m_listStereoCamera.push_back(m_pView->assignStereoCamera(ds,gc,right_start,0,nWidth/2,nHeight,GL_BACK,1.0));
+                break;
+            }
+            case VERTICAL_SPLIT:
+            {
+                bool left_eye_bottom_viewport = ds->getSplitStereoVerticalEyeMapping()==osg::DisplaySettings::LEFT_EYE_BOTTOM_VIEWPORT;
+                int left_start = (left_eye_bottom_viewport) ? 0 : nHeight/2;
+                int right_start = (left_eye_bottom_viewport) ? nHeight/2 : 0;
+
+                m_listStereoCamera.push_back(m_pView->assignStereoCamera(ds,gc,0,left_start,nWidth,nHeight/2,GL_BACK,-1.0));
+                m_listStereoCamera.push_back(m_pView->assignStereoCamera(ds,gc,0,right_start,nWidth,nHeight/2,GL_BACK,1.0));
+                break;
+            }
+            case LEFT_EYE:
+                m_listStereoCamera.push_back(m_pView->assignStereoCamera(ds,gc,0,0,nWidth,nHeight,GL_BACK,-1.0));
+                break;
+            case RIGHT_EYE:
+                m_listStereoCamera.push_back(m_pView->assignStereoCamera(ds,gc,0,0,nWidth,nHeight,GL_BACK,1.0));
+                break;
+            case HORIZONTAL_INTERLACE:
+            case VERTICAL_INTERLACE:
+            case CHECKERBOARD:
+            {
+                osg::ref_ptr<osg::Camera> stencil_camera = new osg::Camera;
+                stencil_camera->setGraphicsContext(gc);
+                stencil_camera->setViewport(0, 0, nWidth, nHeight);
+                stencil_camera->setDrawBuffer(GL_BACK);
+                stencil_camera->setReadBuffer(stencil_camera->getDrawBuffer());
+                stencil_camera->setReferenceFrame(osg::Camera::ABSOLUTE_RF);
+                stencil_camera->setClearMask(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
+                stencil_camera->setClearStencil(0);
+                stencil_camera->setRenderOrder(osg::Camera::NESTED_RENDER, 0);
+                m_pView->addSlave(stencil_camera.get(), false);
+                m_listStereoCamera.push_back(stencil_camera);
+
+                osg::ref_ptr<osg::Geometry> geometry = osg::createTexturedQuadGeometry(osg::Vec3(-1.0f,-1.0f,0.0f), osg::Vec3(2.0f,0.0f,0.0f), osg::Vec3(0.0f,2.0f,0.0f), 0.0f, 0.0f, 1.0f, 1.0f);
+                osg::ref_ptr<osg::Geode> geode = new osg::Geode;
+                geode->addDrawable(geometry.get());
+                stencil_camera->addChild(geode.get());
+
+                geode->setCullingActive(false);
+
+                osg::ref_ptr<osg::StateSet> stateset = geode->getOrCreateStateSet();
+
+                // set up stencil
+                osg::ref_ptr<osg::Stencil> stencil = new osg::Stencil;
+                stencil->setFunction(osg::Stencil::ALWAYS, 1, ~0u);
+                stencil->setOperation(osg::Stencil::REPLACE, osg::Stencil::REPLACE, osg::Stencil::REPLACE);
+                stencil->setWriteMask(~0u);
+                stateset->setAttributeAndModes(stencil.get(), osg::StateAttribute::ON);
+
+                // set up polygon stipple
+                if(ds->getStereoMode() == osg::DisplaySettings::VERTICAL_INTERLACE)
+                {
+                    stateset->setAttributeAndModes(new osg::PolygonStipple(patternVertEven), osg::StateAttribute::ON);
+                }
+                else if(ds->getStereoMode() == osg::DisplaySettings::HORIZONTAL_INTERLACE)
+                {
+                    stateset->setAttributeAndModes(new osg::PolygonStipple(patternHorzEven), osg::StateAttribute::ON);
+                }
+                else
+                {
+                    stateset->setAttributeAndModes(new osg::PolygonStipple(patternCheckerboard), osg::StateAttribute::ON);
+                }
+
+                stateset->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
+                stateset->setMode(GL_DEPTH_TEST, osg::StateAttribute::OFF);
+
+            }
+
+                // left Camera
+            {
+                osg::ref_ptr<osg::Camera> left_camera = m_pView->assignStereoCamera(ds,gc,0,0,nWidth,nHeight,GL_BACK,-1.0);
+                left_camera->setClearMask(0);
+                left_camera->setClearMask(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+                left_camera->setRenderOrder(osg::Camera::NESTED_RENDER, 1);
+
+                osg::ref_ptr<osg::Stencil> stencil = new osg::Stencil;
+                stencil->setFunction(osg::Stencil::EQUAL, 0, ~0u);
+                stencil->setOperation(osg::Stencil::KEEP, osg::Stencil::KEEP, osg::Stencil::KEEP);
+                left_camera->getOrCreateStateSet()->setAttributeAndModes(stencil.get(), osg::StateAttribute::ON);
+                m_listStereoCamera.push_back(left_camera);
+            }
+
+                // right Camera
+            {
+                osg::ref_ptr<osg::Camera> right_camera = m_pView->assignStereoCamera(ds,gc,0,0,nWidth,nHeight,GL_BACK,1.0);
+                right_camera->setClearMask(GL_DEPTH_BUFFER_BIT);
+                right_camera->setRenderOrder(osg::Camera::NESTED_RENDER, 2);
+
+                osg::ref_ptr<osg::Stencil> stencil = new osg::Stencil;
+                stencil->setFunction(osg::Stencil::NOTEQUAL, 0, ~0u);
+                stencil->setOperation(osg::Stencil::KEEP, osg::Stencil::KEEP, osg::Stencil::KEEP);
+                right_camera->getOrCreateStateSet()->setAttributeAndModes(stencil.get(), osg::StateAttribute::ON);
+                m_listStereoCamera.push_back(right_camera);
+            }
+                break;
+            }
+            m_pView->getCamera()->setGraphicsContext(0);
+        }
+        m_bStereoChanged=false;
+    }
+}
+
+void QtViewPort::RemoveSlave()
+{
+    if(m_listStereoCamera.size() > 0)
+    {
+        std::cout<<m_pView->getNumSlaves()<<std::endl;
+        m_pView->getCamera()->setGraphicsContext(m_listStereoCamera.front()->getGraphicsContext());
+        for(auto one : m_listStereoCamera)
+        {
+            m_pView->removeSlave(m_pView->findSlaveIndexForCamera(one));
+        }
+
+        std::cout<<"Clear"<<m_pView->getNumSlaves()<<std::endl;
+        m_listStereoCamera.clear();
+    }
 }

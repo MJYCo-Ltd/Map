@@ -31,6 +31,16 @@ public:
     ~QtViewPort();
 
     /**
+     * @brief 开启立体显示
+     */
+    void OpenStereo(bool bOpenStereo)JUDGE_EQUAL_SET_TRUE(bOpenStereo,m_bOpenStereo,m_bStereoChanged)
+    /**
+     * @brief SetStereoMode
+     * @param type
+     */
+    void SetStereoMode(StereoType type)JUDGE_EQUAL_SET_TRUE(type,m_emStereo,m_bStereoChanged)
+
+    /**
      * @brief 地图类型切换
      * @param emType
      */
@@ -45,7 +55,7 @@ public:
      * @brief 获取跟踪的节点
      * @return
      */
-    ISceneNode* GetTrackNode();
+    ISceneNode* GetTrackNode()const;
 
     /**
      * @brief 获取视口的屏显控制类
@@ -62,7 +72,7 @@ public:
      * @brief 获取视点位置
      * @return
      */
-    const SceneViewPoint& GetViewPoint();
+    const SceneViewPoint& GetViewPoint()const;
 
     /**
      * @brief 设置窗口大小
@@ -74,7 +84,7 @@ public:
      * @brief 设置窗口大小
      * @return
      */
-    const CameraViewPort& GetViewPort();
+    const CameraViewPort& GetViewPort()const;
 
     /**
      * @brief 设置投影类型
@@ -85,14 +95,22 @@ public:
      * @brief 获取投影类型
      * @return 当前的投影类型
      */
-    ProjectType GetProjectType();
+    ProjectType GetProjectType()const;
 
     /**
      * @brief 获取osgView
      * @return
      */
     osgViewer::View* GetOsgView();
+
+    /**
+     * @brief 每一帧的回调
+     */
+    void FrameEvent();
 protected:
+    void RemoveSlave();
+protected:
+    std::list<osg::ref_ptr<osg::Camera>>           m_listStereoCamera;
     osg::ref_ptr<osgViewer::View>                  m_pView;
     osg::ref_ptr<QtViewPointUpdateCallback>        m_pCameraUpdate;
     osg::ref_ptr<CMyEarthManipulator>              m_p2DEarthManipulator; ///二维地图操作器
@@ -109,6 +127,9 @@ protected:
     SceneViewPoint m_rViewPoint;
     CameraViewPort m_rViewPort;
     ProjectType    m_emProjectType;
+    StereoType     m_emStereo=ANAGLYPHIC;                                 /// 立体模式
+    bool           m_bOpenStereo=false;                                   /// 是否开启立体
+    bool           m_bStereoChanged=false;
 };
 
 #endif // QT_VIEWPORT_H
