@@ -71,9 +71,9 @@ ISceneNode *CPlotManager::CreateSceneNode(const std::string& csInterfaceName)
 }
 
 /// 加载模型
-ISceneNode *CPlotManager::LoadSceneNode(const std::string &sPath)
+ISceneNode *CPlotManager::LoadSceneNode(const std::string &sPath, bool bRef)
 {
-    osg::Node* pOsgNode = m_pSceneGraph->ResouceLoader()->LoadNode(sPath);
+    osg::Node* pOsgNode = m_pSceneGraph->ResouceLoader()->LoadNode(sPath,bRef);
     if(nullptr != pOsgNode)
     {
         auto pNode = new ImplSceneModel<ISceneModel>(m_pSceneGraph);

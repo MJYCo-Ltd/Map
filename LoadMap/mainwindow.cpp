@@ -263,7 +263,7 @@ void MainWindow::on_action_triggered()
 //    pRadarSensor->SetImage("Space/pixmaps/venus.png");
     pRadarSensor->SetCanPick(true);
     pSceneRoot->AddSceneNode(pAttitudeGroup1);
-    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("Model/AirPlane.ive");
+    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("F:/BaiduNetdiskDownload/shancheng/shanchengzhen/Data/root.osgb",false);
     pModel->SetCanPick(true);
 //    IMapLocation* pLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     auto pScal = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();

@@ -34,7 +34,7 @@ public:
      * @param sPath
      * @return
      */
-    ISceneNode* LoadSceneNode(const std::string& sPath);
+    ISceneNode* LoadSceneNode(const std::string& sPath,bool bRef);
 
     /**
      * @brief FreeNoUseMapSceneNode

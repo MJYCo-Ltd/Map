@@ -45,7 +45,7 @@ public:
      * @brief 根据路径加载模型
      * @return
      */
-    virtual ISceneNode* LoadSceneNode(const std::string&)=0;
+    virtual ISceneNode* LoadSceneNode(const std::string&,bool)=0;
 
     /**
      * @brief 强制删除不再使用的地图节点

@@ -169,7 +169,7 @@ void CSatelliteShow::ModelChanged()
         m_pSatelliteScale->RemoveSceneNode(m_pModel);
     }
 
-    m_pModel = m_pSceneGraph->GetPlot()->LoadSceneNode(m_sModelPath)->AsSceneModel();
+    m_pModel = m_pSceneGraph->GetPlot()->LoadSceneNode(m_sModelPath,true)->AsSceneModel();
     m_pSatelliteScale->AddSceneNode(m_pModel);
 
 
