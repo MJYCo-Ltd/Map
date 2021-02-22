@@ -40,10 +40,10 @@ public:
     void AddSensor(int id, ISensor*pSensor);
 
     /// <summary>
-    /// 获取卫星位置
+    /// 获取卫星WGS84位置和速度
     /// </summary>
     /// <returns></returns>
-    const ScenePos& GetSatellitePos()const;
+    const Math::CVector& GetSatelliteWgs84PV()const;
 
 
     /// <summary>
@@ -116,7 +116,7 @@ protected:
 
     std::vector<double>        m_vdMjd;      /// 坐标对应的时间
     Math::CVector              m_stNowPos; /// 当前卫星的位置(j2000)
-    ScenePos                   m_satelliteWgs84Pos;  // 当前卫星的位置(wgs84)
+    Math::CVector              m_satelliteWgs84PV;  // 当前卫星的位置和速度(wgs84)
     SceneAttitude              m_satelliteCorrectAttitude;  //卫星模型矫正姿态
     SceneAttitude              m_satelliteAttitude;         //卫星姿态
 

@@ -44,10 +44,10 @@ public:
     virtual void SetECFOribit(const std::vector<Math::CVector>&) = 0;
 
     /// <summary>
-    /// 获取卫星位置
+    /// 获取卫星WGS84位置和速度
     /// </summary>
     /// <returns></returns>
-    virtual const ScenePos& GetSatellitePos()const = 0;
+    virtual const Math::CVector& GetSatelliteWgs84PV()const = 0;
 
     /// <summary>
     /// 设置卫星缩放
