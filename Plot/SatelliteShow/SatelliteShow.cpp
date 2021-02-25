@@ -77,9 +77,9 @@ void CSatelliteShow::AddSensor(int id, ISensor *pSensor)
     m_SensorAttMap[id] = pAtt;
 }
 
-const ScenePos &CSatelliteShow::GetSatellitePos() const
+const Math::CVector& CSatelliteShow::GetSatelliteWgs84PV() const
 {
-    return m_satelliteWgs84Pos;
+    return m_satelliteWgs84PV;
 }
 
 void CSatelliteShow::SetScale(double dScale)
@@ -221,26 +221,29 @@ void CSatelliteShow::NowTimeChanged()
 
     m_nIndex = nIndex;
 
-    //当前位置
-    if (m_vEcfOribit.size() > 1)
-    {
-        m_satelliteWgs84Pos.fX = m_vEcfOribit[m_nIndex - 1](0);
-        m_satelliteWgs84Pos.fY = m_vEcfOribit[m_nIndex - 1](1);
-        m_satelliteWgs84Pos.fZ = m_vEcfOribit[m_nIndex - 1](2);
-    }
-
     /// 赋值
     dTime[0] = m_vdMjd[m_nIndex-1];
     dTime[1] = m_vdMjd[m_nIndex];
     dTime[2] = m_vdMjd[m_nIndex+1];
 
     /// 计算插值
-    m_stNowPos(0) = CalItNewton(dTime,m_dNowMJD,0);
-    m_stNowPos(1) = CalItNewton(dTime,m_dNowMJD,1);
-    m_stNowPos(2) = CalItNewton(dTime,m_dNowMJD,2);
-    m_stNowPos(3) = CalItNewton(dTime,m_dNowMJD,3);
-    m_stNowPos(4) = CalItNewton(dTime,m_dNowMJD,4);
-    m_stNowPos(5) = CalItNewton(dTime,m_dNowMJD,5);
+    //当前wgs84位置
+    if (m_vEcfOribit.size() > 1)
+    {
+        m_satelliteWgs84PV(0) = CalItNewtonEcf(dTime, m_dNowMJD, 0);
+        m_satelliteWgs84PV(1) = CalItNewtonEcf(dTime, m_dNowMJD, 1);
+        m_satelliteWgs84PV(2) = CalItNewtonEcf(dTime, m_dNowMJD, 2);
+        m_satelliteWgs84PV(3) = CalItNewtonEcf(dTime, m_dNowMJD, 3);
+        m_satelliteWgs84PV(4) = CalItNewtonEcf(dTime, m_dNowMJD, 4);
+        m_satelliteWgs84PV(5) = CalItNewtonEcf(dTime, m_dNowMJD, 5);
+    }
+    //当前j2000位置
+    m_stNowPos(0) = CalItNewton(dTime, m_dNowMJD, 0);
+    m_stNowPos(1) = CalItNewton(dTime, m_dNowMJD, 1);
+    m_stNowPos(2) = CalItNewton(dTime, m_dNowMJD, 2);
+    m_stNowPos(3) = CalItNewton(dTime, m_dNowMJD, 3);
+    m_stNowPos(4) = CalItNewton(dTime, m_dNowMJD, 4);
+    m_stNowPos(5) = CalItNewton(dTime, m_dNowMJD, 5);
     ScenePos tmpPos;
     tmpPos.fX = m_stNowPos(0);
     tmpPos.fY = m_stNowPos(1);
@@ -290,6 +293,15 @@ double CSatelliteShow::CalItNewton(double *dX, double dT, int nDim)
     return(Numerical::Cntpol::ItNewton(3,dX,dY,dT));
 }
 
+double CSatelliteShow::CalItNewtonEcf(double* dX, double dT, int nDim)
+{
+    static double dY[3];
+    dY[0] = m_vEcfOribit[m_nIndex - 1](nDim);
+    dY[1] = m_vEcfOribit[m_nIndex](nDim);
+    dY[2] = m_vEcfOribit[m_nIndex + 1](nDim);
+
+    return(Numerical::Cntpol::ItNewton(3, dX, dY, dT));
+}
 
 /// 创建节点
 ISatellite *CreateNode(ISceneGraph *pSceneGraph, const std::string &sInterfaceName)
