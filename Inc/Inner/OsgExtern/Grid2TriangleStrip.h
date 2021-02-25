@@ -1,13 +1,14 @@
 #ifndef CGRID2TRIANGLESTRIP_H
 #define CGRID2TRIANGLESTRIP_H
 
+#include <Inner/OsgExtern/OsgExtern_Global.h>
 #include <osg/PrimitiveSet>
 
 /**
  * @brief 本类的主要作用是将设定的网格
  *             化成 TRIANGLE_STRIP 的顶点索引
  */
-class CGrid2TriangleStrip
+class OSGEXTERNSHARED_EXPORT CGrid2TriangleStrip
 {
 public:
     /**

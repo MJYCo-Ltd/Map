@@ -20,6 +20,7 @@ HEADERS += \
         mainwindow.h
 
 FORMS += \
+        mainwindow.ui \
         mainwindow.ui
 
 SDK_CONFIG *= SceneCore Satellite OSG

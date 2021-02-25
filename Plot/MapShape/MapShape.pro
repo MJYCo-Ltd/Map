@@ -19,7 +19,6 @@ HEADERS += \
     DrawShape/MapLocation.h \
     DrawShape/MapPoint.h \
     DrawShape/MapPolygon.h \
-    Grid2TriangleStrip.h \
     MapShape.h
 
 SOURCES += \
@@ -28,5 +27,4 @@ SOURCES += \
     DrawShape/MapLocation.cpp \
     DrawShape/MapPoint.cpp \
     DrawShape/MapPolygon.cpp \
-    Grid2TriangleStrip.cpp \
     MapShape.cpp

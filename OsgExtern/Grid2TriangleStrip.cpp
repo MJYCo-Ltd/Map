@@ -1,4 +1,4 @@
-#include "Grid2TriangleStrip.h"
+#include <Inner/OsgExtern/Grid2TriangleStrip.h>
 
 CGrid2TriangleStrip::CGrid2TriangleStrip(unsigned int unRow, unsigned int unLine, bool bCloseure):
     m_unRowCount(unRow),
@@ -39,7 +39,6 @@ void CGrid2TriangleStrip::SetClosure(bool bClosure)
     GenerateIndex();
 }
 
-#include <iostream>
 /// 生成顶点索引数组
 void CGrid2TriangleStrip::GenerateIndex()
 {

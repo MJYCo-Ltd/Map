@@ -36,6 +36,7 @@
 #include <Plot/Common/ISceneLodGroup.h>
 #include <Plot/SceneShape/ILabel.h>
 #include <Hud/IViewHud.h>
+#include <Inner/ILoadResource.h>
 
 
 #include "mainwindow.h"
@@ -46,6 +47,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->mainToolBar->show();
 }
 
 MainWindow::~MainWindow()
@@ -251,14 +253,14 @@ void MainWindow::on_action_triggered()
     pAttitudeGroup1->SetPos(pPoint2->Pos());
     pRadarSensor->SetDistance(10000.);
     pRadarSensor->SetAzimuth(0,150);
-    pRadarSensor->SetElevation(-10,10);
+    pRadarSensor->SetElevation(10,30);
     pRadarSensor->SetSConeHAngle(20);
     pRadarSensor->SetSConeVAngle(40);
     pRadarSensor->SetConeAngle(30);
     pRadarSensor->SetColor(color);
     pRadarSensor->SetEquator(1.0);
     pRadarSensor->SetPolar(1.2);
-    pRadarSensor->SetDrawType(IEllipsoidSensor::CONE_PART);
+    pRadarSensor->SetDrawType(IEllipsoidSensor::SUB_PART);
     pRadarSensor->SetShowBack(false);
 //    pRadarSensor->SetImage("Space/pixmaps/venus.png");
     pRadarSensor->SetCanPick(true);
@@ -274,6 +276,7 @@ void MainWindow::on_action_triggered()
     pFlash->SetFlashFreq(0.5);
     pFlash->SetFlashColor(color);
     pLod->AddSceneNode(pScal);
+    m_pSceneGraph->GetRoot()->AddSceneNode(pModel);
 
     ILabel* pLabel = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
     pLabel->SetCanPick(true);
@@ -341,7 +344,7 @@ void MainWindow::on_action_triggered()
     pos.fHeight = 500;
 
     m_pLine->AddPoint(0,pos);
-    pos.fLon = 110.0606607;
+    pos.fLon = 179.0606607;
     pos.fLat = 25.910152;
 
     m_pLine->AddPoint(1,pos);
@@ -542,7 +545,7 @@ class SubPointPick: public PickMessage
 public:
     void PickID(unsigned int unID)
     {
-        qDebug()<<unID;
+//        qDebug()<<unID;
     }
 };
 
@@ -558,7 +561,7 @@ void MainWindow::on_action_4_triggered()
 {
     auto pViewPort = m_pSceneGraph->GetMainWindow()->GetMainViewPoint();
 
-    if(g_nTest > IViewPort::CHECKERBOARD)
+    if(g_nTest > IViewPort::VERTICAL_SPLIT)
     {
         g_nTest = 0;
         pViewPort->OpenStereo(false);

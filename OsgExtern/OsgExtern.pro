@@ -10,6 +10,7 @@ SDK_CONFIG *= OSG Satellite
 include(../SoftSDK.pri)
 
 SOURCES += \
+    Grid2TriangleStrip.cpp \
     MathCommon.cpp \
     MyMatrixTransform.cpp \
     MyPositionAttitudeTransform.cpp

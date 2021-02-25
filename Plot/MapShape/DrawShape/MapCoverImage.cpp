@@ -2,8 +2,8 @@
 #include <osgEarth/PlaceNode>
 #include <ISceneCore.h>
 #include <Inner/ILoadResource.h>
+#include <Inner/OsgExtern/Grid2TriangleStrip.h>
 #include "MapCoverImage.h"
-#include "../Grid2TriangleStrip.h"
 
 
 void CMapCoverImage::UpdateMapNode(osgEarth::MapNode *pMapNode)

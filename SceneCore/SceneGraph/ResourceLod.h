@@ -1,6 +1,7 @@
 #ifndef RESOURCELOD_H
 #define RESOURCELOD_H
 
+#include <QImage>
 #include <osg/Texture2D>
 #include <osg/Node>
 #include <osgText/Font>
@@ -51,6 +52,7 @@ public:
      * @return
      */
     osg::Image* LoadImage(const std::string& sImagePath, int nWidth, int nHeight, bool bIsRef);
+    osg::Image* QImage2OsgImage(const QImage& rQImage);
 
     /**
      * @brief 加载着色器
@@ -60,6 +62,8 @@ public:
      */
     bool LoadVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const std::string& sGLSLPath,bool bIsRef=true);
     bool RemoveVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const std::string& sGLSLPath,bool bIsRef=true);
+protected:
+    osg::Image* TransformQImage(const QImage& rQImage);
 protected:
     std::string m_sAppPath;
     std::map<std::string,osg::observer_ptr<osg::Node>>      m_mapNode;    /// 模型映射

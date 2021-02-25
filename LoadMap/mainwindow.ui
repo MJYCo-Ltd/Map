@@ -38,16 +38,34 @@
    <addaction name="action_4"/>
    <addaction name="action_5"/>
    <addaction name="action_6"/>
+   <addaction name="action12"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>LeftToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
   <action name="actionchange">
    <property name="text">
-    <string>切换</string>
+    <string>切换wewe</string>
+   </property>
+   <property name="toolTip">
+    <string>切换wewe</string>
    </property>
   </action>
   <action name="action">
    <property name="text">
-    <string>测试</string>
+    <string>测试wewe</string>
+   </property>
+   <property name="toolTip">
+    <string>测试wewe</string>
    </property>
   </action>
   <action name="action_2">
@@ -73,6 +91,11 @@
   <action name="action_6">
    <property name="text">
     <string>降低帧率</string>
+   </property>
+  </action>
+  <action name="action12">
+   <property name="text">
+    <string>12</string>
    </property>
   </action>
  </widget>

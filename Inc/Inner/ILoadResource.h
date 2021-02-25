@@ -19,6 +19,8 @@ namespace osgText
     class Font;
 }
 
+class QImage;
+
 /**
  * @brief 资源加载器
  */
@@ -64,6 +66,12 @@ public:
      * @return
      */
     virtual osg::Image* LoadImage(const std::string& sImagePath, int nWidth=0, int nHeight=0,bool bIsRef=true)=0;
+
+    /**
+     * @brief 将QImage转换成OsgImage
+     * @return osg::Image指针,外部负责释放
+     */
+    virtual osg::Image* QImage2OsgImage(const QImage& rQImage)=0;
 
     /**
      * @brief 加载着色器

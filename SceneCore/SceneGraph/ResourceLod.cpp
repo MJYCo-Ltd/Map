@@ -176,6 +176,20 @@ osg::Image *CResourceLod::LoadImage(const std::string &sImagePath, int nWidth, i
     }
 }
 
+/// 将QImage转成OsgImage
+osg::Image *CResourceLod::QImage2OsgImage(const QImage &rQImage)
+{
+    if(rQImage.format() != QImage::Format_RGBA8888)
+    {
+       QImage tmpImage = rQImage.convertToFormat(QImage::Format_RGBA8888);
+       return(TransformQImage(tmpImage));
+    }
+    else
+    {
+        return(TransformQImage(rQImage));
+    }
+}
+
 /// 加载virtualProgram
 bool CResourceLod::LoadVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const std::string& sGLSLPath,bool bIsRef)
 {
@@ -210,4 +224,22 @@ bool CResourceLod::RemoveVirtualProgram(osgEarth::VirtualProgram *pVirtualProgra
 
     static osgEarth::Shaders shader;
     return(shader.unload(pVirtualProgram,glslPath));
+}
+
+/// 转换QImage成osgImage
+osg::Image *CResourceLod::TransformQImage(const QImage &rQImage)
+{
+    int nHeight = rQImage.height();
+
+    auto size = rQImage.sizeInBytes();
+    unsigned char* pTempBuffer = new unsigned char[size]();
+    size = rQImage.bytesPerLine();
+    for(int i=nHeight-1,j=0; i>-1; --i,++j)
+    {
+        memcpy(pTempBuffer+size*i,rQImage.scanLine(j),size);
+    }
+
+    auto image = new osg::Image;
+    image->setImage(rQImage.width(), nHeight, 1, GL_RGBA,GL_RGBA, GL_UNSIGNED_BYTE,pTempBuffer,osg::Image::USE_NEW_DELETE);
+    return(image);
 }

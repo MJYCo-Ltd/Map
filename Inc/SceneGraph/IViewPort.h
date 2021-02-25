@@ -16,12 +16,7 @@ public:
         QUAD_BUFFER,
         ANAGLYPHIC,
         HORIZONTAL_SPLIT,
-        VERTICAL_SPLIT,
-        LEFT_EYE,
-        RIGHT_EYE,
-        HORIZONTAL_INTERLACE,
-        VERTICAL_INTERLACE,
-        CHECKERBOARD
+        VERTICAL_SPLIT
     };
 
     /**
