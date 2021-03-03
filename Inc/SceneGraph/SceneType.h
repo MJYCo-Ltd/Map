@@ -107,5 +107,30 @@ struct ScenePos
     }
 };
 
+/**
+ * @brief 屏幕偏移
+ */
+struct ScenePixelOffset
+{
+    short sWidth=0;
+    short sHeight=0;
+
+    bool operator ==(const ScenePixelOffset& rOther) const
+    {
+        if(&rOther == this)
+        {
+            return(true);
+        }
+
+        return(rOther.sHeight == sHeight
+            && rOther.sWidth == sWidth);
+    }
+
+    bool operator !=(const ScenePixelOffset& rOther) const
+    {
+        return(!(this->operator==(rOther)));
+    }
+};
+
 static unsigned int const PICK_MASK=1u;
 #endif

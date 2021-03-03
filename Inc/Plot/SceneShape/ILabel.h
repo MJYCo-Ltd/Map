@@ -62,7 +62,16 @@ public:
     const SceneColor& BoundingBoxColor()const{return (m_stBoundingBoxColor);}
 
     /**
+     * @brief 设置屏幕位置偏移
+     * @attention 设置屏幕固定偏移
+     * @attention SetPixelOffset与SetAttachNode最好设置一个
+     */
+    void SetPixelOffset(const ScenePixelOffset& rPixelOffset)JUDGE_EQUAL_CALL_FUNCTION(rPixelOffset,m_stPixelOffset,PixelOffChanged)
+    const ScenePixelOffset& PixelOffset()const{return(m_stPixelOffset);}
+
+    /**
      * @brief 设置依附的节点
+     * @attention 会根据绑定节点的包围盒计算真实位置的偏移量
      */
     virtual bool SetAttachNode(ISceneNode* pSceneNode)=0;
     virtual bool DisAttachNode(ISceneNode* pSceneNode)=0;
@@ -77,6 +86,7 @@ protected:
     virtual void FillColorChanged()=0;
     virtual void OutColorChanged()=0;
     virtual void BoundingBoxColorChanged()=0;
+    virtual void PixelOffChanged()=0;
 
 protected:
     ISceneNode* m_pAttachNode=nullptr;
@@ -88,6 +98,7 @@ protected:
     SceneColor m_stFillColor;
     SceneColor m_stOutColor;
     SceneColor m_stBoundingBoxColor;
+    ScenePixelOffset m_stPixelOffset;
 };
 
 #endif//INTERFACE_LABEL_HEARDER_H

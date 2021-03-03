@@ -1,4 +1,5 @@
 #include <Inner/OsgExtern/OsgExtern.h>
+#include <osgEarth/ScreenSpaceLayout>
 #include "SceneLabel.h"
 
 /// 设置绑定的节点
@@ -157,6 +158,12 @@ void CSceneLabel::UpdateNode()
         m_pText->setBoundingBoxColor(osg::Vec4(m_stBoundingBoxColor.fR,m_stBoundingBoxColor.fG
                                                ,m_stBoundingBoxColor.fB,m_stBoundingBoxColor.fA));
         m_bBoudingBoxColorChanged=false;
+    }
+
+    if(m_bPixelOffChanged)
+    {
+        auto pLayoutData=osgEarth::ScreenSpaceLayoutData::getOrCreate(m_pText.get());
+        pLayoutData->setPixelOffset(osg::Vec2s(m_stPixelOffset.sWidth,m_stPixelOffset.sHeight));
     }
     ImplSceneNode<ILabel>::UpdateNode();
 }

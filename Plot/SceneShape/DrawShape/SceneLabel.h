@@ -32,6 +32,7 @@ protected:
     void FillColorChanged()SET_TRUE_NODE_UPDATE(m_bFillColorChanged)
     void OutColorChanged()SET_TRUE_NODE_UPDATE(m_bOutColorChanged)
     void BoundingBoxColorChanged()SET_TRUE_NODE_UPDATE(m_bBoudingBoxColorChanged)
+    void PixelOffChanged()SET_TRUE_NODE_UPDATE(m_bPixelOffChanged)
 protected:
     bool m_bInfoChanged=false;
     bool m_bBoundingBoxVisibleChanged=false;
@@ -41,6 +42,7 @@ protected:
     bool m_bBoudingBoxColorChanged=false;
     bool m_bPosChanged=false;
     bool m_bFontChanged=false;
+    bool m_bPixelOffChanged=false;
     osg::observer_ptr<osgEarth::Text> m_pText;
 };
 
