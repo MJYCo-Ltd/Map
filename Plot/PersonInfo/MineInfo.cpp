@@ -1,71 +1,48 @@
 #include <ISceneCore.h>
+#include <Plot/Map/IMapLocation.h>
+#include <Plot/SceneShape/ILabel.h>
+#include <Plot/SceneShape/IImage.h>
+#include <Plot/Common/ISceneScaleGroup.h>
 #include "MineInfo.h"
 
 void CMineInfo::UpdateMapNode(osgEarth::MapNode *pMapNode)
 {
-    m_pMine->setMapNode(pMapNode);
-    if(pMapNode->isGeocentric())
-    {
-        m_pMine->setHorizonCulling(true);
-    }
+    auto pLocation = dynamic_cast<IOsgMapSceneNode*>(m_pLocation);
+    pLocation->UpdateMapNode(pMapNode);
 }
 
 void CMineInfo::InitNode()
 {
-    ImplMapSceneNode<IMineInfo>::InitNode();
+    m_pLabel = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
+    m_pLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+    m_pImage=dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
 
+//    auto pAutoScale = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
+    m_pImage->SetImagePath("Image/Mine/17.png");
+//    pAutoScale->AddSceneNode(m_pImage);
+    m_pLocation->SetSceneNode(m_pImage);
+    m_pLabel->SetAttachNode(m_pImage);
+    m_pLabel->SetFont("Fonts/msyh.ttf");
 
-    m_placeStyle.getOrCreateSymbol<osgEarth::TextSymbol>()->encoding() = osgEarth::TextSymbol::ENCODING_UTF8;
-    m_placeStyle.getOrCreateSymbol<osgEarth::TextSymbol>()->alignment() = osgEarth::TextSymbol::ALIGN_LEFT_CENTER;
-    m_placeStyle.getOrCreateSymbol<osgEarth::TextSymbol>()->size() = 20;
-    std::string sFontPath = GetDataPath();
-    sFontPath += "Fonts/msyh.ttf";
-    m_placeStyle.getOrCreateSymbol<osgEarth::TextSymbol>()->font() = sFontPath;
-    m_placeStyle.getOrCreateSymbol<osgEarth::TextSymbol>()->fill()->color() = osgEarth::Color::White;
-    m_placeStyle.getOrCreateSymbol<osgEarth::TextSymbol>()->halo()->color() = osgEarth::Color::Black;
-    m_placeStyle.getOrCreate<osgEarth::AltitudeSymbol>()->clamping() =
-            osgEarth::AltitudeSymbol::CLAMP_RELATIVE_TO_TERRAIN;
-    m_placeStyle.getOrCreate<osgEarth::IconSymbol>()->declutter() = false;
-    m_placeStyle.getOrCreate<osgEarth::IconSymbol>()->alignment() = osgEarth::IconSymbol::ALIGN_RIGHT_CENTER;
+    m_pRootNode = m_pLocation->AsOsgSceneNode()->GetOsgNode();
+    m_preMask = m_pRootNode->getNodeMask();
 
-    std::string sImagePath = "Image/Mine/17.png";
-    auto pImage = m_pSceneGraph->ResouceLoader()->LoadImage(sImagePath,32,32);
-
-
-    m_pMine = new osgEarth::PlaceNode(osgEarth::GeoPoint(osgEarth::SpatialReference::get("wgs84"),0,0,0),
-                                      m_sName,m_placeStyle,pImage);
-    m_pMine->setDynamic(true);
-    ImplMapSceneNode<IMineInfo>::SetOsgNode(m_pMine.get());
+    osgEarth::ScreenSpaceLayout::activate(m_pRootNode->getOrCreateStateSet());
+//    auto pData = osgEarth::ScreenSpaceLayoutData::getOrCreate(m_pRootNode.get());
+//    pData->setPixelOffset(osg::Vec2s(100,100));
 }
 
 void CMineInfo::PosChanged()
 {
-    m_bPosChanged = true;
-    ImplMapSceneNode<IMineInfo>::NodeChanged();
+    m_pLocation->SetGeoPos(m_geoPos);
 }
 
 void CMineInfo::NameChanged()
 {
-    m_bNameChanged = true;
-    ImplMapSceneNode<IMineInfo>::NodeChanged();
+    m_pLabel->SetText(m_sName);
 }
 
-///更新节点
-void CMineInfo::UpdateNode()
+void CMineInfo::ColorChanged()
 {
-    if(m_bPosChanged)
-    {
-        m_pMine->setPosition(osgEarth::GeoPoint(
-                                   osgEarth::SpatialReference::get("wgs84"),
-                                   m_geoPos.fLon,m_geoPos.fLat,m_geoPos.fHeight));
-        m_bPosChanged=false;
-    }
-
-    if(m_bNameChanged)
-    {
-        m_pMine->setText(m_sName);
-        m_bNameChanged=false;
-    }
-
-    ImplMapSceneNode<IMineInfo>::UpdateNode();
+    m_pImage->SetColor(m_stColor);
 }

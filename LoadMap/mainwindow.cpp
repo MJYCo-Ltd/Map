@@ -34,6 +34,7 @@
 #include <Plot/SceneShape/IImage.h>
 #include <Plot/Common/ISceneScaleGroup.h>
 #include <Plot/Common/ISceneLodGroup.h>
+#include <Plot/PersonInfo/IMineInfo.h>
 #include <Plot/SceneShape/ILabel.h>
 #include <Hud/IViewHud.h>
 #include <Inner/ILoadResource.h>
@@ -116,7 +117,7 @@ void MainWindow::on_actionchange_triggered()
 bool bShowBackGround=false;
 IHudLayout* pHudLayout=nullptr;
 IHudText*   pHudText=nullptr;
-IMapLocation* pEarthLocation=nullptr;
+//IMapLocation* pEarthLocation=nullptr;
 ISceneFlashGroup* pFlash=nullptr;
 ISatellite*  pSatellite = nullptr;
 IImage* pImage=nullptr;
@@ -124,7 +125,10 @@ IImage* pImage=nullptr;
 void MainWindow::on_action_triggered()
 {
     pImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
-    pImage->SetImagePath("Image/ship.png");
+    pImage->SetImagePath("Image/Mine/17.png");
+    SceneColor color;
+    color.fG=color.fB=.0f;
+    pImage->SetColor(color);
 
     ISceneGroup* pSceneRoot = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
 
@@ -147,7 +151,7 @@ void MainWindow::on_action_triggered()
     auto pLod = m_pSceneGraph->GetPlot()->CreateSceneGroup(LOD_GROUP)->AsSceneLodGroup();
     pLod->AddSceneNode(pAutoImage);
 
-    SceneColor color;
+
     color.fR=1.0f;
     color.fG=1.0f;
     color.fB=1.0f;
@@ -305,9 +309,22 @@ void MainWindow::on_action_triggered()
 //    m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);
 //    return;
     m_pLayer = m_pSceneGraph->GetMap()->CreateLayer("test");
-    pEarthLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
-    m_pLayer->AddSceneNode(pEarthLocation);
-    pEarthLocation->SetSceneNode(pSceneRoot);
+//    pEarthLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+//    m_pLayer->AddSceneNode(pEarthLocation);
+//    pEarthLocation->SetSceneNode(pSceneRoot);
+
+    auto pIMine = dynamic_cast<IMineInfo*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMineInfo"));
+
+    MapGeoPos pos;
+    pos.fLon = 103.566212;
+    pos.fLat = 19.573845;
+    pos.fHeight = 100;
+
+    color.fA=1.0f;
+    pIMine->SetPos(pos);
+    pIMine->SetName("你好Hello");
+    pIMine->SetColor(color);
+    m_pLayer->AddSceneNode(pIMine);
 
 //    m_pTrackNode = pPoint1;
 
@@ -329,8 +346,6 @@ void MainWindow::on_action_triggered()
     dL2 /= 2000.;
     GisMath::CalBaiserF(121.178775*DD2R,23.101700*DD2R,121.164617*DD2R,23.059267*DD2R,dA3,dAizm2,dL3);
     dL3 /= 2000.;
-
-    MapGeoPos pos;
 
     color.fR=1.f;
     color.fG=0.f;
@@ -427,15 +442,15 @@ void MainWindow::on_action_triggered()
 
 
     /// 添加模型
-    IMapLocation* pLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
-    pLocation->SetSceneNode(pFlash);
+//    IMapLocation* pLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+//    pLocation->SetSceneNode(pFlash);
 
-    pos.fLon=125.625319;
-    pos.fLat=19.748377;
-    pLocation->SetGeoPos(pos);
-    m_pLayer->AddSceneNode(pLocation);
+//    pos.fLon=125.625319;
+//    pos.fLat=19.748377;
+//    pLocation->SetGeoPos(pos);
+//    m_pLayer->AddSceneNode(pLocation);
     pos.fLat=20.748377;
-    pEarthLocation->SetGeoPos(pos);
+//    pEarthLocation->SetGeoPos(pos);
 
     /// 标绘卫星
     pSatellite= dynamic_cast<ISatellite*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISatellite"));
@@ -480,13 +495,13 @@ void MainWindow::on_action_triggered()
 
     vOther(1) += 10*DD2R;
     vOther(2) = 0;
-    IMapLocation* pEarthLocationTest = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
-    testPos.fLon = vOther(0)*DR2D;
-    testPos.fLat = vOther(1)*DR2D;
-    testPos.fHeight = 0;
-    pEarthLocationTest->SetGeoPos(testPos);
-    pEarthLocationTest->SetSceneNode(pPoint);
-    m_pLayer->AddSceneNode(pEarthLocationTest);
+//    IMapLocation* pEarthLocationTest = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+//    testPos.fLon = vOther(0)*DR2D;
+//    testPos.fLat = vOther(1)*DR2D;
+//    testPos.fHeight = 0;
+//    pEarthLocationTest->SetGeoPos(testPos);
+//    pEarthLocationTest->SetSceneNode(pPoint);
+//    m_pLayer->AddSceneNode(pEarthLocationTest);
 
     GisMath::LBH2XYZ(vOther(0),vOther(1),vOther(2),rPos.dX,rPos.dY,rPos.dZ);
     CalPRY(satPV,rPos,Rota_RYP,satPRY);

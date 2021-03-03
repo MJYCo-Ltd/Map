@@ -24,14 +24,22 @@ public:
      */
     void SetPos(const MapGeoPos& rGeoPos)JUDGE_EQUAL_CALL_FUNCTION(rGeoPos,m_geoPos,PosChanged)
     const MapGeoPos& GetPos()const{return(m_geoPos);}
+
+    /**
+     * @brief 设置颜色
+     */
+    void SetColor(const SceneColor& rColor)JUDGE_EQUAL_CALL_FUNCTION(rColor,m_stColor,ColorChanged)
+    const SceneColor& GetColor()const{return(m_stColor);}
 protected:
     virtual void PosChanged()=0;
-	virtual void NameChanged()=0;
+    virtual void NameChanged()=0;
+    virtual void ColorChanged()=0;
 
     virtual ~IMineInfo(){}
 protected:
     std::string m_sName;
-    MapGeoPos    m_geoPos;
+    MapGeoPos   m_geoPos;
+    SceneColor  m_stColor;
 };
 
 #endif

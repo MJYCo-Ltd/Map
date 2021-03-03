@@ -7,7 +7,9 @@
 #include <Inner/ImplMapSceneNode.hpp>
 
 #include <NoQt.h>
-
+class IMapLocation;
+class ILabel;
+class IImage;
 class CMineInfo:public ImplMapSceneNode<IMineInfo>
 {
 public:
@@ -29,12 +31,14 @@ protected:
      */
     void PosChanged();
     void NameChanged();
-    void UpdateNode();
+    void ColorChanged();
 protected:
     bool m_bPosChanged=false;
     bool m_bNameChanged=false;
-    osg::observer_ptr<osgEarth::PlaceNode> m_pMine;
-    osgEarth::Style                   m_placeStyle;  /// 位置样式
+    bool m_bColorChanged=false;
+    IMapLocation* m_pLocation=nullptr;
+    ILabel*       m_pLabel=nullptr;
+    IImage*       m_pImage=nullptr;
 };
 
 #endif // CMINEINFO_H

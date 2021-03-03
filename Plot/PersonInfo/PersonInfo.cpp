@@ -40,7 +40,7 @@ void CPersonInfo::InitNode()
     m_placeStyle.getOrCreate<osgEarth::IconSymbol>()->alignment() = osgEarth::IconSymbol::ALIGN_RIGHT_CENTER;
 
     std::string sImagePath = "Image/Person/red.png";
-    auto pImage = m_pSceneGraph->ResouceLoader()->LoadImage(sImagePath,32,32);
+    auto pImage = m_pSceneGraph->ResouceLoader()->LoadImage(sImagePath,16,16);
 
 
     m_pPerson = new osgEarth::PlaceNode(osgEarth::GeoPoint(osgEarth::SpatialReference::get("wgs84"),0,0,0),

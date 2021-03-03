@@ -60,7 +60,7 @@ void CMapLocation::UpdateNode()
         /// 如果有高程
         if(m_pTerrain.valid())
         {
-            p.makeAbsolute(m_pTerrain.get());
+            p.makeRelative(m_pTerrain.get());
         }
 
         osg::Matrixd local2world;
@@ -102,6 +102,7 @@ void CMapLocation::PosChanged()
         m_pGeoPoint.y() = m_stGeoPos.fLat;
         m_pGeoPoint.z() = m_stGeoPos.fHeight;
     }
+
 
     ImplMapSceneNode<IMapLocation>::NodeChanged();
 }

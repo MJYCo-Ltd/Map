@@ -1,4 +1,3 @@
-#include <osgUtil/Optimizer>
 #include "SceneImage.h"
 
 void CSceneImage::ImageSizeChanged()
