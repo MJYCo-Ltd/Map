@@ -96,7 +96,7 @@ bool CheckPC(char *argv[])
         osgEarth::setNotifyLevel(osg::NOTICE);
 
         int nMax,nMin;
-        sscanf_s(csCapabilities.getVersion().data(),"%d.%d",&nMax,&nMin);
+        sscanf(csCapabilities.getVersion().data(),"%d.%d",&nMax,&nMin);
 
         QSurfaceFormat format = QSurfaceFormat::defaultFormat();
         osg::GraphicsContext::Traits traits(osg::DisplaySettings::instance().get());

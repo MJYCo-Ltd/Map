@@ -32,7 +32,8 @@ struct RttPickerCallBack:public osgEarth::Util::RTTPicker::Callback
      */
     virtual bool accept(const osgGA::GUIEventAdapter& ea, const osgGA::GUIActionAdapter&)
     {
-        if(ea.getButton()==ea.LEFT_MOUSE_BUTTON && ea.getEventType() == ea.PUSH)
+        if(ea.getButton()==ea.LEFT_MOUSE_BUTTON &&
+          (ea.getEventType() == ea.PUSH || ea.getEventType() == ea.DOUBLECLICK))
         {
             return(true);
         }

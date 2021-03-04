@@ -230,8 +230,11 @@ bool CResourceLod::RemoveVirtualProgram(osgEarth::VirtualProgram *pVirtualProgra
 osg::Image *CResourceLod::TransformQImage(const QImage &rQImage)
 {
     int nHeight = rQImage.height();
-
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+    auto size = rQImage.byteCount();
+#else
     auto size = rQImage.sizeInBytes();
+#endif
     unsigned char* pTempBuffer = new unsigned char[size]();
     size = rQImage.bytesPerLine();
     for(int i=nHeight-1,j=0; i>-1; --i,++j)
