@@ -4,7 +4,7 @@
 #include <string>
 
 #include <SceneGraph/SceneType.h>
-
+class ISceneGraph;
 struct PickMessage
 {
     virtual ~PickMessage(){}
