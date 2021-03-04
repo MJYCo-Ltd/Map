@@ -11,6 +11,7 @@ class ISceneFlashGroup;
 class ISceneScaleGroup;
 class ISceneCameraGroup;
 class ISceneAttitudeGroup;
+class ISceneScreenGroup;
 
 class ISceneModel;
 class IOsgSceneNode;
@@ -55,6 +56,7 @@ public:
     virtual ISceneFlashGroup* AsSceneFlashGroup(){return(nullptr);}
     virtual ISceneAttitudeGroup* AsSceneAttitudeGroup(){return(nullptr);}
     virtual ISceneCameraGroup* AsSceneCameraGroup(){return(nullptr);}
+    virtual ISceneScreenGroup* AsSceneScreenGroup(){return(nullptr);}
     virtual IMapSceneNode* AsMapSceneNode(){return(nullptr);}
     virtual IOsgSceneNode* AsOsgSceneNode(){return(nullptr);}
     virtual IHudNode* AsHudNode(){return(nullptr);}

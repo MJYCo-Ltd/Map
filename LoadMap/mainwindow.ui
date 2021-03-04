@@ -54,18 +54,18 @@
   </widget>
   <action name="actionchange">
    <property name="text">
-    <string>切换wewe</string>
+    <string>二三维切换</string>
    </property>
    <property name="toolTip">
-    <string>切换wewe</string>
+    <string>切换二三维</string>
    </property>
   </action>
   <action name="action">
    <property name="text">
-    <string>测试wewe</string>
+    <string>测试标绘</string>
    </property>
    <property name="toolTip">
-    <string>测试wewe</string>
+    <string>测试标绘</string>
    </property>
   </action>
   <action name="action_2">

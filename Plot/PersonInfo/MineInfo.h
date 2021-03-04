@@ -32,6 +32,7 @@ protected:
     void PosChanged();
     void NameChanged();
     void ColorChanged();
+    void TypeChanged();
 protected:
     bool m_bPosChanged=false;
     bool m_bNameChanged=false;

@@ -2,7 +2,7 @@
 #include <Plot/Map/IMapLocation.h>
 #include <Plot/SceneShape/ILabel.h>
 #include <Plot/SceneShape/IImage.h>
-#include <SceneGraph/ISceneGroup.h>
+#include <Plot/Common/ISceneScreenGroup.h>
 #include "MineInfo.h"
 
 void CMineInfo::UpdateMapNode(osgEarth::MapNode *pMapNode)
@@ -13,18 +13,20 @@ void CMineInfo::UpdateMapNode(osgEarth::MapNode *pMapNode)
 
 void CMineInfo::InitNode()
 {
+    auto pScreenGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCREEN_GROUP)->AsSceneScreenGroup();
     m_pLabel = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
     m_pLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     m_pImage=dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
 
-    m_pImage->SetImagePath("Image/Mine/17.png");
+    TypeChanged();
     SceneImageSize size;
     size.unHeight=32;
     size.unWidth=32;
     size.bOutSet=true;
     m_pImage->SetImageSize(size);
-    m_pLocation->SetSceneNode(m_pImage);
-    m_pLabel->SetAttachNode(m_pImage);
+    pScreenGroup->AddSceneNode(m_pImage);
+    pScreenGroup->AddSceneNode(m_pLabel);
+    m_pLocation->SetSceneNode(pScreenGroup);
     m_pLabel->SetFont("Fonts/msyh.ttf");
 
     ScenePixelOffset spOffset;
@@ -34,8 +36,6 @@ void CMineInfo::InitNode()
 
     m_pRootNode = m_pLocation->AsOsgSceneNode()->GetOsgNode();
     m_preMask = m_pRootNode->getNodeMask();
-
-    osgEarth::ScreenSpaceLayout::activate(m_pRootNode->getOrCreateStateSet());
 }
 
 void CMineInfo::PosChanged()
@@ -51,4 +51,22 @@ void CMineInfo::NameChanged()
 void CMineInfo::ColorChanged()
 {
     m_pImage->SetColor(m_stColor);
+}
+
+void CMineInfo::TypeChanged()
+{
+    const char* pFilePath=nullptr;
+    switch (m_emType)
+    {
+    case MINE_EXPLOSION:
+        pFilePath = "Image/Mine/17-2.png";
+        break;
+    case MINE_DISARM:
+        pFilePath = "Image/Mine/17-1.png";
+        break;
+    default:
+        pFilePath = "Image/Mine/17.png";
+        break;
+    }
+    m_pImage->SetImagePath(pFilePath);
 }

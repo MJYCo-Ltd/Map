@@ -121,6 +121,7 @@ IHudText*   pHudText=nullptr;
 ISceneFlashGroup* pFlash=nullptr;
 ISatellite*  pSatellite = nullptr;
 IImage* pImage=nullptr;
+IMineInfo* pMineInfo=nullptr;
 
 void MainWindow::on_action_triggered()
 {
@@ -313,7 +314,7 @@ void MainWindow::on_action_triggered()
 //    m_pLayer->AddSceneNode(pEarthLocation);
 //    pEarthLocation->SetSceneNode(pSceneRoot);
 
-    auto pIMine = dynamic_cast<IMineInfo*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMineInfo"));
+    pMineInfo = dynamic_cast<IMineInfo*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMineInfo"));
 
     MapGeoPos pos;
     pos.fLon = 103.566212;
@@ -321,10 +322,10 @@ void MainWindow::on_action_triggered()
     pos.fHeight = 100;
 
     color.fA=1.0f;
-    pIMine->SetPos(pos);
-    pIMine->SetName("你好Hello");
-    pIMine->SetColor(color);
-    m_pLayer->AddSceneNode(pIMine);
+    pMineInfo->SetPos(pos);
+    pMineInfo->SetName("你好Hello");
+    pMineInfo->SetColor(color);
+    m_pLayer->AddSceneNode(pMineInfo);
 
 //    m_pTrackNode = pPoint1;
 
@@ -566,6 +567,7 @@ public:
 
 void MainWindow::on_action_3_triggered()
 {
+    pMineInfo->SetType(IMineInfo::MINE_DISARM);
     m_pSceneGraph->GetTool()->SubPickMessage(new SubPointPick);
     m_pSceneGraph->GetTool()->SelecteTool("IPointPick");
 //    nTimerID = startTimer(100);
