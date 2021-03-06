@@ -34,7 +34,6 @@
 #include <Plot/SceneShape/IImage.h>
 #include <Plot/Common/ISceneScaleGroup.h>
 #include <Plot/Common/ISceneLodGroup.h>
-#include <Plot/PersonInfo/IMineInfo.h>
 #include <Plot/SceneShape/ILabel.h>
 #include <Hud/IViewHud.h>
 #include <Inner/ILoadResource.h>
@@ -121,7 +120,6 @@ IHudText*   pHudText=nullptr;
 ISceneFlashGroup* pFlash=nullptr;
 ISatellite*  pSatellite = nullptr;
 IImage* pImage=nullptr;
-IMineInfo* pMineInfo=nullptr;
 
 void MainWindow::on_action_triggered()
 {
@@ -314,18 +312,8 @@ void MainWindow::on_action_triggered()
 //    m_pLayer->AddSceneNode(pEarthLocation);
 //    pEarthLocation->SetSceneNode(pSceneRoot);
 
-    pMineInfo = dynamic_cast<IMineInfo*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMineInfo"));
 
     MapGeoPos pos;
-    pos.fLon = 103.566212;
-    pos.fLat = 19.573845;
-    pos.fHeight = 100;
-
-    color.fA=1.0f;
-    pMineInfo->SetPos(pos);
-    pMineInfo->SetName("你好Hello");
-    pMineInfo->SetColor(color);
-    m_pLayer->AddSceneNode(pMineInfo);
 
 //    m_pTrackNode = pPoint1;
 
@@ -357,7 +345,7 @@ void MainWindow::on_action_triggered()
     m_pLine = dynamic_cast<IMapLine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLine"));
     pos.fLon = 103.566212;
     pos.fLat = 19.573845;
-    pos.fHeight = 500;
+    pos.fHeight = 5;
 
     m_pLine->AddPoint(0,pos);
     pos.fLon = 179.0606607;
@@ -567,7 +555,6 @@ public:
 
 void MainWindow::on_action_3_triggered()
 {
-    pMineInfo->SetType(IMineInfo::MINE_DISARM);
     m_pSceneGraph->GetTool()->SubPickMessage(new SubPointPick);
     m_pSceneGraph->GetTool()->SelecteTool("IPointPick");
 //    nTimerID = startTimer(100);

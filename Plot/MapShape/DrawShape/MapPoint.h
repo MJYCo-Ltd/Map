@@ -38,7 +38,6 @@ public:
     void ColorChanged();
 protected:
     bool   m_bUpdate=false;
-    osg::observer_ptr<PointCallBack> m_pPointCallBack;
     osg::observer_ptr<osgEarth::FeatureNode> m_pFeatureNode;
 };
 

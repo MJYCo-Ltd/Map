@@ -2,7 +2,6 @@
 #include <SceneGraph/ISceneGraph.h>
 #include <Plot/Map/IMap.h>
 #include <Plot/IPlot.h>
-#include <Plot/PersonInfo/IPersonInfo.h>
 #include <Plot/Map/IMapPoint.h>
 #include <Plot/Map/IMapLine.h>
 #include <Plot/Map/IMapLayer.h>

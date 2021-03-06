@@ -4,7 +4,6 @@ SUBDIRS =\
     SpaceBackGround\
     SceneShape\
     MapShape\
-    PersonInfo\
     Hud\
     SatelliteShow\
     Map\
