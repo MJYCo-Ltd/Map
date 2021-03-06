@@ -10,6 +10,7 @@ public:
 protected:
     void ImageSizeChanged();
     void ImagePathChanged()SET_TRUE_SHAPE_UPDATE(m_bPathChanged)
+    void ImageDataChanged()SET_TRUE_SHAPE_UPDATE(m_bImageDataChanged)
 
     /**
      * @brief 初始化节点
@@ -20,6 +21,7 @@ protected:
 protected:
     bool m_bSizeChanged=false;
     bool m_bPathChanged=false;
+    bool m_bImageDataChanged=false;
     osg::ref_ptr<osg::Vec2Array>  m_pTexCoordArray;
 };
 

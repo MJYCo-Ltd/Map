@@ -116,18 +116,32 @@ void MainWindow::on_actionchange_triggered()
 bool bShowBackGround=false;
 IHudLayout* pHudLayout=nullptr;
 IHudText*   pHudText=nullptr;
-//IMapLocation* pEarthLocation=nullptr;
+IMapLocation* pEarthLocation=nullptr;
 ISceneFlashGroup* pFlash=nullptr;
 ISatellite*  pSatellite = nullptr;
 IImage* pImage=nullptr;
 
 void MainWindow::on_action_triggered()
 {
+    QImage image = QImage("E:/splash-620x300.png").convertToFormat(QImage::Format_RGBA8888);
     pImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
-    pImage->SetImagePath("Image/Mine/17.png");
+//    pImage->SetImagePath("Image/Mine/17.png");
+    RGBAData data;
+    data.unWidth = image.width();
+    data.unHeight = image.height();
+    data.bFlipVertically=true;
+    data.pRGBAData = new unsigned char[image.byteCount()]();
+    memcpy(data.pRGBAData,image.bits(),image.byteCount());
+    pImage->SetRGBAData(data);
     SceneColor color;
     color.fG=color.fB=.0f;
     pImage->SetColor(color);
+
+    SceneImageSize size;
+    size.unHeight=32;
+    size.unWidth=32;
+    size.bOutSet=true;
+    pImage->SetImageSize(size);
 
     ISceneGroup* pSceneRoot = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
 
@@ -308,9 +322,9 @@ void MainWindow::on_action_triggered()
 //    m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);
 //    return;
     m_pLayer = m_pSceneGraph->GetMap()->CreateLayer("test");
-//    pEarthLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
-//    m_pLayer->AddSceneNode(pEarthLocation);
-//    pEarthLocation->SetSceneNode(pSceneRoot);
+    pEarthLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+    m_pLayer->AddSceneNode(pEarthLocation);
+    pEarthLocation->SetSceneNode(pSceneRoot);
 
 
     MapGeoPos pos;
@@ -439,7 +453,7 @@ void MainWindow::on_action_triggered()
 //    pLocation->SetGeoPos(pos);
 //    m_pLayer->AddSceneNode(pLocation);
     pos.fLat=20.748377;
-//    pEarthLocation->SetGeoPos(pos);
+    pEarthLocation->SetGeoPos(pos);
 
     /// 标绘卫星
     pSatellite= dynamic_cast<ISatellite*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISatellite"));

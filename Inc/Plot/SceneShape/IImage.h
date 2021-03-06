@@ -3,10 +3,86 @@
 #include <string>
 #include <Plot/SceneShape/IShape.h>
 
+/**
+ * @brief 内存数据结构体
+ * @attention 只支持rgba每一个颜色8bit(1byte)的数据结构
+ * @例如 10X10像素的图片 大小为 10x10x4=400byte的数据
+ */
+struct RGBAData
+{
+
+    unsigned short unWidth;
+    unsigned short unHeight;
+    unsigned char* pRGBAData;
+    bool           bFlipVertically;
+
+    RGBAData()
+    {
+        unWidth=0u;
+        unHeight=0u;
+        pRGBAData=nullptr;
+        bFlipVertically=false;
+    }
+
+    RGBAData(const RGBAData& rOther)
+    {
+        unWidth = rOther.unWidth;
+        unHeight = rOther.unHeight;
+        bFlipVertically = rOther.bFlipVertically;
+
+        int nSize = unWidth*unHeight*4;
+        pRGBAData = new unsigned char[nSize]();
+        memcpy(pRGBAData,rOther.pRGBAData,nSize);
+    }
+
+    RGBAData& operator=(const RGBAData& rOther)
+    {
+        if(&rOther == this)
+        {
+            return(*this);
+        }
+        else
+        {
+            unWidth = rOther.unWidth;
+            unHeight = rOther.unHeight;
+            bFlipVertically = rOther.bFlipVertically;
+
+            int nSize = unWidth*unHeight*4;
+            pRGBAData = new unsigned char[nSize]();
+            memcpy(pRGBAData,rOther.pRGBAData,nSize);
+        }
+    }
+    ~RGBAData()
+    {
+        delete [] pRGBAData;
+    }
+
+    bool operator == (const RGBAData& rOther)const
+    {
+        if(this == & rOther)
+        {
+            return (true);
+        }
+
+        return(unWidth == rOther.unWidth
+               && unHeight == rOther.unHeight
+               && pRGBAData == rOther.pRGBAData
+               && bFlipVertically == rOther.bFlipVertically);
+    }
+
+    bool operator !=(const RGBAData& rOther)const
+    {
+        return(!this->operator==(rOther));
+    }
+};
+
+/**
+ * @brief 图片尺寸结构体
+ */
 struct SceneImageSize
 {
-    unsigned int unWidth=0u;  /// 图片宽度
-    unsigned int unHeight=0u; /// 图片高度
+    unsigned short unWidth=0u;  /// 图片宽度
+    unsigned short unHeight=0u; /// 图片高度
     bool         bOutSet=false;///是否是外部设置
 
     bool operator == (const SceneImageSize& rOther)const
@@ -49,15 +125,22 @@ public:
      */
     void SetImagePath(const std::string& sImagePath)JUDGE_EQUAL_CALL_FUNCTION(sImagePath,m_sImagePath,ImagePathChanged)
     const std::string& ImagePath()const{return(m_sImagePath);}
-protected:
-    virtual ~IImage(){}
+
+    /**
+     * @brief 设置内存图片
+     */
+    void SetRGBAData(const RGBAData& rRGBAData)JUDGE_EQUAL_CALL_FUNCTION(rRGBAData,m_stRGBAData,ImageDataChanged)
+    protected:
+        virtual ~IImage(){}
 
     /// 状态更改
     virtual void ImageSizeChanged()=0;
     virtual void ImagePathChanged()=0;
+    virtual void ImageDataChanged()=0;
 
 protected:
     std::string m_sImagePath;
+    RGBAData    m_stRGBAData;
     SceneImageSize m_stImageSize;
 };
 

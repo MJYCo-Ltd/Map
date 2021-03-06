@@ -27,7 +27,7 @@ void CSceneImage::CreateShape()
     m_pTexCoordArray->at(2).set(1,0);
     m_pTexCoordArray->at(3).set(1,1);
 }
-
+#include <osgDB/WriteFile>
 void CSceneImage::UpdateShape()
 {
 
@@ -59,6 +59,42 @@ void CSceneImage::UpdateShape()
         m_pVertexArray->at(3).set(nX,nY,0);
 
         m_bSizeChanged=false;
+    }
+
+    if(m_bImageDataChanged)
+    {
+        int size = m_stRGBAData.unWidth*4;
+        unsigned char* pTempBuffer = new unsigned char[size]();
+        if(m_stRGBAData.bFlipVertically)
+        {
+            for(int i=m_stRGBAData.unHeight-1,j=0; i>j; --i,++j)
+            {
+                memcpy(pTempBuffer,m_stRGBAData.pRGBAData+j*size,size);
+                memcpy(m_stRGBAData.pRGBAData+j*size,m_stRGBAData.pRGBAData+i*size,size);
+                memcpy(m_stRGBAData.pRGBAData+i*size,pTempBuffer,size);
+            }
+        }
+        delete[]pTempBuffer;
+
+        auto pImage = new osg::Image;
+        pImage->setImage(m_stRGBAData.unWidth, m_stRGBAData.unHeight, 1,
+                        GL_RGBA,GL_RGBA, GL_UNSIGNED_BYTE,m_stRGBAData.pRGBAData,osg::Image::NO_DELETE);
+
+        auto pTexture = new osg::Texture2D;
+        pTexture->setImage(pImage);
+        pTexture->setFilter(osg::Texture::MIN_FILTER, osg::Texture::LINEAR);
+        pTexture->setFilter(osg::Texture::MAG_FILTER, osg::Texture::LINEAR);
+        pTexture->setResizeNonPowerOfTwoHint(false);
+
+        m_pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(0,pTexture);
+
+        if(!m_stImageSize || !m_stImageSize.bOutSet)
+        {
+            m_stImageSize.unWidth = m_stRGBAData.unWidth;
+            m_stImageSize.unHeight = m_stRGBAData.unHeight;
+            m_bSizeChanged = true;
+        }
+        m_bImageDataChanged=false;
     }
 
 }

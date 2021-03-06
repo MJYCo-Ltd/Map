@@ -1,6 +1,5 @@
 #include "DrawShape/SceneCone.h"
 #include "DrawShape/SceneSCone.h"
-#include "DrawShape/ScenePulse.h"
 #include "DrawShape/ScenePoint.h"
 #include "DrawShape/SceneLine.h"
 #include "DrawShape/SceneEllipsoid.h"
@@ -18,7 +17,6 @@ static const char s_sCone[]="ICone";
 static const char s_sImage[]="IImage";
 static const char s_sConeSensor[]="IConeSensor";
 static const char s_sSConeSensor[]="ISConeSensor";
-static const char s_sPulseSensor[]="IPulseSensor";
 static const char s_sEllipsoidSensor[]="IEllipsoidSensor";
 static const char s_sLabel[]="ILabel";
 
@@ -31,10 +29,6 @@ ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName
     else if(sInterfaceName == s_sSConeSensor)
     {
         return(new CSceneSCone(pSceneGraph));
-    }
-    else if (sInterfaceName == s_sPulseSensor)
-    {
-        return(new CScenePulse(pSceneGraph));
     }
     else if(sInterfaceName == s_sPoint)
     {
@@ -85,8 +79,6 @@ bool QueryInterface(std::string& sInterfaceName)
     sInterfaceName += s_sConeSensor;
     sInterfaceName += " ";
     sInterfaceName += s_sSConeSensor;
-    sInterfaceName += " ";
-    sInterfaceName += s_sPulseSensor;
     sInterfaceName += " ";
     sInterfaceName += s_sEllipsoidSensor;
     sInterfaceName += " ";
