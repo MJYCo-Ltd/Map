@@ -74,11 +74,12 @@ protected:
         {
             if(!T::m_bFlash)
             {
-                T::m_pSceneGraph->ResouceLoader()->RemoveVirtualProgram(m_pVirutlProgram,"Data/GLSL/Flash.glsl");
+                T::m_pSceneGraph->ResouceLoader()->RemoveVirtualProgram(m_pVirutlProgram,"GLSL/Flash.glsl");
             }
             else
             {
-                T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(m_pVirutlProgram,"Data/GLSL/Flash.glsl");
+                m_pFlashStartTime->set((float)osg::Timer::instance()->time_s());
+                T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(m_pVirutlProgram,"GLSL/Flash.glsl");
             }
             T::m_bFlashChanged = false;
         }

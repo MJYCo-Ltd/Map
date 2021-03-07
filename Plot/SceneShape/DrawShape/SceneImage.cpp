@@ -27,7 +27,7 @@ void CSceneImage::CreateShape()
     m_pTexCoordArray->at(2).set(1,0);
     m_pTexCoordArray->at(3).set(1,1);
 }
-#include <osgDB/WriteFile>
+
 void CSceneImage::UpdateShape()
 {
 

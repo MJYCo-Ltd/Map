@@ -530,7 +530,7 @@ void MainWindow::on_action_triggered()
     m_pSceneGraph->GetMap()->GetSpaceEnv()->AddSceneNode(pSatellite);
     m_pSceneGraph->GetMap()->GetSpaceEnv()->UpdateDate(dMJD);
 
-    m_pTrackNode = pRadarSensor;
+    m_pTrackNode = pSatelliteSensor;
     PlotMap();
 }
 
@@ -569,6 +569,7 @@ public:
 
 void MainWindow::on_action_3_triggered()
 {
+    dynamic_cast<ISensor*>(m_pTrackNode)->SetEffects(ISensor::UNIFORM_MOTION);
     m_pSceneGraph->GetTool()->SubPickMessage(new SubPointPick);
     m_pSceneGraph->GetTool()->SelecteTool("IPointPick");
 //    nTimerID = startTimer(100);
