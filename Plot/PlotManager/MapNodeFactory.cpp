@@ -9,6 +9,7 @@
 #include <SceneGraph/ISceneNode.h>
 #include <Inner/OsgExtern/OsgExtern.h>
 #include <Inner/IRender.h>
+#include <Inner/ILoadResource.h>
 #include <Inner/IOsgSceneNode.h>
 #include "MapNodeFactory.h"
 
@@ -155,5 +156,6 @@ void CMapNodeFactory::timerEvent(QTimerEvent *event)
     if(event->timerId() == m_nTimerID)
     {
         DeleteNoUseSceneNode();
+        m_pSceneGraph->ResouceLoader()->ClearNoUse();
     }
 }

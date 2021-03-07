@@ -226,6 +226,32 @@ bool CResourceLod::RemoveVirtualProgram(osgEarth::VirtualProgram *pVirtualProgra
     return(shader.unload(pVirtualProgram,glslPath));
 }
 
+template <typename T>
+void ClearMap(T& value)
+{
+    for(auto one = value.begin();one != value.end();)
+    {
+        if(1 == one->second->referenceCount())
+        {
+            one = value.erase(one);
+        }
+        else
+        {
+            ++one;
+        }
+    }
+}
+
+/// 清空不再使用资源
+void CResourceLod::ClearNoUse()
+{
+    ClearMap(m_mapNode);
+    ClearMap(m_mapImage);
+    ClearMap(m_mapTexture);
+    ClearMap(m_mapFont);
+    ClearMap(m_mapProgram);
+}
+
 /// 转换QImage成osgImage
 osg::Image *CResourceLod::TransformQImage(const QImage &rQImage)
 {

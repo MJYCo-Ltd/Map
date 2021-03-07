@@ -22,6 +22,19 @@ protected:
     {
         ImplSceneGroup<T>::InitNode();
         osgEarth::ScreenSpaceLayout::activate(IOsgSceneNode::m_pRootNode->getOrCreateStateSet());
+        osgEarth::ScreenSpaceLayout::setDeclutteringEnabled(false);
+    }
+
+    void AvoidChanged()
+    {
+        if(T::m_bAvoid)
+        {
+            osgEarth::ScreenSpaceLayout::setDeclutteringEnabled(true);
+        }
+        else
+        {
+            osgEarth::ScreenSpaceLayout::setDeclutteringEnabled(false);
+        }
     }
 };
 

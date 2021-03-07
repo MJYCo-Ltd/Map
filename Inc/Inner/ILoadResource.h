@@ -81,6 +81,11 @@ public:
      */
     virtual bool LoadVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const std::string& sGLSLPath,bool bIsRef=true)=0;
     virtual bool RemoveVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const std::string& sGLSLPath,bool bIsRef=true)=0;
+
+    /**
+     * @brief 清空不再使用的资源
+     */
+    virtual void ClearNoUse()=0;
 };
 
 #endif

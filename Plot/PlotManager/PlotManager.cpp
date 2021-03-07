@@ -95,6 +95,7 @@ ISceneNode *CPlotManager::LoadSceneNode(const std::string &sPath, bool bRef)
 void CPlotManager::FreeNoUseSceneNode()
 {
     m_pCreateFactory->DeleteNoUseSceneNode();
+    m_pSceneGraph->ResouceLoader()->ClearNoUse();
 }
 
 /// 注册可以标绘的类型

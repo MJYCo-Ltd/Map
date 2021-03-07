@@ -62,15 +62,20 @@ public:
      */
     bool LoadVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const std::string& sGLSLPath,bool bIsRef=true);
     bool RemoveVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const std::string& sGLSLPath,bool bIsRef=true);
+
+    /**
+     * @brief 清空不再使用的资源
+     */
+    void ClearNoUse();
 protected:
     osg::Image* TransformQImage(const QImage& rQImage);
 protected:
     std::string m_sAppPath;
-    std::map<std::string,osg::observer_ptr<osg::Node>>      m_mapNode;    /// 模型映射
+    std::map<std::string,osg::ref_ptr<osg::Node>>      m_mapNode;    /// 模型映射
     std::map<std::string,osg::ref_ptr<osg::Image>>     m_mapImage;   /// 图片映射
-    std::map<std::string,osg::observer_ptr<osg::Texture2D>> m_mapTexture; /// 纹理映射
-    std::map<std::string,osg::observer_ptr<osgText::Font>>  m_mapFont;    /// 字体映射
-    std::map<std::string,osg::observer_ptr<osgEarth::VirtualProgram>>m_mapProgram; /// 纹理
+    std::map<std::string,osg::ref_ptr<osg::Texture2D>> m_mapTexture; /// 纹理映射
+    std::map<std::string,osg::ref_ptr<osgText::Font>>  m_mapFont;    /// 字体映射
+    std::map<std::string,osg::ref_ptr<osgEarth::VirtualProgram>>m_mapProgram; /// shader程序
 };
 
 #endif // RESOURCELOD_H
