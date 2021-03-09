@@ -1,6 +1,7 @@
 #ifndef H_SCENE_TYPE_INCLUDE_H
 #define H_SCENE_TYPE_INCLUDE_H
 
+#include <string>
 #include <cmath>
 #include <cfloat>
 
@@ -132,5 +133,77 @@ struct ScenePixelOffset
     }
 };
 
+/**
+ * @brief 内存数据结构体
+ * @attention 只支持rgba每一个颜色8bit(1byte)的数据结构
+ * @例如 10X10像素的图片 大小为 10x10x4=400byte的数据
+ */
+struct RGBAData
+{
+
+    unsigned short unWidth;
+    unsigned short unHeight;
+    unsigned char* pRGBAData;
+    bool           bFlipVertically;
+
+    RGBAData()
+    {
+        unWidth=0u;
+        unHeight=0u;
+        pRGBAData=nullptr;
+        bFlipVertically=false;
+    }
+
+    RGBAData(const RGBAData& rOther)
+    {
+        unWidth = rOther.unWidth;
+        unHeight = rOther.unHeight;
+        bFlipVertically = rOther.bFlipVertically;
+
+        int nSize = unWidth*unHeight*4;
+        pRGBAData = new unsigned char[nSize]();
+        memcpy(pRGBAData,rOther.pRGBAData,nSize);
+    }
+
+    RGBAData& operator=(const RGBAData& rOther)
+    {
+        if(&rOther == this)
+        {
+            return(*this);
+        }
+        else
+        {
+            unWidth = rOther.unWidth;
+            unHeight = rOther.unHeight;
+            bFlipVertically = rOther.bFlipVertically;
+
+            int nSize = unWidth*unHeight*4;
+            pRGBAData = new unsigned char[nSize]();
+            memcpy(pRGBAData,rOther.pRGBAData,nSize);
+        }
+    }
+    ~RGBAData()
+    {
+        delete [] pRGBAData;
+    }
+
+    bool operator == (const RGBAData& rOther)const
+    {
+        if(this == & rOther)
+        {
+            return (true);
+        }
+
+        return(unWidth == rOther.unWidth
+               && unHeight == rOther.unHeight
+               && pRGBAData == rOther.pRGBAData
+               && bFlipVertically == rOther.bFlipVertically);
+    }
+
+    bool operator !=(const RGBAData& rOther)const
+    {
+        return(!this->operator==(rOther));
+    }
+};
 static unsigned int const PICK_MASK=1u;
 #endif

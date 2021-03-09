@@ -268,8 +268,8 @@ void MainWindow::on_action_triggered()
     SceneColor radarColor;
     pAttitudeGroup1->AddSceneNode(pRadarSensor);
     pAttitudeGroup1->SetPos(pPoint2->Pos());
-    pRadarSensor->SetDistance(10000.);
-    pRadarSensor->SetAzimuth(0,150);
+    pRadarSensor->SetDistance(1000000.);
+    pRadarSensor->SetAzimuth(-180,180);
     pRadarSensor->SetElevation(10,30);
     pRadarSensor->SetSConeHAngle(20);
     pRadarSensor->SetSConeVAngle(40);

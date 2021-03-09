@@ -186,32 +186,37 @@ void CSceneEllipsoid::UpdateShape()
         {
             osg::DrawElementsUShort* el1 = new osg::DrawElementsUShort(GL_TRIANGLE_FAN);
             osg::DrawElementsUShort* el2 = new osg::DrawElementsUShort(GL_TRIANGLE_FAN);
-            osg::DrawElementsUShort* el3 = new osg::DrawElementsUShort(GL_TRIANGLE_FAN);
-            osg::DrawElementsUShort* el4 = new osg::DrawElementsUShort(GL_TRIANGLE_FAN);
             el1->reserve(nLonSegments+2);
             el2->reserve(nLonSegments+2);
-            el3->reserve(nLatSegments+2);
-            el4->reserve(nLatSegments+2);
 
             el1->push_back((nLatSegments+1)*(nLonSegments+1));
             el2->push_back((nLatSegments+1)*(nLonSegments+1));
-            el3->push_back((nLatSegments+1)*(nLonSegments+1));
-            el4->push_back((nLatSegments+1)*(nLonSegments+1));
             for( x=nLonSegments; x>-1; --x )
             {
                 el1->push_back(nLonSegments-x);
                 el2->push_back(nLatSegments*(nLonSegments+1) + x);
             }
-            for( y=nLatSegments; y>-1; --y )
-            {
-                el3->push_back(y*(nLonSegments+1));
-                el4->push_back((nLatSegments-y)*(nLonSegments+1) + nLonSegments);
-            }
 
             m_pGeometry->addPrimitiveSet(el1);
             m_pGeometry->addPrimitiveSet(el2);
-            m_pGeometry->addPrimitiveSet(el3);
-            m_pGeometry->addPrimitiveSet(el4);
+
+            if(SUB_PART==m_emDrawType && fabs(m_dMaxAzim-m_dMinAzim-360)>DBL_EPSILON)
+            {
+                osg::DrawElementsUShort* el3 = new osg::DrawElementsUShort(GL_TRIANGLE_FAN);
+                osg::DrawElementsUShort* el4 = new osg::DrawElementsUShort(GL_TRIANGLE_FAN);
+                el3->reserve(nLatSegments+2);
+                el4->reserve(nLatSegments+2);
+                el3->push_back((nLatSegments+1)*(nLonSegments+1));
+                el4->push_back((nLatSegments+1)*(nLonSegments+1));
+                for( y=nLatSegments; y>-1; --y )
+                {
+                    el3->push_back(y*(nLonSegments+1));
+                    el4->push_back((nLatSegments-y)*(nLonSegments+1) + nLonSegments);
+                }
+
+                m_pGeometry->addPrimitiveSet(el3);
+                m_pGeometry->addPrimitiveSet(el4);
+            }
         }
         else
         {
