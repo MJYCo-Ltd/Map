@@ -23,17 +23,8 @@ protected:
         ImplSceneGroup<T>::SetGroupNode(m_pLod.get());
     }
 
-    void ChangeTypeChanged()
-    {
-        m_bTypeChanged = true;
-        ImplSceneGroup<T>::NodeChanged();
-    }
-
-    void LevelsChanged()
-    {
-        m_bLevelsChanged=true;
-        ImplSceneGroup<T>::NodeChanged();
-    }
+    void ChangeTypeChanged()SET_TRUE_NODE_UPDATE(m_bTypeChanged)
+    void LevelsChanged()SET_TRUE_NODE_UPDATE(m_bLevelsChanged)
 
     void UpdateNode()
     {

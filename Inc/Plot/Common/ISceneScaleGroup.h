@@ -19,7 +19,7 @@ public:
     /**
      * @brief 设置缩放系数
      */
-    void SetScal(double dScalBit){if(dScalBit>0. && fabs(m_dScalBit - dScalBit)>1e-15){m_dScalBit=dScalBit;ScalChanged();}}
+    void SetScal(double dScalBit)JUDGE_POSITIVE_DOUBLE_CALL_FUNCTION(dScalBit,m_dScalBit,ScalChanged)
     double Scal()const{return(m_dScalBit);}
 
     /**
@@ -33,27 +33,27 @@ public:
      * @brief 设置最小缩放倍数
      * @param dMinScal
      */
-    void SetMinScal(double dMinScal){if(dMinScal>0. && fabs(m_dMinScal-dMinScal)>DBL_EPSILON){m_dMinScal=dMinScal;AutoScalChanged();m_bMinScalChanged=true;}}
+    void SetMinScal(double dMinScal)JUDGE_POSITIVE_DOUBLE_CALL_FUNCTION(dMinScal,m_dMinScal,MinScalChanged)
     double MinScal(){return(m_dMinScal);}
 
     /**
      * @brief 设置最大缩放倍数
      * @param dMaxScal
      */
-    void SetMaxScal(double dMaxScal){if(dMaxScal>0. && fabs(m_dMaxScal-dMaxScal)>DBL_EPSILON){m_dMaxScal=dMaxScal;AutoScalChanged();m_bMaxScalChanged=true;}}
+    void SetMaxScal(double dMaxScal)JUDGE_POSITIVE_DOUBLE_CALL_FUNCTION(dMaxScal,m_dMaxScal,MaxScalChanged)
     double MaxScal(){return(m_dMaxScal);}
 protected:
     virtual ~ISceneScaleGroup(){}
     virtual void ScalChanged()=0;
     virtual void AutoScalChanged()=0;
+    virtual void MinScalChanged()=0;
+    virtual void MaxScalChanged()=0;
 
 protected:
     double        m_dScalBit=1.;
     double        m_dMinScal=0.;
     double        m_dMaxScal=DBL_MAX;
     bool          m_bAutoScal=true;
-    bool          m_bMinScalChanged=false;
-    bool          m_bMaxScalChanged=false;
 };
 
 #endif//INTERFACE_SCENE_AUTO_SCALE_GROUP_HEARDER_H

@@ -25,17 +25,10 @@ protected:
     /**
      * @brief 位置更改
      */
-    void ScalChanged()
-    {
-        m_bScaleChanged = true;
-        ImplSceneGroup<T>::NodeChanged();
-    }
-
-    void AutoScalChanged()
-    {
-        m_bAutoScalChanged = true;
-        ImplSceneGroup<T>::NodeChanged();
-    }
+    void ScalChanged()SET_TRUE_NODE_UPDATE(m_bScaleChanged)
+    void AutoScalChanged()SET_TRUE_NODE_UPDATE(m_bAutoScalChanged)
+    void MinScalChanged()SET_TRUE_NODE_UPDATE(m_bMinScalChanged)
+    void MaxScalChanged()SET_TRUE_NODE_UPDATE(m_bMaxScalChanged)
 
     void UpdateNode()
     {
@@ -56,21 +49,21 @@ protected:
             }
             m_pAutoScaleTransform->setAutoScaleToScreen(T::m_bAutoScal);
 
-
-            if(T::m_bMinScalChanged)
-            {
-                m_pAutoScaleTransform->setMinimumScale(T::m_dMinScal);
-                T::m_bMinScalChanged=false;
-            }
-
-            if(T::m_bMaxScalChanged)
-            {
-                m_pAutoScaleTransform->setMaximumScale(T::m_dMaxScal);
-                T::m_bMaxScalChanged=false;
-            }
-
             m_bAutoScalChanged=false;
         }
+
+        if(m_bMinScalChanged)
+        {
+            m_pAutoScaleTransform->setMinimumScale(T::m_dMinScal);
+            m_bMinScalChanged=false;
+        }
+
+        if(m_bMaxScalChanged)
+        {
+            m_pAutoScaleTransform->setMaximumScale(T::m_dMaxScal);
+            m_bMaxScalChanged=false;
+        }
+
         ImplSceneGroup<T>::UpdateNode();
     }
 
@@ -78,6 +71,8 @@ protected:
     osg::observer_ptr<osg::AutoTransform> m_pAutoScaleTransform;
     bool m_bScaleChanged=false;
     bool m_bAutoScalChanged=false;
+    bool m_bMinScalChanged=false;
+    bool m_bMaxScalChanged=false;
 };
 
 #endif // IMPL_SCENE_MODEL_H

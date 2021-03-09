@@ -50,27 +50,13 @@ protected:
         }
     }
 
-    void FlashStatusChanged()
-    {
-        T::m_bStatusChanged=true;
-        ImplSceneGroup<T>::NodeChanged();
-    }
-
-    void FlashColorChanged()
-    {
-        T::m_bColorChanged=true;
-        ImplSceneGroup<T>::NodeChanged();
-    }
-
-    void FlashFlashChanged()
-    {
-        T::m_bFlashChanged=true;
-        ImplSceneGroup<T>::NodeChanged();
-    }
+    void FlashStatusChanged()SET_TRUE_NODE_UPDATE(m_bStatusChanged)
+    void FlashColorChanged()SET_TRUE_NODE_UPDATE(m_bColorChanged)
+    void FlashFlashChanged()SET_TRUE_NODE_UPDATE(m_bFlashChanged)
 
     void UpdateNode()
     {
-        if(T::m_bFlashChanged)
+        if(m_bFlashChanged)
         {
             if(!T::m_bFlash)
             {
@@ -81,19 +67,19 @@ protected:
                 m_pFlashStartTime->set((float)osg::Timer::instance()->time_s());
                 T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(m_pVirutlProgram,"GLSL/Flash.glsl");
             }
-            T::m_bFlashChanged = false;
+            m_bFlashChanged = false;
         }
 
-        if(T::m_bColorChanged)
+        if(m_bColorChanged)
         {
             if(m_pFlashColor.valid())
             {
                 m_pFlashColor->set(osg::Vec4(T::m_stFlahColor.fR,T::m_stFlahColor.fG,T::m_stFlahColor.fB,T::m_stFlahColor.fA));
             }
-            T::m_bColorChanged=false;
+            m_bColorChanged=false;
         }
 
-        if(T::m_bStatusChanged)
+        if(m_bStatusChanged)
         {
             if(m_pFlashIntervalTime.valid())
             {
@@ -102,7 +88,7 @@ protected:
             }
 
 
-            T::m_bStatusChanged=false;
+            m_bStatusChanged=false;
         }
         ImplSceneGroup<T>::UpdateNode();
     }
@@ -112,6 +98,9 @@ protected:
     osg::ref_ptr<osg::Uniform>             m_pFlashIntervalTime;
     osg::ref_ptr<osg::Uniform>             m_pFlashColor;
     osg::ref_ptr<osgEarth::VirtualProgram> m_pVirutlProgram;
+    bool m_bStatusChanged=false;
+    bool m_bColorChanged=false;
+    bool m_bFlashChanged=false;
 };
 
 #endif // IMPL_SCENE_FLASH_GROUP_H
