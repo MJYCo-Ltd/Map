@@ -35,11 +35,16 @@ public:
      * @param bVisible
      */
     void SetPlanetNameShow(bool bVisible);
+
+    /**
+     * @brief 是否显示大气
+     */
+    void ShowAtmosphere(bool);
 private:
-    ISceneGraph*     m_pSceneGraph;                       /// 场景
-    bool             m_bNeedUpdate;                       /// 是否需要更新
-    std::map<int,CPlanetModel*> m_mapPlanet;/// 行星绘制类
-    osg::ref_ptr<CSunModel>                   m_pSun;     /// 绘制的太阳
+    ISceneGraph*     m_pSceneGraph;          /// 场景
+    bool             m_bNeedUpdate;          /// 是否需要更新
+    std::map<int,CPlanetModel*> m_mapPlanet; /// 行星绘制类
+    osg::ref_ptr<CSunModel>     m_pSun;      /// 绘制的太阳
 };
 
 #endif // SOLARENV_H

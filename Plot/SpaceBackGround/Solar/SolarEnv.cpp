@@ -90,3 +90,8 @@ void CSolarEnv::UpdateTime(const double &dMJD)
 void CSolarEnv::SetPlanetNameShow(bool bVisible)
 {
 }
+
+/// 是否显示大气
+void CSolarEnv::ShowAtmosphere(bool)
+{
+}

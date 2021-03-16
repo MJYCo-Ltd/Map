@@ -45,6 +45,11 @@ void CSpaceBackGround::SetPlanetsNamesVisible(bool bShow)
     m_pSkyNode->SetPlanetsNamesVisible(bShow);
 }
 
+void CSpaceBackGround::ShowAtmosphere(bool bVisible)
+{
+    m_pSkyNode->ShowAtmosphere(bVisible);
+}
+
 /// 初始化场景节点
 void CSpaceBackGround::InitNode()
 {

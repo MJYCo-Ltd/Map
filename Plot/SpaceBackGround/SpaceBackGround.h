@@ -59,6 +59,8 @@ public:
     void DateChanged()SET_TRUE_NODE_UPDATE(m_bDateChanged)
     void MatrixChanged()SET_TRUE_NODE_UPDATE(m_bMatrixChanged)
 
+    void ShowAtmosphere(bool);
+
     /**
      * @brief 初始化节点
      */

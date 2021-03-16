@@ -58,6 +58,12 @@ public:
      * @brief 更新矩阵
      */
     virtual void UpdateMatrix(const Math::CMatrix& rRotate)JUDGE_EQUAL_CALL_FUNCTION(rRotate,m_matRotate,MatrixChanged)
+
+    /**
+     * @brief 是否开启大气模型
+     * @param bShow
+     */
+    virtual void ShowAtmosphere(bool)=0;
 protected:
     virtual ~ISpaceBackGround(){}
     virtual void DateChanged()=0;

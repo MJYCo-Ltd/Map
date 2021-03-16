@@ -61,6 +61,8 @@ public:
      */
     void UpdateMatrix(const Math::CMatrix& rRotate);
 
+    void ShowAtmosphere(bool);
+
 public:
     ///////////////// 重写父类方法 ///////////////////
     void traverse(osg::NodeVisitor&);

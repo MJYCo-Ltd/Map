@@ -29,6 +29,11 @@ struct MapGeoPos
     {
         return(!(this->operator==(rOther)));
     }
+
+    bool IsValid()
+    {
+        return(fLon>-180&&fLon<180&&fLat>=-90&&fLat<=-90);
+    }
 };
 
 /**

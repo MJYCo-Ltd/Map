@@ -35,6 +35,7 @@
 #include <Plot/Common/ISceneScaleGroup.h>
 #include <Plot/Common/ISceneLodGroup.h>
 #include <Plot/SceneShape/ILabel.h>
+#include <Plot/Common/ISceneScreenGroup.h>
 #include <Hud/IViewHud.h>
 #include <Inner/ILoadResource.h>
 
@@ -62,40 +63,6 @@ void MainWindow::SetSecenGraph(ISceneGraph *pSceneGraph)
 
 void MainWindow::timerEvent(QTimerEvent *event)
 {
-//    ScenePos pos;
-//    pos.bIsGeo = true;
-//    pos.fHeight = 500;
-//    ++m_nTimes;
-//    double dLon,dLat;
-//    if(m_nTimes < 2000)
-//    {
-//        GisMath::CalBaiser(121.225100*DD2R,23.128880*DD2R,dA1,m_nTimes*dL1,dLon,dLat);
-//        pos.fLon = dLon*DR2D;
-//        pos.fLat = dLat*DR2D;
-//        m_pModel->SetPos(pos);
-
-//        m_pModel->SetYPR(dA1*DR2D,0,0);
-//    }
-//    else if(m_nTimes < 4000)
-//    {
-//        GisMath::CalBaiser(121.185947*DD2R,23.123019*DD2R,dA2,(m_nTimes-2000)*dL2,dLon,dLat);
-//        pos.fLon = dLon*DR2D;
-//        pos.fLat = dLat*DR2D;
-//        m_pModel->SetPos(pos);
-//        m_pModel->SetYPR(dA2*DR2D,0,0);
-//    }
-//    else if(m_nTimes < 6000)
-//    {
-//        GisMath::CalBaiser(121.178775*DD2R,23.101700*DD2R,dA3,(m_nTimes-4000)*dL3,dLon,dLat);
-//        pos.fLon = dLon*DR2D;
-//        pos.fLat = dLat*DR2D;
-//        m_pModel->SetPos(pos);
-//        m_pModel->SetYPR(dA3*DR2D,0,0);
-//    }
-//    else
-//    {
-//        killTimer(nTimerID);
-//    }
 }
 
 bool bClick=false;
@@ -282,7 +249,7 @@ void MainWindow::on_action_triggered()
 //    pRadarSensor->SetImage("Space/pixmaps/venus.png");
     pRadarSensor->SetCanPick(true);
     pSceneRoot->AddSceneNode(pAttitudeGroup1);
-    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("F:/BaiduNetdiskDownload/shancheng/shanchengzhen/Data/root.osgb",false);
+    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("E:/out.osgb",false);
     pModel->SetCanPick(true);
 //    IMapLocation* pLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     auto pScal = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
@@ -299,7 +266,7 @@ void MainWindow::on_action_triggered()
     pLabel->SetCanPick(true);
     pLabel->SetAttachNode(pModel);
     pLabel->SetFont("Fonts/msyh.ttf");
-    pLabel->SetText("飞机");
+    pLabel->SetText("桂林理工大学博文管理学院");
 
     auto pAttitudeAirplane = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
     pAttitudeAirplane->SetPos(pPoint1->Pos());
@@ -325,9 +292,31 @@ void MainWindow::on_action_triggered()
     pEarthLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     m_pLayer->AddSceneNode(pEarthLocation);
     pEarthLocation->SetSceneNode(pSceneRoot);
+    auto pGuiLin = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+    m_pLayer->AddSceneNode(pGuiLin);
 
+    ILabel* pGuiLInLabel = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
+    pGuiLInLabel->SetCanPick(true);
+    pGuiLInLabel->SetFont("Fonts/msyh.ttf");
+    pGuiLInLabel->SetText("桂林理工大学博文管理学院");
+    auto pScreenGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCREEN_GROUP)->AsSceneScreenGroup();
+    pScreenGroup->AddSceneNode(pGuiLInLabel);
+    auto pGuiLinGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP)->AsSceneGroup();
+
+    pGuiLinGroup->AddSceneNode(pScreenGroup);
+    pGuiLinGroup->AddSceneNode(pModel);
 
     MapGeoPos pos;
+    double dGuiLinLon=110.2912;
+    double dGuiLinLat=25.06479;
+
+//    GisMath::WGS842GJC02(dGuiLinLon,dGuiLinLat);
+    pos.fLon = dGuiLinLon;
+    pos.fLat = dGuiLinLat;
+    pos.fHeight=25;
+    pGuiLin->SetGeoPos(pos);
+    pGuiLin->SetSceneNode(pGuiLinGroup);
+
 
 //    m_pTrackNode = pPoint1;
 
@@ -532,6 +521,7 @@ void MainWindow::on_action_triggered()
 
     m_pTrackNode = pSatelliteSensor;
     PlotMap();
+    LodPlot();
 }
 
 void MainWindow::on_action_2_triggered()
@@ -649,4 +639,44 @@ void MainWindow::PlotMap()
     m_pPolygon->AddPoint(2,pos);
     m_pPolygon->SetPolygonColor(color);
     m_pLayer->AddSceneNode(m_pPolygon);
+}
+
+void MainWindow::LodPlot()
+{
+    auto pNewImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
+    pNewImage->SetImagePath("Image/China.png");
+    auto pAutoImage1 = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
+    pAutoImage1->SetMinScal(1.);
+    pAutoImage1->AddSceneNode(pNewImage);
+
+    auto pNewImage1 = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
+    pNewImage1->SetImagePath("Image/ship.png");
+    auto pAutoImage2 = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
+    pAutoImage2->SetMinScal(1.);
+    pAutoImage2->AddSceneNode(pNewImage1);
+
+    auto pLod = m_pSceneGraph->GetPlot()->CreateSceneGroup(LOD_GROUP)->AsSceneLodGroup();
+    pLod->AddSceneNode(pAutoImage1);
+    pLod->AddSceneNode(pAutoImage2);
+
+    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("Model/AirPlane.ive",true);
+    auto pAutoModel = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
+    pAutoModel->SetMinScal(1.);
+    pAutoModel->AddSceneNode(pModel);
+    pLod->AddSceneNode(pAutoModel);
+
+    std::vector<float> vLevelInfo;
+    vLevelInfo.push_back(1e7);
+    vLevelInfo.push_back(1e5);
+
+    pLod->SetLevelsInfo(vLevelInfo);
+
+    MapGeoPos pos;
+    pos.fLon = 117.5f;
+    pos.fLat = 39.5f;
+    pos.fHeight = 1000.f;
+    auto pEarthLocation1 = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+    pEarthLocation1->SetSceneNode(pLod);
+    pEarthLocation1->SetGeoPos(pos);
+    m_pLayer->AddSceneNode(pEarthLocation1);
 }

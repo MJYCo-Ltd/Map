@@ -13,4 +13,5 @@ SOURCES += \
     Grid2TriangleStrip.cpp \
     MathCommon.cpp \
     MyMatrixTransform.cpp \
-    MyPositionAttitudeTransform.cpp
+    MyPositionAttitudeTransform.cpp \
+    SplitRectangle.cpp

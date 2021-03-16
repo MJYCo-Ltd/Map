@@ -1,6 +1,7 @@
 #include <osgUtil/CullVisitor>
 #include "SkyNode.h"
-
+#include <osgDB/ReadFile>
+#include <osgDB/WriteFile>
 CSkyNode::CSkyNode(ISceneGraph *pSceneGraph)
 {
     m_pSpaceBackGroundRoot = new osg::Group;
@@ -61,6 +62,11 @@ void CSkyNode::UpdateDate(double dMJD)
 void CSkyNode::UpdateMatrix(const Math::CMatrix &rRotate)
 {
     m_pStarEnv->UpdateMatrix(rRotate);
+}
+
+void CSkyNode::ShowAtmosphere(bool bVisble)
+{
+    m_pSolarEnv->ShowAtmosphere(bVisble);
 }
 
 void CSkyNode::traverse(osg::NodeVisitor & nv)

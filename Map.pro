@@ -5,6 +5,7 @@ SUBDIRS =\
     SceneCore\
     Plot\
     Tool\
+    ExternShape\
     LoadMap\
     LoadQmlMap 
 CONFIG *= ordered
