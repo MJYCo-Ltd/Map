@@ -162,6 +162,9 @@ void QtSceneGraph::InitSceneGraph()
     LoadTool();
     m_pTool->RegisterTool();
 
+
+    m_pRoot = m_pPlot->CreateSceneGroup(STANDARD_GROUP);
+
     /// 如果是Map则加载earth文件
     if(SCENEGRAPH_USER != m_emType)
     {
@@ -180,14 +183,8 @@ void QtSceneGraph::InitSceneGraph()
             m_pMap->AsOsgSceneNode()->Init();
             m_pMap->SubMessage(pViewPoint);
 
-            m_pRoot = m_pMap;
+            m_pRoot->AddSceneNode(m_pMap);
         }
-    }
-
-    /// 如果没有地图数据则创建一个默认的节点
-    if(nullptr == m_pRoot)
-    {
-        m_pRoot = m_pPlot->CreateSceneGroup(STANDARD_GROUP);
     }
 
 

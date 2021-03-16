@@ -315,11 +315,6 @@ void CMap::SetEarthSelfRotate(bool bSelfRotate)
 void CMap::InitNode()
 {
     ImplSceneGroup<IMap>::InitNode();
-
-    m_pSpaceEnv = new CSpaceEnv(m_pSceneGraph);
-    osg::Camera* pCamera = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
-            ->GetOsgView()->getCamera();
-    m_pSpaceEnv->SetMainCamara(pCamera);
     InitMap();
 }
 
@@ -376,6 +371,11 @@ void CMap::InitMap()
             osgEarth::Util::LogarithmicDepthBuffer buffer;
             buffer.setUseFragDepth(true);
             buffer.install(m_pGroup.get());
+
+            m_pSpaceEnv = new CSpaceEnv(m_pSceneGraph);
+            osg::Camera* pCamera = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
+                    ->GetOsgView()->getCamera();
+            m_pSpaceEnv->SetMainCamara(pCamera);
             m_pSpaceEnv->Init();
 
             osgEarth::GLUtils::setGlobalDefaults(m_pMap3DNode->getOrCreateStateSet());

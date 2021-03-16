@@ -262,11 +262,11 @@ void MainWindow::on_action_triggered()
     pLod->AddSceneNode(pScal);
     m_pSceneGraph->GetRoot()->AddSceneNode(pModel);
 
-    ILabel* pLabel = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
-    pLabel->SetCanPick(true);
-    pLabel->SetAttachNode(pModel);
-    pLabel->SetFont("Fonts/msyh.ttf");
-    pLabel->SetText("桂林理工大学博文管理学院");
+//    ILabel* pLabel = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
+//    pLabel->SetCanPick(true);
+//    pLabel->SetAttachNode(pModel);
+//    pLabel->SetFont("Fonts/msyh.ttf");
+//    pLabel->SetText("桂林理工大学博文管理学院");
 
     auto pAttitudeAirplane = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
     pAttitudeAirplane->SetPos(pPoint1->Pos());

@@ -13,10 +13,12 @@ TEMPLATE = app
 
 
 SOURCES += \
+        CSimpleLabel.cpp \
         main.cpp \
         mainwindow.cpp
 
 HEADERS += \
+        CSimpleLabel.h \
         mainwindow.h
 
 FORMS += \
