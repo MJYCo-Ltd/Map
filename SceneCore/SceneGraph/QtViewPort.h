@@ -66,7 +66,7 @@ public:
     /**
      * @brief 设置视点位置
      */
-    void SetViewPoint(const SceneViewPoint&rViewPoint);
+    void SetViewPoint(const SceneViewPoint&rViewPoint,unsigned int unTimes);
 
     /**
      * @brief 获取视点位置

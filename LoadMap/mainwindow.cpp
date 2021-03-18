@@ -119,7 +119,7 @@ void MainWindow::on_action_triggered()
     pHudLayout = dynamic_cast<IHudLayout*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudLayout"));
 
     pHudText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
-    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudLayout);
+//    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudLayout);
 
     auto pHudImage = dynamic_cast<IHudImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudImage"));
     pHudImage->SetImage("Image/ship.png");
@@ -260,7 +260,7 @@ void MainWindow::on_action_triggered()
     pFlash->SetFlashFreq(0.5);
     pFlash->SetFlashColor(color);
     pLod->AddSceneNode(pScal);
-    m_pSceneGraph->GetRoot()->AddSceneNode(pModel);
+//    m_pSceneGraph->GetRoot()->AddSceneNode(pModel);
 
 //    ILabel* pLabel = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
 //    pLabel->SetCanPick(true);
@@ -279,7 +279,7 @@ void MainWindow::on_action_triggered()
     pFlashttt->SetFlashColor(color);
     pFlashttt->SetFlashFreq(3);
 
-    pSceneRoot->AddSceneNode(pFlashttt);
+//    pSceneRoot->AddSceneNode(pFlashttt);
 
 
     std::vector<float> vLevelInfo;
@@ -290,7 +290,7 @@ void MainWindow::on_action_triggered()
 //    return;
     m_pLayer = m_pSceneGraph->GetMap()->CreateLayer("test");
     pEarthLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
-    m_pLayer->AddSceneNode(pEarthLocation);
+//    m_pLayer->AddSceneNode(pEarthLocation);
     pEarthLocation->SetSceneNode(pSceneRoot);
     auto pGuiLin = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     m_pLayer->AddSceneNode(pGuiLin);
@@ -366,7 +366,7 @@ void MainWindow::on_action_triggered()
     m_pLine->SetLineColor(color);
 //    m_pLine->SetLineWidth(100.f);
     //m_pLine->SetTerrainType(RELATIVE_TERRAIN);
-    m_pLayer->AddSceneNode(m_pLine);
+//    m_pLayer->AddSceneNode(m_pLine);
 
     IMapCoverImage* pCover = dynamic_cast<IMapCoverImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapCoverImage"));
 //    if(nullptr != pCover)
@@ -447,7 +447,7 @@ void MainWindow::on_action_triggered()
     /// 标绘卫星
     pSatellite= dynamic_cast<ISatellite*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISatellite"));
 
-    pSatellite->SetName("长江");
+    pSatellite->SetName("卫星");
     pSatellite->SetScale(10000.);
     CDate mjBein(2021,1,7,17,29,0);
     Satellite::CSGP4 spg41("1 91001U          20061.66666667 -.00000001  00000-0 -13106-2 0 00008",
@@ -516,34 +516,34 @@ void MainWindow::on_action_triggered()
     pSatellite->SetOribitColor(color);
     pSatellite->AddSensor(0, pSatelliteSensor);
     pSatellite->UpdateData(dMJD);
-    m_pSceneGraph->GetMap()->GetSpaceEnv()->AddSceneNode(pSatellite);
+//    m_pSceneGraph->GetMap()->GetSpaceEnv()->AddSceneNode(pSatellite);
     m_pSceneGraph->GetMap()->GetSpaceEnv()->UpdateDate(dMJD);
 
     m_pTrackNode = pSatelliteSensor;
-    PlotMap();
-    LodPlot();
+//    PlotMap();
+//    LodPlot();
 }
 
 void MainWindow::on_action_2_triggered()
 {
-    SceneColor color;
-    color.fG=color.fB=0.0f;
-    pSatellite->SetOribitColor(color);
-    SceneImageSize size;
-    size.unHeight = size.unWidth = 100;
-    pImage->SetImageSize(size);
-    pFlash->SetFlash(!pFlash->IsFlash());
+//    SceneColor color;
+//    color.fG=color.fB=0.0f;
+//    pSatellite->SetOribitColor(color);
+//    SceneImageSize size;
+//    size.unHeight = size.unWidth = 100;
+//    pImage->SetImageSize(size);
+//    pFlash->SetFlash(!pFlash->IsFlash());
 //    pEarthLocation->SetVisible(!pEarthLocation->IsVisible());
-    pHudLayout->RemoveHudNode(pHudText);
-    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudText);
+//    pHudLayout->RemoveHudNode(pHudText);
+//    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudText);
 //    pEarthLocation->SetVisible(!pEarthLocation->IsVisible());
     SceneViewPoint viewPoint;
-    viewPoint.stPos.fX = 123;
-    viewPoint.stPos.fY = 26;
-    viewPoint.fDistance = 3000;
-    viewPoint.fAzimuth = 300;
-    viewPoint.fElev = 10;
-    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->SetViewPoint(viewPoint);
+    viewPoint.stPos.fX = 110.2912;
+    viewPoint.stPos.fY = 25.06479;
+    viewPoint.fDistance = 1000;
+    viewPoint.fAzimuth = 0;
+    viewPoint.fElev = 80;
+    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->SetViewPoint(viewPoint,15u);
 }
 
 #include <Tool/ITool.h>

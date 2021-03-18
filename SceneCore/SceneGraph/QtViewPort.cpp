@@ -168,48 +168,45 @@ IViewHud *QtViewPort::GetHud()
 }
 
 /// 设置视点
-void QtViewPort::SetViewPoint(const SceneViewPoint & rViewPoint)
+void QtViewPort::SetViewPoint(const SceneViewPoint & rViewPoint, unsigned int unTimes)
 {
-    if(rViewPoint != m_rViewPoint)
+    m_rViewPoint = rViewPoint;
+
+    switch(m_emType)
     {
-        m_rViewPoint = rViewPoint;
+    case View_3D:
+    {
+        auto viewPoint = m_p3DEarthManipulator->getViewpoint();
+        viewPoint.setFocalPoint(osgEarth::GeoPoint(osgEarth::SpatialReference::get("wgs84"),m_rViewPoint.stPos.fX,
+                                                   m_rViewPoint.stPos.fY,m_rViewPoint.stPos.fZ));
+        viewPoint.setRange(osgEarth::Distance(m_rViewPoint.fDistance,osgEarth::Units::METERS));
+        viewPoint.setHeading(osgEarth::Angle(m_rViewPoint.fAzimuth,osgEarth::Units::DEGREES));
+        viewPoint.setPitch(osgEarth::Angle(0-m_rViewPoint.fElev,osgEarth::Units::DEGREES));
 
-        switch(m_emType)
-        {
-        case View_3D:
-        {
-            auto viewPoint = m_p3DEarthManipulator->getViewpoint();
-            viewPoint.setFocalPoint(osgEarth::GeoPoint(osgEarth::SpatialReference::get("wgs84"),m_rViewPoint.stPos.fX,
-                                                       m_rViewPoint.stPos.fY,m_rViewPoint.stPos.fZ));
-            viewPoint.setRange(osgEarth::Distance(m_rViewPoint.fDistance,osgEarth::Units::METERS));
-            viewPoint.setHeading(osgEarth::Angle(m_rViewPoint.fAzimuth,osgEarth::Units::DEGREES));
-            viewPoint.setPitch(osgEarth::Angle(0-m_rViewPoint.fElev,osgEarth::Units::DEGREES));
+        m_p3DEarthManipulator->setViewpoint(viewPoint,unTimes);
+    }
+        break;
+    case View_2D:
+    {
+        auto viewPoint = m_p2DEarthManipulator->getViewpoint();
+        viewPoint.setFocalPoint(osgEarth::GeoPoint(osgEarth::SpatialReference::get("wgs84"),m_rViewPoint.stPos.fX,
+                                                   m_rViewPoint.stPos.fY,m_rViewPoint.stPos.fZ));
+        viewPoint.setRange(osgEarth::Distance(m_rViewPoint.fDistance,osgEarth::Units::METERS));
 
-            m_p3DEarthManipulator->setViewpoint(viewPoint,3);
-        }
-            break;
-        case View_2D:
-        {
-            auto viewPoint = m_p2DEarthManipulator->getViewpoint();
-            viewPoint.setFocalPoint(osgEarth::GeoPoint(osgEarth::SpatialReference::get("wgs84"),m_rViewPoint.stPos.fX,
-                                                       m_rViewPoint.stPos.fY,m_rViewPoint.stPos.fZ));
-            viewPoint.setRange(osgEarth::Distance(m_rViewPoint.fDistance,osgEarth::Units::METERS));
-
-            m_p2DEarthManipulator->setViewpoint(viewPoint,3);
-        }
-            break;
-        case View_Node:
-        {
-            m_pTrackManipulator->setDistance(m_rViewPoint.fDistance);
-            m_pTrackManipulator->setHeading(osg::DegreesToRadians(m_rViewPoint.fAzimuth));
-            m_pTrackManipulator->setElevation(osg::DegreesToRadians(m_rViewPoint.fElev));
-        }
-            break;
-        case View_User:
-            break;
-        default:
-            break;
-        }
+        m_p2DEarthManipulator->setViewpoint(viewPoint,unTimes);
+    }
+        break;
+    case View_Node:
+    {
+        m_pTrackManipulator->setDistance(m_rViewPoint.fDistance);
+        m_pTrackManipulator->setHeading(osg::DegreesToRadians(m_rViewPoint.fAzimuth));
+        m_pTrackManipulator->setElevation(osg::DegreesToRadians(m_rViewPoint.fElev));
+    }
+        break;
+    case View_User:
+        break;
+    default:
+        break;
     }
 }
 

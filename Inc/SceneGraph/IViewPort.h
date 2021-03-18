@@ -44,8 +44,9 @@ public:
 
     /**
      * @brief 设置视点位置
+     * @brief 到视点的时间[s]
      */
-    virtual void SetViewPoint(const SceneViewPoint&)=0;
+    virtual void SetViewPoint(const SceneViewPoint&,unsigned int)=0;
     virtual const SceneViewPoint& GetViewPoint()const=0;
 
     /**
