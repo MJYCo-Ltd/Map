@@ -60,6 +60,7 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent *event);
     void wheelEvent(QWheelEvent *event);
     void touchEvent(QTouchEvent* event);
+    void hoverMoveEvent(QHoverEvent* event);
 
 private:
     ItemType       m_emType=Item_3DMAP;  /// 创建类型

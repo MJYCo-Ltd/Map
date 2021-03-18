@@ -8,6 +8,7 @@ QtOsgItem::QtOsgItem(QQuickItem *parent):
     QQuickFramebufferObject(parent)
 {
     setMirrorVertically(true);
+    setAcceptHoverEvents(true);
     setAcceptedMouseButtons(Qt::AllButtons);
 }
 
@@ -117,7 +118,7 @@ void QtOsgItem::mouseDoubleClickEvent(QMouseEvent *event)
     {
         m_pRenderer->GetFBOWindow()->MouseDouble(event,window()->devicePixelRatio());
     }
-    QQuickItem::mouseDoubleClickEvent(event);
+    QQuickFramebufferObject::mouseDoubleClickEvent(event);
 }
 
 /// 添加滚轮
@@ -127,7 +128,7 @@ void QtOsgItem::wheelEvent(QWheelEvent *event)
     {
         m_pRenderer->GetFBOWindow()->WheelEvent(event);
     }
-    QQuickItem::wheelEvent(event);
+    QQuickFramebufferObject::wheelEvent(event);
 }
 
 /// 触屏消息
@@ -138,5 +139,15 @@ void QtOsgItem::touchEvent(QTouchEvent *event)
         m_pRenderer->GetFBOWindow()->TouchEvent(event);
     }
 
-    QQuickItem::touchEvent(event);
+    QQuickFramebufferObject::touchEvent(event);
+}
+
+/// 光标移动
+void QtOsgItem::hoverMoveEvent(QHoverEvent *event)
+{
+    if(nullptr != m_pRenderer)
+    {
+        m_pRenderer->GetFBOWindow()->HoverMove(event,window()->devicePixelRatio());
+    }
+    QQuickFramebufferObject::hoverMoveEvent(event);
 }

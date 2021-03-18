@@ -15,11 +15,12 @@ class QOffscreenSurface;
 class QOpenGLContext;
 class QThread;
 
-class  QMouseEvent;
+class QMouseEvent;
 class QKeyEvent;
 class QWheelEvent;
-class  QTouchEvent;
+class QTouchEvent;
 class QInputEvent;
+class QHoverEvent;
 class IWindowMessageObserver;
 
 class QtFBOWindow:public osgViewer::GraphicsWindowEmbedded
@@ -73,6 +74,7 @@ public:
     void MousePress(QMouseEvent *event, qreal rScal);
     void MouseUp(QMouseEvent* event, qreal rScal);
     void MouseMove(QMouseEvent* event, qreal rScal);
+    void HoverMove(QHoverEvent* event, qreal rScal);
     void WheelEvent(QWheelEvent* event);
     void TouchEvent(QTouchEvent* event);
     ////////////// 鼠标/键盘/触摸屏 消息处理 ////////////////////////////////////////////
