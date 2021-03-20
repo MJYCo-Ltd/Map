@@ -71,3 +71,4 @@ compile_commands.json
 *.cd
 *.doc
 *.zip
+*.bat

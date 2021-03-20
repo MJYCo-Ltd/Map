@@ -88,6 +88,11 @@ protected:
      * @brief 初始化地图
      */
     void InitMap();
+
+    /**
+     * @brief 初始化3D灯光
+     */
+    void Init3DLight();
 protected:
     bool   m_bSelfRotate=true;
     std::list<IMapMessageObserver*> m_listObserver;

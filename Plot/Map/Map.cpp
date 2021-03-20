@@ -2,6 +2,7 @@
 #include <osg/MatrixTransform>
 #include <osgEarth/Version>
 #include <osgEarth/Terrain>
+#include <osgEarth/Lighting>
 
 #if OSGEARTH_VERSION_GREATER_OR_EQUAL(3,0,0)
 #include <osgEarth/LogarithmicDepthBuffer>
@@ -368,6 +369,7 @@ void CMap::InitMap()
 #if OSGEARTH_VERSION_GREATER_OR_EQUAL(3,0,0)
             m_pMap3DNode->open();
 #endif
+            Init3DLight();
             osgEarth::Util::LogarithmicDepthBuffer buffer;
             buffer.setUseFragDepth(true);
             buffer.install(m_pGroup.get());
@@ -388,6 +390,75 @@ void CMap::InitMap()
     }
         break;
     }
+}
+
+void CMap::Init3DLight()
+{
+    osg::StateSet* stateset = m_pMap3DNode->getOrCreateStateSet();
+    stateset->setDefine("OE_NUM_LIGHTS", "1");
+    auto _ellipsoidModel = m_pMap3DNode->getMapSRS()->getEllipsoid();
+
+    auto _light = new osgEarth::LightGL3( 0 );
+    _light->setPosition( osg::Vec4f(0.0f, 0.0f, 1.0f, 0.0f) );
+    _light->setAmbient ( osg::Vec4f(0.1f, 0.1f, 0.1f, 1.0f) );
+    _light->setDiffuse ( osg::Vec4f(1.0f, 1.0f, 1.0f, 1.0f) );
+    _light->setSpecular( osg::Vec4f(1.0f, 1.0f, 1.0f, 1.0f) );
+
+    // install the Sun as a lightsource.
+    osg::LightSource* lightSource = new osg::LightSource();
+    lightSource->setLight(_light);
+    lightSource->setCullingActive(false);
+    m_pMap3DNode->addChild( lightSource );
+    lightSource->addCullCallback(new osgEarth::LightSourceGL3UniformGenerator());
+
+    osgEarth::VirtualProgram* vp = osgEarth::VirtualProgram::getOrCreate(stateset);
+    vp->setName( "SimpleSky Scene Lighting");
+    m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(vp,"GLSL/ONeilGround.glsl");
+
+    float _innerRadius=osg::minimum(
+                _ellipsoidModel->getRadiusPolar(),
+                _ellipsoidModel->getRadiusEquator());
+    float _outerRadius = _innerRadius * 1.025f;
+    // calculate and apply the uniforms:
+    // TODO: perhaps we can just hard-code most of these as GLSL consts.
+    float r_wl = ::powf( .65f, 4.0f );
+    float g_wl = ::powf( .57f, 4.0f );
+    float b_wl = ::powf( .475f, 4.0f );
+    osg::Vec3 RGB_wl( 1.0f/r_wl, 1.0f/g_wl, 1.0f/b_wl );
+    float Kr = 0.0025f;
+    float Kr4PI = Kr * 4.0f * osg::PI;
+    float Km = 0.0015f;
+    float Km4PI = Km * 4.0f * osg::PI;
+    float ESun = 15.0f;
+    float MPhase = -.095f;
+    float RayleighScaleDepth = 0.25f;
+    int   Samples = 2;
+    float Weather = 1.0f;
+
+    float Scale = 1.0f / (_outerRadius - _innerRadius);
+
+    //TODO: make all these constants. -gw
+    stateset->getOrCreateUniform( "atmos_v3InvWavelength", osg::Uniform::FLOAT_VEC3 )->set( RGB_wl );
+    stateset->getOrCreateUniform( "atmos_fInnerRadius",    osg::Uniform::FLOAT )->set( _innerRadius );
+    stateset->getOrCreateUniform( "atmos_fInnerRadius2",   osg::Uniform::FLOAT )->set( _innerRadius * _innerRadius );
+    stateset->getOrCreateUniform( "atmos_fOuterRadius",    osg::Uniform::FLOAT )->set( _outerRadius );
+    stateset->getOrCreateUniform( "atmos_fOuterRadius2",   osg::Uniform::FLOAT )->set( _outerRadius * _outerRadius );
+    stateset->getOrCreateUniform( "atmos_fKrESun",         osg::Uniform::FLOAT )->set( Kr * ESun );
+    stateset->getOrCreateUniform( "atmos_fKmESun",         osg::Uniform::FLOAT )->set( Km * ESun );
+    stateset->getOrCreateUniform( "atmos_fKr4PI",          osg::Uniform::FLOAT )->set( Kr4PI );
+    stateset->getOrCreateUniform( "atmos_fKm4PI",          osg::Uniform::FLOAT )->set( Km4PI );
+    stateset->getOrCreateUniform( "atmos_fScale",          osg::Uniform::FLOAT )->set( Scale );
+    stateset->getOrCreateUniform( "atmos_fScaleDepth",     osg::Uniform::FLOAT )->set( RayleighScaleDepth );
+    stateset->getOrCreateUniform( "atmos_fScaleOverScaleDepth", osg::Uniform::FLOAT )->set( Scale / RayleighScaleDepth );
+    stateset->getOrCreateUniform( "atmos_g",               osg::Uniform::FLOAT )->set( MPhase );
+    stateset->getOrCreateUniform( "atmos_g2",              osg::Uniform::FLOAT )->set( MPhase * MPhase );
+    stateset->getOrCreateUniform( "atmos_nSamples",        osg::Uniform::INT )->set( Samples );
+    stateset->getOrCreateUniform( "atmos_fSamples",        osg::Uniform::FLOAT )->set( (float)Samples );
+    stateset->getOrCreateUniform( "atmos_fWeather",        osg::Uniform::FLOAT )->set( Weather );
+
+    // options:
+    stateset->getOrCreateUniform("oe_sky_exposure",           osg::Uniform::FLOAT )->set(3.3f);
+    stateset->getOrCreateUniform("oe_sky_ambientBoostFactor", osg::Uniform::FLOAT)->set(5.0f);
 }
 
 static const char s_sMap2D[]="IMap2D";
