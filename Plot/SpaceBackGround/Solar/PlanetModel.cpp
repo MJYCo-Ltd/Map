@@ -82,7 +82,7 @@ static float s_planetRadius[][2] =
 
 /// 行星节点
 CPlanetModel::CPlanetModel(ISceneGraph *pSceneGraph, int nIndex)
-    :m_pSceneGraph(pSceneGraph),m_nRenderBin(-1000*nIndex-100)
+    :m_nRenderBin(-1001-100*nIndex),m_pSceneGraph(pSceneGraph)
 {
     /// 设置点的大小
     m_cnPlanetName = g_mapPlanetName[nIndex];

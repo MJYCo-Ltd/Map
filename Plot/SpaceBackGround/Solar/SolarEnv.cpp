@@ -11,6 +11,7 @@
 #include "Satellite/TimeSys.h"
 
 #include "SolarEnv.h"
+#include "Atmosphere.h"
 
 extern void InitSolarName();
 /// 太阳系构建函数
@@ -56,6 +57,10 @@ void CSolarEnv::CreateSolar()
         m_mapPlanet[i] = pPlanet;
         this->addChild(pPlanet->GetNode());
     }
+
+    auto pAtmosphere = new CAtmosphere(m_pSceneGraph,-1000);
+    pAtmosphere->MakeAtmosphere();
+    this->addChild(pAtmosphere->GetNode());
 
     m_pSun = new CSunModel;
     this->addChild(m_pSun);

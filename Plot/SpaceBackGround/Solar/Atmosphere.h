@@ -1,6 +1,6 @@
 #ifndef CATMOSPHERE_H
 #define CATMOSPHERE_H
-
+#include <osg/Node>
 #include <Plot/Common/ISceneCameraGroup.h>
 #include <Plot/SceneShape/IEllipsoidSensor.h>
 
@@ -13,6 +13,12 @@ public:
      * @brief 构建太空盒子
      */
     void MakeAtmosphere();
+
+    /**
+     * @brief 获取节点
+     * @return
+     */
+    osg::Node* GetNode();
 protected:
     ISceneCameraGroup*   m_pCameraNode;
     IEllipsoidSensor*    m_pEllipsoid;
