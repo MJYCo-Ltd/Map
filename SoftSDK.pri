@@ -85,6 +85,13 @@ contains(SDK_CONFIG,OsgExtern){
         LIBS *= -lOsgExtern
     }
 }
+contains(SDK_CONFIG,ExternShape){
+    CONFIG (debug, debug|release){
+        LIBS *= -lExternShaped
+    }else{
+        LIBS *= -lExternShape
+    }
+}
 
 contains(SDK_CONFIG,SceneCore){
     CONFIG (debug, debug|release){

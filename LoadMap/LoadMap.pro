@@ -25,6 +25,6 @@ FORMS += \
         mainwindow.ui \
         mainwindow.ui
 
-SDK_CONFIG *= SceneCore Satellite OSG
-unix:SDK_CONFIG *= Satellite OsgExtern
+SDK_CONFIG *= SceneCore Satellite OSG ExternShape
+unix:SDK_CONFIG *= Satellite OsgExtern ExternShape
 include(../SoftSDK.pri)

@@ -1,31 +1,35 @@
-﻿#ifndef CMAPRECTANGE_H
-#define CMAPRECTANGE_H
+﻿#ifndef CMAPCIRCLE_H
+#define CMAPCIRCLE_H
 #include <ExternShape/ExternShape_Global.h>
 #include <Plot/Map/IMapPolygon.h>
 
 /**
  * @brief 在地图上绘制矩形
  */
-class OSGEXTERNSHARED_EXPORT CMapRectange
+class OSGEXTERNSHARED_EXPORT CMapCircle
 {
 public:
-    CMapRectange(ISceneGraph* pSceneGraph);
+    CMapCircle(ISceneGraph* pSceneGraph);
 
     /**
-     * @brief 设置点1
+     * @brief 设置圆心
      * @param rLeftUp
      */
-    void SetPos1(const MapGeoPos& pos);
-
+    void SetCenter(const MapGeoPos& pos);
+	
     /**
-     * @brief 设置点2
-     * 根据点1、点2的位置关系，自动计算其余两点位置
+     * @brief 设置半径
      */
-    void SetPos2(const MapGeoPos& pos);
+    void SetRadius(const float&);
     /**
      * @brief 设置颜色
      */
     void SetColor(const SceneColor& color);
+
+    /**
+     * @brief 设置细度
+     */
+    void SetFineness(int);
     /**
      * @brief 获取地图节点
      * @return
@@ -42,10 +46,12 @@ protected:
      */
     void UpdateNode();
 protected:
-    MapGeoPos     m_stPos1;
-    MapGeoPos     m_stPos2;
+    MapGeoPos     m_stCenter;
     ISceneGraph*  m_pSceneGraph=nullptr;
     IMapPolygon*  m_pPolygon=nullptr;
+
+    float         m_fRadius = 0.0f;
+    int           m_nFineness = 36;
 };
 
-#endif // CMAPRECTANGE_H
+#endif // CMAPCIRCLE_H

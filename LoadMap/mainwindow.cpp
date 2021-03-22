@@ -42,7 +42,8 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include <ExternShape/MapRectange.h>
+#include <ExternShape/MapCircle.h>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -90,6 +91,62 @@ IImage* pImage=nullptr;
 
 void MainWindow::on_action_triggered()
 {
+    MapGeoPos pos11;
+    pos11.fLon = -126.0;
+    pos11.fLat = 45.6;
+    pos11.fHeight = 10000;
+
+    SceneColor color11;
+    color11.fR =1.0;
+    color11.fG =0.0;
+    color11.fB =0.0;
+
+    CMapCircle* pCircle = new CMapCircle(m_pSceneGraph);
+    pCircle->SetCenter(pos11);
+    pCircle->SetRadius(10000);
+    pCircle->SetColor(color11);
+
+    ISceneGroup* pSceneRootaaaa = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
+    IMapLocation*  aaaa = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+    aaaa->SetSceneNode(pSceneRootaaaa);
+    pSceneRootaaaa->AddSceneNode(pCircle->GetMapSceneNode());
+    IMapLayer* m_pLayerTest = m_pSceneGraph->GetMap()->CreateLayer("test");
+    m_pLayerTest->AddSceneNode(aaaa);
+
+//    CMapRectange* pRectangle = new CMapRectange(m_pSceneGraph);
+
+//    ISceneGroup* pSceneRootaaaa = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
+//    IMapLocation*  aaaa = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+
+//    aaaa->SetSceneNode(pSceneRootaaaa);
+//    pSceneRootaaaa->AddSceneNode(pRectangle->GetMapSceneNode());
+//    IMapLayer* m_pLayerTest = m_pSceneGraph->GetMap()->CreateLayer("test");
+//    m_pLayerTest->AddSceneNode(aaaa);
+
+//    MapGeoPos pos11,pos21;
+//    pos11.fLon = -126.0;
+//    pos11.fLat = 45.6;
+//    pos11.fHeight = 10000;
+
+
+//    pos21.fLon = -136.0;
+//    pos21.fLat = 55.6;
+//    pos21.fHeight = 10000;
+//    pRectangle->SetPos1(pos11);
+//    pRectangle->SetPos2(pos21);
+
+//    SceneColor color11;
+//    color11.fR =1.0;
+//    color11.fG =0.0;
+//    color11.fB =0.0;
+//    pRectangle->SetColor(color11);
+
+
+    return;
+
+
+
+
     QImage image = QImage("E:/splash-620x300.png").convertToFormat(QImage::Format_RGBA8888);
     pImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
 //    pImage->SetImagePath("Image/Mine/17.png");

@@ -10,6 +10,7 @@ include($$PWD/../SoftSDK.pri)
 HEADERS +=
 
 SOURCES += \
+    MapCircle.cpp \
     MapPlaceNode.cpp \
     MapRectange.cpp
 CONFIG *= ordered
