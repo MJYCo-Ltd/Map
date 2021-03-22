@@ -1,4 +1,4 @@
-#include <QLibrary>
+﻿#include <QLibrary>
 #include <osg/Notify>
 #include <fstream>
 #include <sstream>
@@ -92,11 +92,11 @@ void CToolSelector::UnSubPickMessage(PickMessage* pSub)
     }
 }
 
-void CToolSelector::PickID(unsigned int unID)
+void CToolSelector::PickID(unsigned int unID,unsigned int EventType)
 {
     for(auto one : m_listPickMessage)
     {
-        one->PickID(unID);
+        one->PickID(unID,EventType);
     }
 }
 

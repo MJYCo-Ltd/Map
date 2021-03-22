@@ -1,4 +1,4 @@
-#ifndef INTERFACE_MAP_HEARDER_H
+﻿#ifndef INTERFACE_MAP_HEARDER_H
 #define INTERFACE_MAP_HEARDER_H
 
 #include <list>
@@ -68,7 +68,7 @@ public:
      * @return
      */
     virtual bool RemoveLayer(IMapLayer*&)=0;
-
+    virtual bool RemoveLayer(const std::string& sLayerName)=0;
     /**
      * @brief 清空所有的图层
      */

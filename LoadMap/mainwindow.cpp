@@ -1,4 +1,4 @@
-#include <QFileDialog>
+﻿#include <QFileDialog>
 #include <QDebug>
 
 #include <VersionMathCommon.h>
@@ -551,7 +551,7 @@ void MainWindow::on_action_2_triggered()
 class SubPointPick: public PickMessage
 {
 public:
-    void PickID(unsigned int unID)
+    void PickID(unsigned int unID,unsigned int)
     {
 //        qDebug()<<unID;
     }

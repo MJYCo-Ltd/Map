@@ -1,4 +1,4 @@
-#include <osgViewer/View>
+﻿#include <osgViewer/View>
 #include <osg/MatrixTransform>
 #include <osgEarth/Version>
 #include <osgEarth/Terrain>
@@ -249,7 +249,37 @@ bool CMap::RemoveLayer(IMapLayer *& pLayer)
 
     return(false);
 }
+bool CMap::RemoveLayer(const std::string& sLayerName)
+{
+    auto findOne = m_userLayers.find(sLayerName);
+    if(m_userLayers.end() == findOne)
+    {
+        return false;
+    }
+    osgEarth::MapNode* pMapNode(nullptr);
+    switch (m_emType)
+    {
+    case MAP_2D:
+        pMapNode = m_pMap2DNode;
+        break;
+    case MAP_3D:
+        pMapNode = m_pMap3DNode;
+        break;
+    }
 
+    /// 从map中移除节点
+    m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(pMapNode,findOne->second->GetModelLayer(),false));
+    delete findOne->second;
+
+    /// 通知观察者
+    for(auto oneObserver:m_listObserver)
+    {
+        oneObserver->RemoveLayer(findOne->first);
+    }
+
+    m_userLayers.erase(findOne);
+    return(true);
+}
 void CMap::ClearLayers()
 {
     osgEarth::MapNode* pMapNode(nullptr);

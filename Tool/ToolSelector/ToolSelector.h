@@ -1,4 +1,4 @@
-#ifndef CTOOLSELECTOR_H
+﻿#ifndef CTOOLSELECTOR_H
 #define CTOOLSELECTOR_H
 #include <map>
 #include <list>
@@ -39,7 +39,7 @@ public:
     /**
      * @brief 点选消息
      */
-    void PickID(unsigned int);
+    void PickID(unsigned int,unsigned int);
 protected:
     void CreateTool(const std::string &sInterface);
     void InitType(const std::string &sInterface);

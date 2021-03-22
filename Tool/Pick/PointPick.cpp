@@ -1,4 +1,4 @@
-#include <SceneGraph/ISceneGraph.h>
+﻿#include <SceneGraph/ISceneGraph.h>
 #include <SceneGraph/IWindow.h>
 #include <SceneGraph/IViewPort.h>
 #include <Inner/IOsgViewPoint.h>
@@ -16,7 +16,7 @@ struct RttPickerCallBack:public osgEarth::Util::RTTPicker::Callback
      */
     virtual void onHit(osgEarth::ObjectID id)
     {
-        QMetaObject::invokeMethod(m_pPicker,"HitId",Q_ARG(unsigned int,id));
+        QMetaObject::invokeMethod(m_pPicker,"HitId",Q_ARG(unsigned int,id),Q_ARG(unsigned int,m_EventType));
     }
 
     /**
@@ -24,7 +24,7 @@ struct RttPickerCallBack:public osgEarth::Util::RTTPicker::Callback
      */
     virtual void onMiss()
     {
-        QMetaObject::invokeMethod(m_pPicker,"HitId",Q_ARG(unsigned int,0));
+        QMetaObject::invokeMethod(m_pPicker,"HitId",Q_ARG(unsigned int,0),Q_ARG(unsigned int,0));
     }
 
     /**
@@ -32,17 +32,21 @@ struct RttPickerCallBack:public osgEarth::Util::RTTPicker::Callback
      */
     virtual bool accept(const osgGA::GUIEventAdapter& ea, const osgGA::GUIActionAdapter&)
     {
-        if(ea.getButton()==ea.LEFT_MOUSE_BUTTON &&
-          (ea.getEventType() == ea.PUSH || ea.getEventType() == ea.DOUBLECLICK))
+        if(ea.getButton()==ea.LEFT_MOUSE_BUTTON &&ea.getEventType() == ea.DOUBLECLICK)
         {
-            return(true);
+            m_EventType = 2;
+            return(false);
+        }
+        else if(ea.getButton()==ea.LEFT_MOUSE_BUTTON && ea.getEventType() == ea.PUSH)
+        {
+            m_EventType = 1;
         }
         else
         {
             return(false);
         }
     }
-
+    unsigned  int m_EventType = 0;      //1 单击 2双击
     CPointPick* m_pPicker;
 };
 
@@ -79,7 +83,7 @@ void CPointPick::ReleaseTool()
     }
 }
 
-void CPointPick::HitId(unsigned int unID)
+void CPointPick::HitId(unsigned int unID,unsigned int type)
 {
-    m_pToolSelector->PickID(unID);
+    m_pToolSelector->PickID(unID,type);
 }

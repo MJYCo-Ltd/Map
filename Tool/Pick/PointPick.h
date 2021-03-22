@@ -1,4 +1,4 @@
-#ifndef CPOINTPICK_H
+﻿#ifndef CPOINTPICK_H
 #define CPOINTPICK_H
 #include <QObject>
 #include <osgEarth/RTTPicker>
@@ -18,7 +18,7 @@ public:
     void ReleaseTool();
 
 public slots:
-    void HitId(unsigned int);
+    void HitId(unsigned int,unsigned int);
 protected:
     osg::ref_ptr<osgEarth::Util::RTTPicker> m_pPicker;
 };

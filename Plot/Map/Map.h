@@ -1,4 +1,4 @@
-#ifndef CMAP_INCLUDE_HEADER_H
+﻿#ifndef CMAP_INCLUDE_HEADER_H
 #define CMAP_INCLUDE_HEADER_H
 #include <map>
 #include <osg/Camera>
@@ -58,8 +58,8 @@ public:
      * @return
      */
     IMapLayer* CreateLayer(const std::string&);
-    bool RemoveLayer(IMapLayer*&);
-
+    virtual bool RemoveLayer(IMapLayer*&) override;
+    virtual bool RemoveLayer(const std::string& sLayerName) override;
     /**
      * @brief 清空所有图层
      */

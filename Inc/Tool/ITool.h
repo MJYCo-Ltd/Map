@@ -1,4 +1,4 @@
-#ifndef INTERFACE_TOOL_HEADER_H
+﻿#ifndef INTERFACE_TOOL_HEADER_H
 #define INTERFACE_TOOL_HEADER_H
 #include <vector>
 #include <string>
@@ -8,7 +8,7 @@ class ISceneGraph;
 struct PickMessage
 {
     virtual ~PickMessage(){}
-    virtual void PickID(unsigned int){}
+    virtual void PickID(unsigned int,unsigned int){}
 };
 
 /**
