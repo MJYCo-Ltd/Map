@@ -17,6 +17,7 @@ static char S_3DSatllite[]="ISatellite";
 void CSatelliteShow::InitNode()
 {
     m_stNowPos.Resize(6);
+    m_satelliteWgs84PV.Resize(6);
     ImplSceneGroup<ISatellite>::InitNode();
 
     /// 加载模型
@@ -169,7 +170,7 @@ void CSatelliteShow::ModelChanged()
         m_pSatelliteScale->RemoveSceneNode(m_pModel);
     }
 
-    m_pModel = m_pSceneGraph->GetPlot()->LoadSceneNode(m_sModelPath,true)->AsSceneModel();
+    m_pModel = m_pSceneGraph->GetPlot()->LoadSceneNode(m_sModelPath,false)->AsSceneModel();
     m_pSatelliteScale->AddSceneNode(m_pModel);
 
 
