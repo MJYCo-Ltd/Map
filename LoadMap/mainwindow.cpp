@@ -516,7 +516,7 @@ void MainWindow::on_action_triggered()
     pSatellite->SetOribitColor(color);
     pSatellite->AddSensor(0, pSatelliteSensor);
     pSatellite->UpdateData(dMJD);
-//    m_pSceneGraph->GetMap()->GetSpaceEnv()->AddSceneNode(pSatellite);
+    m_pSceneGraph->GetMap()->GetSpaceEnv()->AddSceneNode(pSatellite);
     m_pSceneGraph->GetMap()->GetSpaceEnv()->UpdateDate(dMJD);
 
     m_pTrackNode = pSatelliteSensor;

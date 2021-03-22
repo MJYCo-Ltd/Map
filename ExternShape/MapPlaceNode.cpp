@@ -1,0 +1,73 @@
+#include <ISceneCore.h>
+#include <Plot/Map/IMapLocation.h>
+#include <Plot/SceneShape/ILabel.h>
+#include <Plot/SceneShape/IImage.h>
+#include <Plot/Common/ISceneScreenGroup.h>
+#include <ExternShape/MapPlaceNode.h>
+
+
+CPlaceNode::CPlaceNode(ISceneGraph *pSceneGraph):m_pSceneGraph(pSceneGraph)
+{
+    InitNode();
+}
+
+void CPlaceNode::SetPos(float fLon, float fLat)
+{
+    MapGeoPos pos;
+    pos.fLon = fLon;
+    pos.fLat = fLat;
+    m_pLocation->SetGeoPos(pos);
+}
+
+const MapGeoPos CPlaceNode::GetPos()
+{
+    return(m_pLocation->GeoPos());
+}
+
+void CPlaceNode::SetText(const std::string &sTextInfo)
+{
+    m_pLabel->SetText(sTextInfo);
+}
+
+
+void CPlaceNode::SetColor(const SceneColor &rColor)
+{
+    m_pImage->SetColor(rColor);
+}
+
+void CPlaceNode::SetImagePath(const std::string &sPath)
+{
+    m_pImage->SetImagePath(sPath);
+}
+
+void CPlaceNode::SetImageSize(const SceneImageSize &stSize)
+{
+    m_pImage->SetImageSize(stSize);
+    ScenePixelOffset spOffset;
+    spOffset.sHeight=0;
+    spOffset.sWidth=stSize.unWidth/2;
+    m_pLabel->SetPixelOffset(spOffset);
+}
+
+void CPlaceNode::InitNode()
+{
+    auto pScreenGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCREEN_GROUP)->AsSceneScreenGroup();
+    m_pLabel = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
+    m_pLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+    m_pImage=dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
+
+    SceneImageSize size;
+    size.unHeight=32;
+    size.unWidth=32;
+    size.bOutSet=true;
+    m_pImage->SetImageSize(size);
+    pScreenGroup->AddSceneNode(m_pImage);
+    pScreenGroup->AddSceneNode(m_pLabel);
+    m_pLocation->SetSceneNode(pScreenGroup);
+    m_pLabel->SetFont("Fonts/msyh.ttf");
+
+    ScenePixelOffset spOffset;
+    spOffset.sHeight=0;
+    spOffset.sWidth=16;
+    m_pLabel->SetPixelOffset(spOffset);
+}

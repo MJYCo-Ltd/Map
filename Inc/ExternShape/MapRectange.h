@@ -1,6 +1,6 @@
 #ifndef CMAPRECTANGE_H
 #define CMAPRECTANGE_H
-#include "ExternMapShape_Global.h"
+#include <ExternShape/ExternShape_Global.h>
 #include <Plot/Map/IMapPolygon.h>
 
 /**

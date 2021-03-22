@@ -1,6 +1,6 @@
 #include <SceneGraph/ISceneGraph.h>
 #include <Plot/IPlot.h>
-#include "MapRectange.h"
+#include <ExternShape/MapRectange.h>
 
 CMapRectange::CMapRectange(ISceneGraph *pSceneGraph):
     m_pSceneGraph(pSceneGraph)

@@ -372,7 +372,7 @@ void CMap::InitMap()
 //            Init3DLight();
             osgEarth::Util::LogarithmicDepthBuffer buffer;
             buffer.setUseFragDepth(true);
-            buffer.install(m_pMap3DNode.get());
+//            buffer.install(m_pMap3DNode.get());
 
             m_pSpaceEnv = new CSpaceEnv(m_pSceneGraph);
             osg::Camera* pCamera = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
