@@ -1,4 +1,4 @@
-#include <osg/LineWidth>
+#include <osgEarth/LineDrawable>
 #include <ISceneCore.h>
 #include <SceneGraph/ISceneGraph.h>
 #include <Inner/ILoadResource.h>
@@ -255,8 +255,7 @@ void CStarConstellation::BuildGeometry(osg::Group* pRoot)
 
         geom->addPrimitiveSet(el);
     }
-    geom->getOrCreateStateSet()->setMode(GL_LINE_SMOOTH, osg::StateAttribute::ON);
-    geom->getOrCreateStateSet()->setAttribute(new osg::LineWidth(2));
+
     pRoot->addChild(geom);
 }
 

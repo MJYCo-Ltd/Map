@@ -1,6 +1,6 @@
 #include <osg/BlendFunc>
 #include <osg/Depth>
-#include <osgEarth/VirtualProgram>
+#include <osgEarth/CullingUtils>
 #include <osgGA/GUIEventHandler>
 
 #include <Math/Matrix.h>

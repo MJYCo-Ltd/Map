@@ -3,6 +3,7 @@
 #include <osg/Group>
 #include <osgEarth/Shaders>
 #include <osgEarth/MapNode>
+#include <osgEarth/Lighting>
 
 #include "ResourceLod.h"
 
@@ -40,6 +41,9 @@ osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
             {
                 auto pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(pNode->getOrCreateStateSet());
                 LoadVirtualProgram(pVirutlProgram,"GLSL/Global.glsl");
+
+                osgEarth::GenerateGL3LightingUniforms generateUniforms;
+                pNode->accept(generateUniforms);
             }
             m_mapNode[modelPath] = pNode;
         }

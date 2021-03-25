@@ -116,19 +116,13 @@ void CMapNodeFactory::InsertNode(ISceneNode *pNode)
 /// 初始化类型
 void CMapNodeFactory::InitType(const std::string &sInterface)
 {
-    QLibrary loadDll;
     auto findOne = m_mapTypeDllName.find(sInterface);
     if (m_mapTypeDllName.end() != findOne)
     {
         std::string sInterfaceNameList;
-        loadDll.setFileName(findOne->second.c_str());
-        auto pQueryFunc = reinterpret_cast<pQueryInterfaceFun>(loadDll.resolve("QueryInterface"));
-        if(nullptr == pQueryFunc)
-        {
-            osg::notify(osg::WARN)<<loadDll.errorString().toStdString();
-        }
 
-        auto pCreateFun = reinterpret_cast<pCreateNodeFun>(loadDll.resolve("CreateNode"));
+        auto pQueryFunc = reinterpret_cast<pQueryInterfaceFun>(QLibrary::resolve(findOne->second.c_str(),"QueryInterface"));
+        auto pCreateFun = reinterpret_cast<pCreateNodeFun>(QLibrary::resolve(findOne->second.c_str(),"CreateNode"));
 
         if (nullptr != pCreateFun && nullptr != pQueryFunc)
         {

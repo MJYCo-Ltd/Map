@@ -45,11 +45,11 @@ public:
     /**
      * @brief 根据路径加载模型
      * @param1 相对路径或者绝对路径
-     * @param2 是否是相对路径
+     * @param2 bRef 是否是相对路径
      * @attention 相对路径对应的是exe所在目录中的Data目录
      * @return
      */
-    virtual ISceneNode* LoadSceneNode(const std::string&,bool)=0;
+    virtual ISceneNode* LoadSceneNode(const std::string&,bool bRef=true)=0;
 
     /**
      * @brief 强制删除不再使用的地图节点

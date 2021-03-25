@@ -142,9 +142,6 @@ void MainWindow::on_action_triggered()
 //    pRectangle->SetColor(color11);
 
 
-    return;
-
-
 
 
     QImage image = QImage("E:/splash-620x300.png").convertToFormat(QImage::Format_RGBA8888);
@@ -562,7 +559,7 @@ void MainWindow::on_action_triggered()
 
 
     pSatellite->SetJ2000Oribit(vTime,vPos);
-    pSatellite->SetModelPath("model/SJ-2/shixian-2.flt");
+    pSatellite->SetModelPath("Model/SJ-2/shixian-2.flt");
 
     auto pSatelliteSensor = dynamic_cast<ISConeSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISConeSensor"));
     color.fG=1.f;

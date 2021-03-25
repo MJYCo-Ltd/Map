@@ -139,7 +139,6 @@ void CStarRender::init()
     state->getOrCreateUniform("tex", osg::Uniform::SAMPLER_2D)->set(1);
 
     /// 设置点大小
-    state->setMode(GL_PROGRAM_POINT_SIZE,osg::StateAttribute::ON);
     state->setMode(GL_BLEND,osg::StateAttribute::ON);
 }
 

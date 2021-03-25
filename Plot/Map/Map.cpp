@@ -394,12 +394,13 @@ void CMap::InitMap()
     {
         if(!m_pMap3DNode.valid())
         {
+            m_p3DRoot = new osg::LightSource;
             auto node = m_pSceneGraph->ResouceLoader()->LoadNode("Earth/Geocentric.earth");
             m_pMap3DNode = osgEarth::MapNode::findMapNode(node);
 #if OSGEARTH_VERSION_GREATER_OR_EQUAL(3,0,0)
             m_pMap3DNode->open();
 #endif
-//            Init3DLight();
+            Init3DLight();
             osgEarth::Util::LogarithmicDepthBuffer buffer;
             buffer.setUseFragDepth(true);
 //            buffer.install(m_pMap3DNode.get());
@@ -409,13 +410,14 @@ void CMap::InitMap()
                     ->GetOsgView()->getCamera();
             m_pSpaceEnv->SetMainCamara(pCamera);
             m_pSpaceEnv->Init();
+            m_p3DRoot->addChild(m_pSpaceEnv->AsOsgSceneNode()->GetOsgNode());
+            m_p3DRoot->addChild(m_pMap3DNode);
 
             osgEarth::GLUtils::setGlobalDefaults(m_pMap3DNode->getOrCreateStateSet());
         }
 
         /// 增加更新
-        AddNode(m_pGroup.get(),m_pMap3DNode.get());
-        AddNode(m_pGroup.get(),m_pSpaceEnv->GetOsgNode());
+        AddNode(m_pGroup.get(),m_p3DRoot.get());
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapNodeChanged(m_pMap2DNode,m_pMap3DNode,this));
     }
         break;
@@ -424,22 +426,20 @@ void CMap::InitMap()
 
 void CMap::Init3DLight()
 {
-    osg::StateSet* stateset = m_pMap3DNode->getOrCreateStateSet();
+    m_p3DRoot->setLocalStateSetModes();
+    osg::StateSet* stateset = m_p3DRoot->getOrCreateStateSet();
     stateset->setDefine("OE_NUM_LIGHTS", "1");
     auto _ellipsoidModel = m_pMap3DNode->getMapSRS()->getEllipsoid();
 
-    auto _light = new osgEarth::LightGL3( 0 );
+    auto _light = new osgEarth::LightGL3(0);
     _light->setPosition( osg::Vec4f(0.0f, 0.0f, 1.0f, 0.0f) );
     _light->setAmbient ( osg::Vec4f(0.1f, 0.1f, 0.1f, 1.0f) );
     _light->setDiffuse ( osg::Vec4f(1.0f, 1.0f, 1.0f, 1.0f) );
     _light->setSpecular( osg::Vec4f(1.0f, 1.0f, 1.0f, 1.0f) );
 
-    // install the Sun as a lightsource.
-    osg::LightSource* lightSource = new osg::LightSource();
-    lightSource->setLight(_light);
-    lightSource->setCullingActive(false);
-    m_pMap3DNode->addChild( lightSource );
-    lightSource->addCullCallback(new osgEarth::LightSourceGL3UniformGenerator());
+    m_p3DRoot->setLight(_light);
+    m_p3DRoot->setCullingActive(false);
+//    m_p3DRoot->addCullCallback(new osgEarth::LightSourceGL3UniformGenerator());
 
     osgEarth::VirtualProgram* vp = osgEarth::VirtualProgram::getOrCreate(stateset);
     vp->setName( "SimpleSky Scene Lighting");

@@ -3,6 +3,7 @@
 #include <map>
 #include <osg/Camera>
 #include <osgEarth/MapNode>
+#include <osg/LightSource>
 #include <Map/IMap.h>
 #include <Inner/ImplSceneGroup.hpp>
 #include <NoQt.h>
@@ -97,6 +98,7 @@ protected:
     bool   m_bSelfRotate=true;
     std::list<IMapMessageObserver*> m_listObserver;
     osg::ref_ptr<osg::Group>   m_p2DRoot;
+    osg::ref_ptr<osg::LightSource> m_p3DRoot;
 
     osg::ref_ptr<osgEarth::MapNode> m_pMap3DNode;
     osg::ref_ptr<osgEarth::MapNode> m_pMap2DNode;

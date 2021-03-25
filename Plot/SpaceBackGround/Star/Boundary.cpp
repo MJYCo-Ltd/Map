@@ -1,8 +1,5 @@
 #include <sstream>
-#include <QString>
-#include <osg/LineStipple>
-#include <osgEarth/Registry>
-#include <osg/DisplaySettings>
+#include <QtCore>
 #include <ISceneCore.h>
 #include "Boundary.h"
 
@@ -67,7 +64,7 @@ void CBoundary::makeBoundray()
             continue;
         if (count <= 0)
         {
-            osg::notify(osg::WARN) << "Failed when read the boundary data!"
+            osg::notify(osg::WARN) << "天区数量小于0!"
                     << std::endl;
             continue;
         }
@@ -76,7 +73,7 @@ void CBoundary::makeBoundray()
         if ((int) fread(data, sizeof(double), count * 2, file) != count * 2)
         {
             delete[] data;
-            osg::notify(osg::WARN) << "Failed when read the boundary data!"
+            osg::notify(osg::WARN) << "解析天区文件失败!"
                     << std::endl;
             continue;
         }
@@ -108,10 +105,6 @@ void CBoundary::makeBoundray()
     m_pBoundray->setVertexArray(verts);
     m_pBoundray->setColorArray(colors);
     m_pBoundray->setColorBinding(osg::Geometry::BIND_OVERALL);
-    //m_pBoundray->setCullingActive(false);
 
     fclose(file);
-
-    osg::StateSet *state = m_pBoundray->getOrCreateStateSet();
-    state->setMode(GL_LINE_SMOOTH, osg::StateAttribute::ON);
 }
