@@ -29,27 +29,24 @@ void CAtmosphere::MakeAtmosphere()
 
     m_pCameraNode->AddSceneNode(m_pEllipsoid);
     m_pCameraNode->SetRenderIndex(m_nIndex);
-    SceneColor color;
-    color.fA=0.2f;
-    m_pEllipsoid->SetColor(color);
 
     IOsgSceneNode* pOsgSceneNode = m_pEllipsoid->AsOsgSceneNode();
     auto pOsgNode = pOsgSceneNode->GetOsgNode();
     auto atmosSet = pOsgNode->getOrCreateStateSet();
-//    atmosSet->setAttributeAndModes(
-//                new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::FILL),
-//                osg::StateAttribute::PROTECTED);
+    atmosSet->setAttributeAndModes(
+                new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::FILL),
+                osg::StateAttribute::PROTECTED);
 
-//    osgEarth::GLUtils::setLighting(atmosSet, osg::StateAttribute::OFF);
-//    atmosSet->setAttributeAndModes( new osg::CullFace(osg::CullFace::FRONT), osg::StateAttribute::ON );
-//    atmosSet->setAttributeAndModes( new osg::Depth( osg::Depth::LESS, 0, 1, false ) ); // no depth write
-//    atmosSet->setAttributeAndModes( new osg::Depth(osg::Depth::ALWAYS, 0, 1, false) ); // no zbuffer
-//    atmosSet->setAttributeAndModes( new osg::BlendFunc( GL_ONE, GL_ONE ), osg::StateAttribute::ON );
+    osgEarth::GLUtils::setLighting(atmosSet, osg::StateAttribute::OFF);
+    atmosSet->setAttributeAndModes( new osg::CullFace(osg::CullFace::FRONT), osg::StateAttribute::ON );
+    atmosSet->setAttributeAndModes( new osg::Depth( osg::Depth::LESS, 0, 1, false ) ); // no depth write
+    atmosSet->setAttributeAndModes( new osg::Depth(osg::Depth::ALWAYS, 0, 1, false) ); // no zbuffer
+    atmosSet->setAttributeAndModes( new osg::BlendFunc( GL_ONE, GL_ONE ), osg::StateAttribute::ON );
 
-//    osgEarth::VirtualProgram* vp = osgEarth::VirtualProgram::getOrCreate( atmosSet );
-//    vp->setName("SimpleSkyAtmosphere");
-//    vp->setInheritShaders( false );
-//    m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(vp,"GLSL/Atmosphere.glsl");
+    osgEarth::VirtualProgram* vp = osgEarth::VirtualProgram::getOrCreate( atmosSet );
+    vp->setName("SimpleSkyAtmosphere");
+    vp->setInheritShaders( false );
+    m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(vp,"GLSL/Atmosphere.glsl");
 }
 
 osg::Node *CAtmosphere::GetNode()
