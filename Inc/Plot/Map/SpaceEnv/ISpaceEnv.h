@@ -28,6 +28,12 @@ public:
      * @brief 更新时间
      */
     virtual void UpdateDate(double)=0;
+
+    /**
+     * @brief 获取地固系下太阳位置
+     * @return
+     */
+    virtual const Math::CVector& GetSunPos()=0;
 };
 
 #endif

@@ -560,6 +560,7 @@ void MainWindow::on_action_triggered()
 
     pSatellite->SetJ2000Oribit(vTime,vPos);
     pSatellite->SetModelPath("Model/SJ-2/shixian-2.flt");
+    pSatellite->OpenLight(false);
 
     auto pSatelliteSensor = dynamic_cast<ISConeSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISConeSensor"));
     color.fG=1.f;
@@ -571,7 +572,7 @@ void MainWindow::on_action_triggered()
     pSatellite->AddSensor(0, pSatelliteSensor);
     pSatellite->UpdateData(dMJD);
     m_pSceneGraph->GetMap()->GetSpaceEnv()->AddSceneNode(pSatellite);
-    m_pSceneGraph->GetMap()->GetSpaceEnv()->UpdateDate(dMJD);
+    m_pSceneGraph->GetMap()->UpdateDate(dMJD);
 
     m_pTrackNode = pSatelliteSensor;
 //    PlotMap();

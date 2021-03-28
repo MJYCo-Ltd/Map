@@ -64,17 +64,6 @@ void CSpaceEnv::InitNode()
     if(nullptr != m_pSpaceBackGround)
     {
         AddSceneNode(m_pSpaceBackGround);
-
-        time_t timep;
-
-        /// 更新时间
-        time(&timep);
-        auto p = gmtime(&timep);
-        Aerospace::CDate data(p->tm_year+1900,p->tm_mon+1
-                              ,p->tm_mday,p->tm_hour
-                              ,p->tm_min,p->tm_sec,UTC);
-
-        UpdateDate(data.GetMJD());
     }
     else
     {
@@ -82,6 +71,8 @@ void CSpaceEnv::InitNode()
     }
 }
 
+#include <Satellite/TimeSys.h>
+#include <Satellite/JPLEphemeris.h>
 /// 更新时间
 void CSpaceEnv::UpdateDate(double dMJD)
 {
@@ -93,6 +84,13 @@ void CSpaceEnv::UpdateDate(double dMJD)
     {
         m_pSpaceBackGround->UpdateMatrix(m_matAttitude);
         m_pSpaceBackGround->UpdateDate(dMJD);
+
+        Aerospace::CTimeSys timeSys(dMJD);
+        double dMJDTT = timeSys.GetTT();
+        Math::CVector m_pSunPos = Aerospace::CJPLEphemeris::GetInstance()
+                ->GetPos(dMJDTT,Sun,Earth);
+
+        m_vSunPos = m_pSunPos*m_matAttitude;
     }
 }
 

@@ -50,6 +50,11 @@ void CSpaceBackGround::ShowAtmosphere(bool bVisible)
     m_pSkyNode->ShowAtmosphere(bVisible);
 }
 
+const Math::CVector &CSpaceBackGround::GetSunPos()
+{
+    return(m_pSkyNode->GetSunPos());
+}
+
 /// 初始化场景节点
 void CSpaceBackGround::InitNode()
 {

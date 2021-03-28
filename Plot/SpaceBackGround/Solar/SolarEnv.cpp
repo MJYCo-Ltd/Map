@@ -5,10 +5,9 @@
 #include <ISceneCore.h>
 #include <SceneGraph/ISceneGraph.h>
 
-#include "Satellite/JPLEphemeris.h"
-#include "Math/Vector.h"
-#include "Satellite/Date.h"
-#include "Satellite/TimeSys.h"
+#include <Math/Vector.h>
+#include <Satellite/TimeSys.h>
+#include <Satellite/JPLEphemeris.h>
 
 #include "SolarEnv.h"
 #include "Atmosphere.h"
@@ -58,9 +57,9 @@ void CSolarEnv::CreateSolar()
         this->addChild(pPlanet->GetNode());
     }
 
-    auto pAtmosphere = new CAtmosphere(m_pSceneGraph,-1000);
-    pAtmosphere->MakeAtmosphere();
-    this->addChild(pAtmosphere->GetNode());
+    m_pAtmosphere = new CAtmosphere(m_pSceneGraph,-1000);
+    m_pAtmosphere->MakeAtmosphere();
+//    this->addChild(m_pAtmosphere->GetNode());
 
     m_pSun = new CSunModel;
     this->addChild(m_pSun);
@@ -84,11 +83,11 @@ void CSolarEnv::UpdateTime(const double &dMJD)
         }
     }
 
-    Math::CVector tmpPos = Aerospace::CJPLEphemeris::GetInstance()
+    m_pSunPos = Aerospace::CJPLEphemeris::GetInstance()
             ->GetPos(dMJDTT,Sun,Earth);
-    if(tmpPos)
+    if(m_pSunPos)
     {
-        m_pSun->UpdatePostion(osg::Vec3(tmpPos.GetX(),tmpPos.GetY(),tmpPos.GetZ()));
+        m_pSun->UpdatePostion(osg::Vec3(m_pSunPos.GetX(),m_pSunPos.GetY(),m_pSunPos.GetZ()));
     }
 }
 
@@ -97,6 +96,7 @@ void CSolarEnv::SetPlanetNameShow(bool bVisible)
 }
 
 /// 是否显示大气
-void CSolarEnv::ShowAtmosphere(bool)
+void CSolarEnv::ShowAtmosphere(bool bVisible)
 {
+    m_pAtmosphere->SetVisible(bVisible);
 }

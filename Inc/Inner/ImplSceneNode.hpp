@@ -5,6 +5,7 @@
 #include <osgEarth/VirtualProgram>
 #include <osgEarth/Registry>
 #include <osgEarth/ObjectIndex>
+#include <osgEarth/GLUtils>
 #include <Inner/OsgExtern/OsgExtern.h>
 #include <Inner/IOsgSceneNode.h>
 #include <Inner/IRender.h>
@@ -53,6 +54,7 @@ protected:
             m_pRootNode = pNode;
             m_preMask = m_pRootNode->getNodeMask();
             m_pRootNode->addUpdateCallback(m_pUpdateCallBack);
+            m_bLightingChanged=true;
         }
     }
 
@@ -82,6 +84,14 @@ protected:
                 T::m_unID = 0;
             }
             m_bPickStateChanged=false;
+        }
+
+        /// 如果光照可见
+        if(m_bLightingChanged)
+        {
+            osgEarth::GLUtils::setLighting(m_pRootNode->getOrCreateStateSet(),
+                                           T::m_bOpenLight ? osg::StateAttribute::ON : osg::StateAttribute::OFF);
+            m_bLightingChanged=false;
         }
         IOsgSceneNode::UpdateNode();
     }
@@ -113,6 +123,7 @@ protected:
     }
 
     void PickStateChanged()SET_TRUE_NODE_UPDATE(m_bPickStateChanged)
+    void LightChanged()SET_TRUE_NODE_UPDATE(m_bLightingChanged)
 
     void AddNode(osg::Group* pGroup,osg::Node* pNode)
     {
@@ -127,6 +138,7 @@ protected:
 protected:
     osg::Node::NodeMask  m_preMask = 0xffffffffu;
     bool m_bPickStateChanged=false;
+    bool m_bLightingChanged=false;
 };
 
 #endif // IMPL_SCENE_NODE_H

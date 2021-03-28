@@ -90,6 +90,11 @@ public:
      * @attention 默认开启
      */
     virtual void SetEarthSelfRotate(bool)=0;
+
+    /**
+     * @brief 更新时间
+     */
+    virtual void UpdateDate(double)=0;
 protected:
     virtual ~IMap(){}
 };

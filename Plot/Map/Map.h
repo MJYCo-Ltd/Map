@@ -2,6 +2,7 @@
 #define CMAP_INCLUDE_HEADER_H
 #include <map>
 #include <osgEarth/MapNode>
+#include <osgEarth/Lighting>
 #include <Map/IMap.h>
 #include <Inner/ImplSceneGroup.hpp>
 #include <NoQt.h>
@@ -80,6 +81,8 @@ public:
      */
     void SetEarthSelfRotate(bool);
 
+    void UpdateDate(double);
+
 protected:
     void InitNode();
 
@@ -100,6 +103,9 @@ protected:
 
     osg::ref_ptr<osgEarth::MapNode> m_pMap3DNode;
     osg::ref_ptr<osgEarth::MapNode> m_pMap2DNode;
+
+    osg::ref_ptr<osgEarth::LightGL3> m_pLight;
+    osg::ref_ptr<osg::Uniform>       m_pLightPosUniform;
 
     UserLayers   m_userLayers;
     MapLayers    m_earthFileLayers;

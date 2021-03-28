@@ -69,6 +69,11 @@ void CSkyNode::ShowAtmosphere(bool bVisble)
     m_pSolarEnv->ShowAtmosphere(bVisble);
 }
 
+const Math::CVector &CSkyNode::GetSunPos()
+{
+    return(m_pSolarEnv->GetSunPos());
+}
+
 void CSkyNode::traverse(osg::NodeVisitor & nv)
 {
     if (nv.getVisitorType() == nv.CULL_VISITOR)

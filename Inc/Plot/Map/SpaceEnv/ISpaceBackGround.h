@@ -64,6 +64,12 @@ public:
      * @param bShow
      */
     virtual void ShowAtmosphere(bool)=0;
+
+    /**
+     * @brief 获取太阳位置
+     * @return
+     */
+    virtual const Math::CVector& GetSunPos()=0;
 protected:
     virtual ~ISpaceBackGround(){}
     virtual void DateChanged()=0;

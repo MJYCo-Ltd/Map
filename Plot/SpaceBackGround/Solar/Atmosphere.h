@@ -19,6 +19,12 @@ public:
      * @return
      */
     osg::Node* GetNode();
+
+    /**
+     * @brief 设置是否可见
+     * @param bVisilbe
+     */
+    void SetVisible(bool bVisilbe);
 protected:
     ISceneCameraGroup*   m_pCameraNode;
     IEllipsoidSensor*    m_pEllipsoid;

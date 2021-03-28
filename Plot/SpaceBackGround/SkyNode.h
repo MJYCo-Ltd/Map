@@ -61,7 +61,16 @@ public:
      */
     void UpdateMatrix(const Math::CMatrix& rRotate);
 
+    /**
+     * @brief 是否显示大气
+     */
     void ShowAtmosphere(bool);
+
+    /**
+     * @brief 获取太阳位置
+     * @return
+     */
+    const Math::CVector& GetSunPos();
 
 public:
     ///////////////// 重写父类方法 ///////////////////

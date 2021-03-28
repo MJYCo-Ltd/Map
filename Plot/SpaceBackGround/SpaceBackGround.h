@@ -59,7 +59,16 @@ public:
     void DateChanged()SET_TRUE_NODE_UPDATE(m_bDateChanged)
     void MatrixChanged()SET_TRUE_NODE_UPDATE(m_bMatrixChanged)
 
+    /**
+     * @brief 显示大气模型
+     */
     void ShowAtmosphere(bool);
+
+    /**
+     * @brief 获取太阳位置
+     * @return
+     */
+    const Math::CVector& GetSunPos();
 
     /**
      * @brief 初始化节点

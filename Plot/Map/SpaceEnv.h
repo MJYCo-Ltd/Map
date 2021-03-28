@@ -38,6 +38,11 @@ public:
      */
     void UpdateDate(double);
 
+    /**
+     * @brief 获取太阳位置
+     * @return
+     */
+    const Math::CVector& GetSunPos(){return(m_vSunPos);}
 protected:
 
     /**
@@ -48,6 +53,7 @@ protected:
     ISpaceBackGround* m_pSpaceBackGround=nullptr;
     bool              m_bShowSpaceBackGround=true;
     osg::observer_ptr<osg::Camera> m_pMainCamera;
+    Math::CVector     m_vSunPos;
 };
 
 #endif // CSPACEENV_H

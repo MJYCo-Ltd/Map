@@ -46,6 +46,12 @@ public:
     unsigned int PickID(){return(m_unID);}
 
     /**
+     * @brief 设置节点是否开启光照
+     */
+    void OpenLight(bool bOpen)JUDGE_EQUAL_CALL_FUNCTION(bOpen,m_bOpenLight,LightChanged)
+    bool IsOpenLight() const{return(m_bOpenLight);}
+
+    /**
      * @brief 转换成想要的类型
      * @return
      */
@@ -64,11 +70,13 @@ protected:
     virtual ~ISceneNode(){}
     virtual void VisibleChanged()=0;
     virtual void PickStateChanged()=0;
+    virtual void LightChanged()=0;
 
 protected:
     ISceneGraph* m_pSceneGraph;
     bool         m_bVisible=true;
     bool         m_bCanPick=false;
+    bool         m_bOpenLight=true;
     unsigned int m_unID=0;
 };
 

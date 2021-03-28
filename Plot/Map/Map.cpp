@@ -13,6 +13,7 @@
 #include <osgEarth/GLUtils>
 #include <osgEarth/AutoClipPlaneHandler>
 
+#include <Satellite/Date.h>
 #include <Inner/IRender.h>
 #include <Inner/ILoadResource.h>
 #include <Inner/IOsgSceneNode.h>
@@ -21,6 +22,7 @@
 #include <SceneGraph/IWindow.h>
 #include <SceneGraph/IViewPort.h>
 #include <Plot/Map/IMapObserver.h>
+
 #include "MapNodeChanged.h"
 #include "MapModifyLayer.h"
 #include "SpaceEnv.h"
@@ -341,6 +343,17 @@ void CMap::SetEarthSelfRotate(bool bSelfRotate)
         m_bSelfRotate = bSelfRotate;
     }
 }
+#include<Satellite/JPLEphemeris.h>
+void CMap::UpdateDate(double dMJD)
+{
+    m_pSpaceEnv->UpdateDate(dMJD);
+
+    const Math::CVector& vSunPos = m_pSpaceEnv->GetSunPos();
+    osg::Vec3 npos(vSunPos.GetX(),vSunPos.GetY(),vSunPos.GetZ());
+    m_pLight->setPosition(osg::Vec4(npos,.0));
+    m_pLightPosUniform->set(npos/npos.length());
+//    std::cout<<dMJD<<"updateData"<<vSunPos;
+}
 
 /// 初始化场景
 void CMap::InitNode()
@@ -411,7 +424,17 @@ void CMap::InitMap()
             m_pSpaceEnv->Init();
 
             Init3DLight();
-            m_p3DRoot->addChild(m_pSpaceEnv->AsOsgSceneNode()->GetOsgNode());
+
+            time_t timep;
+
+            /// 更新时间
+            time(&timep);
+            auto p = gmtime(&timep);
+            Aerospace::CDate data(p->tm_year+1900,p->tm_mon+1
+                                  ,p->tm_mday,p->tm_hour
+                                  ,p->tm_min,p->tm_sec,UTC);
+
+            UpdateDate(data.GetMJD());
             m_p3DRoot->addChild(m_pMap3DNode);
 
             osgEarth::GLUtils::setGlobalDefaults(m_pMap3DNode->getOrCreateStateSet());
@@ -419,6 +442,7 @@ void CMap::InitMap()
 
         /// 增加更新
         AddNode(m_pGroup.get(),m_p3DRoot.get());
+        AddNode(m_pGroup.get(),m_pSpaceEnv->AsOsgSceneNode()->GetOsgNode());
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapNodeChanged(m_pMap2DNode,m_pMap3DNode,this));
     }
         break;
@@ -427,23 +451,23 @@ void CMap::InitMap()
 
 void CMap::Init3DLight()
 {
-    osg::Vec3f lightPos(1.0f, 1.0f, 0.0f);
+    osg::Vec3f lightPos(0.0f, 0.0f, 1.0f);
     osg::LightSource* lightSource = new osg::LightSource();
-    auto _light = new osgEarth::LightGL3( 0 );
-    _light->setPosition( osg::Vec4f(1.0f, 1.0f, 0.0f, 0.0f) );
-    _light->setAmbient ( osg::Vec4f(0.1f, 0.1f, 0.1f, 1.0f) );
-    _light->setDiffuse ( osg::Vec4f(1.0f, 1.0f, 1.0f, 1.0f) );
-    _light->setSpecular( osg::Vec4f(1.0f, 1.0f, 1.0f, 1.0f) );
-    lightSource->setLight(_light);
+    m_pLight = new osgEarth::LightGL3( 0 );
+    m_pLight->setPosition( osg::Vec4f(0.0f, 0.0f, 1.0f, 0.0f) );
+    m_pLight->setAmbient ( osg::Vec4f(0.1f, 0.1f, 0.1f, 1.0f) );
+    m_pLight->setDiffuse ( osg::Vec4f(1.0f, 1.0f, 1.0f, 1.0f) );
+    m_pLight->setSpecular( osg::Vec4f(1.0f, 1.0f, 1.0f, 1.0f) );
+    lightSource->setLight(m_pLight);
 
     lightSource->setCullingActive(false);
     m_p3DRoot->addChild(lightSource);
 
     lightSource->addCullCallback(new osgEarth::LightSourceGL3UniformGenerator);
     osg::StateSet* stateset = m_p3DRoot->getOrCreateStateSet();
-    auto _lightPosUniform = new osg::Uniform(osg::Uniform::FLOAT_VEC3, "atmos_v3LightDir");
-    _lightPosUniform->set( lightPos / lightPos.length() );
-    stateset->addUniform( _lightPosUniform);
+    m_pLightPosUniform = new osg::Uniform(osg::Uniform::FLOAT_VEC3, "atmos_v3LightDir");
+    m_pLightPosUniform->set( lightPos / lightPos.length());
+    stateset->addUniform( m_pLightPosUniform);
 
     stateset->setDefine(OE_LIGHTING_DEFINE, osg::StateAttribute::ON);
 
