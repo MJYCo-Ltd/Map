@@ -17,8 +17,9 @@ INCLUDEPATH *= $$PWD/../Inc $$PWD/../Inc/Plot
 win32{
     DEFINES -= UNICODE
     # 开启utf-8 编码方式支持
-    QMAKE_CXXFLAGS += -utf-8
+    QMAKE_CXXFLAGS += /utf-8
     QMAKE_CXXFLAGS += /wd"4100"
+    QMAKE_CXXFLAGS += /MP
 
     LIBS *= -L$$PWD/../Lib
     DLLDESTDIR = $$PWD/../../Bin/MapPlugin/Plot
@@ -26,7 +27,7 @@ win32{
 
 unix{
     DESTDIR = $$PWD/../../Bin/MapPlugin/Plot
-    LIBS *= -L$$DESTDIR
+    LIBS *= -L$$PWD/../../Bin
     contains(TEMPLATE, "app"){
         QMAKE_LFLAGS += -Wl,-rpath=.:./osglib:./stklib
     }else{
@@ -44,7 +45,7 @@ contains(SDK_CONFIG,OSG){
     }
 
     unix{
-        LIBS *= -L$$DESTDIR/osglib
+        LIBS *= -L$$PWD/../../Bin/osglib
     }
 
    CONFIG (debug, debug|release){
@@ -65,7 +66,7 @@ contains(SDK_CONFIG,Satellite){
     MathPath=$${PWD}/../../VersionMath
     INCLUDEPATH *= $${MathPath}/Inc $${MathPath}/Inc/Math
     win32:LIBS *= -L$${MathPath}/Lib
-    unix:LIBS *= -L$$DESTDIR/stklib
+    unix:LIBS *= -L$$PWD/../../Bin/stklib
     CONFIG (debug, debug|release){
         LIBS *= -lSatellited -lMathd -lGisMathd -lSatelliteToolKitd
     }else{
@@ -91,5 +92,12 @@ contains(SDK_CONFIG,SceneCore){
 
 # This can suffix a d by itself,if is a debug version
 CONFIG(debug, debug|release) {
-  TARGET = $$join(TARGET,,,d)
+    OBJECTS_DIR = $$PWD/../debug/$$TARGET/obj
+    MOC_DIR = $$PWD/../debug/$$TARGET/moc
+    UI_DIR = $$PWD/../debug/$$TARGET/UI
+    TARGET = $$join(TARGET,,,d)
+}else{
+    OBJECTS_DIR = $$PWD/../release/$$TARGET/obj
+    MOC_DIR = $$PWD/../release/$$TARGET/moc
+    UI_DIR = $$PWD/../release/$$TARGET/UI
 }

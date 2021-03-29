@@ -17,8 +17,9 @@ INCLUDEPATH *= $$PWD/Inc
 win32{
     DEFINES -= UNICODE
     # 开启utf-8 编码方式支持
-    QMAKE_CXXFLAGS += -utf-8
+    QMAKE_CXXFLAGS += /utf-8
     QMAKE_CXXFLAGS += /wd"4100"
+    QMAKE_CXXFLAGS += /MP
 
     LIBS *= -L$$PWD/Lib
     contains(TEMPLATE, "app"){
@@ -103,5 +104,12 @@ contains(SDK_CONFIG,SceneCore){
 
 # This can suffix a d by itself,if is a debug version
 CONFIG(debug, debug|release) {
-  TARGET = $$join(TARGET,,,d)
+    OBJECTS_DIR = $$PWD/debug/$$TARGET/obj
+    MOC_DIR = $$PWD/debug/$$TARGET/moc
+    UI_DIR = $$PWD/debug/$$TARGET/UI
+    TARGET = $$join(TARGET,,,d)
+}else{
+    OBJECTS_DIR = $$PWD/release/$$TARGET/obj
+    MOC_DIR = $$PWD/release/$$TARGET/moc
+    UI_DIR = $$PWD/release/$$TARGET/UI
 }
