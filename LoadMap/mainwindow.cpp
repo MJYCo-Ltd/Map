@@ -38,12 +38,21 @@
 #include <Plot/Common/ISceneScreenGroup.h>
 #include <Hud/IViewHud.h>
 #include <Inner/ILoadResource.h>
-
+#include <Plot/Map/IMapObserver.h>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <ExternShape/MapRectange.h>
 #include <ExternShape/MapCircle.h>
+
+struct MapObser:public IMapMessageObserver
+{
+    void MousePos(float fLon,float fLat)
+    {
+        std::cout<<fLon<<'\t'<<fLat<<std::endl;
+    }
+};
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -91,6 +100,9 @@ IImage* pImage=nullptr;
 
 void MainWindow::on_action_triggered()
 {
+
+    m_pSceneGraph->GetMap()->SubMessage(new MapObser);
+
     MapGeoPos pos11;
     pos11.fLon = -126.0;
     pos11.fLat = 45.6;

@@ -1,20 +1,32 @@
 ﻿#ifndef CMAP_INCLUDE_HEADER_H
 #define CMAP_INCLUDE_HEADER_H
 #include <map>
+#include <QObject>
 #include <osgEarth/MapNode>
 #include <osgEarth/Lighting>
 #include <Map/IMap.h>
 #include <Inner/ImplSceneGroup.hpp>
-#include <NoQt.h>
 
 class CSpaceEnv;
 class ISceneGraph;
 
 class CMapLayer;
+class CMap;
 typedef std::map<std::string,CMapLayer*> UserLayers;
 
-class CMap:public ImplSceneGroup<IMap>
+class MapEventCallback:public osgGA::GUIEventHandler
 {
+public:
+    MapEventCallback(CMap* pMap):m_pMap(pMap){}
+    virtual bool handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter&,
+                        osg::Object*, osg::NodeVisitor*);
+protected:
+    CMap* m_pMap;
+};
+
+class CMap:public QObject,public ImplSceneGroup<IMap>
+{
+    Q_OBJECT
     friend class CMapNodeChanged;
 public:
     CONSTRUCTOR(CMap,ImplSceneGroup<IMap>)
@@ -39,7 +51,7 @@ public:
      * @param TranType  转换类型 0表示从屏幕坐标转换成地理坐标，1表示由地理坐标转换成屏幕坐标
      * @return
      */
-    bool ConvertCoord(int& nX, int& nY, MapGeoPos &geoPos, short TranType);
+    bool ConvertCoord(float& fX, float& fY, MapGeoPos &geoPos, short TranType);
 
     /**
      * @brief 获取地图图层
@@ -81,6 +93,9 @@ public:
      */
     void SetEarthSelfRotate(bool);
 
+    /**
+     * @brief 更新日期
+     */
     void UpdateDate(double);
 
 protected:
@@ -95,6 +110,8 @@ protected:
      * @brief 初始化3D灯光
      */
     void Init3DLight();
+protected slots:
+    void MouseMove(float fLon,float fLat);
 protected:
     bool   m_bSelfRotate=true;
     std::list<IMapMessageObserver*> m_listObserver;
@@ -106,6 +123,7 @@ protected:
 
     osg::ref_ptr<osgEarth::LightGL3> m_pLight;
     osg::ref_ptr<osg::Uniform>       m_pLightPosUniform;
+    osg::ref_ptr<MapEventCallback>   m_pEventCallBack;
 
     UserLayers   m_userLayers;
     MapLayers    m_earthFileLayers;
@@ -113,6 +131,7 @@ protected:
     CSpaceEnv   *m_pSpaceEnv=nullptr;/// 空间背景
 };
 
+#include <NoQt.h>
 extern "C"
 {
     Q_DECL_EXPORT ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName);

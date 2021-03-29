@@ -18,6 +18,13 @@ struct IMapMessageObserver
      */
     virtual void AddLayer(const std::string&){}
     virtual void RemoveLayer(const std::string&){}
+
+    /**
+     * @brief 鼠标所在的经纬度信息
+     * @arg1 经度信息 [deg](-180,180)
+     * @arg2 纬度信息 [deg][-90,90]
+     */
+    virtual void MousePos(float,float){}
 };
 
 #endif /// INTERFACE_MAP_OBSERVER_HEARDER_H

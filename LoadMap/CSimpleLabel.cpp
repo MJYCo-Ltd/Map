@@ -55,7 +55,7 @@ CSimpleLabel::~CSimpleLabel()
 void CSimpleLabel::MouseMove(MouseButtonMask, int x, int y)
 {
     MapGeoPos mapPos;
-    m_pSceneGraph->GetMap()->ConvertCoord(x,y,mapPos,0);
+//    m_pSceneGraph->GetMap()->ConvertCoord(x,y,mapPos,0);
     double dX,dY,dZ;
     GisMath::LBH2XYZ(mapPos.fLon*DD2R,mapPos.fLat*DD2R,mapPos.fHeight-1000,dX,dY,dZ);
 

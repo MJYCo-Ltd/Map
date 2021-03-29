@@ -11,7 +11,6 @@
 #endif
 
 #include <osgEarth/GLUtils>
-#include <osgEarth/AutoClipPlaneHandler>
 
 #include <Satellite/Date.h>
 #include <Inner/IRender.h>
@@ -30,9 +29,40 @@
 #include "MapLayer.h"
 #include "MapModelLayer.h"
 
+bool MapEventCallback::handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter&,
+                              osg::Object*, osg::NodeVisitor*)
+{
+    if(ea.MOVE == ea.getEventType())
+    {
+        static MapGeoPos pos;
+        static float fX,fY;
+        static short type(0);
+
+        fX = ea.getX();
+        if(ea.Y_INCREASING_UPWARDS == ea.getMouseYOrientation())
+        {
+            fY = ea.getYmax() - ea.getY();
+        }
+        else
+        {
+            fY = ea.getY();
+        }
+        m_pMap->ConvertCoord(fX,fY,pos,type);
+        QMetaObject::invokeMethod(m_pMap,"MouseMove",Q_ARG(float,pos.fLon),Q_ARG(float,pos.fLat));
+    }
+    return(false);
+}
+
 /// 析构函数
 CMap::~CMap()
 {
+    auto pOsgViewPoint = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint());
+    if(nullptr != pOsgViewPoint && nullptr != pOsgViewPoint->GetOsgView())
+    {
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
+                    new CModifyViewHandler(pOsgViewPoint->GetOsgView(),m_pEventCallBack,false));
+    }
+
     ClearLayers();
 
     if(m_p2DRoot.valid())
@@ -77,7 +107,7 @@ void CMap::UnSubMessage(IMapMessageObserver *pMsgObr)
 }
 
 /// 坐标转换
-bool CMap::ConvertCoord(int &nX, int &nY, MapGeoPos &geoPos, short TranType)
+bool CMap::ConvertCoord(float &fX, float &fY, MapGeoPos &geoPos, short TranType)
 {
     if(0 == TranType)
     {
@@ -93,7 +123,7 @@ bool CMap::ConvertCoord(int &nX, int &nY, MapGeoPos &geoPos, short TranType)
         switch (m_emType)
         {
         case MAP_2D:
-            if(m_pMap2DNode->getTerrain()->getWorldCoordsUnderMouse(pOsgViewPoint->GetOsgView(), nX, pViewPort ? pViewPort->height() - nY : nY, world))
+            if(m_pMap2DNode->getTerrain()->getWorldCoordsUnderMouse(pOsgViewPoint->GetOsgView(), fX, pViewPort ? pViewPort->height() - fY : fY, world))
             {
                 geoPoint.fromWorld(m_pMap2DNode->getMapSRS(),world);
                 geoPoint.makeGeographic();
@@ -104,7 +134,7 @@ bool CMap::ConvertCoord(int &nX, int &nY, MapGeoPos &geoPos, short TranType)
             }
             break;
         case MAP_3D:
-            if(m_pMap3DNode->getTerrain()->getWorldCoordsUnderMouse(pOsgViewPoint->GetOsgView(), nX, pViewPort ? pViewPort->height() - nY : nY, world))
+            if(m_pMap3DNode->getTerrain()->getWorldCoordsUnderMouse(pOsgViewPoint->GetOsgView(), fX, pViewPort ? pViewPort->height() - fY : fY, world))
             {
                 geoPoint.fromWorld(m_pMap3DNode->getMapSRS(),world);
                 geoPoint.makeGeographic();
@@ -139,8 +169,8 @@ bool CMap::ConvertCoord(int &nX, int &nY, MapGeoPos &geoPos, short TranType)
                         * pView->getCamera()->getViewport()->computeWindowMatrix();
 
                 osg::Vec3d scrennPos = world * _MVPW;
-                nX = scrennPos.x();
-                nY = pView->getCamera()->getViewport()->height() - scrennPos.y();
+                fX = scrennPos.x();
+                fY = pView->getCamera()->getViewport()->height() - scrennPos.y();
                 return(true);
             }
             break;
@@ -151,8 +181,8 @@ bool CMap::ConvertCoord(int &nX, int &nY, MapGeoPos &geoPos, short TranType)
                         * pView->getCamera()->getViewport()->computeWindowMatrix();
 
                 osg::Vec3d scrennPos = world * _MVPW;
-                nX = scrennPos.x();
-                nY = pView->getCamera()->getViewport()->height() - scrennPos.y();
+                fX = scrennPos.x();
+                fY = pView->getCamera()->getViewport()->height() - scrennPos.y();
                 return(true);
             }
             break;
@@ -352,13 +382,19 @@ void CMap::UpdateDate(double dMJD)
     osg::Vec3 npos(vSunPos.GetX(),vSunPos.GetY(),vSunPos.GetZ());
     m_pLight->setPosition(osg::Vec4(npos,.0));
     m_pLightPosUniform->set(npos/npos.length());
-//    std::cout<<dMJD<<"updateData"<<vSunPos;
 }
 
 /// 初始化场景
 void CMap::InitNode()
 {
     ImplSceneGroup<IMap>::InitNode();
+    auto pOsgViewPoint = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint());
+    if(nullptr != pOsgViewPoint && nullptr != pOsgViewPoint->GetOsgView())
+    {
+        m_pEventCallBack = new MapEventCallback(this);
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
+                    new CModifyViewHandler(pOsgViewPoint->GetOsgView(),m_pEventCallBack,true));
+    }
     InitMap();
 }
 
@@ -465,11 +501,8 @@ void CMap::Init3DLight()
 
     lightSource->addCullCallback(new osgEarth::LightSourceGL3UniformGenerator);
     osg::StateSet* stateset = m_p3DRoot->getOrCreateStateSet();
-    m_pLightPosUniform = new osg::Uniform(osg::Uniform::FLOAT_VEC3, "atmos_v3LightDir");
+    m_pLightPosUniform = stateset->getOrCreateUniform("atmos_v3LightDir",osg::Uniform::FLOAT_VEC3);
     m_pLightPosUniform->set( lightPos / lightPos.length());
-    stateset->addUniform( m_pLightPosUniform);
-
-    stateset->setDefine(OE_LIGHTING_DEFINE, osg::StateAttribute::ON);
 
     stateset->setDefine("OE_NUM_LIGHTS", "1");
     auto _ellipsoidModel = m_pMap3DNode->getMapSRS()->getEllipsoid();
@@ -522,6 +555,15 @@ void CMap::Init3DLight()
     // options:
     stateset->getOrCreateUniform("oe_sky_exposure",           osg::Uniform::FLOAT )->set(3.3f);
     stateset->getOrCreateUniform("oe_sky_ambientBoostFactor", osg::Uniform::FLOAT)->set(5.0f);
+}
+
+/// 鼠标移动消息
+void CMap::MouseMove(float fLon, float fLat)
+{
+    for(auto one:m_listObserver)
+    {
+        one->MousePos(fLon,fLat);
+    }
 }
 
 static const char s_sMap2D[]="IMap2D";

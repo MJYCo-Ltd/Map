@@ -43,7 +43,7 @@ public:
      * @param 转换类型 0表示从屏幕坐标转换成地理坐标，1表示由地理坐标转换成屏幕坐标
      * @return
      */
-    virtual bool ConvertCoord(int&, int&, MapGeoPos&, short)=0;
+    virtual bool ConvertCoord(float&, float&, MapGeoPos&, short)=0;
 
     /**
      * @brief 获取地图图层
@@ -93,6 +93,7 @@ public:
 
     /**
      * @brief 更新时间
+     * @arg   约简儒略日
      */
     virtual void UpdateDate(double)=0;
 protected:

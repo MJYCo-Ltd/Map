@@ -54,7 +54,8 @@ protected:
             m_pRootNode = pNode;
             m_preMask = m_pRootNode->getNodeMask();
             m_pRootNode->addUpdateCallback(m_pUpdateCallBack);
-            m_bLightingChanged=true;
+
+            LightChanged();
         }
     }
 
