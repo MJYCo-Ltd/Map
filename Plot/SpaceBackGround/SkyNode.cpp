@@ -49,29 +49,20 @@ void CSkyNode::SetPlanetsNamesVisible(bool bShow)
     m_pSolarEnv->SetPlanetNameShow(bShow);
 }
 
-/// 更新时间
-void CSkyNode::UpdateDate(double dMJD)
-{
-    if(fabs(m_dMJD - dMJD) > 1e-11)
-    {
-        m_dMJD = dMJD;
-        m_pSolarEnv->UpdateTime(m_dMJD);
-    }
-}
 
 void CSkyNode::UpdateMatrix(const Math::CMatrix &rRotate)
 {
     m_pStarEnv->UpdateMatrix(rRotate);
 }
 
+void CSkyNode::UpdatePos(const std::vector<Math::CVector> &vSolarPos)
+{
+    m_pSolarEnv->UpdatePos(vSolarPos);
+}
+
 void CSkyNode::ShowAtmosphere(bool bVisble)
 {
     m_pSolarEnv->ShowAtmosphere(bVisble);
-}
-
-const Math::CVector &CSkyNode::GetSunPos()
-{
-    return(m_pSolarEnv->GetSunPos());
 }
 
 void CSkyNode::traverse(osg::NodeVisitor & nv)

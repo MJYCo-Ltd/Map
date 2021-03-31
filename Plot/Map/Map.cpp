@@ -373,16 +373,6 @@ void CMap::SetEarthSelfRotate(bool bSelfRotate)
         m_bSelfRotate = bSelfRotate;
     }
 }
-#include<Satellite/JPLEphemeris.h>
-void CMap::UpdateDate(double dMJD)
-{
-    m_pSpaceEnv->UpdateDate(dMJD);
-
-    const Math::CVector& vSunPos = m_pSpaceEnv->GetSunPos();
-    osg::Vec3 npos(vSunPos.GetX(),vSunPos.GetY(),vSunPos.GetZ());
-    m_pLight->setPosition(osg::Vec4(npos,.0));
-    m_pLightPosUniform->set(npos/npos.length());
-}
 
 /// 初始化场景
 void CMap::InitNode()
@@ -398,6 +388,25 @@ void CMap::InitNode()
     InitMap();
 }
 
+/// 更新节点
+void CMap::UpdateNode()
+{
+    if(m_bDateChanged)
+    {
+        m_pSpaceEnv->UpdateDate(m_dMJD);
+
+        const Math::CVector& vSunPos = m_pSpaceEnv->GetSunPos();
+        osg::Vec3 npos(vSunPos.GetX(),vSunPos.GetY(),vSunPos.GetZ());
+        m_pLight->setPosition(osg::Vec4(npos,.0));
+        m_pLightPosUniform->set(npos/npos.length());
+
+        m_bDateChanged = false;
+    }
+
+    ImplSceneGroup<IMap>::UpdateNode();
+}
+
+/// 初始化地图
 void CMap::InitMap()
 {
     m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CClearChildNode(m_pGroup.get()));
@@ -470,7 +479,8 @@ void CMap::InitMap()
                                   ,p->tm_mday,p->tm_hour
                                   ,p->tm_min,p->tm_sec,UTC);
 
-            UpdateDate(data.GetMJD());
+            m_dMJD = data.GetMJD();
+            DateChanged();
             m_p3DRoot->addChild(m_pMap3DNode);
 
             osgEarth::GLUtils::setGlobalDefaults(m_pMap3DNode->getOrCreateStateSet());
@@ -485,6 +495,7 @@ void CMap::InitMap()
     }
 }
 
+/// 初始化光线
 void CMap::Init3DLight()
 {
     osg::Vec3f lightPos(0.0f, 0.0f, 1.0f);

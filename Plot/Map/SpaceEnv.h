@@ -42,18 +42,13 @@ public:
      * @brief 获取太阳位置
      * @return
      */
-    const Math::CVector& GetSunPos(){return(m_vSunPos);}
-protected:
-
-    /**
-     * @brief 加载空间背景
-     */
-    void LoadBackGround();
+    const Math::CVector& GetSunPos(){return(m_vSun);}
 protected:
     ISpaceBackGround* m_pSpaceBackGround=nullptr;
     bool              m_bShowSpaceBackGround=true;
     osg::observer_ptr<osg::Camera> m_pMainCamera;
-    Math::CVector     m_vSunPos;
+    std::vector<Math::CVector> m_vAllPos;
+    Math::CVector              m_vSun;
 };
 
 #endif // CSPACEENV_H

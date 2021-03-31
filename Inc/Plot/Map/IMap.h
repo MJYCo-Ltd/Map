@@ -95,9 +95,12 @@ public:
      * @brief 更新时间
      * @arg   约简儒略日
      */
-    virtual void UpdateDate(double)=0;
+    void UpdateDate(double dMJD)JUDGE_DOUBLE_CALL_FUNCTION(dMJD,m_dMJD,DateChanged)
 protected:
     virtual ~IMap(){}
+    virtual void DateChanged()=0;
+protected:
+    double m_dMJD=0.;
 };
 
 #endif

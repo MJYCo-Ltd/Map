@@ -94,12 +94,14 @@ public:
     void SetEarthSelfRotate(bool);
 
     /**
-     * @brief 更新日期
+     * @brief时间更新
      */
-    void UpdateDate(double);
+    void DateChanged()SET_TRUE_NODE_UPDATE(m_bDateChanged)
 
 protected:
     void InitNode();
+
+    void UpdateNode();
 
     /**
      * @brief 初始化地图
@@ -114,6 +116,7 @@ protected slots:
     void MouseMove(float fLon,float fLat);
 protected:
     bool   m_bSelfRotate=true;
+    bool   m_bDateChanged=false;
     std::list<IMapMessageObserver*> m_listObserver;
     osg::ref_ptr<osg::Group>   m_p2DRoot;
     osg::ref_ptr<osg::Group>   m_p3DRoot;

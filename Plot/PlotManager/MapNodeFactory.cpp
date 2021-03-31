@@ -141,6 +141,10 @@ void CMapNodeFactory::InitType(const std::string &sInterface)
                 m_mapTypeFunc[sInterface].pCrete = pCreateFun;
             }
         }
+        else
+        {
+            osg::notify(osg::WARN)<<"加载"<<findOne->second<<" 失败"<<std::endl;
+        }
     }
 }
 

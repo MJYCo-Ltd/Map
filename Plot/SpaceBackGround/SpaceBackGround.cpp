@@ -50,11 +50,6 @@ void CSpaceBackGround::ShowAtmosphere(bool bVisible)
     m_pSkyNode->ShowAtmosphere(bVisible);
 }
 
-const Math::CVector &CSpaceBackGround::GetSunPos()
-{
-    return(m_pSkyNode->GetSunPos());
-}
-
 /// 初始化场景节点
 void CSpaceBackGround::InitNode()
 {
@@ -64,23 +59,16 @@ void CSpaceBackGround::InitNode()
     SetOsgNode(m_pSkyNode.get());
 }
 
-/// 更新节点
-void CSpaceBackGround::UpdateNode()
+void CSpaceBackGround::UpdatePos(const std::vector<CVector> &vSolarPos)
 {
-    if(m_bDateChanged)
-    {
-        m_pSkyNode->UpdateDate(m_dMJD);
-        m_bDateChanged=false;
-    }
-
-    if(m_bMatrixChanged)
-    {
-        m_pSkyNode->UpdateMatrix(m_matRotate);
-        m_bMatrixChanged=false;
-    }
-
-    ImplSceneNode<ISpaceBackGround>::UpdateNode();
+    m_pSkyNode->UpdatePos(vSolarPos);
 }
+
+void CSpaceBackGround::UpdateMatrix(const Math::CMatrix &matRotate)
+{
+    m_pSkyNode->UpdateMatrix(matRotate);
+}
+
 
 static const char s_sSpaceBackGround[]="ISpaceBackGround";
 

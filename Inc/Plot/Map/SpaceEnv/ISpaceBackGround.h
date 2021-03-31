@@ -1,15 +1,16 @@
 #ifndef INTERFACE_SPACE_BACKGROUBD_HEARDER_H
 #define INTERFACE_SPACE_BACKGROUBD_HEARDER_H
 
+#include <vector>
+#include <Math/VecMat.h>
 #include <SceneGraph/ISceneNode.h>
-#include <Math/Matrix.h>
+
 /**
  * @brief 场景节点类
  */
 class ISpaceBackGround:public ISceneNode
 {
 public:
-
     CONSTRUCTOR(ISpaceBackGround,ISceneNode)
 
     /**
@@ -49,34 +50,18 @@ public:
     virtual void SetConstellationNamesVisible(bool)=0;
 
     /**
-     * @brief 更新时间
-     * @param 约简儒略日
-     */
-    void UpdateDate(double dMJD)JUDGE_DOUBLE_CALL_FUNCTION(dMJD,m_dMJD,DateChanged)
-
-    /**
-     * @brief 更新矩阵
-     */
-    virtual void UpdateMatrix(const Math::CMatrix& rRotate)JUDGE_EQUAL_CALL_FUNCTION(rRotate,m_matRotate,MatrixChanged)
-
-    /**
      * @brief 是否开启大气模型
      * @param bShow
      */
     virtual void ShowAtmosphere(bool)=0;
 
     /**
-     * @brief 获取太阳位置
-     * @return
+     * @brief 不知道怎么用的情况下不要擅自调用
      */
-    virtual const Math::CVector& GetSunPos()=0;
+    virtual void UpdateMatrix(const Math::CMatrix&)=0;
+    virtual void UpdatePos(const std::vector<Math::CVector>&)=0;
 protected:
     virtual ~ISpaceBackGround(){}
-    virtual void DateChanged()=0;
-    virtual void MatrixChanged()=0;
-protected:
-    double m_dMJD=0;
-    Math::CMatrix m_matRotate;
 };
 
 #endif

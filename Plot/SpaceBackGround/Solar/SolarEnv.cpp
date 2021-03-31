@@ -5,7 +5,7 @@
 #include <ISceneCore.h>
 #include <SceneGraph/ISceneGraph.h>
 
-#include <Math/Vector.h>
+#include <Math/VecMat.h>
 #include <Satellite/TimeSys.h>
 #include <Satellite/JPLEphemeris.h>
 
@@ -65,30 +65,16 @@ void CSolarEnv::CreateSolar()
     this->addChild(m_pSun);
 }
 
-/// 更新时间
-void CSolarEnv::UpdateTime(const double &dMJD)
+void CSolarEnv::UpdatePos(const std::vector<CVector> &vSolarPos)
 {
-    Aerospace::CTimeSys timeSys(dMJD);
-    double dMJDTT = timeSys.GetTT();
-
     for(auto itor = m_mapPlanet.begin();
         itor != m_mapPlanet.end();
         ++itor)
     {
-        Math::CVector tmpPos = Aerospace::CJPLEphemeris::GetInstance()
-                ->GetPos(dMJDTT,PLANET_TYPE(itor->first+1),Earth);
-        if(tmpPos)
-        {
-            itor->second->UpdatePostion(tmpPos);
-        }
+        itor->second->UpdatePostion(vSolarPos[itor->first]);
     }
 
-    m_pSunPos = Aerospace::CJPLEphemeris::GetInstance()
-            ->GetPos(dMJDTT,Sun,Earth);
-    if(m_pSunPos)
-    {
-        m_pSun->UpdatePostion(osg::Vec3(m_pSunPos.GetX(),m_pSunPos.GetY(),m_pSunPos.GetZ()));
-    }
+    m_pSun->UpdatePostion(vSolarPos[10]);
 }
 
 void CSolarEnv::SetPlanetNameShow(bool bVisible)

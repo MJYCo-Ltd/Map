@@ -129,19 +129,13 @@ void CToolSelector::CreateTool(const std::string &sInterface)
 /// 初始化类型
 void CToolSelector::InitType(const std::string &sInterface)
 {
-    QLibrary loadDll;
     auto findOne = m_mapTypeDllName.find(sInterface);
     if (m_mapTypeDllName.end() != findOne)
     {
         std::string sInterfaceNameList;
-        loadDll.setFileName(findOne->second.c_str());
-        auto pQueryFunc = reinterpret_cast<pQueryInterfaceFun>(loadDll.resolve("QueryInterface"));
-        if(nullptr == pQueryFunc)
-        {
-            osg::notify(osg::WARN)<<loadDll.errorString().toStdString();
-        }
 
-        auto pCreateFun = reinterpret_cast<pCreateToolFun>(loadDll.resolve("CreateTool"));
+        auto pQueryFunc = reinterpret_cast<pQueryInterfaceFun>(QLibrary::resolve(findOne->second.c_str(),"QueryInterface"));
+        auto pCreateFun = reinterpret_cast<pCreateToolFun>(QLibrary::resolve(findOne->second.c_str(),"CreateTool"));
 
         if (nullptr != pCreateFun && nullptr != pQueryFunc)
         {
@@ -159,6 +153,10 @@ void CToolSelector::InitType(const std::string &sInterface)
             {
                 m_mapTypeFunc[sInterface] = pCreateFun;
             }
+        }
+        else
+        {
+            osg::notify(osg::WARN)<<"加载"<<findOne->second<<" 失败"<<std::endl;
         }
     }
 }

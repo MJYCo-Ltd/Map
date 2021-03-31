@@ -100,9 +100,6 @@ IImage* pImage=nullptr;
 
 void MainWindow::on_action_triggered()
 {
-
-    m_pSceneGraph->GetMap()->SubMessage(new MapObser);
-
     MapGeoPos pos11;
     pos11.fLon = -126.0;
     pos11.fLat = 45.6;

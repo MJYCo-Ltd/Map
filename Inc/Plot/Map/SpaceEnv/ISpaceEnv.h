@@ -25,11 +25,6 @@ public:
     virtual void ShowSpaceBackGround(bool)=0;
 
     /**
-     * @brief 更新时间
-     */
-    virtual void UpdateDate(double)=0;
-
-    /**
      * @brief 获取地固系下太阳位置
      * @return
      */

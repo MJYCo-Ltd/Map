@@ -155,8 +155,7 @@ CSunModel::CSunModel():m_bNeedUpdate(false)
 }
 
 /// 更新位置
-void CSunModel::UpdatePostion(const osg::Vec3 &rPos)
+void CSunModel::UpdatePostion(const Math::CVector &rPos)
 {
-    m_rECIPostion = rPos;
-    setMatrix(osg::Matrix::translate(rPos));
+    setMatrix(osg::Matrix::translate(osg::Vec3(rPos.GetX(),rPos.GetY(),rPos.GetZ())));
 }

@@ -3,7 +3,6 @@
 #include <Satellite/CoorSys.h>
 #include <Math/YPRAngle.h>
 #include <Math/Quaternion.h>
-#include <Satellite/Date.h>
 #include <SatelliteToolKit/SatelliteToolKit.h>
 #include <Map/SpaceEnv/ISpaceBackGround.h>
 #include <ISceneCore.h>
@@ -14,6 +13,7 @@
 CSpaceEnv::CSpaceEnv(ISceneGraph *pSceneGraph):
     ImplSceneAttitudeGroup<ISpaceEnv>(pSceneGraph)
 {
+    m_vAllPos.resize(11);
 }
 
 /// 设置主相机
@@ -54,7 +54,7 @@ void CSpaceEnv::InitNode()
     std::string sErrorInfo;
     if(!InitSatelliteToolKit(GetExePath(),sErrorInfo))
     {
-        std::cout<<sErrorInfo<<std::endl;
+        osg::notify(osg::WARN)<<sErrorInfo<<std::endl;
     }
 
     m_pSpaceBackGround = dynamic_cast<ISpaceBackGround*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISpaceBackGround"));
@@ -78,26 +78,27 @@ void CSpaceEnv::UpdateDate(double dMJD)
 {
     m_matAttitude = Aerospace::CCoorSys::ECF2ECI(dMJD);
 
-    AttitudeMatrixChanged();
+    m_pOsgAttitudeNode->SetRotateMatrix(m_matAttitude);
+
+    Aerospace::CTimeSys timeSys(dMJD);
+    double dMJDTT = timeSys.GetTT();
+
+    m_vAllPos[10] = Aerospace::CJPLEphemeris::GetInstance()->GetPos(dMJDTT,Sun,Earth);
+    m_vSun = m_vAllPos[10] * m_matAttitude;
 
     if(nullptr != m_pSpaceBackGround)
     {
         m_pSpaceBackGround->UpdateMatrix(m_matAttitude);
-        m_pSpaceBackGround->UpdateDate(dMJD);
 
-        Aerospace::CTimeSys timeSys(dMJD);
-        double dMJDTT = timeSys.GetTT();
-        Math::CVector m_pSunPos = Aerospace::CJPLEphemeris::GetInstance()
-                ->GetPos(dMJDTT,Sun,Earth);
+        for(int nIndex=Mercury;nIndex<Sun;++nIndex)
+        {
+            if(nIndex != Earth)
+            {
+                m_vAllPos[nIndex-1] = Aerospace::CJPLEphemeris::GetInstance()
+                        ->GetPos(dMJDTT,static_cast<PLANET_TYPE>(nIndex),Earth);
+            }
+        }
 
-        m_vSunPos = m_pSunPos*m_matAttitude;
-    }
-}
-
-/// 加载星空背景
-void CSpaceEnv::LoadBackGround()
-{
-    if(nullptr == m_pSpaceBackGround)
-    {
+        m_pSpaceBackGround->UpdatePos(m_vAllPos);
     }
 }

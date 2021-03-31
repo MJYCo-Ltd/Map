@@ -52,9 +52,10 @@ public:
     void SetPlanetsNamesVisible(bool bShow);
 
     /**
-     * @brief UpdateDate
+     * @brief 是否显示大气
      */
-    void UpdateDate(double dMJD);
+    void ShowAtmosphere(bool);
+
 
     /**
      * @brief 更新矩阵
@@ -62,16 +63,9 @@ public:
     void UpdateMatrix(const Math::CMatrix& rRotate);
 
     /**
-     * @brief 是否显示大气
+     * @brief 更新位置
      */
-    void ShowAtmosphere(bool);
-
-    /**
-     * @brief 获取太阳位置
-     * @return
-     */
-    const Math::CVector& GetSunPos();
-
+    void UpdatePos(const std::vector<Math::CVector>&);
 public:
     ///////////////// 重写父类方法 ///////////////////
     void traverse(osg::NodeVisitor&);
@@ -83,7 +77,6 @@ private:
     osg::ref_ptr<osg::Group> m_pSpaceBackGroundRoot;
     osg::ref_ptr<CSolarEnv>  m_pSolarEnv;  /// 行星背景
     osg::ref_ptr<CStarEnv>   m_pStarEnv;   /// 星空背景
-    double                   m_dMJD=0.0;       /// 约简儒略日
 };
 
 #endif // CSKYNODE_H

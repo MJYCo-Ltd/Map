@@ -3,6 +3,7 @@
 
 #include <osg/Camera>
 #include <osg/MatrixTransform>
+#include <Math/Vector.h>
 
 class CSunModel:public osg::MatrixTransform
 {
@@ -13,8 +14,7 @@ public:
      * @brief 更新行星位置
      * @param rPos
      */
-    void UpdatePostion(const osg::Vec3& rPos);
-    const osg::Vec3& GetUpdatePostion(){return(m_rECIPostion);}
+    void UpdatePostion(const Math::CVector& rPos);
 
     void SetMatrix(const osg::Matrix& rMatrix);
 private:

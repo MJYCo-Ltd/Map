@@ -86,10 +86,10 @@ protected:
     }
 
     /// 状态更改
-    void PosChanged(){ImplSceneGroup<T>::NodeChanged();m_bPosChanged=true;}
-    void AttitudeChanged(){ImplSceneGroup<T>::NodeChanged();m_bAttitudeChanged=true;}
-    void AttitudeMatrixChanged(){ImplSceneGroup<T>::NodeChanged();m_bAttitudeMatrixChanged=true;}
-    void PivotPosChanged(){ImplSceneGroup<T>::NodeChanged();m_bPivotChanged=true;}
+    void PosChanged()SET_TRUE_NODE_UPDATE(m_bPosChanged)
+    void AttitudeChanged()SET_TRUE_NODE_UPDATE(m_bAttitudeChanged)
+    void AttitudeMatrixChanged()SET_TRUE_NODE_UPDATE(m_bAttitudeMatrixChanged)
+    void PivotPosChanged()SET_TRUE_NODE_UPDATE(m_bPivotChanged)
 protected:
     bool m_bPosChanged=false;
     bool m_bAttitudeChanged=false;

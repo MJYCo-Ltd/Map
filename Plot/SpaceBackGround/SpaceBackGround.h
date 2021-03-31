@@ -54,32 +54,26 @@ public:
     void SetPlanetsNamesVisible(bool bShow);
 
     /**
-     * @brief UpdateDate
-     */
-    void DateChanged()SET_TRUE_NODE_UPDATE(m_bDateChanged)
-    void MatrixChanged()SET_TRUE_NODE_UPDATE(m_bMatrixChanged)
-
-    /**
      * @brief 显示大气模型
      */
     void ShowAtmosphere(bool);
 
     /**
-     * @brief 获取太阳位置
-     * @return
-     */
-    const Math::CVector& GetSunPos();
-
-    /**
      * @brief 初始化节点
      */
     void InitNode();
-protected:
-    void UpdateNode();
+
+    /**
+     * @brief 更新位置
+     */
+    void UpdatePos(const std::vector<Math::CVector>&);
+
+    /**
+     * @brief 更新矩阵
+     */
+    void UpdateMatrix(const Math::CMatrix&);
 protected:
     osg::observer_ptr<CSkyNode> m_pSkyNode;
-    bool  m_bDateChanged=false;
-    bool  m_bMatrixChanged=false;
 };
 
 

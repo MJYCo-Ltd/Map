@@ -26,10 +26,10 @@ public:
     bool& IsNeedUpdate(){return(m_bNeedUpdate);}
 
     /**
-     * @brief 更新时间
-     * @param dMJD
+     * @brief 更新行星位置
+     * @param 行星位置
      */
-    void UpdateTime(const double& dMJD);
+    void UpdatePos(const std::vector<Math::CVector> &vSolarPos);
 
     /**
      * @brief 设置行星名称显隐
@@ -41,18 +41,11 @@ public:
      * @brief 是否显示大气
      */
     void ShowAtmosphere(bool);
-
-    /**
-     * @brief 获取太阳位置
-     * @return
-     */
-    const Math::CVector& GetSunPos(){return(m_pSunPos);}
 private:
     ISceneGraph*     m_pSceneGraph;          /// 场景
     bool             m_bNeedUpdate;          /// 是否需要更新
     std::map<int,CPlanetModel*> m_mapPlanet; /// 行星绘制类
     osg::ref_ptr<CSunModel>     m_pSun;      /// 绘制的太阳
-    Math::CVector               m_pSunPos;
     CAtmosphere*                m_pAtmosphere;
 };
 
