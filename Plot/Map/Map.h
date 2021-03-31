@@ -113,7 +113,7 @@ protected:
      */
     void Init3DLight();
 protected slots:
-    void MouseMove(float fLon,float fLat);
+    void MouseMove(float fLon,float fLat,float fHight);
 protected:
     bool   m_bSelfRotate=true;
     bool   m_bDateChanged=false;

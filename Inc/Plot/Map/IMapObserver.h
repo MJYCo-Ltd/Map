@@ -24,7 +24,7 @@ struct IMapMessageObserver
      * @arg1 经度信息 [deg](-180,180)
      * @arg2 纬度信息 [deg][-90,90]
      */
-    virtual void MousePos(float,float){}
+    virtual void MousePos(float,float,float){}
 };
 
 #endif /// INTERFACE_MAP_OBSERVER_HEARDER_H

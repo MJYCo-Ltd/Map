@@ -48,7 +48,7 @@ bool MapEventCallback::handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionA
             fY = ea.getY();
         }
         m_pMap->ConvertCoord(fX,fY,pos,type);
-        QMetaObject::invokeMethod(m_pMap,"MouseMove",Q_ARG(float,pos.fLon),Q_ARG(float,pos.fLat));
+        QMetaObject::invokeMethod(m_pMap,"MouseMove",Q_ARG(float,pos.fLon),Q_ARG(float,pos.fLat),Q_ARG(float,pos.fHeight));
     }
     return(false);
 }
@@ -569,11 +569,11 @@ void CMap::Init3DLight()
 }
 
 /// 鼠标移动消息
-void CMap::MouseMove(float fLon, float fLat)
+void CMap::MouseMove(float fLon, float fLat, float fHight)
 {
     for(auto one:m_listObserver)
     {
-        one->MousePos(fLon,fLat);
+        one->MousePos(fLon,fLat,fHight);
     }
 }
 
