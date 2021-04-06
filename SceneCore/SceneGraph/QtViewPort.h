@@ -5,9 +5,8 @@
 #include <osgGA/NodeTrackerManipulator>
 
 #include <SceneGraph/IViewPort.h>
+#include <SceneGraph/ISceneGraph.h>
 #include <Inner/IOsgViewPoint.h>
-#include <Plot/Map/IMap.h>
-#include <Plot/Map/IMapObserver.h>
 
 class IRender;
 class IOsgSceneNode;
@@ -15,47 +14,11 @@ class QtViewPointUpdateCallback;
 class CMyEarthManipulator;
 class QtViewHud;
 
-/// 设置视点状态
-enum ViewPointType
-{
-    View_2D,
-    View_3D,
-    View_User,
-    View_Node
-};
-
-class QtViewPort :public IViewPort,public IMapMessageObserver,public IOsgViewPoint
+class QtViewPort :public IViewPort,public IOsgViewPoint
 {
 public:
     explicit QtViewPort(IRender* pRender,ISceneGraph* pSceneGraph,ProjectType emProject=Perspective);
     ~QtViewPort();
-
-    /**
-     * @brief 开启立体显示
-     */
-    void OpenStereo(bool bOpenStereo)JUDGE_EQUAL_SET_TRUE(bOpenStereo,m_bOpenStereo,m_bStereoChanged)
-    /**
-     * @brief SetStereoMode
-     * @param type
-     */
-    void SetStereoMode(StereoType type)JUDGE_EQUAL_SET_TRUE(type,m_emStereo,m_bStereoChanged)
-
-    /**
-     * @brief 地图类型切换
-     * @param emType
-     */
-    void MapTypeChanged(MapType emType);
-
-    /**
-     * @brief 设置跟踪的节点
-     */
-    bool SetTrackNode(ISceneNode* pTrackNode);
-
-    /**
-     * @brief 获取跟踪的节点
-     * @return
-     */
-    ISceneNode* GetTrackNode()const;
 
     /**
      * @brief 获取视口的屏显控制类
@@ -64,38 +27,16 @@ public:
     IViewHud* GetHud();
 
     /**
+     * @brief 地图类型切换
+     * @param emType
+     */
+    void ViewPointTypeChanged(ViewPointType emType);
+
+    /**
      * @brief 设置视点位置
      */
     void SetViewPoint(const SceneViewPoint&rViewPoint,unsigned int unTimes);
-
-    /**
-     * @brief 获取视点位置
-     * @return
-     */
     const SceneViewPoint& GetViewPoint()const;
-
-    /**
-     * @brief 设置窗口大小
-     * @param rViewPort
-     */
-    void SetViewPort(const CameraViewPort& rViewPort);
-
-    /**
-     * @brief 设置窗口大小
-     * @return
-     */
-    const CameraViewPort& GetViewPort()const;
-
-    /**
-     * @brief 设置投影类型
-     */
-    void SetProjectType(ProjectType emProject);
-
-    /**
-     * @brief 获取投影类型
-     * @return 当前的投影类型
-     */
-    ProjectType GetProjectType()const;
 
     /**
      * @brief 获取osgView
@@ -107,7 +48,21 @@ public:
      * @brief 每一帧的回调
      */
     void FrameEvent();
+
+    /**
+     * @brief 回到Home视点
+     */
+    void HomeViewPoint();
 protected:
+    /// 立体显示模式更改
+    void StereoChanged(){m_bStereoChanged=true;}
+    void HomePointChanged();
+    void TrackNodeChanged();
+    void ViewPortChanged();
+    void ProjectTypeChanged();
+    /**
+     * @brief 删除从相机
+     */
     void RemoveSlave();
 protected:
     std::list<osg::ref_ptr<osg::Camera>>           m_listStereoCamera;
@@ -119,16 +74,11 @@ protected:
     osg::ref_ptr<osgGA::NodeTrackerManipulator>    m_pTrackManipulator;   /// 跟踪操作器
     ViewPointType                                  m_emType=View_User;
     ViewPointType                                  m_emPreType;
+    SceneViewPoint m_stViewPoint;
 
     QtViewHud*     m_pHud=nullptr;                                         /// 屏显根节点
     ISceneGraph*   m_pSceneGraph=nullptr;                                  /// 设置场景
     IRender*       m_pRender;
-    IOsgSceneNode* m_pTrackNode=nullptr;
-    SceneViewPoint m_rViewPoint;
-    CameraViewPort m_rViewPort;
-    ProjectType    m_emProjectType;
-    StereoType     m_emStereo=ANAGLYPHIC;                                 /// 立体模式
-    bool           m_bOpenStereo=false;                                   /// 是否开启立体
     bool           m_bStereoChanged=false;
 };
 

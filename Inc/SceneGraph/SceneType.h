@@ -86,9 +86,9 @@ struct SceneAttitude
  */
 struct ScenePos
 {
-    float fX=0.f;    /// x轴坐标
-    float fY=0.f;    /// y轴坐标
-    float fZ=0.f;    /// z轴坐标
+    float fX=0.f;    /// x轴坐标 或者 经度[deg]
+    float fY=0.f;    /// y轴坐标 或者 纬度[deg]
+    float fZ=0.f;    /// z轴坐标 或者 高度[m]
 
     bool operator == (const ScenePos& rOther) const
     {

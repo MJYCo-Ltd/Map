@@ -7,6 +7,7 @@ class ISceneGraph;
 class IMapLocation;
 class ILabel;
 class IImage;
+class ISceneScreenGroup;
 struct MapGeoPos;
 struct SceneColor;
 struct SceneImageSize;
@@ -62,6 +63,7 @@ protected:
 protected:
     ISceneGraph*  m_pSceneGraph;
     IMapLocation* m_pLocation=nullptr;
+    ISceneScreenGroup* m_pSceneScreenGroup=nullptr;
     ILabel*       m_pLabel=nullptr;
     IImage*       m_pImage=nullptr;
 };

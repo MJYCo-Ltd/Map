@@ -15,7 +15,7 @@
 #include <SceneGraph/ViewType.h>
 #include "QtEventMap.h"
 #include "QtFBOWindow.h"
-
+#include <QDebug>
 inline MouseButtonMask ChangeMouseType(QMouseEvent* event)
 {
     MouseButtonMask button;
@@ -184,30 +184,34 @@ void QtFBOWindow::KeyPress(QKeyEvent *event)
 {
     auto iter = m_pAllOserver->begin();
     auto tmpIter = iter;
+
+    int nKey = QtEventdMap::GetInstance()->ChangeKeyEvent(event);
     for(;iter != m_pAllOserver->end(); )
     {
         ++tmpIter;
-        (*iter)->KeyDown(QtEventdMap::GetInstance()->ChangeKeyEvent(event));
+        (*iter)->KeyDown(nKey);
         iter = tmpIter;
     }
 
     keyboardModifiers(event);
-    getEventQueue()->keyPress(QtEventdMap::GetInstance()->ChangeKeyEvent(event));
+    getEventQueue()->keyPress(nKey);
 }
 
 void QtFBOWindow::KeyUp(QKeyEvent *event)
 {
     auto iter = m_pAllOserver->begin();
     auto tmpIter = iter;
+
+    int nKey = QtEventdMap::GetInstance()->ChangeKeyEvent(event);
     for(;iter != m_pAllOserver->end(); )
     {
         ++tmpIter;
-        (*iter)->KeyUp(QtEventdMap::GetInstance()->ChangeKeyEvent(event));
+        (*iter)->KeyUp(nKey);
         iter = tmpIter;
     }
 
     keyboardModifiers(event);
-    getEventQueue()->keyRelease(QtEventdMap::GetInstance()->ChangeKeyEvent(event));
+    getEventQueue()->keyRelease(nKey);
 }
 
 void QtFBOWindow::MouseDouble(QMouseEvent *event, qreal rScal)
@@ -217,10 +221,11 @@ void QtFBOWindow::MouseDouble(QMouseEvent *event, qreal rScal)
 
     auto iter = m_pAllOserver->begin();
     auto tmpIter = iter;
+    MouseButtonMask mask = ChangeMouseType(event);
     for(;iter != m_pAllOserver->end(); )
     {
         ++tmpIter;
-        (*iter)->MouseDblClick(ChangeMouseType(event),m_rMouseX,m_rMouseY);
+        (*iter)->MouseDblClick(mask,m_rMouseX,m_rMouseY);
         iter = tmpIter;
     }
 
@@ -236,10 +241,12 @@ void QtFBOWindow::MousePress(QMouseEvent *event,qreal rScal)
 
     auto iter = m_pAllOserver->begin();
     auto tmpIter = iter;
+
+    MouseButtonMask mask = ChangeMouseType(event);
     for(;iter != m_pAllOserver->end(); )
     {
         ++tmpIter;
-        (*iter)->MouseDown(ChangeMouseType(event),m_rMouseX,m_rMouseY);
+        (*iter)->MouseDown(mask,m_rMouseX,m_rMouseY);
         iter = tmpIter;
     }
 
@@ -255,10 +262,12 @@ void QtFBOWindow::MouseUp(QMouseEvent *event,qreal rScal)
 
     auto iter = m_pAllOserver->begin();
     auto tmpIter = iter;
+
+    MouseButtonMask mask = ChangeMouseType(event);
     for(;iter != m_pAllOserver->end(); )
     {
         ++tmpIter;
-        (*iter)->MouseUp(ChangeMouseType(event),m_rMouseX,m_rMouseY);
+        (*iter)->MouseUp(mask,m_rMouseX,m_rMouseY);
         iter = tmpIter;
     }
 
@@ -274,10 +283,11 @@ void QtFBOWindow::MouseMove(QMouseEvent *event,qreal rScal)
 
     auto iter = m_pAllOserver->begin();
     auto tmpIter = iter;
+    MouseButtonMask mask = ChangeMouseType(event);
     for(;iter != m_pAllOserver->end(); )
     {
         ++tmpIter;
-        (*iter)->MouseMove(ChangeMouseType(event),m_rMouseX,m_rMouseY);
+        (*iter)->MouseMove(mask,m_rMouseX,m_rMouseY);
         iter = tmpIter;
     }
 

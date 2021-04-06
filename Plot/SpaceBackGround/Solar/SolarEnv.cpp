@@ -59,7 +59,7 @@ void CSolarEnv::CreateSolar()
 
     m_pAtmosphere = new CAtmosphere(m_pSceneGraph,-1000);
     m_pAtmosphere->MakeAtmosphere();
-//    this->addChild(m_pAtmosphere->GetNode());
+    this->addChild(m_pAtmosphere->GetNode());
 
     m_pSun = new CSunModel;
     this->addChild(m_pSun);

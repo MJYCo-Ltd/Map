@@ -182,7 +182,7 @@ void MainWindow::on_action_triggered()
     pHudLayout = dynamic_cast<IHudLayout*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudLayout"));
 
     pHudText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
-    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudLayout);
+//    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudLayout);
 
     auto pHudImage = dynamic_cast<IHudImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudImage"));
     pHudImage->SetImage("Image/ship.png");
@@ -312,7 +312,7 @@ void MainWindow::on_action_triggered()
 //    pRadarSensor->SetImage("Space/pixmaps/venus.png");
     pRadarSensor->SetCanPick(true);
     pSceneRoot->AddSceneNode(pAttitudeGroup1);
-    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("E:/out.osgb",false);
+    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("F:/BaiduNetdiskDownload/xian/Data/out.osgb",false);
     pModel->SetCanPick(true);
 //    IMapLocation* pLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     auto pScal = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
@@ -361,7 +361,7 @@ void MainWindow::on_action_triggered()
     ILabel* pGuiLInLabel = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
     pGuiLInLabel->SetCanPick(true);
     pGuiLInLabel->SetFont("Fonts/msyh.ttf");
-    pGuiLInLabel->SetText("桂林理工大学博文管理学院");
+    pGuiLInLabel->SetText("西安第一医院");
     auto pScreenGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCREEN_GROUP)->AsSceneScreenGroup();
     pScreenGroup->AddSceneNode(pGuiLInLabel);
     auto pGuiLinGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP)->AsSceneGroup();
@@ -370,13 +370,13 @@ void MainWindow::on_action_triggered()
     pGuiLinGroup->AddSceneNode(pModel);
 
     MapGeoPos pos;
-    double dGuiLinLon=110.2912;
-    double dGuiLinLat=25.06479;
+    double dGuiLinLon=108.78107;
+    double dGuiLinLat=34.11611;
 
 //    GisMath::WGS842GJC02(dGuiLinLon,dGuiLinLat);
     pos.fLon = dGuiLinLon;
     pos.fLat = dGuiLinLat;
-    pos.fHeight=25;
+    pos.fHeight=35;
     pGuiLin->SetGeoPos(pos);
     pGuiLin->SetSceneNode(pGuiLinGroup);
 
@@ -512,7 +512,7 @@ void MainWindow::on_action_triggered()
 
     pSatellite->SetName("卫星");
     pSatellite->SetScale(10000.);
-    CDate mjBein(2021,1,7,17,29,0);
+    CDate mjBein(2021,4,6,12,0,0);
     Satellite::CSGP4 spg41("1 91001U          20061.66666667 -.00000001  00000-0 -13106-2 0 00008",
                           "2 91001 045.0073 000.0048 0004655 268.5152 091.4846 07.15404217000017");
 
@@ -580,7 +580,7 @@ void MainWindow::on_action_triggered()
     pSatellite->SetOribitColor(color);
     pSatellite->AddSensor(0, pSatelliteSensor);
     pSatellite->UpdateData(dMJD);
-    m_pSceneGraph->GetMap()->GetSpaceEnv()->AddSceneNode(pSatellite);
+//    m_pSceneGraph->GetMap()->GetSpaceEnv()->AddSceneNode(pSatellite);
     m_pSceneGraph->GetMap()->UpdateDate(dMJD);
 
     m_pTrackNode = pSatelliteSensor;
@@ -602,8 +602,8 @@ void MainWindow::on_action_2_triggered()
 //    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudText);
 //    pEarthLocation->SetVisible(!pEarthLocation->IsVisible());
     SceneViewPoint viewPoint;
-    viewPoint.stPos.fX = 110.2912;
-    viewPoint.stPos.fY = 25.06479;
+    viewPoint.stPos.fX = 108.78107;
+    viewPoint.stPos.fY = 34.11611;
     viewPoint.fDistance = 1000;
     viewPoint.fAzimuth = 0;
     viewPoint.fElev = 80;

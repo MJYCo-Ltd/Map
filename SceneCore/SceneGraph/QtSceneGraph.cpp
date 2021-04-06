@@ -173,15 +173,14 @@ void QtSceneGraph::InitSceneGraph()
         {
             if(SCENEGRAPH_2D == m_emType)
             {
-                pViewPoint->MapTypeChanged(MAP_2D);
+                pViewPoint->ViewPointTypeChanged(IOsgViewPoint::View_2D);
             }
             else
             {
-                pViewPoint->MapTypeChanged(MAP_3D);
+                pViewPoint->ViewPointTypeChanged(IOsgViewPoint::View_3D);
             }
 
             m_pMap->AsOsgSceneNode()->Init();
-            m_pMap->SubMessage(pViewPoint);
 
             m_pRoot->AddSceneNode(m_pMap);
         }

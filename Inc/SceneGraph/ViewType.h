@@ -10,9 +10,9 @@ const int C_WINDOW_WIDTH(100);
 struct SceneViewPoint
 {
     ScenePos stPos;
-    float fAzimuth=0.f;
-    float fElev=0.f;
-    float fDistance=10.f;
+    float fAzimuth=0.f;  /// 方位角 [deg][0~360]
+    float fElev=0.f;     /// 俯仰角 [deg][0~90]
+    float fDistance=10.f;/// 距视点位置的距离[m]
 
     ///重写判等操作符
     bool operator == (const SceneViewPoint& rOther) const
