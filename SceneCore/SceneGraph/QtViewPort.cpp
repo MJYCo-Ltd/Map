@@ -14,14 +14,15 @@ class ViewPortEventCallback:public osgGA::GUIEventHandler
 {
 public:
     ViewPortEventCallback(QtViewPort* pViewPort):m_pViewPort(pViewPort){}
-    virtual bool handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter&,
+    virtual bool handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter& aa,
                         osg::Object*, osg::NodeVisitor*)
     {
         if(ea.FRAME == ea.getEventType())
         {
             m_pViewPort->FrameEvent();
         }
-        return(false);
+
+        return(osgGA::GUIEventHandler::handle(ea,aa));
     }
 
 protected:
@@ -57,6 +58,13 @@ QtViewPort::QtViewPort(IRender *pRender,ISceneGraph *pSceneGraph, ProjectType em
 
     m_pSelfManipulator = new osgGA::TrackballManipulator;
     m_pView->setCameraManipulator(m_pSelfManipulator);
+
+    /// 默认的
+    m_stHomePoint.fAzimuth = 0.f;
+    m_stHomePoint.fElev = 0.f;
+    m_stHomePoint.fDistance = 12000e3;
+    m_stHomePoint.stPos.fX = 118.8f;
+    m_stHomePoint.stPos.fY = 32.1f;
 }
 
 /// 析构函数
@@ -69,29 +77,41 @@ QtViewPort::~QtViewPort()
 /// 地图类型切换
 void QtViewPort::ViewPointTypeChanged(ViewPointType emType)
 {
+    if(emType == m_emType)
+    {
+        return;
+    }
+
     switch(emType)
     {
-    case View_2D:
-    {
+    case View_2DMap:
         if(!m_p2DEarthManipulator.valid())
         {
             m_p2DEarthManipulator = new CMyEarthManipulator(MAP_2D);
-            m_p2DEarthManipulator->InitViewPoint();
+            m_p2DEarthManipulator->InitHomePoint(m_stHomePoint);
         }
-        m_emType = View_2D;
         m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_p2DEarthManipulator));
-    }
         break;
-    case View_3D:
+    case View_3DMap:
         if(!m_p3DEarthManipulator.valid())
         {
             m_p3DEarthManipulator = new CMyEarthManipulator(MAP_3D);
-            m_p3DEarthManipulator->InitViewPoint();
+            m_p3DEarthManipulator->InitHomePoint(m_stHomePoint);
         }
-        m_emType = View_3D;
         m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_p3DEarthManipulator));
         break;
+    case View_Osg:
+        if(!m_pSelfManipulator.valid())
+        {
+            m_pSelfManipulator = new osgGA::TrackballManipulator;
+        }
+        m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_pSelfManipulator));
+        break;
+    case View_Node:
+        break;
     }
+
+    m_emType = emType;
 }
 
 /// 设置跟踪视点
@@ -129,10 +149,10 @@ void QtViewPort::TrackNodeChanged()
     {
         switch (m_emPreType)
         {
-        case View_3D:
+        case View_3DMap:
             m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_p3DEarthManipulator));
             break;
-        case View_2D:
+        case View_2DMap:
             m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_p2DEarthManipulator));
             break;
         default:
@@ -169,43 +189,8 @@ IViewHud *QtViewPort::GetHud()
 void QtViewPort::SetViewPoint(const SceneViewPoint & rViewPoint, unsigned int unTimes)
 {
     m_stViewPoint = rViewPoint;
-
-    switch(m_emType)
-    {
-    case View_3D:
-    {
-        auto viewPoint = m_p3DEarthManipulator->getViewpoint();
-        viewPoint.setFocalPoint(osgEarth::GeoPoint(osgEarth::SpatialReference::get("wgs84"),m_stViewPoint.stPos.fX,
-                                                   m_stViewPoint.stPos.fY,m_stViewPoint.stPos.fZ));
-        viewPoint.setRange(osgEarth::Distance(m_stViewPoint.fDistance,osgEarth::Units::METERS));
-        viewPoint.setHeading(osgEarth::Angle(m_stViewPoint.fAzimuth,osgEarth::Units::DEGREES));
-        viewPoint.setPitch(osgEarth::Angle(0-m_stViewPoint.fElev,osgEarth::Units::DEGREES));
-
-        m_p3DEarthManipulator->setViewpoint(viewPoint,unTimes);
-    }
-        break;
-    case View_2D:
-    {
-        auto viewPoint = m_p2DEarthManipulator->getViewpoint();
-        viewPoint.setFocalPoint(osgEarth::GeoPoint(osgEarth::SpatialReference::get("wgs84"),m_stViewPoint.stPos.fX,
-                                                   m_stViewPoint.stPos.fY,m_stViewPoint.stPos.fZ));
-        viewPoint.setRange(osgEarth::Distance(m_stViewPoint.fDistance,osgEarth::Units::METERS));
-
-        m_p2DEarthManipulator->setViewpoint(viewPoint,unTimes);
-    }
-        break;
-    case View_Node:
-    {
-        m_pTrackManipulator->setDistance(m_stViewPoint.fDistance);
-        m_pTrackManipulator->setHeading(osg::DegreesToRadians(m_stViewPoint.fAzimuth));
-        m_pTrackManipulator->setElevation(osg::DegreesToRadians(m_stViewPoint.fElev));
-    }
-        break;
-    case View_User:
-        break;
-    default:
-        break;
-    }
+    m_dTimes = unTimes;
+    m_bViewPointChanged=true;
 }
 
 /// 获取视点位置
@@ -306,14 +291,80 @@ void QtViewPort::FrameEvent()
         }
         m_bStereoChanged=false;
     }
-}
 
-void QtViewPort::HomeViewPoint()
-{
-}
+    /// home视点更改
+    if(m_bHomePointChanged)
+    {
+        switch(m_emType)
+        {
+        case View_2DMap:
+            if(m_p2DEarthManipulator.valid())
+            {
+                m_p2DEarthManipulator->InitHomePoint(m_stHomePoint);
+            }
+            break;
+        case View_3DMap:
+            if(m_p3DEarthManipulator)
+            {
+                m_p3DEarthManipulator->InitHomePoint(m_stHomePoint);
+            }
+            break;
+        default:
+            break;
+        }
 
-void QtViewPort::HomePointChanged()
-{
+        m_bHomePointChanged=false;
+    }
+
+    if(m_bViewPointChanged)
+    {
+        switch(m_emType)
+        {
+        case View_3DMap:
+            m_p3DEarthManipulator->SetViewPoint(m_stViewPoint,m_dTimes);
+            break;
+        case View_2DMap:
+            m_p2DEarthManipulator->SetViewPoint(m_stViewPoint,m_dTimes);
+            break;
+        case View_Node:
+            m_pTrackManipulator->setDistance(m_stViewPoint.fDistance);
+            m_pTrackManipulator->setHeading(osg::DegreesToRadians(m_stViewPoint.fAzimuth));
+            m_pTrackManipulator->setElevation(osg::DegreesToRadians(m_stViewPoint.fElev));
+            break;
+        case View_Osg:
+            m_pSelfManipulator->setDistance(m_stViewPoint.fDistance);
+            m_pSelfManipulator->setCenter(osg::Vec3(m_stViewPoint.stPos.fX,m_stViewPoint.stPos.fY,
+                                                    m_stViewPoint.stPos.fZ));
+            m_pSelfManipulator->setHeading(osg::DegreesToRadians(m_stViewPoint.fAzimuth));
+            m_pSelfManipulator->setElevation(osg::DegreesToRadians(m_stViewPoint.fElev));
+            break;
+        default:
+            break;
+        }
+        m_bViewPointChanged=false;
+    }
+
+    if(m_bBackHome)
+    {
+        switch(m_emType)
+        {
+        case View_3DMap:
+            m_p3DEarthManipulator->home(0.);
+            break;
+        case View_2DMap:
+            m_p2DEarthManipulator->home(0.);
+            break;
+        case View_Node:
+            m_pTrackManipulator->home(0.);
+            break;
+        case View_Osg:
+            m_pTrackManipulator->home(0.);
+            break;
+        default:
+            break;
+        }
+        m_bBackHome=false;
+    }
 }
 
 /// 移除从相机

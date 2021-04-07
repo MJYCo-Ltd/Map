@@ -10,6 +10,7 @@
 #endif
 
 #include <Plot/Map/IMap.h>
+#include <SceneGraph/ViewType.h>
 
 class CMyEarthManipulator : public osgEarth::Util::EarthManipulator
 {
@@ -30,14 +31,20 @@ public:
     /**
      * @brief 初始化视点
      */
-    void InitViewPoint();
+    void InitHomePoint(const SceneViewPoint& homePoint);
+
+    /**
+     * @brief 设置视点
+     * @param viewPoint
+     */
+    void SetViewPoint(const SceneViewPoint& viewPoint, double dTimes);
 
 protected:
 
     /**
      * @brief 调整视点
      */
-    void AdjustViewPoint();
+    bool AdjustViewPoint(osgEarth::Viewpoint &vp);
 
 private:
     MapType m_emType;

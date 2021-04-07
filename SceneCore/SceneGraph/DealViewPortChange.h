@@ -84,4 +84,37 @@ private:
     osg::ref_ptr<osgGA::CameraManipulator> m_pManipulator;
 };
 
+/// 更改视点
+class ChangeViewPoint:public osg::Operation
+{
+public:
+    ChangeViewPoint(osgGA::CameraManipulator* pManipulator,SceneViewPoint viewPoint,IOsgViewPoint::ViewPointType type):
+        m_pManipulator(pManipulator),
+        m_stViewPoint(viewPoint),
+        m_emPointType(type){}
+
+    void operator()(osg::Object*)
+    {
+        m_pManipulator;
+    }
+private:
+    osg::ref_ptr<osgGA::CameraManipulator> m_pManipulator;
+    SceneViewPoint m_stViewPoint;
+    IOsgViewPoint::ViewPointType  m_emPointType;
+};
+
+/// 更改视点
+class HomeViewPoint:public osg::Operation
+{
+public:
+    HomeViewPoint(osgGA::CameraManipulator* pManipulator):m_pManipulator(pManipulator){}
+
+    void operator()(osg::Object*)
+    {
+        m_pManipulator->home(0);
+    }
+private:
+    osg::ref_ptr<osgGA::CameraManipulator> m_pManipulator;
+};
+
 #endif // DEALVIEWPORTCHANGE_H

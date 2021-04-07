@@ -21,14 +21,18 @@ void CMyEarthManipulator::ChangeMap(MapType emType)
         {
         case MAP_3D:
             getSettings()->setThrowingEnabled(true);
-            getSettings()->setThrowDecayRate(0.1);
+            getSettings()->setThrowDecayRate(0.009);
             getSettings()->setMinMaxDistance(1,DBL_MAX);
             getSettings()->setLockAzimuthWhilePanning(false);
             getSettings()->setTerrainAvoidanceEnabled(true);
             break;
         case MAP_2D:
             getSettings()->setMinMaxDistance(10,m_dMaxDistance);
-            AdjustViewPoint();
+            auto vp = getViewpoint();
+            if(AdjustViewPoint(vp))
+            {
+                setViewpoint(vp);
+            }
             break;
         }
     }
@@ -91,10 +95,9 @@ void CMyEarthManipulator::pan(double dx, double dy)
             vp.focalPoint()->y() = m_extent.yMin();
         }
 
+        AdjustViewPoint(vp);
         /// 设置视点位置
         setViewpoint(vp);
-
-        AdjustViewPoint();
     }
 }
 
@@ -115,18 +118,21 @@ void CMyEarthManipulator::zoom(double dx, double dy, osg::View *view)
     osgEarth::Util::EarthManipulator::zoom(-dx,-dy,view);
     if(MAP_2D == m_emType)
     {
-        AdjustViewPoint();
+        auto vp = getViewpoint();
+        if(AdjustViewPoint(vp))
+        {
+            setViewpoint(vp);
+        }
     }
 }
 
 /// 调整视点
-void CMyEarthManipulator::AdjustViewPoint()
+bool CMyEarthManipulator::AdjustViewPoint(osgEarth::Viewpoint& vp)
 {
     if(!m_bInit)
     {
-        return;
+        return(false);
     }
-    osgEarth::Viewpoint vp = getViewpoint();
 
     const double YOffet = vp.focalPoint()->y();
     const double EyeHeight = vp.range()->getValue();
@@ -135,31 +141,54 @@ void CMyEarthManipulator::AdjustViewPoint()
     if(YOffet > 0 && (YOffet + EyeHeight*m_dFactor) > m_extent.yMax())
     {
         vp.focalPoint()->y() = DISTANCE;
-        setViewpoint(vp);
+        return(true);
     }
     else if(YOffet < 0 && (-YOffet + EyeHeight*m_dFactor) > m_extent.yMax())
     {
         vp.focalPoint()->y() = -DISTANCE;
-        setViewpoint(vp);
+        return(true);
     }
 
+    return(false);
 }
 
 /// 初始化视点
-void CMyEarthManipulator::InitViewPoint()
+void CMyEarthManipulator::InitHomePoint(const SceneViewPoint &homePoint)
 {
     osgEarth::Viewpoint vp;
-    auto srs = osgEarth::SpatialReference::get("wgs84");
-
-
-    vp.focalPoint()= osgEarth::GeoPoint(srs,118.8,32.1,0);
-    vp.heading()->set(0,osgEarth::Units::DEGREES);
-    vp.pitch()->set(-90,osgEarth::Units::DEGREES);
-    vp.range()->set(12000,osgEarth::Units::KILOMETERS);
-    setHomeViewpoint(vp);
+    vp.focalPoint()= osgEarth::GeoPoint(osgEarth::SpatialReference::get("wgs84"),
+                                        homePoint.stPos.fX,homePoint.stPos.fY,homePoint.stPos.fZ);
+    vp.heading()->set(homePoint.fAzimuth,osgEarth::Units::DEGREES);
+    vp.range()->set(homePoint.fDistance,osgEarth::Units::METERS);
 
     if(MAP_2D == m_emType)
     {
-        AdjustViewPoint();
+        AdjustViewPoint(vp);
     }
+    else
+    {
+        vp.pitch()->set(homePoint.fElev-90.,osgEarth::Units::DEGREES);
+    }
+
+    setHomeViewpoint(vp);
+}
+
+/// 设置视点
+void CMyEarthManipulator::SetViewPoint(const SceneViewPoint &viewPoint,double dTimes)
+{
+    osgEarth::Viewpoint vp;
+    vp.focalPoint()= osgEarth::GeoPoint(osgEarth::SpatialReference::get("wgs84"),
+                                        viewPoint.stPos.fX,viewPoint.stPos.fY,viewPoint.stPos.fZ);
+    vp.heading()->set(viewPoint.fAzimuth,osgEarth::Units::DEGREES);
+    vp.range()->set(viewPoint.fDistance,osgEarth::Units::METERS);
+
+    if(MAP_2D == m_emType)
+    {
+        AdjustViewPoint(vp);
+    }
+    else
+    {
+        vp.pitch()->set(0-viewPoint.fElev,osgEarth::Units::DEGREES);
+    }
+    setViewpoint(vp,dTimes);
 }

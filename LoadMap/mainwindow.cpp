@@ -590,6 +590,8 @@ void MainWindow::on_action_triggered()
 
 void MainWindow::on_action_2_triggered()
 {
+    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->HomeViewPoint();
+    return;
 //    SceneColor color;
 //    color.fG=color.fB=0.0f;
 //    pSatellite->SetOribitColor(color);

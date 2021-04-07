@@ -9,8 +9,9 @@ public:
     /// 设置视点状态
     enum ViewPointType
     {
-        View_2D,  /// 二维查看
-        View_3D,  /// 三维查看
+        View_2DMap,  /// 二维查看
+        View_3DMap,  /// 三维查看
+        View_Osg,    /// 不使用地图的时候的操作器
         View_User,/// 用户查看
         View_Node /// 跟踪节点
     };
