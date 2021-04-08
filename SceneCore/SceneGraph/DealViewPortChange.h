@@ -104,10 +104,10 @@ private:
 };
 
 /// 更改视点
-class HomeViewPoint:public osg::Operation
+class HomeViewPointOperation:public osg::Operation
 {
 public:
-    HomeViewPoint(osgGA::CameraManipulator* pManipulator):m_pManipulator(pManipulator){}
+    HomeViewPointOperation(osgGA::CameraManipulator* pManipulator):m_pManipulator(pManipulator){}
 
     void operator()(osg::Object*)
     {

@@ -119,8 +119,8 @@ void MainWindow::on_action_triggered()
     IMapLocation*  aaaa = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     aaaa->SetSceneNode(pSceneRootaaaa);
     pSceneRootaaaa->AddSceneNode(pCircle->GetMapSceneNode());
-    IMapLayer* m_pLayerTest = m_pSceneGraph->GetMap()->CreateLayer("test");
-    m_pLayerTest->AddSceneNode(aaaa);
+//    IMapLayer* m_pLayerTest = m_pSceneGraph->GetMap()->CreateLayer("test");
+//    m_pLayerTest->AddSceneNode(aaaa);
 
 //    CMapRectange* pRectangle = new CMapRectange(m_pSceneGraph);
 
@@ -182,7 +182,7 @@ void MainWindow::on_action_triggered()
     pHudLayout = dynamic_cast<IHudLayout*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudLayout"));
 
     pHudText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
-//    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudLayout);
+    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudLayout);
 
     auto pHudImage = dynamic_cast<IHudImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudImage"));
     pHudImage->SetImage("Image/ship.png");
@@ -323,7 +323,7 @@ void MainWindow::on_action_triggered()
     pFlash->SetFlashFreq(0.5);
     pFlash->SetFlashColor(color);
     pLod->AddSceneNode(pScal);
-//    m_pSceneGraph->GetRoot()->AddSceneNode(pModel);
+    m_pSceneGraph->GetRoot()->AddSceneNode(pModel);
 
 //    ILabel* pLabel = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
 //    pLabel->SetCanPick(true);
@@ -349,8 +349,8 @@ void MainWindow::on_action_triggered()
     vLevelInfo.push_back(1e6);
 
     pLod->SetLevelsInfo(vLevelInfo);
-//    m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);
-//    return;
+    m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);
+    return;
     m_pLayer = m_pSceneGraph->GetMap()->CreateLayer("test");
     pEarthLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
 //    m_pLayer->AddSceneNode(pEarthLocation);

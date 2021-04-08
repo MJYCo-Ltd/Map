@@ -343,27 +343,26 @@ void QtViewPort::FrameEvent()
         }
         m_bViewPointChanged=false;
     }
+}
 
-    if(m_bBackHome)
+void QtViewPort::HomeViewPoint()
+{
+    switch(m_emType)
     {
-        switch(m_emType)
-        {
-        case View_3DMap:
-            m_p3DEarthManipulator->home(0.);
-            break;
-        case View_2DMap:
-            m_p2DEarthManipulator->home(0.);
-            break;
-        case View_Node:
-            m_pTrackManipulator->home(0.);
-            break;
-        case View_Osg:
-            m_pTrackManipulator->home(0.);
-            break;
-        default:
-            break;
-        }
-        m_bBackHome=false;
+    case View_3DMap:
+        m_pRender->AddUpdateOperation(new HomeViewPointOperation(m_p3DEarthManipulator));
+        break;
+    case View_2DMap:
+        m_pRender->AddUpdateOperation(new HomeViewPointOperation(m_p2DEarthManipulator));
+        break;
+    case View_Node:
+        m_pRender->AddUpdateOperation(new HomeViewPointOperation(m_pTrackManipulator));
+        break;
+    case View_Osg:
+        m_pRender->AddUpdateOperation(new HomeViewPointOperation(m_pSelfManipulator));
+        break;
+    default:
+        break;
     }
 }
 
