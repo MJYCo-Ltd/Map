@@ -5,7 +5,9 @@ TEMPLATE = lib
 include($$PWD/../Tool.pri)
 
 HEADERS += \
-    AnalysisTool.h
+    AnalysisTool.h \
+    ViewAnalysis.h
 
 SOURCES += \
-    AnalysisTool.cpp
+    AnalysisTool.cpp \
+    ViewAnalysis.cpp

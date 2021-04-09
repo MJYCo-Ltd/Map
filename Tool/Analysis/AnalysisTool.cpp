@@ -12,5 +12,6 @@ ITool *CreateTool(ISceneGraph *pSceneGraph, const std::string &sInterfaceName)
 
 bool QueryInterface(std::string& sInterfaceName)
 {
+    sInterfaceName = "IViewAnalysis";
     return(false);
 }

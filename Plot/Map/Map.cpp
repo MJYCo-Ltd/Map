@@ -5,11 +5,10 @@
 #include <osgEarth/Lighting>
 
 #if OSGEARTH_VERSION_GREATER_OR_EQUAL(3,0,0)
-#include <osgEarth/LogarithmicDepthBuffer>
+#include <osgEarth/AutoClipPlaneHandler>
 #else
-#include <osgEarthUtil/LogarithmicDepthBuffer>
+#include <osgEarthUtil/AutoClipPlaneHandler>
 #endif
-
 #include <osgEarth/GLUtils>
 
 #include <Satellite/Date.h>
@@ -458,13 +457,10 @@ void CMap::InitMap()
 #if OSGEARTH_VERSION_GREATER_OR_EQUAL(3,0,0)
             m_pMap3DNode->open();
 #endif
-            osgEarth::Util::LogarithmicDepthBuffer buffer;
-            buffer.setUseFragDepth(true);
-            buffer.install(m_pMap3DNode.get());
-
             m_pSpaceEnv = new CSpaceEnv(m_pSceneGraph);
             osg::Camera* pCamera = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
                     ->GetOsgView()->getCamera();
+            pCamera->addCullCallback(new osgEarth::Util::AutoClipPlaneCullCallback(m_pMap3DNode));
             m_pSpaceEnv->SetMainCamara(pCamera);
             m_pSpaceEnv->Init();
 

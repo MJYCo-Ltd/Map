@@ -22,12 +22,12 @@ void CMyEarthManipulator::ChangeMap(MapType emType)
         case MAP_3D:
             getSettings()->setThrowingEnabled(true);
             getSettings()->setThrowDecayRate(0.009);
-            getSettings()->setMinMaxDistance(1,DBL_MAX);
+            getSettings()->setMinMaxDistance(100,DBL_MAX);
             getSettings()->setLockAzimuthWhilePanning(false);
             getSettings()->setTerrainAvoidanceEnabled(true);
             break;
         case MAP_2D:
-            getSettings()->setMinMaxDistance(10,m_dMaxDistance);
+            getSettings()->setMinMaxDistance(100,m_dMaxDistance);
             auto vp = getViewpoint();
             if(AdjustViewPoint(vp))
             {
