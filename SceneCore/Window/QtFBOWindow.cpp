@@ -4,6 +4,7 @@
 #include <QKeyEvent>
 #include <QWheelEvent>
 #include <QHoverEvent>
+#include <QDropEvent>
 #include <QOffscreenSurface>
 #include <QOpenGLContext>
 #include <QOpenGLFramebufferObject>
@@ -311,6 +312,24 @@ void QtFBOWindow::HoverMove(QHoverEvent *event, qreal rScal)
     }
 
     keyboardModifiers(event);
+    getEventQueue()->mouseMotion(m_rMouseX, m_rMouseY);
+}
+
+/// 拖拽消息
+void QtFBOWindow::Drop(QDropEvent *event, qreal rScal)
+{
+    m_rMouseX = event->pos().x()*rScal;
+    m_rMouseY = event->pos().y()*rScal;
+
+    auto iter = m_pAllOserver->begin();
+    auto tmpIter = iter;
+    for(;iter != m_pAllOserver->end(); )
+    {
+        ++tmpIter;
+        (*iter)->MouseMove(UNKNOWN_BUTTON,m_rMouseX,m_rMouseY);
+        iter = tmpIter;
+    }
+
     getEventQueue()->mouseMotion(m_rMouseX, m_rMouseY);
 }
 

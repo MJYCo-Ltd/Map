@@ -105,12 +105,13 @@ void CMapLine::UpdateNode()
         {
             pGeometry->at(nIndex++).set(one.fLon,one.fLat,one.fHeight);
         }
+
+        ///此处dirty会重新加载style
+        m_pFeatureNode->dirty();
+
         m_bPosChanged=false;
     }
-
-    ///此处dirty会重新加载style
-    m_pFeatureNode->dirty();
-    ImplMapSceneNode<IMapLine>::UpdateNode();
+    ImplMapShape<IMapLine>::UpdateNode();
 }
 
 /// 更新地图
@@ -131,7 +132,7 @@ void CMapLine::UpdateMapNode(osgEarth::MapNode *pMapNode)
 /// 初始化场景节点
 void CMapLine::InitNode()
 {
-    ImplMapSceneNode<IMapLine>::InitNode();
+    ImplMapShape<IMapLine>::InitNode();
 
     osgEarth::Feature* pFeature = new osgEarth::Feature(
                 new osgEarth::LineString,
@@ -143,7 +144,6 @@ void CMapLine::InitNode()
     m_pFeatureNode = new osgEarth::FeatureNode(pFeature);
     m_pFeatureNode->setDynamic(true);
 
-    m_pFeatureNode->dirty();
     SetOsgNode(m_pFeatureNode.get());
 }
 
@@ -159,11 +159,7 @@ void CMapLine::InitStyle()
     m_pNodeStyle->getOrCreate<osgEarth::LineSymbol>()
             ->stroke()->stipplePattern() = MAP_DOTTED_LINE == m_emLineType ? 0xF0F0 : 0xFFFF;
 
-
-    m_pNodeStyle->getOrCreate<osgEarth::AltitudeSymbol>()
-            ->technique() = osgEarth::AltitudeSymbol::TECHNIQUE_DRAPE;
-
-    ImplMapSceneNode<IMapLine>::InitStyle(m_pNodeStyle);
+    ImplMapShape<IMapLine>::InitStyle(m_pNodeStyle);
 }
 
 /// 修改线宽

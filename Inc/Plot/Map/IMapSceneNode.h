@@ -12,6 +12,16 @@ public:
     CONSTRUCTOR(IMapSceneNode,ISceneNode)
 
     /**
+     * @brief 地图节点高程格式
+     */
+    enum MAP_TERRAIN
+    {
+        CLOSE_TERRAIN,    /// 贴地
+        RELATIVE_TERRAIN, /// 相对高程高度
+        ABSOLUTE_TERRAIN  /// 相对椭球表面高度
+    };
+
+    /**
      * @brief 转换成MapSceneNode
      * @return
      */
@@ -31,7 +41,7 @@ protected:
     virtual void TerrainTypeChanged()=0;
 
 protected:
-    MAP_TERRAIN m_emType=RELATIVE_TERRAIN;
+    MAP_TERRAIN m_emType=CLOSE_TERRAIN;
 };
 
 #endif

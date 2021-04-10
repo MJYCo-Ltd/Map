@@ -18,7 +18,7 @@ void CMapPoint::UpdateMapNode(osgEarth::MapNode *pMapNode)
 /// 初始化节点
 void CMapPoint::InitNode()
 {
-    ImplMapSceneNode<IMapPoint>::InitNode();
+    ImplMapShape<IMapPoint>::InitNode();
 
     osgEarth::Feature* pFeature = new osgEarth::Feature(
                 new osgEarth::PointSet,
@@ -26,33 +26,19 @@ void CMapPoint::InitNode()
 
     m_pNodeStyle = pFeature->style().operator->();
 
+    InitStyle();
+
     m_pFeatureNode = new osgEarth::FeatureNode(pFeature);
     m_pFeatureNode->setDynamic(true);
 
     SetOsgNode(m_pFeatureNode.get());
-    InitStyle();
 }
 
 /// 更改位置
 void CMapPoint::PosChanged()
 {
-    osgEarth::Geometry* pGeometry = m_pFeatureNode->getFeature()->getGeometry();
-    if(pGeometry->size() < 1)
-    {
-        pGeometry->push_back(osg::Vec3(m_stGeoPos.fLon,
-                                        m_stGeoPos.fLat,
-                                        m_stGeoPos.fHeight));
-    }
-    else
-    {
-        pGeometry->at(0).set(m_stGeoPos.fLon,
-                             m_stGeoPos.fLat,
-                             m_stGeoPos.fHeight);
-    }
-
-    /// 重新构建futureNode
-    m_pFeatureNode->dirty();
-    ImplMapSceneNode<IMapPoint>::NodeChanged();
+    m_bPosChanged=true;
+    NodeChanged();
 }
 
 /// 初始化样式
@@ -63,13 +49,33 @@ void CMapPoint::InitStyle()
     m_pNodeStyle->getOrCreate<osgEarth::PointSymbol>()->size() = m_fPointSize;
     m_pNodeStyle->getOrCreate<osgEarth::PointSymbol>()->smooth()=true;
 
-    ImplMapSceneNode<IMapPoint>::InitStyle(m_pNodeStyle);
+    ImplMapShape<IMapPoint>::InitStyle(m_pNodeStyle);
 }
 
 /// 修改
 void CMapPoint::UpdateNode()
 {
-    ImplMapSceneNode<IMapPoint>::UpdateNode();
+    if(m_bPosChanged)
+    {
+        osgEarth::Geometry* pGeometry = m_pFeatureNode->getFeature()->getGeometry();
+        if(pGeometry->size() < 1)
+        {
+            pGeometry->push_back(osg::Vec3(m_stGeoPos.fLon,
+                                            m_stGeoPos.fLat,
+                                            m_stGeoPos.fHeight));
+        }
+        else
+        {
+            pGeometry->at(0).set(m_stGeoPos.fLon,
+                                 m_stGeoPos.fLat,
+                                 m_stGeoPos.fHeight);
+        }
+
+        /// 重新构建futureNode
+        m_pFeatureNode->dirty();
+        m_bPosChanged=false;
+    }
+    ImplMapShape<IMapPoint>::UpdateNode();
 }
 
 /// 点大小修改

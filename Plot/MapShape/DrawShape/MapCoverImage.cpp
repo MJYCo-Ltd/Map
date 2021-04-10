@@ -15,7 +15,7 @@ void CMapCoverImage::UpdateMapNode(osgEarth::MapNode *pMapNode)
 
 void CMapCoverImage::InitNode()
 {
-    ImplMapSceneNode<IMapCoverImage>::InitNode();
+    ImplMapShape<IMapCoverImage>::InitNode();
     InitStyle();
 
     m_pCoverRoot = new osg::Group;
@@ -146,7 +146,7 @@ void CMapCoverImage::SetCeDian(const std::vector<CeDian> & vAllCedian)
 void CMapCoverImage::InitStyle()
 {
     m_pNodeStyle = new osgEarth::Style;
-    ImplMapSceneNode<IMapCoverImage>::InitStyle(m_pNodeStyle);
+    ImplMapShape<IMapCoverImage>::InitStyle(m_pNodeStyle);
 
     m_pNodeStyle->getOrCreateSymbol<osgEarth::TextSymbol>()->encoding() = osgEarth::TextSymbol::ENCODING_UTF8;
     m_pNodeStyle->getOrCreateSymbol<osgEarth::TextSymbol>()->alignment() = osgEarth::TextSymbol::ALIGN_LEFT_CENTER;

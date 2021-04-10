@@ -12,6 +12,6 @@ public:
      * @brief 更新地图
      * @param pMapNode
      */
-    virtual void UpdateMapNode(osgEarth::MapNode* pMapNode)=0;
+    virtual void UpdateMapNode(osgEarth::MapNode*){};
 };
 #endif //INTERFACE_OSG_MAP_SCENE_NODE_H

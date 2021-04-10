@@ -74,13 +74,13 @@ void CMapLocation::UpdateNode()
         m_pGeoTransform->setMatrix(local2world);
     }
 
-    ImplMapSceneNode<IMapLocation>::UpdateNode();
+    ImplSceneNode<IMapLocation>::UpdateNode();
 }
 
 /// 初始化节点
 void CMapLocation::InitNode()
 {
-    ImplMapSceneNode<IMapLocation>::InitNode();
+    ImplSceneNode<IMapLocation>::InitNode();
     m_pGeoTransform = new CMyMatrixTransform;
 
     m_pHorizonCullBack = new osgEarth::HorizonCullCallback;
@@ -103,6 +103,9 @@ void CMapLocation::PosChanged()
         m_pGeoPoint.z() = m_stGeoPos.fHeight;
     }
 
+    NodeChanged();
+}
 
-    ImplMapSceneNode<IMapLocation>::NodeChanged();
+void CMapLocation::TerrainTypeChanged()
+{
 }

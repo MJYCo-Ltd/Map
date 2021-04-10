@@ -19,7 +19,8 @@ void CMapPolygon::AddPoint(int nIndex, const MapGeoPos &rScenePos)
         m_listAllPos.insert(pIter,rScenePos);
     }
 
-    ImplMapSceneNode<IMapPolygon>::NodeChanged();
+    m_bPosChanged=true;
+    NodeChanged();
 }
 
 /// 移除指定位置点
@@ -34,7 +35,8 @@ bool CMapPolygon::RemovePoint(int nIndex)
     for(int i=0; i<nIndex;++i,++pIter){}
     m_listAllPos.erase(pIter);
 
-    ImplMapSceneNode<IMapPolygon>::NodeChanged();
+    m_bPosChanged=true;
+    NodeChanged();
     return(true);
 }
 
@@ -52,7 +54,8 @@ bool CMapPolygon::UpdatePoint(int nIndex, const MapGeoPos &rPos)
     if(*pIter != rPos)
     {
         *pIter = rPos;
-        ImplMapSceneNode<IMapPolygon>::NodeChanged();
+        m_bPosChanged=true;
+        NodeChanged();
     }
 
     return(true);
@@ -68,7 +71,8 @@ void CMapPolygon::SetMultPos(const std::vector<MapGeoPos> &vAllPoints)
         m_listAllPos.push_back(one);
     }
 
-    ImplMapSceneNode<IMapPolygon>::NodeChanged();
+    m_bPosChanged=true;
+    NodeChanged();
 }
 
 /// 多边形颜色修改
@@ -82,16 +86,20 @@ void CMapPolygon::PolygonColorChanged()
 /// 更新回调
 void CMapPolygon::UpdateNode()
 {
-    osgEarth::Geometry* pGeometry = m_pFeatureNode->getFeature()->getGeometry();
-    int nIndex(0);
-    pGeometry->resize(m_listAllPos.size());
-    for(auto one : m_listAllPos)
+    if(m_bPosChanged)
     {
-        pGeometry->at(nIndex++).set(one.fLon,one.fLat,one.fHeight);
+        osgEarth::Geometry* pGeometry = m_pFeatureNode->getFeature()->getGeometry();
+        int nIndex(0);
+        pGeometry->resize(m_listAllPos.size());
+        for(auto one : m_listAllPos)
+        {
+            pGeometry->at(nIndex++).set(one.fLon,one.fLat,one.fHeight);
+        }
+        m_pFeatureNode->dirty();
+        m_bPosChanged=false;
     }
-    m_pFeatureNode->dirty();
 
-    ImplMapSceneNode<IMapPolygon>::UpdateNode();
+    ImplMapShape<IMapPolygon>::UpdateNode();
 }
 
 void CMapPolygon::UpdateMapNode(osgEarth::MapNode *pMapNode)
@@ -106,7 +114,7 @@ void CMapPolygon::UpdateMapNode(osgEarth::MapNode *pMapNode)
 /// 初始化节点
 void CMapPolygon::InitNode()
 {
-    ImplMapSceneNode<IMapPolygon>::InitNode();
+    ImplMapShape<IMapPolygon>::InitNode();
 
     osgEarth::Feature* pFeature = new osgEarth::Feature(
                 new osgEarth::Polygon,
@@ -128,7 +136,5 @@ void CMapPolygon::InitStyle()
             ->fill()->color().set(m_stPolygonColor.fR,m_stPolygonColor.fG
                                   ,m_stPolygonColor.fB,m_stPolygonColor.fA);
 
-    m_pNodeStyle->getOrCreate<osgEarth::AltitudeSymbol>()
-            ->technique() = osgEarth::AltitudeSymbol::TECHNIQUE_DRAPE;
-    ImplMapSceneNode<IMapPolygon>::InitStyle(m_pNodeStyle);
+    ImplMapShape<IMapPolygon>::InitStyle(m_pNodeStyle);
 }

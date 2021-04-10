@@ -3,12 +3,13 @@
 #include <osgEarth/Horizon>
 #include <osgEarth/GeoPositionNode>
 #include <Plot/Map/IMapLocation.h>
-#include <Inner/ImplMapSceneNode.hpp>
+#include <Inner/ImplSceneNode.hpp>
+#include <Inner/IOsgMapSceneNode.h>
 #include <Inner/OsgExtern/MyMatrixTransform.h>
-class CMapLocation:public ImplMapSceneNode<IMapLocation>
+class CMapLocation:public ImplSceneNode<IMapLocation>,public IOsgMapSceneNode
 {
 public:
-    CONSTRUCTOR(CMapLocation,ImplMapSceneNode<IMapLocation>)
+    CONSTRUCTOR(CMapLocation,ImplSceneNode<IMapLocation>)
 
     /**
      * @brief
@@ -37,6 +38,11 @@ protected:
      * @brief 位置更改
      */
     void PosChanged();
+
+    /**
+     * @brief 贴地状态更改
+     */
+    void TerrainTypeChanged();
 
 protected:
     osgEarth::GeoPoint                                m_pGeoPoint;

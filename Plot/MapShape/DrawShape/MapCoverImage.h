@@ -3,12 +3,12 @@
 #include <osgEarth/DrapeableNode>
 #include <osgEarth/ImageOverlay>
 #include <Plot/Map/IMapCoverImage.h>
-#include <Inner/ImplMapSceneNode.hpp>
+#include <Inner/ImplMapShape.hpp>
 
-class CMapCoverImage:public ImplMapSceneNode<IMapCoverImage>
+class CMapCoverImage:public ImplMapShape<IMapCoverImage>
 {
 public:
-    CONSTRUCTOR(CMapCoverImage,ImplMapSceneNode<IMapCoverImage>)
+    CONSTRUCTOR(CMapCoverImage,ImplMapShape<IMapCoverImage>)
 
     /**
      * @brief 更新地图节点

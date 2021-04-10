@@ -3,14 +3,12 @@
 
 #include <Plot/Map/IMapPoint.h>
 #include <osgEarth/FeatureNode>
-#include <Inner/ImplMapSceneNode.hpp>
-class PointCallBack;
+#include <Inner/ImplMapShape.hpp>
 
-class CMapPoint:public ImplMapSceneNode<IMapPoint>
+class CMapPoint:public ImplMapShape<IMapPoint>
 {
-    friend class PointCallBack;
 public:
-    CONSTRUCTOR(CMapPoint,ImplMapSceneNode<IMapPoint>)
+    CONSTRUCTOR(CMapPoint,ImplMapShape<IMapPoint>)
 
     /**
      * @brief 更新地图节点
@@ -37,7 +35,7 @@ public:
     void PointSizeChanged();
     void ColorChanged();
 protected:
-    bool   m_bUpdate=false;
+    bool   m_bPosChanged=false;
     osg::observer_ptr<osgEarth::FeatureNode> m_pFeatureNode;
 };
 

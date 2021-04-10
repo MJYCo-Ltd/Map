@@ -21,6 +21,7 @@ class QWheelEvent;
 class QTouchEvent;
 class QInputEvent;
 class QHoverEvent;
+class QDropEvent;
 class IWindowMessageObserver;
 
 class QtFBOWindow:public osgViewer::GraphicsWindowEmbedded
@@ -75,6 +76,7 @@ public:
     void MouseUp(QMouseEvent* event, qreal rScal);
     void MouseMove(QMouseEvent* event, qreal rScal);
     void HoverMove(QHoverEvent* event, qreal rScal);
+    void Drop(QDropEvent *event,qreal rScal);
     void WheelEvent(QWheelEvent* event);
     void TouchEvent(QTouchEvent* event);
     ////////////// 鼠标/键盘/触摸屏 消息处理 ////////////////////////////////////////////

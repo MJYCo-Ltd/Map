@@ -3,12 +3,12 @@
 
 #include <osgEarth/FeatureNode>
 #include <Plot/Map/IMapPolygon.h>
-#include <Inner/ImplMapSceneNode.hpp>
+#include <Inner/ImplMapShape.hpp>
 
-class CMapPolygon:public ImplMapSceneNode<IMapPolygon>
+class CMapPolygon:public ImplMapShape<IMapPolygon>
 {
 public:
-    CONSTRUCTOR(CMapPolygon,ImplMapSceneNode<IMapPolygon>)
+    CONSTRUCTOR(CMapPolygon,ImplMapShape<IMapPolygon>)
 
     /**
      * @brief 增加点
@@ -58,6 +58,7 @@ protected:
     void InitStyle();
 private:
     osg::observer_ptr<osgEarth::FeatureNode> m_pFeatureNode;
+    bool  m_bPosChanged=false;
 };
 
 #endif // CSENEPOLYGON_H

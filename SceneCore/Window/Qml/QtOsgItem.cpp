@@ -52,6 +52,7 @@ void QtOsgItem::setFrameRate(int nFrameRate)
 /// 已经准备好了
 void QtOsgItem::Ready()
 {
+    m_rScal=window()->devicePixelRatio();
     m_pRenderer->InitSurface();
     QTimer::singleShot(1000/m_nFrameRate,this,&QtOsgItem::EvnetCall);
 }
@@ -87,7 +88,7 @@ void QtOsgItem::mousePressEvent(QMouseEvent * event)
 {
     if(nullptr != m_pRenderer)
     {
-        m_pRenderer->GetFBOWindow()->MousePress(event,window()->devicePixelRatio());
+        m_pRenderer->GetFBOWindow()->MousePress(event,m_rScal);
     }
     event->accept();
 }
@@ -97,7 +98,7 @@ void QtOsgItem::mouseReleaseEvent(QMouseEvent *event)
 {
     if(nullptr != m_pRenderer)
     {
-        m_pRenderer->GetFBOWindow()->MouseUp(event,window()->devicePixelRatio());
+        m_pRenderer->GetFBOWindow()->MouseUp(event,m_rScal);
     }
     event->accept();
 }
@@ -106,7 +107,7 @@ void QtOsgItem::mouseMoveEvent(QMouseEvent *event)
 {
     if(nullptr != m_pRenderer)
     {
-        m_pRenderer->GetFBOWindow()->MouseMove(event,window()->devicePixelRatio());
+        m_pRenderer->GetFBOWindow()->MouseMove(event,m_rScal);
     }
     event->accept();
 }
@@ -116,7 +117,7 @@ void QtOsgItem::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if(nullptr != m_pRenderer)
     {
-        m_pRenderer->GetFBOWindow()->MouseDouble(event,window()->devicePixelRatio());
+        m_pRenderer->GetFBOWindow()->MouseDouble(event,m_rScal);
     }
     QQuickFramebufferObject::mouseDoubleClickEvent(event);
 }
@@ -147,7 +148,16 @@ void QtOsgItem::hoverMoveEvent(QHoverEvent *event)
 {
     if(nullptr != m_pRenderer)
     {
-        m_pRenderer->GetFBOWindow()->HoverMove(event,window()->devicePixelRatio());
+        m_pRenderer->GetFBOWindow()->HoverMove(event,m_rScal);
     }
     QQuickFramebufferObject::hoverMoveEvent(event);
+}
+
+void QtOsgItem::dropEvent(QDropEvent *event)
+{
+    if(nullptr != m_pRenderer)
+    {
+        m_pRenderer->GetFBOWindow()->Drop(event,m_rScal);
+    }
+    QQuickFramebufferObject::dropEvent(event);
 }

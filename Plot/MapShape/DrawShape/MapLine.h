@@ -3,12 +3,12 @@
 
 #include <osgEarth/FeatureNode>
 #include <Plot/Map/IMapLine.h>
-#include <Inner/ImplMapSceneNode.hpp>
+#include <Inner/ImplMapShape.hpp>
 
-class CMapLine:public ImplMapSceneNode<IMapLine>
+class CMapLine:public ImplMapShape<IMapLine>
 {
 public:
-    CONSTRUCTOR(CMapLine,ImplMapSceneNode<IMapLine>)
+    CONSTRUCTOR(CMapLine,ImplMapShape<IMapLine>)
 
 
     /**
