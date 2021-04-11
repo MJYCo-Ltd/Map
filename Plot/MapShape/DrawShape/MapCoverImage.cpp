@@ -6,16 +6,16 @@
 #include "MapCoverImage.h"
 
 
-void CMapCoverImage::UpdateMapNode(osgEarth::MapNode *pMapNode)
+void CMapCoverImage::UpdateMapNode()
 {
-    m_pDrapeableNode->setMapNode(pMapNode);
+    m_pDrapeableNode->setMapNode(s_pMapNode.get());
 
-    if(m_pImage.valid()) m_pImage->setMapNode(pMapNode);
+    if(m_pImage.valid()) m_pImage->setMapNode(s_pMapNode.get());
 }
 
 void CMapCoverImage::InitNode()
 {
-    ImplMapShape<IMapCoverImage>::InitNode();
+    ImplMapSceneNode<IMapCoverImage>::InitNode();
     InitStyle();
 
     m_pCoverRoot = new osg::Group;
@@ -145,19 +145,19 @@ void CMapCoverImage::SetCeDian(const std::vector<CeDian> & vAllCedian)
 /// 初始化样式
 void CMapCoverImage::InitStyle()
 {
-    m_pNodeStyle = new osgEarth::Style;
-    ImplMapShape<IMapCoverImage>::InitStyle(m_pNodeStyle);
+//    m_pNodeStyle = new osgEarth::Style;
+//    ImplMapShape<IMapCoverImage>::InitStyle(m_pNodeStyle);
 
-    m_pNodeStyle->getOrCreateSymbol<osgEarth::TextSymbol>()->encoding() = osgEarth::TextSymbol::ENCODING_UTF8;
-    m_pNodeStyle->getOrCreateSymbol<osgEarth::TextSymbol>()->alignment() = osgEarth::TextSymbol::ALIGN_LEFT_CENTER;
-    m_pNodeStyle->getOrCreateSymbol<osgEarth::TextSymbol>()->size() = 20;
-    std::string sFontPath = GetDataPath();
-    sFontPath += "fonts/msyh.ttf";
-    m_pNodeStyle->getOrCreateSymbol<osgEarth::TextSymbol>()->font() = sFontPath;
-    m_pNodeStyle->getOrCreateSymbol<osgEarth::TextSymbol>()->fill()->color() = osgEarth::Color::White;
-    m_pNodeStyle->getOrCreateSymbol<osgEarth::TextSymbol>()->halo()->color() = osgEarth::Color::Black;
-    m_pNodeStyle->getOrCreate<osgEarth::IconSymbol>()->declutter() = false;
-    m_pNodeStyle->getOrCreate<osgEarth::IconSymbol>()->alignment() = osgEarth::IconSymbol::ALIGN_RIGHT_CENTER;
+//    m_pNodeStyle->getOrCreateSymbol<osgEarth::TextSymbol>()->encoding() = osgEarth::TextSymbol::ENCODING_UTF8;
+//    m_pNodeStyle->getOrCreateSymbol<osgEarth::TextSymbol>()->alignment() = osgEarth::TextSymbol::ALIGN_LEFT_CENTER;
+//    m_pNodeStyle->getOrCreateSymbol<osgEarth::TextSymbol>()->size() = 20;
+//    std::string sFontPath = GetDataPath();
+//    sFontPath += "fonts/msyh.ttf";
+//    m_pNodeStyle->getOrCreateSymbol<osgEarth::TextSymbol>()->font() = sFontPath;
+//    m_pNodeStyle->getOrCreateSymbol<osgEarth::TextSymbol>()->fill()->color() = osgEarth::Color::White;
+//    m_pNodeStyle->getOrCreateSymbol<osgEarth::TextSymbol>()->halo()->color() = osgEarth::Color::Black;
+//    m_pNodeStyle->getOrCreate<osgEarth::IconSymbol>()->declutter() = false;
+//    m_pNodeStyle->getOrCreate<osgEarth::IconSymbol>()->alignment() = osgEarth::IconSymbol::ALIGN_RIGHT_CENTER;
 }
 
 /// 设置最小值颜色
@@ -172,7 +172,7 @@ void CMapCoverImage::SetMaxValueColor(const SceneColor &rMaxColor)
     m_stMaxColor = rMaxColor;
 }
 #include <osgEarth/ImageOverlay>
-void CMapCoverImage::SetBound(const MapGeoPos &rLeftUp, const MapGeoPos &rRightDown, const std::string &sImagePath)
+void CMapCoverImage::SetBound(const ScenePos &rLeftUp, const ScenePos &rRightDown, const std::string &sImagePath)
 {
     if(!m_pImage.valid())
     {
@@ -181,10 +181,10 @@ void CMapCoverImage::SetBound(const MapGeoPos &rLeftUp, const MapGeoPos &rRightD
         AddNode(m_pCoverRoot.get(),m_pImage);
     }
 
-    m_pImage->setWest(rLeftUp.fLon);
-    m_pImage->setEast(rRightDown.fLon);
-    m_pImage->setNorth(rLeftUp.fLat);
-    m_pImage->setSouth(rRightDown.fLat);
+    m_pImage->setWest(rLeftUp.fX);
+    m_pImage->setEast(rRightDown.fX);
+    m_pImage->setNorth(rLeftUp.fY);
+    m_pImage->setSouth(rRightDown.fY);
 
     auto pImage =  m_pSceneGraph->ResouceLoader()->LoadImage(sImagePath,0,0,false);
     m_pImage->setImage(pImage);

@@ -15,8 +15,8 @@ public:
      * @brief 设置点的位置
      * @param rGeoPos
      */
-    void SetGeoPos(const MapGeoPos& rGeoPos)JUDGE_EQUAL_CALL_FUNCTION(rGeoPos,m_stGeoPos,PosChanged)
-    const MapGeoPos& GeoPos(){return(m_stGeoPos);}
+    void SetGeoPos(const ScenePos& rGeoPos)JUDGE_EQUAL_CALL_FUNCTION(rGeoPos,m_stGeoPos,PosChanged)
+    const ScenePos& GeoPos(){return(m_stGeoPos);}
 
     /**
      * @brief 设置由SceneShpae创建的节点
@@ -34,7 +34,7 @@ protected:
     virtual void PosChanged()=0;
 protected:
     ISceneNode* m_pSceneNode=nullptr;
-    MapGeoPos  m_stGeoPos;
+    ScenePos  m_stGeoPos;
 };
 
 #endif//INTERFACE_MAP_LOCATION_HEARDER_H

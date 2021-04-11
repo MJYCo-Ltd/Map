@@ -1,7 +1,6 @@
 #ifndef IMPL_SCENE_SHAPE_H
 #define IMPL_SCENE_SHAPE_H
 #include <osg/Geometry>
-#include <osg/CullFace>
 #include <Inner/ImplSceneNode.hpp>
 
 /**
@@ -22,7 +21,7 @@ public:
         m_pGeometry->setDataVariance(osg::Object::DYNAMIC);
 
         auto pState = m_pGeometry->getOrCreateStateSet();
-        /// 开启颜色混合 关闭光照
+        /// 开启颜色混合
         pState->setMode(GL_BLEND,osg::StateAttribute::ON);
 
         /// 关闭写深度缓存
@@ -58,7 +57,6 @@ protected:
     /// 形状更改
     void ShapeChanged()SET_TRUE_NODE_UPDATE(m_bShapeChanged)
     void ColorChanged()SET_TRUE_NODE_UPDATE(m_bColorChanged)
-    void ShowBackChanged()SET_TRUE_NODE_UPDATE(m_bShowBackChanged)
 
     virtual void UpdateColor()
     {
@@ -86,31 +84,14 @@ protected:
             m_bShapeChanged=false;
         }
 
-        if(m_bShowBackChanged)
-        {
-            if(!T::m_bShowBack)
-            {
-                /// 开启背面裁剪
-                m_pCullFace = new osg::CullFace;
-                m_pGeometry->getOrCreateStateSet()->setAttributeAndModes(m_pCullFace);
-            }
-            else
-            {
-                m_pGeometry->getOrCreateStateSet()->removeAssociatedModes(m_pCullFace);
-            }
-            m_bShowBackChanged=false;
-        }
-
         ImplSceneNode<T>::UpdateNode();
     }
 protected:
     osg::observer_ptr<osg::Geometry> m_pGeometry;
     osg::ref_ptr<osg::Vec3Array>     m_pVertexArray;
     osg::ref_ptr<osg::Vec4Array>     m_pColorArray;
-    osg::ref_ptr<osg::CullFace>      m_pCullFace;
     bool       m_bColorChanged=false;
     bool       m_bShapeChanged=false;
-    bool       m_bShowBackChanged=false;
 };
 
 #endif // IMPL_SCENE_SHAPE_H

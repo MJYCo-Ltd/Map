@@ -3,34 +3,11 @@
 #include <list>
 #include <osgEarth/LineDrawable>
 #include <Plot/SceneShape/ILine.h>
-#include <Inner/ImplSceneShape.hpp>
-class CSceneLine:public ImplSceneNode<ILine>
+#include <Inner/ImplSceneGeometry.hpp>
+class CSceneLine:public ImplSceneGeometry<ILine>
 {
 public:
-    CONSTRUCTOR(CSceneLine,ImplSceneNode<ILine>)
-
-    /**
-     * @brief增加一个点
-     */
-    void AddPoint(int,const ScenePos&);
-
-    /**
-     * @brief 移除一个点
-     * @return
-     */
-    bool RemovePoint(int);
-
-    /**
-     * @brief更新点
-     * @return
-     */
-    bool UpdatePoint(int,const ScenePos&);
-
-    /**
-     * @brief 一次设置多个点
-     */
-    void SetMultPos(const std::vector<ScenePos>&);
-    std::vector<ScenePos> GetMulPos()const;
+    CONSTRUCTOR(CSceneLine,ImplSceneGeometry<ILine>)
 
 protected:
 
@@ -48,7 +25,11 @@ protected:
      * @brief 颜色修改
      */
     void ColorChanged()SET_TRUE_NODE_UPDATE(m_bColorChanged)
-    void ShowBackChanged(){}
+
+    /**
+     * @brief 线型更改
+     */
+    void LineTypeChanged()SET_TRUE_NODE_UPDATE(m_bLineTypeChanged)
 
     /**
      * @brief 初始化节点
@@ -59,12 +40,15 @@ protected:
      * @brief 节点更新
      */
     void UpdateNode();
+
+    void CreateShape(){}
+    void UpdateShape(){}
 protected:
     osg::ref_ptr<osgEarth::LineDrawable> m_pLine;
-    std::list<ScenePos>           m_listAllPos;
     bool                          m_bColorChanged=false;
     bool                          m_bShapeChanged=false;
     bool                          m_bWidthChanged=false;
+    bool                          m_bLineTypeChanged=false;
 };
 
 #endif // CSCENELINE_H

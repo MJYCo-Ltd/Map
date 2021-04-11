@@ -15,7 +15,7 @@ public:
      * @brief 设置圆心
      * @param rLeftUp
      */
-    void SetCenter(const MapGeoPos& pos);
+    void SetCenter(const ScenePos& pos);
 	
     /**
      * @brief 设置半径
@@ -46,7 +46,7 @@ protected:
      */
     void UpdateNode();
 protected:
-    MapGeoPos     m_stCenter;
+    ScenePos     m_stCenter;
     ISceneGraph*  m_pSceneGraph=nullptr;
     IMapPolygon*  m_pPolygon=nullptr;
 

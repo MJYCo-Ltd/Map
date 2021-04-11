@@ -1,11 +1,12 @@
 #ifndef IMPL_SCENE_SENSOR_H
 #define IMPL_SCENE_SENSOR_H
 #include <osg/PolygonMode>
+#include <osg/CullFace>
 #include <osg/MatrixTransform>
 #include <Inner/ImplSceneShape.hpp>
 
 /**
- *  实现ISceneNode所有的接口
+ *  实现ISceneSensor所有的接口
  */
 template <typename T>
 class ImplSceneSensor:public ImplSceneShape<T>
@@ -21,6 +22,7 @@ protected:
     void ShowTypeChanged()SET_TRUE_NODE_UPDATE(m_bShowTypeChanged)
     void DistanceChanged()SET_TRUE_NODE_UPDATE(m_bDistanceChanged)
     void EffectsChanged()SET_TRUE_NODE_UPDATE(m_bEffectChanged)
+    void ShowBackChanged()SET_TRUE_NODE_UPDATE(m_bShowBackChanged)
     void CountChanged(){m_pPulseStep->set(1.f/T::m_unCount);}
     void DirectionChanged(){m_pbIsOut->set(T::m_bOut);}
     void FreqChanged(){m_pPulseIntervalTime->set(1.f/T::m_unFreq);}
@@ -79,6 +81,21 @@ protected:
             m_bEffectChanged=false;
         }
 
+        if(m_bShowBackChanged)
+        {
+            if(!T::m_bShowBack)
+            {
+                /// 开启背面裁剪
+                m_pCullFace = new osg::CullFace;
+                m_pGeometry->getOrCreateStateSet()->setAttributeAndModes(m_pCullFace);
+            }
+            else
+            {
+                m_pGeometry->getOrCreateStateSet()->removeAssociatedModes(m_pCullFace);
+            }
+            m_bShowBackChanged=false;
+        }
+
         ImplSceneShape<T>::UpdateNode();
     }
 
@@ -124,6 +141,7 @@ protected:
     osg::observer_ptr<osg::Group>    m_pLineGroup;
     osg::observer_ptr<osg::MatrixTransform> m_pScalTransform;
     osg::ref_ptr<osgEarth::VirtualProgram> m_pVirutlProgram;
+    osg::ref_ptr<osg::CullFace>            m_pCullFace;
     osg::ref_ptr<osg::Uniform>             m_pPulseStartTime;
     osg::ref_ptr<osg::Uniform>             m_pPulseIntervalTime;
     osg::ref_ptr<osg::Uniform>             m_pbIsOut;
@@ -132,6 +150,7 @@ protected:
     bool       m_bDistanceChanged=false;
     bool       m_bShowTypeChanged=false;
     bool       m_bEffectChanged=false;
+    bool       m_bShowBackChanged=false;
 };
 
 #endif // IMPL_SCENE_SENSOR_H

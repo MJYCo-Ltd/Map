@@ -8,7 +8,7 @@ CMapCircle::CMapCircle(ISceneGraph* pSceneGraph)
     m_pSceneGraph = pSceneGraph;
     InitNode();
 }
-void CMapCircle::SetCenter(const MapGeoPos& pos)
+void CMapCircle::SetCenter(const ScenePos &pos)
 {
     if(pos != m_stCenter)
     {
@@ -26,7 +26,7 @@ void CMapCircle::SetRadius(const float& radius)
 }
 void CMapCircle::SetColor(const SceneColor& color)
 {
-    m_pPolygon->SetPolygonColor(color);
+    m_pPolygon->GetDrawPolygon()->SetColor(color);
 }
 void CMapCircle::SetFineness(int fineness)
 {
@@ -46,15 +46,15 @@ void CMapCircle::UpdateNode()
         return;
     double dTmpOffset = D2PI/m_nFineness;
     double dLon, dLat,dHeight;
-    MapGeoPos Pos;
-    std::vector<MapGeoPos> GeoMuPos;
+    ScenePos Pos;
+    std::vector<ScenePos> GeoMuPos;
     for(int i =0 ; i<= m_nFineness;i++)
     {
-        GisMath::GeoCalEndGeo(m_stCenter.fLon*DD2R,m_stCenter.fLat*DD2R,0,i*dTmpOffset, 0, m_fRadius,dLon, dLat,dHeight);
-        Pos.fLat = dLat*DR2D;
-        Pos.fLon = dLon*DR2D;
-        Pos.fHeight = dHeight;
+        GisMath::GeoCalEndGeo(m_stCenter.fX*DD2R,m_stCenter.fY*DD2R,0,i*dTmpOffset, 0, m_fRadius,dLon, dLat,dHeight);
+        Pos.fX = dLat*DR2D;
+        Pos.fY = dLon*DR2D;
+        Pos.fZ = dHeight;
         GeoMuPos.push_back(Pos);
     }
-    m_pPolygon->SetMultPos(GeoMuPos);
+    m_pPolygon->GetDrawPolygon()->SetMultPos(GeoMuPos);
 }

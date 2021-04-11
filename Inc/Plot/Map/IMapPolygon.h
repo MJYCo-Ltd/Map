@@ -1,8 +1,7 @@
 #ifndef INTERFACE_MAP_POLYGON_HEARDER_H
 #define INTERFACE_MAP_POLYGON_HEARDER_H
-#include <list>
 #include <Plot/Map/IMapSceneNode.h>
-
+#include <Plot/SceneShape/IPolygon.h>
 
 /**
  * @brief 场景节点类
@@ -13,42 +12,14 @@ public:
     CONSTRUCTOR(IMapPolygon,IMapSceneNode)
 
     /**
-     * @brief 增加点
+     * @brief 获取绘制信息
+     * @return
      */
-    virtual void AddPoint(int,const MapGeoPos&)=0;
-
-    /**
-     * @brief 移除点
-     */
-    virtual bool RemovePoint(int)=0;
-
-    /**
-     * @brief 更新指定位置点
-     */
-    virtual bool UpdatePoint(int,const MapGeoPos&)=0;
-
-    /**
-     * @brief 设置多个位置
-     */
-    virtual void SetMultPos(const std::vector<MapGeoPos>&)=0;
-    const std::list<MapGeoPos>& GetMulPos(){return(m_listAllPos);}
-
-    /**
-     * @brief 设置颜色
-     */
-    void SetPolygonColor(const SceneColor& polygonColor)JUDGE_EQUAL_CALL_FUNCTION(polygonColor,m_stPolygonColor,PolygonColorChanged)
-    const SceneColor& PolygonColor(){return(m_stPolygonColor);}
-
-    /**
-     * @brief 获取多边形点的个数
-     */
-    int GetPointCount()const{return(m_listAllPos.size());}
+    IPolygon* GetDrawPolygon(){return(m_pDrawPolygon);}
 protected:
     virtual ~IMapPolygon(){}
-    virtual void PolygonColorChanged()=0;
 protected:
-    SceneColor             m_stPolygonColor;
-    std::list<MapGeoPos>   m_listAllPos;
+    IPolygon* m_pDrawPolygon=nullptr;
 };
 
 #endif

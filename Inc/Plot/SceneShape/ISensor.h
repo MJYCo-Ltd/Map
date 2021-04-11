@@ -16,6 +16,13 @@ public:
     CONSTRUCTOR(ISensor,IShape)
 
     /**
+     * @brief 是否显示背面
+     * @param bShow
+     */
+    void SetShowBack(bool bShow)JUDGE_EQUAL_CALL_FUNCTION(bShow,m_bShowBack,ShowBackChanged)
+    bool ShowBack()const{return(m_bShowBack);}
+
+    /**
      * @brief 显示面
      */
     void ShowFace(bool bShow)JUDGE_EQUAL_CALL_FUNCTION(bShow,m_bShowFace,ShowTypeChanged)
@@ -66,9 +73,11 @@ protected:
     virtual void CountChanged()=0;
     virtual void DirectionChanged()=0;
     virtual void FreqChanged()=0;
+    virtual void ShowBackChanged()=0;
 protected:
     bool       m_bShowLine=true;
     bool       m_bShowFace=true;
+    bool       m_bShowBack=true;
     double     m_dDistance=1.;
     unsigned short m_unCount=10u;
     unsigned short m_unFreq=1u;

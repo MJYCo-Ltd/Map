@@ -1,14 +1,9 @@
-#include <osg/PointSprite>
 #include "ScenePoint.h"
 
 /// 更新形状
 void CScenePoint::UpdateShape()
 {
-    if(m_bPosChanged)
-    {
-        m_pVertexArray->at(0).set(m_stPos.fX,m_stPos.fY,m_stPos.fZ);
-        m_bPosChanged=false;
-    }
+    ImplSceneGeometry<IPoint>::UpdateShape();
 
     if(m_bPointSizeChanged)
     {
@@ -44,9 +39,11 @@ void CScenePoint::CreateShape()
     {
         /// 获取闪烁变量
         m_ufPointSize = pSate->getOrCreateUniform("pointSize",osg::Uniform::FLOAT);
-        m_ufPointSize->set(1.f);
+        m_ufPointSize->set(m_fPointSize);
+        pSate->setMode(GL_VERTEX_PROGRAM_POINT_SIZE,1);
     }
 
-    m_pVertexArray->push_back(osg::Vec3(m_stPos.fX,m_stPos.fY,m_stPos.fZ));
-    m_pGeometry->addPrimitiveSet(new osg::DrawArrays(GL_POINTS,0,m_pVertexArray->size()));
+
+    m_pDrawArrays=new osg::DrawArrays(GL_POINTS,0,m_pVertexArray->size());
+    m_pGeometry->addPrimitiveSet(m_pDrawArrays);
 }

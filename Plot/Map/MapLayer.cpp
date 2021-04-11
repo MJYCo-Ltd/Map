@@ -2,7 +2,7 @@
 #include <SceneGraph/ISceneGraph.h>
 #include <Inner/IRender.h>
 #include <Inner/OsgExtern/OsgExtern.h>
-#include <Inner/IOsgMapSceneNode.h>
+#include <Inner/OsgExtern/IOsgMapSceneNode.h>
 #include <Inner/IOsgSceneNode.h>
 #include "MapModelLayer.h"
 
@@ -17,7 +17,7 @@ public:
 
     void operator()(osg::Object*)
     {
-        m_pMapSceneNode->UpdateMapNode(m_pLayer->m_pMapNode.get());
+        m_pMapSceneNode->UpdateMapNode();
         m_pLayer->m_pModelLayer->getGroup()->addChild(dynamic_cast<IOsgSceneNode*>(m_pMapSceneNode)->GetOsgNode());
     }
 private:
@@ -111,7 +111,7 @@ void CMapLayer::UpdateMapNode(osgEarth::MapNode *pMapNode)
     m_pMapNode = pMapNode;
     for(auto one : m_mapID2Node)
     {
-        dynamic_cast<IOsgMapSceneNode*>(one.second)->UpdateMapNode(pMapNode);
+        dynamic_cast<IOsgMapSceneNode*>(one.second)->UpdateMapNode();
     }
 }
 

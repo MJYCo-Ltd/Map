@@ -14,7 +14,7 @@ public:
     CONSTRUCTOR(ImplSceneGroup,ImplSceneNode<T>)
 
     /// 添加节点
-    bool AddSceneNode(ISceneNode* pSceneNode)
+    bool AddSceneNode(ISceneNode* pSceneNode) override
     {
         if (nullptr == pSceneNode)
         {
@@ -42,7 +42,7 @@ public:
     }
 
     /// 移除节点
-    bool RemoveSceneNode(ISceneNode* pSceneNode)
+    bool RemoveSceneNode(ISceneNode* pSceneNode) override
     {
         if (nullptr == pSceneNode)
         {
@@ -64,7 +64,7 @@ public:
     }
 
 protected:
-    void InitNode()
+    void InitNode() override
     {
         ImplSceneNode<T>::InitNode();
         m_pGroup = new osg::Group;

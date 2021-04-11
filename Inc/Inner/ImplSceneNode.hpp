@@ -59,6 +59,9 @@ protected:
         }
     }
 
+    /**
+     * @brief 节点更新回调
+     */
     void UpdateNode()
     {
         if(m_bPickStateChanged)

@@ -3,18 +3,18 @@
 #include <osgEarth/DrapeableNode>
 #include <osgEarth/ImageOverlay>
 #include <Plot/Map/IMapCoverImage.h>
-#include <Inner/ImplMapShape.hpp>
+#include <Inner/ImplMapSceneNode.hpp>
 
-class CMapCoverImage:public ImplMapShape<IMapCoverImage>
+class CMapCoverImage:public ImplMapSceneNode<IMapCoverImage>
 {
 public:
-    CONSTRUCTOR(CMapCoverImage,ImplMapShape<IMapCoverImage>)
+    CONSTRUCTOR(CMapCoverImage,ImplMapSceneNode<IMapCoverImage>)
 
     /**
      * @brief 更新地图节点
      * @param pMapNode
      */
-    void UpdateMapNode(osgEarth::MapNode* pMapNode);
+    void UpdateMapNode();
 
     /**
      * @brief 初始化节点
@@ -48,7 +48,7 @@ public:
      */
     void SetMaxValueColor(const SceneColor&);
 
-    void SetBound(const MapGeoPos&,const MapGeoPos&,const std::string&);
+    void SetBound(const ScenePos&,const ScenePos&,const std::string&);
 
 private:
     std::vector<CeDian> m_vCedian;    //// 测点信息

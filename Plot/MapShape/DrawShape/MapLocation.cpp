@@ -20,12 +20,12 @@ void CMapLocation::SetSceneNode(ISceneNode *pNode)
     AddNode(m_pGeoTransform.get(),pNode->AsOsgSceneNode()->GetOsgNode());
 }
 
-void CMapLocation::UpdateMapNode(osgEarth::MapNode *pMapNode)
+void CMapLocation::UpdateMapNode()
 {
-    m_pTerrain = pMapNode->getTerrain();
-    m_pMapSrs = pMapNode->getMapSRS();
+    m_pTerrain = s_pMapNode->getTerrain();
+    m_pMapSrs = s_pMapNode->getMapSRS();
 
-    m_pHorizonCullBack->setEnabled(pMapNode->isGeocentric());
+    m_pHorizonCullBack->setEnabled(s_pMapNode->isGeocentric());
 
     /// 转换到
     if (!m_pMapSrs->isEquivalentTo(m_pGeoPoint.getSRS()))
@@ -94,13 +94,13 @@ void CMapLocation::PosChanged()
 {
     if(!m_pGeoPoint.isValid())
     {
-        m_pGeoPoint.set(osgEarth::SpatialReference::get("wgs84"),m_stGeoPos.fLon,m_stGeoPos.fLat,m_stGeoPos.fHeight,osgEarth::ALTMODE_RELATIVE);
+        m_pGeoPoint.set(osgEarth::SpatialReference::get("wgs84"),m_stGeoPos.fX,m_stGeoPos.fY,m_stGeoPos.fZ,osgEarth::ALTMODE_RELATIVE);
     }
     else
     {
-        m_pGeoPoint.x() = m_stGeoPos.fLon;
-        m_pGeoPoint.y() = m_stGeoPos.fLat;
-        m_pGeoPoint.z() = m_stGeoPos.fHeight;
+        m_pGeoPoint.x() = m_stGeoPos.fX;
+        m_pGeoPoint.y() = m_stGeoPos.fY;
+        m_pGeoPoint.z() = m_stGeoPos.fZ;
     }
 
     NodeChanged();

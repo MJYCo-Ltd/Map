@@ -100,10 +100,10 @@ IImage* pImage=nullptr;
 
 void MainWindow::on_action_triggered()
 {
-    MapGeoPos pos11;
-    pos11.fLon = -126.0;
-    pos11.fLat = 45.6;
-    pos11.fHeight = 10000;
+    ScenePos pos11;
+    pos11.fX = 126.0;
+    pos11.fY = 45.6;
+    pos11.fZ = 10000;
 
     SceneColor color11;
     color11.fR =1.0;
@@ -133,14 +133,14 @@ void MainWindow::on_action_triggered()
 //    m_pLayerTest->AddSceneNode(aaaa);
 
 //    MapGeoPos pos11,pos21;
-//    pos11.fLon = -126.0;
-//    pos11.fLat = 45.6;
-//    pos11.fHeight = 10000;
+//    pos11.fX = -126.0;
+//    pos11.fY = 45.6;
+//    pos11.fZ = 10000;
 
 
-//    pos21.fLon = -136.0;
-//    pos21.fLat = 55.6;
-//    pos21.fHeight = 10000;
+//    pos21.fX = -136.0;
+//    pos21.fY = 55.6;
+//    pos21.fZ = 10000;
 //    pRectangle->SetPos1(pos11);
 //    pRectangle->SetPos2(pos21);
 
@@ -210,58 +210,6 @@ void MainWindow::on_action_triggered()
 
     pSceneRoot->AddSceneNode(pLod);
 
-    /// 绘制点
-    auto pPoint = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
-    auto pPoint1 = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
-    auto pPoint2 = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
-    auto pPoint3 = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
-    pPoint->SetPointSize(5.f);
-    pPoint1->SetPointSize(5.f);
-    pPoint2->SetPointSize(5.f);
-    pPoint3->SetPointSize(50.f);
-    pPoint3->SetImage("Space/pixmaps/star.png");
-
-
-    pPoint->SetColor(color);
-    pPoint1->SetColor(color);
-    pPoint2->SetColor(color);
-    pPoint3->SetColor(color);
-    pSceneRoot->AddSceneNode(pPoint);
-    pSceneRoot->AddSceneNode(pPoint1);
-    pSceneRoot->AddSceneNode(pPoint2);
-    pSceneRoot->AddSceneNode(pPoint3);
-
-    /// 绘制线
-    auto pLine = dynamic_cast<ILine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILine"));
-    pLine->SetColor(color);
-
-    ScenePos scenePos;
-    pLine->AddPoint(0,scenePos);
-
-    scenePos.fX = 100.f;
-    pPoint1->SetPos(scenePos);
-    pLine->AddPoint(1,scenePos);
-
-    scenePos.fX = 100.f;
-    scenePos.fY = 100.f;
-    pPoint2->SetPos(scenePos);
-    pLine->AddPoint(2,scenePos);
-
-    scenePos.fX = 0.f;
-    pPoint3->SetPos(scenePos);
-    pLine->AddPoint(3,scenePos);
-    pSceneRoot->AddSceneNode(pLine);
-    pLine->SetLineWidth(2);
-
-    /// 绘制多边形
-    auto pPolygon = dynamic_cast<IPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPolygon"));
-    pPolygon->SetMultPos(pLine->GetMulPos());
-    scenePos.fX=50.f;
-    scenePos.fY=50.f;
-    pPolygon->AddPoint(4,scenePos);
-    pPolygon->SetColor(color);
-//    pSceneRoot->AddSceneNode(pPolygon);
-
 
     /// 绘制锥形波
     auto pConSensor = dynamic_cast<IConeSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IConeSensor"));
@@ -284,7 +232,7 @@ void MainWindow::on_action_triggered()
     pSConSensor->SetHAngle(4.f);
     pSConSensor->SetVAngle(10.f);
     pAttitudeGroup->AddSceneNode(pSConSensor);
-    pAttitudeGroup->SetPos(scenePos);
+    pAttitudeGroup->SetPos(pos11);
 
     SceneAttitude attitue;
     attitue.dPitch = 90;
@@ -297,7 +245,7 @@ void MainWindow::on_action_triggered()
     auto pRadarSensor = dynamic_cast<IEllipsoidSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IEllipsoidSensor"));
     SceneColor radarColor;
     pAttitudeGroup1->AddSceneNode(pRadarSensor);
-    pAttitudeGroup1->SetPos(pPoint2->Pos());
+    pAttitudeGroup1->SetPos(pos11);
     pRadarSensor->SetDistance(1000000.);
     pRadarSensor->SetAzimuth(-180,180);
     pRadarSensor->SetElevation(10,30);
@@ -332,7 +280,7 @@ void MainWindow::on_action_triggered()
 //    pLabel->SetText("桂林理工大学博文管理学院");
 
     auto pAttitudeAirplane = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
-    pAttitudeAirplane->SetPos(pPoint1->Pos());
+    pAttitudeAirplane->SetPos(pos11);
     pAttitudeAirplane->AddSceneNode(pModel);
     auto pFlashttt = m_pSceneGraph->GetPlot()->CreateSceneGroup(FLASH_GROUP)->AsSceneFlashGroup();
     pFlashttt->AddSceneNode(pAttitudeAirplane);
@@ -349,8 +297,8 @@ void MainWindow::on_action_triggered()
     vLevelInfo.push_back(1e6);
 
     pLod->SetLevelsInfo(vLevelInfo);
-    m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);
-    return;
+//    m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);
+//    return;
     m_pLayer = m_pSceneGraph->GetMap()->CreateLayer("test");
     pEarthLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
 //    m_pLayer->AddSceneNode(pEarthLocation);
@@ -369,14 +317,14 @@ void MainWindow::on_action_triggered()
     pGuiLinGroup->AddSceneNode(pScreenGroup);
     pGuiLinGroup->AddSceneNode(pModel);
 
-    MapGeoPos pos;
+    ScenePos pos;
     double dGuiLinLon=108.78107;
     double dGuiLinLat=34.11611;
 
 //    GisMath::WGS842GJC02(dGuiLinLon,dGuiLinLat);
-    pos.fLon = dGuiLinLon;
-    pos.fLat = dGuiLinLat;
-    pos.fHeight=35;
+    pos.fX = dGuiLinLon;
+    pos.fY = dGuiLinLat;
+    pos.fZ=35;
     pGuiLin->SetGeoPos(pos);
     pGuiLin->SetSceneNode(pGuiLinGroup);
 
@@ -409,27 +357,27 @@ void MainWindow::on_action_triggered()
 
     /// 添加线
     m_pLine = dynamic_cast<IMapLine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLine"));
-    pos.fLon = 103.566212;
-    pos.fLat = 19.573845;
-    pos.fHeight = 5;
+    pos.fX = 103.566212;
+    pos.fY = 19.573845;
+    pos.fZ = 5;
 
-    m_pLine->AddPoint(0,pos);
-    pos.fLon = 179.0606607;
-    pos.fLat = 25.910152;
+    m_pLine->GetDrawLine()->AddPoint(0,pos);
+    pos.fX = 179.0606607;
+    pos.fY = 25.910152;
 
-    m_pLine->AddPoint(1,pos);
-    pos.fLon = 116.358510;
-    pos.fLat = 20.009330;
+    m_pLine->GetDrawLine()->AddPoint(1,pos);
+    pos.fX = 116.358510;
+    pos.fY = 20.009330;
 
-    m_pLine->AddPoint(2,pos);
-    pos.fLon = 125.625319;
-    pos.fLat = 19.748377;
+    m_pLine->GetDrawLine()->AddPoint(2,pos);
+    pos.fX = 125.625319;
+    pos.fY = 19.748377;
 
-    m_pLine->AddPoint(3,pos);
-    m_pLine->SetLineColor(color);
+    m_pLine->GetDrawLine()->AddPoint(3,pos);
+    m_pLine->GetDrawLine()->SetColor(color);
 //    m_pLine->SetLineWidth(100.f);
     //m_pLine->SetTerrainType(RELATIVE_TERRAIN);
-//    m_pLayer->AddSceneNode(m_pLine);
+    m_pLayer->AddSceneNode(m_pLine);
 
     IMapCoverImage* pCover = dynamic_cast<IMapCoverImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapCoverImage"));
 //    if(nullptr != pCover)
@@ -500,11 +448,11 @@ void MainWindow::on_action_triggered()
 //    IMapLocation* pLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
 //    pLocation->SetSceneNode(pFlash);
 
-//    pos.fLon=125.625319;
-//    pos.fLat=19.748377;
+//    pos.fX=125.625319;
+//    pos.fY=19.748377;
 //    pLocation->SetGeoPos(pos);
 //    m_pLayer->AddSceneNode(pLocation);
-    pos.fLat=20.748377;
+    pos.fY=20.748377;
     pEarthLocation->SetGeoPos(pos);
 
     /// 标绘卫星
@@ -544,16 +492,16 @@ void MainWindow::on_action_triggered()
 
     Pos satPRY,rPos;
 
-    MapGeoPos testPos;
+    ScenePos testPos;
     CVector vOther;
     GisMath::XYZ2LBH(vECF.slice(0,2),vOther);
 
     vOther(1) += 10*DD2R;
     vOther(2) = 0;
 //    IMapLocation* pEarthLocationTest = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
-//    testPos.fLon = vOther(0)*DR2D;
-//    testPos.fLat = vOther(1)*DR2D;
-//    testPos.fHeight = 0;
+//    testPos.fX = vOther(0)*DR2D;
+//    testPos.fY = vOther(1)*DR2D;
+//    testPos.fZ = 0;
 //    pEarthLocationTest->SetGeoPos(testPos);
 //    pEarthLocationTest->SetSceneNode(pPoint);
 //    m_pLayer->AddSceneNode(pEarthLocationTest);
@@ -580,11 +528,11 @@ void MainWindow::on_action_triggered()
     pSatellite->SetOribitColor(color);
     pSatellite->AddSensor(0, pSatelliteSensor);
     pSatellite->UpdateData(dMJD);
-//    m_pSceneGraph->GetMap()->GetSpaceEnv()->AddSceneNode(pSatellite);
+    m_pSceneGraph->GetMap()->GetSpaceEnv()->AddSceneNode(pSatellite);
     m_pSceneGraph->GetMap()->UpdateDate(dMJD);
 
     m_pTrackNode = pSatelliteSensor;
-//    PlotMap();
+    PlotMap();
 //    LodPlot();
 }
 
@@ -668,42 +616,42 @@ void MainWindow::on_action_6_triggered()
 
 void MainWindow::PlotMap()
 {
-    MapGeoPos pos;
+    ScenePos pos;
     ///绘制地图元素
     auto m_pPoint = dynamic_cast<IMapPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPoint"));
-    pos.fLon = 121;
-    pos.fLat = 25;
-    pos.fHeight = 0;
-    m_pPoint->SetGeoPos(pos);
+    pos.fX = 121;
+    pos.fY = 25;
+    pos.fZ = 0;
+    m_pPoint->GetDrawPoint()->AddPoint(0,pos);
     SceneColor color;
     color.fG = .0f;
     color.fB = .0f;
-    m_pPoint->SetPointColor(color);
+    m_pPoint->GetDrawPoint()->SetColor(color);
     m_pLayer->AddSceneNode(m_pPoint);
 
     /// 绘制线
     auto m_pLine = dynamic_cast<IMapLine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLine"));
-    m_pLine->AddPoint(0,pos);
-    pos.fLon = 122;
-    pos.fLat = 26;
-    m_pLine->AddPoint(0,pos);
-    pos.fLon = 123;
-    pos.fLat = 27;
-    m_pLine->AddPoint(0,pos);
-    m_pLine->SetLineColor(color);
-    m_pLine->SetLineWidth(2.f);
+    m_pLine->GetDrawLine()->AddPoint(0,pos);
+    pos.fX = 122;
+    pos.fY = 26;
+    m_pLine->GetDrawLine()->AddPoint(0,pos);
+    pos.fX = 123;
+    pos.fY = 27;
+    m_pLine->GetDrawLine()->AddPoint(0,pos);
+    m_pLine->GetDrawLine()->SetColor(color);
+    m_pLine->GetDrawLine()->SetLineWidth(2.f);
     m_pLayer->AddSceneNode(m_pLine);
 
     /// 绘制区域
     auto m_pPolygon = dynamic_cast<IMapPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPolygon"));
-    m_pPolygon->AddPoint(0,pos);
-    pos.fLon = 123;
-    pos.fLat = 26;
-    m_pPolygon->AddPoint(1,pos);
-    pos.fLon = 121;
-    pos.fLat = 26.5;
-    m_pPolygon->AddPoint(2,pos);
-    m_pPolygon->SetPolygonColor(color);
+    m_pPolygon->GetDrawPolygon()->AddPoint(0,pos);
+    pos.fX = 123;
+    pos.fY = 26;
+    m_pPolygon->GetDrawPolygon()->AddPoint(1,pos);
+    pos.fX = 121;
+    pos.fY = 26.5;
+    m_pPolygon->GetDrawPolygon()->AddPoint(2,pos);
+    m_pPolygon->GetDrawPolygon()->SetColor(color);
     m_pLayer->AddSceneNode(m_pPolygon);
 }
 
@@ -737,12 +685,65 @@ void MainWindow::LodPlot()
 
     pLod->SetLevelsInfo(vLevelInfo);
 
-    MapGeoPos pos;
-    pos.fLon = 117.5f;
-    pos.fLat = 39.5f;
-    pos.fHeight = 1000.f;
+    ScenePos pos;
+    pos.fX = 117.5f;
+    pos.fY = 39.5f;
+    pos.fZ = 1000.f;
     auto pEarthLocation1 = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     pEarthLocation1->SetSceneNode(pLod);
     pEarthLocation1->SetGeoPos(pos);
     m_pLayer->AddSceneNode(pEarthLocation1);
+}
+
+/// 测试标绘模型
+void MainWindow::on_action12_triggered()
+{
+    ISceneGroup* pSceneRoot = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
+    SceneColor color;
+
+
+    color.fR=1.0f;
+    color.fG=1.0f;
+    color.fB=1.0f;
+
+    /// 绘制点
+    auto pPoint = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
+    pPoint->SetPointSize(50.f);
+    pPoint->SetImage("Image/China.png");
+
+
+    pPoint->SetColor(color);
+    pSceneRoot->AddSceneNode(pPoint);
+
+    /// 绘制线
+    auto pLine = dynamic_cast<ILine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILine"));
+    pLine->SetColor(color);
+
+    ScenePos scenePos;
+    pLine->AddPoint(0,scenePos);
+
+    scenePos.fX = 100.f;
+    pPoint->AddPoint(pPoint->GetCount(),scenePos);
+    pLine->AddPoint(1,scenePos);
+
+    scenePos.fX = 100.f;
+    scenePos.fY = 100.f;
+    pPoint->AddPoint(pPoint->GetCount(),scenePos);
+    pLine->AddPoint(2,scenePos);
+
+    scenePos.fX = 0.f;
+    pPoint->AddPoint(pPoint->GetCount(),scenePos);
+    pLine->AddPoint(3,scenePos);
+    pSceneRoot->AddSceneNode(pLine);
+    pLine->SetLineWidth(2);
+
+    /// 绘制多边形
+    auto pPolygon = dynamic_cast<IPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPolygon"));
+    pPolygon->SetMultPos(pLine->GetMulPos());
+    scenePos.fX=50.f;
+    scenePos.fY=50.f;
+    pPolygon->AddPoint(4,scenePos);
+    pPolygon->SetColor(color);
+    pSceneRoot->AddSceneNode(pPolygon);
+    m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);
 }

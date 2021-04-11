@@ -4,7 +4,7 @@
 #include <osgEarth/GeoPositionNode>
 #include <Plot/Map/IMapLocation.h>
 #include <Inner/ImplSceneNode.hpp>
-#include <Inner/IOsgMapSceneNode.h>
+#include <Inner/OsgExtern/IOsgMapSceneNode.h>
 #include <Inner/OsgExtern/MyMatrixTransform.h>
 class CMapLocation:public ImplSceneNode<IMapLocation>,public IOsgMapSceneNode
 {
@@ -21,7 +21,7 @@ public:
      * @brief 更新地图节点
      * @param pMapNode
      */
-    void UpdateMapNode(osgEarth::MapNode* pMapNode);
+    void UpdateMapNode();
 
 protected:
     /**

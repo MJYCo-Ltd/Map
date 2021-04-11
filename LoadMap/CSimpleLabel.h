@@ -43,7 +43,7 @@ private:
     ISceneGroup*    m_pSceneGroup;
     IMapLocation* m_pRoot;
 
-    MapGeoPos m_TargetPos;
+    ScenePos m_TargetPos;
 
     long    m_LabelColor;
     long    m_LineColor;

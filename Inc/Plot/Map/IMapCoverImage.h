@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <Plot/Map/IMapSceneNode.h>
+#include <SceneGraph/ISceneNode.h>
 
 /**
  * @brief 位置信息
@@ -68,7 +69,7 @@ public:
     /**
      * @brief 设置范围和图片
      */
-    virtual void SetBound(const MapGeoPos&,const MapGeoPos&,const std::string&)=0;
+    virtual void SetBound(const ScenePos&,const ScenePos&,const std::string&)=0;
 protected:
     virtual ~IMapCoverImage(){}
 };

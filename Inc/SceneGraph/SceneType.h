@@ -106,6 +106,11 @@ struct ScenePos
     {
         return(!(this->operator==(rOther)));
     }
+
+    bool IsValidMap()
+    {
+        return(fX>-180&&fX<180&&fY>=-90&&fY<=-90);
+    }
 };
 
 /**

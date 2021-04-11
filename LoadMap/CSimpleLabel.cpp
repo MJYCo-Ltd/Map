@@ -54,10 +54,10 @@ CSimpleLabel::~CSimpleLabel()
 
 void CSimpleLabel::MouseMove(MouseButtonMask, int x, int y)
 {
-    MapGeoPos mapPos;
+    ScenePos mapPos;
 //    m_pSceneGraph->GetMap()->ConvertCoord(x,y,mapPos,0);
     double dX,dY,dZ;
-    GisMath::LBH2XYZ(mapPos.fLon*DD2R,mapPos.fLat*DD2R,mapPos.fHeight-1000,dX,dY,dZ);
+    GisMath::LBH2XYZ(mapPos.fX*DD2R,mapPos.fY*DD2R,mapPos.fZ-1000,dX,dY,dZ);
 
     ScenePos pox;
     pox.fX = dX;
@@ -101,12 +101,12 @@ void CSimpleLabel::SetTarget(IPlotBase* pTarget)
 {
     pTarget =pTarget;
     //
-    MapGeoPos geoPos;
+    ScenePos geoPos;
 //    pTarget->GetPosition(&geoPos.fLon,&geoPos.fLat,&geoPos.fHeight);
 
     double x,y,z;
 
-    GisMath::LBH2XYZ(geoPos.fLon*DD2R,geoPos.fLat*DD2R,geoPos.fHeight,x,y,z);
+    GisMath::LBH2XYZ(geoPos.fX*DD2R,geoPos.fY*DD2R,geoPos.fZ,x,y,z);
 
     m_TargetPos = geoPos;
 
@@ -196,7 +196,7 @@ void CSimpleLabel::update()
         m_pLabel->SetText(m_CurLabel);
         m_bLabelChange= false;
     }
-   MapGeoPos geoPos;
+   ScenePos geoPos;
 //   m_pTarget->GetPosition(&geoPos.fLon,&geoPos.fLat,&geoPos.fHeight);
 
     if(m_TargetPos != geoPos) //目标移动
@@ -205,7 +205,7 @@ void CSimpleLabel::update()
         ScenePos tmPos1,tmPos2;
 
         double x,y,z;
-        GisMath::LBH2XYZ(geoPos.fLon*DD2R,geoPos.fLat*DD2R,geoPos.fHeight, x,y,z);
+        GisMath::LBH2XYZ(geoPos.fX*DD2R,geoPos.fY*DD2R,geoPos.fZ, x,y,z);
 
         tmPos1.fX = x;
         tmPos1.fY = y;

@@ -13,13 +13,13 @@ CPlaceNode::CPlaceNode(ISceneGraph *pSceneGraph):m_pSceneGraph(pSceneGraph)
 
 void CPlaceNode::SetPos(float fLon, float fLat)
 {
-    MapGeoPos pos;
-    pos.fLon = fLon;
-    pos.fLat = fLat;
+    ScenePos pos;
+    pos.fX = fLon;
+    pos.fY = fLat;
     m_pLocation->SetGeoPos(pos);
 }
 
-const MapGeoPos CPlaceNode::GetPos()
+const ScenePos CPlaceNode::GetPos()
 {
     return(m_pLocation->GeoPos());
 }

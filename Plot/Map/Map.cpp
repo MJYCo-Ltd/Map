@@ -17,6 +17,7 @@
 #include <Inner/IOsgSceneNode.h>
 #include <Inner/IOsgViewPoint.h>
 #include <Inner/OsgExtern/OsgExtern.h>
+#include <Inner/OsgExtern/IOsgMapSceneNode.h>
 #include <SceneGraph/IWindow.h>
 #include <SceneGraph/IViewPort.h>
 #include <Plot/Map/IMapObserver.h>
@@ -33,7 +34,7 @@ bool MapEventCallback::handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionA
 {
     if(ea.MOVE == ea.getEventType())
     {
-        static MapGeoPos pos;
+        static ScenePos pos;
         static float fX,fY;
         static short type(0);
 
@@ -47,7 +48,7 @@ bool MapEventCallback::handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionA
             fY = ea.getY();
         }
         m_pMap->ConvertCoord(fX,fY,pos,type);
-        QMetaObject::invokeMethod(m_pMap,"MouseMove",Q_ARG(float,pos.fLon),Q_ARG(float,pos.fLat),Q_ARG(float,pos.fHeight));
+        QMetaObject::invokeMethod(m_pMap,"MouseMove",Q_ARG(float,pos.fX),Q_ARG(float,pos.fY),Q_ARG(float,pos.fZ));
     }
     return(false);
 }
@@ -106,7 +107,7 @@ void CMap::UnSubMessage(IMapMessageObserver *pMsgObr)
 }
 
 /// 坐标转换
-bool CMap::ConvertCoord(float &fX, float &fY, MapGeoPos &geoPos, short TranType)
+bool CMap::ConvertCoord(float &fX, float &fY, ScenePos &geoPos, short TranType)
 {
     if(0 == TranType)
     {
@@ -126,9 +127,9 @@ bool CMap::ConvertCoord(float &fX, float &fY, MapGeoPos &geoPos, short TranType)
             {
                 geoPoint.fromWorld(m_pMap2DNode->getMapSRS(),world);
                 geoPoint.makeGeographic();
-                geoPos.fLon = geoPoint.x();
-                geoPos.fLat = geoPoint.y();
-                geoPos.fHeight = geoPoint.z();
+                geoPos.fX = geoPoint.x();
+                geoPos.fY = geoPoint.y();
+                geoPos.fZ = geoPoint.z();
                 return (true);
             }
             break;
@@ -137,9 +138,9 @@ bool CMap::ConvertCoord(float &fX, float &fY, MapGeoPos &geoPos, short TranType)
             {
                 geoPoint.fromWorld(m_pMap3DNode->getMapSRS(),world);
                 geoPoint.makeGeographic();
-                geoPos.fLon = geoPoint.x();
-                geoPos.fLat = geoPoint.y();
-                geoPos.fHeight = geoPoint.z();
+                geoPos.fX = geoPoint.x();
+                geoPos.fY = geoPoint.y();
+                geoPos.fZ = geoPoint.z();
                 return (true);
             }
             break;
@@ -157,7 +158,7 @@ bool CMap::ConvertCoord(float &fX, float &fY, MapGeoPos &geoPos, short TranType)
         auto pView = pOsgViewPoint->GetOsgView();
 
         osg::Vec3d world;
-        osgEarth::GeoPoint geoPoint(osgEarth::SpatialReference::create("wgs84"),geoPos.fLon,geoPos.fLat,geoPos.fHeight),geoOut;
+        osgEarth::GeoPoint geoPoint(osgEarth::SpatialReference::create("wgs84"),geoPos.fX,geoPos.fY,geoPos.fZ),geoOut;
         switch (m_emType)
         {
         case MAP_2D:
@@ -174,7 +175,7 @@ bool CMap::ConvertCoord(float &fX, float &fY, MapGeoPos &geoPos, short TranType)
             }
             break;
         case MAP_3D:
-            if(m_pMap3DNode->getMapSRS()->transformToWorld(osg::Vec3d(geoPos.fLon,geoPos.fLat,geoPos.fHeight),world))
+            if(m_pMap3DNode->getMapSRS()->transformToWorld(osg::Vec3d(geoPos.fX,geoPos.fY,geoPos.fZ),world))
             {
                 osg::Matrixd _MVPW = pView->getCamera()->getViewMatrix() * pView->getCamera()->getProjectionMatrix()
                         * pView->getCamera()->getViewport()->computeWindowMatrix();
@@ -445,6 +446,7 @@ void CMap::InitMap()
 
         AddNode(m_pGroup.get(),m_p2DRoot);
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapNodeChanged(m_pMap3DNode,m_pMap2DNode,this));
+        IOsgMapSceneNode::SetMapNode(m_pMap2DNode);
     }
         break;
     case MAP_3D:
@@ -486,6 +488,7 @@ void CMap::InitMap()
         AddNode(m_pGroup.get(),m_p3DRoot.get());
         AddNode(m_pGroup.get(),m_pSpaceEnv->AsOsgSceneNode()->GetOsgNode());
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapNodeChanged(m_pMap2DNode,m_pMap3DNode,this));
+        IOsgMapSceneNode::SetMapNode(m_pMap3DNode);
     }
         break;
     }

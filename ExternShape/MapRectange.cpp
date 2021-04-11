@@ -9,7 +9,7 @@ CMapRectange::CMapRectange(ISceneGraph *pSceneGraph):
 }
 
 /// 设置左上角
-void CMapRectange::SetPos1(const MapGeoPos &pos)
+void CMapRectange::SetPos1(const ScenePos &pos)
 {
     if(pos != m_stPos1)
     {
@@ -19,7 +19,7 @@ void CMapRectange::SetPos1(const MapGeoPos &pos)
 }
 
 /// 设置右下角
-void CMapRectange::SetPos2(const MapGeoPos &pos)
+void CMapRectange::SetPos2(const ScenePos &pos)
 {
     if(pos != m_stPos2)
     {
@@ -29,7 +29,7 @@ void CMapRectange::SetPos2(const MapGeoPos &pos)
 }
 void CMapRectange::SetColor(const SceneColor& color)
 {
-    m_pPolygon->SetPolygonColor(color);
+    m_pPolygon->GetDrawPolygon()->SetColor(color);
 }
 /// 初始化节点
 void CMapRectange::InitNode()
@@ -40,68 +40,68 @@ void CMapRectange::InitNode()
 /// 更新节点
 void CMapRectange::UpdateNode()
 {
-    MapGeoPos tPos_2,tPos_4;
-    if(m_stPos1.fLon < m_stPos2.fLon)
+    ScenePos tPos_2,tPos_4;
+    if(m_stPos1.fX < m_stPos2.fX)
     {
-        if(m_stPos1.fLat>m_stPos2.fLat)         //左上
+        if(m_stPos1.fY>m_stPos2.fY)         //左上
         {
-            tPos_2.fLon = m_stPos2.fLon;
-            tPos_2.fLat = m_stPos1.fLat;
-            tPos_2.fHeight =m_stPos1.fHeight;
+            tPos_2.fX = m_stPos2.fX;
+            tPos_2.fY = m_stPos1.fY;
+            tPos_2.fZ =m_stPos1.fZ;
 
-            tPos_4.fLon = m_stPos1.fLon;
-            tPos_4.fLat = m_stPos2.fLat;
-            tPos_4.fHeight =m_stPos1.fHeight;
+            tPos_4.fX = m_stPos1.fX;
+            tPos_4.fY = m_stPos2.fY;
+            tPos_4.fZ =m_stPos1.fZ;
         }
         else                //左下
         {
-            tPos_4.fLon = m_stPos1.fLon;
-            tPos_4.fLat = m_stPos2.fLat;
-            tPos_4.fHeight =m_stPos1.fHeight;
+            tPos_4.fX = m_stPos1.fX;
+            tPos_4.fY = m_stPos2.fY;
+            tPos_4.fZ =m_stPos1.fZ;
 
-            tPos_2.fLon = m_stPos2.fLon;
-            tPos_2.fLat = m_stPos1.fLat;
-            tPos_2.fHeight =m_stPos1.fHeight;
+            tPos_2.fX = m_stPos2.fX;
+            tPos_2.fY = m_stPos1.fY;
+            tPos_2.fZ =m_stPos1.fZ;
         }
     }
     else
     {
 
-        if(m_stPos1.fLat>m_stPos2.fLat)     //右上
+        if(m_stPos1.fY>m_stPos2.fY)     //右上
         {
-            tPos_2.fLon = m_stPos1.fLon;
-            tPos_2.fLat = m_stPos2.fLat;
-            tPos_2.fHeight =m_stPos1.fHeight;
+            tPos_2.fX = m_stPos1.fX;
+            tPos_2.fY = m_stPos2.fY;
+            tPos_2.fZ =m_stPos1.fZ;
 
-            tPos_4.fLon = m_stPos2.fLon;
-            tPos_4.fLat = m_stPos1.fLat;
-            tPos_4.fHeight =m_stPos1.fHeight;
+            tPos_4.fX = m_stPos2.fX;
+            tPos_4.fY = m_stPos1.fY;
+            tPos_4.fZ =m_stPos1.fZ;
         }
         else
         {
-            tPos_2.fLon = m_stPos1.fLon;
-            tPos_2.fLat = m_stPos2.fLat;
-            tPos_2.fHeight =m_stPos1.fHeight;
+            tPos_2.fX = m_stPos1.fX;
+            tPos_2.fY = m_stPos2.fY;
+            tPos_2.fZ =m_stPos1.fZ;
 
-            tPos_4.fLon = m_stPos2.fLon;
-            tPos_4.fLat = m_stPos1.fLat;
-            tPos_4.fHeight =m_stPos1.fHeight;
+            tPos_4.fX = m_stPos2.fX;
+            tPos_4.fY = m_stPos1.fY;
+            tPos_4.fZ =m_stPos1.fZ;
         }
     }
 
-    if(m_pPolygon->GetPointCount() ==0)
+    if(m_pPolygon->GetDrawPolygon()->GetCount() ==0)
     {
-        m_pPolygon->AddPoint(0,m_stPos1);
-        m_pPolygon->AddPoint(1,tPos_2);
-        m_pPolygon->AddPoint(2,m_stPos2);
-        m_pPolygon->AddPoint(3,tPos_4);
+        m_pPolygon->GetDrawPolygon()->AddPoint(0,m_stPos1);
+        m_pPolygon->GetDrawPolygon()->AddPoint(1,tPos_2);
+        m_pPolygon->GetDrawPolygon()->AddPoint(2,m_stPos2);
+        m_pPolygon->GetDrawPolygon()->AddPoint(3,tPos_4);
     }
     else
     {
-        m_pPolygon->UpdatePoint(0,m_stPos1);
-        m_pPolygon->UpdatePoint(1,tPos_2);
-        m_pPolygon->UpdatePoint(2,m_stPos2);
-        m_pPolygon->UpdatePoint(3,tPos_4);
+        m_pPolygon->GetDrawPolygon()->UpdatePoint(0,m_stPos1);
+        m_pPolygon->GetDrawPolygon()->UpdatePoint(1,tPos_2);
+        m_pPolygon->GetDrawPolygon()->UpdatePoint(2,m_stPos2);
+        m_pPolygon->GetDrawPolygon()->UpdatePoint(3,tPos_4);
 
     }
 }

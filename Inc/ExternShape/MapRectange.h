@@ -15,13 +15,13 @@ public:
      * @brief 设置点1
      * @param rLeftUp
      */
-    void SetPos1(const MapGeoPos& pos);
+    void SetPos1(const ScenePos& pos);
 
     /**
      * @brief 设置点2
      * 根据点1、点2的位置关系，自动计算其余两点位置
      */
-    void SetPos2(const MapGeoPos& pos);
+    void SetPos2(const ScenePos &pos);
     /**
      * @brief 设置颜色
      */
@@ -42,8 +42,8 @@ protected:
      */
     void UpdateNode();
 protected:
-    MapGeoPos     m_stPos1;
-    MapGeoPos     m_stPos2;
+    ScenePos     m_stPos1;
+    ScenePos     m_stPos2;
     ISceneGraph*  m_pSceneGraph=nullptr;
     IMapPolygon*  m_pPolygon=nullptr;
 };

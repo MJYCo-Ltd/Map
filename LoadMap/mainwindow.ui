@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>468</width>
-    <height>395</height>
+    <width>941</width>
+    <height>462</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>468</width>
+     <width>941</width>
      <height>23</height>
     </rect>
    </property>
@@ -95,7 +95,7 @@
   </action>
   <action name="action12">
    <property name="text">
-    <string>12</string>
+    <string>User标绘</string>
    </property>
   </action>
  </widget>

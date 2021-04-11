@@ -8,7 +8,7 @@ class IMapLocation;
 class ILabel;
 class IImage;
 class ISceneScreenGroup;
-struct MapGeoPos;
+struct ScenePos;
 struct SceneColor;
 struct SceneImageSize;
 
@@ -23,7 +23,7 @@ public:
      * @param fLat
      */
     void SetPos(float fLon, float fLat);
-    const MapGeoPos GetPos();
+    const ScenePos GetPos();
 
     /**
      * @brief 设置显示的文字
