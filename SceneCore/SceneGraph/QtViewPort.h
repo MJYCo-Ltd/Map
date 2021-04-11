@@ -24,25 +24,25 @@ public:
      * @brief 获取视口的屏显控制类
      * @return
      */
-    IViewHud* GetHud();
+    IViewHud* GetHud() override;
 
     /**
      * @brief 地图类型切换
      * @param emType
      */
-    void ViewPointTypeChanged(ViewPointType emType);
+    void ViewPointTypeChanged(ViewPointType emType) override;
 
     /**
      * @brief 设置视点位置
      */
-    void SetViewPoint(const SceneViewPoint&rViewPoint,unsigned int unTimes);
-    const SceneViewPoint& GetViewPoint()const;
+    void SetViewPoint(const SceneViewPoint&rViewPoint,unsigned int unTimes) override;
+    const SceneViewPoint& GetViewPoint()const override;
 
     /**
      * @brief 获取osgView
      * @return
      */
-    osgViewer::View* GetOsgView();
+    osgViewer::View* GetOsgView()override;
 
     /**
      * @brief 每一帧的回调
@@ -52,7 +52,7 @@ public:
     /**
      * @brief 回到Home视点
      */
-    void HomeViewPoint();
+    void HomeViewPoint()override;
 protected:
     /// 立体显示模式更改
     void StereoChanged(){m_bStereoChanged=true;}

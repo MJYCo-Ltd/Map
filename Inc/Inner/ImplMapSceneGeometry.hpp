@@ -24,6 +24,11 @@ protected:
         ImplMapSceneNode<T>::SetOsgNode(m_pDrapeNode.get());
     }
 
+    void UpdateMapNode() override
+    {
+        ImplMapSceneNode<T>::UpdateMapNode();
+        m_pDrapeNode->setMapNode(ImplMapSceneNode<T>::s_pMapNode.get());
+    }
     /// 设置绘制几何体
     void SetGeometry(IGeometry* pGeometry)
     {

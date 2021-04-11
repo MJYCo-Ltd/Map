@@ -627,6 +627,7 @@ void MainWindow::PlotMap()
     color.fG = .0f;
     color.fB = .0f;
     m_pPoint->GetDrawPoint()->SetColor(color);
+    m_pPoint->GetDrawPoint()->SetPointSize(5.f);
     m_pLayer->AddSceneNode(m_pPoint);
 
     /// 绘制线

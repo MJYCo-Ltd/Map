@@ -18,6 +18,7 @@
 #include <Inner/IOsgViewPoint.h>
 #include <Inner/OsgExtern/OsgExtern.h>
 #include <Inner/OsgExtern/IOsgMapSceneNode.h>
+#include <Inner/IOsgViewPoint.h>
 #include <SceneGraph/IWindow.h>
 #include <SceneGraph/IViewPort.h>
 #include <Plot/Map/IMapObserver.h>
@@ -351,6 +352,12 @@ void CMap::ChangeMapType(MapType mapType)
     {
         m_emType = mapType;
         InitMap();
+
+        IOsgViewPoint* pViewPoint = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint());
+        if(nullptr != pViewPoint)
+        {
+            pViewPoint->ViewPointTypeChanged(MAP_3D == m_emType ? IOsgViewPoint::View_3DMap : IOsgViewPoint::View_2DMap);
+        }
 
         for(auto one:m_listObserver)
         {

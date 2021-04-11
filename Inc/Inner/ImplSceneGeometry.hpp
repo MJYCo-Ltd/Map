@@ -160,14 +160,11 @@ protected:
 
             std::vector<ScenePos> vAllConverdPos;
             int nIndex=0;
-            std::cout<<"m_pDealPoint:"<<T::m_pDealPoint<<std::endl;
             if(nullptr != T::m_pDealPoint && T::m_pDealPoint->Conversion(m_listAllPos,vAllConverdPos))
             {
                 for(auto one : vAllConverdPos)
                 {
                     ImplSceneShape<T>::m_pVertexArray->at(nIndex++).set(one.fX,one.fY,one.fZ);
-
-                    std::cout<<one.fX<<','<<one.fY<<','<<one.fZ<<std::endl;
                 }
             }
             else

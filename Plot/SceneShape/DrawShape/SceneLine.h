@@ -43,6 +43,8 @@ protected:
 
     void CreateShape(){}
     void UpdateShape(){}
+
+    void NeedUpdate() SET_TRUE_NODE_UPDATE(m_bShapeChanged)
 protected:
     osg::ref_ptr<osgEarth::LineDrawable> m_pLine;
     bool                          m_bColorChanged=false;
