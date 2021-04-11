@@ -4,7 +4,7 @@
 void CScenePolygon::CreateShape()
 {
     m_pTess = new osgUtil::Tessellator;
-    m_pTess->setTessellationType(osgUtil::Tessellator::TESS_TYPE_POLYGONS);
+    m_pTess->setTessellationType(osgUtil::Tessellator::TESS_TYPE_DRAWABLE);
     m_pTess->setWindingType(osgUtil::Tessellator::TESS_WINDING_ODD);
 
     m_pDrawArrays = new osg::DrawArrays(GL_TRIANGLE_FAN,0,m_pVertexArray->size());

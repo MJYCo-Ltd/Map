@@ -650,8 +650,14 @@ void MainWindow::PlotMap()
     pos.fY = 26;
     m_pPolygon->GetDrawPolygon()->AddPoint(1,pos);
     pos.fX = 121;
-    pos.fY = 26.5;
+    pos.fY = 26;
     m_pPolygon->GetDrawPolygon()->AddPoint(2,pos);
+    pos.fX = 122;
+    pos.fY = 26.5;
+    m_pPolygon->GetDrawPolygon()->AddPoint(3,pos);
+    pos.fX = 121;
+    pos.fY = 27;
+    m_pPolygon->GetDrawPolygon()->AddPoint(4,pos);
     m_pPolygon->GetDrawPolygon()->SetColor(color);
     m_pLayer->AddSceneNode(m_pPolygon);
 }
