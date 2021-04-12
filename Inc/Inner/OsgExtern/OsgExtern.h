@@ -4,7 +4,6 @@
 #include <osg/Group>
 #include <osgEarth/Controls>
 
-
 /**
  * @brief 将显示节点从场景中移除
  */
@@ -70,6 +69,29 @@ private:
     osg::ref_ptr<osg::Group> m_pParent; /// 父节点
     osg::ref_ptr<osg::Node>  m_pChild;  /// 子节点
     bool                     m_bAdd;    /// 是否增加
+};
+
+#include <iostream>
+/**
+ * @brief 替换节点
+ */
+class CReplaceNode:public osg::Operation
+{
+public:
+    CReplaceNode(osg::Node* pOldNode,osg::Node* pNewNode):m_pOldNode(pOldNode),m_pNewNode(pNewNode){}
+
+    void operator()(osg::Object*)
+    {
+        auto parentList = m_pOldNode->getParents();
+        for(auto one : parentList)
+        {
+            one->removeChild(m_pOldNode);
+            one->addChild(m_pNewNode);
+        }
+    }
+private:
+    osg::ref_ptr<osg::Node> m_pOldNode;
+    osg::ref_ptr<osg::Node> m_pNewNode;
 };
 
 /**

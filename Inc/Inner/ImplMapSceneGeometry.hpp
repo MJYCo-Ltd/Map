@@ -27,12 +27,17 @@ protected:
     void UpdateMapNode() override
     {
         ImplMapSceneNode<T>::UpdateMapNode();
-        m_pDrapeNode->setMapNode(ImplMapSceneNode<T>::s_pMapNode.get());
+        if(m_pDrapeNode.valid())
+        {
+            m_pDrapeNode->setMapNode(ImplMapSceneNode<T>::s_pMapNode.get());
+        }
     }
+
     /// 设置绘制几何体
     void SetGeometry(IGeometry* pGeometry)
     {
         m_pGeometry=pGeometry;
+        AddNode(m_pDrapeNode.get(),pGeometry->AsOsgSceneNode()->GetOsgNode());
         m_pGeometry->SetDealPoint(this);
     }
 
@@ -45,6 +50,28 @@ protected:
         if(bMapChanged && nullptr != m_pGeometry)
         {
             m_pGeometry->NeedUpdate();
+        }
+
+        if(CLOSE_TERRAIN != T::m_emType)
+        {
+            T::m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CReplaceNode(m_pDrapeNode.get(),
+                                                                                      m_pGeometry->AsOsgSceneNode()->GetOsgNode()));
+//            T::m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pDrapeNode.get()));
+            ImplMapSceneNode<T>::SetOsgNode(m_pGeometry->AsOsgSceneNode()->GetOsgNode());
+            m_pGeometry->NeedUpdate();
+        }
+        else
+        {
+            if(!m_pDrapeNode.valid())
+            {
+                m_pDrapeNode = new osgEarth::DrapeableNode;
+                m_pDrapeNode->setMapNode(ImplMapSceneNode<T>::s_pMapNode.get());
+                T::m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
+                            new CReplaceNode(m_pGeometry->AsOsgSceneNode()->GetOsgNode(),m_pDrapeNode.get()));
+                AddNode(m_pDrapeNode.get(),m_pGeometry->AsOsgSceneNode()->GetOsgNode());
+            }
+
+            ImplMapSceneNode<T>::SetOsgNode(m_pDrapeNode.get());
         }
     }
 
