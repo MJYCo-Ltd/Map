@@ -45,12 +45,35 @@
 #include <ExternShape/MapRectange.h>
 #include <ExternShape/MapCircle.h>
 
-struct MapObser:public IMapMessageObserver
+struct MapObser:public IMapMessageObserver,public IWindowMessageObserver
 {
-    void MousePos(float fLon,float fLat)
+    MapObser(ISceneGraph* pSceneGraph):m_pSceneGraph(pSceneGraph){}
+
+    void MousePos(float fLon,float fLat,float fHeight)
     {
-        std::cout<<fLon<<'\t'<<fLat<<std::endl;
+        pos.fX = fLon;
+        pos.fY = fLat;
+        pos.fZ = fHeight;
     }
+
+    void MouseDown(MouseButtonMask, int, int)
+    {
+        if(nullptr == pLayer)
+        {
+            pLayer = m_pSceneGraph->GetMap()->CreateLayer("HHHH");
+            auto pMapPolygon=dynamic_cast<IMapPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPolygon"));
+
+            pLayer->AddSceneNode(pMapPolygon);
+            m_pPolygon = pMapPolygon->GetDrawPolygon();
+        }
+
+        m_pPolygon->AddPoint(m_pPolygon->GetCount()-1,pos);
+    }
+private:
+    ScenePos pos;
+    IMapLayer* pLayer=nullptr;
+    ISceneGraph* m_pSceneGraph;
+    IPolygon*    m_pPolygon;
 };
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -69,6 +92,12 @@ MainWindow::~MainWindow()
 void MainWindow::SetSecenGraph(ISceneGraph *pSceneGraph)
 {
     m_pSceneGraph = pSceneGraph;
+    if(m_pSceneGraph->GetMap())
+    {
+        auto pMap= new MapObser(m_pSceneGraph);
+        m_pSceneGraph->GetMainWindow()->SubMessage(pMap);
+        m_pSceneGraph->GetMap()->SubMessage(pMap);
+    }
 }
 
 void MainWindow::timerEvent(QTimerEvent *event)
@@ -728,6 +757,7 @@ void MainWindow::on_action12_triggered()
     pLine->SetColor(color);
 
     ScenePos scenePos;
+    scenePos.fZ = 10.f;
     pLine->AddPoint(0,scenePos);
 
     scenePos.fX = 100.f;
@@ -747,11 +777,11 @@ void MainWindow::on_action12_triggered()
 
     /// 绘制多边形
     auto pPolygon = dynamic_cast<IPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPolygon"));
+    pSceneRoot->AddSceneNode(pPolygon);
     pPolygon->SetMultPos(pLine->GetMulPos());
     scenePos.fX=50.f;
     scenePos.fY=50.f;
-    pPolygon->AddPoint(4,scenePos);
+    pPolygon->AddPoint(pPolygon->GetCount(),scenePos);
     pPolygon->SetColor(color);
-    pSceneRoot->AddSceneNode(pPolygon);
     m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);
 }

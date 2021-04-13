@@ -174,9 +174,7 @@ protected:
                     ImplSceneShape<T>::m_pVertexArray->at(nIndex++).set(one.fX,one.fY,one.fZ);
                 }
             }
-
             m_pDrawArrays->setCount(ImplSceneShape<T>::m_pVertexArray->size());
-            m_pDrawArrays->dirty();
             m_bCountChanged=false;
         }
     }

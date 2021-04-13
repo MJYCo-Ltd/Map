@@ -45,13 +45,13 @@ void CAtmosphere::MakeAtmosphere()
 
     osgEarth::VirtualProgram* vp = osgEarth::VirtualProgram::getOrCreate( atmosSet );
     vp->setName("SimpleSkyAtmosphere");
-    vp->setInheritShaders( false );
+    vp->setInheritShaders(false);
     m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(vp,"GLSL/Atmosphere.glsl");
 }
 
 osg::Node *CAtmosphere::GetNode()
 {
-    return(m_pEllipsoid->AsOsgSceneNode()->GetOsgNode());
+    return(m_pCameraNode->AsOsgSceneNode()->GetOsgNode());
 }
 
 void CAtmosphere::SetVisible(bool bVisilbe)

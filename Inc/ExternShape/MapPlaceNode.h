@@ -53,6 +53,18 @@ public:
      * @return
      */
     IMapLocation* GetLocationNode(){return(m_pLocation);}
+
+    /**
+     * @brief 获取Label标签
+     * @return
+     */
+    ILabel* GetLabel(){return(m_pLabel);}
+
+    /**
+     * @brief 获取图片
+     * @return
+     */
+    IImage* GetImage(){return(m_pImage);}
 protected:
     /**
       * @brief 初始化节点
