@@ -52,6 +52,13 @@ public:
     bool IsOpenLight() const{return(m_bOpenLight);}
 
     /**
+     * @brief 是否开启预裁剪
+     * @attention 给GPU之前是否进行预裁剪
+     */
+    void OpenPreCut(bool bOpenPreCut)JUDGE_EQUAL_CALL_FUNCTION(bOpenPreCut,m_bOpenPreCut,PreCutChanged)
+    bool IsOpenPreCut()const{return(m_bOpenPreCut);}
+
+    /**
      * @brief 转换成想要的类型
      * @return
      */
@@ -70,12 +77,14 @@ protected:
     virtual void VisibleChanged()=0;
     virtual void PickStateChanged()=0;
     virtual void LightChanged()=0;
+    virtual void PreCutChanged()=0;
 
 protected:
     ISceneGraph* m_pSceneGraph;
     bool         m_bVisible=true;
     bool         m_bCanPick=false;
     bool         m_bOpenLight=true;
+    bool         m_bOpenPreCut=true;
     unsigned int m_unID=0;
 };
 

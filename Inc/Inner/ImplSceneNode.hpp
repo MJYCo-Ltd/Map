@@ -56,6 +56,7 @@ protected:
             m_pRootNode->addUpdateCallback(m_pUpdateCallBack);
 
             LightChanged();
+            PreCutChanged();
         }
     }
 
@@ -97,6 +98,12 @@ protected:
                                            T::m_bOpenLight ? osg::StateAttribute::ON : osg::StateAttribute::OFF);
             m_bLightingChanged=false;
         }
+
+        if(m_bPreCutChanged)
+        {
+            m_pRootNode->setCullingActive(T::m_bOpenPreCut);
+            m_bPreCutChanged=false;
+        }
         IOsgSceneNode::UpdateNode();
     }
 
@@ -128,6 +135,7 @@ protected:
 
     void PickStateChanged()SET_TRUE_NODE_UPDATE(m_bPickStateChanged)
     void LightChanged()SET_TRUE_NODE_UPDATE(m_bLightingChanged)
+    void PreCutChanged()SET_TRUE_NODE_UPDATE(m_bLightingChanged)
 
     void AddNode(osg::Group* pGroup,osg::Node* pNode)
     {
@@ -143,6 +151,7 @@ protected:
     osg::Node::NodeMask  m_preMask = 0xffffffffu;
     bool m_bPickStateChanged=false;
     bool m_bLightingChanged=false;
+    bool m_bPreCutChanged=false;
 };
 
 #endif // IMPL_SCENE_NODE_H

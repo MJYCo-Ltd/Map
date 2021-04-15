@@ -13,6 +13,7 @@ SDK_CONFIG *= OSG Satellite OsgExtern
 include($$PWD/../MapPlot.pri)
 
 HEADERS += \
+    DrawShape/SceneBox.h \
     DrawShape/SceneCone.h \
     DrawShape/SceneEllipsoid.h \
     DrawShape/SceneImage.h \
@@ -24,6 +25,7 @@ HEADERS += \
     SceneShape.h
 
 SOURCES += \
+    DrawShape/SceneBox.cpp \
     DrawShape/SceneCone.cpp \
     DrawShape/SceneEllipsoid.cpp \
     DrawShape/SceneImage.cpp \

@@ -143,7 +143,7 @@ void QtWindow::InitWindow()
     {
         m_pMainViewPoint->GetOsgView()->getCamera()->setGraphicsContext(m_pFBOWindow);
         m_pMainViewPoint->GetOsgView()->getCamera()->setNearFarRatio(0.0001);
-        m_pMainViewPoint->GetOsgView()->getCamera()->setSmallFeatureCullingPixelSize(-1.0f);
+        m_pMainViewPoint->GetOsgView()->getCamera()->setSmallFeatureCullingPixelSize(1.0f);
         m_bInit=true;
     }
 }

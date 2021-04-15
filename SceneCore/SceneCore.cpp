@@ -91,7 +91,6 @@ bool CheckPC(char *argv[])
             return(s_gBChecked);
         }
 
-        osgEarth::Registry::instance()->unRefImageDataAfterApply() = false;
         osg::setNotifyLevel(osg::WARN);
         osgEarth::setNotifyLevel(osg::NOTICE);
 

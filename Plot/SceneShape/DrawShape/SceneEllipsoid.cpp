@@ -45,16 +45,19 @@ void CSceneEllipsoid::UpdateShape()
             pTexture = m_pSceneGraph->ResouceLoader()->LoadTexture(m_sImagePath);
         }
 
+        m_pNormals->clear();
+        m_pNormals->reserve(m_pVertexArray->capacity());
+        m_pGeometry->setNormalArray(m_pNormals);
+
         if(nullptr != pTexture)
         {
-            m_pNormals->clear();
+
             m_pTexCoords->clear();
 
             m_pTexCoords->reserve(m_pVertexArray->capacity());
-            m_pNormals->reserve(m_pVertexArray->capacity());
+
 
             m_pGeometry->setTexCoordArray(0,m_pTexCoords);
-            m_pGeometry->setNormalArray(m_pNormals);
             m_pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(0, pTexture,osg::StateAttribute::ON);
 
             /// 如果VP中没有函数则添加
@@ -124,10 +127,11 @@ void CSceneEllipsoid::UpdateShape()
         break;
     }
 
-    double lat,lon,gx,gy,gz;
+    double lat,lon,gx,gy,gz,ds,dt;
     int x,y,y_plus_1;
     static Math::CVector vCenter(3);
     Math::CVector vDir(0,0,-1),vOut(3);
+    osg::Vec3 normal;
 
     for( y = 0; y <= nLatSegments; ++y )
     {
@@ -157,16 +161,16 @@ void CSceneEllipsoid::UpdateShape()
 
             m_pVertexArray->push_back(osg::Vec3(gx,gy,gz));
 
-            if (nullptr !=pTexture)
+            if(nullptr != pTexture)
             {
-                double s = (lon + 180) / 360.0;
-                double t = (lat + 90.0) / 180.0;
-                m_pTexCoords->push_back(osg::Vec2(s,t));
-
-                osg::Vec3d normal(gx, gy, gz);
-                normal.normalize();
-                m_pNormals->push_back( osg::Vec3f(normal));
+                ds = (lon + 180) / 360.0;
+                dt = (lat + 90.0) / 180.0;
+                m_pTexCoords->push_back(osg::Vec2(ds,dt));
             }
+
+            normal.set(gx, gy, gz);
+            normal.normalize();
+            m_pNormals->push_back(normal);
 
 
             y_plus_1 = y+1;
@@ -232,9 +236,10 @@ void CSceneEllipsoid::UpdateShape()
     }
     else if(nullptr != pTexture)
     {
-        m_pNormals->dirty();
         m_pTexCoords->dirty();
     }
+
+    m_pNormals->dirty();
 }
 
 /// 创建模型
@@ -243,6 +248,7 @@ void CSceneEllipsoid::CreateShape()
     m_pEllipsoidModel = new osg::EllipsoidModel;
     m_pTexCoords = new osg::Vec2Array(osg::Array::BIND_PER_VERTEX);
     m_pNormals = new osg::Vec3Array(osg::Array::BIND_PER_VERTEX);
+    m_pGeometry->setNormalArray(m_pNormals);
     m_pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(m_pGeometry->getOrCreateStateSet());
     UpdateShape();
 }

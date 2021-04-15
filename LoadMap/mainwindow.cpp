@@ -36,6 +36,7 @@
 #include <Plot/Common/ISceneLodGroup.h>
 #include <Plot/SceneShape/ILabel.h>
 #include <Plot/Common/ISceneScreenGroup.h>
+#include <Plot/SceneShape/IBoxSensor.h>
 #include <Hud/IViewHud.h>
 #include <Inner/ILoadResource.h>
 #include <Plot/Map/IMapObserver.h>
@@ -92,12 +93,12 @@ MainWindow::~MainWindow()
 void MainWindow::SetSecenGraph(ISceneGraph *pSceneGraph)
 {
     m_pSceneGraph = pSceneGraph;
-    if(m_pSceneGraph->GetMap())
-    {
-        auto pMap= new MapObser(m_pSceneGraph);
-        m_pSceneGraph->GetMainWindow()->SubMessage(pMap);
-        m_pSceneGraph->GetMap()->SubMessage(pMap);
-    }
+//    if(m_pSceneGraph->GetMap())
+//    {
+//        auto pMap= new MapObser(m_pSceneGraph);
+//        m_pSceneGraph->GetMainWindow()->SubMessage(pMap);
+//        m_pSceneGraph->GetMap()->SubMessage(pMap);
+//    }
 }
 
 void MainWindow::timerEvent(QTimerEvent *event)
@@ -690,6 +691,17 @@ void MainWindow::PlotMap()
     m_pPolygon->GetDrawPolygon()->AddPoint(4,pos);
     m_pPolygon->GetDrawPolygon()->SetColor(color);
     m_pLayer->AddSceneNode(m_pPolygon);
+
+    auto pMapLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+    m_pLayer->AddSceneNode(pMapLocation);
+    pMapLocation->SetGeoPos(pos);
+
+    auto pBoxSensor = dynamic_cast<IBoxSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IBoxSensor"));
+    pMapLocation->SetSceneNode(pBoxSensor);
+    pBoxSensor->SetDistance(10000);
+    pBoxSensor->ShowFace(false);
+    pBoxSensor->ShowLine(true);
+    pBoxSensor->SetShowBack(false);
 }
 
 void MainWindow::LodPlot()
