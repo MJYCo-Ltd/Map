@@ -135,7 +135,7 @@ protected:
 
     void PickStateChanged()SET_TRUE_NODE_UPDATE(m_bPickStateChanged)
     void LightChanged()SET_TRUE_NODE_UPDATE(m_bLightingChanged)
-    void PreCutChanged()SET_TRUE_NODE_UPDATE(m_bLightingChanged)
+    void PreCutChanged()SET_TRUE_NODE_UPDATE(m_bPreCutChanged)
 
     void AddNode(osg::Group* pGroup,osg::Node* pNode)
     {
