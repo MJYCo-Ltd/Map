@@ -4,46 +4,46 @@ void CSceneBox::UpdateShape()
 {
     double dy(m_dYXRatio),dz(m_dZXRatio);
     // -ve y plane
-    m_pVertexArray->push_back(osg::Vec3(-1.f,-dy,dz));
-    m_pVertexArray->push_back(osg::Vec3(-1.f,-dy,-dz));
-    m_pVertexArray->push_back(osg::Vec3(1.f,-dy,-dz));
-    m_pVertexArray->push_back(osg::Vec3(1.f,-dy,dz));
+    m_pVertexArray->at(0).set(osg::Vec3(-1.f,-dy,dz));
+    m_pVertexArray->at(1).set(osg::Vec3(-1.f,-dy,-dz));
+    m_pVertexArray->at(2).set(osg::Vec3(1.f,-dy,-dz));
+    m_pVertexArray->at(3).set(osg::Vec3(1.f,-dy,dz));
 
     // +ve y plane
-    m_pVertexArray->push_back(osg::Vec3(1.f,dy,dz));
-    m_pVertexArray->push_back(osg::Vec3(1.f,dy,-dz));
-    m_pVertexArray->push_back(osg::Vec3(-1.f,dy,-dz));
-    m_pVertexArray->push_back(osg::Vec3(-1.f,dy,dz));
+    m_pVertexArray->at(4).set(osg::Vec3(1.f,dy,dz));
+    m_pVertexArray->at(5).set(osg::Vec3(1.f,dy,-dz));
+    m_pVertexArray->at(6).set(osg::Vec3(-1.f,dy,-dz));
+    m_pVertexArray->at(7).set(osg::Vec3(-1.f,dy,dz));
 
     // +ve x plane
-    m_pVertexArray->push_back(osg::Vec3(1.f,-dy,dz));
-    m_pVertexArray->push_back(osg::Vec3(1.f,-dy,-dz));
-    m_pVertexArray->push_back(osg::Vec3(1.f,dy,-dz));
-    m_pVertexArray->push_back(osg::Vec3(1.f,dy,dz));
+    m_pVertexArray->at(8).set(osg::Vec3(1.f,-dy,dz));
+    m_pVertexArray->at(9).set(osg::Vec3(1.f,-dy,-dz));
+    m_pVertexArray->at(10).set(osg::Vec3(1.f,dy,-dz));
+    m_pVertexArray->at(11).set(osg::Vec3(1.f,dy,dz));
 
     // -ve x plane
-    m_pVertexArray->push_back(osg::Vec3(-1.f,dy,dz));
-    m_pVertexArray->push_back(osg::Vec3(-1.f,dy,-dz));
-    m_pVertexArray->push_back(osg::Vec3(-1.f,-dy,-dz));
-    m_pVertexArray->push_back(osg::Vec3(-1.f,-dy,dz));
+    m_pVertexArray->at(12).set(osg::Vec3(-1.f,dy,dz));
+    m_pVertexArray->at(13).set(osg::Vec3(-1.f,dy,-dz));
+    m_pVertexArray->at(14).set(osg::Vec3(-1.f,-dy,-dz));
+    m_pVertexArray->at(15).set(osg::Vec3(-1.f,-dy,dz));
 
     // +ve z plane
-    m_pVertexArray->push_back(osg::Vec3(-1.f,dy,dz));
-    m_pVertexArray->push_back(osg::Vec3(-1.f,-dy,dz));
-    m_pVertexArray->push_back(osg::Vec3(1.f,-dy,dz));
-    m_pVertexArray->push_back(osg::Vec3(1.f,dy,dz));
+    m_pVertexArray->at(16).set(osg::Vec3(-1.f,dy,dz));
+    m_pVertexArray->at(17).set(osg::Vec3(-1.f,-dy,dz));
+    m_pVertexArray->at(18).set(osg::Vec3(1.f,-dy,dz));
+    m_pVertexArray->at(19).set(osg::Vec3(1.f,dy,dz));
 
     // -ve z plane
-    m_pVertexArray->push_back(osg::Vec3(1.f,dy,-dz));
-    m_pVertexArray->push_back(osg::Vec3(1.f,-dy,-dz));
-    m_pVertexArray->push_back(osg::Vec3(-1.f,-dy,-dz));
-    m_pVertexArray->push_back(osg::Vec3(-1.f,dy,-dz));
+    m_pVertexArray->at(20).set(osg::Vec3(1.f,dy,-dz));
+    m_pVertexArray->at(21).set(osg::Vec3(1.f,-dy,-dz));
+    m_pVertexArray->at(22).set(osg::Vec3(-1.f,-dy,-dz));
+    m_pVertexArray->at(23).set(osg::Vec3(-1.f,dy,-dz));
 }
 
 /// 创建多边形
 void CSceneBox::CreateShape()
 {
-    m_pVertexArray->reserve(24);
+    m_pVertexArray->resize(24);
     UpdateShape();
 
     m_pNormals = new osg::Vec3Array(osg::Array::BIND_PER_VERTEX);
