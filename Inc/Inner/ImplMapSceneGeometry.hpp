@@ -1,6 +1,7 @@
 #ifndef IMPL_OSG_MAP_GEOMETRY_H
 #define IMPL_OSG_MAP_GEOMETRY_H
 #include <osgEarth/DrapeableNode>
+#include <osgEarth/Horizon>
 #include <Inner/ImplMapSceneNode.hpp>
 #include <Plot/SceneShape/IGeometry.h>
 
@@ -21,6 +22,9 @@ protected:
         {
             m_pDrapeNode->setMapNode(ImplMapSceneNode<T>::s_pMapNode.get());
         }
+        auto pCullBack = new osgEarth::HorizonCullCallback;
+        pCullBack->setEnabled(true);
+        m_pDrapeNode->addCullCallback(pCullBack);
         ImplMapSceneNode<T>::SetOsgNode(m_pDrapeNode.get());
     }
 
@@ -56,7 +60,6 @@ protected:
         {
             T::m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CReplaceNode(m_pDrapeNode.get(),
                                                                                       m_pGeometry->AsOsgSceneNode()->GetOsgNode()));
-//            T::m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pDrapeNode.get()));
             ImplMapSceneNode<T>::SetOsgNode(m_pGeometry->AsOsgSceneNode()->GetOsgNode());
             m_pGeometry->NeedUpdate();
         }

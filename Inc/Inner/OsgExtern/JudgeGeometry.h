@@ -3,7 +3,13 @@
 
 class OSGEXTERNSHARED_EXPORT CJudgeGeometry:public osg::Drawable::DrawCallback
 {
+public:
     CJudgeGeometry(std::string sName):m_sName(sName){}
-    std::string m_sName;
+
+    /**
+     * @brief 重写父类的函数
+     */
     void drawImplementation(osg::RenderInfo& renderInfo,const osg::Drawable* drawable) const;
+private:
+    std::string m_sName;
 };

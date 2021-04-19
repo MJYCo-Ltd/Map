@@ -8,6 +8,7 @@
 #include <Inner/ILoadResource.h>
 #include <osgEarth/VirtualProgram>
 #include <VersionMathCommon.h>
+#include <osgEarth/SpatialReference>
 #include "Atmosphere.h"
 
 CAtmosphere::CAtmosphere(ISceneGraph* pSceneGraph,int nIndex):
@@ -26,6 +27,7 @@ void CAtmosphere::MakeAtmosphere()
     m_pEllipsoid->SetEquator(R_Earth2*1.025);
     m_pEllipsoid->SetPolar(R_Earth*1.025);
     m_pEllipsoid->ShowLine(false);
+    m_pEllipsoid->SetLatSegMents(100);
 
     m_pCameraNode->AddSceneNode(m_pEllipsoid);
     m_pCameraNode->SetRenderIndex(m_nIndex);
@@ -45,8 +47,8 @@ void CAtmosphere::MakeAtmosphere()
 
     osgEarth::VirtualProgram* vp = osgEarth::VirtualProgram::getOrCreate( atmosSet );
     vp->setName("SimpleSkyAtmosphere");
-    vp->setInheritShaders(false);
     m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(vp,"GLSL/Atmosphere.glsl");
+    vp->setInheritShaders(false);
 }
 
 osg::Node *CAtmosphere::GetNode()

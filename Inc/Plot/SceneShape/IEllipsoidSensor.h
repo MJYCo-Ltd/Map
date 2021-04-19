@@ -21,13 +21,13 @@ public:
     /**
      * @brief 设置赤道半径 [m]
      */
-    void SetEquator(double dEquator)JUDGE_DOUBLE_CALL_FUNCTION(dEquator,m_dEquator,ShapeChanged)
+    void SetEquator(double dEquator)JUDGE_POSITIVE_DOUBLE_CALL_FUNCTION(dEquator,m_dEquator,ShapeChanged)
     double Equator()const{return(m_dEquator);}
 
     /**
      * @brief 设置极半径 [m]
      */
-    void SetPolar(double dPolar)JUDGE_DOUBLE_CALL_FUNCTION(dPolar,m_dPolar,ShapeChanged)
+    void SetPolar(double dPolar)JUDGE_POSITIVE_DOUBLE_CALL_FUNCTION(dPolar,m_dPolar,ShapeChanged)
     double Polar()const{return(m_dPolar);}
 
     /**
@@ -81,25 +81,33 @@ public:
     /**
      * @brief 设置圆锥半角[deg][0~90]
      */
-    void SetConeAngle(double dAngle)JUDGE_DOUBLE_CALL_FUNCTION(dAngle,m_dAngle,ShapeChanged)
+    void SetConeAngle(double dAngle)JUDGE_POSITIVE_DOUBLE_CALL_FUNCTION(dAngle,m_dAngle,ShapeChanged)
     double ConeAngle()const{return(m_dAngle);}
 
     /**
      * @brief 设置方锥半角[deg][0~90]
      */
-    void SetSConeHAngle(double dHAngle)JUDGE_DOUBLE_CALL_FUNCTION(dHAngle,m_dHAngle,ShapeChanged)
-    double SConeHAngle(){return(m_dHAngle);}
+    void SetSConeHAngle(double dHAngle)JUDGE_POSITIVE_DOUBLE_CALL_FUNCTION(dHAngle,m_dHAngle,ShapeChanged)
+    double SConeHAngle()const{return(m_dHAngle);}
 
     /**
      * @brief 设置方锥半角[deg][0~90]
      */
-    void SetSConeVAngle(double dVAngle)JUDGE_DOUBLE_CALL_FUNCTION(dVAngle,m_dVAngle,ShapeChanged)
-    double SConeVAngle(){return(m_dVAngle);}
+    void SetSConeVAngle(double dVAngle)JUDGE_POSITIVE_DOUBLE_CALL_FUNCTION(dVAngle,m_dVAngle,ShapeChanged)
+    double SConeVAngle()const{return(m_dVAngle);}
+
+    /**
+     * @brief 设置椭球纬度上划分的个数
+     * @attention 经度上为纬度上划分的个数的2倍
+     */
+    void SetLatSegMents(unsigned int nSgements)JUDGE_EQUAL_CALL_FUNCTION(nSgements,m_unSegments,ShapeChanged)
+    unsigned int LatSegmentsconst()const{return(m_unSegments);}
 
 protected:
     virtual ~IEllipsoidSensor(){}
 protected:
     DRAW_TYPE m_emDrawType=FULL_PART;
+    unsigned int m_unSegments=18;
     double m_dEquator=1.; /// 赤道半径
     double m_dPolar=1.;   /// 极半径
     double m_dMinAzim=-1.;

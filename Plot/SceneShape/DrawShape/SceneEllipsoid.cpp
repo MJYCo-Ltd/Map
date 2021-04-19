@@ -1,5 +1,6 @@
 #include <GisMath/GisMath.h>
 #include <VersionMathCommon.h>
+#include <Inner/OsgExtern/JudgeGeometry.h>
 #include "SceneEllipsoid.h"
 
 static bool checkFunctions(const osgEarth::VirtualProgram* attr)
@@ -27,7 +28,7 @@ void CSceneEllipsoid::UpdateShape()
             dStartLon(-180.),dEndLon(180),
             dLatSegmentSize,dLonSegmentSize;
 
-    int nLatSegments(18),nLonSegments(nLatSegments*2);
+    int nLatSegments(m_unSegments),nLonSegments(nLatSegments*2);
     osg::Texture2D* pTexture=nullptr;
 
     switch (m_emDrawType)

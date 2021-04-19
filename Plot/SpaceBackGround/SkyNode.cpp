@@ -80,6 +80,10 @@ void CSkyNode::traverse(osg::NodeVisitor & nv)
 
         cv->setClampProjectionMatrixCallback(0L);
 
+        if(m_pSpaceBackGroundRoot->getStateSet() != this->getStateSet())
+        {
+            m_pSpaceBackGroundRoot->setStateSet(this->getStateSet());
+        }
         /// 真实的节点进行遍历
         m_pSpaceBackGroundRoot->accept( nv );
 

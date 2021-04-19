@@ -487,6 +487,7 @@ void CMap::InitMap()
             m_dMJD = data.GetMJD();
             DateChanged();
             m_p3DRoot->addChild(m_pMap3DNode);
+            m_pSpaceEnv->AsOsgSceneNode()->GetOsgNode()->setStateSet(m_p3DRoot->getOrCreateStateSet());
 
             osgEarth::GLUtils::setGlobalDefaults(m_pMap3DNode->getOrCreateStateSet());
         }

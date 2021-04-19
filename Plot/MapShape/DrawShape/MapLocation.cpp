@@ -35,7 +35,7 @@ void CMapLocation::UpdateMapNode()
         /// 如果有高程
         if(m_pTerrain.valid())
         {
-            p.makeAbsolute(m_pTerrain.get());
+//            p.makeRelative(m_pTerrain.get());
         }
 
         osg::Matrixd local2world;
@@ -60,7 +60,7 @@ void CMapLocation::UpdateNode()
         /// 如果有高程
         if(m_pTerrain.valid())
         {
-            p.makeRelative(m_pTerrain.get());
+//            p.makeRelative(m_pTerrain.get());
         }
 
         osg::Matrixd local2world;
@@ -94,7 +94,7 @@ void CMapLocation::PosChanged()
 {
     if(!m_pGeoPoint.isValid())
     {
-        m_pGeoPoint.set(osgEarth::SpatialReference::get("wgs84"),m_stGeoPos.fX,m_stGeoPos.fY,m_stGeoPos.fZ,osgEarth::ALTMODE_RELATIVE);
+        m_pGeoPoint.set(osgEarth::SpatialReference::get("wgs84"),m_stGeoPos.fX,m_stGeoPos.fY,m_stGeoPos.fZ,osgEarth::ALTMODE_ABSOLUTE);
     }
     else
     {

@@ -16,6 +16,19 @@ void CJudgeGeometry::drawImplementation(osg::RenderInfo &renderInfo, const osg::
             osg::notify(osg::WARN)<<pProgram->getShader(i)->getShaderSource()<<std::endl;
         }
 
-        osg::notify(osg::WARN)<<"baseTexture:"<<renderInfo.getState()->getUniformMap().at("baseTexture").uniformVec[0].second<<std::endl;
+    }
+
+    for(auto one : renderInfo.getState()->getUniformMap())
+    {
+        osg::notify(osg::WARN)<<one.first<<":"<<std::endl;
+        osg::notify(osg::WARN)<<"    UniformVec { ";
+        for(auto itr = one.second.uniformVec.begin();
+            itr != one.second.uniformVec.end();
+            ++itr)
+        {
+            if (itr!=one.second.uniformVec.begin()) osg::notify(osg::WARN)<<", ";
+            osg::notify(osg::WARN)<<"("<<itr->first<<", "<<itr->second<<")";
+        }
+        osg::notify(osg::WARN)<<" }"<<std::endl;
     }
 }
