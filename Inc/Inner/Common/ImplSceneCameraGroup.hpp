@@ -2,7 +2,7 @@
 #define IMPL_SCENE_CAMERA_GROUP_H
 
 #include <set>
-#include <Inner/ImplSceneGroup.hpp>
+#include <Inner/Common/ImplSceneGroup.hpp>
 
 /**
  *  实现ISceneCameraGroup的接口

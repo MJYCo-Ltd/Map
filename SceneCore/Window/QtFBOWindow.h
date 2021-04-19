@@ -64,7 +64,7 @@ public:
      * @brief 获取FBO Texture ID
      * @return
      */
-    uint GetFBOTextureID(){return(m_nTextureID);}
+    uint GetFBOTextureID();
     const QSize& GetFBOSize(){return(m_stTextureSize);}
 
     ////////////// 鼠标/键盘/触摸屏 消息处理 ////////////////////////////////////////////
@@ -96,8 +96,9 @@ protected:
 
 private:
     bool                                           m_bInit=false;          /// 是否已经初始化
-    uint                                           m_bInitFBO=false;       /// 是否初始化 FBO
-    uint                                           m_nTextureID=0;    /// 纹理ID
+    bool                                           m_bInitFBO=false;       /// 是否初始化 FBO
+    bool                                           m_bCanSwap=true;    ///是否可以交换
+    uint                                           m_unTextureID=0;    /// 纹理ID
     QSize                                          m_stWinSize;      /// 窗口大小
     QSize                                          m_stTextureSize;  /// 纹理大小
     qreal                                          m_rMouseX;

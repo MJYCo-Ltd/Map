@@ -9,7 +9,7 @@
 #include <Plot/SatelliteShow/ISatellite.h>
 #include <Plot/SceneShape/ILabel.h>
 
-#include <Inner/ImplSceneGroup.hpp>
+#include <Inner/Common/ImplSceneGroup.hpp>
 
 class ILine;
 

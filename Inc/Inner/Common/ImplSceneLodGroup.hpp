@@ -3,7 +3,7 @@
 
 #include <osg/LOD>
 #include <SceneGraph/ISceneGroup.h>
-#include <Inner/ImplSceneGroup.hpp>
+#include <Inner/Common/ImplSceneGroup.hpp>
 
 
 /**

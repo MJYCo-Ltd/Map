@@ -12,6 +12,7 @@ enum SCENE_GROUP_TYPE
     SCALE_GROUP,    /// 自动缩放
     SCREEN_GROUP,   /// 将节点显示在屏幕上
     CAMERA_GROUP,   /// 防止裁剪的节点
+    VISUAL_GROUP,   /// 视域分析
     STANDARD_GROUP  /// 只是一个容器
 };
 

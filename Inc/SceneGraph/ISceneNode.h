@@ -12,6 +12,7 @@ class ISceneScaleGroup;
 class ISceneCameraGroup;
 class ISceneAttitudeGroup;
 class ISceneScreenGroup;
+class ISceneVisualGroup;
 
 class ISceneModel;
 class IOsgSceneNode;
@@ -70,6 +71,7 @@ public:
     virtual ISceneAttitudeGroup* AsSceneAttitudeGroup(){return(nullptr);}
     virtual ISceneCameraGroup* AsSceneCameraGroup(){return(nullptr);}
     virtual ISceneScreenGroup* AsSceneScreenGroup(){return(nullptr);}
+    virtual ISceneVisualGroup* AsSceneVisualGroup(){return(nullptr);}
     virtual IOsgSceneNode* AsOsgSceneNode(){return(nullptr);}
     virtual IHudNode* AsHudNode(){return(nullptr);}
 protected:

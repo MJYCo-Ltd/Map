@@ -76,6 +76,9 @@ protected:
         m_pGroup = pGroup;
         ImplSceneNode<T>::SetOsgNode(m_pGroup.get());
     }
+
+    virtual void InsertChildNode(osg::Node*){}
+    virtual void RemoveChildNode(osg::Node*){}
 protected:
     std::set<IOsgSceneNode*>       m_setChildNode;/// 子节点
     osg::observer_ptr<osg::Group>m_pGroup;      /// 本节点

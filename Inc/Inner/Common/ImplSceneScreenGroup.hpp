@@ -2,10 +2,10 @@
 #define IMPL_SCENE_SCREEN_GROUP_H
 
 #include <osgEarth/ScreenSpaceLayout>
-#include <Inner/ImplSceneGroup.hpp>
+#include <Inner/Common/ImplSceneGroup.hpp>
 
 /**
- *  实现ISceneNode所有的接口
+ *  实现ISceneScreenGroup的接口
  */
 template <typename T>
 class ImplSceneScreenGroup:public ImplSceneGroup<T>

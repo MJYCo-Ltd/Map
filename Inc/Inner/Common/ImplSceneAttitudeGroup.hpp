@@ -3,10 +3,10 @@
 #include <VersionMathCommon.h>
 #include <Inner/OsgExtern/MyPositionAttitudeTransform.h>
 #include <Math/YPRAngle.h>
-#include <Inner/ImplSceneGroup.hpp>
+#include <Inner/Common/ImplSceneGroup.hpp>
 
 /**
- *  实现ISceneNode所有的接口
+ *  实现ISceneAttitudeGroup的接口
  */
 template <typename T>
 class ImplSceneAttitudeGroup:public ImplSceneGroup<T>

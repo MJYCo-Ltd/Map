@@ -1,9 +1,10 @@
-#include <Inner/ImplSceneAttitudeGroup.hpp>
-#include <Inner/ImplSceneFlashGroup.hpp>
-#include <Inner/ImplSceneLodGroup.hpp>
-#include <Inner/ImplSceneScaleGroup.hpp>
-#include <Inner/ImplSceneCameraGroup.hpp>
-#include <Inner/ImplSceneScreenGroup.hpp>
+#include <Inner/Common/ImplSceneAttitudeGroup.hpp>
+#include <Inner/Common/ImplSceneFlashGroup.hpp>
+#include <Inner/Common/ImplSceneLodGroup.hpp>
+#include <Inner/Common/ImplSceneScaleGroup.hpp>
+#include <Inner/Common/ImplSceneCameraGroup.hpp>
+#include <Inner/Common/ImplSceneScreenGroup.hpp>
+#include <Inner/Common/ImplSceneVisualGroup.hpp>
 #include <Inner/ImplSceneModel.hpp>
 
 #include <Plot/Common/ISceneAttitudeGroup.h>
@@ -12,6 +13,7 @@
 #include <Plot/Common/ISceneScaleGroup.h>
 #include <Plot/Common/ISceneCameraGroup.h>
 #include <Plot/Common/ISceneScreenGroup.h>
+#include <Plot/Common/ISceneVisualGroup.h>
 #include <Plot/Common/ISceneModel.h>
 
 #include "MapNodeFactory.h"
@@ -52,6 +54,9 @@ ISceneGroup *CPlotManager::CreateSceneGroup(SCENE_GROUP_TYPE emType)
         break;
     case SCREEN_GROUP:
         pGroup = new ImplSceneScreenGroup<ISceneScreenGroup>(m_pSceneGraph);
+        break;
+    case VISUAL_GROUP:
+        pGroup = new ImplSceneVisualGroup<ISceneVisualGroup>(m_pSceneGraph);
         break;
     default:
         pGroup = new ImplSceneGroup<ISceneGroup>(m_pSceneGraph);

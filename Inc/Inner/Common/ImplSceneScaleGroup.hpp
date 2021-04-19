@@ -2,7 +2,7 @@
 #define IMPL_SCENE_SCALE_GROUP_H
 
 #include <osg/AutoTransform>
-#include "ImplSceneGroup.hpp"
+#include <Inner/Common/ImplSceneGroup.hpp>
 
 /**
  *  实现ISceneScaleGroup所有的接口

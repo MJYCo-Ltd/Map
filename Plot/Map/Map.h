@@ -5,7 +5,7 @@
 #include <osgEarth/MapNode>
 #include <osgEarth/Lighting>
 #include <Map/IMap.h>
-#include <Inner/ImplSceneGroup.hpp>
+#include <Inner/Common/ImplSceneGroup.hpp>
 
 class CSpaceEnv;
 class ISceneGraph;

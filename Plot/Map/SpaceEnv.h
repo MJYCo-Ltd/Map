@@ -2,7 +2,7 @@
 #define CSPACEENV_H
 #include <osg/Camera>
 #include <Inner/IOsgSceneNode.h>
-#include <Inner/ImplSceneAttitudeGroup.hpp>
+#include <Inner/Common/ImplSceneAttitudeGroup.hpp>
 #include <Plot/Map/SpaceEnv/ISpaceEnv.h>
 #include <Plot/Common/ISceneAttitudeGroup.h>
 

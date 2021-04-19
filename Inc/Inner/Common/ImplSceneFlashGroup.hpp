@@ -5,12 +5,12 @@
 #include <osgEarth/VirtualProgram>
 #include <osgEarth/Shaders>
 
-#include <Inner/ImplSceneGroup.hpp>
+#include <Inner/Common/ImplSceneGroup.hpp>
 #include <SceneGraph/ISceneGroup.h>
 #include <Inner/ILoadResource.h>
 
 /**
- *  实现ISceneNode所有的接口
+ *  实现ISceneFlashGroup的接口
  */
 template <typename T>
 class ImplSceneFlashGroup:public ImplSceneGroup<T>
