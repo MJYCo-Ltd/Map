@@ -12,6 +12,7 @@ include(../SoftSDK.pri)
 SOURCES += \
     Grid2TriangleStrip.cpp \
     JudgeGeometry.cpp \
+    MapNodeCullBack.cpp \
     MathCommon.cpp \
     MyMatrixTransform.cpp \
     MyPositionAttitudeTransform.cpp \

@@ -11,16 +11,14 @@
 #include <osgEarth/SpatialReference>
 #include "Atmosphere.h"
 
-CAtmosphere::CAtmosphere(ISceneGraph* pSceneGraph,int nIndex):
-    m_pSceneGraph(pSceneGraph),
-    m_nIndex(nIndex)
+CAtmosphere::CAtmosphere(ISceneGraph* pSceneGraph):
+    m_pSceneGraph(pSceneGraph)
 {
 }
 
 void CAtmosphere::MakeAtmosphere()
 {
     IPlot* pPlot=m_pSceneGraph->GetPlot();
-    m_pCameraNode=pPlot->CreateSceneGroup(CAMERA_GROUP)->AsSceneCameraGroup();
     m_pEllipsoid=dynamic_cast<IEllipsoidSensor*>(pPlot->CreateSceneNode("IEllipsoidSensor"));
 
     m_pEllipsoid->SetDrawType(IEllipsoidSensor::FULL_PART);
@@ -28,9 +26,6 @@ void CAtmosphere::MakeAtmosphere()
     m_pEllipsoid->SetPolar(R_Earth*1.025);
     m_pEllipsoid->ShowLine(false);
     m_pEllipsoid->SetLatSegMents(100);
-
-    m_pCameraNode->AddSceneNode(m_pEllipsoid);
-    m_pCameraNode->SetRenderIndex(m_nIndex);
 
     IOsgSceneNode* pOsgSceneNode = m_pEllipsoid->AsOsgSceneNode();
     auto pOsgNode = pOsgSceneNode->GetOsgNode();
@@ -53,10 +48,10 @@ void CAtmosphere::MakeAtmosphere()
 
 osg::Node *CAtmosphere::GetNode()
 {
-    return(m_pCameraNode->AsOsgSceneNode()->GetOsgNode());
+    return(m_pEllipsoid->AsOsgSceneNode()->GetOsgNode());
 }
 
 void CAtmosphere::SetVisible(bool bVisilbe)
 {
-    m_pCameraNode->SetVisible(bVisilbe);
+    m_pEllipsoid->SetVisible(bVisilbe);
 }

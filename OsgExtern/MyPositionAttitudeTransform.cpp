@@ -1,4 +1,4 @@
-#include "Inner/OsgExtern/MyPositionAttitudeTransform.h"
+#include <Inner/OsgExtern/MyPositionAttitudeTransform.h>
 
 using namespace osg;
 CMyPositionAttitudeTransform::CMyPositionAttitudeTransform()

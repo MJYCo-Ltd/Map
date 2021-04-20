@@ -3,12 +3,6 @@
 #include <osgEarth/Version>
 #include <osgEarth/Terrain>
 #include <osgEarth/Lighting>
-
-#if OSGEARTH_VERSION_GREATER_OR_EQUAL(3,0,0)
-#include <osgEarth/AutoClipPlaneHandler>
-#else
-#include <osgEarthUtil/AutoClipPlaneHandler>
-#endif
 #include <osgEarth/GLUtils>
 
 #include <Satellite/Date.h>
@@ -18,6 +12,7 @@
 #include <Inner/IOsgViewPoint.h>
 #include <Inner/OsgExtern/OsgExtern.h>
 #include <Inner/OsgExtern/IOsgMapSceneNode.h>
+#include <Inner/OsgExtern/MapNodeCullBack.h>
 #include <Inner/IOsgViewPoint.h>
 #include <SceneGraph/IWindow.h>
 #include <SceneGraph/IViewPort.h>
@@ -472,14 +467,15 @@ void CMap::InitMap()
 #if OSGEARTH_VERSION_GREATER_OR_EQUAL(3,0,0)
             m_pMap3DNode->open();
 #endif
+            m_pMap3DNode->addCullCallback(new CMapNodeCullBack);
             m_pSpaceEnv = new CSpaceEnv(m_pSceneGraph);
             osg::Camera* pCamera = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
                     ->GetOsgView()->getCamera();
-            pCamera->addCullCallback(new osgEarth::Util::AutoClipPlaneCullCallback(m_pMap3DNode));
+
             m_pSpaceEnv->SetMainCamara(pCamera);
             m_pSpaceEnv->Init();
 
-            m_pAtmosphere = new CAtmosphere(m_pSceneGraph,-1);
+            m_pAtmosphere = new CAtmosphere(m_pSceneGraph);
             m_pAtmosphere->MakeAtmosphere();
             m_p3DRoot->addChild(m_pAtmosphere->GetNode());
 
@@ -498,7 +494,6 @@ void CMap::InitMap()
             m_dMJD = data.GetMJD();
             DateChanged();
             m_p3DRoot->addChild(m_pMap3DNode);
-            m_pSpaceEnv->AsOsgSceneNode()->GetOsgNode()->setStateSet(m_p3DRoot->getOrCreateStateSet());
 
             osgEarth::GLUtils::setGlobalDefaults(m_pMap3DNode->getOrCreateStateSet());
         }

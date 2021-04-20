@@ -7,7 +7,7 @@
 class CAtmosphere
 {
 public:
-    CAtmosphere(ISceneGraph* pSceneGraph,int nIndex);
+    CAtmosphere(ISceneGraph* pSceneGraph);
 
     /**
      * @brief 构建太空盒子
@@ -26,10 +26,8 @@ public:
      */
     void SetVisible(bool bVisilbe);
 protected:
-    ISceneCameraGroup*   m_pCameraNode;
     IEllipsoidSensor*    m_pEllipsoid;
     ISceneGraph*         m_pSceneGraph;
-    int                  m_nIndex;
 };
 
 #endif // CATMOSPHERE_H

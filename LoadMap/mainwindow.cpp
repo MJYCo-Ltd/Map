@@ -93,12 +93,13 @@ MainWindow::~MainWindow()
 void MainWindow::SetSecenGraph(ISceneGraph *pSceneGraph)
 {
     m_pSceneGraph = pSceneGraph;
-//    if(m_pSceneGraph->GetMap())
-//    {
+    if(m_pSceneGraph->GetMap())
+    {
+        m_pLayer = m_pSceneGraph->GetMap()->CreateLayer("Test");
 //        auto pMap= new MapObser(m_pSceneGraph);
 //        m_pSceneGraph->GetMainWindow()->SubMessage(pMap);
 //        m_pSceneGraph->GetMap()->SubMessage(pMap);
-//    }
+    }
 }
 
 void MainWindow::timerEvent(QTimerEvent *event)
@@ -302,7 +303,7 @@ void MainWindow::on_action_triggered()
 
     pSatellite->SetJ2000Oribit(vTime,vPos);
     pSatellite->SetModelPath("Model/SJ-2/shixian-2.flt");
-    pSatellite->OpenLight(false);
+    m_pSceneGraph->GetMap()->GetSpaceEnv()->OpenLight(false);
 
     auto pSatelliteSensor = dynamic_cast<ISConeSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISConeSensor"));
     color.fG=1.f;

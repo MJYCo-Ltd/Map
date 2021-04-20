@@ -1,3 +1,6 @@
+#ifndef INCLUDE_JUDGE_GEOMETRY_H
+#define INCLUDE_JUDGE_GEOMETRY_H
+
 #include <Inner/OsgExtern/OsgExtern_Global.h>
 #include <osg/Drawable>
 
@@ -13,3 +16,5 @@ public:
 private:
     std::string m_sName;
 };
+
+#endif
