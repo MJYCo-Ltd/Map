@@ -58,5 +58,5 @@ osg::Node *CAtmosphere::GetNode()
 
 void CAtmosphere::SetVisible(bool bVisilbe)
 {
-    m_pEllipsoid->SetVisible(bVisilbe);
+    m_pCameraNode->SetVisible(bVisilbe);
 }

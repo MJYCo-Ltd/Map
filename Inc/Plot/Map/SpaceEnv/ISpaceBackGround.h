@@ -50,12 +50,6 @@ public:
     virtual void SetConstellationNamesVisible(bool)=0;
 
     /**
-     * @brief 是否开启大气模型
-     * @param bShow
-     */
-    virtual void ShowAtmosphere(bool)=0;
-
-    /**
      * @brief 不知道怎么用的情况下不要擅自调用
      */
     virtual void UpdateMatrix(const Math::CMatrix&)=0;

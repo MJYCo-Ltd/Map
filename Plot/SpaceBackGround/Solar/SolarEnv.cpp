@@ -10,7 +10,6 @@
 #include <Satellite/JPLEphemeris.h>
 
 #include "SolarEnv.h"
-#include "Atmosphere.h"
 
 extern void InitSolarName();
 /// 太阳系构建函数
@@ -57,10 +56,6 @@ void CSolarEnv::CreateSolar()
         this->addChild(pPlanet->GetNode());
     }
 
-    m_pAtmosphere = new CAtmosphere(m_pSceneGraph,-1000);
-    m_pAtmosphere->MakeAtmosphere();
-    this->addChild(m_pAtmosphere->GetNode());
-
     m_pSun = new CSunModel;
     this->addChild(m_pSun);
 }
@@ -79,10 +74,4 @@ void CSolarEnv::UpdatePos(const std::vector<CVector> &vSolarPos)
 
 void CSolarEnv::SetPlanetNameShow(bool bVisible)
 {
-}
-
-/// 是否显示大气
-void CSolarEnv::ShowAtmosphere(bool bVisible)
-{
-    m_pAtmosphere->SetVisible(bVisible);
 }

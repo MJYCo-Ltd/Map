@@ -54,11 +54,6 @@ public:
     void SetPlanetsNamesVisible(bool bShow);
 
     /**
-     * @brief 显示大气模型
-     */
-    void ShowAtmosphere(bool);
-
-    /**
      * @brief 初始化节点
      */
     void InitNode();

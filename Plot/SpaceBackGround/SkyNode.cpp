@@ -60,11 +60,6 @@ void CSkyNode::UpdatePos(const std::vector<Math::CVector> &vSolarPos)
     m_pSolarEnv->UpdatePos(vSolarPos);
 }
 
-void CSkyNode::ShowAtmosphere(bool bVisble)
-{
-    m_pSolarEnv->ShowAtmosphere(bVisble);
-}
-
 void CSkyNode::traverse(osg::NodeVisitor & nv)
 {
     if (nv.getVisitorType() == nv.CULL_VISITOR)
@@ -79,11 +74,6 @@ void CSkyNode::traverse(osg::NodeVisitor & nv)
                 cv->getClampProjectionMatrixCallback();
 
         cv->setClampProjectionMatrixCallback(0L);
-
-        if(m_pSpaceBackGroundRoot->getStateSet() != this->getStateSet())
-        {
-            m_pSpaceBackGroundRoot->setStateSet(this->getStateSet());
-        }
         /// 真实的节点进行遍历
         m_pSpaceBackGroundRoot->accept( nv );
 

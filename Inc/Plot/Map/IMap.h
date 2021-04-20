@@ -92,6 +92,11 @@ public:
     virtual void SetEarthSelfRotate(bool)=0;
 
     /**
+     * @brief 设置大气层是否显示
+     */
+    virtual void SetShowAtmosphere(bool)=0;
+
+    /**
      * @brief 更新时间
      * @arg   约简儒略日
      */

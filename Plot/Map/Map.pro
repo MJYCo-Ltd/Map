@@ -9,6 +9,7 @@ SDK_CONFIG *= OSG OsgExtern SceneCore Satellite
 include($$PWD/../MapPlot.pri)
 
 HEADERS += \
+    Atmosphere.h \
     Map.h \
     MapLayer.h \
     MapModelLayer.h \
@@ -17,6 +18,7 @@ HEADERS += \
     SpaceEnv.h
 
 SOURCES += \
+    Atmosphere.cpp \
     Map.cpp \
     MapLayer.cpp \
     MapModelLayer.cpp \

@@ -9,6 +9,7 @@
 
 class CSpaceEnv;
 class ISceneGraph;
+class CAtmosphere;
 
 class CMapLayer;
 class CMap;
@@ -94,6 +95,11 @@ public:
     void SetEarthSelfRotate(bool) override;
 
     /**
+     * @brief 设置显示大气效果
+     */
+    void SetShowAtmosphere(bool)override;
+
+    /**
      * @brief时间更新
      */
     void DateChanged() override SET_TRUE_NODE_UPDATE(m_bDateChanged)
@@ -132,6 +138,7 @@ protected:
     MapLayers    m_earthFileLayers;
     MapType      m_emType=MAP_3D;
     CSpaceEnv   *m_pSpaceEnv=nullptr;/// 空间背景
+    CAtmosphere *m_pAtmosphere=nullptr;///大气效果
 };
 
 #include <NoQt.h>

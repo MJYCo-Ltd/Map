@@ -17,7 +17,6 @@ include($$PWD/../MapPlot.pri)
 
 HEADERS += \
     SkyNode.h \
-    Solar/Atmosphere.h \
     Solar/PlanetModel.h \
     Solar/SolarEnv.h \
     Solar/SunModel.h \
@@ -40,7 +39,6 @@ HEADERS += \
 
 SOURCES += \
     SkyNode.cpp \
-    Solar/Atmosphere.cpp \
     Solar/PlanetModel.cpp \
     Solar/SolarEnv.cpp \
     Solar/SunModel.cpp \

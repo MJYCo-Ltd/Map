@@ -26,6 +26,7 @@
 #include "MapNodeChanged.h"
 #include "MapModifyLayer.h"
 #include "SpaceEnv.h"
+#include "Atmosphere.h"
 #include "Map.h"
 #include "MapLayer.h"
 #include "MapModelLayer.h"
@@ -381,6 +382,11 @@ void CMap::SetEarthSelfRotate(bool bSelfRotate)
     }
 }
 
+void CMap::SetShowAtmosphere(bool bVisible)
+{
+    m_pAtmosphere->SetVisible(bVisible);
+}
+
 /// 初始化场景
 void CMap::InitNode()
 {
@@ -472,6 +478,11 @@ void CMap::InitMap()
             pCamera->addCullCallback(new osgEarth::Util::AutoClipPlaneCullCallback(m_pMap3DNode));
             m_pSpaceEnv->SetMainCamara(pCamera);
             m_pSpaceEnv->Init();
+
+            m_pAtmosphere = new CAtmosphere(m_pSceneGraph,-1);
+            m_pAtmosphere->MakeAtmosphere();
+            m_p3DRoot->addChild(m_pAtmosphere->GetNode());
+
 
             Init3DLight();
 

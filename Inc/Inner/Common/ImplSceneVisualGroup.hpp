@@ -18,15 +18,15 @@ protected:
     {
         ImplSceneNode<T>::InitNode();
 
-        osg::ref_ptr<osg::Texture2D> texture2D = new osg::Texture2D;
-        texture2D->setTextureSize(1024, 1024);
-        texture2D->setInternalFormat(GL_DEPTH_COMPONENT);
-        texture2D->setSourceFormat(GL_DEPTH_COMPONENT);
-        texture2D->setSourceType(GL_FLOAT);
-        texture2D->setFilter(osg::Texture2D::MIN_FILTER, osg::Texture2D::LINEAR);
-        texture2D->setFilter(osg::Texture2D::MAG_FILTER, osg::Texture2D::LINEAR);
-        texture2D->setWrap(osg::Texture::WRAP_S, osg::Texture::CLAMP_TO_EDGE);
-        texture2D->setWrap(osg::Texture::WRAP_T, osg::Texture::CLAMP_TO_EDGE);
+        m_pTexture2D = new osg::Texture2D;
+        m_pTexture2D->setTextureSize(1024, 1024);
+        m_pTexture2D->setInternalFormat(GL_DEPTH_COMPONENT);
+        m_pTexture2D->setSourceFormat(GL_DEPTH_COMPONENT);
+        m_pTexture2D->setSourceType(GL_FLOAT);
+        m_pTexture2D->setFilter(osg::Texture2D::MIN_FILTER, osg::Texture2D::LINEAR);
+        m_pTexture2D->setFilter(osg::Texture2D::MAG_FILTER, osg::Texture2D::LINEAR);
+        m_pTexture2D->setWrap(osg::Texture::WRAP_S, osg::Texture::CLAMP_TO_EDGE);
+        m_pTexture2D->setWrap(osg::Texture::WRAP_T, osg::Texture::CLAMP_TO_EDGE);
 
         m_pCamera = new osg::Camera();
         m_pCamera->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
@@ -35,8 +35,8 @@ protected:
         m_pCamera->setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         m_pCamera->setRenderTargetImplementation(osg::Camera::FRAME_BUFFER_OBJECT);
         m_pCamera->setRenderOrder(osg::Camera::PRE_RENDER);
-        m_pCamera->setViewport(0, 0, texture2D->getTextureWidth(), texture2D->getTextureHeight());
-        m_pCamera->attach(osg::Camera::DEPTH_BUFFER, texture2D.get());
+        m_pCamera->setViewport(0, 0, m_pTexture2D->getTextureWidth(), m_pTexture2D->getTextureHeight());
+        m_pCamera->attach(osg::Camera::DEPTH_BUFFER, m_pTexture2D.get());
 
         ImplSceneGroup<T>::SetGroupNode(m_pCamera.get());
     }
@@ -44,7 +44,7 @@ protected:
     /// 更新
     void UpdateNode()
     {
-        m_pCamera->setProjectionMatrix(osg::Matrixd::perspective(T::m_dFovy,T::m_dAspect,0.,T::m_dDistance));
+        m_pCamera->setProjectionMatrix(osg::Matrixd::perspective(T::m_dFovy,T::m_dAspect,0.,T::m_stViewPoint.fDistance));
         ImplSceneGroup<T>::UpdateNode();
     }
 
@@ -62,6 +62,7 @@ protected:
     void ParameterChanged()SET_TRUE_NODE_UPDATE(m_bParameterChanged)
 protected:
     osg::observer_ptr<osg::Camera> m_pCamera;
+    osg::ref_ptr<osg::Texture2D>   m_pTexture2D;
     bool m_bParameterChanged=false;
 };
 

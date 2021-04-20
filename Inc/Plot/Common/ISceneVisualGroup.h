@@ -2,6 +2,7 @@
 #define INTERFACE_SCENE_VISUAL_GROUP_HEARDER_H
 
 #include <SceneGraph/ISceneGroup.h>
+#include <SceneGraph/ViewType.h>
 
 /**
  * @brief 屏幕节点类
@@ -31,17 +32,18 @@ public:
     double Aspect()const{return(m_dAspect);}
 
     /**
-     * @brief 设置可视距离
+     * @brief 设置分析位置
+     * @attention rViewPint.stPos 位置为
      */
-    void SetDistance(double dDistance)JUDGE_POSITIVE_DOUBLE_CALL_FUNCTION(dDistance,m_dDistance,ParameterChanged)
-    double Distance()const{return(m_dDistance);}
+    void SetViewPoint(const SceneViewPoint& rViewPoint)JUDGE_EQUAL_CALL_FUNCTION(rViewPoint,m_stViewPoint,ParameterChanged)
+    const SceneViewPoint& ViewPoint()const{return(m_stViewPoint);}
 protected:
     virtual ~ISceneVisualGroup(){}
     virtual void ParameterChanged()=0;
 protected:
     double m_dFovy=45.;   /// 张角
     double m_dAspect=1.;  /// 纵横比
-    double m_dDistance=1.;/// 可视距离
+    SceneViewPoint m_stViewPoint; ///视点位置
 };
 
 #endif //INTERFACE_SCENE_FLASH_GROUP_HEARDER_H
