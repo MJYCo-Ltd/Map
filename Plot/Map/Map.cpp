@@ -380,6 +380,7 @@ void CMap::MovePos(const ScenePos & stWord)
 /// 初始化场景
 void CMap::InitNode()
 {
+    m_pSceneGraph->GetMainWindow()->SubMessage(this);
     ImplSceneGroup<IMap>::InitNode();
     InitMap();
 }
