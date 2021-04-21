@@ -1,6 +1,6 @@
 #ifndef QT_VIEWPORT_H
 #define QT_VIEWPORT_H
-
+#include <QObject>
 #include <osgGA/TrackballManipulator>
 #include <osgGA/NodeTrackerManipulator>
 
@@ -14,8 +14,9 @@ class QtViewPointUpdateCallback;
 class CMyEarthManipulator;
 class QtViewHud;
 
-class QtViewPort :public IViewPort,public IOsgViewPoint
+class QtViewPort :public QObject,public IViewPort,public IOsgViewPoint
 {
+    Q_OBJECT
 public:
     explicit QtViewPort(IRender* pRender,ISceneGraph* pSceneGraph,ProjectType emProject=Perspective);
     ~QtViewPort();
@@ -53,19 +54,35 @@ public:
      * @brief 回到Home视点
      */
     void HomeViewPoint()override;
+
+    /**
+     * @brief 订阅消息
+     * @return
+     */
+    bool SubMessage(IViewPortMessageObserver*)override;
+
+    /**
+     * @brief 订阅消息
+     * @return
+     */
+    bool UnSubMessage(IViewPortMessageObserver*)override;
+protected slots:
+    void EyePos(double dX,double dY, double dZ);
+    void LookDir(double dX,double dY, double dZ);
 protected:
     /// 立体显示模式更改
-    void StereoChanged(){m_bStereoChanged=true;}
-    void HomePointChanged(){m_bHomePointChanged=true;}
-    void TrackNodeChanged();
-    void ViewPortChanged();
-    void ProjectTypeChanged();
+    void StereoChanged()override{m_bStereoChanged=true;}
+    void HomePointChanged()override{m_bHomePointChanged=true;}
+    void TrackNodeChanged()override;
+    void ViewPortChanged()override;
+    void ProjectTypeChanged()override;
     /**
      * @brief 删除从相机
      */
     void RemoveSlave();
 protected:
     std::list<osg::ref_ptr<osg::Camera>>           m_listStereoCamera;
+    std::list<IViewPortMessageObserver*>           m_pAllOserver;          /// 所有的消息订阅者
     osg::ref_ptr<osgViewer::View>                  m_pView;
     osg::ref_ptr<QtViewPointUpdateCallback>        m_pCameraUpdate;
     osg::ref_ptr<CMyEarthManipulator>              m_p2DEarthManipulator; ///二维地图操作器

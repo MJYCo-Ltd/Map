@@ -7,7 +7,7 @@
 
 bool ViewEventCallback::handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIActionAdapter &, osg::Object *, osg::NodeVisitor *)
 {
-    if(ea.MOVE == ea.getEventType())
+    if(ea.MOVE == ea.getEventType() || ea.SCROLL == ea.getEventType())
     {
         if (ea.getNumPointerData()>=1)
         {
@@ -31,6 +31,10 @@ bool ViewEventCallback::handle(const osgGA::GUIEventAdapter &ea, osgGA::GUIActio
                 if (picker->containsIntersections())
                 {
                     out_coords = picker->getIntersections().begin()->getWorldIntersectPoint();
+                }
+                else
+                {
+                    out_coords = endVertex * osg::Matrixd::inverse(camera->getProjectionMatrix());
                 }
                 QMetaObject::invokeMethod(m_pWindow,"MouseMovePos",Q_ARG(double,out_coords.x()),
                                           Q_ARG(double,out_coords.y()),Q_ARG(double,out_coords.z()));

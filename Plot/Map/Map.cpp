@@ -5,6 +5,7 @@
 #include <osgEarth/Lighting>
 #include <osgEarth/GLUtils>
 
+#include <GisMath/GisMath.h>
 #include <Satellite/Date.h>
 #include <Inner/IRender.h>
 #include <Inner/ILoadResource.h>
@@ -162,6 +163,29 @@ bool CMap::ConvertCoord(float &fX, float &fY, ScenePos &geoPos, short TranType)
     {
         return(false);
     }
+}
+
+float CMap::GetHeight(float fLon, float fLat)
+{
+    static osgEarth::SpatialReference* s_pWgs84 = osgEarth::SpatialReference::get("wgs84");
+    osgEarth::Terrain* pTerrain=nullptr;
+    switch (m_emType)
+    {
+    case MAP_2D:
+        pTerrain=m_pMap2DNode->getTerrain();
+        break;
+    case MAP_3D:
+        pTerrain=m_pMap3DNode->getTerrain();
+        break;
+    }
+    if(nullptr == pTerrain)
+    {
+        return(0);
+    }
+
+    static double dHeight;
+    pTerrain->getHeight(s_pWgs84,fLon,fLat,&dHeight);
+    return(dHeight);
 }
 
 /// 获取所有的图层
@@ -353,34 +377,73 @@ void CMap::SetShowAtmosphere(bool bVisible)
     m_pAtmosphere->SetVisible(bVisible);
 }
 
+/// 鼠标移动
 void CMap::MovePos(const ScenePos & stWord)
 {
-    static osgEarth::GeoPoint geoPoint;
+    static double dX(0.),dY(0.),dZ(0.);
     if(m_listObserver.size() > 0)
     {
         switch (m_emType)
         {
-        case MAP_2D:
-            geoPoint.fromWorld(m_pMap2DNode->getMapSRS(),osg::Vec3d(stWord.fX,stWord.fY,stWord.fZ));
-            geoPoint.makeGeographic();
-            break;
         case MAP_3D:
-            geoPoint.fromWorld(m_pMap3DNode->getMapSRS(),osg::Vec3d(stWord.fX,stWord.fY,stWord.fZ));
-            geoPoint.makeGeographic();
+        {
+            static Math::CVector vPos(3),vDir(3),vInsert(3);
+            vPos.Set(m_stEyePos.fX,m_stEyePos.fY,m_stEyePos.fZ);
+            vDir.Set(stWord.fX-m_stEyePos.fX,stWord.fY-m_stEyePos.fY,stWord.fZ-m_stEyePos.fZ);
+
+            if(GisMath::CalLineInterEarth(vPos,vDir,vInsert))
+            {
+                static Math::CVector vGeo(3);
+                if(GisMath::XYZ2LBH(vInsert,vGeo))
+                {
+                    dX = vGeo.GetX()*DR2D;
+                    dY = vGeo.GetY()*DR2D;
+                    dZ = GetHeight(dX,dY);
+                }
+                else
+                {
+                    dX=dY=dZ=0.;
+                }
+            }
+            else
+            {
+                dX=dY=dZ=0.;
+            }
             break;
         }
+        case MAP_2D:
+        {
+            static osgEarth::GeoPoint geoPoint;
+            static osg::Vec3d vWorld;
+            vWorld.set(stWord.fX,stWord.fY,stWord.fZ);
+            geoPoint.fromWorld(m_pMap2DNode->getMapSRS(),vWorld);
+            geoPoint.makeGeographic();
+            dX=geoPoint.x();
+            dY=geoPoint.y();
+            dZ=geoPoint.alt();
+        }
+            break;
+        }
+
     }
 
     for(auto one:m_listObserver)
     {
-        one->MousePos(geoPoint.x(),geoPoint.y(),geoPoint.z());
+        one->MousePos(dX,dY,dZ);
     }
+}
+
+/// 眼睛位置
+void CMap::EypePos(const ScenePos & stEyePos)
+{
+    m_stEyePos = stEyePos;
 }
 
 /// 初始化场景
 void CMap::InitNode()
 {
     m_pSceneGraph->GetMainWindow()->SubMessage(this);
+    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->SubMessage(this);
     ImplSceneGroup<IMap>::InitNode();
     InitMap();
 }

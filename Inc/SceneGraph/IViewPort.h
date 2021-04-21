@@ -5,6 +5,25 @@ class IViewHud;
 class ISceneNode;
 
 /**
+ * @brief 视口消息
+ */
+class IViewPortMessageObserver
+{
+public:
+    virtual ~IViewPortMessageObserver(){}
+
+    /**
+     * @brief 视点位置更改
+     */
+    virtual void EypePos(const ScenePos&){}
+
+    /**
+     * @brief 观察点位置
+     */
+    virtual void LookDir(const ScenePos&){}
+};
+
+/**
  * @brief 视口类
  */
 class IViewPort
@@ -73,6 +92,12 @@ public:
      * @brief 回到home视点
      */
     virtual void HomeViewPoint()=0;
+
+    /**
+     * @brief 订阅消息
+     */
+    virtual bool SubMessage(IViewPortMessageObserver*)=0;
+    virtual bool UnSubMessage(IViewPortMessageObserver*)=0;
 protected:
     virtual ~IViewPort(){}
 

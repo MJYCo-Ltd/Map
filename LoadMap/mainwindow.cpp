@@ -55,21 +55,26 @@ struct MapObser:public IMapMessageObserver,public IWindowMessageObserver
         pos.fX = fLon;
         pos.fY = fLat;
         pos.fZ = fHeight;
+        std::cout<<"GeoPos:"<<pos.fX<<','<<pos.fY<<','<<pos.fZ<<std::endl;
     }
 
-    void MouseDown(MouseButtonMask, int, int)
+    void MovePos(const ScenePos& wordPos)
     {
-        if(nullptr == pLayer)
-        {
-            pLayer = m_pSceneGraph->GetMap()->CreateLayer("HHHH");
-            auto pMapPolygon=dynamic_cast<IMapPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPolygon"));
-
-            pLayer->AddSceneNode(pMapPolygon);
-            m_pPolygon = pMapPolygon->GetDrawPolygon();
-        }
-
-        m_pPolygon->AddPoint(m_pPolygon->GetCount()-1,pos);
+//        std::cout<<wordPos.fX<<','<<wordPos.fY<<','<<wordPos.fZ<<std::endl;
     }
+//    void MouseDown(MouseButtonMask, int, int)
+//    {
+//        if(nullptr == pLayer)
+//        {
+//            pLayer = m_pSceneGraph->GetMap()->CreateLayer("HHHH");
+//            auto pMapPolygon=dynamic_cast<IMapPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPolygon"));
+
+//            pLayer->AddSceneNode(pMapPolygon);
+//            m_pPolygon = pMapPolygon->GetDrawPolygon();
+//        }
+
+//        m_pPolygon->AddPoint(m_pPolygon->GetCount()-1,pos);
+//    }
 private:
     ScenePos pos;
     IMapLayer* pLayer=nullptr;
@@ -96,9 +101,9 @@ void MainWindow::SetSecenGraph(ISceneGraph *pSceneGraph)
     if(m_pSceneGraph->GetMap())
     {
         m_pLayer = m_pSceneGraph->GetMap()->CreateLayer("Test");
-//        auto pMap= new MapObser(m_pSceneGraph);
-//        m_pSceneGraph->GetMainWindow()->SubMessage(pMap);
-//        m_pSceneGraph->GetMap()->SubMessage(pMap);
+        auto pMap= new MapObser(m_pSceneGraph);
+        m_pSceneGraph->GetMainWindow()->SubMessage(pMap);
+        m_pSceneGraph->GetMap()->SubMessage(pMap);
     }
 }
 

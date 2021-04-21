@@ -6,6 +6,7 @@
 #include <Map/IMap.h>
 #include <Inner/Common/ImplSceneGroup.hpp>
 #include <SceneGraph/IWindow.h>
+#include <SceneGraph/IViewPort.h>
 
 class CSpaceEnv;
 class ISceneGraph;
@@ -15,7 +16,7 @@ class CMapLayer;
 typedef std::map<std::string,CMapLayer*> UserLayers;
 
 
-class CMap:public ImplSceneGroup<IMap>,public IWindowMessageObserver
+class CMap:public ImplSceneGroup<IMap>,public IWindowMessageObserver,public IViewPortMessageObserver
 {
     friend class CMapNodeChanged;
 public:
@@ -42,6 +43,11 @@ public:
      * @return
      */
     bool ConvertCoord(float& fX, float& fY, ScenePos &geoPos, short TranType) override;
+
+    /**
+     * @brief 获取指定位置的高程
+     */
+    float GetHeight(float fLon, float fLat)override;
 
     /**
      * @brief 获取地图图层
@@ -97,6 +103,11 @@ public:
      * @brief 鼠标移动消息
      */
     void MovePos(const ScenePos&) override;
+
+    /**
+     * @brief 眼睛位置
+     */
+    void EypePos(const ScenePos&)override;
 protected:
     void InitNode() override;
 
@@ -127,6 +138,7 @@ protected:
     UserLayers   m_userLayers;
     MapLayers    m_earthFileLayers;
     MapType      m_emType=MAP_3D;
+    ScenePos     m_stEyePos;
     CSpaceEnv   *m_pSpaceEnv=nullptr;/// 空间背景
     CAtmosphere *m_pAtmosphere=nullptr;///大气效果
 };

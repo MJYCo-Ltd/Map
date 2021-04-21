@@ -20,6 +20,17 @@ public:
         if(ea.FRAME == ea.getEventType())
         {
             m_pViewPort->FrameEvent();
+            auto view = aa.asView();
+            if(nullptr != view)
+            {
+                osg::Vec3d vEye,center,up;
+                view->getCamera()->getViewMatrixAsLookAt(vEye,center,up);
+
+                QMetaObject::invokeMethod(m_pViewPort,"EyePos",Q_ARG(double,vEye.x()),
+                                          Q_ARG(double,vEye.y()),Q_ARG(double,vEye.z()));
+                QMetaObject::invokeMethod(m_pViewPort,"LookDir",Q_ARG(double,center.x()),
+                                          Q_ARG(double,center.y()),Q_ARG(double,center.z()));
+            }
         }
 
         return(osgGA::GUIEventHandler::handle(ea,aa));
@@ -363,6 +374,69 @@ void QtViewPort::HomeViewPoint()
         break;
     default:
         break;
+    }
+}
+
+bool QtViewPort::SubMessage(IViewPortMessageObserver *pObserver)
+{
+    auto findResult = find(m_pAllOserver.begin(),m_pAllOserver.end(),pObserver);
+    if(findResult == m_pAllOserver.end())
+    {
+        m_pAllOserver.push_back(pObserver);
+    }
+
+    return(true);
+}
+
+bool QtViewPort::UnSubMessage(IViewPortMessageObserver *pObserver)
+{
+    auto findResult = find(m_pAllOserver.begin(),m_pAllOserver.end(),pObserver);
+    if(findResult != m_pAllOserver.end())
+    {
+        m_pAllOserver.erase(findResult);
+        return(true);
+    }
+    else
+    {
+        return(false);
+    }
+}
+
+/// 视点位置
+void QtViewPort::EyePos(double dX, double dY, double dZ)
+{
+    static ScenePos s_stWordPos;
+    auto iter = m_pAllOserver.begin();
+    auto tmpIter = iter;
+
+    s_stWordPos.fX = dX;
+    s_stWordPos.fY = dY;
+    s_stWordPos.fZ = dZ;
+
+    for(;iter != m_pAllOserver.end();)
+    {
+        ++tmpIter;
+        (*iter)->EypePos(s_stWordPos);
+        iter = tmpIter;
+    }
+}
+
+/// 查看的位置
+void QtViewPort::LookDir(double dX, double dY, double dZ)
+{
+    static ScenePos s_stWordPos;
+    auto iter = m_pAllOserver.begin();
+    auto tmpIter = iter;
+
+    s_stWordPos.fX = dX;
+    s_stWordPos.fY = dY;
+    s_stWordPos.fZ = dZ;
+
+    for(;iter != m_pAllOserver.end();)
+    {
+        ++tmpIter;
+        (*iter)->LookDir(s_stWordPos);
+        iter = tmpIter;
     }
 }
 

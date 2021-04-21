@@ -46,6 +46,14 @@ public:
     virtual bool ConvertCoord(float&, float&, ScenePos&, short)=0;
 
     /**
+     * @brief 获取指定位置的高程
+     * @param fLon 经度 [deg][-180~180]
+     * @param fLat 纬度 [deg][-90~90]
+     * @return
+     */
+    virtual float GetHeight(float fLon, float fLat)=0;
+
+    /**
      * @brief 获取地图图层
      * @return
      */
