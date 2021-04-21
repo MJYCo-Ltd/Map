@@ -5,6 +5,7 @@ class QWindow;
 class QWidget;
 class QQuickItem;
 class IViewPort;
+struct ScenePos;
 
 /**
  * @brief 鼠标类型
@@ -36,6 +37,7 @@ public:
     virtual void MouseDown(MouseButtonMask, int, int){}
     virtual void MouseUp(MouseButtonMask, int, int){}
     virtual void MouseMove(MouseButtonMask, int, int){}
+    virtual void MovePos(const ScenePos&){}
     virtual void MouseDblClick(MouseButtonMask, int, int){}
 
     /**

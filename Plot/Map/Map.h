@@ -1,33 +1,22 @@
 ﻿#ifndef CMAP_INCLUDE_HEADER_H
 #define CMAP_INCLUDE_HEADER_H
 #include <map>
-#include <QObject>
 #include <osgEarth/MapNode>
 #include <osgEarth/Lighting>
 #include <Map/IMap.h>
 #include <Inner/Common/ImplSceneGroup.hpp>
+#include <SceneGraph/IWindow.h>
 
 class CSpaceEnv;
 class ISceneGraph;
 class CAtmosphere;
 
 class CMapLayer;
-class CMap;
 typedef std::map<std::string,CMapLayer*> UserLayers;
 
-class MapEventCallback:public osgGA::GUIEventHandler
-{
-public:
-    MapEventCallback(CMap* pMap):m_pMap(pMap){}
-    virtual bool handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter&,
-                        osg::Object*, osg::NodeVisitor*);
-protected:
-    CMap* m_pMap;
-};
 
-class CMap:public QObject,public ImplSceneGroup<IMap>
+class CMap:public ImplSceneGroup<IMap>,public IWindowMessageObserver
 {
-    Q_OBJECT
     friend class CMapNodeChanged;
 public:
     CONSTRUCTOR(CMap,ImplSceneGroup<IMap>)
@@ -104,6 +93,10 @@ public:
      */
     void DateChanged() override SET_TRUE_NODE_UPDATE(m_bDateChanged)
 
+    /**
+     * @brief 鼠标移动消息
+     */
+    void MovePos(const ScenePos&) override;
 protected:
     void InitNode() override;
 
@@ -118,8 +111,6 @@ protected:
      * @brief 初始化3D灯光
      */
     void Init3DLight();
-protected slots:
-    void MouseMove(float fLon,float fLat,float fHight);
 protected:
     bool   m_bSelfRotate=true;
     bool   m_bDateChanged=false;
@@ -132,7 +123,6 @@ protected:
 
     osg::ref_ptr<osgEarth::LightGL3> m_pLight;
     osg::ref_ptr<osg::Uniform>       m_pLightPosUniform;
-    osg::ref_ptr<MapEventCallback>   m_pEventCallBack;
 
     UserLayers   m_userLayers;
     MapLayers    m_earthFileLayers;

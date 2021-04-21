@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       -= gui
+CONFIG -= qt
 
 TARGET = SatelliteShow
 TEMPLATE = lib

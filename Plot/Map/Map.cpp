@@ -26,39 +26,10 @@
 #include "MapLayer.h"
 #include "MapModelLayer.h"
 
-bool MapEventCallback::handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter&,
-                              osg::Object*, osg::NodeVisitor*)
-{
-    if(ea.MOVE == ea.getEventType())
-    {
-        static ScenePos pos;
-        static float fX,fY;
-        static short type(0);
-
-        fX = ea.getX();
-        if(ea.Y_INCREASING_UPWARDS == ea.getMouseYOrientation())
-        {
-            fY = ea.getYmax() - ea.getY();
-        }
-        else
-        {
-            fY = ea.getY();
-        }
-        m_pMap->ConvertCoord(fX,fY,pos,type);
-        QMetaObject::invokeMethod(m_pMap,"MouseMove",Q_ARG(float,pos.fX),Q_ARG(float,pos.fY),Q_ARG(float,pos.fZ));
-    }
-    return(false);
-}
-
 /// 析构函数
 CMap::~CMap()
 {
     auto pOsgViewPoint = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint());
-    if(nullptr != pOsgViewPoint && nullptr != pOsgViewPoint->GetOsgView())
-    {
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
-                    new CModifyViewHandler(pOsgViewPoint->GetOsgView(),m_pEventCallBack,false));
-    }
 
     ClearLayers();
 
@@ -382,17 +353,34 @@ void CMap::SetShowAtmosphere(bool bVisible)
     m_pAtmosphere->SetVisible(bVisible);
 }
 
+void CMap::MovePos(const ScenePos & stWord)
+{
+    static osgEarth::GeoPoint geoPoint;
+    if(m_listObserver.size() > 0)
+    {
+        switch (m_emType)
+        {
+        case MAP_2D:
+            geoPoint.fromWorld(m_pMap2DNode->getMapSRS(),osg::Vec3d(stWord.fX,stWord.fY,stWord.fZ));
+            geoPoint.makeGeographic();
+            break;
+        case MAP_3D:
+            geoPoint.fromWorld(m_pMap3DNode->getMapSRS(),osg::Vec3d(stWord.fX,stWord.fY,stWord.fZ));
+            geoPoint.makeGeographic();
+            break;
+        }
+    }
+
+    for(auto one:m_listObserver)
+    {
+        one->MousePos(geoPoint.x(),geoPoint.y(),geoPoint.z());
+    }
+}
+
 /// 初始化场景
 void CMap::InitNode()
 {
     ImplSceneGroup<IMap>::InitNode();
-    auto pOsgViewPoint = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint());
-    if(nullptr != pOsgViewPoint && nullptr != pOsgViewPoint->GetOsgView())
-    {
-        m_pEventCallBack = new MapEventCallback(this);
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
-                    new CModifyViewHandler(pOsgViewPoint->GetOsgView(),m_pEventCallBack,true));
-    }
     InitMap();
 }
 
@@ -579,15 +567,6 @@ void CMap::Init3DLight()
     // options:
     stateset->getOrCreateUniform("oe_sky_exposure",           osg::Uniform::FLOAT )->set(3.3f);
     stateset->getOrCreateUniform("oe_sky_ambientBoostFactor", osg::Uniform::FLOAT)->set(5.0f);
-}
-
-/// 鼠标移动消息
-void CMap::MouseMove(float fLon, float fLat, float fHight)
-{
-    for(auto one:m_listObserver)
-    {
-        one->MousePos(fLon,fLat,fHight);
-    }
 }
 
 static const char s_sMap2D[]="IMap2D";

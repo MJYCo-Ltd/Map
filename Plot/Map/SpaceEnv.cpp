@@ -1,4 +1,3 @@
-#include <QLibrary>
 #include <Math/VecMat.h>
 #include <Satellite/CoorSys.h>
 #include <Math/YPRAngle.h>

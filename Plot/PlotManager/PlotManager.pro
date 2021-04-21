@@ -1,5 +1,4 @@
 QT -= gui
-
 TARGET = Plot
 TEMPLATE = lib
 

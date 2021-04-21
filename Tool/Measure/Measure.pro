@@ -1,4 +1,4 @@
-QT -= gui
+CONFIG -= qt
 TARGET = Measure
 TEMPLATE = lib
 

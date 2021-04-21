@@ -1,4 +1,4 @@
-QT -= gui
+CONFIG -= qt
 TARGET = Map
 TEMPLATE = lib
 
