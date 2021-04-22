@@ -3,6 +3,7 @@
 #include <SceneGraph/ViewType.h>
 class IViewHud;
 class ISceneNode;
+class IOsgViewPoint;
 
 /**
  * @brief 视口消息
@@ -98,6 +99,12 @@ public:
      */
     virtual bool SubMessage(IViewPortMessageObserver*)=0;
     virtual bool UnSubMessage(IViewPortMessageObserver*)=0;
+
+    /**
+     * @brief 做为OSG的ViewPoint接口
+     * @return
+     */
+    virtual IOsgViewPoint* AsOsgViewPoint(){return(nullptr);}
 protected:
     virtual ~IViewPort(){}
 

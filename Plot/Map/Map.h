@@ -6,7 +6,7 @@
 #include <Map/IMap.h>
 #include <Inner/Common/ImplSceneGroup.hpp>
 #include <SceneGraph/IWindow.h>
-#include <SceneGraph/IViewPort.h>
+#include <Inner/OsgExtern/MapNodeCullBack.h>
 
 class CSpaceEnv;
 class ISceneGraph;
@@ -16,7 +16,7 @@ class CMapLayer;
 typedef std::map<std::string,CMapLayer*> UserLayers;
 
 
-class CMap:public ImplSceneGroup<IMap>,public IWindowMessageObserver,public IViewPortMessageObserver
+class CMap:public ImplSceneGroup<IMap>,public IWindowMessageObserver
 {
     friend class CMapNodeChanged;
 public:
@@ -102,15 +102,16 @@ public:
     /**
      * @brief 鼠标移动消息
      */
-    void MovePos(const ScenePos&) override;
-
-    /**
-     * @brief 眼睛位置
-     */
-    void EypePos(const ScenePos&)override;
+    void MouseMove(MouseButtonMask, int, int);
 protected:
+    /**
+     * @brief 初始化节点
+     */
     void InitNode() override;
 
+    /**
+     * @brief 更新节点
+     */
     void UpdateNode() override;
 
     /**
@@ -134,11 +135,11 @@ protected:
 
     osg::ref_ptr<osgEarth::LightGL3> m_pLight;
     osg::ref_ptr<osg::Uniform>       m_pLightPosUniform;
+    osg::ref_ptr<CMapNodeCullBack>   m_pUpdateCallBack;
 
     UserLayers   m_userLayers;
     MapLayers    m_earthFileLayers;
     MapType      m_emType=MAP_3D;
-    ScenePos     m_stEyePos;
     CSpaceEnv   *m_pSpaceEnv=nullptr;/// 空间背景
     CAtmosphere *m_pAtmosphere=nullptr;///大气效果
 };

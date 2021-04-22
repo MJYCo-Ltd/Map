@@ -15,19 +15,8 @@ class QtRender;
 class ISceneGraph;
 class QtWindow;
 
-class ViewEventCallback:public osgGA::GUIEventHandler
+class QtWindow:public IWindow
 {
-public:
-    ViewEventCallback(QtWindow* pWindow):m_pWindow(pWindow){}
-    virtual bool handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter&,
-                        osg::Object*, osg::NodeVisitor*);
-protected:
-    QtWindow* m_pWindow;
-};
-
-class QtWindow:public QObject,public IWindow
-{
-    Q_OBJECT
 public:
     QtWindow(ISceneGraph* pSceneGraph,QtRender* pRender, QThread* pThread,int nType);
     ~QtWindow();
@@ -92,8 +81,6 @@ public:
      * @brief 初始化窗口
      */
     void InitWindow();
-protected slots:
-    void MouseMovePos(double,double,double);
 protected:
     ISceneGraph*    m_pSceneGraph;
     QThread*        m_pThread;
@@ -108,7 +95,6 @@ protected:
     bool            m_bCanChange=true;
     std::list<QtViewPort*> m_vOtherViewPoint;
     std::list<IWindowMessageObserver*> m_allWindowMessageObserver;
-    osg::ref_ptr<ViewEventCallback> m_pViewEventCallback;
 };
 
 #endif // CMYQTWINDOW_H

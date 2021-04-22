@@ -37,7 +37,6 @@ public:
     virtual void MouseDown(MouseButtonMask, int, int){}
     virtual void MouseUp(MouseButtonMask, int, int){}
     virtual void MouseMove(MouseButtonMask, int, int){}
-    virtual void MovePos(const ScenePos&){}
     virtual void MouseDblClick(MouseButtonMask, int, int){}
 
     /**

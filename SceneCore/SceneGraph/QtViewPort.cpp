@@ -23,13 +23,13 @@ public:
             auto view = aa.asView();
             if(nullptr != view)
             {
-                osg::Vec3d vEye,center,up;
-                view->getCamera()->getViewMatrixAsLookAt(vEye,center,up);
 
-                QMetaObject::invokeMethod(m_pViewPort,"EyePos",Q_ARG(double,vEye.x()),
-                                          Q_ARG(double,vEye.y()),Q_ARG(double,vEye.z()));
-                QMetaObject::invokeMethod(m_pViewPort,"LookDir",Q_ARG(double,center.x()),
-                                          Q_ARG(double,center.y()),Q_ARG(double,center.z()));
+                view->getCamera()->getViewMatrixAsLookAt(m_vEye,m_vCenter,m_vUp);
+
+                QMetaObject::invokeMethod(m_pViewPort,"EyePos",Q_ARG(double,m_vEye.x()),
+                                          Q_ARG(double,m_vEye.y()),Q_ARG(double,m_vEye.z()));
+                QMetaObject::invokeMethod(m_pViewPort,"LookDir",Q_ARG(double,m_vCenter.x()),
+                                          Q_ARG(double,m_vCenter.y()),Q_ARG(double,m_vCenter.z()));
             }
         }
 
@@ -38,6 +38,9 @@ public:
 
 protected:
     QtViewPort* m_pViewPort;
+    osg::Vec3d  m_vEye;
+    osg::Vec3d  m_vCenter;
+    osg::Vec3d  m_vUp;
 };
 
 /// 视点

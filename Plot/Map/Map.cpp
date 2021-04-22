@@ -30,7 +30,7 @@
 /// 析构函数
 CMap::~CMap()
 {
-    auto pOsgViewPoint = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint());
+    m_pSceneGraph->GetMainWindow()->UnSubMessage(this);
 
     ClearLayers();
 
@@ -82,7 +82,7 @@ bool CMap::ConvertCoord(float &fX, float &fY, ScenePos &geoPos, short TranType)
     {
         osg::Vec3d world;
         osgEarth::GeoPoint geoPoint;
-        auto pOsgViewPoint = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint());
+        auto pOsgViewPoint = m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->AsOsgViewPoint();
         if(!pOsgViewPoint || !pOsgViewPoint->GetOsgView())
         {
             return(false);
@@ -377,73 +377,36 @@ void CMap::SetShowAtmosphere(bool bVisible)
     m_pAtmosphere->SetVisible(bVisible);
 }
 
-/// 鼠标移动
-void CMap::MovePos(const ScenePos & stWord)
+/// 鼠标移动消息
+void CMap::MouseMove(MouseButtonMask, int nX, int nY)
 {
-    static double dX(0.),dY(0.),dZ(0.);
-    if(m_listObserver.size() > 0)
+    m_pUpdateCallBack->SetMousePos(nX,nY);
+    osgEarth::MapNode* pMapNode(nullptr);
+    switch (m_emType)
     {
-        switch (m_emType)
-        {
-        case MAP_3D:
-        {
-            static Math::CVector vPos(3),vDir(3),vInsert(3);
-            vPos.Set(m_stEyePos.fX,m_stEyePos.fY,m_stEyePos.fZ);
-            vDir.Set(stWord.fX-m_stEyePos.fX,stWord.fY-m_stEyePos.fY,stWord.fZ-m_stEyePos.fZ);
-
-            if(GisMath::CalLineInterEarth(vPos,vDir,vInsert))
-            {
-                static Math::CVector vGeo(3);
-                if(GisMath::XYZ2LBH(vInsert,vGeo))
-                {
-                    dX = vGeo.GetX()*DR2D;
-                    dY = vGeo.GetY()*DR2D;
-                    dZ = GetHeight(dX,dY);
-                }
-                else
-                {
-                    dX=dY=dZ=0.;
-                }
-            }
-            else
-            {
-                dX=dY=dZ=0.;
-            }
-            break;
-        }
-        case MAP_2D:
-        {
-            static osgEarth::GeoPoint geoPoint;
-            static osg::Vec3d vWorld;
-            vWorld.set(stWord.fX,stWord.fY,stWord.fZ);
-            geoPoint.fromWorld(m_pMap2DNode->getMapSRS(),vWorld);
-            geoPoint.makeGeographic();
-            dX=geoPoint.x();
-            dY=geoPoint.y();
-            dZ=geoPoint.alt();
-        }
-            break;
-        }
-
+    case MAP_2D:
+        pMapNode=m_pMap2DNode;
+        break;
+    case MAP_3D:
+        pMapNode=m_pMap3DNode;
+        break;
     }
 
-    for(auto one:m_listObserver)
+    if(pMapNode&&pMapNode->getUserData())
     {
-        one->MousePos(dX,dY,dZ);
+        YtyUserData* pUserData = static_cast<YtyUserData*>(pMapNode->getUserData());
+        for(auto one:m_listObserver)
+        {
+            one->MousePos(pUserData->GetDx(),pUserData->GetDy(),pUserData->GetDz());
+        }
     }
-}
-
-/// 眼睛位置
-void CMap::EypePos(const ScenePos & stEyePos)
-{
-    m_stEyePos = stEyePos;
 }
 
 /// 初始化场景
 void CMap::InitNode()
 {
+    m_pUpdateCallBack = new CMapNodeCullBack(m_pSceneGraph);
     m_pSceneGraph->GetMainWindow()->SubMessage(this);
-    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->SubMessage(this);
     ImplSceneGroup<IMap>::InitNode();
     InitMap();
 }
@@ -483,6 +446,7 @@ void CMap::InitMap()
 #endif
             m_p2DRoot = new osg::Group;
             m_p2DRoot->addChild(node);
+            m_pMap2DNode->addUpdateCallback(m_pUpdateCallBack);
 
 
             auto m_pLeftMatrixTransform = new osg::MatrixTransform;
@@ -519,7 +483,7 @@ void CMap::InitMap()
 #if OSGEARTH_VERSION_GREATER_OR_EQUAL(3,0,0)
             m_pMap3DNode->open();
 #endif
-            m_pMap3DNode->addCullCallback(new CMapNodeCullBack);
+            m_pMap3DNode->addUpdateCallback(m_pUpdateCallBack);
             m_pSpaceEnv = new CSpaceEnv(m_pSceneGraph);
             osg::Camera* pCamera = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
                     ->GetOsgView()->getCamera();

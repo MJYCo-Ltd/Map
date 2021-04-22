@@ -3,10 +3,15 @@
 #include <osgEarth/MapNode>
 #include <osgEarth/Terrain>
 #include <osgEarth/LogarithmicDepthBuffer>
+#include <VersionMathCommon.h>
+#include <SceneGraph/IWindow.h>
+#include <Inner/IOsgViewPoint.h>
 
-CMapNodeCullBack::CMapNodeCullBack()
+CMapNodeCullBack::CMapNodeCullBack(ISceneGraph*pSceneGraph):m_pSceneGraph(pSceneGraph)
 {
-//    m_pCullBack = new osgEarth::Util::AutoClipPlaneCullCallback;
+    m_pUserData = new YtyUserData;
+    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->SubMessage(this);
+    m_pView=m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->AsOsgViewPoint()->GetOsgView();
 }
 
 bool CMapNodeCullBack::run(osg::Object *object, osg::Object *data)
@@ -14,62 +19,70 @@ bool CMapNodeCullBack::run(osg::Object *object, osg::Object *data)
     static osgEarth::LogarithmicDepthBuffer s_logDepthBuffer;
 
     osg::Node* node = object ? object->asNode() : 0;
-    osg::NodeVisitor* nv = data ? data->asNodeVisitor() : 0;
 
-    if (nullptr != node && nullptr != nv)
+    if(nullptr == node->getUserData())
     {
-        osgUtil::CullVisitor* cv = nv->asCullVisitor();
-        if(nullptr != cv)
+        node->setUserData(m_pUserData);
+    }
+
+    if (nullptr != node)
+    {
+        auto pMapNode = static_cast<osgEarth::MapNode*>(node);
+        if(nullptr != pMapNode && pMapNode->isGeocentric())
         {
-            auto pMapNode = dynamic_cast<osgEarth::MapNode*>(node);
-            if(nullptr != pMapNode)
+            if(m_dEyeLength - R_Earth < 1000)
             {
-                osg::Vec3d eye, center, up;
-                cv->getModelViewMatrix()->getLookAt( eye, center, up );
-
-                osgEarth::GeoPoint loc;
-                if ( pMapNode )
+                if(!m_bInstelld)
                 {
-                    loc.fromWorld( pMapNode->getMapSRS(), eye );
-                }
-                else
-                {
-                    static osg::EllipsoidModel em;
-                    osg::Vec3d t;
-                    em.convertXYZToLatLongHeight( eye.x(), eye.y(), eye.z(), loc.y(), loc.x(), loc.z() );
-                }
-
-                //double hae = loc.z();
-                double hae = loc.z();
-                if(pMapNode->getTerrain())
-                {
-                    double height = 0.0;
-                    pMapNode->getTerrain()->getHeight(loc.getSRS(), loc.x(), loc.y(), &height);
-
-                    hae -= height;
-                }
-
-                if(hae < 2000)
-                {
-                    if(!m_bInstelld)
-                    {
-//                        pMapNode->addCullCallback(m_pCullBack);
-                        s_logDepthBuffer.install(pMapNode);
-                        m_bInstelld=true;
-                    }
-                }
-                else
-                {
-                    if(m_bInstelld)
-                    {
-                        s_logDepthBuffer.uninstall(pMapNode);
-//                        pMapNode->removeCullCallback(m_pCullBack);
-                        m_bInstelld=false;
-                    }
+                    s_logDepthBuffer.install(pMapNode);
+                    m_bInstelld=true;
                 }
             }
+            else
+            {
+                if(m_bInstelld)
+                {
+                    s_logDepthBuffer.uninstall(pMapNode);
+                    m_bInstelld=false;
+                }
+            }
+        }
+
+        osg::Viewport* pViewPort = m_pView->getCamera()->getViewport();
+        static osg::Vec3d world;
+        static osgEarth::GeoPoint geoPoint;
+        if(pMapNode->getTerrain()->getWorldCoordsUnderMouse(m_pView.get(), m_nX, pViewPort ? pViewPort->height() - m_nY : m_nY, world))
+        {
+            geoPoint.fromWorld(pMapNode->getMapSRS(),world);
+            geoPoint.makeGeographic();
+            m_pUserData->SetValue(geoPoint.x(),geoPoint.y(),geoPoint.z());
         }
     }
 
     return traverse(object, data);
+}
+
+/// 眼睛位置
+void CMapNodeCullBack::EypePos(const ScenePos & eyePos)
+{
+    m_dEyeLength = sqrt(eyePos.fX*eyePos.fX+eyePos.fY*eyePos.fY+eyePos.fZ*eyePos.fZ);
+}
+
+///设置鼠标位置
+void CMapNodeCullBack::SetMousePos(int nX, int nY)
+{
+    m_nX = nX;
+    m_nY = nY;
+}
+
+CMapNodeCullBack::~CMapNodeCullBack()
+{
+    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->UnSubMessage(this);
+}
+
+void YtyUserData::SetValue(const double &dX, const double &dY, const double &dZ)
+{
+    m_dX=dX;
+    m_dY=dY;
+    m_dZ=dZ;
 }

@@ -66,6 +66,12 @@ public:
      * @return
      */
     bool UnSubMessage(IViewPortMessageObserver*)override;
+
+    /**
+     * @brief 做为OSG的接口
+     * @return
+     */
+    IOsgViewPoint* AsOsgViewPoint()override{return(this);}
 protected slots:
     void EyePos(double dX,double dY, double dZ);
     void LookDir(double dX,double dY, double dZ);
