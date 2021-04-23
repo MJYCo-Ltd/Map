@@ -69,7 +69,7 @@ public:
      * @brief 到视点的时间[s]
      */
     virtual void SetViewPoint(const SceneViewPoint&,unsigned int)=0;
-    virtual const SceneViewPoint& GetViewPoint()const=0;
+    virtual const SceneViewPoint& GetViewPoint()=0;
 
     /**
      * @brief 设置home视点

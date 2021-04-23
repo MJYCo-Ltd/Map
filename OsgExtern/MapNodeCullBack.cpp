@@ -30,7 +30,7 @@ bool CMapNodeCullBack::run(osg::Object *object, osg::Object *data)
         auto pMapNode = static_cast<osgEarth::MapNode*>(node);
         if(nullptr != pMapNode && pMapNode->isGeocentric())
         {
-            if(m_dEyeLength - R_Earth < 1000)
+            if(m_dEyeLength - R_Earth < 3000)
             {
                 if(!m_bInstelld)
                 {
@@ -65,7 +65,8 @@ bool CMapNodeCullBack::run(osg::Object *object, osg::Object *data)
 /// 眼睛位置
 void CMapNodeCullBack::EypePos(const ScenePos & eyePos)
 {
-    m_dEyeLength = sqrt(eyePos.fX*eyePos.fX+eyePos.fY*eyePos.fY+eyePos.fZ*eyePos.fZ);
+    m_vEyePos.Set(eyePos.fX,eyePos.fY,eyePos.fZ);
+    m_dEyeLength = m_vEyePos.Length();
 }
 
 ///设置鼠标位置
@@ -73,6 +74,11 @@ void CMapNodeCullBack::SetMousePos(int nX, int nY)
 {
     m_nX = nX;
     m_nY = nY;
+}
+
+const Math::CVector&CMapNodeCullBack::GetEyePos()const
+{
+    return (m_vEyePos);
 }
 
 CMapNodeCullBack::~CMapNodeCullBack()

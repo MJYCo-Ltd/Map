@@ -6,6 +6,7 @@
 #include <SceneGraph/IViewPort.h>
 #include <SceneGraph/ISceneGraph.h>
 #include <SceneGraph/IWindow.h>
+#include <Math/Vector.h>
 
 class OSGEXTERNSHARED_EXPORT YtyUserData:public osg::Referenced
 {
@@ -44,12 +45,19 @@ public:
      * @brief 设置鼠标位置
      */
     void SetMousePos(int nX, int nY);
+
+    /**
+     * @brief 获取眼睛位置
+     * @return
+     */
+    const Math::CVector& GetEyePos()const;
 protected:
     ~CMapNodeCullBack();
 protected:
     ISceneGraph* m_pSceneGraph;
     osg::observer_ptr<osg::View> m_pView;
     osg::ref_ptr<YtyUserData> m_pUserData;
+    Math::CVector m_vEyePos;
     bool m_bInstelld=false;
     double m_dEyeLength;
     int    m_nX=0;

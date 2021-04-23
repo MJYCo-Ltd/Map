@@ -208,8 +208,24 @@ void QtViewPort::SetViewPoint(const SceneViewPoint & rViewPoint, unsigned int un
 }
 
 /// 获取视点位置
-const SceneViewPoint &QtViewPort::GetViewPoint() const
+const SceneViewPoint &QtViewPort::GetViewPoint()
 {
+    switch(m_emType)
+    {
+    case View_2DMap:
+        UpdateViewPoint(m_p2DEarthManipulator);
+        break;
+    case View_3DMap:
+        UpdateViewPoint(m_p3DEarthManipulator);
+        break;
+    case View_Osg:
+        UpdateViewPoint(m_pSelfManipulator);
+        break;
+    case View_Node:
+        UpdateViewPoint(m_pTrackManipulator);
+        break;
+    }
+
     return(m_stViewPoint);
 }
 
@@ -455,4 +471,26 @@ void QtViewPort::RemoveSlave()
         }
         m_listStereoCamera.clear();
     }
+}
+
+void QtViewPort::UpdateViewPoint(CMyEarthManipulator *pEarthManipulator)
+{
+    auto ViewPoint = pEarthManipulator->getViewpoint();
+    m_stViewPoint.fAzimuth = ViewPoint.heading()->as(osgEarth::Units::DEGREES);
+    m_stViewPoint.fElev = ViewPoint.pitch()->as(osgEarth::Units::DEGREES)+90;
+    m_stViewPoint.fDistance=ViewPoint.range()->as(osgEarth::Units::METERS);
+    m_stViewPoint.stPos.fX = ViewPoint.focalPoint()->x();
+    m_stViewPoint.stPos.fY = ViewPoint.focalPoint()->y();
+    m_stViewPoint.stPos.fZ = ViewPoint.focalPoint()->z();
+}
+
+void QtViewPort::UpdateViewPoint(osgGA::OrbitManipulator *pManipulator)
+{
+    const osg::Vec3d& rCenter = pManipulator->getCenter();
+    m_stViewPoint.stPos.fX = rCenter.x();
+    m_stViewPoint.stPos.fY = rCenter.y();
+    m_stViewPoint.stPos.fZ = rCenter.z();
+    m_stViewPoint.fAzimuth = osg::RadiansToDegrees(pManipulator->getHeading());
+    m_stViewPoint.fElev = osg::RadiansToDegrees(pManipulator->getElevation());
+    m_stViewPoint.fDistance = pManipulator->getDistance();
 }

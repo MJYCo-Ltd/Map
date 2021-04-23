@@ -102,7 +102,7 @@ public:
     /**
      * @brief 鼠标移动消息
      */
-    void MouseMove(MouseButtonMask, int, int);
+    void MouseMove(MouseButtonMask, int, int)override;
 protected:
     /**
      * @brief 初始化节点

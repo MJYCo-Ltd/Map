@@ -417,6 +417,7 @@ void CMap::UpdateNode()
     if(m_bDateChanged)
     {
         m_pSpaceEnv->UpdateDate(m_dMJD);
+        m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetViewPoint();
 
         const Math::CVector& vSunPos = m_pSpaceEnv->GetSunPos();
         osg::Vec3 npos(vSunPos.GetX(),vSunPos.GetY(),vSunPos.GetZ());

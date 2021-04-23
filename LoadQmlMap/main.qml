@@ -17,6 +17,7 @@ Window
     OsgItem{
         type: OsgItem.Item_3DMAP
         id:showOsg
+        frameRate: 100
         focus: true
         anchors.fill: parent
         Component.onCompleted:{

@@ -37,7 +37,7 @@ public:
      * @brief 设置视点位置
      */
     void SetViewPoint(const SceneViewPoint&rViewPoint,unsigned int unTimes) override;
-    const SceneViewPoint& GetViewPoint()const override;
+    const SceneViewPoint& GetViewPoint() override;
 
     /**
      * @brief 获取osgView
@@ -86,6 +86,12 @@ protected:
      * @brief 删除从相机
      */
     void RemoveSlave();
+
+    /**
+     * @brief 更新当前视点
+     */
+    void UpdateViewPoint(CMyEarthManipulator* pEarthManipulator);
+    void UpdateViewPoint(osgGA::OrbitManipulator* pManipulator);
 protected:
     std::list<osg::ref_ptr<osg::Camera>>           m_listStereoCamera;
     std::list<IViewPortMessageObserver*>           m_pAllOserver;          /// 所有的消息订阅者
