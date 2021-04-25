@@ -55,7 +55,6 @@ struct MapObser:public IMapMessageObserver,public IWindowMessageObserver
         pos.fX = fLon;
         pos.fY = fLat;
         pos.fZ = fHeight;
-        std::cout<<"GeoPos:"<<pos.fX<<','<<pos.fY<<','<<pos.fZ<<std::endl;
     }
 
     void MovePos(const ScenePos& wordPos)
@@ -104,7 +103,7 @@ void MainWindow::SetSecenGraph(ISceneGraph *pSceneGraph)
         auto pMap= new MapObser(m_pSceneGraph);
         m_pSceneGraph->GetMainWindow()->SubMessage(pMap);
         m_pSceneGraph->GetMap()->SubMessage(pMap);
-        m_pSceneGraph->GetMap()->GetSpaceEnv()->ShowSpaceBackGround(false);
+//        m_pSceneGraph->GetMap()->GetSpaceEnv()->ShowSpaceBackGround(false);
     }
 }
 
@@ -140,7 +139,7 @@ void MainWindow::on_action_triggered()
     ScenePos pos11;
     pos11.fX = 126.0;
     pos11.fY = 45.6;
-    pos11.fZ = 10000;
+    pos11.fZ = 10;
 
     SceneColor color11;
     color11.fR =1.0;
@@ -247,83 +246,87 @@ void MainWindow::on_action_triggered()
 
     pSceneRoot->AddSceneNode(pLod);
 
-    /// 标绘卫星
-    pSatellite= dynamic_cast<ISatellite*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISatellite"));
-
-    pSatellite->SetName("卫星");
-    pSatellite->SetScale(10000.);
-    CDate mjBein(2021,4,6,12,0,0);
-    Satellite::CSGP4 spg41("1 91001U          20061.66666667 -.00000001  00000-0 -13106-2 0 00008",
-                          "2 91001 045.0073 000.0048 0004655 268.5152 091.4846 07.15404217000017");
-
-    double dMJD = mjBein.GetMJD();
-    vector<CVector> vPos;
-    vector<double> vTime;
-    CVector vPV;
-
-    vTime.reserve(86400);
-    vPos.reserve(86400);
-    for(int i=0;i<86400;i+=300)
+    if(MAP_3D == m_pSceneGraph->GetMap()->GetMapType())
     {
-        vPV = spg41.CalPV(dMJD+i*SECDAY);
-        vTime.push_back(dMJD+i*SECDAY);
-        vPos.push_back(vPV);
+        /// 标绘卫星
+        pSatellite= dynamic_cast<ISatellite*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISatellite"));
+
+        pSatellite->SetName("卫星");
+        pSatellite->SetScale(10000.);
+        CDate mjBein(2021,4,6,12,0,0);
+        Satellite::CSGP4 spg41("1 91001U          20061.66666667 -.00000001  00000-0 -13106-2 0 00008",
+                               "2 91001 045.0073 000.0048 0004655 268.5152 091.4846 07.15404217000017");
+
+        double dMJD = mjBein.GetMJD();
+        vector<CVector> vPos;
+        vector<double> vTime;
+        CVector vPV;
+
+        vTime.reserve(86400);
+        vPos.reserve(86400);
+        for(int i=0;i<86400;i+=300)
+        {
+            vPV = spg41.CalPV(dMJD+i*SECDAY);
+            vTime.push_back(dMJD+i*SECDAY);
+            vPos.push_back(vPV);
+        }
+
+        /// 转到地固系下
+        CVector vECF;
+        CCoorSys::TEME2ECF(dMJD,vPos[0],vECF);
+        PV satPV;
+        satPV.stP.dX = vECF(0);
+        satPV.stP.dY = vECF(1);
+        satPV.stP.dZ = vECF(2);
+
+        satPV.stV.dX = vECF(3);
+        satPV.stV.dY = vECF(4);
+        satPV.stV.dZ = vECF(5);
+
+        Pos satPRY,rPos;
+
+        ScenePos testPos;
+        CVector vOther;
+        GisMath::XYZ2LBH(vECF.slice(0,2),vOther);
+
+        vOther(1) += 10*DD2R;
+        vOther(2) = 0;
+        //    IMapLocation* pEarthLocationTest = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+        //    testPos.fX = vOther(0)*DR2D;
+        //    testPos.fY = vOther(1)*DR2D;
+        //    testPos.fZ = 0;
+        //    pEarthLocationTest->SetGeoPos(testPos);
+        //    pEarthLocationTest->SetSceneNode(pPoint);
+        //    m_pLayer->AddSceneNode(pEarthLocationTest);
+
+        GisMath::LBH2XYZ(vOther(0),vOther(1),vOther(2),rPos.dX,rPos.dY,rPos.dZ);
+        CalPRY(satPV,rPos,Rota_RYP,satPRY);
+        SceneAttitude attitude;
+        attitude.dRoll = satPRY.dX*DR2D;
+        attitude.dPitch = satPRY.dY*DR2D;
+        attitude.dYaw = satPRY.dZ*DR2D;
+
+
+
+        pSatellite->SetJ2000Oribit(vTime,vPos);
+        pSatellite->SetModelPath("Model/SJ-2/shixian-2.flt");
+        m_pSceneGraph->GetMap()->GetSpaceEnv()->OpenLight(false);
+
+        auto pSatelliteSensor = dynamic_cast<ISConeSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISConeSensor"));
+        color.fG=1.f;
+        color.fA=.6f;
+        pSatelliteSensor->SetHAngle(.4f);
+        pSatelliteSensor->SetVAngle(1.f);
+        pSatelliteSensor->SetColor(color);
+        pSatellite->SetOribitColor(color);
+        pSatellite->AddSensor(0, pSatelliteSensor);
+        pSatellite->UpdateData(dMJD);
+        m_pSceneGraph->GetMap()->GetSpaceEnv()->AddSceneNode(pSatellite);
+
+        m_pSceneGraph->GetMap()->UpdateDate(dMJD);
+
+        m_pTrackNode = pSatelliteSensor;
     }
-
-    /// 转到地固系下
-    CVector vECF;
-    CCoorSys::TEME2ECF(dMJD,vPos[0],vECF);
-    PV satPV;
-    satPV.stP.dX = vECF(0);
-    satPV.stP.dY = vECF(1);
-    satPV.stP.dZ = vECF(2);
-
-    satPV.stV.dX = vECF(3);
-    satPV.stV.dY = vECF(4);
-    satPV.stV.dZ = vECF(5);
-
-    Pos satPRY,rPos;
-
-    ScenePos testPos;
-    CVector vOther;
-    GisMath::XYZ2LBH(vECF.slice(0,2),vOther);
-
-    vOther(1) += 10*DD2R;
-    vOther(2) = 0;
-//    IMapLocation* pEarthLocationTest = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
-//    testPos.fX = vOther(0)*DR2D;
-//    testPos.fY = vOther(1)*DR2D;
-//    testPos.fZ = 0;
-//    pEarthLocationTest->SetGeoPos(testPos);
-//    pEarthLocationTest->SetSceneNode(pPoint);
-//    m_pLayer->AddSceneNode(pEarthLocationTest);
-
-    GisMath::LBH2XYZ(vOther(0),vOther(1),vOther(2),rPos.dX,rPos.dY,rPos.dZ);
-    CalPRY(satPV,rPos,Rota_RYP,satPRY);
-    SceneAttitude attitude;
-    attitude.dRoll = satPRY.dX*DR2D;
-    attitude.dPitch = satPRY.dY*DR2D;
-    attitude.dYaw = satPRY.dZ*DR2D;
-
-
-
-    pSatellite->SetJ2000Oribit(vTime,vPos);
-    pSatellite->SetModelPath("Model/SJ-2/shixian-2.flt");
-    m_pSceneGraph->GetMap()->GetSpaceEnv()->OpenLight(false);
-
-    auto pSatelliteSensor = dynamic_cast<ISConeSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISConeSensor"));
-    color.fG=1.f;
-    color.fA=.6f;
-    pSatelliteSensor->SetHAngle(.4f);
-    pSatelliteSensor->SetVAngle(1.f);
-    pSatelliteSensor->SetColor(color);
-    pSatellite->SetOribitColor(color);
-    pSatellite->AddSensor(0, pSatelliteSensor);
-    pSatellite->UpdateData(dMJD);
-    m_pSceneGraph->GetMap()->GetSpaceEnv()->AddSceneNode(pSatellite);
-    m_pSceneGraph->GetMap()->UpdateDate(dMJD);
-
-    m_pTrackNode = pSatelliteSensor;
     PlotMap();
 //    LodPlot();
 }
@@ -411,15 +414,16 @@ void MainWindow::PlotMap()
     ScenePos pos;
     ///绘制地图元素
     auto m_pPoint = dynamic_cast<IMapPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPoint"));
-    pos.fX = 121;
+    pos.fX = 121.5;
     pos.fY = 25;
-    pos.fZ = 10000;
+    pos.fZ = 0;
     m_pPoint->GetDrawPoint()->AddPoint(0,pos);
     SceneColor color;
     color.fG = .0f;
     color.fB = .0f;
     m_pPoint->GetDrawPoint()->SetColor(color);
-    m_pPoint->GetDrawPoint()->SetPointSize(5.f);
+    m_pPoint->GetDrawPoint()->SetPointSize(50.f);
+//    m_pPoint->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
     m_pLayer->AddSceneNode(m_pPoint);
 
     /// 绘制线
@@ -433,7 +437,7 @@ void MainWindow::PlotMap()
     m_pLine->GetDrawLine()->AddPoint(0,pos);
     m_pLine->GetDrawLine()->SetColor(color);
     m_pLine->GetDrawLine()->SetLineWidth(2.f);
-    m_pLine->SetTerrainType(IMapPolygon::RELATIVE_TERRAIN);
+    m_pLine->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
     m_pLayer->AddSceneNode(m_pLine);
 
     /// 绘制区域

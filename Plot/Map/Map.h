@@ -77,6 +77,7 @@ public:
      * @brief 更改地图类型
      */
     virtual void ChangeMapType(MapType mapType) override;
+    MapType GetMapType()const override{return(m_emType);}
 
     /**
      * @brief 获取地惯系节点
@@ -123,6 +124,16 @@ protected:
      * @brief 初始化3D灯光
      */
     void Init3DLight();
+
+    /**
+     * @brief 从指定位置删除图层
+     */
+    void RemoveLayer(UserLayers::iterator itor);
+
+    /**
+     * @brief 获取正确的mapnode
+     */
+    inline osgEarth::MapNode* GetMapNode();
 protected:
     bool   m_bSelfRotate=true;
     bool   m_bDateChanged=false;

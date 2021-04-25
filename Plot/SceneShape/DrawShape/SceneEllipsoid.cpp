@@ -1,6 +1,5 @@
 #include <GisMath/GisMath.h>
 #include <VersionMathCommon.h>
-#include <Inner/OsgExtern/JudgeGeometry.h>
 #include "SceneEllipsoid.h"
 
 static bool checkFunctions(const osgEarth::VirtualProgram* attr)

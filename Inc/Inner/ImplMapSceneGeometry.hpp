@@ -15,25 +15,37 @@ protected:
 
     void InitNode()
     {
+        T::m_bOpenPreCut=false;
         ImplMapSceneNode<T>::InitNode();
 
+        /// 创建贴地节点
         m_pDrapeNode = new osgEarth::DrapeableNode;
         if(ImplMapSceneNode<T>::s_pMapNode.valid())
         {
             m_pDrapeNode->setMapNode(ImplMapSceneNode<T>::s_pMapNode.get());
         }
-        auto pCullBack = new osgEarth::HorizonCullCallback;
-        pCullBack->setEnabled(true);
-        m_pDrapeNode->addCullCallback(pCullBack);
+
+        /// 增加地平面回调
+//        m_pCullCallBack = new osgEarth::HorizonCullCallback;
+//        m_pCullCallBack->setEnabled(true);
+//        m_pDrapeNode->addCullCallback(m_pCullCallBack);
         ImplMapSceneNode<T>::SetOsgNode(m_pDrapeNode.get());
     }
 
     void UpdateMapNode() override
     {
-        ImplMapSceneNode<T>::UpdateMapNode();
         if(m_pDrapeNode.valid())
         {
             m_pDrapeNode->setMapNode(ImplMapSceneNode<T>::s_pMapNode.get());
+        }
+
+
+//        m_pCullCallBack->setEnabled(ImplMapSceneNode<T>::s_pMapNode->isGeocentric());
+
+        /// 如果有几何体
+        if(nullptr != m_pGeometry)
+        {
+            m_pGeometry->NeedUpdate();
         }
     }
 
@@ -48,14 +60,9 @@ protected:
     /**
      * @brief 状态更改
      */
-    void UpdateTrerrain(bool bMapChanged)
+    void UpdateTrerrain()
     {
-        /// 地图更改必须重新计算
-        if(bMapChanged && nullptr != m_pGeometry)
-        {
-            m_pGeometry->NeedUpdate();
-        }
-
+        /// 不再贴地了
         if(CLOSE_TERRAIN != T::m_emType)
         {
             T::m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CReplaceNode(m_pDrapeNode.get(),
@@ -73,7 +80,6 @@ protected:
                             new CReplaceNode(m_pGeometry->AsOsgSceneNode()->GetOsgNode(),m_pDrapeNode.get()));
                 AddNode(m_pDrapeNode.get(),m_pGeometry->AsOsgSceneNode()->GetOsgNode());
             }
-
             ImplMapSceneNode<T>::SetOsgNode(m_pDrapeNode.get());
         }
     }
@@ -136,6 +142,7 @@ protected:
 protected:
    IGeometry* m_pGeometry=nullptr;
    osg::observer_ptr<osgEarth::DrapeableNode> m_pDrapeNode;
+   osg::ref_ptr<osgEarth::HorizonCullCallback> m_pCullCallBack;
 };
 
 #endif // IMPL_OSG_MAP_SHAPE_H

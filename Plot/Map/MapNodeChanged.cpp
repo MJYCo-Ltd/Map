@@ -28,7 +28,7 @@ void CMapNodeChanged::operator()(osg::Object *)
         for(auto one=m_pMap->m_userLayers.begin();one != m_pMap->m_userLayers.end();++one)
         {
             m_pNewMapNode->getMap()->addLayer(one->second->GetModelLayer());
-            one->second->UpdateMapNode(m_pNewMapNode);
+            one->second->UpdateMapNode();
         }
         m_pNewMapNode->getMap()->endUpdate();
     }

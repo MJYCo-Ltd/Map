@@ -16,18 +16,9 @@ protected:
     void TerrainTypeChanged()SET_TRUE_NODE_UPDATE(m_bTerrainTypeChanged)
 
     /**
-     * @brief 地图节点更新
-     */
-    void UpdateMapNode() override
-    {
-        m_bMapNodeChanged=true;
-        TerrainTypeChanged();
-    }
-
-    /**
-      * @brief UpdateTrerrain
+      * @brief 贴地方式更改
       */
-    virtual void UpdateTrerrain(bool){}
+    virtual void UpdateTrerrain(){}
 
     /**
      * @brief 重写回调
@@ -36,8 +27,7 @@ protected:
     {
         if(m_bTerrainTypeChanged)
         {
-            UpdateTrerrain(m_bMapNodeChanged);
-            m_bMapNodeChanged=false;
+            UpdateTrerrain();
             m_bTerrainTypeChanged=false;
         }
         ImplSceneNode<T>::UpdateNode();
@@ -45,6 +35,5 @@ protected:
 
 protected:
     bool m_bTerrainTypeChanged=false; /// 贴地模式是否修改
-    bool m_bMapNodeChanged=false;
 };
 #endif // IMPL_OSG_MAP_SHAPE_H

@@ -11,10 +11,8 @@ class CMapModelLayer;
 
 class CMapLayer : public IMapLayer
 {
-    friend class MapLayerAddNode;
-
 public:
-    CMapLayer(const std::string& sLayerName,osgEarth::MapNode* pMapNode,ISceneGraph* pSceneGraph);
+    CMapLayer(const std::string& sLayerName, ISceneGraph* pSceneGraph);
     ~CMapLayer();
 
     /**
@@ -53,7 +51,7 @@ public:
      * @brief 更新地图
      * @param pMapNode
      */
-    void UpdateMapNode(osgEarth::MapNode* pMapNode);
+    void UpdateMapNode();
 
     /**
      * @brief 获取模型
@@ -66,12 +64,11 @@ protected:
      */
     void RemoveNode(IMapSceneNode*);
 private:
-    ISceneGraph*                      m_pSceneGraph=nullptr;
-    osg::observer_ptr<osgEarth::MapNode> m_pMapNode;
+    ISceneGraph*                 m_pSceneGraph=nullptr;
     osg::ref_ptr<CMapModelLayer> m_pModelLayer;
-    std::string       m_sLayerName;
-    unsigned int m_unID=0;
-    bool         m_bVisible=true;
+    std::string                  m_sLayerName;
+    unsigned int                 m_unID=0;
+    bool                         m_bVisible=true;
     std::map<unsigned int,IMapSceneNode*> m_mapID2Node;
 };
 

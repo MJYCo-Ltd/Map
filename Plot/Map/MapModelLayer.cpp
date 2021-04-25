@@ -7,35 +7,26 @@ void CMapModelLayer::init()
 {
     VisibleLayer::init();
 
-    _root = new osg::Group();
-
-    deserialize();
-
     installDefaultOpacityShader();
+}
+
+void CMapModelLayer::InitNode()
+{
+    init();
+    ImplSceneGroup<ISceneGroup>::InitNode();
 }
 
 osg::Node* CMapModelLayer::getNode() const
 {
-    return _root.get();
+    return m_pGroup.get();
 }
 
 osg::Group* CMapModelLayer::getGroup() const
 {
-    return _root.get();
+    return m_pGroup.get();
 }
 
-CMapModelLayer::CMapModelLayer()
+CMapModelLayer::CMapModelLayer(ISceneGraph* pSceneGraph):
+    ImplSceneGroup<ISceneGroup>(pSceneGraph)
 {
-    init();
-}
-
-
-void CMapModelLayer::addChild(AnnotationNode* node)
-{
-    _root->addChild(node);
-}
-
-void CMapModelLayer::deserialize()
-{
-    _root->removeChildren(0, _root->getNumChildren());
 }

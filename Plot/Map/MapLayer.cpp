@@ -8,36 +8,19 @@
 
 #include "MapLayer.h"
 
-class MapLayerAddNode:public osg::Operation
-{
-public:
-    MapLayerAddNode(CMapLayer* pLayer,IOsgMapSceneNode* pMapSceneNode):
-        m_pLayer(pLayer),
-        m_pMapSceneNode(pMapSceneNode){}
-
-    void operator()(osg::Object*)
-    {
-        m_pMapSceneNode->UpdateMapNode();
-        m_pLayer->m_pModelLayer->getGroup()->addChild(dynamic_cast<IOsgSceneNode*>(m_pMapSceneNode)->GetOsgNode());
-    }
-private:
-    CMapLayer* m_pLayer;
-    IOsgMapSceneNode* m_pMapSceneNode;
-};
-
 /// 标绘图层
-CMapLayer::CMapLayer(const std::string &sLayerName, osgEarth::MapNode *pMapNode, ISceneGraph *pSceneGraph):
+CMapLayer::CMapLayer(const std::string &sLayerName, ISceneGraph *pSceneGraph):
     m_pSceneGraph(pSceneGraph),
-    m_pMapNode(pMapNode),
     m_sLayerName(sLayerName)
 {
-    m_pModelLayer = new CMapModelLayer;
+    m_pModelLayer = new CMapModelLayer(m_pSceneGraph);
+    m_pModelLayer->Init();
 }
 
 /// 析构
 CMapLayer::~CMapLayer()
 {
-    Clear();
+    CMapLayer::Clear();
 }
 
 /// 添加到图层上
@@ -57,7 +40,7 @@ unsigned int CMapLayer::AddSceneNode(IMapSceneNode *pSceneNode)
 
     pSceneNode->AsOsgSceneNode()->AddToGroup(m_pModelLayer->getGroup());
     /// 添加到场景中去
-    m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new MapLayerAddNode(this,dynamic_cast<IOsgMapSceneNode*>(pSceneNode)));
+    m_pModelLayer->AddSceneNode(pSceneNode);
 
     return(m_unID);
 }
@@ -106,9 +89,8 @@ void CMapLayer::SetVisible(bool bVisible)
 
 
 /// 更新地图
-void CMapLayer::UpdateMapNode(osgEarth::MapNode *pMapNode)
+void CMapLayer::UpdateMapNode()
 {
-    m_pMapNode = pMapNode;
     for(auto one : m_mapID2Node)
     {
         dynamic_cast<IOsgMapSceneNode*>(one.second)->UpdateMapNode();
@@ -120,6 +102,5 @@ void CMapLayer::RemoveNode(IMapSceneNode *pSceneNode)
 {
     pSceneNode->AsOsgSceneNode()->DelFromGroup(m_pModelLayer->getGroup());
     /// 从场景中移除
-    m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
-                new CModifyNode(m_pModelLayer->getGroup(),pSceneNode->AsOsgSceneNode()->GetOsgNode(),false));
+   m_pModelLayer->RemoveSceneNode(pSceneNode);
 }

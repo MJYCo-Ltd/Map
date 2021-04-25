@@ -42,6 +42,7 @@ osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
                 auto pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(pNode->getOrCreateStateSet());
                 LoadVirtualProgram(pVirutlProgram,"GLSL/Global.glsl");
 
+                /// 去掉 Material::apply(State&) 警告
                 osgEarth::GenerateGL3LightingUniforms generateUniforms;
                 pNode->accept(generateUniforms);
             }

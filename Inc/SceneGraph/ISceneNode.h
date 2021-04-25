@@ -72,6 +72,7 @@ public:
     virtual ISceneCameraGroup* AsSceneCameraGroup(){return(nullptr);}
     virtual ISceneScreenGroup* AsSceneScreenGroup(){return(nullptr);}
     virtual ISceneVisualGroup* AsSceneVisualGroup(){return(nullptr);}
+    virtual IMapSceneNode* AsMapSceneNode(){return(nullptr);}
     virtual IOsgSceneNode* AsOsgSceneNode(){return(nullptr);}
     virtual IHudNode* AsHudNode(){return(nullptr);}
 protected:

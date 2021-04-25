@@ -86,6 +86,7 @@ public:
      * @brief 更改地图类型
      */
     virtual void ChangeMapType(MapType)=0;
+    virtual MapType GetMapType()const=0;
 
     /**
      * @brief 获取地惯系节点

@@ -25,6 +25,8 @@ public:
      */
     void SetTerrainType(MAP_TERRAIN type)JUDGE_EQUAL_CALL_FUNCTION(type,m_emType,TerrainTypeChanged)
     MAP_TERRAIN TerrainType()const{return(m_emType);}
+
+    IMapSceneNode* AsMapSceneNode(){return(this);}
 protected:
     virtual ~IMapSceneNode(){}
 

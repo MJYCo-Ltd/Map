@@ -89,32 +89,21 @@ bool CMap::ConvertCoord(float &fX, float &fY, ScenePos &geoPos, short TranType)
         }
 
         osg::Viewport* pViewPort = pOsgViewPoint->GetOsgView()->getCamera()->getViewport();
-        switch (m_emType)
+        if(nullptr != GetMapNode()->getTerrain() &&
+                GetMapNode()->getTerrain()->getWorldCoordsUnderMouse(pOsgViewPoint->GetOsgView(),
+                                                                fX, pViewPort ? pViewPort->height() - fY : fY, world))
         {
-        case MAP_2D:
-            if(m_pMap2DNode->getTerrain()->getWorldCoordsUnderMouse(pOsgViewPoint->GetOsgView(), fX, pViewPort ? pViewPort->height() - fY : fY, world))
-            {
-                geoPoint.fromWorld(m_pMap2DNode->getMapSRS(),world);
-                geoPoint.makeGeographic();
-                geoPos.fX = geoPoint.x();
-                geoPos.fY = geoPoint.y();
-                geoPos.fZ = geoPoint.z();
-                return (true);
-            }
-            break;
-        case MAP_3D:
-            if(m_pMap3DNode->getTerrain()->getWorldCoordsUnderMouse(pOsgViewPoint->GetOsgView(), fX, pViewPort ? pViewPort->height() - fY : fY, world))
-            {
-                geoPoint.fromWorld(m_pMap3DNode->getMapSRS(),world);
-                geoPoint.makeGeographic();
-                geoPos.fX = geoPoint.x();
-                geoPos.fY = geoPoint.y();
-                geoPos.fZ = geoPoint.z();
-                return (true);
-            }
-            break;
+            geoPoint.fromWorld(GetMapNode()->getMapSRS(),world);
+            geoPoint.makeGeographic();
+            geoPos.fX = geoPoint.x();
+            geoPos.fY = geoPoint.y();
+            geoPos.fZ = geoPoint.z();
+            return (true);
         }
-        return(false);
+        else
+        {
+            return(false);
+        }
     }
     else if(1==TranType)
     {
@@ -128,36 +117,22 @@ bool CMap::ConvertCoord(float &fX, float &fY, ScenePos &geoPos, short TranType)
 
         osg::Vec3d world;
         osgEarth::GeoPoint geoPoint(osgEarth::SpatialReference::create("wgs84"),geoPos.fX,geoPos.fY,geoPos.fZ),geoOut;
-        switch (m_emType)
+
+        if(geoPoint.transform(GetMapNode()->getMapSRS(),geoOut) &&
+                GetMapNode()->getMapSRS()->transformToWorld(osg::Vec3d(geoOut.x(),geoOut.y(),geoOut.z()),world))
         {
-        case MAP_2D:
-            if(geoPoint.transform(m_pMap2DNode->getMapSRS(),geoOut) &&
-               m_pMap2DNode->getMapSRS()->transformToWorld(osg::Vec3d(geoOut.x(),geoOut.y(),geoOut.z()),world))
-            {
-                osg::Matrixd _MVPW = pView->getCamera()->getViewMatrix() * pView->getCamera()->getProjectionMatrix()
-                        * pView->getCamera()->getViewport()->computeWindowMatrix();
+            osg::Matrixd _MVPW = pView->getCamera()->getViewMatrix() * pView->getCamera()->getProjectionMatrix()
+                    * pView->getCamera()->getViewport()->computeWindowMatrix();
 
-                osg::Vec3d scrennPos = world * _MVPW;
-                fX = scrennPos.x();
-                fY = pView->getCamera()->getViewport()->height() - scrennPos.y();
-                return(true);
-            }
-            break;
-        case MAP_3D:
-            if(m_pMap3DNode->getMapSRS()->transformToWorld(osg::Vec3d(geoPos.fX,geoPos.fY,geoPos.fZ),world))
-            {
-                osg::Matrixd _MVPW = pView->getCamera()->getViewMatrix() * pView->getCamera()->getProjectionMatrix()
-                        * pView->getCamera()->getViewport()->computeWindowMatrix();
-
-                osg::Vec3d scrennPos = world * _MVPW;
-                fX = scrennPos.x();
-                fY = pView->getCamera()->getViewport()->height() - scrennPos.y();
-                return(true);
-            }
-            break;
+            osg::Vec3d scrennPos = world * _MVPW;
+            fX = scrennPos.x();
+            fY = pView->getCamera()->getViewport()->height() - scrennPos.y();
+            return(true);
         }
-
-        return(false);
+        else
+        {
+            return(false);
+        }
     }
     else
     {
@@ -168,16 +143,9 @@ bool CMap::ConvertCoord(float &fX, float &fY, ScenePos &geoPos, short TranType)
 float CMap::GetHeight(float fLon, float fLat)
 {
     static osgEarth::SpatialReference* s_pWgs84 = osgEarth::SpatialReference::get("wgs84");
-    osgEarth::Terrain* pTerrain=nullptr;
-    switch (m_emType)
-    {
-    case MAP_2D:
-        pTerrain=m_pMap2DNode->getTerrain();
-        break;
-    case MAP_3D:
-        pTerrain=m_pMap3DNode->getTerrain();
-        break;
-    }
+
+    osgEarth::Terrain* pTerrain=GetMapNode()->getTerrain();
+
     if(nullptr == pTerrain)
     {
         return(0);
@@ -214,19 +182,9 @@ IMapLayer *CMap::CreateLayer(const std::string & sLayerName)
     }
     else
     {
-        osgEarth::MapNode* pMapNode(nullptr);
-        switch (m_emType)
-        {
-        case MAP_2D:
-            pMapNode = m_pMap2DNode;
-            break;
-        case MAP_3D:
-            pMapNode = m_pMap3DNode;
-            break;
-        }
-        CMapLayer* pLayer = new CMapLayer(sLayerName,pMapNode,m_pSceneGraph);
+        CMapLayer* pLayer = new CMapLayer(sLayerName,m_pSceneGraph);
         m_userLayers[sLayerName] = pLayer;
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(pMapNode,pLayer->GetModelLayer(),true));
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(GetMapNode(),pLayer->GetModelLayer(),true));
 
         /// 通知观察者
         for(auto one:m_listObserver)
@@ -245,34 +203,15 @@ bool CMap::RemoveLayer(IMapLayer *& pLayer)
     {
         if(one->second == pLayer)
         {
-            osgEarth::MapNode* pMapNode(nullptr);
-            switch (m_emType)
-            {
-            case MAP_2D:
-                pMapNode = m_pMap2DNode;
-                break;
-            case MAP_3D:
-                pMapNode = m_pMap3DNode;
-                break;
-            }
-
-            /// 从map中移除节点
-            m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(pMapNode,one->second->GetModelLayer(),false));
-            delete one->second;
-
-            /// 通知观察者
-            for(auto oneObserver:m_listObserver)
-            {
-                oneObserver->RemoveLayer(one->first);
-            }
-
-            m_userLayers.erase(one);
+            RemoveLayer(one);
+            pLayer=nullptr;
             return(true);
         }
     }
 
     return(false);
 }
+
 bool CMap::RemoveLayer(const std::string& sLayerName)
 {
     auto findOne = m_userLayers.find(sLayerName);
@@ -280,42 +219,43 @@ bool CMap::RemoveLayer(const std::string& sLayerName)
     {
         return false;
     }
-    osgEarth::MapNode* pMapNode(nullptr);
-    switch (m_emType)
-    {
-    case MAP_2D:
-        pMapNode = m_pMap2DNode;
-        break;
-    case MAP_3D:
-        pMapNode = m_pMap3DNode;
-        break;
-    }
 
-    /// 从map中移除节点
-    m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(pMapNode,findOne->second->GetModelLayer(),false));
-    delete findOne->second;
+    RemoveLayer(findOne);
 
+    return(true);
+}
+
+void CMap::RemoveLayer(UserLayers::iterator itor)
+{
     /// 通知观察者
     for(auto oneObserver:m_listObserver)
     {
-        oneObserver->RemoveLayer(findOne->first);
+        oneObserver->RemoveLayer(itor->first);
     }
 
-    m_userLayers.erase(findOne);
-    return(true);
+    /// 从map中移除节点
+    m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(GetMapNode(),itor->second->GetModelLayer(),false));
+    delete itor->second;
+
+    m_userLayers.erase(itor);
 }
-void CMap::ClearLayers()
+
+/// 获取正确的mapNode
+osgEarth::MapNode *CMap::GetMapNode()
 {
-    osgEarth::MapNode* pMapNode(nullptr);
     switch (m_emType)
     {
     case MAP_2D:
-        pMapNode = m_pMap2DNode;
+        return(m_pMap2DNode);
         break;
     case MAP_3D:
-        pMapNode = m_pMap3DNode;
-        break;
+        return(m_pMap3DNode);
     }
+}
+
+void CMap::ClearLayers()
+{
+    osgEarth::MapNode* pMapNode=GetMapNode();
 
     for(auto one = m_userLayers.begin();one != m_userLayers.end();++one)
     {
@@ -381,16 +321,7 @@ void CMap::SetShowAtmosphere(bool bVisible)
 void CMap::MouseMove(MouseButtonMask, int nX, int nY)
 {
     m_pUpdateCallBack->SetMousePos(nX,nY);
-    osgEarth::MapNode* pMapNode(nullptr);
-    switch (m_emType)
-    {
-    case MAP_2D:
-        pMapNode=m_pMap2DNode;
-        break;
-    case MAP_3D:
-        pMapNode=m_pMap3DNode;
-        break;
-    }
+    osgEarth::MapNode* pMapNode=GetMapNode();
 
     if(pMapNode&&pMapNode->getUserData())
     {
@@ -484,11 +415,11 @@ void CMap::InitMap()
 #if OSGEARTH_VERSION_GREATER_OR_EQUAL(3,0,0)
             m_pMap3DNode->open();
 #endif
+
             m_pMap3DNode->addUpdateCallback(m_pUpdateCallBack);
             m_pSpaceEnv = new CSpaceEnv(m_pSceneGraph);
             osg::Camera* pCamera = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
                     ->GetOsgView()->getCamera();
-
             m_pSpaceEnv->SetMainCamara(pCamera);
             m_pSpaceEnv->Init();
 
@@ -510,7 +441,7 @@ void CMap::InitMap()
 
             m_dMJD = data.GetMJD();
             DateChanged();
-            m_p3DRoot->addChild(m_pMap3DNode);
+            m_p3DRoot->addChild(node);
 
             osgEarth::GLUtils::setGlobalDefaults(m_pMap3DNode->getOrCreateStateSet());
         }
