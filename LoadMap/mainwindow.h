@@ -48,6 +48,7 @@ private slots:
 protected:
     void PlotMap();
     void LodPlot();
+    void TestGroup();
 
 private:
     Ui::MainWindow *ui;

@@ -328,7 +328,7 @@ void MainWindow::on_action_triggered()
         m_pTrackNode = pSatelliteSensor;
     }
     PlotMap();
-//    LodPlot();
+    LodPlot();
 }
 
 void MainWindow::on_action_2_triggered()
@@ -501,13 +501,29 @@ void MainWindow::LodPlot()
     pLod->SetLevelsInfo(vLevelInfo);
 
     ScenePos pos;
-    pos.fX = 117.5f;
-    pos.fY = 39.5f;
+    pos.fX = 121.f;
+    pos.fY = 27.f;
     pos.fZ = 1000.f;
     auto pEarthLocation1 = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     pEarthLocation1->SetSceneNode(pLod);
     pEarthLocation1->SetGeoPos(pos);
     m_pLayer->AddSceneNode(pEarthLocation1);
+}
+
+void MainWindow::TestGroup()
+{
+    ScenePos pos;
+    pos.fX = 120.f;
+    pos.fY = 24.f;
+    pos.fZ = 10.f;
+    auto pEarthLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+    auto pLod = m_pSceneGraph->GetPlot()->CreateSceneGroup(LOD_GROUP)->AsSceneLodGroup();
+
+    auto pImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
+    pImage->SetImagePath("Image/ship.png");
+    pLod->AddSceneNode(pImage);
+    auto p3DModel = m_pSceneGraph->GetPlot()->LoadSceneNode("Model/AirPlane.ive");
+    pLod->AddSceneNode(p3DModel);
 }
 
 /// 测试标绘模型

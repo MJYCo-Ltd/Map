@@ -15,7 +15,6 @@ protected:
 
     void InitNode()
     {
-        T::m_bOpenPreCut=false;
         ImplMapSceneNode<T>::InitNode();
 
         /// 创建贴地节点

@@ -3,6 +3,11 @@
 
 using namespace osgEarth;
 
+CMapModelLayer::CMapModelLayer(ISceneGraph* pSceneGraph):
+    ImplSceneGroup<ISceneGroup>(pSceneGraph)
+{
+}
+
 void CMapModelLayer::init()
 {
     VisibleLayer::init();
@@ -24,9 +29,4 @@ osg::Node* CMapModelLayer::getNode() const
 osg::Group* CMapModelLayer::getGroup() const
 {
     return m_pGroup.get();
-}
-
-CMapModelLayer::CMapModelLayer(ISceneGraph* pSceneGraph):
-    ImplSceneGroup<ISceneGroup>(pSceneGraph)
-{
 }

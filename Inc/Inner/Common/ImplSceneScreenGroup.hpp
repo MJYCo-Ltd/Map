@@ -20,10 +20,10 @@ protected:
      */
     void InitNode()
     {
-        T::m_bOpenPreCut=false;
         ImplSceneGroup<T>::InitNode();
         osgEarth::ScreenSpaceLayout::activate(IOsgSceneNode::m_pRootNode->getOrCreateStateSet());
         osgEarth::ScreenSpaceLayout::setDeclutteringEnabled(false);
+        IOsgSceneNode::m_pRootNode->setCullingActive(false);
     }
 
     void AvoidChanged()
