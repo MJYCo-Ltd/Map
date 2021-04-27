@@ -209,7 +209,7 @@ bool CResourceLod::LoadVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,
     }
 
 
-    static osgEarth::Shaders shader;
+    static osgEarth::Util::Shaders shader;
     return(shader.load(pVirtualProgram,glslPath));
 }
 

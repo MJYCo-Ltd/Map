@@ -23,6 +23,10 @@ protected:
         ImplSceneGroup<T>::InitNode();
         osgEarth::ScreenSpaceLayout::activate(IOsgSceneNode::m_pRootNode->getOrCreateStateSet());
         osgEarth::ScreenSpaceLayout::setDeclutteringEnabled(false);
+        auto options = osgEarth::ScreenSpaceLayout::getOptions();
+        options.technique() = options.TECHNIQUE_CALLOUTS;
+        osgEarth::ScreenSpaceLayout::setOptions(options);
+
         IOsgSceneNode::m_pRootNode->setCullingActive(false);
     }
 

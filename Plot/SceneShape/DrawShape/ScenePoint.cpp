@@ -6,6 +6,7 @@ void CScenePoint::UpdateShape()
 {
     ImplSceneGeometry<IPoint>::UpdateShape();
 
+    /// 点大小更改
     if(m_bPointSizeChanged)
     {
         if(m_ufPointSize.valid())
@@ -15,6 +16,7 @@ void CScenePoint::UpdateShape()
         m_bPointSizeChanged = false;
     }
 
+    /// 图片路径修改
     if(m_bImageChanged)
     {
         osg::ref_ptr<osg::Texture2D> starTexture1 = m_pSceneGraph->ResouceLoader()->LoadTexture(m_sImagePath);
@@ -39,7 +41,7 @@ void CScenePoint::CreateShape()
     /// 此处应该不知道
     if(m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(pNodeProgram,"GLSL/Point.glsl"))
     {
-        /// 获取闪烁变量
+        /// 获取点大小
         m_ufPointSize = pSate->getOrCreateUniform("pointSize",osg::Uniform::FLOAT);
         m_ufPointSize->set(m_fPointSize);
         pSate->setMode(GL_VERTEX_PROGRAM_POINT_SIZE,1);

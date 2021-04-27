@@ -220,9 +220,9 @@ void MainWindow::on_action_triggered()
     pHudText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
     m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudLayout);
 
-    auto pHudImage = dynamic_cast<IHudImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudImage"));
-    pHudImage->SetImage("Image/ship.png");
-    pHudLayout->AddHudNode(pHudImage);
+//    auto pHudImage = dynamic_cast<IHudImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudImage"));
+//    pHudImage->SetImage("Image/ship.png");
+//    pHudLayout->AddHudNode(pHudImage);
     pHudLayout->AddHudNode(pHudText);
     pHudLayout->SetPosType(HUD_DOWN_RIGHT);
 //    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudImage);
@@ -328,7 +328,8 @@ void MainWindow::on_action_triggered()
         m_pTrackNode = pSatelliteSensor;
     }
     PlotMap();
-    LodPlot();
+//    LodPlot();
+    TestGroup();
 }
 
 void MainWindow::on_action_2_triggered()
@@ -515,15 +516,26 @@ void MainWindow::TestGroup()
     ScenePos pos;
     pos.fX = 120.f;
     pos.fY = 24.f;
-    pos.fZ = 10.f;
+    pos.fZ = 0.f;
     auto pEarthLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
-    auto pLod = m_pSceneGraph->GetPlot()->CreateSceneGroup(LOD_GROUP)->AsSceneLodGroup();
+    auto pScreenGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCREEN_GROUP);
+    pEarthLocation->SetGeoPos(pos);
+    pEarthLocation->SetTerrainType(pEarthLocation->ABSOLUTE_TERRAIN);
 
     auto pImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
     pImage->SetImagePath("Image/ship.png");
-    pLod->AddSceneNode(pImage);
-    auto p3DModel = m_pSceneGraph->GetPlot()->LoadSceneNode("Model/AirPlane.ive");
-    pLod->AddSceneNode(p3DModel);
+    pScreenGroup->AddSceneNode(pImage);
+
+    auto pLabel = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
+    pScreenGroup->AddSceneNode(pLabel);
+
+    pLabel->SetText("hello wolrd");
+    ScenePixelOffset offset;
+    offset.sHeight=0;
+    offset.sWidth=16;
+    pLabel->SetPixelOffset(offset);
+    pEarthLocation->SetSceneNode(pScreenGroup);
+    m_pLayer->AddSceneNode(pEarthLocation);
 }
 
 /// 测试标绘模型

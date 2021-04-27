@@ -25,9 +25,9 @@ protected:
         }
 
         /// 增加地平面回调
-//        m_pCullCallBack = new osgEarth::HorizonCullCallback;
-//        m_pCullCallBack->setEnabled(true);
-//        m_pDrapeNode->addCullCallback(m_pCullCallBack);
+        m_pCullCallBack = new osgEarth::HorizonCullCallback;
+        m_pCullCallBack->setEnabled(true);
+        m_pDrapeNode->addCullCallback(m_pCullCallBack);
         ImplMapSceneNode<T>::SetOsgNode(m_pDrapeNode.get());
     }
 
@@ -39,7 +39,7 @@ protected:
         }
 
 
-//        m_pCullCallBack->setEnabled(ImplMapSceneNode<T>::s_pMapNode->isGeocentric());
+        m_pCullCallBack->setEnabled(ImplMapSceneNode<T>::s_pMapNode->isGeocentric());
 
         /// 如果有几何体
         if(nullptr != m_pGeometry)
@@ -98,6 +98,7 @@ protected:
             vIn.at(nIndex++).set(one.fX,one.fY,one.fZ);
         }
 
+        /// 将经纬度信息转成地图的投影信息
         ImplMapSceneNode<T>::s_pWGS84->transform(vIn,ImplMapSceneNode<T>::s_pMapSRS.get());
 
         std::vector<osg::Vec3d> vOut;
@@ -119,14 +120,17 @@ protected:
         }
 
         /// 如果是相对位置
-        if(T::RELATIVE_TERRAIN == T::m_emType)
+        if(T::RELATIVE_TERRAIN == T::m_emType && ImplMapSceneNode<T>::s_pTerrain.valid())
         {
             double out_hamsl;
+
+            osg::ref_ptr<osgEarth::Terrain> terrain;
+            ImplMapSceneNode<T>::s_pTerrain.lock(terrain);
 
             nIndex=0;
             for(auto one : listAllPos)
             {
-                if(ImplMapSceneNode<T>::s_pTerrain->getHeight(ImplMapSceneNode<T>::s_pWGS84.get(), one.fX, one.fY, &out_hamsl))
+                if(terrain->getHeight(ImplMapSceneNode<T>::s_pWGS84.get(), one.fX, one.fY, &out_hamsl))
                 {
                     vAllPos[nIndex].fZ +=out_hamsl;
                 }
