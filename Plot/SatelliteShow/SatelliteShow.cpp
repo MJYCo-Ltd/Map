@@ -147,11 +147,11 @@ void CSatelliteShow::UpdateJ2000OribitShow(double duration)
             pos.fX = iter->GetX();
             pos.fY = iter->GetY();
             pos.fZ = iter->GetZ();
-            dTimeCount += dStep;
             if (dTimeCount * 86400 > duration)
                 break;
             else
                 vTemp.push_back(pos);
+            dTimeCount += dStep;
         }
         m_pOribit->SetMultPos(vTemp);
     }
