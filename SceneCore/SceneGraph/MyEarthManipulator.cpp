@@ -188,7 +188,7 @@ void CMyEarthManipulator::SetViewPoint(const SceneViewPoint &viewPoint,double dT
     }
     else
     {
-        vp.pitch()->set(0-viewPoint.fElev,osgEarth::Units::DEGREES);
+        vp.pitch()->set(viewPoint.fElev-90,osgEarth::Units::DEGREES);
     }
     setViewpoint(vp,dTimes);
 }
