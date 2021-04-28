@@ -49,6 +49,7 @@ protected:
     void PlotMap();
     void LodPlot();
     void TestGroup();
+    void LoadQingxie();
 
 private:
     Ui::MainWindow *ui;

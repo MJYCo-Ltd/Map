@@ -61,26 +61,8 @@ protected:
      */
     void UpdateTrerrain()
     {
-        /// 不再贴地了
-        if(CLOSE_TERRAIN != T::m_emType)
-        {
-            T::m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CReplaceNode(m_pDrapeNode.get(),
-                                                                                      m_pGeometry->AsOsgSceneNode()->GetOsgNode()));
-            ImplMapSceneNode<T>::SetOsgNode(m_pGeometry->AsOsgSceneNode()->GetOsgNode());
-            m_pGeometry->NeedUpdate();
-        }
-        else
-        {
-            if(!m_pDrapeNode.valid())
-            {
-                m_pDrapeNode = new osgEarth::DrapeableNode;
-                m_pDrapeNode->setMapNode(ImplMapSceneNode<T>::s_pMapNode.get());
-                T::m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
-                            new CReplaceNode(m_pGeometry->AsOsgSceneNode()->GetOsgNode(),m_pDrapeNode.get()));
-                AddNode(m_pDrapeNode.get(),m_pGeometry->AsOsgSceneNode()->GetOsgNode());
-            }
-            ImplMapSceneNode<T>::SetOsgNode(m_pDrapeNode.get());
-        }
+        m_pDrapeNode->setDrapingEnabled(T::m_emType==CLOSE_TERRAIN);
+        m_pGeometry->NeedUpdate();
     }
 
     /**

@@ -231,9 +231,9 @@ void MainWindow::on_action_triggered()
     pLod->AddSceneNode(pAutoImage);
 
 
-    color.fR=1.0f;
-    color.fG=1.0f;
-    color.fB=0.0f;
+    color.fR=0.0f;
+    color.fG=0.0f;
+    color.fB=1.0f;
     pHudText->SetText("Hello world");
     pHudText->SetColor(color);
 
@@ -330,12 +330,13 @@ void MainWindow::on_action_triggered()
     PlotMap();
 //    LodPlot();
     TestGroup();
+    LoadQingxie();
 }
 
 void MainWindow::on_action_2_triggered()
 {
-    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->HomeViewPoint();
-    return;
+//    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->HomeViewPoint();
+//    return;
 //    SceneColor color;
 //    color.fG=color.fB=0.0f;
 //    pSatellite->SetOribitColor(color);
@@ -534,6 +535,19 @@ void MainWindow::TestGroup()
     offset.sWidth=16;
     pLabel->SetPixelOffset(offset);
     pEarthLocation->SetSceneNode(pScreenGroup);
+    m_pLayer->AddSceneNode(pEarthLocation);
+}
+
+void MainWindow::LoadQingxie()
+{
+    ScenePos pos;
+    pos.fX = 108.78107;
+    pos.fY = 34.11611;
+    pos.fZ = 100.;
+    auto pEarthLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+    auto pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("F:/BaiduNetdiskDownload/shancheng/shanchengzhen/Data/out.osgb",false);
+    pEarthLocation->SetGeoPos(pos);
+    pEarthLocation->SetSceneNode(pModel);
     m_pLayer->AddSceneNode(pEarthLocation);
 }
 

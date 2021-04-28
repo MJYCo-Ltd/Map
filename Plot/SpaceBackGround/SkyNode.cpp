@@ -20,6 +20,7 @@ void CSkyNode::SetMaxVisibleMagnitude(int nMax)
 
 void CSkyNode::SetMilkywayVisible(bool bShow)
 {
+    m_pStarEnv->SetMilkwayVisible(bShow);
 }
 
 void CSkyNode::SetStarNamesVisible(bool bShow)

@@ -136,6 +136,14 @@ void CStarEnv::SetConstellationVisible(bool bVisible)
 void CStarEnv::SetMilkwayVisible(bool bVisible)
 {
     m_pMilkyway->SetVisible(bVisible);
+    if(bVisible)
+    {
+        m_pMainCamera->setClearMask(GL_DEPTH_BUFFER_BIT);
+    }
+    else
+    {
+        m_pMainCamera->setClearMask(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
+    }
 }
 
 void CStarEnv::UpdateMatrix(const CMatrix &rRotate)

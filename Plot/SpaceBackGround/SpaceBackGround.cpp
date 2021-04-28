@@ -16,6 +16,7 @@ void CSpaceBackGround::SetMaxVisibleMagnitude(int nMax)
 
 void CSpaceBackGround::SetMilkywayVisible(bool bShow)
 {
+    m_pSkyNode->SetMilkywayVisible(bShow);
 }
 
 void CSpaceBackGround::SetStarNamesVisible(bool bShow)
