@@ -75,7 +75,7 @@ QtViewPort::QtViewPort(IRender *pRender,ISceneGraph *pSceneGraph, ProjectType em
 
     /// 默认的
     m_stHomePoint.fAzimuth = 0.f;
-    m_stHomePoint.fElev = 0.f;
+    m_stHomePoint.fElev = 90.f;
     m_stHomePoint.fDistance = 12000e3;
     m_stHomePoint.stPos.fX = 118.8f;
     m_stHomePoint.stPos.fY = 32.1f;
@@ -484,7 +484,7 @@ void QtViewPort::UpdateViewPoint(CMyEarthManipulator *pEarthManipulator)
 {
     auto ViewPoint = pEarthManipulator->getViewpoint();
     m_stViewPoint.fAzimuth = ViewPoint.heading()->as(osgEarth::Units::DEGREES);
-    m_stViewPoint.fElev = ViewPoint.pitch()->as(osgEarth::Units::DEGREES)+90;
+    m_stViewPoint.fElev = -ViewPoint.pitch()->as(osgEarth::Units::DEGREES);
     m_stViewPoint.fDistance=ViewPoint.range()->as(osgEarth::Units::METERS);
     m_stViewPoint.stPos.fX = ViewPoint.focalPoint()->x();
     m_stViewPoint.stPos.fY = ViewPoint.focalPoint()->y();

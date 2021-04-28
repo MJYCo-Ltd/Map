@@ -233,7 +233,7 @@ void MainWindow::on_action_triggered()
 
     color.fR=1.0f;
     color.fG=1.0f;
-    color.fB=1.0f;
+    color.fB=0.0f;
     pHudText->SetText("Hello world");
     pHudText->SetColor(color);
 
@@ -516,7 +516,6 @@ void MainWindow::TestGroup()
     ScenePos pos;
     pos.fX = 120.f;
     pos.fY = 24.f;
-    pos.fZ = 0.f;
     auto pEarthLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     auto pScreenGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCREEN_GROUP);
     pEarthLocation->SetGeoPos(pos);
