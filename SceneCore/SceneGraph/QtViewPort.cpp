@@ -210,23 +210,30 @@ void QtViewPort::SetViewPoint(const SceneViewPoint & rViewPoint, unsigned int un
 /// 获取视点位置
 const SceneViewPoint &QtViewPort::GetViewPoint()
 {
-    switch(m_emType)
+    if(m_bViewPointChanged)
     {
-    case View_2DMap:
-        UpdateViewPoint(m_p2DEarthManipulator);
-        break;
-    case View_3DMap:
-        UpdateViewPoint(m_p3DEarthManipulator);
-        break;
-    case View_Osg:
-        UpdateViewPoint(m_pSelfManipulator);
-        break;
-    case View_Node:
-        UpdateViewPoint(m_pTrackManipulator);
-        break;
+        return(m_stViewPoint);
     }
+    else
+    {
+        switch(m_emType)
+        {
+        case View_2DMap:
+            UpdateViewPoint(m_p2DEarthManipulator);
+            break;
+        case View_3DMap:
+            UpdateViewPoint(m_p3DEarthManipulator);
+            break;
+        case View_Osg:
+            UpdateViewPoint(m_pSelfManipulator);
+            break;
+        case View_Node:
+            UpdateViewPoint(m_pTrackManipulator);
+            break;
+        }
 
-    return(m_stViewPoint);
+        return(m_stViewPoint);
+    }
 }
 
 /// 获取视图类
