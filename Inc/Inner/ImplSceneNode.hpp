@@ -94,16 +94,16 @@ protected:
         if(m_bLightingChanged)
         {
             osgEarth::GLUtils::setLighting(m_pRootNode->getOrCreateStateSet(),
-                                           (T::m_bOpenLight ? osg::StateAttribute::ON : osg::StateAttribute::OFF)
-                                           & osg::StateAttribute::OVERRIDE);
+                                           T::m_bOpenLight?osg::StateAttribute::ON:osg::StateAttribute::OFF);
             m_bLightingChanged=false;
         }
 
         /// 是否一直显示
         if(m_bShowTopChanged)
         {
-            m_pRootNode->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,(T::m_bShowTop ? osg::StateAttribute::OFF : osg::StateAttribute::ON)
-                                                        & osg::StateAttribute::OVERRIDE);
+            m_pRootNode->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,(T::m_bShowTop ?
+                                                                           osg::StateAttribute::OFF : osg::StateAttribute::ON)
+                                                        | osg::StateAttribute::OVERRIDE);
             m_bShowTopChanged=false;
         }
 
