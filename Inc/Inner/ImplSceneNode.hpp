@@ -94,7 +94,7 @@ protected:
         if(m_bLightingChanged)
         {
             osgEarth::GLUtils::setLighting(m_pRootNode->getOrCreateStateSet(),
-                                           T::m_bOpenLight ? osg::StateAttribute::ON : osg::StateAttribute::OFF);
+                                           T::m_bOpenLight ? osg::StateAttribute::ON : osg::StateAttribute::OFF | osg::StateAttribute::OVERRIDE);
             m_bLightingChanged=false;
         }
 

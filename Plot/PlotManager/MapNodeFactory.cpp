@@ -72,7 +72,6 @@ void CMapNodeFactory::DeleteNoUseSceneNode()
         auto pMapSceneNode = *one;
         if(pMapSceneNode->AsOsgSceneNode()->CanDelete())
         {
-            std::cout<<"Delete:"<<pMapSceneNode<<std::endl;
             delete pMapSceneNode->AsOsgSceneNode();
             one = m_allCreateNode.erase(one);
         }

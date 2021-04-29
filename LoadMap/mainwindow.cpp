@@ -103,7 +103,9 @@ void MainWindow::SetSecenGraph(ISceneGraph *pSceneGraph)
         auto pMap= new MapObser(m_pSceneGraph);
         m_pSceneGraph->GetMainWindow()->SubMessage(pMap);
         m_pSceneGraph->GetMap()->SubMessage(pMap);
-//        m_pSceneGraph->GetMap()->GetSpaceEnv()->ShowSpaceBackGround(false);
+        m_pSceneGraph->GetMap()->GetSpaceEnv()->ShowSpaceBackGround(false);
+        m_pSceneGraph->GetMap()->OpenLight(false);
+        m_pSceneGraph->GetMap()->SetShowAtmosphere(false);
     }
 }
 
@@ -146,15 +148,15 @@ void MainWindow::on_action_triggered()
     color11.fG =0.0;
     color11.fB =0.0;
 
-    CMapCircle* pCircle = new CMapCircle(m_pSceneGraph);
-    pCircle->SetCenter(pos11);
-    pCircle->SetRadius(10000);
-    pCircle->SetColor(color11);
+//    CMapCircle* pCircle = new CMapCircle(m_pSceneGraph);
+//    pCircle->SetCenter(pos11);
+//    pCircle->SetRadius(10000);
+//    pCircle->SetColor(color11);
 
-    ISceneGroup* pSceneRootaaaa = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
-    IMapLocation*  aaaa = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
-    aaaa->SetSceneNode(pSceneRootaaaa);
-    pSceneRootaaaa->AddSceneNode(pCircle->GetMapSceneNode());
+//    ISceneGroup* pSceneRootaaaa = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
+//    IMapLocation*  aaaa = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+//    aaaa->SetSceneNode(pSceneRootaaaa);
+//    pSceneRootaaaa->AddSceneNode(pCircle->GetMapSceneNode());
 //    IMapLayer* m_pLayerTest = m_pSceneGraph->GetMap()->CreateLayer("test");
 //    m_pLayerTest->AddSceneNode(aaaa);
 
@@ -330,7 +332,7 @@ void MainWindow::on_action_triggered()
     PlotMap();
 //    LodPlot();
     TestGroup();
-    LoadQingxie();
+//    LoadQingxie();
 }
 
 void MainWindow::on_action_2_triggered()
@@ -439,26 +441,26 @@ void MainWindow::PlotMap()
     m_pLine->GetDrawLine()->AddPoint(0,pos);
     m_pLine->GetDrawLine()->SetColor(color);
     m_pLine->GetDrawLine()->SetLineWidth(2.f);
-    m_pLine->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
-    m_pLayer->AddSceneNode(m_pLine);
+//    m_pLine->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
+//    m_pLayer->AddSceneNode(m_pLine);
 
     /// 绘制区域
-    auto m_pPolygon = dynamic_cast<IMapPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPolygon"));
-    m_pPolygon->GetDrawPolygon()->AddPoint(0,pos);
-    pos.fX = 123;
-    pos.fY = 26;
-    m_pPolygon->GetDrawPolygon()->AddPoint(1,pos);
-    pos.fX = 121;
-    pos.fY = 26;
-    m_pPolygon->GetDrawPolygon()->AddPoint(2,pos);
-    pos.fX = 122;
-    pos.fY = 26.5;
-    m_pPolygon->GetDrawPolygon()->AddPoint(3,pos);
+//    auto m_pPolygon = dynamic_cast<IMapPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPolygon"));
+//    m_pPolygon->GetDrawPolygon()->AddPoint(0,pos);
+//    pos.fX = 123;
+//    pos.fY = 26;
+//    m_pPolygon->GetDrawPolygon()->AddPoint(1,pos);
+//    pos.fX = 121;
+//    pos.fY = 26;
+//    m_pPolygon->GetDrawPolygon()->AddPoint(2,pos);
+//    pos.fX = 122;
+//    pos.fY = 26.5;
+//    m_pPolygon->GetDrawPolygon()->AddPoint(3,pos);
     pos.fX = 121;
     pos.fY = 27;
-    m_pPolygon->GetDrawPolygon()->AddPoint(4,pos);
-    m_pPolygon->GetDrawPolygon()->SetColor(color);
-    m_pLayer->AddSceneNode(m_pPolygon);
+//    m_pPolygon->GetDrawPolygon()->AddPoint(4,pos);
+//    m_pPolygon->GetDrawPolygon()->SetColor(color);
+//    m_pLayer->AddSceneNode(m_pPolygon);
 
     auto pMapLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     m_pLayer->AddSceneNode(pMapLocation);
@@ -467,7 +469,7 @@ void MainWindow::PlotMap()
     auto pBoxSensor = dynamic_cast<IBoxSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IBoxSensor"));
     pMapLocation->SetSceneNode(pBoxSensor);
     pBoxSensor->SetDistance(10000);
-    pBoxSensor->ShowFace(false);
+    pBoxSensor->ShowFace(true);
     pBoxSensor->ShowLine(true);
     pBoxSensor->SetShowBack(false);
 }
