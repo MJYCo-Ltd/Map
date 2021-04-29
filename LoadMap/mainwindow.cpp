@@ -332,7 +332,7 @@ void MainWindow::on_action_triggered()
     PlotMap();
 //    LodPlot();
     TestGroup();
-//    LoadQingxie();
+    LoadQingxie();
 }
 
 void MainWindow::on_action_2_triggered()
@@ -427,8 +427,9 @@ void MainWindow::PlotMap()
     color.fB = .0f;
     m_pPoint->GetDrawPoint()->SetColor(color);
     m_pPoint->GetDrawPoint()->SetPointSize(50.f);
+//    m_pPoint->GetDrawPoint()->SetImage("Image/ship.png");
 //    m_pPoint->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
-    m_pLayer->AddSceneNode(m_pPoint);
+//    m_pLayer->AddSceneNode(m_pPoint);
 
     /// 绘制线
     auto m_pLine = dynamic_cast<IMapLine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLine"));
@@ -445,21 +446,21 @@ void MainWindow::PlotMap()
 //    m_pLayer->AddSceneNode(m_pLine);
 
     /// 绘制区域
-//    auto m_pPolygon = dynamic_cast<IMapPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPolygon"));
-//    m_pPolygon->GetDrawPolygon()->AddPoint(0,pos);
-//    pos.fX = 123;
-//    pos.fY = 26;
-//    m_pPolygon->GetDrawPolygon()->AddPoint(1,pos);
-//    pos.fX = 121;
-//    pos.fY = 26;
-//    m_pPolygon->GetDrawPolygon()->AddPoint(2,pos);
-//    pos.fX = 122;
-//    pos.fY = 26.5;
-//    m_pPolygon->GetDrawPolygon()->AddPoint(3,pos);
+    auto m_pPolygon = dynamic_cast<IMapPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPolygon"));
+    m_pPolygon->GetDrawPolygon()->AddPoint(0,pos);
+    pos.fX = 123;
+    pos.fY = 26;
+    m_pPolygon->GetDrawPolygon()->AddPoint(1,pos);
+    pos.fX = 121;
+    pos.fY = 26;
+    m_pPolygon->GetDrawPolygon()->AddPoint(2,pos);
+    pos.fX = 122;
+    pos.fY = 26.5;
+    m_pPolygon->GetDrawPolygon()->AddPoint(3,pos);
     pos.fX = 121;
     pos.fY = 27;
-//    m_pPolygon->GetDrawPolygon()->AddPoint(4,pos);
-//    m_pPolygon->GetDrawPolygon()->SetColor(color);
+    m_pPolygon->GetDrawPolygon()->AddPoint(4,pos);
+    m_pPolygon->GetDrawPolygon()->SetColor(color);
 //    m_pLayer->AddSceneNode(m_pPolygon);
 
     auto pMapLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
@@ -514,30 +515,37 @@ void MainWindow::LodPlot()
     m_pLayer->AddSceneNode(pEarthLocation1);
 }
 
+#include <ExternShape/MapPlaceNode.h>
 void MainWindow::TestGroup()
 {
-    ScenePos pos;
-    pos.fX = 120.f;
-    pos.fY = 24.f;
-    auto pEarthLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
-    auto pScreenGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCREEN_GROUP);
-    pEarthLocation->SetGeoPos(pos);
-    pEarthLocation->SetTerrainType(pEarthLocation->ABSOLUTE_TERRAIN);
+    CPlaceNode* pPlaceNode = new CPlaceNode(m_pSceneGraph);
+    pPlaceNode->SetPos(120.,24.);
+    pPlaceNode->SetImagePath("Image/ship.png");
+    pPlaceNode->SetText("Hello world");
+    m_pLayer->AddSceneNode(pPlaceNode->GetLocationNode());
 
-    auto pImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
-    pImage->SetImagePath("Image/ship.png");
-    pScreenGroup->AddSceneNode(pImage);
+//    ScenePos pos;
+//    pos.fX = 120.f;
+//    pos.fY = 24.f;
+//    auto pEarthLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+//    auto pScreenGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCREEN_GROUP);
+//    pEarthLocation->SetGeoPos(pos);
+//    pEarthLocation->SetTerrainType(pEarthLocation->ABSOLUTE_TERRAIN);
 
-    auto pLabel = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
-    pScreenGroup->AddSceneNode(pLabel);
+//    auto pImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
+//    pImage->SetImagePath("Image/ship.png");
+//    pScreenGroup->AddSceneNode(pImage);
 
-    pLabel->SetText("hello wolrd");
-    ScenePixelOffset offset;
-    offset.sHeight=0;
-    offset.sWidth=16;
-    pLabel->SetPixelOffset(offset);
-    pEarthLocation->SetSceneNode(pScreenGroup);
-    m_pLayer->AddSceneNode(pEarthLocation);
+//    auto pLabel = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
+//    pScreenGroup->AddSceneNode(pLabel);
+
+//    pLabel->SetText("hello wolrd");
+//    ScenePixelOffset offset;
+//    offset.sHeight=0;
+//    offset.sWidth=16;
+//    pLabel->SetPixelOffset(offset);
+//    pEarthLocation->SetSceneNode(pScreenGroup);
+//    m_pLayer->AddSceneNode(pEarthLocation);
 }
 
 void MainWindow::LoadQingxie()

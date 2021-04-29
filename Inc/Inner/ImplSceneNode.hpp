@@ -94,8 +94,17 @@ protected:
         if(m_bLightingChanged)
         {
             osgEarth::GLUtils::setLighting(m_pRootNode->getOrCreateStateSet(),
-                                           T::m_bOpenLight ? osg::StateAttribute::ON : osg::StateAttribute::OFF | osg::StateAttribute::OVERRIDE);
+                                           (T::m_bOpenLight ? osg::StateAttribute::ON : osg::StateAttribute::OFF)
+                                           & osg::StateAttribute::OVERRIDE);
             m_bLightingChanged=false;
+        }
+
+        /// 是否一直显示
+        if(m_bShowTopChanged)
+        {
+            m_pRootNode->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,(T::m_bShowTop ? osg::StateAttribute::OFF : osg::StateAttribute::ON)
+                                                        & osg::StateAttribute::OVERRIDE);
+            m_bShowTopChanged=false;
         }
 
         IOsgSceneNode::UpdateNode();
@@ -129,6 +138,7 @@ protected:
 
     void PickStateChanged()SET_TRUE_NODE_UPDATE(m_bPickStateChanged)
     void LightChanged()SET_TRUE_NODE_UPDATE(m_bLightingChanged)
+    void ShowTopChanged()SET_TRUE_NODE_UPDATE(m_bShowTopChanged)
 
     void AddNode(osg::Group* pGroup,osg::Node* pNode)
     {
@@ -144,6 +154,7 @@ protected:
     osg::Node::NodeMask  m_preMask = 0xffffffffu;
     bool m_bPickStateChanged=false;
     bool m_bLightingChanged=false;
+    bool m_bShowTopChanged=false;
 };
 
 #endif // IMPL_SCENE_NODE_H

@@ -53,6 +53,12 @@ public:
     bool IsOpenLight() const{return(m_bOpenLight);}
 
     /**
+     * @brief 设置节点总是显示
+     */
+    void AlwasOnTop(bool bOpen)JUDGE_EQUAL_CALL_FUNCTION(bOpen,m_bShowTop,ShowTopChanged)
+    bool IsAlwasOnTop()const{return(m_bShowTop);}
+
+    /**
      * @brief 转换成想要的类型
      * @return
      */
@@ -73,12 +79,14 @@ protected:
     virtual void VisibleChanged()=0;
     virtual void PickStateChanged()=0;
     virtual void LightChanged()=0;
+    virtual void ShowTopChanged()=0;
 
 protected:
     ISceneGraph* m_pSceneGraph;
     bool         m_bVisible=true;
     bool         m_bCanPick=false;
     bool         m_bOpenLight=true;
+    bool         m_bShowTop=false;
     unsigned int m_unID=0;
 };
 
