@@ -2,7 +2,10 @@
 #define IMPL_SCENE_VISUAL_GROUP_H
 
 #include <set>
+
+#include <GisMath/GisMath.h>
 #include <Inner/Common/ImplSceneGroup.hpp>
+#include <Inner/ILoadResource.h>
 
 /**
  *  实现ISceneVisualGroup的接口
@@ -44,18 +47,71 @@ protected:
     /// 更新
     void UpdateNode()
     {
-        m_pCamera->setProjectionMatrix(osg::Matrixd::perspective(T::m_dFovy,T::m_dAspect,0.,T::m_stViewPoint.fDistance));
+        if(m_bParameterChanged)
+        {
+            /// 设置投影矩阵
+            m_pCamera->setProjectionMatrixAsPerspective(T::m_dFovy,T::m_dAspect,
+                                                        T::m_stViewPoint.fDistance*1e-4,T::m_stViewPoint.fDistance);
+            m_bParameterChanged=false;
+
+            Math::CMatrix local2Global = GisMath::LOCAL2GLOBAL(T::m_stViewPoint.stPos.fX*DD2R,T::m_stViewPoint.stPos.fY*DD2R);
+            /// 计算射线方线
+            Math::CVector vLocal = Math::CVecMat::VecPolar((DPI/2.-T::m_stViewPoint.fAzimuth)*DD2R,T::m_stViewPoint.fAzimuth*DD2R);
+            Math::CVector vGlobal=local2Global*vLocal;
+
+            /// 将经纬度转成
+            double dX,dY,dZ;
+            GisMath::LBH2XYZ(T::m_stViewPoint.stPos.fX*DD2R,T::m_stViewPoint.stPos.fY*DD2R,T::m_stViewPoint.stPos.fZ,
+                             dX,dY,dZ);
+
+            vGlobal(0) += dX;
+            vGlobal(1) += dY;
+            vGlobal(2) += dZ;
+
+            osg::Vec3 eye(dX,dY,dZ);
+            osg::Vec3 center(vGlobal.GetX(),vGlobal.GetY(),vGlobal.GetZ());
+
+            vLocal.Set(0,0,1);
+            vGlobal = local2Global*vLocal;
+            osg::Vec3 up(vGlobal.GetX(),vGlobal.GetY(),vGlobal.GetZ());
+            m_pCamera->setViewMatrixAsLookAt(eye,center,up);
+        }
+        if(m_bChildInsert)
+        {
+            for(auto one : m_listInsertChild)
+            {
+                auto pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(one->getOrCreateStateSet());
+                T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(pVirutlProgram,"GLSL/Visual.glsl");
+            }
+            m_listInsertChild.clear();
+            m_bChildInsert=false;
+        }
+
+        if(m_bChildRemove)
+        {
+            for(auto one : m_listInsertChild)
+            {
+                auto pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(one->getOrCreateStateSet());
+                T::m_pSceneGraph->ResouceLoader()->RemoveVirtualProgram(pVirutlProgram,"GLSL/Visual.glsl");
+            }
+            m_listInsertChild.clear();
+            m_bChildRemove=false;
+        }
         ImplSceneGroup<T>::UpdateNode();
     }
 
     /// 增加了一个节点
     void InsertChildNode(osg::Node* pNode)
     {
+        m_bChildInsert=true;
+        m_listInsertChild.push_back(pNode);
     }
 
     /// 删除了一个节点
-    void RemoveChildNode(osg::Node*)
+    void RemoveChildNode(osg::Node* pNode)
     {
+        m_bChildRemove=true;
+        m_listInsertChild.push_back(pNode);
     }
 
     /// 参数更新
@@ -63,7 +119,10 @@ protected:
 protected:
     osg::observer_ptr<osg::Camera> m_pCamera;
     osg::ref_ptr<osg::Texture2D>   m_pTexture2D;
+    std::list<osg::ref_ptr<osg::Node>> m_listInsertChild;
     bool m_bParameterChanged=false;
+    bool m_bChildInsert=false;
+    bool m_bChildRemove=false;
 };
 
 #endif // IMPL_SCENE_GROUP_H
