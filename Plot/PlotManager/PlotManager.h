@@ -37,6 +37,13 @@ public:
     ISceneNode* LoadSceneNode(const std::string& sPath,bool bRef);
 
     /**
+     * @brief 根据模型ID获取模型
+     * @param unPickID
+     * @return
+     */
+    ISceneNode* FindNodeByID(unsigned int unPickID);
+
+    /**
      * @brief FreeNoUseMapSceneNode
      */
     void FreeNoUseSceneNode();

@@ -96,6 +96,12 @@ ISceneNode *CPlotManager::LoadSceneNode(const std::string &sPath, bool bRef)
     return(nullptr);
 }
 
+/// 根据模型ID获取模型
+ISceneNode *CPlotManager::FindNodeByID(unsigned int unPickID)
+{
+    return(m_pCreateFactory->FindNodeByID(unPickID));
+}
+
 /// 强制删除没用的地图节点
 void CPlotManager::FreeNoUseSceneNode()
 {

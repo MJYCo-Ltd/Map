@@ -113,6 +113,24 @@ void CMapNodeFactory::InsertNode(ISceneNode *pNode)
     m_allCreateNode.push_back(pNode);
 }
 
+///根据模型ID获取模型
+ISceneNode *CMapNodeFactory::FindNodeByID(unsigned int unPickID)
+{
+    /// 遍历所有创建的节点
+    for(auto one : m_allCreateNode)
+    {
+        if(one->CanPick())
+        {
+            if(unPickID == one->PickID())
+            {
+                return(one);
+            }
+        }
+    }
+
+    return(nullptr);
+}
+
 /// 初始化类型
 void CMapNodeFactory::InitType(const std::string &sInterface)
 {

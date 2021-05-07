@@ -37,6 +37,13 @@ public:
      */
     void InsertNode(ISceneNode* pNode);
 
+    /**
+     * @brief 根据模型ID获取模型
+     * @param unPickID
+     * @return
+     */
+    ISceneNode* FindNodeByID(unsigned int unPickID);
+
 protected:
 
 	/**

@@ -53,6 +53,12 @@ public:
     virtual ISceneNode* LoadSceneNode(const std::string&,bool bRef=true)=0;
 
     /**
+     * @brief 根据模型ID获取模型
+     * @return
+     */
+    virtual ISceneNode* FindNodeByID(unsigned int unPickID)=0;
+
+    /**
      * @brief 强制删除不再使用的地图节点
      */
     virtual void FreeNoUseSceneNode()=0;
