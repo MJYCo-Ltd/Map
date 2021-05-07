@@ -76,10 +76,17 @@ protected:
             osg::Vec3 up(vGlobal.GetX(),vGlobal.GetY(),vGlobal.GetZ());
             m_pCamera->setViewMatrixAsLookAt(eye,center,up);
         }
+
         if(m_bChildInsert)
         {
+            osg::Matrixf renderTextureMatrix = m_pCamera->getViewMatrix() * m_pCamera->getProjectionMatrix();
             for(auto one : m_listInsertChild)
             {
+                one->getOrCreateStateSet()->setTextureAttributeAndModes(1, m_pTexture2D.get(), osg::StateAttribute::ON);
+                one->getOrCreateStateSet()->addUniform(new osg::Uniform("renderTextureMatrix", renderTextureMatrix));
+                one->getOrCreateStateSet()->addUniform(new osg::Uniform("depthTexture", 1));
+                one->getOrCreateStateSet()->addUniform(new osg::Uniform("visibleColor", osg::Vec4(0.0, 1.0, 0.0, 1.0)));
+                one->getOrCreateStateSet()->addUniform(new osg::Uniform("hiddenColor", osg::Vec4(1.0, 0.0, 0.0, 1.0)));
                 auto pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(one->getOrCreateStateSet());
                 T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(pVirutlProgram,"GLSL/Visual.glsl");
             }

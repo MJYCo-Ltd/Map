@@ -72,8 +72,6 @@ ISceneGroup *CPlotManager::CreateSceneGroup(SCENE_GROUP_TYPE emType)
     return(pGroup);
 }
 
-
-
 /// 根据接口类型创建地图节点
 ISceneNode *CPlotManager::CreateSceneNode(const std::string& csInterfaceName)
 {

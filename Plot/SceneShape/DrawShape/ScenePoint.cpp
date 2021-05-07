@@ -1,4 +1,3 @@
-#include <Inner/OsgExtern/JudgeGeometry.h>
 #include "ScenePoint.h"
 
 /// 更新形状
@@ -35,7 +34,6 @@ void CScenePoint::UpdateShape()
 /// 创建形状
 void CScenePoint::CreateShape()
 {
-    m_pGeometry->setDrawCallback(new CJudgeGeometry("SCenePoint"));
     auto pSate = m_pGeometry->getOrCreateStateSet();
     auto pNodeProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
     /// 此处应该不知道

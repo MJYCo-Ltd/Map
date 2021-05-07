@@ -8,6 +8,11 @@ class ISceneGraph;
 struct PickMessage
 {
     virtual ~PickMessage(){}
+    /**
+     * @brief  鼠标选中目标信息
+     * @param1 0 表示没有选中目标 非 0 表示选中目标ID
+     * @param2 1 表述鼠标左键按下 2 表示鼠标右键双击
+     */
     virtual void PickID(unsigned int,unsigned int){}
 };
 

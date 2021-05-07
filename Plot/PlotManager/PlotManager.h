@@ -21,7 +21,11 @@ public:
     ~CPlotManager();
 
 
+    /**
+     * @brief 根据不同的类型创建组节点
+     */
     ISceneGroup* CreateSceneGroup(SCENE_GROUP_TYPE emType);
+
     /**
      * @brief 根据接口类型创建节点
      * @param csInterfaceName
@@ -44,7 +48,7 @@ public:
     ISceneNode* FindNodeByID(unsigned int unPickID);
 
     /**
-     * @brief FreeNoUseMapSceneNode
+     * @brief 强制删除不再使用的地图节点
      */
     void FreeNoUseSceneNode();
 

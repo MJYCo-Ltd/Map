@@ -75,6 +75,7 @@ void CToolSelector::UnSelecteTool()
         m_pCurrentTool->ReleaseTool();
         delete m_pCurrentTool;
         m_pCurrentTool = nullptr;
+        m_sCurrentToolID="";
     }
 }
 
