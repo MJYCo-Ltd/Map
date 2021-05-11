@@ -47,6 +47,7 @@ public:
         CreateShape();
 
         ImplSceneNode<T>::InitNode();
+        m_pGeometry->setNodeMask(~PICK_MASK);
         ImplSceneNode<T>::SetOsgNode(m_pGeometry.get());
     }
 

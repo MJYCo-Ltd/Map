@@ -10,6 +10,8 @@
 CMapNodeCullBack::CMapNodeCullBack(ISceneGraph*pSceneGraph):m_pSceneGraph(pSceneGraph)
 {
     m_pUserData = new YtyUserData;
+    m_pPicker=new osgUtil::LineSegmentIntersector(osgUtil::Intersector::MODEL, m_stStartVertex, m_stEndVertex);
+    m_pPicker->setIntersectionLimit( osgUtil::Intersector::LIMIT_NEAREST );
     m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->SubMessage(this);
     m_pView=m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->AsOsgViewPoint()->GetOsgView();
 }
@@ -51,8 +53,50 @@ bool CMapNodeCullBack::run(osg::Object *object, osg::Object *data)
         osg::Viewport* pViewPort = m_pView->getCamera()->getViewport();
         static osg::Vec3d world;
         static osgEarth::GeoPoint geoPoint;
-        if(pMapNode->getTerrain()->getWorldCoordsUnderMouse(m_pView.get(), m_nX, pViewPort ? pViewPort->height() - m_nY : m_nY, world))
+
+        static float local_x(0.f), local_y(0.0f);
+        const osg::Camera* camera = m_pView->getCameraContainingPosition(m_nX, pViewPort ? pViewPort->height() - m_nY : m_nY,
+                                                                         local_x, local_y);
+        if (!camera)
+            camera = m_pView->getCamera();
+        // Build a matrix that transforms from the terrain/world space
+        // to either clip or window space, depending on whether we have
+        // a viewport. Is it even possible to not have a viewport? -gw
+        osg::Matrixd matrix;
+
+        // compensate for any transforms applied between terrain and camera:
+        osg::Matrix terrainRefFrame = osg::computeLocalToWorld(pMapNode->getParentalNodePaths()[0]);
+        matrix.postMult(terrainRefFrame);
+
+        matrix.postMult(camera->getViewMatrix());
+        matrix.postMult(camera->getProjectionMatrix());
+
+        double zNear = -1.0;
+        double zFar = 1.0;
+        if (camera->getViewport())
         {
+            matrix.postMult(camera->getViewport()->computeWindowMatrix());
+            zNear = 0.0, zFar = 1.0;
+        }
+
+        static osg::Matrixd inverse;
+        inverse.invert(matrix);
+
+        static osg::Vec3d vDir, vUp;
+        camera->getViewMatrixAsLookAt(m_stStartVertex, vDir, vUp);
+        m_stEndVertex = osg::Vec3d(local_x,local_y,zFar) * inverse;
+
+        m_pPicker->reset();
+        m_pPicker->setStart(m_stStartVertex);
+        m_pPicker->setEnd(m_stEndVertex);
+
+        osgUtil::IntersectionVisitor iv(m_pPicker);
+        iv.setTraversalMask(PICK_MASK);
+        pMapNode->accept(iv);
+
+        if (m_pPicker->containsIntersections())
+        {
+            world = m_pPicker->getIntersections().begin()->getWorldIntersectPoint();
             geoPoint.fromWorld(pMapNode->getMapSRS(),world);
             geoPoint.makeGeographic();
             m_pUserData->SetValue(geoPoint.x(),geoPoint.y(),geoPoint.z());

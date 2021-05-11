@@ -25,6 +25,7 @@ void CMyEarthManipulator::ChangeMap(MapType emType)
             getSettings()->setMinMaxDistance(100,DBL_MAX);
             getSettings()->setLockAzimuthWhilePanning(false);
             getSettings()->setTerrainAvoidanceEnabled(true);
+            getSettings()->setTerrainAvoidanceMinimumDistance(1);
             break;
         case MAP_2D:
             getSettings()->setMinMaxDistance(100,m_dMaxDistance);

@@ -1,7 +1,7 @@
 #ifndef INCLUDE_MAPNODE_CULL_BACK_H
 #define INCLUDE_MAPNODE_CULL_BACK_H
 #include <osg/Callback>
-#include <osg/View>
+#include <osgViewer/View>
 #include <Inner/OsgExtern/OsgExtern_Global.h>
 #include <SceneGraph/IViewPort.h>
 #include <SceneGraph/ISceneGraph.h>
@@ -55,8 +55,11 @@ protected:
     ~CMapNodeCullBack();
 protected:
     ISceneGraph* m_pSceneGraph;
-    osg::observer_ptr<osg::View> m_pView;
+    osg::observer_ptr<osgViewer::View> m_pView;
     osg::ref_ptr<YtyUserData> m_pUserData;
+    osg::ref_ptr<osgUtil::LineSegmentIntersector> m_pPicker;
+    osg::Vec3d m_stStartVertex;
+    osg::Vec3d m_stEndVertex;
     Math::CVector m_vEyePos;
     bool m_bInstelld=false;
     double m_dEyeLength;
