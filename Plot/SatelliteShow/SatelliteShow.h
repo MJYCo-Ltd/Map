@@ -12,6 +12,7 @@
 #include <Inner/Common/ImplSceneGroup.hpp>
 
 class ILine;
+class IImage;
 
 class CSatelliteShow:public ImplSceneGroup<ISatellite>
 {
@@ -95,6 +96,11 @@ public:
     /// <param name="fontFillColor">字体颜色</param>
     /// <param name="fontOutColor">字体边框颜色</param>
     void SetFont(int fontSize, SceneColor fontFillColor, SceneColor fontOutColor);
+
+    /**
+     * @brief 设置卫星图标路径
+     */
+    void SetPicPath(const std::string& sPicPath);
 protected:
     void ModelChanged();
     void NameChanged();
@@ -111,7 +117,8 @@ protected:
 
     ISceneAttitudeGroup*       m_pSatelliteAtt=nullptr;     //卫星调姿节点
     ISceneScaleGroup*          m_pSatelliteScale = nullptr; //卫星缩放节点
-    ISceneModel*               m_pModel=nullptr;
+    ISceneModel*               m_pModel=nullptr;    //3D模型
+    IImage*                    m_pImage = nullptr;  //2D图标
     ILabel*                    m_pSatelliteName=nullptr;
 
     ILine*                     m_pOribit=nullptr;
@@ -128,6 +135,7 @@ protected:
     SceneAttitude              m_satelliteCorrectAttitude;  //卫星模型矫正姿态
     SceneAttitude              m_satelliteAttitude;         //卫星姿态
 
+    std::string m_sPicPath;     //2D图标路径
 
     double                     m_dStart = 0.0;
     double                     m_dEnd = 0.0;
