@@ -157,6 +157,11 @@ void CSatelliteShow::UpdateJ2000OribitShow(double duration)
     }
 }
 
+void CSatelliteShow::SetFont(int fontSize, SceneColor fontFillColor, SceneColor fontOutColor)
+{
+    m_pSatelliteName->SetFontSize(fontSize);
+}
+
 /// 模型修改
 void CSatelliteShow::ModelChanged()
 {
@@ -178,6 +183,7 @@ void CSatelliteShow::ModelChanged()
     {
         m_pSatelliteName = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
         m_pSatelliteName->SetText(m_sName);
+        m_pSatelliteName->SetFontSize(15);
         m_pSatelliteName->SetFont("fonts/msyh.ttf");
     }
 

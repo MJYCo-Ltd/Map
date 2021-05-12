@@ -87,6 +87,14 @@ public:
     /// </summary>
     /// <param name="duration">时长</param>
     void UpdateJ2000OribitShow(double duration);
+
+    /// <summary>
+    /// 设置卫星字体
+    /// </summary>
+    /// <param name="fontSize">字体大小</param>
+    /// <param name="fontFillColor">字体颜色</param>
+    /// <param name="fontOutColor">字体边框颜色</param>
+    void SetFont(int fontSize, SceneColor fontFillColor, SceneColor fontOutColor);
 protected:
     void ModelChanged();
     void NameChanged();
