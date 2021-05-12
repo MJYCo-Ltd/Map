@@ -53,7 +53,7 @@ protected:
     double        m_dScalBit=1.;
     double        m_dMinScal=0.;
     double        m_dMaxScal=DBL_MAX;
-    bool          m_bAutoScal=true;
+    bool          m_bAutoScal=false;
 };
 
 #endif//INTERFACE_SCENE_AUTO_SCALE_GROUP_HEARDER_H

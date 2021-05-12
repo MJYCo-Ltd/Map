@@ -106,6 +106,7 @@ void MainWindow::SetSecenGraph(ISceneGraph *pSceneGraph)
         m_pSceneGraph->GetMap()->GetSpaceEnv()->ShowSpaceBackGround(false);
         m_pSceneGraph->GetMap()->OpenLight(false);
         m_pSceneGraph->GetMap()->SetShowAtmosphere(true);
+        m_pSceneGraph->GetPlot()->LoadSceneNode("E:/out.ifc.ass",false);
     }
 }
 

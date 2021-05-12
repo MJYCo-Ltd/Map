@@ -18,7 +18,11 @@ protected:
     {
         ImplSceneNode<T>::InitNode();
         m_pAutoScaleTransform = new osg::AutoTransform;
-        m_pAutoScaleTransform->setAutoScaleToScreen(true);
+        m_pAutoScaleTransform->setAutoScaleToScreen(T::m_bAutoScal);
+        m_pAutoScaleTransform->setMinimumScale(T::m_dMinScal);
+        m_pAutoScaleTransform->setMaximumScale(T::m_dMaxScal);
+        m_pAutoScaleTransform->setScale(T::m_dScalBit);
+
         ImplSceneGroup<T>::SetGroupNode(m_pAutoScaleTransform.get());
     }
 
