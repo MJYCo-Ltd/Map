@@ -186,7 +186,7 @@ void CSatelliteShow::ModelChanged()
 	auto pImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
 	pImage->SetImagePath(m_sPicPath);
 	pImage->OpenLight(false);
-	pImage->AlwasOnTop(true);
+	//pImage->AlwasOnTop(true);
 	auto pAutoImage = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
 	pAutoImage->SetAutoScal(true);
 	pAutoImage->SetMinScal(1.);
