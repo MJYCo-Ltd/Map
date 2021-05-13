@@ -113,6 +113,11 @@ public:
      * @brief 设置卫星图标路径
      */
     virtual void SetPicPath(const std::string& sPicPath) = 0;
+
+    /**
+     * @brief 设置分级显示距离
+     */
+    virtual void SetLodDis(double dis) = 0;
 protected:
     virtual ~ISatellite(){}
     virtual void ModelChanged()=0;

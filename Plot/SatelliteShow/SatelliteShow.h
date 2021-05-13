@@ -101,6 +101,11 @@ public:
      * @brief 设置卫星图标路径
      */
     void SetPicPath(const std::string& sPicPath);
+
+    /**
+     * @brief 设置分级显示距离
+     */
+    void SetLodDis(double dis);
 protected:
     void ModelChanged();
     void NameChanged();
@@ -119,6 +124,7 @@ protected:
     ISceneScaleGroup*          m_pSatelliteScale = nullptr; //卫星缩放节点
     ISceneModel*               m_pModel=nullptr;    //3D模型
     IImage*                    m_pImage = nullptr;  //2D图标
+    double                     m_lodDis = 1e6;  //分级显示距离
     ILabel*                    m_pSatelliteName=nullptr;
 
     ILine*                     m_pOribit=nullptr;

@@ -169,6 +169,11 @@ void CSatelliteShow::SetPicPath(const std::string& sPicPath)
     m_sPicPath = sPicPath;
 }
 
+void CSatelliteShow::SetLodDis(double dis)
+{
+    m_lodDis = dis;
+}
+
 /// 模型修改
 void CSatelliteShow::ModelChanged()
 {
@@ -199,7 +204,7 @@ void CSatelliteShow::ModelChanged()
     pLod->AddSceneNode(pAutoImage);
     pLod->AddSceneNode(m_pSatelliteScale);
     std::vector<float> vLevelInfo;
-    vLevelInfo.push_back(5 * 1e6);
+    vLevelInfo.push_back(m_lodDis);
     pLod->SetLevelsInfo(vLevelInfo);
     m_pSatelliteAtt->AddSceneNode(pLod);
 
