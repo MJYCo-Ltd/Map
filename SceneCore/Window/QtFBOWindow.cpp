@@ -109,7 +109,6 @@ void QtFBOWindow::InitSurface(QThread *pThread)
 uint QtFBOWindow::GetFBOTextureID()
 {
     m_bCanSwap=true;
-    OSG_WARN<<"Reday ID:"<<m_unTextureID<<std::endl;
     return(m_unTextureID);
 }
 
