@@ -5,6 +5,8 @@
 #include <Plot/SceneShape/ILine.h>
 #include <Plot/Common/ISceneAttitudeGroup.h>
 #include <Plot/Common/ISceneScaleGroup.h>
+#include <Plot/Common/ISceneLodGroup.h>
+#include <Plot/SceneShape/IImage.h>
 #include <Plot/IPlot.h>
 #include <Plot/SceneShape/ILine.h>
 #include <Plot/Common/ISceneModel.h>
@@ -20,15 +22,15 @@ void CSatelliteShow::InitNode()
     m_satelliteWgs84PV.Resize(6);
     ImplSceneGroup<ISatellite>::InitNode();
 
-    /// 加载模型
-    m_pSatellite = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
-    m_pSatelliteAtt = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
-    m_pSatelliteScale = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
+	/// 加载模型
+	m_pSatellite = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
+	m_pSatelliteAtt = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
+	m_pSatelliteScale = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
 
-    m_pSatelliteScale->SetAutoScal(false);
-    m_pSatelliteScale->SetMinScal(1);
-    m_pSatelliteAtt->AddSceneNode(m_pSatelliteScale);
-    m_pSatellite->AddSceneNode(m_pSatelliteAtt);
+	m_pSatelliteScale->SetAutoScal(false);
+	m_pSatelliteScale->SetMinScal(1);
+	//m_pSatelliteAtt->AddSceneNode(m_pSatelliteScale);
+	m_pSatellite->AddSceneNode(m_pSatelliteAtt);
 
     m_pOribit = dynamic_cast<ILine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILine"));
     AddSceneNode(m_pSatellite);
@@ -157,6 +159,21 @@ void CSatelliteShow::UpdateJ2000OribitShow(double duration)
     }
 }
 
+void CSatelliteShow::SetFont(int fontSize, SceneColor fontFillColor, SceneColor fontOutColor)
+{
+    m_pSatelliteName->SetFontSize(fontSize);
+}
+
+void CSatelliteShow::SetPicPath(const std::string& sPicPath)
+{
+    m_sPicPath = sPicPath;
+}
+
+void CSatelliteShow::SetLodDis(double dis)
+{
+    m_lodDis = dis;
+}
+
 /// 模型修改
 void CSatelliteShow::ModelChanged()
 {
@@ -170,18 +187,36 @@ void CSatelliteShow::ModelChanged()
         m_pSatelliteScale->RemoveSceneNode(m_pModel);
     }
 
+	//2D图标
+	auto pImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
+	pImage->SetImagePath(m_sPicPath);
+	pImage->OpenLight(false);
+	//pImage->AlwasOnTop(true);
+	auto pAutoImage = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
+	pAutoImage->SetAutoScal(true);
+	pAutoImage->SetMinScal(1.);
+	pAutoImage->AddSceneNode(pImage);
+    //3D模型
     m_pModel = m_pSceneGraph->GetPlot()->LoadSceneNode(m_sModelPath)->AsSceneModel();
     m_pSatelliteScale->AddSceneNode(m_pModel);
-
+    //分级显示
+    auto pLod = m_pSceneGraph->GetPlot()->CreateSceneGroup(LOD_GROUP)->AsSceneLodGroup();
+    pLod->AddSceneNode(pAutoImage);
+    pLod->AddSceneNode(m_pSatelliteScale);
+    std::vector<float> vLevelInfo;
+    vLevelInfo.push_back(m_lodDis);
+    pLod->SetLevelsInfo(vLevelInfo);
+    m_pSatelliteAtt->AddSceneNode(pLod);
 
     if(nullptr == m_pSatelliteName)
     {
         m_pSatelliteName = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
         m_pSatelliteName->SetText(m_sName);
+        m_pSatelliteName->SetFontSize(15);
         m_pSatelliteName->SetFont("fonts/msyh.ttf");
     }
 
-    m_pSatelliteName->SetAttachNode(m_pModel);
+    m_pSatelliteName->SetAttachNode(m_pSatelliteAtt);
 }
 
 ///名称修改

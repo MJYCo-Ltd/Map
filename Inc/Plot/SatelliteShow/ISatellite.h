@@ -100,6 +100,24 @@ public:
      * @brief添加传感器
      */
     virtual void AddSensor(int id, ISensor*) = 0;
+
+    /// <summary>
+    /// 设置卫星字体
+    /// </summary>
+    /// <param name="fontSize">字体大小</param>
+    /// <param name="fontFillColor">字体颜色</param>
+    /// <param name="fontOutColor">字体边框颜色</param>
+    virtual void SetFont(int fontSize, SceneColor fontFillColor, SceneColor fontOutColor) = 0;
+
+    /**
+     * @brief 设置卫星图标路径
+     */
+    virtual void SetPicPath(const std::string& sPicPath) = 0;
+
+    /**
+     * @brief 设置分级显示距离
+     */
+    virtual void SetLodDis(double dis) = 0;
 protected:
     virtual ~ISatellite(){}
     virtual void ModelChanged()=0;
