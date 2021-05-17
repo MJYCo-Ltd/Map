@@ -616,3 +616,13 @@ void MainWindow::on_action12_triggered()
     pPolygon->SetColor(color);
     m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);
 }
+
+void MainWindow::on_BeginCapture_triggered()
+{
+    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->BeginCapture();
+}
+
+void MainWindow::on_endCapture_triggered()
+{
+    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->EndCapture();
+}

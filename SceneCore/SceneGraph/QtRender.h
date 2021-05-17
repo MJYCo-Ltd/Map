@@ -63,7 +63,6 @@ private:
     void Render();
     void Release();
 private:
-    QObject* m_pSender=nullptr;
     osg::ref_ptr<osgViewer::CompositeViewer> m_pOsgViewer;    /// 多视口查看器
 };
 

@@ -19,10 +19,6 @@ protected:
 
         /// 创建贴地节点
         m_pDrapeNode = new osgEarth::DrapeableNode;
-        if(ImplMapSceneNode<T>::s_pMapNode.valid())
-        {
-            m_pDrapeNode->setMapNode(ImplMapSceneNode<T>::s_pMapNode.get());
-        }
 
         /// 增加地平面回调
         m_pCullCallBack = new osgEarth::HorizonCullCallback;
@@ -33,12 +29,6 @@ protected:
 
     void UpdateMapNode() override
     {
-        if(m_pDrapeNode.valid())
-        {
-            m_pDrapeNode->setMapNode(ImplMapSceneNode<T>::s_pMapNode.get());
-        }
-
-
         m_pCullCallBack->setEnabled(ImplMapSceneNode<T>::s_pMapNode->isGeocentric());
 
         /// 如果有几何体

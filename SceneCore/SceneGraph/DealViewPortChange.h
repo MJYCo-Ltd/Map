@@ -2,6 +2,7 @@
 #define DEALVIEWPORTCHANGE_H
 
 #include <osg/OperationThread>
+#include "QtViewPort.h"
 
 /// 视点更新回调
 class QtViewPointUpdateCallback:public osg::Callback

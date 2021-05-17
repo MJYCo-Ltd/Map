@@ -39,6 +39,8 @@
    <addaction name="action_5"/>
    <addaction name="action_6"/>
    <addaction name="action12"/>
+   <addaction name="BeginCapture"/>
+   <addaction name="endCapture"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="toolBar">
@@ -96,6 +98,16 @@
   <action name="action12">
    <property name="text">
     <string>User标绘</string>
+   </property>
+  </action>
+  <action name="BeginCapture">
+   <property name="text">
+    <string>开始截图</string>
+   </property>
+  </action>
+  <action name="endCapture">
+   <property name="text">
+    <string>结束截图</string>
    </property>
   </action>
  </widget>

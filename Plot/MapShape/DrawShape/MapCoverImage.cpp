@@ -8,8 +8,6 @@
 
 void CMapCoverImage::UpdateMapNode()
 {
-    m_pDrapeableNode->setMapNode(s_pMapNode.get());
-
     if(m_pImage.valid()) m_pImage->setMapNode(s_pMapNode.get());
 }
 

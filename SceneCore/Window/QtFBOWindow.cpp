@@ -109,6 +109,7 @@ void QtFBOWindow::InitSurface(QThread *pThread)
 uint QtFBOWindow::GetFBOTextureID()
 {
     m_bCanSwap=true;
+    OSG_WARN<<"Reday ID:"<<m_unTextureID<<std::endl;
     return(m_unTextureID);
 }
 
@@ -141,14 +142,15 @@ bool QtFBOWindow::releaseContextImplementation()
 /// 交换帧缓存区
 void QtFBOWindow::swapBuffersImplementation()
 {
-    m_pOpenglContext->functions()->glFlush();
+    m_pOpenglContext->functions()->glFinish();
+
+    m_unTextureID = m_pRenderFbo->texture();
 
     if(m_bCanSwap)
     {
         qSwap(m_pRenderFbo, m_pDisplayFbo);
         m_bCanSwap=false;
     }
-    m_unTextureID = m_pDisplayFbo->texture();
 }
 
 

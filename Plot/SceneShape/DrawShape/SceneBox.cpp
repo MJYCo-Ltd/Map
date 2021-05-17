@@ -125,7 +125,7 @@ void CSceneBox::CreateShape()
     m_pNormals->push_back(osg::Vec3(0.0f,0.0f,-1.0f));
     //TexCoord2f(1.0f,1.0f);
 
-    osg::ref_ptr<osg::DrawElements> primitives =  static_cast<osg::DrawElements*>(new osg::DrawElementsUShort(GL_TRIANGLES));
+    osg::ref_ptr<osg::DrawElements> primitives =  new osg::DrawElementsUShort(GL_TRIANGLES);
     m_pGeometry->addPrimitiveSet(primitives.get());
     m_pGeometry->setNormalArray(m_pNormals);
 

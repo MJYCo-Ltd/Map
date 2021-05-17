@@ -45,6 +45,10 @@ private slots:
 
     void on_action12_triggered();
 
+    void on_BeginCapture_triggered();
+
+    void on_endCapture_triggered();
+
 protected:
     void PlotMap();
     void LodPlot();

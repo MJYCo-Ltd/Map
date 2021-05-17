@@ -55,6 +55,11 @@ protected:
         m_pCamera->setViewport(0, 0, 1024, 1024);
         m_pCamera->attach(osg::Camera::DEPTH_BUFFER, m_pTexture2D.get());
 
+//        osg::Image* pImage = new osg::Image;
+//        pImage->allocateImage(1024,1024,1,GL_RGBA,GL_UNSIGNED_BYTE);
+//        m_pCamera->attach(osg::Camera::COLOR_BUFFER,pImage);
+//        m_pCamera->setPostDrawCallback(new MyCameraPostDrawCallback(pImage));
+
         m_pRenderTextureMatrix = new osg::Uniform(osg::Uniform::FLOAT_MAT4,"renderTextureMatrix");
         m_pTextureProjMatrix = new osg::Uniform(osg::Uniform::FLOAT_MAT4,"textureProjMatrix");
         m_pTextureViewMatrix = new osg::Uniform(osg::Uniform::FLOAT_MAT4,"textureViewMatrix");

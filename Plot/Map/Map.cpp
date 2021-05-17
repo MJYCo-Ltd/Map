@@ -477,15 +477,15 @@ void CMap::Init3DLight()
     m_pLightPosUniform->set( lightPos / lightPos.length());
 
     stateset->setDefine("OE_NUM_LIGHTS", "1");
-    auto _ellipsoidModel = m_pMap3DNode->getMapSRS()->getEllipsoid();
+    const osgEarth::Ellipsoid& _ellipsoidModel = m_pMap3DNode->getMapSRS()->getEllipsoid();
 
     osgEarth::VirtualProgram* vp = osgEarth::VirtualProgram::getOrCreate(stateset);
     vp->setName( "SimpleSky Scene Lighting");
     m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(vp,"GLSL/ONeilGround.glsl");
 
     float _innerRadius=osg::minimum(
-                _ellipsoidModel->getRadiusPolar(),
-                _ellipsoidModel->getRadiusEquator());
+                _ellipsoidModel.getRadiusPolar(),
+                _ellipsoidModel.getRadiusEquator());
     float _outerRadius = _innerRadius * 1.025f;
     // calculate and apply the uniforms:
     // TODO: perhaps we can just hard-code most of these as GLSL consts.

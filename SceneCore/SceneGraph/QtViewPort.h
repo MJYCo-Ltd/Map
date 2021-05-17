@@ -1,5 +1,6 @@
 #ifndef QT_VIEWPORT_H
 #define QT_VIEWPORT_H
+
 #include <QObject>
 #include <osgGA/TrackballManipulator>
 #include <osgGA/NodeTrackerManipulator>
@@ -13,6 +14,7 @@ class IOsgSceneNode;
 class QtViewPointUpdateCallback;
 class CMyEarthManipulator;
 class QtViewHud;
+struct CaptureImageCallback;
 
 class QtViewPort :public QObject,public IViewPort,public IOsgViewPoint
 {
@@ -72,9 +74,20 @@ public:
      * @return
      */
     IOsgViewPoint* AsOsgViewPoint()override{return(this);}
+
+    /**
+     * @brief 开始截图
+     */
+    void BeginCapture() override;
+
+    /**
+     * @brief 停止截图
+     */
+    void EndCapture() override;
 protected slots:
     void EyePos(double dX,double dY, double dZ);
     void LookDir(double dX,double dY, double dZ);
+    void CaptureImage(int nWidht, int nHeight,QByteArray info);
 protected:
     /// 立体显示模式更改
     void StereoChanged()override{m_bStereoChanged=true;}
@@ -97,6 +110,7 @@ protected:
     std::list<IViewPortMessageObserver*>           m_pAllOserver;          /// 所有的消息订阅者
     osg::ref_ptr<osgViewer::View>                  m_pView;
     osg::ref_ptr<QtViewPointUpdateCallback>        m_pCameraUpdate;
+    osg::ref_ptr<CaptureImageCallback>             m_pPostDrawBack;       /// 绘制完成的回调
     osg::ref_ptr<CMyEarthManipulator>              m_p2DEarthManipulator; ///二维地图操作器
     osg::ref_ptr<CMyEarthManipulator>              m_p3DEarthManipulator; ///三维地图操作器
     osg::ref_ptr<osgGA::TrackballManipulator>      m_pSelfManipulator;    /// 没有地图的操作器

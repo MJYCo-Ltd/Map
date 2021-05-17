@@ -68,7 +68,6 @@ bool QtRender::event(QEvent *e)
         Render();
         return true;
     case RENDER_RESIZE:
-        m_pSender = sender();
         Resize(static_cast<RenderResize*>(e));
         return true;
     case RENDER_STOP:
@@ -89,7 +88,7 @@ void QtRender::Resize(RenderResize* pRenderResize)
 void QtRender::Render()
 {
     m_pOsgViewer->frame();
-    emit(RenderAFrame());
+    emit RenderAFrame();
 }
 
 /// 释放资源

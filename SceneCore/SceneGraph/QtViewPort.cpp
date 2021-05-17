@@ -43,6 +43,33 @@ protected:
     osg::Vec3d  m_vUp;
 };
 
+/// 截屏
+struct CaptureImageCallback:public osg::Camera::DrawCallback
+{
+    CaptureImageCallback(QtViewPort* pViewPort):m_pViewPort(pViewPort)
+    {
+        m_pImage = new osg::Image;
+    }
+
+    virtual void operator () (osg::RenderInfo& renderInfo) const
+    {
+        osg::GraphicsContext* gc = renderInfo.getState()->getGraphicsContext();
+        int width =gc->getTraits()->width, height=gc->getTraits()->height;
+
+        ///读取像素信息抓图
+        m_pImage->readPixels(0 , 0 , width , height , GL_RGB , GL_UNSIGNED_BYTE);
+
+        /// 发送消息
+        QMetaObject::invokeMethod(m_pViewPort,"CaptureImage",Q_ARG(int,width),
+                                  Q_ARG(int,height),
+                                  Q_ARG(QByteArray,QByteArray::fromRawData(reinterpret_cast<const char *>(m_pImage->data()),
+                                                                           m_pImage->getTotalSizeInBytes())));
+    }
+private:
+    osg::ref_ptr<osg::Image> m_pImage;
+    QtViewPort* m_pViewPort;
+};
+
 /// 视点
 QtViewPort::QtViewPort(IRender *pRender,ISceneGraph *pSceneGraph, ProjectType emProject):
     m_pSceneGraph(pSceneGraph),
@@ -253,7 +280,6 @@ void QtViewPort::FrameEvent()
         {
             ds =new osg::DisplaySettings(*osg::DisplaySettings::instance());
             m_pView->setDisplaySettings(ds);
-//            ds->setSplitStereoAutoAdjustAspectRatio(true);
         }
 
         ds->setStereo(false);
@@ -428,6 +454,26 @@ bool QtViewPort::UnSubMessage(IViewPortMessageObserver *pObserver)
     }
 }
 
+/// 开始截图
+void QtViewPort::BeginCapture()
+{
+    if(!m_pPostDrawBack.valid())
+    {
+        m_pPostDrawBack = new CaptureImageCallback(this);
+        m_pView->getCamera()->addPostDrawCallback(m_pPostDrawBack);
+    }
+}
+
+/// 停止截图
+void QtViewPort::EndCapture()
+{
+    if(m_pPostDrawBack.valid())
+    {
+        m_pView->getCamera()->removePostDrawCallback(m_pPostDrawBack);
+        m_pPostDrawBack=nullptr;
+    }
+}
+
 /// 视点位置
 void QtViewPort::EyePos(double dX, double dY, double dZ)
 {
@@ -464,6 +510,25 @@ void QtViewPort::LookDir(double dX, double dY, double dZ)
         (*iter)->LookDir(s_stWordPos);
         iter = tmpIter;
     }
+}
+
+void QtViewPort::CaptureImage(int nWidht, int nHeight, QByteArray info)
+{
+    auto iter = m_pAllOserver.begin();
+    auto tmpIter = iter;
+
+    RGBAData* pData=new RGBAData;
+    pData->unWidth = nWidht;
+    pData->unHeight = nHeight;
+    pData->pRGBAData=reinterpret_cast<unsigned char*>(info.data());
+    for(;iter != m_pAllOserver.end();)
+    {
+        ++tmpIter;
+        (*iter)->CaptureImage(pData);
+        iter = tmpIter;
+    }
+    pData->pRGBAData=nullptr;
+    delete pData;
 }
 
 /// 移除从相机

@@ -152,7 +152,7 @@ public:
 
         m_unZonesCount = nrOfZones(level);
 
-        int *data_head = static_cast<int *>(dataSource);
+        int *data_head = reinterpret_cast<int *>(dataSource);
         m_nMagMin = qFromLittleEndian(*data_head++);
         m_nMagRange = qFromLittleEndian(*data_head++);
         m_nMagSteps = qFromLittleEndian(*data_head++);

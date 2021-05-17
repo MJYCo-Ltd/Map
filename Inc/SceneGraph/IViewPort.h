@@ -22,6 +22,11 @@ public:
      * @brief 观察点位置
      */
     virtual void LookDir(const ScenePos&){}
+
+    /**
+     * @brief 捕获到的照片
+     */
+    virtual void CaptureImage(const RGBAData*){}
 };
 
 /**
@@ -105,6 +110,16 @@ public:
      * @return
      */
     virtual IOsgViewPoint* AsOsgViewPoint(){return(nullptr);}
+
+    /**
+     * @brief 开始截图
+     */
+    virtual void BeginCapture()=0;
+
+    /**
+     * @brief 停止截图
+     */
+    virtual void EndCapture()=0;
 protected:
     virtual ~IViewPort(){}
 
