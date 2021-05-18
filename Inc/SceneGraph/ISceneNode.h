@@ -85,7 +85,7 @@ protected:
     ISceneGraph* m_pSceneGraph;
     bool         m_bVisible=true;
     bool         m_bCanPick=false;
-    bool         m_bOpenLight=true;
+    bool         m_bOpenLight=false;
     bool         m_bShowTop=false;
     unsigned int m_unID=0;
 };

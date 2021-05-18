@@ -28,26 +28,20 @@ void CPlotMap::PlotLine()
 {
     auto pLayer = m_pSceneGraph->GetMap()->CreateLayer("test");
     /// 绘制人
-//    auto m_pPersonInfo = dynamic_cast<IPersonInfo*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPersonInfo"));
-//    m_pPersonInfo->SetName("123");
     ScenePos pos;
-//    pos.fLon = 120;
-//    pos.fLat = 24;
-//    pos.fHeight = 100;
-
-//    m_pPersonInfo->SetPos(pos);
-//    pLayer->AddSceneNode(m_pPersonInfo);
 
     /// 绘制点
     auto m_pPoint = dynamic_cast<IMapPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPoint"));
     pos.fX = 121;
     pos.fY = 25;
-    pos.fZ = 0;
+    pos.fZ = 1000;
     m_pPoint->GetDrawPoint()->AddPoint(0,pos);
     SceneColor color;
     color.fG = .0f;
     color.fB = .0f;
     m_pPoint->GetDrawPoint()->SetColor(color);
+    m_pPoint->GetDrawPoint()->SetPointSize(5.0f);
+    m_pPoint->SetTerrainType(m_pPoint->RELATIVE_TERRAIN);
     pLayer->AddSceneNode(m_pPoint);
 
     /// 绘制线

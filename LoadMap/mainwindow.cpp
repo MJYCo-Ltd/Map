@@ -139,7 +139,7 @@ IImage* pImage=nullptr;
 
 void MainWindow::on_action_triggered()
 {
-    m_pSceneGraph->GetMap()->OpenLight(true);
+//    m_pSceneGraph->GetMap()->OpenLight(true);
     ScenePos pos11;
     pos11.fX = 126.0;
     pos11.fY = 45.6;

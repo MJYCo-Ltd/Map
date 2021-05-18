@@ -16,6 +16,9 @@ enum RenderEvent
     RENDER_STOP
 };
 
+/**
+ * @brief 窗口大小改变的消息
+ */
 class RenderResize:public QEvent
 {
 public:

@@ -103,7 +103,7 @@ void QtOsgWindow::paintUnderGL()
         f->glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         m_pProgram->release();
 
-        /// 需要更新的时候
+        /// 只有当拿到最新的纹理，才会发送绘制下一帧的消息
         if(m_bUpdate)
         {
             QCoreApplication::postEvent(m_pOsgRender,new QEvent(static_cast<QEvent::Type>(RENDER_START)));

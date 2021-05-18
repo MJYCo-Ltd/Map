@@ -1,11 +1,35 @@
 #include <osgDB/FileNameUtils>
 #include <osgDB/ReadFile>
 #include <osg/Group>
+#include <osg/ProxyNode>
 #include <osgEarth/Shaders>
 #include <osgEarth/MapNode>
 #include <osgEarth/Lighting>
 
 #include "ResourceLod.h"
+
+class MyProxyNode:public osg::ProxyNode
+{
+public:
+    MyProxyNode(){}
+
+    using osg::Group::addChild;
+    virtual bool addChild(Node *child)
+    {
+        std::cout<<child<<std::endl;
+        if(osg::ProxyNode::addChild(child))
+        {
+            osgEarth::GenerateGL3LightingUniforms generateUniforms;
+            child->accept(generateUniforms);
+            return(true);
+        }
+
+        return(false);
+    }
+
+protected :
+    virtual ~MyProxyNode() {}
+};
 
 /// 初始化路径
 void CResourceLod::InitPath(const std::string &csAppPath)
@@ -33,23 +57,31 @@ osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
     }
     else
     {
-        osg::Node* pNode = osgDB::readNodeFile(modelPath);
-
-        if(nullptr != pNode)
+        if(!osgDB::equalCaseInsensitive(osgDB::getFileExtension(modelPath),"earth"))
         {
-            if(!osgDB::equalCaseInsensitive(osgDB::getFileExtension(modelPath),"earth"))
+            osg::Node* pNode = osgDB::readNodeFile(modelPath);
+            if(nullptr != pNode)
             {
                 auto pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(pNode->getOrCreateStateSet());
                 LoadVirtualProgram(pVirutlProgram,"GLSL/Global.glsl");
 
-                /// 去掉 Material::apply(State&) 警告
-                osgEarth::GenerateGL3LightingUniforms generateUniforms;
-                pNode->accept(generateUniforms);
-            }
-            m_mapNode[modelPath] = pNode;
-        }
+//                osgEarth::GenerateGL3LightingUniforms generateUniforms;
+//                pNode->accept(generateUniforms);
 
-        return(pNode);
+                m_mapNode[modelPath] = pNode;
+            }
+            return(pNode);
+        }
+        else
+        {
+            osg::Node* pNode = osgDB::readNodeFile(modelPath);
+            if(nullptr != pNode)
+            {
+                m_mapNode[modelPath] = pNode;
+            }
+
+            return(pNode);
+        }
     }
 }
 

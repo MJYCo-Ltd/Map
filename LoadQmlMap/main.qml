@@ -22,7 +22,7 @@ Window
         anchors.fill: parent
         Component.onCompleted:{
             $app.setOsgItem(showOsg)
-            mainWindow.showFullScreen();
+            mainWindow.showMaximized();
         }
     }
 }
