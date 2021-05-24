@@ -2,7 +2,6 @@
 #define MYNOTIFY_H
 
 #include <osg/Notify>
-class QFile;
 
 /**
  * @brief 用于接收osg和osgEarth打印的字符串
@@ -10,7 +9,7 @@ class QFile;
 class CMyNotify:public osg::NotifyHandler
 {
 public:
-    CMyNotify();
+    CMyNotify(const std::string& sLogPath, const char *pFileName);
 
     /**
      * @brief 重写notify函数
@@ -20,7 +19,8 @@ public:
 protected:
     ~CMyNotify();
 private:
-    QFile* m_pFile;
+    FILE* m_pFile;
+    bool  m_bInit;
 };
 
 #endif // MYNOTIFY_H

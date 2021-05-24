@@ -1,10 +1,12 @@
 #include <osgDB/FileNameUtils>
 #include <osgDB/ReadFile>
 #include <osg/Group>
+#include <osgUtil/MeshOptimizers>
 #include <osg/ProxyNode>
 #include <osgEarth/Shaders>
 #include <osgEarth/MapNode>
 #include <osgEarth/Lighting>
+#include <osgEarth/Utils>
 
 #include "ResourceLod.h"
 
@@ -30,6 +32,29 @@ public:
 protected :
     virtual ~MyProxyNode() {}
 };
+
+//class DealQuads: public osg::NodeVisitor
+//{
+//public:
+//    DealQuads(){}
+
+//    void apply(osg::Geometry& geometry)
+//    {
+//        auto primitSize = geometry.getNumPrimitiveSets();
+//        for(unsigned int nIndex=0; nIndex < primitSize;++nIndex)
+//        {
+//            switch(geometry.getPrimitiveSet(nIndex)->getMode())
+//            {
+//            case osg::PrimitiveSet::QUADS:
+//                break;
+//            case osg::PrimitiveSet::POLYGON:
+//                break;
+//            case osg::PrimitiveSet::QUAD_STRIP:
+//                break;
+//            }
+//        }
+//    }
+//};
 
 /// 初始化路径
 void CResourceLod::InitPath(const std::string &csAppPath)
@@ -62,6 +87,9 @@ osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
             osg::Node* pNode = osgDB::readNodeFile(modelPath);
             if(nullptr != pNode)
             {
+                /// 对模型进行优化
+                osgUtil::optimizeMesh(pNode);
+
                 auto pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(pNode->getOrCreateStateSet());
                 LoadVirtualProgram(pVirutlProgram,"GLSL/Global.glsl");
 

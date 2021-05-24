@@ -20,10 +20,6 @@ public:
     ISceneGraphManager* GetSceneGraphManager();
 
 protected:
-    void InitSystem();
-    void InitLog();
-
-protected:
     CSceneGraphManager*  m_pSceneGraphManger;
 };
 #endif // SCENCECORE_H

@@ -1,4 +1,4 @@
-#include <QtCore>
+#include <QtCore/qsystemdetection.h>
 #include <QSurfaceFormat>
 #include <osgEarth/Registry>
 #include <osgEarth/Capabilities>
@@ -20,7 +20,6 @@ static std::string s_strData("./Data/");
 CSceneCore::CSceneCore():
     m_pSceneGraphManger(new CSceneGraphManager)
 {
-    InitSystem();
 }
 
 CSceneCore::~CSceneCore()
@@ -31,20 +30,6 @@ CSceneCore::~CSceneCore()
 ISceneGraphManager *CSceneCore::GetSceneGraphManager()
 {
     return(m_pSceneGraphManger);
-}
-
-/// 初始化系统
-void CSceneCore::InitSystem()
-{
-    InitLog();
-}
-
-void CSceneCore::InitLog()
-{
-    /// 将警告信息输出到文件中
-    osg::NotifyHandler* pHandler = new CMyNotify;
-    osg::setNotifyHandler(pHandler);
-    osgEarth::setNotifyHandler(pHandler);
 }
 
 /// 获取场景核心
@@ -82,6 +67,11 @@ bool CheckPC(char *argv[])
         s_strData = s_strPath;
         s_strData += "Data";
         s_strData += s_cSeparator;
+
+        /// 将警告信息输出到文件中
+        osg::NotifyHandler* pHandler = new CMyNotify(s_strData+"Log"+s_cSeparator,pStr);
+        osg::setNotifyHandler(pHandler);
+        osgEarth::setNotifyHandler(pHandler);
 
         osgEarth::setNotifyLevel(osg::INFO);
         const osgEarth::Capabilities& csCapabilities = osgEarth::Registry::instance()->getCapabilities();

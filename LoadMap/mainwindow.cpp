@@ -103,10 +103,9 @@ void MainWindow::SetSecenGraph(ISceneGraph *pSceneGraph)
         auto pMap= new MapObser(m_pSceneGraph);
         m_pSceneGraph->GetMainWindow()->SubMessage(pMap);
         m_pSceneGraph->GetMap()->SubMessage(pMap);
-        m_pSceneGraph->GetMap()->GetSpaceEnv()->ShowSpaceBackGround(false);
+//        m_pSceneGraph->GetMap()->GetSpaceEnv()->ShowSpaceBackGround(true);
         m_pSceneGraph->GetMap()->OpenLight(false);
         m_pSceneGraph->GetMap()->SetShowAtmosphere(true);
-        m_pSceneGraph->GetPlot()->LoadSceneNode("E:/out.ifc.ass",false);
     }
 }
 
@@ -139,7 +138,7 @@ IImage* pImage=nullptr;
 
 void MainWindow::on_action_triggered()
 {
-//    m_pSceneGraph->GetMap()->OpenLight(true);
+    m_pSceneGraph->GetMap()->OpenLight(true);
     ScenePos pos11;
     pos11.fX = 126.0;
     pos11.fY = 45.6;
