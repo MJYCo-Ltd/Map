@@ -45,6 +45,7 @@ HEADERS += \
     SceneGraph/QtViewPort.h \
     SceneGraph/ResourceLod.h \
     SceneGraph/SceneGraphManager.h \
+    SceneGraph/ViewPortEventCallback.h \
     Window/MyShader.h \
     Window/Qml/QtOsgRenderer.h \
     Window/QtFBOWindow.h \

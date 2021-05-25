@@ -1,7 +1,7 @@
 #include <algorithm>
+#include <SceneGraph/ISceneGroup.h>
 #include "SceneGraphManager.h"
 #include "QtSceneGraph.h"
-#include "SceneGraph/ISceneGroup.h"
 
 CSceneGraphManager::CSceneGraphManager()
 {
@@ -21,7 +21,6 @@ ISceneGraph *CSceneGraphManager::CreateSceneGraph(ISceneGraph::SceneGraphType ty
 {
     auto pSceneGraph = new QtSceneGraph(typeScene);
     pSceneGraph->InitSceneGraph();
-
     m_vSceneGraph.push_back(pSceneGraph);
 
     return(pSceneGraph);

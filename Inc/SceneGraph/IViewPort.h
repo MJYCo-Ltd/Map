@@ -47,20 +47,21 @@ public:
     /**
      * @brief 是否开启立体
      */
-    void OpenStereo(bool bOpen)JUDGE_EQUAL_CALL_FUNCTION(bOpen,m_bOpenStereo,StereoChanged)
+    void OpenStereo(bool bOpen)JUDGE_EQUAL_SET_TRUE(bOpen,m_bOpenStereo,m_bStereoChanged)
     bool IsOpenStereo()const{return(m_bOpenStereo);}
 
     /**
      * @brief 设置立体模式
-     * @param type
+     * @param 立体模式
      */
-    void SetStereoMode(StereoType emStereo)JUDGE_EQUAL_CALL_FUNCTION(emStereo,m_emStereo,StereoChanged);
+    void SetStereoMode(StereoType emStereo)JUDGE_EQUAL_SET_TRUE(emStereo,m_emStereo,m_bStereoChanged);
     StereoType GetStereoMode()const{return(m_emStereo);}
 
     /**
      * @brief 设置跟踪的节点
+     * @param 具体的跟踪节点
      */
-    void SetTrackNode(ISceneNode* pNode)JUDGE_EQUAL_CALL_FUNCTION(pNode,m_pTrackNode,TrackNodeChanged)
+    void SetTrackNode(ISceneNode* pNode)JUDGE_EQUAL_SET_TRUE(pNode,m_pTrackNode,m_bTraceNodeChanged)
     ISceneNode* GetTrackNode()const{return(m_pTrackNode);}
 
     /**
@@ -71,7 +72,8 @@ public:
 
     /**
      * @brief 设置视点位置
-     * @brief 到视点的时间[s]
+     * @param 视点的位置
+     * @param 到视点的时间[s]
      */
     virtual void SetViewPoint(const SceneViewPoint&,unsigned int)=0;
     virtual const SceneViewPoint& GetViewPoint()=0;
@@ -79,19 +81,19 @@ public:
     /**
      * @brief 设置home视点
      */
-    void SetHomePoint(const SceneViewPoint& stHomtPoint)JUDGE_EQUAL_CALL_FUNCTION(stHomtPoint,m_stHomePoint,HomePointChanged);
+    void SetHomePoint(const SceneViewPoint& stHomtPoint)JUDGE_EQUAL_SET_TRUE(stHomtPoint,m_stHomePoint,m_bHomePointChanged);
     const SceneViewPoint& GetHomePoint()const{return(m_stHomePoint);}
 
     /**
      * @brief 设置视口大小
      */
-    void SetViewPort(const CameraViewPort& stViewPort)JUDGE_EQUAL_CALL_FUNCTION(stViewPort,m_stViewPort,ViewPortChanged)
+    void SetViewPort(const CameraViewPort& stViewPort)JUDGE_EQUAL_SET_TRUE(stViewPort,m_stViewPort,m_bUpdateViewPort)
     const CameraViewPort& GetViewPort()const{return(m_stViewPort);}
 
     /**
      * @brief 设置投影类型
      */
-    void SetProjectType(ProjectType emType)JUDGE_EQUAL_CALL_FUNCTION(emType,m_emProjectType,ProjectTypeChanged)
+    void SetProjectType(ProjectType emType)JUDGE_EQUAL_SET_TRUE(emType,m_emProjectType,m_bUpdateProject)
     ProjectType GetProjectType()const{return(m_emProjectType);}
 
     /**
@@ -120,22 +122,22 @@ public:
      * @brief 停止截图
      */
     virtual void EndCapture()=0;
+
+    /**
+     * @brief 更新时间
+     * @param dt 距离上次调用的时间间隔[s]
+     */
+    virtual void UpdateTime(double dt)=0;
 protected:
     virtual ~IViewPort(){}
-
-    /// 投影方式更改
-    virtual void ProjectTypeChanged()=0;
-    /// 视点更改
-    virtual void HomePointChanged()=0;
-    /// 视口更改
-    virtual void ViewPortChanged()=0;
-    /// 跟踪节点更改
-    virtual void TrackNodeChanged()=0;
-    /// 立体状态更改
-    virtual void StereoChanged()=0;
 protected:
     StereoType     m_emStereo=ANAGLYPHIC;       /// 立体模式
     bool           m_bOpenStereo=false;         /// 是否开启立体
+    bool           m_bStereoChanged=false;      /// 立体模式更改
+    bool           m_bHomePointChanged=false;   /// home视点更改
+    bool           m_bTraceNodeChanged=false;   /// 跟踪节点更改
+    bool           m_bUpdateProject=false;      /// 投影方式更改
+    bool           m_bUpdateViewPort=false;     /// 视口更改
     ProjectType    m_emProjectType=Perspective; /// 投影类型
     ISceneNode*    m_pTrackNode=nullptr;
     SceneViewPoint m_stHomePoint;

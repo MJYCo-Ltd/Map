@@ -10,38 +10,8 @@
 #include "QtViewPort.h"
 #include "QtViewHud.h"
 #include "DealViewPortChange.h"
-class ViewPortEventCallback:public osgGA::GUIEventHandler
-{
-public:
-    ViewPortEventCallback(QtViewPort* pViewPort):m_pViewPort(pViewPort){}
-    virtual bool handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter& aa,
-                        osg::Object*, osg::NodeVisitor*)
-    {
-        if(ea.FRAME == ea.getEventType())
-        {
-            m_pViewPort->FrameEvent();
-            auto view = aa.asView();
-            if(nullptr != view)
-            {
+#include "ViewPortEventCallback.h"
 
-                view->getCamera()->getViewMatrixAsLookAt(m_vEye,m_vCenter,m_vUp);
-
-                QMetaObject::invokeMethod(m_pViewPort,"EyePos",Q_ARG(double,m_vEye.x()),
-                                          Q_ARG(double,m_vEye.y()),Q_ARG(double,m_vEye.z()));
-                QMetaObject::invokeMethod(m_pViewPort,"LookDir",Q_ARG(double,m_vCenter.x()),
-                                          Q_ARG(double,m_vCenter.y()),Q_ARG(double,m_vCenter.z()));
-            }
-        }
-
-        return(osgGA::GUIEventHandler::handle(ea,aa));
-    }
-
-protected:
-    QtViewPort* m_pViewPort;
-    osg::Vec3d  m_vEye;
-    osg::Vec3d  m_vCenter;
-    osg::Vec3d  m_vUp;
-};
 
 /// 截屏
 struct CaptureImageCallback:public osg::Camera::DrawCallback
@@ -71,7 +41,7 @@ private:
 };
 
 /// 视点
-QtViewPort::QtViewPort(IRender *pRender,ISceneGraph *pSceneGraph, ProjectType emProject):
+QtViewPort::QtViewPort(IRender *pRender,ISceneGraph *pSceneGraph):
     m_pSceneGraph(pSceneGraph),
     m_pRender(pRender)
 {
@@ -91,9 +61,7 @@ QtViewPort::QtViewPort(IRender *pRender,ISceneGraph *pSceneGraph, ProjectType em
         m_pView->getCamera()->setProjectionMatrixAsOrtho2D(0,C_WINDOW_WIDTH,0,C_WINDOW_HEIGHT);
         break;
     }
-    m_pCameraUpdate = new QtViewPointUpdateCallback(this);
 
-    m_pView->getCamera()->addUpdateCallback(m_pCameraUpdate);
     m_pView->addEventHandler(new osgViewer::StatsHandler);
     m_pView->addEventHandler(new ViewPortEventCallback(this));
 
@@ -112,7 +80,6 @@ QtViewPort::QtViewPort(IRender *pRender,ISceneGraph *pSceneGraph, ProjectType em
 QtViewPort::~QtViewPort()
 {
     delete m_pHud;
-    m_pView->getCamera()->removeUpdateCallback(m_pCameraUpdate);
 }
 
 /// 地图类型切换
@@ -153,65 +120,6 @@ void QtViewPort::ViewPointTypeChanged(ViewPointType emType)
     }
 
     m_emType = emType;
-}
-
-/// 设置跟踪视点
-void QtViewPort::TrackNodeChanged()
-{
-    if(m_pSceneGraph != m_pTrackNode->GetBoundSceneGraph())
-    {
-        return;
-    }
-
-    IOsgSceneNode* pOsgNode = m_pTrackNode->AsOsgSceneNode();
-
-    if(pOsgNode)
-    {
-        if(!m_pTrackManipulator.valid())
-        {
-            m_pTrackManipulator = new osgGA::NodeTrackerManipulator;
-            m_pTrackManipulator->setDistance(m_stViewPoint.fDistance);
-
-            m_emPreType = m_emType;
-            m_emType = View_Node;
-
-            m_pTrackManipulator->setTrackNode(pOsgNode->GetOsgNode());
-            m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_pTrackManipulator));
-        }
-        else
-        {
-            m_pTrackManipulator->setRotationMode(osgGA::NodeTrackerManipulator::ELEVATION_AZIM);
-            m_emPreType = m_emType;
-            m_emType = View_Node;
-            m_pTrackManipulator->setTrackNode(pOsgNode->GetOsgNode());
-        }
-    }
-    else
-    {
-        switch (m_emPreType)
-        {
-        case View_3DMap:
-            m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_p3DEarthManipulator));
-            break;
-        case View_2DMap:
-            m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_p2DEarthManipulator));
-            break;
-        default:
-            m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_pSelfManipulator));
-            break;
-        }
-    }
-}
-
-/// 视口更改
-void QtViewPort::ViewPortChanged()
-{
-    m_pCameraUpdate->UpdateViewPort();
-}
-
-void QtViewPort::ProjectTypeChanged()
-{
-    m_pCameraUpdate->UpdateProject();
 }
 
 /// 获取屏显节点
@@ -269,6 +177,7 @@ osgViewer::View *QtViewPort::GetOsgView()
     return(m_pView.get());
 }
 
+/// 每一帧都会调用一次
 void QtViewPort::FrameEvent()
 {
     if(m_bStereoChanged)
@@ -379,6 +288,7 @@ void QtViewPort::FrameEvent()
         m_bHomePointChanged=false;
     }
 
+    /// 视点更改
     if(m_bViewPointChanged)
     {
         switch(m_emType)
@@ -406,6 +316,77 @@ void QtViewPort::FrameEvent()
         }
         m_bViewPointChanged=false;
     }
+
+    /// 更新跟踪节点
+    if(m_bTraceNodeChanged)
+    {
+        if(m_pTrackNode->GetBoundSceneGraph() == m_pSceneGraph)
+        {
+            IOsgSceneNode* pOsgNode = m_pTrackNode->AsOsgSceneNode();
+
+            if(pOsgNode)
+            {
+                if(!m_pTrackManipulator.valid())
+                {
+                    m_pTrackManipulator = new osgGA::NodeTrackerManipulator;
+                    m_pTrackManipulator->setDistance(m_stViewPoint.fDistance);
+
+                    m_emPreType = m_emType;
+                    m_emType = View_Node;
+
+                    m_pTrackManipulator->setTrackNode(pOsgNode->GetOsgNode());
+                    m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_pTrackManipulator));
+                }
+                else
+                {
+                    m_pTrackManipulator->setRotationMode(osgGA::NodeTrackerManipulator::ELEVATION_AZIM);
+                    m_emPreType = m_emType;
+                    m_emType = View_Node;
+                    m_pTrackManipulator->setTrackNode(pOsgNode->GetOsgNode());
+                }
+            }
+            else
+            {
+                switch (m_emPreType)
+                {
+                case View_3DMap:
+                    m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_p3DEarthManipulator));
+                    break;
+                case View_2DMap:
+                    m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_p2DEarthManipulator));
+                    break;
+                default:
+                    m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_pSelfManipulator));
+                    break;
+                }
+            }
+        }
+    }
+
+    ///  更新视口
+    if(m_bUpdateViewPort)
+    {
+        m_pView->getCamera()->setViewport(m_stViewPort.nX,m_stViewPort.nY,m_stViewPort.nWidth,m_stViewPort.nHeight);
+        m_bUpdateViewPort = false;
+    }
+
+    /// 更新投影方式
+    if(m_bUpdateProject)
+    {
+        double dAcesip = static_cast<double>(m_stViewPort.nWidth)/static_cast<double>(m_stViewPort.nHeight);
+        switch (m_emProjectType)
+        {
+        case Ortho:
+            m_pView->getCamera()->setProjectionMatrixAsOrtho2D(m_stViewPort.nX,m_stViewPort.nWidth,m_stViewPort.nY,m_stViewPort.nHeight);
+            break;
+        case Perspective:
+            m_pView->getCamera()->setProjectionMatrixAsPerspective(45,dAcesip,0.01,100.);
+            break;
+        }
+        m_bUpdateProject = false;
+    }
+
+
 }
 
 void QtViewPort::HomeViewPoint()
@@ -472,6 +453,11 @@ void QtViewPort::EndCapture()
         m_pView->getCamera()->removePostDrawCallback(m_pPostDrawBack);
         m_pPostDrawBack=nullptr;
     }
+}
+
+/// 更新时间
+void QtViewPort::UpdateTime(double dt)
+{
 }
 
 /// 视点位置
