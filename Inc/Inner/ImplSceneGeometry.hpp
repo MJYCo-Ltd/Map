@@ -158,8 +158,27 @@ protected:
         {
             ImplSceneShape<T>::m_pVertexArray->resize(m_listAllPos.size());
 
-            std::vector<ScenePos> vAllConverdPos;
             int nIndex=0;
+
+//            if(nullptr != T::m_pDealPoint)
+//            {
+//                if(nullptr == ImplSceneShape<T>::m_pAttitudeArray)
+//                {
+//                    ImplSceneShape<T>::m_pAttitudeArray = new osg::FloatArray;
+//                    ImplSceneShape<T>::m_pGeometry->setVertexAttribArray(osg::Drawable::ATTRIBUTE_6,
+//                                                                         m_pAttitudeArray,osg::Array::BIND_PER_VERTEX);
+//                }
+
+//                ImplSceneShape<T>::m_pAttitudeArray->resize(m_listAllPos.size());
+//                for(auto one : m_listAllPos)
+//                {
+//                    ImplSceneShape<T>::m_pAttitudeArray->at(nIndex++) = one.fZ;
+//                }
+
+//            }
+
+            nIndex=0;
+            std::vector<ScenePos> vAllConverdPos;
             if(nullptr != T::m_pDealPoint && T::m_pDealPoint->Conversion(m_listAllPos,vAllConverdPos))
             {
                 for(auto one : vAllConverdPos)

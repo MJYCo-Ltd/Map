@@ -51,7 +51,15 @@ protected:
      */
     void UpdateTrerrain()
     {
-        m_pDrapeNode->setDrapingEnabled(T::m_emType==CLOSE_TERRAIN);
+        m_pDrapeNode->setDrapingEnabled(T::m_emType==T::CLOSE_TERRAIN);
+//        if(T::RELATIVE_TERRAIN == T::m_emType)
+//        {
+//            auto pSate = m_pDrapeNode->getOrCreateStateSet();
+//            pSate->setDefine("YTY_CLAMP");
+//            auto m_pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
+//            T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(m_pVirutlProgram,"GLSL/Clamp.glsl");
+//            m_pVirutlProgram->addBindAttribLocation("reletiveHight",osg::Drawable::ATTRIBUTE_6);
+//        }
         m_pGeometry->NeedUpdate();
     }
 
@@ -82,19 +90,11 @@ protected:
 
         vAllPos.resize(vOut.size());
 
-        nIndex=0;
-        for(auto one : vOut)
-        {
-            vAllPos[nIndex].fX = one.x();
-            vAllPos[nIndex].fY = one.y();
-            vAllPos[nIndex].fZ = one.z();
-            ++nIndex;
-        }
-
         /// 如果是相对位置
-        if(T::RELATIVE_TERRAIN == T::m_emType && ImplMapSceneNode<T>::s_pTerrain.valid())
+        if(T::RELATIVE_TERRAIN == T::m_emType)
         {
-            double out_hamsl;
+            /// 根据高程计算
+            double out_hamsl,dLength;
 
             osg::ref_ptr<osgEarth::Terrain> terrain;
             ImplMapSceneNode<T>::s_pTerrain.lock(terrain);
@@ -104,12 +104,20 @@ protected:
             {
                 if(terrain->getHeight(ImplMapSceneNode<T>::s_pWGS84.get(), one.fX, one.fY, &out_hamsl))
                 {
-                    vAllPos[nIndex].fZ +=out_hamsl;
+                    dLength=vOut[nIndex].length();
+                    vOut[nIndex] *= 1 + out_hamsl/dLength;
                 }
                 ++nIndex;
             }
+        }
 
-            return(0 != nIndex);
+        nIndex=0;
+        for(auto one : vOut)
+        {
+            vAllPos[nIndex].fX = one.x();
+            vAllPos[nIndex].fY = one.y();
+            vAllPos[nIndex].fZ = one.z();
+            ++nIndex;
         }
         return(true);
 

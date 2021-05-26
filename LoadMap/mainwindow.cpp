@@ -333,7 +333,7 @@ void MainWindow::on_action_triggered()
     PlotMap();
 //    LodPlot();
     TestGroup();
-    LoadQingxie();
+//    LoadQingxie();
 }
 
 void MainWindow::on_action_2_triggered()
@@ -421,16 +421,16 @@ void MainWindow::PlotMap()
     auto m_pPoint = dynamic_cast<IMapPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPoint"));
     pos.fX = 121.5;
     pos.fY = 25;
-    pos.fZ = 0;
+    pos.fZ = 100;
     m_pPoint->GetDrawPoint()->AddPoint(0,pos);
     SceneColor color;
     color.fG = .0f;
     color.fB = .0f;
     m_pPoint->GetDrawPoint()->SetColor(color);
     m_pPoint->GetDrawPoint()->SetPointSize(50.f);
-//    m_pPoint->GetDrawPoint()->SetImage("Image/ship.png");
+    m_pPoint->GetDrawPoint()->SetImage("Image/ship.png");
 //    m_pPoint->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
-//    m_pLayer->AddSceneNode(m_pPoint);
+    m_pLayer->AddSceneNode(m_pPoint);
 
     /// 绘制线
     auto m_pLine = dynamic_cast<IMapLine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLine"));
@@ -444,7 +444,7 @@ void MainWindow::PlotMap()
     m_pLine->GetDrawLine()->SetColor(color);
     m_pLine->GetDrawLine()->SetLineWidth(2.f);
 //    m_pLine->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
-//    m_pLayer->AddSceneNode(m_pLine);
+    m_pLayer->AddSceneNode(m_pLine);
 
     /// 绘制区域
     auto m_pPolygon = dynamic_cast<IMapPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPolygon"));
@@ -462,7 +462,8 @@ void MainWindow::PlotMap()
     pos.fY = 27;
     m_pPolygon->GetDrawPolygon()->AddPoint(4,pos);
     m_pPolygon->GetDrawPolygon()->SetColor(color);
-//    m_pLayer->AddSceneNode(m_pPolygon);
+//    m_pPolygon->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
+    m_pLayer->AddSceneNode(m_pPolygon);
 
     auto pMapLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     m_pLayer->AddSceneNode(pMapLocation);

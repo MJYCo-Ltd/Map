@@ -32,7 +32,7 @@ QtRender::QtRender(QObject *parent) :
 {
     m_pOsgViewer = new osgViewer::CompositeViewer;
     m_pOsgViewer->setKeyEventSetsDone(0);
-    m_pOsgViewer->setThreadingModel(osgViewer::ViewerBase::CullThreadPerCameraDrawSingle);
+    m_pOsgViewer->setThreadingModel(osgViewer::ViewerBase::SingleThreaded);
 }
 
 QtRender::~QtRender()

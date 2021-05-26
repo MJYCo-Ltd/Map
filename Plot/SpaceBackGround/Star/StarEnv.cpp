@@ -20,36 +20,6 @@
 #include "Boundary.h"
 #include "StarManager.h"
 
-/// 响应窗口变化消息
-class ResizeEventHandler:public osgGA::GUIEventHandler
-{
-public:
-    ResizeEventHandler(CStarEnv* pParent)
-        :m_pParent(pParent){}
-
-    bool handle(const osgGA::GUIEventAdapter& ea,
-        osgGA::GUIActionAdapter& aa)
-    {
-        /// 只关注窗口更新消息
-        if( osgGA::GUIEventAdapter::RESIZE == ea.getEventType())
-        {
-            double dWidth = ea.getWindowWidth();
-            double dHeight = ea.getWindowHeight();
-
-            dWidth = dWidth < 1 ? 1 : dWidth;
-            dHeight = dHeight < 1 ? 1 : dHeight;
-
-            double aspectRatio = dWidth/dHeight;
-            m_pParent->setViewport( new osg::Viewport(0, 0, dWidth, dHeight));
-            m_pParent->setProjectionMatrixAsPerspective(45.0,aspectRatio,0.00011,1.1);
-        }
-
-        return osgGA::GUIEventHandler::handle(ea,aa);
-    }
-private:
-    CStarEnv* m_pParent;
-};
-
 /// 空间背景
 CStarEnv::CStarEnv(ISceneGraph *pSceneGraph):
     m_pSceneGraph(pSceneGraph)
@@ -61,7 +31,6 @@ CStarEnv::CStarEnv(ISceneGraph *pSceneGraph):
 
     /// 不进行远近裁剪面的计算
     setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR);
-    setProjectionMatrixAsPerspective(45.0,1.0,0.00011,1.1);
 
     osg::StateSet *state = getOrCreateStateSet();
     state->setGlobalDefaults();
@@ -94,11 +63,14 @@ CStarEnv::CStarEnv(ISceneGraph *pSceneGraph):
 
 void CStarEnv::SetMainView(osgViewer::View* pMainView)
 {
-    setViewport(pMainView->getCamera()->getViewport());
     m_pMainView = pMainView;
     m_pMainCamera = m_pMainView->getCamera();
     setViewport(m_pMainCamera->getViewport());
-    m_pMainCamera->setEventCallback(new ResizeEventHandler(this));
+    setGraphicsContext(m_pMainCamera->getGraphicsContext());
+    double fovy,aspectRatio,zNear,zFar;
+    m_pMainCamera->getProjectionMatrixAsPerspective(fovy,aspectRatio,zNear,zFar);
+    setProjectionMatrixAsPerspective(fovy,aspectRatio,0.00011,1.1);
+//    m_pMainView->addSlave(this,false);
 }
 
 
