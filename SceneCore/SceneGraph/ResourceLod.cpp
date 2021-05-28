@@ -33,28 +33,6 @@ protected :
     virtual ~MyProxyNode() {}
 };
 
-//class DealQuads: public osg::NodeVisitor
-//{
-//public:
-//    DealQuads(){}
-
-//    void apply(osg::Geometry& geometry)
-//    {
-//        auto primitSize = geometry.getNumPrimitiveSets();
-//        for(unsigned int nIndex=0; nIndex < primitSize;++nIndex)
-//        {
-//            switch(geometry.getPrimitiveSet(nIndex)->getMode())
-//            {
-//            case osg::PrimitiveSet::QUADS:
-//                break;
-//            case osg::PrimitiveSet::POLYGON:
-//                break;
-//            case osg::PrimitiveSet::QUAD_STRIP:
-//                break;
-//            }
-//        }
-//    }
-//};
 
 /// 初始化路径
 void CResourceLod::InitPath(const std::string &csAppPath)

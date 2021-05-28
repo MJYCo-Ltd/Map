@@ -23,6 +23,22 @@ public:
      * @param pMapNode
      */
     virtual void UpdateMapNode(){}
+
+    /**
+     * @brief 瓦片数据更新
+     * @param key
+     */
+    virtual void TileDataChanged(const osgEarth::TileKey&){}
+
+    struct MayTerrainCallback : public osgEarth::TerrainCallback
+    {
+        MayTerrainCallback(IOsgMapSceneNode* pMapSceneNode) : m_pMapSceneNode(pMapSceneNode){}
+        void onTileUpdate(const osgEarth::TileKey& key, osg::Node*, osgEarth::TerrainCallbackContext&)
+        {
+            m_pMapSceneNode->TileDataChanged(key);
+        }
+        IOsgMapSceneNode* m_pMapSceneNode;
+    };
 protected:
     static osg::observer_ptr<osgEarth::MapNode>                s_pMapNode;
     static osg::observer_ptr<const osgEarth::SpatialReference> s_pMapSRS;

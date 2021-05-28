@@ -3,13 +3,12 @@
 #include <osgEarth/Horizon>
 #include <osgEarth/GeoPositionNode>
 #include <Plot/Map/IMapLocation.h>
-#include <Inner/ImplSceneNode.hpp>
-#include <Inner/OsgExtern/IOsgMapSceneNode.h>
+#include <Inner/ImplMapSceneNode.hpp>
 #include <Inner/OsgExtern/MyMatrixTransform.h>
-class CMapLocation:public ImplSceneNode<IMapLocation>,public IOsgMapSceneNode
+class CMapLocation:public ImplMapSceneNode<IMapLocation>
 {
 public:
-    CONSTRUCTOR(CMapLocation,ImplSceneNode<IMapLocation>)
+    CONSTRUCTOR(CMapLocation,ImplMapSceneNode<IMapLocation>)
 
     /**
      * @brief
@@ -44,12 +43,15 @@ protected:
      */
     void TerrainTypeChanged();
 
+    /**
+     * @brief 重新计算矩阵
+     */
+    void ReCalculatMatrix();
+
 protected:
-    osgEarth::GeoPoint                                m_pGeoPoint;
-    osg::observer_ptr<const osgEarth::SpatialReference> m_pMapSrs;
-    osg::observer_ptr<osgEarth::Terrain>               m_pTerrain;
-    osg::observer_ptr<CMyMatrixTransform>       m_pGeoTransform;
-    osg::ref_ptr<osgEarth::HorizonCullCallback> m_pHorizonCullBack;
+    bool                                   m_bPosChanged=false;
+    osgEarth::GeoPoint                     m_pGeoPoint;
+    osg::observer_ptr<CMyMatrixTransform>  m_pGeoTransform;
 };
 
 #endif // CMAPLOCATION_H

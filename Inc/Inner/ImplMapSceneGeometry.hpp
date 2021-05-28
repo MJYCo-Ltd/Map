@@ -1,7 +1,6 @@
 #ifndef IMPL_OSG_MAP_GEOMETRY_H
 #define IMPL_OSG_MAP_GEOMETRY_H
 #include <osgEarth/DrapeableNode>
-#include <osgEarth/Horizon>
 #include <Inner/ImplMapSceneNode.hpp>
 #include <Plot/SceneShape/IGeometry.h>
 
@@ -19,17 +18,12 @@ protected:
 
         /// 创建贴地节点
         m_pDrapeNode = new osgEarth::DrapeableNode;
-
-        /// 增加地平面回调
-        m_pCullCallBack = new osgEarth::HorizonCullCallback;
-        m_pCullCallBack->setEnabled(true);
-        m_pDrapeNode->addCullCallback(m_pCullCallBack);
-        ImplMapSceneNode<T>::SetOsgNode(m_pDrapeNode.get());
+        ImplMapSceneNode<T>::SetMapSceneNode(m_pDrapeNode.get());
     }
 
     void UpdateMapNode() override
     {
-        m_pCullCallBack->setEnabled(ImplMapSceneNode<T>::s_pMapNode->isGeocentric());
+        ImplMapSceneNode<T>::UpdateMapNode();
 
         /// 如果有几何体
         if(nullptr != m_pGeometry)
@@ -52,14 +46,6 @@ protected:
     void UpdateTrerrain()
     {
         m_pDrapeNode->setDrapingEnabled(T::m_emType==T::CLOSE_TERRAIN);
-//        if(T::RELATIVE_TERRAIN == T::m_emType)
-//        {
-//            auto pSate = m_pDrapeNode->getOrCreateStateSet();
-//            pSate->setDefine("YTY_CLAMP");
-//            auto m_pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
-//            T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(m_pVirutlProgram,"GLSL/Clamp.glsl");
-//            m_pVirutlProgram->addBindAttribLocation("reletiveHight",osg::Drawable::ATTRIBUTE_6);
-//        }
         m_pGeometry->NeedUpdate();
     }
 
@@ -125,7 +111,6 @@ protected:
 protected:
    IGeometry* m_pGeometry=nullptr;
    osg::observer_ptr<osgEarth::DrapeableNode> m_pDrapeNode;
-   osg::ref_ptr<osgEarth::HorizonCullCallback> m_pCullCallBack;
 };
 
 #endif // IMPL_OSG_MAP_SHAPE_H

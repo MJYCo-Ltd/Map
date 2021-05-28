@@ -421,7 +421,7 @@ void MainWindow::PlotMap()
     auto m_pPoint = dynamic_cast<IMapPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPoint"));
     pos.fX = 121.5;
     pos.fY = 25;
-    pos.fZ = 100;
+    pos.fZ = 0;
     m_pPoint->GetDrawPoint()->AddPoint(0,pos);
     SceneColor color;
     color.fG = .0f;
@@ -429,7 +429,7 @@ void MainWindow::PlotMap()
     m_pPoint->GetDrawPoint()->SetColor(color);
     m_pPoint->GetDrawPoint()->SetPointSize(50.f);
     m_pPoint->GetDrawPoint()->SetImage("Image/ship.png");
-//    m_pPoint->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
+    m_pPoint->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
     m_pLayer->AddSceneNode(m_pPoint);
 
     /// 绘制线
@@ -443,7 +443,7 @@ void MainWindow::PlotMap()
     m_pLine->GetDrawLine()->AddPoint(0,pos);
     m_pLine->GetDrawLine()->SetColor(color);
     m_pLine->GetDrawLine()->SetLineWidth(2.f);
-//    m_pLine->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
+    m_pLine->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
     m_pLayer->AddSceneNode(m_pLine);
 
     /// 绘制区域
@@ -462,7 +462,7 @@ void MainWindow::PlotMap()
     pos.fY = 27;
     m_pPolygon->GetDrawPolygon()->AddPoint(4,pos);
     m_pPolygon->GetDrawPolygon()->SetColor(color);
-//    m_pPolygon->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
+    m_pPolygon->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
     m_pLayer->AddSceneNode(m_pPolygon);
 
     auto pMapLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));

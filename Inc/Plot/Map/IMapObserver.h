@@ -9,20 +9,27 @@ struct IMapMessageObserver
 {
     /**
      * @brief 地图类型更改
-     *        地图都进行修改
+     * @param 地图类型
      */
     virtual void MapTypeChanged(MapType){}
 
     /**
-     * @brief 图层更改消息
+     * @brief 图层增加消息
+     * @param 增加的图层的名字 [utf-8编码]
      */
     virtual void AddLayer(const std::string&){}
+
+    /**
+     * @brief 图层移除消息
+     * @param 移除的图层的名字 [utf-8编码]
+     */
     virtual void RemoveLayer(const std::string&){}
 
     /**
      * @brief 鼠标所在的经纬度信息
-     * @arg1 经度信息 [deg](-180,180)
-     * @arg2 纬度信息 [deg][-90,90]
+     * @param 第1个参数 经度信息 [deg](-180,180)
+     * @param 第2个参数 纬度信息 [deg][-90,90]
+     * @param 第3个参数 高度信息 [m] 相对于wgs84椭球表面的高度
      */
     virtual void MousePos(float,float,float){}
 };
