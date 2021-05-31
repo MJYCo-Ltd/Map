@@ -21,9 +21,9 @@ public:
 protected:
     ~YtyUserData(){}
 protected:
-    double m_dX;
-    double m_dY;
-    double m_dZ;
+    double m_dX{};
+    double m_dY{};
+    double m_dZ{};
 };
 
 class OSGEXTERNSHARED_EXPORT CMapNodeCullBack:public osg::Callback,public IViewPortMessageObserver
@@ -54,17 +54,17 @@ public:
 protected:
     ~CMapNodeCullBack();
 protected:
-    ISceneGraph* m_pSceneGraph;
+    ISceneGraph* m_pSceneGraph{};
     osg::observer_ptr<osgViewer::View> m_pView;
     osg::ref_ptr<YtyUserData> m_pUserData;
     osg::ref_ptr<osgUtil::LineSegmentIntersector> m_pPicker;
     osg::Vec3d m_stStartVertex;
     osg::Vec3d m_stEndVertex;
     Math::CVector m_vEyePos;
-    bool m_bInstelld=false;
-    double m_dEyeLength;
-    int    m_nX=0;
-    int    m_nY=0;
+    bool m_bInstelld{false};
+    double m_dEyeLength{};
+    int    m_nX{};
+    int    m_nY{};
 };
 
 #endif

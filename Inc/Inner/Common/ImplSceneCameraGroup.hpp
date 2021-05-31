@@ -37,7 +37,7 @@ protected:
     void RenderIndexChanged()SET_TRUE_NODE_UPDATE(m_bIndexChanged)
 protected:
     osg::observer_ptr<osg::Camera> m_pCamera;
-    bool m_bIndexChanged=false;
+    bool m_bIndexChanged{false};
 };
 
 #endif // IMPL_SCENE_GROUP_H

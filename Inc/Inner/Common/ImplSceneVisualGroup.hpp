@@ -174,9 +174,9 @@ protected:
     osg::ref_ptr<osg::Uniform>     m_pDepth;
 
     std::list<osg::ref_ptr<osg::Node>> m_listInsertChild;
-    bool m_bParameterChanged=false;
-    bool m_bChildInsert=false;
-    bool m_bChildRemove=false;
+    bool m_bParameterChanged{false};
+    bool m_bChildInsert{false};
+    bool m_bChildRemove{false};
 };
 
 #endif // IMPL_SCENE_GROUP_H

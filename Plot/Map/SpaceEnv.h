@@ -44,8 +44,8 @@ public:
      */
     const Math::CVector& GetSunPos(){return(m_vSun);}
 protected:
-    ISpaceBackGround* m_pSpaceBackGround=nullptr;
-    bool              m_bShowSpaceBackGround=true;
+    ISpaceBackGround* m_pSpaceBackGround{};
+    bool              m_bShowSpaceBackGround{true};
     osg::observer_ptr<osg::Camera> m_pMainCamera;
     std::vector<Math::CVector> m_vAllPos;
     Math::CVector              m_vSun;

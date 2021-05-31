@@ -89,9 +89,9 @@ protected:
     virtual void PixelOffChanged()=0;
 
 protected:
-    ISceneNode* m_pAttachNode=nullptr;
-    bool       m_bShowBoundingBox=false;
-    float      m_fFontSize=20.f;
+    ISceneNode* m_pAttachNode{};
+    bool       m_bShowBoundingBox{false};
+    float      m_fFontSize{20.f};
     std::string m_sInfo;
     std::string m_sFont;
     ScenePos   m_stPos;

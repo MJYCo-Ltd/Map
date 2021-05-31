@@ -80,8 +80,8 @@ protected:
     }
 protected:
     osg::observer_ptr<osgEarth::Controls::Control> m_pControl;
-    bool m_bPosChanged=false;
-    bool m_bTypeChanged=false;
+    bool m_bPosChanged{false};
+    bool m_bTypeChanged{false};
 };
 
 #endif // IMPL_HUD_NODE_H

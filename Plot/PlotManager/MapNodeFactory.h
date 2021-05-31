@@ -56,8 +56,8 @@ protected:
      */
     void timerEvent(QTimerEvent *);
 private:
-    int   m_nTimerID=-1;
-    ISceneGraph* m_pSceneGraph=nullptr;
+    int   m_nTimerID{-1};
+    ISceneGraph* m_pSceneGraph{};
 
     typedef ISceneNode* (*pCreateNodeFun)(ISceneGraph*,const std::string&);
     typedef bool (*pDeleteNodeFun)(ISceneNode*);
@@ -65,8 +65,8 @@ private:
 
     struct MapSceneFun
     {
-        pCreateNodeFun pCrete=nullptr;
-        pDeleteNodeFun pDelete=nullptr;
+        pCreateNodeFun pCrete{};
+        pDeleteNodeFun pDelete{};
     };
 
     std::map<std::string,MapSceneFun> m_mapTypeFunc;

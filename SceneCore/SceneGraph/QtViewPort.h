@@ -113,15 +113,15 @@ protected:
     osg::ref_ptr<CMyEarthManipulator>              m_p3DEarthManipulator; ///三维地图操作器
     osg::ref_ptr<osgGA::TrackballManipulator>      m_pSelfManipulator;    /// 没有地图的操作器
     osg::ref_ptr<osgGA::NodeTrackerManipulator>    m_pTrackManipulator;   /// 跟踪操作器
-    ViewPointType                                  m_emType=View_Osg;
-    ViewPointType                                  m_emPreType;
-    double                                         m_dTimes=0.;
-    bool           m_bViewPointChanged=false;
+    ViewPointType                                  m_emType{View_Osg};
+    ViewPointType                                  m_emPreType{View_Osg};
+    double                                         m_dTimes{0.};
+    bool           m_bViewPointChanged{false};
     SceneViewPoint m_stViewPoint;
 
-    QtViewHud*     m_pHud=nullptr;                                         /// 屏显根节点
-    ISceneGraph*   m_pSceneGraph=nullptr;                                  /// 设置场景
-    IRender*       m_pRender;
+    QtViewHud*     m_pHud{};                                         /// 屏显根节点
+    ISceneGraph*   m_pSceneGraph{};                                  /// 设置场景
+    IRender*       m_pRender{};
 };
 
 #endif // QT_VIEWPORT_H

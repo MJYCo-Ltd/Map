@@ -29,9 +29,9 @@ private:
     void Init();
 
 private:
-    double* m_pSin;    /// sin值
-    double* m_pCos;  /// cos值
-    bool       m_bInit;    /// 是否初始化
+    double* m_pSin{};    /// sin值
+    double* m_pCos{};  /// cos值
+    bool    m_bInit{false};    /// 是否初始化
 };
 
 #endif // SNGEOMATHCOMMON_H

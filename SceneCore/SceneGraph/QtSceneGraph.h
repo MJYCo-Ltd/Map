@@ -99,13 +99,13 @@ protected:
 
 
 protected:
-    ISceneGroup*      m_pRoot=nullptr;
-    IMap*             m_pMap=nullptr;
-    QtWindow*         m_pMainWindow;
-    QQuickItem*       m_pQuickItem=nullptr;
-    QtRender*         m_pRender;
-    QThread*          m_pThread;
-    CResourceLod*     m_pResourceLod;
+    ISceneGroup*      m_pRoot{};
+    IMap*             m_pMap{};
+    QtWindow*         m_pMainWindow{};
+    QQuickItem*       m_pQuickItem{};
+    QtRender*         m_pRender{};
+    QThread*          m_pThread{};
+    CResourceLod*     m_pResourceLod{};
     std::list<QtWindow*> m_vOtherWindow;
 };
 

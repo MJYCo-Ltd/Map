@@ -119,10 +119,10 @@ protected:
         delete m_pTool;
     }
 protected:
-    bool              m_bUnderQml=false;
-    SceneGraphType    m_emType;
-    IPlot*            m_pPlot=nullptr;
-    ITool*            m_pTool=nullptr;
+    bool              m_bUnderQml{false};
+    SceneGraphType    m_emType{SCENEGRAPH_USER};
+    IPlot*            m_pPlot{};
+    ITool*            m_pTool{};
 };
 
 #endif

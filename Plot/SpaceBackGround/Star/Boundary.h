@@ -22,7 +22,7 @@ private:
 
 private:
     osg::ref_ptr<osg::Geometry> m_pBoundray;
-    bool                        m_bShowBoundary=true; /// 是否显示天区
+    bool                        m_bShowBoundary{true}; /// 是否显示天区
 };
 
 #endif // BOUNDARY_H

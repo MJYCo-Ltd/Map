@@ -10,9 +10,9 @@ const int C_WINDOW_WIDTH(100);
 struct SceneViewPoint
 {
     ScenePos stPos;
-    float fAzimuth=0.f;  /// 方位角 [deg][0~360]
-    float fElev=0.f;     /// 俯仰角 [deg][0~90]
-    float fDistance=10.f;/// 距视点位置的距离[m]
+    float fAzimuth{};  /// 方位角 [deg][0~360]
+    float fElev{};     /// 俯仰角 [deg][0~90]
+    float fDistance{10.f};/// 距视点位置的距离[m]
 
     ///重写判等操作符
     bool operator == (const SceneViewPoint& rOther) const
@@ -44,10 +44,10 @@ struct SceneViewPoint
 /// 视口位置
 struct CameraViewPort
 {
-    int nX=0;      /// 视口在屏幕X轴的位置
-    int nY=0;      /// 视口在屏幕Y轴的位置
-    int nWidth=0;  /// 视口的宽度
-    int nHeight=0; /// 视口的高度
+    int nX{};      /// 视口在屏幕X轴的位置
+    int nY{};      /// 视口在屏幕Y轴的位置
+    int nWidth{};  /// 视口的宽度
+    int nHeight{}; /// 视口的高度
 
     /// 判断两个是否相等
     bool operator == (const CameraViewPort& rOther) const

@@ -21,7 +21,7 @@ protected:
     void LayoutTypeChanged()SET_TRUE_NODE_UPDATE(m_bLayoutChanged)
 
 protected:
-    bool m_bLayoutChanged=false;
+    bool m_bLayoutChanged{false};
     osg::observer_ptr<osgEarth::Controls::Container> m_pLayout;
     std::list<IOsgSceneNode*> m_pAllChild;
 };

@@ -19,7 +19,7 @@ protected:
     virtual ~IConeSensor(){}
 
 protected:
-    double m_dAngle=5.0;
+    double m_dAngle{5.0};
 };
 
 #endif

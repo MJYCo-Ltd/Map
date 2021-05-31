@@ -64,11 +64,11 @@ protected:
      */
     void RemoveNode(IMapSceneNode*);
 private:
-    ISceneGraph*                 m_pSceneGraph=nullptr;
+    ISceneGraph*                 m_pSceneGraph{};
     osg::ref_ptr<CMapModelLayer> m_pModelLayer;
     std::string                  m_sLayerName;
-    unsigned int                 m_unID=0;
-    bool                         m_bVisible=true;
+    unsigned int                 m_unID{};
+    bool                         m_bVisible{true};
     std::map<unsigned int,IMapSceneNode*> m_mapID2Node;
 };
 

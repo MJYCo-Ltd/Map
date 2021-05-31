@@ -77,7 +77,7 @@ public:
 protected:
     virtual ~IGeometry(){}
 protected:
-    DealPoint* m_pDealPoint=nullptr;
+    DealPoint* m_pDealPoint{};
 };
 
 #endif//INTERFACE_POLYGON_HEARDER_H

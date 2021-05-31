@@ -36,16 +36,16 @@ public:
 public slots:
     void UpdateTexture();
 private:
-    ISceneGraph*   m_pSceneGraph=nullptr;/// 场景图
-    QtOsgItem*           m_pOsgItem=nullptr;
-    QtFBOWindow*         m_pFBOWindow=nullptr; /// 渲染窗口
-    QOpenGLShaderProgram* m_pProgram=nullptr;
-    QOpenGLVertexArrayObject *m_pVao=nullptr;
-    QOpenGLFramebufferObject* m_pFBO=nullptr;
-    uint                  m_unTextureID=0;
-    bool                 m_bInitOpengl=false;
-    bool                 m_bInitSys=false;
-    bool                 m_bUpdate=false;
+    ISceneGraph*   m_pSceneGraph{};/// 场景图
+    QtOsgItem*           m_pOsgItem{};
+    QtFBOWindow*         m_pFBOWindow{}; /// 渲染窗口
+    QOpenGLShaderProgram* m_pProgram{};
+    QOpenGLVertexArrayObject *m_pVao{};
+    QOpenGLFramebufferObject* m_pFBO{};
+    uint                  m_unTextureID{};
+    bool                 m_bInitOpengl{false};
+    bool                 m_bInitSys{false};
+    bool                 m_bUpdate{false};
 };
 
 #endif // QTOSGRENDERER_H

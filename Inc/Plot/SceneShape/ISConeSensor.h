@@ -23,8 +23,8 @@ public:
 protected:
     virtual ~ISConeSensor(){}
 protected:
-    double  m_dHAngle=5.;
-    double  m_dVAngle=5.;
+    double  m_dHAngle{5.};
+    double  m_dVAngle{5.};
 };
 
 #endif

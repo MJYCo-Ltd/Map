@@ -17,11 +17,11 @@ protected:
     void OutColorChanged()SET_TRUE_NODE_UPDATE(m_bOutColorChanged)
 protected:
     osg::observer_ptr<osgEarth::Controls::LabelControl> m_pLabelControl;
-    bool m_bFontSizeChanged=false;
-    bool m_bTextChanged=false;
-    bool m_bFontChanged=false;
-    bool m_bColorChanged=false;
-    bool m_bOutColorChanged=false;
+    bool m_bFontSizeChanged{false};
+    bool m_bTextChanged{false};
+    bool m_bFontChanged{false};
+    bool m_bColorChanged{false};
+    bool m_bOutColorChanged{false};
 };
 
 #endif // CHUDTEXT_H

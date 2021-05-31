@@ -10,9 +10,9 @@
  */
 struct PosValue
 {
-    double dX;
-    double dY;
-    double dValue;
+    double dX{};
+    double dY{};
+    double dValue{};
 };
 
 /**
@@ -20,10 +20,10 @@ struct PosValue
  */
 struct CoverInfo
 {
-    int    nXNum;
-    int    nYNum;
-    double dMin;
-    double dMax;
+    int    nXNum{};
+    int    nYNum{};
+    double dMin{};
+    double dMax{};
     std::vector<PosValue>vPosInfo;
 };
 
@@ -32,8 +32,8 @@ struct CoverInfo
  */
 struct CeDian
 {
-    double dLon;
-    double dLat;
+    double dLon{};
+    double dLat{};
     std::string sName;
 };
 

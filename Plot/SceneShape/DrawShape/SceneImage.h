@@ -19,9 +19,9 @@ protected:
     void UpdateShape();
 
 protected:
-    bool m_bSizeChanged=false;
-    bool m_bPathChanged=false;
-    bool m_bImageDataChanged=false;
+    bool m_bSizeChanged{false};
+    bool m_bPathChanged{false};
+    bool m_bImageDataChanged{false};
     osg::ref_ptr<osg::Vec2Array>  m_pTexCoordArray;
 };
 

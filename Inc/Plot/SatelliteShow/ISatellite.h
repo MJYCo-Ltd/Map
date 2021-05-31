@@ -128,7 +128,7 @@ protected:
     std::string m_sName;
     std::string m_sModelPath;
     SceneColor m_sColor;
-    double m_dNowMJD=0.;
+    double m_dNowMJD{};
 };
 
 #endif

@@ -41,8 +41,8 @@ protected:
     virtual ~ISceneVisualGroup(){}
     virtual void ParameterChanged()=0;
 protected:
-    double m_dFovy=45.;   /// 张角
-    double m_dAspect=1.;  /// 纵横比
+    double m_dFovy{45.};   /// 张角
+    double m_dAspect{1.};  /// 纵横比
     SceneViewPoint m_stViewPoint; ///视点位置
 };
 

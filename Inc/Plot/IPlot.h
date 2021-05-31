@@ -65,7 +65,7 @@ public:
 protected:
     virtual ~IPlot(){}
 protected:
-    ISceneGraph* m_pSceneGraph;
+    ISceneGraph* m_pSceneGraph{};
 };
 
 #endif//INTERFACE_PLOT_HEADER_H

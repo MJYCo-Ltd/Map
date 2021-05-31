@@ -13,7 +13,7 @@ protected:
     void InitNode();
     void UpdateNode();
 protected:
-    bool m_bImageChanged=false;
+    bool m_bImageChanged{false};
     osg::observer_ptr<osgEarth::Controls::ImageControl> m_pImageControl;
 };
 

@@ -91,8 +91,8 @@ protected:
     osg::observer_ptr<osg::Geometry> m_pGeometry;
     osg::ref_ptr<osg::Vec3Array>     m_pVertexArray;
     osg::ref_ptr<osg::Vec4Array>     m_pColorArray;
-    bool       m_bColorChanged=false;
-    bool       m_bShapeChanged=false;
+    bool       m_bColorChanged{false};
+    bool       m_bShapeChanged{false};
 };
 
 #endif // IMPL_SCENE_SHAPE_H

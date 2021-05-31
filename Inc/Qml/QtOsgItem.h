@@ -64,11 +64,11 @@ protected:
     void dropEvent(QDropEvent *event);
 
 private:
-    ItemType       m_emType=Item_3DMAP;  /// 创建类型
-    int            m_nFrameRate=60;      /// 帧率
-    qreal          m_rScal=1.;           /// 缩放系数
-    ISceneGraph*   m_pSceneGraph=nullptr;/// 场景图
-    QtOsgRenderer* m_pRenderer=nullptr;  /// 渲染器
+    ItemType       m_emType{Item_3DMAP};  /// 创建类型
+    int            m_nFrameRate{60};      /// 帧率
+    qreal          m_rScal{1.};           /// 缩放系数
+    ISceneGraph*   m_pSceneGraph{};/// 场景图
+    QtOsgRenderer* m_pRenderer{};  /// 渲染器
 };
 
 #endif // OSGITEM_H

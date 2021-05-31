@@ -22,7 +22,7 @@ protected:
     virtual void RenderIndexChanged()=0;
 
 protected:
-    int m_nIndex=0;
+    int m_nIndex{};
 };
 
 #endif//INTERFACE_SCENE_CAMERA_GROUP_HEARDER_H

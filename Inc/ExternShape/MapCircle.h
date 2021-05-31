@@ -47,11 +47,11 @@ protected:
     void UpdateNode();
 protected:
     ScenePos     m_stCenter;
-    ISceneGraph*  m_pSceneGraph=nullptr;
-    IMapPolygon*  m_pPolygon=nullptr;
+    ISceneGraph*  m_pSceneGraph{};
+    IMapPolygon*  m_pPolygon{};
 
-    float         m_fRadius = 0.0f;
-    int           m_nFineness = 36;
+    float         m_fRadius{};
+    int           m_nFineness{36};
 };
 
 #endif // CMAPCIRCLE_H

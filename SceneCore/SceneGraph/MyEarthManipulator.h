@@ -49,12 +49,12 @@ protected:
 private:
     MapType m_emType;
     osgEarth::GeoExtent m_extent;
-    double m_dHalfY;
-    double m_dFactor;
-    double m_dTanFvoy=DBL_MIN;
-    double m_dMaxDistance = 360000000;
-    bool   m_bCalFactor=false;
-    bool   m_bInit=false;
+    double m_dHalfY{};
+    double m_dFactor{};
+    double m_dTanFvoy{DBL_MIN};
+    double m_dMaxDistance{360000000};
+    bool   m_bCalFactor{false};
+    bool   m_bInit{false};
 };
 
 #endif // CFLATEARTHMANIPULATOR_H

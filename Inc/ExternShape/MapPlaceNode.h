@@ -73,10 +73,10 @@ protected:
 
     void TypeChanged();
 protected:
-    ISceneGraph*  m_pSceneGraph;
-    IMapLocation* m_pLocation=nullptr;
-    ISceneScreenGroup* m_pSceneScreenGroup=nullptr;
-    ILabel*       m_pLabel=nullptr;
-    IImage*       m_pImage=nullptr;
+    ISceneGraph*  m_pSceneGraph{};
+    IMapLocation* m_pLocation{};
+    ISceneScreenGroup* m_pSceneScreenGroup{};
+    ILabel*       m_pLabel{};
+    IImage*       m_pImage{};
 };
 #endif // C_PLACENODEINFO_H

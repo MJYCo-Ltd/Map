@@ -47,10 +47,10 @@ protected:
     void NeedUpdate() SET_TRUE_NODE_UPDATE(m_bShapeChanged)
 protected:
     osg::ref_ptr<osgEarth::LineDrawable> m_pLine;
-    bool                          m_bColorChanged=false;
-    bool                          m_bShapeChanged=false;
-    bool                          m_bWidthChanged=false;
-    bool                          m_bLineTypeChanged=false;
+    bool                          m_bColorChanged{false};
+    bool                          m_bShapeChanged{false};
+    bool                          m_bWidthChanged{false};
+    bool                          m_bLineTypeChanged{false};
 };
 
 #endif // CSCENELINE_H

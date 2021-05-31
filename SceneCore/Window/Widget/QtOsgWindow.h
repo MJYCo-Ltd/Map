@@ -55,16 +55,16 @@ private:
     void Init();
 
 private:
-    QThread*        m_pOsgRenderThread=nullptr;
-    QtRender*       m_pOsgRender=nullptr;
-    QtFBOWindow*    m_pFBOWindow=nullptr;
-    QOpenGLShaderProgram* m_pProgram=nullptr;
-    QOpenGLVertexArrayObject *m_pVao=nullptr;
-    uint             m_unTextureID=0;
-    int              m_nType;
-    int              m_nTimerID=0;
-    bool             m_bInit=false;
-    bool             m_bUpdate=true;
+    QThread*        m_pOsgRenderThread{};
+    QtRender*       m_pOsgRender{};
+    QtFBOWindow*    m_pFBOWindow{};
+    QOpenGLShaderProgram* m_pProgram{};
+    QOpenGLVertexArrayObject *m_pVao{};
+    uint             m_unTextureID{};
+    int              m_nType{};
+    int              m_nTimerID{};
+    bool             m_bInit{false};
+    bool             m_bUpdate{true};
 };
 
 #endif // GRAPHICSVIEW_H

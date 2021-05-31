@@ -33,8 +33,8 @@ protected:
     virtual void LineTypeChanged()=0;
     virtual ~ILine(){}
 protected:
-    unsigned int m_nLineWidth=1u;
-    LINE_TYPE    m_emLineType=SOLID_LINE;
+    unsigned int m_nLineWidth{1u};
+    LINE_TYPE    m_emLineType{SOLID_LINE};
 };
 
 #endif // INTERFACE_LINE_HEARDER_H

@@ -25,8 +25,8 @@ protected:
     virtual ~IBoxSensor(){}
 
 protected:
-    double m_dYXRatio=1.;
-    double m_dZXRatio=1.;
+    double m_dYXRatio{1.};
+    double m_dZXRatio{1.};
 };
 
 #endif

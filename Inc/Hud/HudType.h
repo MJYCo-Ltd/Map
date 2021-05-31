@@ -20,8 +20,8 @@ enum HUD_POS_TYPE
  */
 struct HudPos
 {
-    unsigned short nX=0; /// 屏幕X轴坐标
-    unsigned short nY=0; /// 屏幕Y轴坐标
+    unsigned short nX{}; /// 屏幕X轴坐标
+    unsigned short nY{}; /// 屏幕Y轴坐标
 
     bool operator == (const HudPos& rOther)const
     {

@@ -98,9 +98,9 @@ protected:
     osg::ref_ptr<osg::Uniform>             m_pFlashIntervalTime;
     osg::ref_ptr<osg::Uniform>             m_pFlashColor;
     osg::ref_ptr<osgEarth::VirtualProgram> m_pVirutlProgram;
-    bool m_bStatusChanged=false;
-    bool m_bColorChanged=false;
-    bool m_bFlashChanged=false;
+    bool m_bStatusChanged{false};
+    bool m_bColorChanged{false};
+    bool m_bFlashChanged{false};
 };
 
 #endif // IMPL_SCENE_FLASH_GROUP_H

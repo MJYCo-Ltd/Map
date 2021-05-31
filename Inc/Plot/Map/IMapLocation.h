@@ -33,7 +33,7 @@ protected:
      */
     virtual void PosChanged()=0;
 protected:
-    ISceneNode* m_pSceneNode=nullptr;
+    ISceneNode* m_pSceneNode{};
     ScenePos  m_stGeoPos;
 };
 

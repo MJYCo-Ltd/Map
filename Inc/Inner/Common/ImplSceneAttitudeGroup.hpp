@@ -91,10 +91,10 @@ protected:
     void AttitudeMatrixChanged()SET_TRUE_NODE_UPDATE(m_bAttitudeMatrixChanged)
     void PivotPosChanged()SET_TRUE_NODE_UPDATE(m_bPivotChanged)
 protected:
-    bool m_bPosChanged=false;
-    bool m_bAttitudeChanged=false;
-    bool m_bAttitudeMatrixChanged=false;
-    bool m_bPivotChanged=false;
+    bool m_bPosChanged{false};
+    bool m_bAttitudeChanged{false};
+    bool m_bAttitudeMatrixChanged{false};
+    bool m_bPivotChanged{false};
     osg::observer_ptr<CMyPositionAttitudeTransform>   m_pOsgAttitudeNode; /// 本节点
 };
 

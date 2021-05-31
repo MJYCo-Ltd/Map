@@ -147,10 +147,10 @@ protected:
     osg::ref_ptr<osg::Uniform>             m_pbIsOut;
     osg::ref_ptr<osg::Uniform>             m_pPulseStep;
     std::string m_sCurrentVirtulProgram;
-    bool       m_bDistanceChanged=false;
-    bool       m_bShowTypeChanged=false;
-    bool       m_bEffectChanged=false;
-    bool       m_bShowBackChanged=false;
+    bool       m_bDistanceChanged{false};
+    bool       m_bShowTypeChanged{false};
+    bool       m_bEffectChanged{false};
+    bool       m_bShowBackChanged{false};
 };
 
 #endif // IMPL_SCENE_SENSOR_H

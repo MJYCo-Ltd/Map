@@ -44,7 +44,7 @@ protected:
     virtual void LevelsChanged()=0;
 
 protected:
-    SCENE_NODE_CHANGE_TYPE m_emType=NODE_EYE_DISTANCE;
+    SCENE_NODE_CHANGE_TYPE m_emType{NODE_EYE_DISTANCE};
     std::vector<float>     m_vLevelInfos;
 };
 

@@ -19,8 +19,8 @@ public:
 protected:
     ~CMyNotify();
 private:
-    FILE* m_pFile;
-    bool  m_bInit;
+    FILE* m_pFile{};
+    bool  m_bInit{false};
 };
 
 #endif // MYNOTIFY_H

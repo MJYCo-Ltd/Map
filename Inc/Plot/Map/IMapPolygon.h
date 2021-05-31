@@ -19,7 +19,7 @@ public:
 protected:
     virtual ~IMapPolygon(){}
 protected:
-    IPolygon* m_pDrawPolygon=nullptr;
+    IPolygon* m_pDrawPolygon{};
 };
 
 #endif

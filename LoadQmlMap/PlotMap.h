@@ -25,8 +25,8 @@ public:
      */
     void ClearLayer();
 private:
-    ISceneGraph* m_pSceneGraph=nullptr;
-    CDealWindowsMessage* m_pDealWindowMessage=nullptr;
+    ISceneGraph* m_pSceneGraph{};
+    CDealWindowsMessage* m_pDealWindowMessage{};
 };
 
 #endif // CPLOTMAP_H

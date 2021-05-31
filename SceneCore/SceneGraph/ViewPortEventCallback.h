@@ -35,7 +35,7 @@ public:
     }
 
 protected:
-    QtViewPort* m_pViewPort;
+    QtViewPort* m_pViewPort{};
     osg::Vec3d  m_vEye;
     osg::Vec3d  m_vCenter;
     osg::Vec3d  m_vUp;

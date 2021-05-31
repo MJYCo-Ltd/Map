@@ -131,15 +131,15 @@ public:
 protected:
     virtual ~IViewPort(){}
 protected:
-    StereoType     m_emStereo=ANAGLYPHIC;       /// 立体模式
-    bool           m_bOpenStereo=false;         /// 是否开启立体
-    bool           m_bStereoChanged=false;      /// 立体模式更改
-    bool           m_bHomePointChanged=false;   /// home视点更改
-    bool           m_bTraceNodeChanged=false;   /// 跟踪节点更改
-    bool           m_bUpdateProject=false;      /// 投影方式更改
-    bool           m_bUpdateViewPort=false;     /// 视口更改
-    ProjectType    m_emProjectType=Perspective; /// 投影类型
-    ISceneNode*    m_pTrackNode=nullptr;
+    StereoType     m_emStereo{ANAGLYPHIC};       /// 立体模式
+    bool           m_bOpenStereo{false};         /// 是否开启立体
+    bool           m_bStereoChanged{false};      /// 立体模式更改
+    bool           m_bHomePointChanged{false};   /// home视点更改
+    bool           m_bTraceNodeChanged{false};   /// 跟踪节点更改
+    bool           m_bUpdateProject{false};      /// 投影方式更改
+    bool           m_bUpdateViewPort{false};     /// 视口更改
+    ProjectType    m_emProjectType{Perspective}; /// 投影类型
+    ISceneNode*    m_pTrackNode{};
     SceneViewPoint m_stHomePoint;
     CameraViewPort m_stViewPort;
 };

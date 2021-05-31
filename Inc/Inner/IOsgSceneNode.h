@@ -175,8 +175,8 @@ protected:
     osg::ref_ptr<osg::Node> m_pRootNode;
     osg::ref_ptr<COsgSceneNodeUpdateCallback> m_pUpdateCallBack;
     std::set<ISceneNodeAttach*> m_allAttach; ///依附的点
-    bool                    m_bInit=false;
-    bool                    m_bCanDelete=true;
-    bool                    m_bNeedUpdate=false;
+    bool                    m_bInit{false};
+    bool                    m_bCanDelete{true};
+    bool                    m_bNeedUpdate{false};
 };
 #endif

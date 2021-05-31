@@ -50,7 +50,7 @@ public:
 protected:
     virtual ~ITool(){}
 protected:
-    ISceneGraph* m_pSceneGraph;
+    ISceneGraph* m_pSceneGraph{};
 };
 
 #endif//INTERFACE_TOOL_HEADER_H

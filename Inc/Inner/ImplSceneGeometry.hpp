@@ -180,7 +180,7 @@ protected:
         }
     }
 protected:
-    bool                   m_bCountChanged=false;
+    bool                   m_bCountChanged{false};
     std::list<ScenePos>    m_listAllPos;
     osg::ref_ptr<osg::DrawArrays> m_pDrawArrays;
 };

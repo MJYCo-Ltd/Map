@@ -36,7 +36,7 @@ protected:
     virtual void TerrainTypeChanged()=0;
 
 protected:
-    MAP_TERRAIN m_emType=CLOSE_TERRAIN;
+    MAP_TERRAIN m_emType{CLOSE_TERRAIN};
 };
 
 #endif

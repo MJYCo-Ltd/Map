@@ -13,6 +13,7 @@ class ISceneCameraGroup;
 class ISceneAttitudeGroup;
 class ISceneScreenGroup;
 class ISceneVisualGroup;
+class INodeAbility;
 
 class ISceneModel;
 class IOsgSceneNode;
@@ -59,6 +60,15 @@ public:
     bool IsAlwasOnTop()const{return(m_bShowTop);}
 
     /**
+     * @brief 获取或者创建能力
+     * @return 指定类型的能力，如果是复合能力，则返回设置的能力中
+     *         最小值对应的能力
+     * @attention 如果传入的类型是复合类型，那么会创建出来所有的能力
+     */
+    virtual INodeAbility* GetOrCreateAbility(ABILITY_TYPE)=0;
+    virtual bool RemoveAbility(ABILITY_TYPE)=0;
+
+    /**
      * @brief 转换成想要的类型
      * @return
      */
@@ -82,12 +92,13 @@ protected:
     virtual void ShowTopChanged()=0;
 
 protected:
-    ISceneGraph* m_pSceneGraph;
-    bool         m_bVisible=true;
-    bool         m_bCanPick=false;
-    bool         m_bOpenLight=false;
-    bool         m_bShowTop=false;
-    unsigned int m_unID=0;
+    ISceneGraph* m_pSceneGraph{};
+    ABILITY_TYPE m_emAbility{NO_ABILITY};
+    bool         m_bVisible{true};
+    bool         m_bCanPick{false};
+    bool         m_bOpenLight{false};
+    bool         m_bShowTop{false};
+    unsigned int m_unID{};
 };
 
 #endif

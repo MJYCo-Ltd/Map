@@ -34,15 +34,15 @@ protected:
     void BoundingBoxColorChanged()SET_TRUE_NODE_UPDATE(m_bBoudingBoxColorChanged)
     void PixelOffChanged()SET_TRUE_NODE_UPDATE(m_bPixelOffChanged)
 protected:
-    bool m_bInfoChanged=false;
-    bool m_bBoundingBoxVisibleChanged=false;
-    bool m_bFontSizeChanged=false;
-    bool m_bFillColorChanged=false;
-    bool m_bOutColorChanged=false;
-    bool m_bBoudingBoxColorChanged=false;
-    bool m_bPosChanged=false;
-    bool m_bFontChanged=false;
-    bool m_bPixelOffChanged=false;
+    bool m_bInfoChanged{false};
+    bool m_bBoundingBoxVisibleChanged{false};
+    bool m_bFontSizeChanged{false};
+    bool m_bFillColorChanged{false};
+    bool m_bOutColorChanged{false};
+    bool m_bBoudingBoxColorChanged{false};
+    bool m_bPosChanged{false};
+    bool m_bFontChanged{false};
+    bool m_bPixelOffChanged{false};
     osg::observer_ptr<osgEarth::Text> m_pText;
 };
 

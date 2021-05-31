@@ -75,14 +75,14 @@ protected:
     virtual void FreqChanged()=0;
     virtual void ShowBackChanged()=0;
 protected:
-    bool       m_bShowLine=true;
-    bool       m_bShowFace=true;
-    bool       m_bShowBack=true;
-    double     m_dDistance=1.;
-    unsigned short m_unCount=10u;
-    unsigned short m_unFreq=1u;
-    bool       m_bOut=true;
-    EffectType m_emEffect=NO_EFFECTE;
+    bool       m_bShowLine{true};
+    bool       m_bShowFace{true};
+    bool       m_bShowBack{true};
+    double     m_dDistance{1.};
+    unsigned short m_unCount{10u};
+    unsigned short m_unFreq{1u};
+    bool       m_bOut{true};
+    EffectType m_emEffect{NO_EFFECTE};
 };
 
 #endif

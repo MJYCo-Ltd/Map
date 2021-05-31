@@ -49,7 +49,7 @@ protected:
     void ReCalculatMatrix();
 
 protected:
-    bool                                   m_bPosChanged=false;
+    bool                                   m_bPosChanged{false};
     osgEarth::GeoPoint                     m_pGeoPoint;
     osg::observer_ptr<CMyMatrixTransform>  m_pGeoTransform;
 };

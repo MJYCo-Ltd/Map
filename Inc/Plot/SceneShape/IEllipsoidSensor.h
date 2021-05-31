@@ -106,17 +106,17 @@ public:
 protected:
     virtual ~IEllipsoidSensor(){}
 protected:
-    DRAW_TYPE m_emDrawType=FULL_PART;
-    unsigned int m_unSegments=18;
-    double m_dEquator=1.; /// 赤道半径
-    double m_dPolar=1.;   /// 极半径
-    double m_dMinAzim=-1.;
-    double m_dMaxAzim=1.;
-    double m_dMinElev=-1.0;
-    double m_dMaxElev=1.;
-    double m_dHAngle=1.;
-    double m_dVAngle=1.;
-    double m_dAngle=1.;
+    DRAW_TYPE m_emDrawType{FULL_PART};
+    unsigned int m_unSegments{18u};
+    double m_dEquator{1.}; /// 赤道半径
+    double m_dPolar{1.};   /// 极半径
+    double m_dMinAzim{-1.};
+    double m_dMaxAzim{1.};
+    double m_dMinElev{-1.0};
+    double m_dMaxElev{1.};
+    double m_dHAngle{1.};
+    double m_dVAngle{1.};
+    double m_dAngle{1.};
     std::string m_sImagePath;
 };
 

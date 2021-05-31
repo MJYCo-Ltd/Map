@@ -150,11 +150,32 @@ protected:
         T::m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(pGroup,pNode,false));
     }
 
+    INodeAbility* GetOrCreateAbility(ABILITY_TYPE type)
+    {
+        if(T::m_emAbility & type)
+        {
+        }
+        return(nullptr);
+    }
+
+    bool RemoveAbility(ABILITY_TYPE type)
+    {
+        if(T::m_emAbility & type)
+        {
+            return (true);
+        }
+        else
+        {
+            return(false);
+        }
+    }
+
 protected:
-    osg::Node::NodeMask  m_preMask = 0xffffffffu;
-    bool m_bPickStateChanged=false;
-    bool m_bLightingChanged=false;
-    bool m_bShowTopChanged=false;
+    osg::Node::NodeMask  m_preMask{-1u};
+    bool m_bPickStateChanged{false};
+    bool m_bLightingChanged{false};
+    bool m_bShowTopChanged{false};
+    std::map<ABILITY_TYPE,INodeAbility*> m_mapAbility;
 };
 
 #endif // IMPL_SCENE_NODE_H

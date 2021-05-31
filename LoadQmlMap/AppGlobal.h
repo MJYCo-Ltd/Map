@@ -33,8 +33,8 @@ public:
      */
     Q_INVOKABLE void clearPlot();
 private:
-    CPlotMap*        m_pPlotMap=nullptr; /// 在map上绘制
-    QQuickItem*      m_pOsgItem=nullptr; /// 设置绑定的osg显示
+    CPlotMap*        m_pPlotMap{}; /// 在map上绘制
+    QQuickItem*      m_pOsgItem{}; /// 设置绑定的osg显示
 };
 
 

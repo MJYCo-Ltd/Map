@@ -30,7 +30,7 @@ protected:
     virtual void ImagePathChanged()=0;
 
 protected:
-    float       m_fPointSize=1.f;
+    float       m_fPointSize{1.f};
     std::string m_sImagePath;
 };
 

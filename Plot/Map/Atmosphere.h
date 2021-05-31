@@ -26,8 +26,8 @@ public:
      */
     void SetVisible(bool bVisilbe);
 protected:
-    IEllipsoidSensor*    m_pEllipsoid;
-    ISceneGraph*         m_pSceneGraph;
+    IEllipsoidSensor*    m_pEllipsoid{nullptr};
+    ISceneGraph*         m_pSceneGraph{nullptr};
 };
 
 #endif // CATMOSPHERE_H

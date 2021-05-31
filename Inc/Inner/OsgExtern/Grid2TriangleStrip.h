@@ -45,9 +45,9 @@ private:
      */
     void GenerateIndex();
 private:
-    unsigned int m_unRowCount;                  /// 行数
-    unsigned int m_unLineCount;                  /// 列数
-    bool              m_bClosure;                        /// 设置收尾是否闭合
+    unsigned int m_unRowCount{};                  /// 行数
+    unsigned int m_unLineCount{};                  /// 列数
+    bool              m_bClosure{false};                        /// 设置收尾是否闭合
     osg::MixinVector<osg::VectorGLuint> m_vIndex;  /// 所有的顶点索引的集合
 };
 

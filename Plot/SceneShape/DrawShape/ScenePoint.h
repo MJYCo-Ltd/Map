@@ -29,8 +29,8 @@ protected:
     void CreateShape() override;
 protected:
     osg::ref_ptr<osg::Uniform> m_ufPointSize;
-    bool     m_bPointSizeChanged=false;
-    bool     m_bImageChanged=false;
+    bool     m_bPointSizeChanged{false};
+    bool     m_bImageChanged{false};
 };
 
 #endif // CSCENEPOINT_H

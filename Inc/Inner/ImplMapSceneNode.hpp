@@ -108,8 +108,8 @@ protected:
     }
 
 protected:
-    bool m_bInsertIntoTerrain=false;
-    bool m_bTerrainTypeChanged=false; /// 贴地模式是否修改
+    bool m_bInsertIntoTerrain{false};
+    bool m_bTerrainTypeChanged{false}; /// 贴地模式是否修改
     osg::ref_ptr<osgEarth::TerrainCallback>     m_pTerrainCallback;
     osg::ref_ptr<osgEarth::HorizonCullCallback> m_pHorizonCullBack;
 };

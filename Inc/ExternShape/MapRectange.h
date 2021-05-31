@@ -44,8 +44,8 @@ protected:
 protected:
     ScenePos     m_stPos1;
     ScenePos     m_stPos2;
-    ISceneGraph*  m_pSceneGraph=nullptr;
-    IMapPolygon*  m_pPolygon=nullptr;
+    ISceneGraph*  m_pSceneGraph{};
+    IMapPolygon*  m_pPolygon{};
 };
 
 #endif // CMAPRECTANGE_H

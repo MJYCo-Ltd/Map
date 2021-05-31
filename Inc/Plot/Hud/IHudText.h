@@ -52,7 +52,7 @@ protected:
     virtual void OutColorChanged()=0;
 
 protected:
-    int         m_nFontSize=30;
+    int         m_nFontSize{30};
     std::string m_sText;
     std::string m_sFont;
     SceneColor  m_stColor;

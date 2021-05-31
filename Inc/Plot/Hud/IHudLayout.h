@@ -31,7 +31,7 @@ protected:
     virtual ~IHudLayout(){}
     virtual void LayoutTypeChanged()=0;
 protected:
-    LAYOUT_TYPE m_emType=LAYOUT_HORIZONTAL;
+    LAYOUT_TYPE m_emType{LAYOUT_HORIZONTAL};
 };
 
 #endif// INTERFACE_HUD_LAYOUT_HEARDER_H

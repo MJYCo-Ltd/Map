@@ -63,8 +63,8 @@ protected:
 
 protected:
     osg::observer_ptr<osg::LOD> m_pLod;
-    bool  m_bTypeChanged=false;
-    bool  m_bLevelsChanged=false;
+    bool  m_bTypeChanged{false};
+    bool  m_bLevelsChanged{false};
 };
 
 #endif // QT_OSG_SCENE_NODE_H

@@ -73,10 +73,10 @@ protected:
 
 protected:
     osg::observer_ptr<osg::AutoTransform> m_pAutoScaleTransform;
-    bool m_bScaleChanged=false;
-    bool m_bAutoScalChanged=false;
-    bool m_bMinScalChanged=false;
-    bool m_bMaxScalChanged=false;
+    bool m_bScaleChanged{false};
+    bool m_bAutoScalChanged{false};
+    bool m_bMinScalChanged{false};
+    bool m_bMaxScalChanged{false};
 };
 
 #endif // IMPL_SCENE_MODEL_H

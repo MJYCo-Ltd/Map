@@ -82,17 +82,17 @@ public:
      */
     void InitWindow();
 protected:
-    ISceneGraph*    m_pSceneGraph;
-    QThread*        m_pThread;
-    QtRender*       m_pRender;
-    QtOsgWindow*    m_pWindow=nullptr;        /// Qt的窗口
-    QWidget*        m_pWidget=nullptr;        /// 返回Widget窗口
-    QtFBOWindow*    m_pFBOWindow=nullptr;     /// osg窗口
-    QtViewPort*     m_pMainViewPoint=nullptr; ///
-    int             m_nType;
-    int             m_nFrameRate=60;          /// 帧率
-    bool            m_bInit=false;
-    bool            m_bCanChange=true;
+    ISceneGraph*    m_pSceneGraph{};
+    QThread*        m_pThread{};
+    QtRender*       m_pRender{};
+    QtOsgWindow*    m_pWindow{};        /// Qt的窗口
+    QWidget*        m_pWidget{};        /// 返回Widget窗口
+    QtFBOWindow*    m_pFBOWindow{};     /// osg窗口
+    QtViewPort*     m_pMainViewPoint{}; ///
+    int             m_nType{};
+    int             m_nFrameRate{60};          /// 帧率
+    bool            m_bInit{false};
+    bool            m_bCanChange{true};
     std::list<QtViewPort*> m_vOtherViewPoint;
     std::list<IWindowMessageObserver*> m_allWindowMessageObserver;
 };

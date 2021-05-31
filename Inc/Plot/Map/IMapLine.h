@@ -19,7 +19,7 @@ public:
 protected:
     virtual ~IMapLine(){}
 protected:
-    ILine*       m_pDrawLine=nullptr;
+    ILine*       m_pDrawLine{};
 };
 
 #endif // INTERFACE_MAP_LINE_HEARDER_H

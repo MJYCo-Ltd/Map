@@ -43,9 +43,9 @@ protected:
     virtual void FlashColorChanged()=0;
     virtual void FlashFlashChanged()=0;
 protected:
-    bool         m_bFlash=true;
+    bool         m_bFlash{true};
     SceneColor   m_stFlahColor;
-    float        m_fFlashHZ=1.f;
+    float        m_fFlashHZ{1.f};
 };
 
 #endif //INTERFACE_SCENE_FLASH_GROUP_HEARDER_H

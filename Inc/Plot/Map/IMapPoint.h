@@ -18,7 +18,7 @@ public:
 protected:
     ~IMapPoint(){}
 protected:
-    IPoint* m_pDrawPoint=nullptr;
+    IPoint* m_pDrawPoint{};
 };
 
 #endif

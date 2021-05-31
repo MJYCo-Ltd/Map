@@ -109,7 +109,7 @@ protected:
 
     }
 protected:
-   IGeometry* m_pGeometry=nullptr;
+   IGeometry* m_pGeometry{};
    osg::observer_ptr<osgEarth::DrapeableNode> m_pDrapeNode;
 };
 

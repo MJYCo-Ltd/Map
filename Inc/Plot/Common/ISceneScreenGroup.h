@@ -27,7 +27,7 @@ protected:
     virtual ~ISceneScreenGroup(){}
     virtual void AvoidChanged()=0;
 protected:
-    bool m_bAvoid=false;
+    bool m_bAvoid{false};
 };
 
 #endif //INTERFACE_SCENE_FLASH_GROUP_HEARDER_H

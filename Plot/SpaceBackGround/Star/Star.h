@@ -102,7 +102,7 @@ private:
     // Use an union so we can access the data as different types without
     // aliasing issues.
     union {
-        quint8  uint8[28];
+        quint8  uint8[28]{};
         quint16 uint16[14];
         qint32  int32[7];
     } d;
@@ -182,7 +182,7 @@ private:
     unsigned int bV :7;
     unsigned int mag:5;
     */
-    quint8 d[10];
+    quint8 d[10]{};
 };
 
 class CCatStar3
@@ -240,7 +240,7 @@ private:
     unsigned int bV     :7
     unsigned int mag  :5
     */
-    quint8 d[6];
+    quint8 d[6]{};
 };
 
 class CBinStar1
@@ -258,8 +258,8 @@ public:
     int    getMag() const{return(mag);}
     int    getHip() const{return(hip);}
 private:
-    qint32 hip,x0,x1,dx0,dx1;
-    quint32 bV,mag;
+    qint32 hip{},x0{},x1{},dx0{},dx1{};
+    quint32 bV{},mag{};
 };
 
 class CBinStar2
@@ -278,10 +278,10 @@ public:
     int    getMag(){return(mag);}
     int    getHip()const{return(UNVALID_HIP);}
 private:
-    qint32 x0,x1;
-    qint16 dx0,dx1;
-    quint8 bV;
-    quint8 mag;
+    qint32 x0{},x1{};
+    qint16 dx0{},dx1{};
+    quint8 bV{};
+    quint8 mag{};
 };
 
 class CBinStar3
@@ -298,9 +298,9 @@ public:
     int    getMag()const{return(mag);}
     int    getHip() const{return(UNVALID_HIP);}
 private:
-    qint32 x0,x1;
-    quint8 bV;
-    quint8 mag;
+    qint32 x0{},x1{};
+    quint8 bV{};
+    quint8 mag{};
 };
 
 #endif // SA_STAR_H

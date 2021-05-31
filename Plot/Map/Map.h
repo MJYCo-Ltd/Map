@@ -135,8 +135,8 @@ protected:
      */
     inline osgEarth::MapNode* GetMapNode();
 protected:
-    bool   m_bSelfRotate=true;
-    bool   m_bDateChanged=false;
+    bool   m_bSelfRotate{false};
+    bool   m_bDateChanged{false};
     std::list<IMapMessageObserver*> m_listObserver;
     osg::ref_ptr<osg::Group>   m_p2DRoot;
     osg::ref_ptr<osg::Group>   m_p3DRoot;
@@ -150,9 +150,9 @@ protected:
 
     UserLayers   m_userLayers;
     MapLayers    m_earthFileLayers;
-    MapType      m_emType=MAP_3D;
-    CSpaceEnv   *m_pSpaceEnv=nullptr;/// 空间背景
-    CAtmosphere *m_pAtmosphere=nullptr;///大气效果
+    MapType      m_emType{MAP_3D};
+    CSpaceEnv   *m_pSpaceEnv{};/// 空间背景
+    CAtmosphere *m_pAtmosphere{};///大气效果
 };
 
 #include <NoQt.h>

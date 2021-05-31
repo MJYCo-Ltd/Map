@@ -114,7 +114,7 @@ protected:
     virtual ~IMap(){}
     virtual void DateChanged()=0;
 protected:
-    double m_dMJD=0.;
+    double m_dMJD{};
 };
 
 #endif
