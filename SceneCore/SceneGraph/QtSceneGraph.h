@@ -62,7 +62,7 @@ public:
      * @brief 资源加载器
      * @return
      */
-    ILoadResouce* ResouceLoader();
+    ILoadResouce* ResouceLoader()const;
 
     /**
      * @brief 获取渲染器

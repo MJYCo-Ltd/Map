@@ -97,7 +97,7 @@ public:
      * @brief 资源加载器
      * @return
      */
-    virtual ILoadResouce* ResouceLoader()=0;
+    virtual ILoadResouce* ResouceLoader() const =0;
 
     /**
      * @brief 获取渲染器

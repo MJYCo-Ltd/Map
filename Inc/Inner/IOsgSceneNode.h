@@ -60,10 +60,12 @@ public:
     bool CanDelete() const{return(m_bCanDelete && m_bInit && m_pRootNode->referenceCount()<2);}
 
     /**
-     * @brief 判断是否需要更新
-     * @return
+     * @brief 节点更改消息
      */
-    bool NeedUpdate(){return(m_bNeedUpdate);}
+    void NodeChanged()
+    {
+        m_bNeedUpdate = true;
+    }
 
     /**
      * @brief BindAttach
@@ -119,14 +121,13 @@ public:
             one->DelFromParent(pParent);
         }
     }
-protected:
+
     /**
-     * @brief 节点更改消息
+     * @brief 是否需要更新
+     * @return
      */
-    void NodeChanged()
-    {
-        m_bNeedUpdate = true;
-    }
+    bool CanUpdate(){return(m_bNeedUpdate);}
+protected:
 
     class COsgSceneNodeUpdateCallback:public osg::Callback
     {
@@ -136,7 +137,7 @@ protected:
         /// 回调函数
         bool run(osg::Object* object, osg::Object* data)
         {
-            if(m_pSceneNode->NeedUpdate())
+            if(m_pSceneNode->CanUpdate())
             {
                 m_pSceneNode->UpdateNode();
             }

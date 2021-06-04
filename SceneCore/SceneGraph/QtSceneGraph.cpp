@@ -126,7 +126,7 @@ bool QtSceneGraph::IsQuickItem(QQuickItem *pQuickItem) const
     return(pQuickItem == m_pQuickItem);
 }
 
-ILoadResouce *QtSceneGraph::ResouceLoader()
+ILoadResouce *QtSceneGraph::ResouceLoader() const
 {
     return (m_pResourceLod);
 }

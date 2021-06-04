@@ -1,8 +1,7 @@
 #ifndef IMPL_SCENE_NODE_H
 #define IMPL_SCENE_NODE_H
-#include <iostream>
+
 #include <osg/Depth>
-#include <osgEarth/VirtualProgram>
 #include <osgEarth/Registry>
 #include <osgEarth/ObjectIndex>
 #include <osgEarth/GLUtils>
@@ -12,6 +11,8 @@
 #include <Inner/ILoadResource.h>
 #include <SceneGraph/ISceneGraph.h>
 #include <SceneGraph/SceneType.h>
+#include <SceneGraph/INodeAbility.h>
+#include <Inner/OsgExtern/NodeAbilityManager.h>
 
 /**
  *  实现ISceneNode所有的接口
@@ -107,6 +108,16 @@ protected:
             m_bShowTopChanged=false;
         }
 
+        /// 如果能力状态更改
+        if(m_bAbilityChanged)
+        {
+            for(auto one : m_mapAbility)
+            {
+                one.second->UpdateAbility();
+            }
+            m_bAbilityChanged=false;
+        }
+
         IOsgSceneNode::UpdateNode();
     }
 
@@ -139,6 +150,7 @@ protected:
     void PickStateChanged()SET_TRUE_NODE_UPDATE(m_bPickStateChanged)
     void LightChanged()SET_TRUE_NODE_UPDATE(m_bLightingChanged)
     void ShowTopChanged()SET_TRUE_NODE_UPDATE(m_bShowTopChanged)
+    void AbilityChanged() SET_TRUE_NODE_UPDATE(m_bAbilityChanged)
 
     void AddNode(osg::Group* pGroup,osg::Node* pNode)
     {
@@ -152,10 +164,22 @@ protected:
 
     INodeAbility* GetOrCreateAbility(ABILITY_TYPE type)
     {
-        if(T::m_emAbility & type)
+        INodeAbility* pReturn{nullptr};
+        if(type & FLASH_ABILITY)
         {
+            auto findOne = m_mapAbility.find(FLASH_ABILITY);
+            if(m_mapAbility.end() != findOne)
+            {
+                pReturn = findOne->second;
+            }
+            else
+            {
+                pReturn = CNodeAbilityManager::GetInstance()->CreateAbility(FLASH_ABILITY);
+                pReturn->BoundNode(this);
+                m_mapAbility.insert(std::make_pair(FLASH_ABILITY,pReturn));
+            }
         }
-        return(nullptr);
+        return(pReturn);
     }
 
     bool RemoveAbility(ABILITY_TYPE type)
@@ -175,6 +199,7 @@ protected:
     bool m_bPickStateChanged{false};
     bool m_bLightingChanged{false};
     bool m_bShowTopChanged{false};
+    bool m_bAbilityChanged{false};
     std::map<ABILITY_TYPE,INodeAbility*> m_mapAbility;
 };
 

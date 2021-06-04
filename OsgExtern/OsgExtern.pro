@@ -10,10 +10,16 @@ SDK_CONFIG *= OSG Satellite
 include(../SoftSDK.pri)
 
 SOURCES += \
+    FlashAbility.cpp \
     Grid2TriangleStrip.cpp \
     JudgeGeometry.cpp \
     MapNodeCullBack.cpp \
     MathCommon.cpp \
     MyMatrixTransform.cpp \
     MyPositionAttitudeTransform.cpp \
+    NodeAbilityManager.cpp \
     SplitRectangle.cpp
+
+HEADERS += \
+    FlashAbility.h \
+    ImplNodeAbility.hpp

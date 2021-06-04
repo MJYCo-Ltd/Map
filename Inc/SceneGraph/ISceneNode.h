@@ -69,6 +69,11 @@ public:
     virtual bool RemoveAbility(ABILITY_TYPE)=0;
 
     /**
+     * @brief 能力更改
+     */
+    virtual void AbilityChanged()=0;
+
+    /**
      * @brief 转换成想要的类型
      * @return
      */
