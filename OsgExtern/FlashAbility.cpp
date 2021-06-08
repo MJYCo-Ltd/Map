@@ -27,6 +27,8 @@ void CFlashAbility::InitAbility()
 
 void CFlashAbility::UpdateAbility()
 {
+    ImplNodeAbility<IFlashAbility>::UpdateAbility();
+
     /// 闪射状态更改
     if(m_bStatusChanged)
     {
