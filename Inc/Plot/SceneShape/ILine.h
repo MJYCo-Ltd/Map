@@ -28,13 +28,21 @@ public:
     void SetLineType(LINE_TYPE lineType)JUDGE_EQUAL_CALL_FUNCTION(lineType,m_emLineType,LineTypeChanged)
     LINE_TYPE GetLineType()const {return(m_emLineType);}
 
+    /**
+     * @brief 是否开启荧光
+     */
+    void OpenGlow(bool bOpen)JUDGE_EQUAL_CALL_FUNCTION(bOpen,m_bOpenGlow,GlowChanged)
+    bool IsOpenGlow(){return(m_bOpenGlow);}
+
 protected:
     virtual void LineWidthChanged()=0;
     virtual void LineTypeChanged()=0;
+    virtual void GlowChanged()=0;
     virtual ~ILine(){}
 protected:
     unsigned int m_nLineWidth{1u};
     LINE_TYPE    m_emLineType{SOLID_LINE};
+    bool         m_bOpenGlow{false};
 };
 
 #endif // INTERFACE_LINE_HEARDER_H

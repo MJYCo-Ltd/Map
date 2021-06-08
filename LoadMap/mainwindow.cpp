@@ -443,6 +443,7 @@ void MainWindow::PlotMap()
     m_pLine->GetDrawLine()->AddPoint(0,pos);
     m_pLine->GetDrawLine()->SetColor(color);
     m_pLine->GetDrawLine()->SetLineWidth(20.f);
+    m_pLine->GetDrawLine()->OpenGlow(true);
 //    m_pLine->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
     m_pLayer->AddSceneNode(m_pLine);
 
@@ -571,8 +572,8 @@ void MainWindow::on_action12_triggered()
 
 
     color.fR=1.0f;
-    color.fG=1.0f;
-    color.fB=1.0f;
+    color.fG=0.0f;
+    color.fB=0.0f;
 
     /// 绘制点
     auto pPoint = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
@@ -604,7 +605,8 @@ void MainWindow::on_action12_triggered()
     pPoint->AddPoint(pPoint->GetCount(),scenePos);
     pLine->AddPoint(3,scenePos);
     pSceneRoot->AddSceneNode(pLine);
-    pLine->SetLineWidth(10);
+    pLine->SetLineWidth(20);
+    pLine->OpenGlow(true);
 
     /// 绘制多边形
     auto pPolygon = dynamic_cast<IPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPolygon"));

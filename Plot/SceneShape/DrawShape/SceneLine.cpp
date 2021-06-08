@@ -108,4 +108,17 @@ void CSceneLine::UpdateShape()
         m_bWidthChanged=false;
     }
 
+    if(m_bGlowChanged)
+    {
+        if(m_bOpenGlow)
+        {
+            m_pGeometry->getOrCreateStateSet()->setDefine("LINE_GLOW");
+        }
+        else
+        {
+            m_pGeometry->getOrCreateStateSet()->removeDefine("LINE_GLOW");
+        }
+        m_bGlowChanged=false;
+    }
+
 }

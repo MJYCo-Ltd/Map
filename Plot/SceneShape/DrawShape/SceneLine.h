@@ -22,6 +22,11 @@ protected:
     void LineTypeChanged()SET_TRUE_NODE_UPDATE(m_bLineTypeChanged)
 
     /**
+     * @brief 荧光状态更改
+     */
+    void GlowChanged()SET_TRUE_NODE_UPDATE(m_bGlowChanged)
+
+    /**
      * @brief 构造模型
      */
     void CreateShape();
@@ -37,6 +42,7 @@ protected:
     osg::ref_ptr<osg::Vec3Array> m_pNextPoints;
     bool                       m_bWidthChanged{false};
     bool                       m_bLineTypeChanged{false};
+    bool                       m_bGlowChanged{false};
 };
 
 #endif // CSCENELINE_H
