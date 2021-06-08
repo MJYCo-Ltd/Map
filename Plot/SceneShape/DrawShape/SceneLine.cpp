@@ -1,65 +1,111 @@
 #include <osgEarth/CullingUtils>
 #include "SceneLine.h"
 
-void CSceneLine::InitNode()
+class COsgSceneNodeCullCallback:public osg::Callback
 {
-    osg::Group *pGroup = new osg::Group;
-    m_pLine = new osgEarth::LineDrawable;
-    m_pLine->setDataVariance(osg::Object::DYNAMIC);
-    pGroup->addChild(m_pLine);
-    pGroup->addCullCallback(new osgEarth::InstallCameraUniform);
-    m_pLine->setColor(osg::Vec4(m_stColor.fR,m_stColor.fG,m_stColor.fB,m_stColor.fA));
-    m_pLine->setLineWidth(m_nLineWidth);
-    m_pLine->setStipplePattern(0xffffu);
-    m_pLine->setLineSmooth(true);
+public:
+    COsgSceneNodeCullCallback(osg::Uniform* pUniform):cameraSize(pUniform){}
 
-    ImplSceneNode<ILine>::InitNode();
-    ImplSceneNode<ILine>::SetOsgNode(pGroup);
+    /// 回调函数
+    bool run(osg::Object* object, osg::Object* data)
+    {
+        osg::Node* node = object ? object->asNode() : 0;
+        osg::NodeVisitor* nv = data ? data->asNodeVisitor() : 0;
+        if(node && nv)
+        {
+            auto cullVisitor = nv->asCullVisitor();
+            if(cullVisitor)
+            {
+                auto pViewPort = cullVisitor->getViewport();
+
+                if(pViewPort)
+                {
+                    osg::Vec2 size(pViewPort->width(),pViewPort->height());
+                    cameraSize->set(size);
+                }
+            }
+        }
+        return traverse(object, data);
+    }
+private:
+    osg::ref_ptr<osg::Uniform> cameraSize;
+};
+
+void CSceneLine::CreateShape()
+{
+    m_nLineWidth=10;
+    m_pPreviousPoints = new osg::Vec3Array;
+    m_pPreviousPoints->setBinding(osg::Array::BIND_PER_VERTEX);
+    m_pGeometry->setVertexAttribArray(osg::Drawable::ATTRIBUTE_6, m_pPreviousPoints);
+
+    m_pNextPoints = new osg::Vec3Array;
+    m_pNextPoints->setBinding(osg::Array::BIND_PER_VERTEX);
+    m_pGeometry->setVertexAttribArray(osg::Drawable::ATTRIBUTE_7, m_pNextPoints);
+
+    auto pSate = m_pGeometry->getOrCreateStateSet();
+    auto pNodeProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
+    /// 此处应该不知道
+    if(m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(pNodeProgram,"GLSL/Line.glsl"))
+    {
+        pNodeProgram->addBindAttribLocation("Line_prev_point",osg::Drawable::ATTRIBUTE_6);
+        pNodeProgram->addBindAttribLocation("Line_next_point",osg::Drawable::ATTRIBUTE_7);
+    }
+    m_uLineWidth = pSate->getOrCreateUniform("LineWidth",osg::Uniform::FLOAT);
+    m_uLineWidth->set(static_cast<float>(m_nLineWidth));
+
+    m_uCameraSize = pSate->getOrCreateUniform("cameraSize",osg::Uniform::FLOAT_VEC2);
+
+    m_pDrawArrays=new osg::DrawArrays(GL_LINE_STRIP,0,m_pVertexArray->size());
+    m_pGeometry->addPrimitiveSet(m_pDrawArrays);
+    m_pGeometry->addCullCallback(new COsgSceneNodeCullCallback(m_uCameraSize.get()));
+
+    /// 设置默认状态
+    pSate->setMode(GL_CULL_FACE, osg::StateAttribute::OFF | osg::StateAttribute::OVERRIDE | osg::StateAttribute::PROTECTED);
 }
 
-void CSceneLine::UpdateNode()
+void CSceneLine::UpdateShape()
 {
+    if(m_bCountChanged)
+    {
+        ImplSceneGeometry<ILine>::UpdateShape();
+
+        /// 更新上一个顶点和下一个顶点的值
+        int nSize = m_listAllPos.size();
+        if(nSize > 1)
+        {
+            m_pPreviousPoints->resize(nSize);
+            m_pNextPoints->resize(nSize);
+
+            for(int i=0;i<nSize;++i)
+            {
+                if(0 == i)
+                {
+                    m_pPreviousPoints->at(0).set(m_pVertexArray->at(0));
+                    m_pNextPoints->at(0).set(m_pVertexArray->at(0));
+                }
+                else if((nSize-1)==i)
+                {
+                    m_pPreviousPoints->at(i).set(m_pVertexArray->at(i-1));
+                    m_pNextPoints->at(i-1).set(m_pVertexArray->at(i));
+                    m_pNextPoints->at(i).set(m_pVertexArray->at(i));
+                }
+                else
+                {
+                    m_pPreviousPoints->at(i).set(m_pVertexArray->at(i-1));
+                    m_pNextPoints->at(i-1).set(m_pVertexArray->at(i));
+                }
+            }
+
+            m_pPreviousPoints->dirty();
+            m_pNextPoints->dirty();
+        }
+
+    }
+
     if(m_bWidthChanged)
     {
-        m_pLine->setLineWidth(m_nLineWidth);
+        m_uLineWidth->set(static_cast<float>(m_nLineWidth));
         m_bWidthChanged=false;
     }
 
-    if(m_bColorChanged)
-    {
-        m_pLine->setColor(osg::Vec4(m_stColor.fR,m_stColor.fG,m_stColor.fB,m_stColor.fA));
-        m_bColorChanged = false;
-    }
-
-    if(m_bShapeChanged)
-    {
-        m_pLine->clear();
-
-        std::vector<ScenePos> vAllConverdPos;
-        if(nullptr != m_pDealPoint && m_pDealPoint->Conversion(m_listAllPos,vAllConverdPos))
-        {
-            for(auto one : vAllConverdPos)
-            {
-                m_pLine->pushVertex(osg::Vec3(one.fX,one.fY,one.fZ));
-            }
-        }
-        else
-        {
-            for(auto one : m_listAllPos)
-            {
-                m_pLine->pushVertex(osg::Vec3(one.fX,one.fY,one.fZ));
-            }
-        }
-        m_pLine->setFirst(0);
-        m_pLine->finish();
-        m_bShapeChanged=false;
-    }
-
-    if(m_bLineTypeChanged)
-    {
-        m_pLine->setStipplePattern(DOTTED_LINE == m_emLineType ? 0xF0F0 : 0xFFFF);
-        m_bLineTypeChanged=false;
-    }
-
-    ImplSceneNode<ILine>::UpdateNode();
 }

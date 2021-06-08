@@ -429,7 +429,7 @@ void MainWindow::PlotMap()
     m_pPoint->GetDrawPoint()->SetColor(color);
     m_pPoint->GetDrawPoint()->SetPointSize(50.f);
     m_pPoint->GetDrawPoint()->SetImage("Image/ship.png");
-    m_pPoint->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
+//    m_pPoint->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
     m_pLayer->AddSceneNode(m_pPoint);
 
     /// 绘制线
@@ -442,8 +442,8 @@ void MainWindow::PlotMap()
     pos.fY = 27;
     m_pLine->GetDrawLine()->AddPoint(0,pos);
     m_pLine->GetDrawLine()->SetColor(color);
-    m_pLine->GetDrawLine()->SetLineWidth(2.f);
-    m_pLine->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
+    m_pLine->GetDrawLine()->SetLineWidth(20.f);
+//    m_pLine->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
     m_pLayer->AddSceneNode(m_pLine);
 
     /// 绘制区域
@@ -462,8 +462,8 @@ void MainWindow::PlotMap()
     pos.fY = 27;
     m_pPolygon->GetDrawPolygon()->AddPoint(4,pos);
     m_pPolygon->GetDrawPolygon()->SetColor(color);
-    m_pPolygon->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
-    m_pLayer->AddSceneNode(m_pPolygon);
+//    m_pPolygon->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
+//    m_pLayer->AddSceneNode(m_pPolygon);
 
     auto pMapLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     m_pLayer->AddSceneNode(pMapLocation);
@@ -581,7 +581,7 @@ void MainWindow::on_action12_triggered()
 
 
     pPoint->SetColor(color);
-    pSceneRoot->AddSceneNode(pPoint);
+//    pSceneRoot->AddSceneNode(pPoint);
 
     /// 绘制线
     auto pLine = dynamic_cast<ILine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILine"));
@@ -604,11 +604,11 @@ void MainWindow::on_action12_triggered()
     pPoint->AddPoint(pPoint->GetCount(),scenePos);
     pLine->AddPoint(3,scenePos);
     pSceneRoot->AddSceneNode(pLine);
-    pLine->SetLineWidth(2);
+    pLine->SetLineWidth(10);
 
     /// 绘制多边形
     auto pPolygon = dynamic_cast<IPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPolygon"));
-    pSceneRoot->AddSceneNode(pPolygon);
+//    pSceneRoot->AddSceneNode(pPolygon);
     pPolygon->SetMultPos(pLine->GetMulPos());
     scenePos.fX=50.f;
     scenePos.fY=50.f;

@@ -150,32 +150,47 @@ public:
     }
 protected:
 
+    /**
+     * @brief 外部调用强制更新
+     */
     void NeedUpdate() SET_TRUE_SHAPE_UPDATE(m_bCountChanged)
+
+    /**
+     * @brief 更新点信息
+     */
+    void UpdateVetrix()
+    {
+        ImplSceneShape<T>::m_pVertexArray->resize(m_listAllPos.size());
+
+        int nIndex=0;
+
+        std::vector<ScenePos> vAllConverdPos;
+        if(nullptr != T::m_pDealPoint && T::m_pDealPoint->Conversion(m_listAllPos,vAllConverdPos))
+        {
+            for(auto one : vAllConverdPos)
+            {
+                ImplSceneShape<T>::m_pVertexArray->at(nIndex++).set(one.fX,one.fY,one.fZ);
+            }
+        }
+        else
+        {
+            for(auto one : m_listAllPos)
+            {
+                ImplSceneShape<T>::m_pVertexArray->at(nIndex++).set(one.fX,one.fY,one.fZ);
+            }
+        }
+    }
 
     void UpdateShape()
     {
         if(m_bCountChanged)
         {
-            ImplSceneShape<T>::m_pVertexArray->resize(m_listAllPos.size());
-
-            int nIndex=0;
-
-            std::vector<ScenePos> vAllConverdPos;
-            if(nullptr != T::m_pDealPoint && T::m_pDealPoint->Conversion(m_listAllPos,vAllConverdPos))
+            UpdateVetrix();
+            if(m_pDrawArrays.valid())
             {
-                for(auto one : vAllConverdPos)
-                {
-                    ImplSceneShape<T>::m_pVertexArray->at(nIndex++).set(one.fX,one.fY,one.fZ);
-                }
+                m_pDrawArrays->setCount(ImplSceneShape<T>::m_pVertexArray->size());
             }
-            else
-            {
-                for(auto one : m_listAllPos)
-                {
-                    ImplSceneShape<T>::m_pVertexArray->at(nIndex++).set(one.fX,one.fY,one.fZ);
-                }
-            }
-            m_pDrawArrays->setCount(ImplSceneShape<T>::m_pVertexArray->size());
+
             m_bCountChanged=false;
         }
     }

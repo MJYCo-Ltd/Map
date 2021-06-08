@@ -17,40 +17,26 @@ protected:
     void LineWidthChanged()SET_TRUE_NODE_UPDATE(m_bWidthChanged)
 
     /**
-     * @brief 形状更改
-     */
-    void ShapeChanged()SET_TRUE_NODE_UPDATE(m_bShapeChanged)
-
-    /**
-     * @brief 颜色修改
-     */
-    void ColorChanged()SET_TRUE_NODE_UPDATE(m_bColorChanged)
-
-    /**
      * @brief 线型更改
      */
     void LineTypeChanged()SET_TRUE_NODE_UPDATE(m_bLineTypeChanged)
 
     /**
-     * @brief 初始化节点
+     * @brief 构造模型
      */
-    void InitNode();
+    void CreateShape();
 
     /**
-     * @brief 节点更新
+     * @brief 更新形状
      */
-    void UpdateNode();
-
-    void CreateShape(){}
-    void UpdateShape(){}
-
-    void NeedUpdate() SET_TRUE_NODE_UPDATE(m_bShapeChanged)
+    void UpdateShape();
 protected:
-    osg::ref_ptr<osgEarth::LineDrawable> m_pLine;
-    bool                          m_bColorChanged{false};
-    bool                          m_bShapeChanged{false};
-    bool                          m_bWidthChanged{false};
-    bool                          m_bLineTypeChanged{false};
+    osg::ref_ptr<osg::Uniform> m_uLineWidth;
+    osg::ref_ptr<osg::Uniform> m_uCameraSize;
+    osg::ref_ptr<osg::Vec3Array> m_pPreviousPoints;
+    osg::ref_ptr<osg::Vec3Array> m_pNextPoints;
+    bool                       m_bWidthChanged{false};
+    bool                       m_bLineTypeChanged{false};
 };
 
 #endif // CSCENELINE_H

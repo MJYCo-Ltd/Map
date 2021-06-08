@@ -61,8 +61,7 @@ protected:
 
     virtual void UpdateColor()
     {
-        m_pColorArray->clear();
-        m_pColorArray->push_back(osg::Vec4(T::m_stColor.fR,T::m_stColor.fG,T::m_stColor.fB,T::m_stColor.fA));
+        m_pColorArray->at(0).set(T::m_stColor.fR,T::m_stColor.fG,T::m_stColor.fB,T::m_stColor.fA);
     }
 
     /**
