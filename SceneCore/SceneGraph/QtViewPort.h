@@ -1,6 +1,10 @@
 #ifndef QT_VIEWPORT_H
 #define QT_VIEWPORT_H
 
+#ifdef NEED_VR
+#include <openvr/openvr.h>
+#endif
+
 #include <QObject>
 #include <osgGA/TrackballManipulator>
 #include <osgGA/NodeTrackerManipulator>
@@ -89,6 +93,23 @@ public:
      * @brief 更新时间
      */
     void UpdateTime(double dt)override;
+
+#ifdef NEED_VR
+    /**
+     * @brief 将视口的内容显示到VR上
+     * @return true 打开VR成功 false 表示打开VR失败
+     * @attention 失败原因见Log/ 下的log
+     */
+    virtual bool ShowOnVR() override;
+
+    /**
+     * @brief 关闭VR
+     * @return 如果没有打开VR或者关闭VR成功 返回 true
+     */
+    virtual bool ShutDownVR() override;
+protected:
+    std::string GetTrackedDeviceString(vr::TrackedDeviceIndex_t unDevice, vr::TrackedDeviceProperty prop, vr::TrackedPropertyError *peError = NULL );
+#endif
 protected slots:
     void EyePos(double dX,double dY, double dZ);
     void LookDir(double dX,double dY, double dZ);
@@ -122,6 +143,11 @@ protected:
     QtViewHud*     m_pHud{};                                         /// 屏显根节点
     ISceneGraph*   m_pSceneGraph{};                                  /// 设置场景
     IRender*       m_pRender{};
+#ifdef NEED_VR
+    vr::IVRSystem *m_pHMD{};
+    unsigned int   m_nVrWidth{};
+    unsigned int   m_nVrHeight{};
+#endif
 };
 
 #endif // QT_VIEWPORT_H

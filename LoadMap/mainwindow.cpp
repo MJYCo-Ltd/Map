@@ -631,3 +631,19 @@ void MainWindow::on_endCapture_triggered()
 {
     m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->EndCapture();
 }
+
+void MainWindow::on_action_OpenVR_triggered()
+{
+#ifdef NEED_VR
+    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->ShowOnVR();
+#endif
+}
+
+
+void MainWindow::on_action_CloseVR_triggered()
+{
+#ifdef NEED_VR
+    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->ShutDownVR();
+#endif
+}
+

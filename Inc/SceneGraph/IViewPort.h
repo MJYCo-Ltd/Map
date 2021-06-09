@@ -128,6 +128,20 @@ public:
      * @param dt 距离上次调用的时间间隔[s]
      */
     virtual void UpdateTime(double dt)=0;
+#ifdef NEED_VR
+    /**
+     * @brief 将视口的内容显示到VR上
+     * @return true 打开VR成功 false 表示打开VR失败
+     * @attention 失败原因见Log/ 下的log
+     */
+    virtual bool ShowOnVR()=0;
+
+    /**
+     * @brief 关闭VR
+     * @return 如果没有打开VR或者关闭VR成功 返回 true
+     */
+    virtual bool ShutDownVR()=0;
+#endif
 protected:
     virtual ~IViewPort(){}
 protected:

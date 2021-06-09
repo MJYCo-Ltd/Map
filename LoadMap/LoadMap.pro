@@ -11,7 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = LoadMap
 TEMPLATE = app
 
-
+DEFINES += NEED_VR
 SOURCES += \
         CSimpleLabel.cpp \
         main.cpp \

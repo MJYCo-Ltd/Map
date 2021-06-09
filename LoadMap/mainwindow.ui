@@ -41,6 +41,8 @@
    <addaction name="action12"/>
    <addaction name="BeginCapture"/>
    <addaction name="endCapture"/>
+   <addaction name="action_OpenVR"/>
+   <addaction name="action_CloseVR"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="toolBar">
@@ -108,6 +110,22 @@
   <action name="endCapture">
    <property name="text">
     <string>结束截图</string>
+   </property>
+  </action>
+  <action name="action_OpenVR">
+   <property name="text">
+    <string>显示VR</string>
+   </property>
+   <property name="toolTip">
+    <string>显示VR</string>
+   </property>
+  </action>
+  <action name="action_CloseVR">
+   <property name="text">
+    <string>关闭VR</string>
+   </property>
+   <property name="toolTip">
+    <string>关闭VR</string>
    </property>
   </action>
  </widget>

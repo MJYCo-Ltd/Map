@@ -40,6 +40,20 @@ unix{
     }
 }
 
+contains(SDK_CONFIG,VR){
+    win32{
+        VRPath = $$PWD/../NewGL3
+        INCLUDEPATH *=$${VRPath}/include
+        LIBS *= -L$${VRPath}/lib
+    }
+
+    CONFIG (debug, debug|release){
+        LIBS *= -lopenvr_api64d
+    }else{
+        LIBS *= -lopenvr_api64
+    }
+}
+
 contains(SDK_CONFIG,OSG){
 
 # include file

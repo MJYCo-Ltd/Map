@@ -121,6 +121,14 @@ bool CheckPC(char *argv[])
     return(s_gBChecked);
 }
 
+#ifdef NEED_VR
+#include <openvr/openvr.h>
+bool CheckVR()
+{
+    return(vr::VR_IsRuntimeInstalled() && vr::VR_IsHmdPresent());
+}
+#endif
+
 /// 获取路径
 const std::string& GetExePath()
 {

@@ -45,6 +45,14 @@ extern "C"
      */
     SCENECORESHARED_EXPORT bool CheckPC(char *argv[]);
 
+#ifdef NEED_VR
+    /**
+     * @brief 检查电脑是否连接VR设备
+     * @return
+     */
+    SCENECORESHARED_EXPORT bool CheckVR();
+#endif
+
 
     /**
      * @brief 获取exe运行路径

@@ -49,6 +49,10 @@ private slots:
 
     void on_endCapture_triggered();
 
+    void on_action_OpenVR_triggered();
+
+    void on_action_CloseVR_triggered();
+
 protected:
     void PlotMap();
     void LodPlot();

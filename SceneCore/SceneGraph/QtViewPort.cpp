@@ -460,6 +460,75 @@ void QtViewPort::UpdateTime(double dt)
 {
 }
 
+#ifdef NEED_VR
+
+#include <QDebug>
+/// 显示到VR上
+bool QtViewPort::ShowOnVR()
+{
+    /// 加载运行时
+    vr::EVRInitError vrError = vr::VRInitError_None;
+    m_pHMD = vr::VR_Init( &vrError,vr::VRApplication_Scene);
+
+    if(vr::VRInitError_None != vrError)
+    {
+        OSG_WARN<<"VR_Init error: "
+                <<vr::VR_GetVRInitErrorAsEnglishDescription(vrError)
+                <<std::endl;
+        return(false);
+    }
+
+    OSG_WARN<<"VR Init "
+            << GetTrackedDeviceString(vr::k_unTrackedDeviceIndex_Hmd, vr::Prop_TrackingSystemName_String)
+            << " "
+            << GetTrackedDeviceString( vr::k_unTrackedDeviceIndex_Hmd, vr::Prop_SerialNumber_String)
+            <<std::endl;
+
+    m_pHMD->GetRecommendedRenderTargetSize(&m_nVrWidth,&m_nVrHeight);
+
+    OSG_WARN<<m_nVrWidth<<'\t'<<m_nVrWidth<<std::endl;
+    if (!vr::VRCompositor())
+    {
+        OSG_WARN<<"Compositor initialization failed"
+                <<std::endl;
+
+        ShutDownVR();
+        return(false);
+    }
+    return(true);
+}
+
+/// 关闭VR
+bool QtViewPort::ShutDownVR()
+{
+    if(nullptr !=m_pHMD)
+    {
+        vr::VR_Shutdown();
+        m_pHMD = nullptr;
+        OSG_WARN<<"VR Close"<<std::endl;
+    }
+
+    return(true);
+}
+
+/// 获取设备信息
+std::string QtViewPort::GetTrackedDeviceString(vr::TrackedDeviceIndex_t unDevice, vr::TrackedDeviceProperty prop, vr::TrackedPropertyError *peError)
+{
+    uint32_t unRequiredBufferLen = vr::VRSystem()->GetStringTrackedDeviceProperty( unDevice, prop, NULL, 0, peError );
+    if(0 == unRequiredBufferLen)
+    {
+        return "";
+    }
+
+    char *pchBuffer = new char[ unRequiredBufferLen ];
+    unRequiredBufferLen = vr::VRSystem()->GetStringTrackedDeviceProperty( unDevice, prop, pchBuffer, unRequiredBufferLen, peError );
+    std::string sResult = pchBuffer;
+    delete [] pchBuffer;
+    return sResult;
+}
+
+#endif
+
 /// 视点位置
 void QtViewPort::EyePos(double dX, double dY, double dZ)
 {

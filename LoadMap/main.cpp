@@ -52,6 +52,14 @@ public:
 int main(int argc, char *argv[])
 {
     bool bChecked = CheckPC(argv);
+#ifdef NEED_VR
+    bChecked = CheckVR();
+#endif
+
+    if(!bChecked)
+    {
+        return (-1);
+    }
 
     QApplication a(argc, argv);
 
