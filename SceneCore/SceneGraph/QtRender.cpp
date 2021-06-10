@@ -1,4 +1,5 @@
 #include <osg/OperationThread>
+#include <Inner/OsgExtern/OsgExtern.h>
 #include "QtRender.h"
 #include "Window/QtFBOWindow.h"
 
@@ -44,12 +45,14 @@ QtRender::~QtRender()
 void QtRender::AddView(osgViewer::View *pView)
 {
     m_pOsgViewer->addUpdateOperation(new CModifyView(m_pOsgViewer.get(),pView,true));
+    m_pOsgViewer->addUpdateOperation(new CUpdateViewbaseThread());
 }
 
 /// 移除视图
 void QtRender::RemoveView(osgViewer::View *pView)
 {
     m_pOsgViewer->addUpdateOperation(new CModifyView(m_pOsgViewer.get(),pView,false));
+    m_pOsgViewer->addUpdateOperation(new CUpdateViewbaseThread());
 }
 
 /// 添加更新操作

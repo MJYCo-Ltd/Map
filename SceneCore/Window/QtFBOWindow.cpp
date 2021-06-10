@@ -138,30 +138,13 @@ bool QtFBOWindow::releaseContextImplementation()
     return(true);
 }
 
-#ifdef NEED_VR
-#include <openvr/openvr.h>
-#endif
+
 /// 交换帧缓存区
 void QtFBOWindow::swapBuffersImplementation()
 {
     m_pOpenglContext->functions()->glFinish();
 
     m_unTextureID = m_pRenderFbo->texture();
-#ifdef NEED_VR
-    if(vr::VRCompositor())
-    {
-        vr::VRCompositor()->SetTrackingSpace(vr::TrackingUniverseSeated);
-
-        vr::TrackedDevicePose_t poses[vr::k_unMaxTrackedDeviceCount];
-        for (int i = 0; i < vr::k_unMaxTrackedDeviceCount; ++i) poses[i].bPoseIsValid = false;
-        vr::VRCompositor()->WaitGetPoses(poses, vr::k_unMaxTrackedDeviceCount, NULL, 0);
-
-        vr::Texture_t leftEyeTexture = {(void*)m_unTextureID, vr::TextureType_OpenGL, vr::ColorSpace_Gamma };
-        vr::Texture_t rightEyeTexture = {(void*)m_unTextureID, vr::TextureType_OpenGL, vr::ColorSpace_Gamma };
-        vr::VRCompositor()->Submit(vr::Eye_Left, &leftEyeTexture);
-        vr::VRCompositor()->Submit(vr::Eye_Right, &rightEyeTexture);
-    }
-#endif
 
     if(m_bCanSwap)
     {

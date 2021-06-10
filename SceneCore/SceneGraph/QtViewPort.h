@@ -145,8 +145,11 @@ protected:
     IRender*       m_pRender{};
 #ifdef NEED_VR
     vr::IVRSystem *m_pHMD{};
+    bool           m_bVRStatusChanged{false};
+    bool           m_bOpenVR{false};
     unsigned int   m_nVrWidth{};
     unsigned int   m_nVrHeight{};
+    std::list<osg::ref_ptr<osg::Camera>>           m_listVRCamera;    /// vr眼镜对应的相机
 #endif
 };
 

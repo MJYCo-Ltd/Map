@@ -71,7 +71,6 @@ private:
     bool                     m_bAdd;    /// 是否增加
 };
 
-#include <iostream>
 /**
  * @brief 替换节点
  */
@@ -235,4 +234,31 @@ private:
     osg::ref_ptr<osgGA::GUIEventHandler> m_pEventHandler;
     bool                    m_bAdd;
 };
+
+/**
+ * @brief 更新Viewer的线程模式
+ */
+class CUpdateViewbaseThread:public osg::Operation
+{
+public:
+    CUpdateViewbaseThread(){}
+
+    void operator()(osg::Object* pOsgObj)
+    {
+        auto pViewer = dynamic_cast<osgViewer::ViewerBase*>(pOsgObj);
+        if(nullptr != pViewer)
+        {
+            if (pViewer->areThreadsRunning())
+            {
+                pViewer->stopThreading();
+            }
+
+            if(pViewer->SingleThreaded != pViewer->getThreadingModel())
+            {
+                pViewer->setUpThreading();
+            }
+        }
+    }
+};
+
 #endif // MAP_GLOBAL_H

@@ -104,7 +104,7 @@ void MainWindow::SetSecenGraph(ISceneGraph *pSceneGraph)
         auto pMap= new MapObser(m_pSceneGraph);
         m_pSceneGraph->GetMainWindow()->SubMessage(pMap);
         m_pSceneGraph->GetMap()->SubMessage(pMap);
-//        m_pSceneGraph->GetMap()->GetSpaceEnv()->ShowSpaceBackGround(true);
+        m_pSceneGraph->GetMap()->GetSpaceEnv()->ShowSpaceBackGround(false);
         m_pSceneGraph->GetMap()->OpenLight(false);
         m_pSceneGraph->GetMap()->SetShowAtmosphere(true);
     }

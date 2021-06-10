@@ -40,6 +40,90 @@ private:
     QtViewPort* m_pViewPort;
 };
 
+#ifdef NEED_VR
+#include <openvr/openvr.h>
+#include <QDebug>
+
+struct VRSlaveCallback : public osg::View::Slave::UpdateSlaveCallback
+{
+    VRSlaveCallback(double eyeScale):_eyeScale(eyeScale) {}
+
+    virtual void updateSlave(osg::View& view, osg::View::Slave& slave)
+    {
+        osg::Camera* camera = slave._camera.get();
+        osgViewer::View* viewer_view = dynamic_cast<osgViewer::View*>(&view);
+        if (camera && viewer_view)
+        {
+//            camera->inheritCullSettings(*(view.getCamera()), camera->getInheritanceMask());
+
+            if (_eyeScale<0.0)
+            {
+                camera->setCullMask(camera->getCullMaskLeft());
+            }
+            else
+            {
+                camera->setCullMask(camera->getCullMaskRight());
+            }
+
+            double fovy, aspectRatio,zNear,zFar;
+            view.getCamera()->getProjectionMatrixAsPerspective(fovy, aspectRatio,zNear,zFar);
+            camera->setProjectionMatrixAsPerspective(fovy,1,zNear,zFar);
+
+
+            double sd = osg::DisplaySettings::instance()->getScreenDistance();
+            double fusionDistance = sd;
+            switch(viewer_view->getFusionDistanceMode())
+            {
+            case(osgUtil::SceneView::USE_FUSION_DISTANCE_VALUE):
+                fusionDistance = viewer_view->getFusionDistanceValue();
+                break;
+            case(osgUtil::SceneView::PROPORTIONAL_TO_SCREEN_DISTANCE):
+                fusionDistance *= viewer_view->getFusionDistanceValue();
+                break;
+            }
+            double eyeScale = osg::absolute(_eyeScale) * (fusionDistance/sd);
+
+            if (_eyeScale<0.0)
+            {
+                camera->setViewMatrix(osg::DisplaySettings::instance()->computeLeftEyeViewImplementation(view.getCamera()->getViewMatrix(), eyeScale));
+            }
+            else
+            {
+                camera->setViewMatrix(osg::DisplaySettings::instance()->computeRightEyeViewImplementation(view.getCamera()->getViewMatrix(), eyeScale));
+            }
+        }
+    }
+
+    double _eyeScale;
+};
+
+struct VRCallback:public osg::Camera::DrawCallback
+{
+    VRCallback(osg::Texture* pTexture,int nID):m_pTexture(pTexture),m_nID(nID){}
+    virtual void operator () (osg::RenderInfo& renderInfo) const
+    {
+        osg::State& state = *renderInfo.getState();
+        const unsigned int contextID = state.getContextID();
+
+        // get the texture object for the current contextID.
+        osg::Texture::TextureObject* textureObject = m_pTexture->getTextureObject(contextID);
+        vr::Texture_t EyeTexture = {(void*)textureObject->_id, vr::TextureType_OpenGL, vr::ColorSpace_Gamma };
+        if(0 > m_nID)
+        {
+            vr::VRCompositor()->Submit(vr::Eye_Left, &EyeTexture);
+        }
+        else
+        {
+            vr::VRCompositor()->Submit(vr::Eye_Right, &EyeTexture);
+        }
+    }
+private:
+    osg::ref_ptr<osg::Texture> m_pTexture;
+    int m_nID{};
+};
+
+#endif
+
 /// 视点
 QtViewPort::QtViewPort(IRender *pRender,ISceneGraph *pSceneGraph):
     m_pSceneGraph(pSceneGraph),
@@ -263,7 +347,79 @@ void QtViewPort::FrameEvent()
         }
         m_bStereoChanged=false;
     }
+#ifdef NEED_VR
 
+    if(m_bVRStatusChanged)
+    {
+        if(m_bOpenVR)
+        {
+            osg::DisplaySettings::instance()->setDisplayType(osg::DisplaySettings::HEAD_MOUNTED_DISPLAY);
+            osg::DisplaySettings::instance()->setScreenDistance(1.5f);
+            auto gc = m_pView->getCamera()->getGraphicsContext();
+
+            /// 左眼看到的
+            {
+                osg::ref_ptr<osg::Texture2D> left_texture = new osg::Texture2D;
+
+                left_texture->setTextureSize(m_nVrWidth, m_nVrHeight);
+                left_texture->setInternalFormat(GL_RGBA);
+                left_texture->setFilter(osg::Texture::MIN_FILTER,osg::Texture::LINEAR);
+                left_texture->setFilter(osg::Texture::MAG_FILTER,osg::Texture::LINEAR);
+                left_texture->setWrap(osg::Texture::WRAP_S,osg::Texture::CLAMP_TO_EDGE);
+                left_texture->setWrap(osg::Texture::WRAP_T,osg::Texture::CLAMP_TO_EDGE);
+                osg::ref_ptr<osg::Camera> left_camera = m_pView->assignRenderToTextureCamera(gc,m_nVrWidth, m_nVrHeight,left_texture);
+                left_camera->setRenderOrder(osg::Camera::NESTED_RENDER, 0);
+                left_camera->setPostDrawCallback(new VRCallback(left_texture.get(),-1));
+
+                osg::View::Slave& left_slave = m_pView->getSlave(m_pView->getNumSlaves()-1);
+                left_slave._updateSlaveCallback =  new VRSlaveCallback(-1.);
+
+                m_listVRCamera.push_back(left_camera);
+            }
+
+            /// 右眼看到的
+            {
+                osg::ref_ptr<osg::Texture2D> right_texture = new osg::Texture2D;
+
+                right_texture->setTextureSize(m_nVrWidth, m_nVrHeight);
+                right_texture->setInternalFormat(GL_RGBA);
+                right_texture->setFilter(osg::Texture::MIN_FILTER,osg::Texture::LINEAR);
+                right_texture->setFilter(osg::Texture::MAG_FILTER,osg::Texture::LINEAR);
+                right_texture->setWrap(osg::Texture::WRAP_S,osg::Texture::CLAMP_TO_EDGE);
+                right_texture->setWrap(osg::Texture::WRAP_T,osg::Texture::CLAMP_TO_EDGE);
+                osg::ref_ptr<osg::Camera> right_camera = m_pView->assignRenderToTextureCamera(gc,m_nVrWidth, m_nVrHeight,right_texture);
+                right_camera->setRenderOrder(osg::Camera::NESTED_RENDER, 1);
+                right_camera->setPostDrawCallback(new VRCallback(right_texture.get(),1));
+
+                osg::View::Slave& right_slave = m_pView->getSlave(m_pView->getNumSlaves()-1);
+                right_slave._updateSlaveCallback =  new VRSlaveCallback(1.);
+
+                m_listVRCamera.push_back(right_camera);
+            }
+        }
+        else
+        {
+            if(m_listVRCamera.size() > 0)
+            {
+                for(auto one : m_listVRCamera)
+                {
+                    m_pView->removeSlave(m_pView->findSlaveIndexForCamera(one));
+                }
+                m_listVRCamera.clear();
+            }
+        }
+        m_bVRStatusChanged=false;
+    }
+
+    if(m_bOpenVR)
+    {
+        vr::VRCompositor()->SetTrackingSpace(vr::TrackingUniverseSeated);
+
+        vr::TrackedDevicePose_t poses[vr::k_unMaxTrackedDeviceCount];
+        for (int i = 0; i < vr::k_unMaxTrackedDeviceCount; ++i) poses[i].bPoseIsValid = false;
+        vr::VRCompositor()->WaitGetPoses(poses, vr::k_unMaxTrackedDeviceCount, NULL, 0);
+    }
+#endif
     /// home视点更改
     if(m_bHomePointChanged)
     {
@@ -462,10 +618,14 @@ void QtViewPort::UpdateTime(double dt)
 
 #ifdef NEED_VR
 
-#include <QDebug>
 /// 显示到VR上
 bool QtViewPort::ShowOnVR()
 {
+    if(m_bOpenVR)
+    {
+        return(false);
+    }
+
     /// 加载运行时
     vr::EVRInitError vrError = vr::VRInitError_None;
     m_pHMD = vr::VR_Init( &vrError,vr::VRApplication_Scene);
@@ -487,6 +647,7 @@ bool QtViewPort::ShowOnVR()
     m_pHMD->GetRecommendedRenderTargetSize(&m_nVrWidth,&m_nVrHeight);
 
     OSG_WARN<<m_nVrWidth<<'\t'<<m_nVrWidth<<std::endl;
+    qDebug()<<m_nVrWidth<<'\t'<<m_nVrHeight;
     if (!vr::VRCompositor())
     {
         OSG_WARN<<"Compositor initialization failed"
@@ -495,6 +656,10 @@ bool QtViewPort::ShowOnVR()
         ShutDownVR();
         return(false);
     }
+
+    m_bOpenVR = true;
+    m_bVRStatusChanged = true;
+
     return(true);
 }
 
@@ -507,6 +672,9 @@ bool QtViewPort::ShutDownVR()
         m_pHMD = nullptr;
         OSG_WARN<<"VR Close"<<std::endl;
     }
+
+    m_bOpenVR = false;
+    m_bVRStatusChanged = true;
 
     return(true);
 }
