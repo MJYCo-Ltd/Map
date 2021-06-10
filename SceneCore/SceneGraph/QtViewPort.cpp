@@ -21,19 +21,29 @@ struct CaptureImageCallback:public osg::Camera::DrawCallback
         m_pImage = new osg::Image;
     }
 
+    /// 重写父类方法
     virtual void operator () (osg::RenderInfo& renderInfo) const
     {
-        osg::GraphicsContext* gc = renderInfo.getState()->getGraphicsContext();
-        int width =gc->getTraits()->width, height=gc->getTraits()->height;
+        static double dLastTime{};
+        double dNowTime = renderInfo.getView()->getFrameStamp()->getReferenceTime();
 
-        ///读取像素信息抓图
-        m_pImage->readPixels(0 , 0 , width , height , GL_RGB , GL_UNSIGNED_BYTE);
+        /// 由于每一帧截屏非必须，保证视频流畅即可
+        /// 故此处截屏帧率为24帧即可
+        if(dNowTime - dLastTime > 0.04)
+        {
+            osg::GraphicsContext* gc = renderInfo.getState()->getGraphicsContext();
+            int width =gc->getTraits()->width, height=gc->getTraits()->height;
 
-        /// 发送消息
-        QMetaObject::invokeMethod(m_pViewPort,"CaptureImage",Q_ARG(int,width),
-                                  Q_ARG(int,height),
-                                  Q_ARG(QByteArray,QByteArray::fromRawData(reinterpret_cast<const char *>(m_pImage->data()),
-                                                                           m_pImage->getTotalSizeInBytes())));
+            ///读取像素信息抓图
+            m_pImage->readPixels(0 , 0 , width , height , GL_RGB , GL_UNSIGNED_BYTE);
+
+            /// 发送消息
+            QMetaObject::invokeMethod(m_pViewPort,"CaptureImage",Q_ARG(int,width),
+                                      Q_ARG(int,height),
+                                      Q_ARG(QByteArray,QByteArray::fromRawData(reinterpret_cast<const char *>(m_pImage->data()),
+                                                                               m_pImage->getTotalSizeInBytes())));
+            dLastTime = dNowTime;
+        }
     }
 private:
     osg::ref_ptr<osg::Image> m_pImage;
@@ -42,7 +52,6 @@ private:
 
 #ifdef NEED_VR
 #include <openvr/openvr.h>
-#include <QDebug>
 
 struct VRSlaveCallback : public osg::View::Slave::UpdateSlaveCallback
 {
@@ -131,6 +140,7 @@ QtViewPort::QtViewPort(IRender *pRender,ISceneGraph *pSceneGraph):
 {
     m_pView = new osgViewer::View;
 
+    m_pView->getDatabasePager()->setUnrefImageDataAfterApplyPolicy( true, false );
     m_pView->getCamera()->setViewport(0,0,C_WINDOW_WIDTH,C_WINDOW_HEIGHT);
     m_pView->getCamera()->setClearColor(osg::Vec4(0,0,0,1));
 
@@ -647,7 +657,6 @@ bool QtViewPort::ShowOnVR()
     m_pHMD->GetRecommendedRenderTargetSize(&m_nVrWidth,&m_nVrHeight);
 
     OSG_WARN<<m_nVrWidth<<'\t'<<m_nVrWidth<<std::endl;
-    qDebug()<<m_nVrWidth<<'\t'<<m_nVrHeight;
     if (!vr::VRCompositor())
     {
         OSG_WARN<<"Compositor initialization failed"

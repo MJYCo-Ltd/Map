@@ -33,6 +33,7 @@ public:
     ~QtFBOWindow();
 
     ////////////////////////////// 实现 osgViewer::GraphicsWindowEmbedded 方法////////////////////////////
+    bool realizeImplementation();
     bool makeCurrentImplementation();
     bool releaseContextImplementation();
     void swapBuffersImplementation();

@@ -40,10 +40,15 @@ public:
     ~QtRender();
 
     /**
-     * @brief 增加视图
-     * @param pView
+     * @brief 添加视图
+     * @param pView 需要添加的视图
      */
     void AddView(osgViewer::View* pView);
+
+    /**
+     * @brief 移除视图
+     * @param pView 需要移除的视图
+     */
     void RemoveView(osgViewer::View* pView);
 
     /**
@@ -51,6 +56,11 @@ public:
      * @param pUpdate
      */
     void AddUpdateOperation(osg::Operation* pUpdate);
+
+    /**
+     * @brief 重建线程
+     */
+    void ResetupThread();
 
 signals:
     void RenderAFrame();

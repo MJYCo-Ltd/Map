@@ -112,7 +112,21 @@ uint QtFBOWindow::GetFBOTextureID()
     return(m_unTextureID);
 }
 
+bool QtFBOWindow::realizeImplementation()
+{
+    // force NVIDIA-style vertex attribute aliasing, since osgEarth
+    // makes use of some specific attribute registers. Later we can
+    // perhaps create a reservation system for this.
+    _state->resetVertexAttributeAlias(false);
 
+    _state->setModeValidity(GL_LIGHTING, false);
+    _state->setModeValidity(GL_NORMALIZE, false);
+    _state->setModeValidity(GL_RESCALE_NORMAL, false);
+    _state->setModeValidity(GL_LINE_STIPPLE, false);
+    _state->setModeValidity(GL_LINE_SMOOTH, false);
+
+    return(true);
+}
 /// 关联设备上下文
 bool QtFBOWindow::makeCurrentImplementation()
 {

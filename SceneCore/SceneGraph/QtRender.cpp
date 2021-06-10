@@ -33,7 +33,7 @@ QtRender::QtRender(QObject *parent) :
 {
     m_pOsgViewer = new osgViewer::CompositeViewer;
     m_pOsgViewer->setKeyEventSetsDone(0);
-    m_pOsgViewer->setThreadingModel(osgViewer::ViewerBase::SingleThreaded);
+    m_pOsgViewer->setThreadingModel(osgViewer::ViewerBase::CullThreadPerCameraDrawSingle);
 }
 
 QtRender::~QtRender()
@@ -52,13 +52,17 @@ void QtRender::AddView(osgViewer::View *pView)
 void QtRender::RemoveView(osgViewer::View *pView)
 {
     m_pOsgViewer->addUpdateOperation(new CModifyView(m_pOsgViewer.get(),pView,false));
-    m_pOsgViewer->addUpdateOperation(new CUpdateViewbaseThread());
 }
 
 /// 添加更新操作
 void QtRender::AddUpdateOperation(osg::Operation *pUpdate)
 {
     m_pOsgViewer->addUpdateOperation(pUpdate);
+}
+
+void QtRender::ResetupThread()
+{
+    m_pOsgViewer->addUpdateOperation(new CUpdateViewbaseThread());
 }
 
 bool QtRender::event(QEvent *e)

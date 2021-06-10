@@ -3,6 +3,7 @@
 #include <osg/DeleteHandler>
 #include <osgEarth/Registry>
 #include <osgEarth/Capabilities>
+#include <osgDB/Registry>
 #include "MyNotify.h"
 #include "SceneCore.h"
 #include "SceneGraph/SceneGraphManager.h"
@@ -116,6 +117,7 @@ bool CheckPC(char *argv[])
         else osg::Referenced::getDeleteHandler()->setNumFramesToRetainObjects(2);
 
         QSurfaceFormat::setDefaultFormat(format);
+        osgDB::Registry::instance()->getObjectWrapperManager()->findWrapper("osg::Image");
     }
 
     return(s_gBChecked);

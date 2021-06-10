@@ -2,6 +2,7 @@
 #define INCLUDE_HEADER_SCENERENDER_H
 
 #include <osg/OperationThread>
+#include <osgViewer/View>
 
 /**
  * @brief 仿真运行控制器
@@ -15,6 +16,11 @@ public:
      * @param pUpdate
      */
     virtual void AddUpdateOperation(osg::Operation*)=0;
+
+    /**
+     * @brief 重建线程
+     */
+    virtual void ResetupThread()=0;
 protected:
     virtual ~IRender(){}
 };
