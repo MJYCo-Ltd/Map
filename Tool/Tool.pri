@@ -16,9 +16,10 @@ greaterThan(QT_MAJOR_VERSION, 5):CONFIG += c++17
 INCLUDEPATH *= $$PWD/../Inc $$PWD/../Inc/Tool
 win32{
     DEFINES -= UNICODE
-    # 寮�鍚痷tf-8 缂栫爜鏂瑰紡鏀寔
+    # 开启utf-8 编码方式支持
     QMAKE_CXXFLAGS += -utf-8
     QMAKE_CXXFLAGS += /wd"4100"
+    QMAKE_CXXFLAGS += /MP
 
     LIBS *= -L$$PWD/../Lib
     DLLDESTDIR = $$PWD/../../Bin/MapPlugin/Tool
@@ -34,13 +35,13 @@ unix{
     }
 }
 
+NEWGL3PATH = D:/MyData/Tencent/QYWX/WXWork/1688851982861420/WeDrive/石家庄沐吉源科技有限公司/石家庄沐吉源科技有限公司/研发部/NewGL3
 contains(SDK_CONFIG,OSG){
 
 # include file
     win32{
-        OSGPath = $$PWD/../../NewGL3
-        INCLUDEPATH *=$${OSGPath}/include
-        LIBS *= -L$${OSGPath}/lib
+        INCLUDEPATH *=$${NEWGL3PATH}/include
+        LIBS *= -L$${NEWGL3PATH}/lib
     }
 
     unix{
