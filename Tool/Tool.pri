@@ -20,9 +20,9 @@ win32{
     QMAKE_CXXFLAGS += -utf-8
     QMAKE_CXXFLAGS += /wd"4100"
     QMAKE_CXXFLAGS += /MP
-
     LIBS *= -L$$PWD/../Lib
     DLLDESTDIR = $$PWD/../../Bin/MapPlugin/Tool
+    NEWGL3PATH = D:\MyData\Tencent\QYWX\WXWork\1688851982861420\WeDrive\石家庄沐吉源科技有限公司\石家庄沐吉源科技有限公司\研发部\NewGL3
 }
 
 unix{
@@ -35,7 +35,6 @@ unix{
     }
 }
 
-NEWGL3PATH = D:/MyData/Tencent/QYWX/WXWork/1688851982861420/WeDrive/石家庄沐吉源科技有限公司/石家庄沐吉源科技有限公司/研发部/NewGL3
 contains(SDK_CONFIG,OSG){
 
 # include file

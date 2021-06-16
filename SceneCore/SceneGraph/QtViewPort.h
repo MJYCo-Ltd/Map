@@ -113,7 +113,7 @@ protected:
 protected slots:
     void EyePos(double dX,double dY, double dZ);
     void LookDir(double dX,double dY, double dZ);
-    void CaptureImage(int nWidht, int nHeight,QByteArray info);
+    void CaptureImage(int nWidht, int nHeight,int nSize,QByteArray info);
 protected:
     /**
      * @brief 删除从相机

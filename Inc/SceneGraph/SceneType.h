@@ -159,6 +159,7 @@ struct RGBAData
 
     unsigned short unWidth{};
     unsigned short unHeight{};
+    unsigned int   unDataSize{};
     unsigned char* pRGBAData{};
     bool           bFlipVertically{false};
 
