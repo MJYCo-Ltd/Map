@@ -1,3 +1,4 @@
+#include <Inner/OsgExtern/IOsgMapSceneNode.h>
 #include "MapNodeChanged.h"
 #include "Map.h"
 #include "MapLayer.h"
@@ -32,4 +33,6 @@ void CMapNodeChanged::operator()(osg::Object *)
         }
         m_pNewMapNode->getMap()->endUpdate();
     }
+
+    IOsgMapSceneNode::SetMapNode(m_pNewMapNode);
 }
