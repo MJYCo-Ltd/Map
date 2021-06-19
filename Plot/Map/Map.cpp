@@ -184,6 +184,7 @@ IMapLayer *CMap::CreateLayer(const std::string & sLayerName)
     {
         CMapLayer* pLayer = new CMapLayer(sLayerName,m_pSceneGraph);
         m_userLayers[sLayerName] = pLayer;
+
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(GetMapNode(),pLayer->GetModelLayer(),true));
 
         /// 通知观察者
@@ -402,8 +403,10 @@ void CMap::InitMap()
         }
 
         AddNode(m_pGroup.get(),m_p2DRoot);
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapNodeChanged(m_pMap3DNode,m_pMap2DNode,this));
-        IOsgMapSceneNode::SetMapNode(m_pMap2DNode);
+        if(m_pMap3DNode.valid())
+        {
+            m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapNodeChanged(m_pMap3DNode,m_pMap2DNode,this));
+        }
     }
         break;
     case MAP_3D:
@@ -450,8 +453,10 @@ void CMap::InitMap()
         /// 增加更新
         AddNode(m_pGroup.get(),m_p3DRoot.get());
         AddNode(m_pGroup.get(),m_pSpaceEnv->AsOsgSceneNode()->GetOsgNode());
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapNodeChanged(m_pMap2DNode,m_pMap3DNode,this));
-        IOsgMapSceneNode::SetMapNode(m_pMap3DNode);
+        if(m_pMap2DNode.valid())
+        {
+            m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapNodeChanged(m_pMap2DNode,m_pMap3DNode,this));
+        }
     }
         break;
     }
