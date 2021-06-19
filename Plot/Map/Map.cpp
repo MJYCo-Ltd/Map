@@ -407,6 +407,10 @@ void CMap::InitMap()
         {
             m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapNodeChanged(m_pMap3DNode,m_pMap2DNode,this));
         }
+        else
+        {
+            IOsgMapSceneNode::SetMapNode(m_pMap2DNode);
+        }
     }
         break;
     case MAP_3D:
@@ -456,6 +460,10 @@ void CMap::InitMap()
         if(m_pMap2DNode.valid())
         {
             m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapNodeChanged(m_pMap2DNode,m_pMap3DNode,this));
+        }
+        else
+        {
+            IOsgMapSceneNode::SetMapNode(m_pMap3DNode);
         }
     }
         break;
