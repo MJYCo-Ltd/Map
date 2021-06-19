@@ -9,7 +9,10 @@
 *.so.*
 *.dll
 *.dylib
-
+*.idx
+/debug
+/release
+/Inc/Doc
 # Qt-es
 object_script.*.Release
 object_script.*.Debug
@@ -72,3 +75,4 @@ compile_commands.json
 *.doc
 *.zip
 *.bat
+*.pri

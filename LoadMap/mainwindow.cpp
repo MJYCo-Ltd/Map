@@ -476,6 +476,8 @@ void MainWindow::PlotMap()
     auto pBoxSensor = dynamic_cast<IBoxSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IBoxSensor"));
     pMapLocation->SetSceneNode(pBoxSensor);
     pBoxSensor->SetDistance(10000);
+    color.fA = 0.1f;
+    pBoxSensor->SetColor(color);
     pBoxSensor->ShowFace(true);
     pBoxSensor->ShowLine(true);
     pBoxSensor->SetShowBack(false);
