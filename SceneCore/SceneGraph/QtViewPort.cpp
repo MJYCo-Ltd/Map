@@ -35,13 +35,15 @@ struct CaptureImageCallback:public osg::Camera::DrawCallback
             int width =gc->getTraits()->width, height=gc->getTraits()->height;
 
             ///读取像素信息抓图
-            m_pImage->readPixels(0 , 0 , width , height , GL_RGB , GL_UNSIGNED_BYTE);
+            m_pImage->readPixels(0 , 0 , width , height , GL_RGBA , GL_UNSIGNED_BYTE);
+            int dataSize = m_pImage->getTotalSizeInBytes();
 
             /// 发送消息
             QMetaObject::invokeMethod(m_pViewPort,"CaptureImage",Q_ARG(int,width),
                                       Q_ARG(int,height),
+                                      Q_ARG(int,dataSize),
                                       Q_ARG(QByteArray,QByteArray::fromRawData(reinterpret_cast<const char *>(m_pImage->data()),
-                                                                               m_pImage->getTotalSizeInBytes())));
+                                                                               dataSize)));
             dLastTime = dNowTime;
         }
     }
@@ -744,7 +746,7 @@ void QtViewPort::LookDir(double dX, double dY, double dZ)
     }
 }
 
-void QtViewPort::CaptureImage(int nWidht, int nHeight, QByteArray info)
+void QtViewPort::CaptureImage(int nWidht, int nHeight, int nSize, QByteArray info)
 {
     auto iter = m_pAllOserver.begin();
     auto tmpIter = iter;
@@ -752,6 +754,7 @@ void QtViewPort::CaptureImage(int nWidht, int nHeight, QByteArray info)
     RGBAData* pData=new RGBAData;
     pData->unWidth = nWidht;
     pData->unHeight = nHeight;
+    pData->unDataSize=nSize;
     pData->pRGBAData=reinterpret_cast<unsigned char*>(info.data());
     for(;iter != m_pAllOserver.end();)
     {

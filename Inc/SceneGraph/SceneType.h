@@ -5,8 +5,8 @@
 #include <cmath>
 #include <cfloat>
 
-#define JUDGE_DOUBLE_EQUAL(VA,VB) (fabs(VA-VB)>DBL_EPSILON)
-#define JUDGE_FLOAT_EQUAL(VA,VB)  (fabs(VA-VB)>FLT_EPSILON)
+#define JUDGE_DOUBLE_EQUAL(VA,VB) (fabs(VA-VB)<DBL_EPSILON)
+#define JUDGE_FLOAT_EQUAL(VA,VB)  (fabs(VA-VB)<FLT_EPSILON)
 
 #define JUDGE_DOUBLE_CALL_FUNCTION(VA,VB,VC) {if JUDGE_DOUBLE_EQUAL(VA,VB){VB=VA;VC();}}
 #define JUDGE_FLOAT_CALL_FUNCTION(VA,VB,VC) {if JUDGE_FLOAT_EQUAL(VA,VB){VB=VA;VC();}}
@@ -81,9 +81,9 @@ struct SceneAttitude
         }
 
         return(rOther.rotaOrder == rotaOrder
-         && fabs(dYaw - rOther.dYaw) < DBL_EPSILON
-         && fabs(dPitch - rOther.dPitch) < DBL_EPSILON
-         && fabs(dRoll - rOther.dRoll) < DBL_EPSILON);
+         && JUDGE_DOUBLE_EQUAL(dYaw,rOther.dYaw)
+         && JUDGE_DOUBLE_EQUAL(dPitch,rOther.dPitch)
+         && JUDGE_DOUBLE_EQUAL(dRoll,rOther.dRoll));
     }
 
     bool operator !=(const SceneAttitude& rOther) const
@@ -108,9 +108,9 @@ struct ScenePos
             return(true);
         }
 
-        return(fabs(fX - rOther.fX) < FLT_EPSILON
-        &&fabs(fY - rOther.fY) < FLT_EPSILON
-        &&fabs(fZ - rOther.fZ) < FLT_EPSILON);
+        return(JUDGE_FLOAT_EQUAL(fX,rOther.fX)
+        &&JUDGE_FLOAT_EQUAL(fY,rOther.fY)
+        &&JUDGE_FLOAT_EQUAL(fZ,rOther.fZ));
     }
 
     bool operator !=(const ScenePos& rOther) const
@@ -159,6 +159,7 @@ struct RGBAData
 
     unsigned short unWidth{};
     unsigned short unHeight{};
+    unsigned int   unDataSize{};
     unsigned char* pRGBAData{};
     bool           bFlipVertically{false};
 
