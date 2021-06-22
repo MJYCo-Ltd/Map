@@ -22,6 +22,8 @@ void CMapNodeChanged::operator()(osg::Object *)
 
     }
 
+    IOsgMapSceneNode::SetMapNode(m_pNewMapNode);
+
     /// 如果新的地图节点有效
     if(m_pNewMapNode.valid())
     {
@@ -33,6 +35,4 @@ void CMapNodeChanged::operator()(osg::Object *)
         }
         m_pNewMapNode->getMap()->endUpdate();
     }
-
-    IOsgMapSceneNode::SetMapNode(m_pNewMapNode);
 }

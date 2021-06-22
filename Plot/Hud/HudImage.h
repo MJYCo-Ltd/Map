@@ -11,7 +11,7 @@ public:
 protected:
     void ImageChanged()SET_TRUE_NODE_UPDATE(m_bImageChanged)
     void InitNode();
-    void UpdateNode();
+    void FrameCall();
 protected:
     bool m_bImageChanged{false};
     osg::observer_ptr<osgEarth::Controls::ImageControl> m_pImageControl;

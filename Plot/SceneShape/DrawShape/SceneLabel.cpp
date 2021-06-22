@@ -95,7 +95,7 @@ void CSceneLabel::InitNode()
 }
 
 /// 更新节点
-void CSceneLabel::UpdateNode()
+void CSceneLabel::FrameCall()
 {
     if(m_bFontChanged)
     {
@@ -164,6 +164,8 @@ void CSceneLabel::UpdateNode()
     {
         auto pLayoutData=osgEarth::ScreenSpaceLayoutData::getOrCreate(m_pText.get());
         pLayoutData->setPixelOffset(osg::Vec2s(m_stPixelOffset.sWidth,m_stPixelOffset.sHeight));
+        m_bPixelOffChanged=false;
     }
-    ImplSceneNode<ILabel>::UpdateNode();
+
+    ImplSceneNode<ILabel>::FrameCall();
 }

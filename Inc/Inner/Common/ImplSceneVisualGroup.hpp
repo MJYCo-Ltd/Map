@@ -73,7 +73,7 @@ protected:
     }
 
     /// 更新
-    void UpdateNode()
+    void FrameCall()
     {
         if(m_bParameterChanged)
         {
@@ -142,7 +142,7 @@ protected:
             m_listInsertChild.clear();
             m_bChildRemove=false;
         }
-        ImplSceneGroup<T>::UpdateNode();
+        ImplSceneGroup<T>::FrameCall();
     }
 
     /// 增加了一个节点

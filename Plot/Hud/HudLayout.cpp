@@ -71,7 +71,7 @@ void CHudLayout::InitNode()
 }
 
 /// 更新节点
-void CHudLayout::UpdateNode()
+void CHudLayout::FrameCall()
 {
     if(m_bLayoutChanged)
     {
@@ -115,6 +115,6 @@ void CHudLayout::UpdateNode()
     }
     else
     {
-        ImplHudNode<IHudLayout>::UpdateNode();
+        ImplHudNode<IHudLayout>::FrameCall();
     }
 }

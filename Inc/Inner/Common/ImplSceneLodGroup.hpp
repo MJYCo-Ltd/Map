@@ -26,7 +26,7 @@ protected:
     void ChangeTypeChanged()SET_TRUE_NODE_UPDATE(m_bTypeChanged)
     void LevelsChanged()SET_TRUE_NODE_UPDATE(m_bLevelsChanged)
 
-    void UpdateNode()
+    void FrameCall()
     {
         if(m_bTypeChanged)
         {
@@ -58,7 +58,7 @@ protected:
             }
             m_bTypeChanged = false;
         }
-        ImplSceneGroup<T>::UpdateNode();
+        ImplSceneGroup<T>::FrameCall();
     }
 
 protected:

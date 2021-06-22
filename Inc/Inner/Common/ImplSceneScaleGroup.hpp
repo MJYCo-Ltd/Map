@@ -34,7 +34,7 @@ protected:
     void MinScalChanged()SET_TRUE_NODE_UPDATE(m_bMinScalChanged)
     void MaxScalChanged()SET_TRUE_NODE_UPDATE(m_bMaxScalChanged)
 
-    void UpdateNode()
+    void FrameCall()
     {
         if(m_bScaleChanged)
         {
@@ -68,7 +68,7 @@ protected:
             m_bMaxScalChanged=false;
         }
 
-        ImplSceneGroup<T>::UpdateNode();
+        ImplSceneGroup<T>::FrameCall();
     }
 
 protected:

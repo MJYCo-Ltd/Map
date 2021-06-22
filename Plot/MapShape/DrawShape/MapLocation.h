@@ -26,7 +26,7 @@ protected:
     /**
      * @brief UpdateNode
      */
-    void UpdateNode();
+    void FrameCall();
 
     /**
      * @brief 初始化节点

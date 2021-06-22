@@ -95,31 +95,6 @@ osgGA::GUIEventAdapter::ScrollingMotion QtEventdMap::ChangeWheelEvent(QWheelEven
     return(emMotion);
 }
 
-/// 转换触摸屏
-osgGA::GUIEventAdapter::TouchPhase QtEventdMap::ChangeTouchEvent(QTouchEvent *event)
-{
-    static osgGA::GUIEventAdapter::TouchPhase emTouch;
-
-    /// 转换类型
-    switch (event->type())
-    {
-    case QEvent::TouchBegin:
-        emTouch = osgGA::GUIEventAdapter::TOUCH_BEGAN;
-        break;
-    case QEvent::TouchUpdate:
-        emTouch = osgGA::GUIEventAdapter::TOUCH_MOVED;
-        break;
-    case QEvent::TouchEnd:
-        emTouch = osgGA::GUIEventAdapter::TOUCH_ENDED;
-        break;
-    default:
-         emTouch = osgGA::GUIEventAdapter::TOUCH_UNKNOWN;
-        break;
-    }
-
-    return(emTouch);
-}
-
 /// 构建映射关系
 QtEventdMap::QtEventdMap()
 {

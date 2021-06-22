@@ -235,30 +235,18 @@ private:
     bool                    m_bAdd;
 };
 
-/**
- * @brief 更新Viewer的线程模式
- */
-class CUpdateViewbaseThread:public osg::Operation
+#include <Inner/IRender.h>
+class CRenderThreadCall:public osg::Operation
 {
 public:
-    CUpdateViewbaseThread(){}
+    CRenderThreadCall(IRender* pRender):osg::Operation("Render",true),m_pRender(pRender){}
 
-    void operator()(osg::Object* pOsgObj)
+    void operator()(osg::Object*)
     {
-        auto pViewer = dynamic_cast<osgViewer::ViewerBase*>(pOsgObj);
-        if(nullptr != pViewer)
-        {
-            if (pViewer->areThreadsRunning())
-            {
-                pViewer->stopThreading();
-            }
-
-            if(pViewer->SingleThreaded != pViewer->getThreadingModel())
-            {
-                pViewer->setUpThreading();
-            }
-        }
+        m_pRender->UpdateRender();
     }
+private:
+    IRender* m_pRender;
 };
 
 #endif // MAP_GLOBAL_H

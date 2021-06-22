@@ -50,14 +50,6 @@ public:
      */
     osgGA::GUIEventAdapter::ScrollingMotion ChangeWheelEvent(QWheelEvent* event);
 
-
-    /**
-     * @brief 转换触摸消息
-     * @param event
-     * @return
-     */
-    osgGA::GUIEventAdapter::TouchPhase ChangeTouchEvent(QTouchEvent * event);
-
 protected:
     QtEventdMap();
 

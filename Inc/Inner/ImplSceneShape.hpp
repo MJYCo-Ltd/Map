@@ -67,7 +67,7 @@ protected:
     /**
      * @brief 更新颜色
      */
-    void UpdateNode()
+    void FrameCall()
     {
         if(m_bColorChanged)
         {
@@ -84,7 +84,7 @@ protected:
             m_bShapeChanged=false;
         }
 
-        ImplSceneNode<T>::UpdateNode();
+        ImplSceneNode<T>::FrameCall();
     }
 protected:
     osg::observer_ptr<osg::Geometry> m_pGeometry;

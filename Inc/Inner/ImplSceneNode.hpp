@@ -18,7 +18,7 @@
  *  实现ISceneNode所有的接口
  */
 template <typename T>
-class ImplSceneNode:public T,public IOsgSceneNode
+class ImplSceneNode:public T,public IOsgSceneNode,public RenderCall
 {
 public:
     CONSTRUCTOR(ImplSceneNode,T)
@@ -39,31 +39,29 @@ public:
     IOsgSceneNode* AsOsgSceneNode(){return(this);}
 
 protected:
+
+    /// 初始化节点
+    virtual void InitNode()
+    {
+        m_bCallOne=true;
+    }
+
     /**
      * @brief 设置节点
      * @param pNode
      */
     void SetOsgNode(osg::Node* pNode)
     {
-        if(m_pRootNode.valid())
-        {
-            m_pRootNode->removeUpdateCallback(m_pUpdateCallBack);
-        }
+        m_pRootNode = pNode;
+        m_preMask = m_pRootNode->getNodeMask();
 
-        if(nullptr != pNode)
-        {
-            m_pRootNode = pNode;
-            m_preMask = m_pRootNode->getNodeMask();
-            m_pRootNode->addUpdateCallback(m_pUpdateCallBack);
-
-            LightChanged();
-        }
+        LightChanged();
     }
 
     /**
      * @brief 节点更新回调
      */
-    void UpdateNode()
+    void FrameCall()
     {
         if(m_bPickStateChanged)
         {
@@ -117,8 +115,6 @@ protected:
             }
             m_bAbilityChanged=false;
         }
-
-        IOsgSceneNode::UpdateNode();
     }
 
     /// 重写子类的函数
@@ -145,6 +141,11 @@ protected:
         {
             one->NodeVisibleChanged(T::m_bVisible);
         }
+    }
+
+    void NodeChanged()
+    {
+        T::m_pSceneGraph->SceneGraphRender()->SubMessage(this);
     }
 
     void PickStateChanged()SET_TRUE_NODE_UPDATE(m_bPickStateChanged)

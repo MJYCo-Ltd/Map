@@ -41,6 +41,7 @@ public:
      */
     void Init(){if(!m_bInit){m_bInit = true;InitNode();}}
 
+    virtual void InitNode(){}
     /**
      * @brief 获取显示节点
      * @return
@@ -58,14 +59,6 @@ public:
      * @return
      */
     bool CanDelete() const{return(m_bCanDelete && m_bInit && m_pRootNode->referenceCount()<2);}
-
-    /**
-     * @brief 节点更改消息
-     */
-    void NodeChanged()
-    {
-        m_bNeedUpdate = true;
-    }
 
     /**
      * @brief BindAttach
@@ -122,49 +115,7 @@ public:
         }
     }
 
-    /**
-     * @brief 是否需要更新
-     * @return
-     */
-    bool CanUpdate(){return(m_bNeedUpdate);}
 protected:
-
-    class COsgSceneNodeUpdateCallback:public osg::Callback
-    {
-    public:
-        COsgSceneNodeUpdateCallback(IOsgSceneNode* pSceneNode):m_pSceneNode(pSceneNode){}
-
-        /// 回调函数
-        bool run(osg::Object* object, osg::Object* data)
-        {
-            if(m_pSceneNode->CanUpdate())
-            {
-                m_pSceneNode->UpdateNode();
-            }
-            return traverse(object, data);
-        }
-    private:
-        IOsgSceneNode* m_pSceneNode;
-    };
-
-    /**
-     * @brief 初始化节点
-     */
-    virtual void InitNode()
-    {
-        if(!m_pUpdateCallBack.valid())
-        {
-            m_pUpdateCallBack = new COsgSceneNodeUpdateCallback(this);
-        }
-    }
-
-    /**
-     * @brief 节点的更新操作
-     */
-    virtual void UpdateNode()
-    {
-        m_bNeedUpdate = false;
-    }
 
     /**
      * @brief 对节点,进行线程安全的操作
@@ -173,11 +124,9 @@ protected:
     virtual void DelNode(osg::Group* pGroup,osg::Node* pNode)=0;
 	
 protected:
-    osg::ref_ptr<osg::Node> m_pRootNode;
-    osg::ref_ptr<COsgSceneNodeUpdateCallback> m_pUpdateCallBack;
-    std::set<ISceneNodeAttach*> m_allAttach; ///依附的点
     bool                    m_bInit{false};
+    osg::ref_ptr<osg::Node> m_pRootNode;
+    std::set<ISceneNodeAttach*> m_allAttach; ///依附的点
     bool                    m_bCanDelete{true};
-    bool                    m_bNeedUpdate{false};
 };
 #endif

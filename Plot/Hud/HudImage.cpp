@@ -8,7 +8,7 @@ void CHudImage::InitNode()
     SetControlNode(m_pImageControl.get());
 }
 
-void CHudImage::UpdateNode()
+void CHudImage::FrameCall()
 {
     if(m_bImageChanged)
     {
@@ -19,5 +19,5 @@ void CHudImage::UpdateNode()
         }
         m_bImageChanged=false;
     }
-    ImplHudNode<IHudImage>::UpdateNode();
+    ImplHudNode<IHudImage>::FrameCall();
 }

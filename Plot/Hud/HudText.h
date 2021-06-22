@@ -9,7 +9,7 @@ public:
     CONSTRUCTOR(CHudText,ImplHudNode<IHudText>)
 protected:
     void InitNode();
-    void UpdateNode();
+    void FrameCall();
     void FontSizeChanged()SET_TRUE_NODE_UPDATE(m_bFontSizeChanged)
     void TextChanged()SET_TRUE_NODE_UPDATE(m_bTextChanged)
     void FontChanged()SET_TRUE_NODE_UPDATE(m_bFontChanged)

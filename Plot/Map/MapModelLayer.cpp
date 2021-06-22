@@ -1,4 +1,5 @@
 #include <osgEarth/AnnotationNode>
+#include <osgEarth/DepthOffset>
 #include "MapModelLayer.h"
 
 using namespace osgEarth;
@@ -19,6 +20,8 @@ void CMapModelLayer::InitNode()
 {
     init();
     ImplSceneGroup<ISceneGroup>::InitNode();
+//    DepthOffsetAdapter doa;
+//    doa.setGraph(m_pGroup.get());
 }
 
 osg::Node* CMapModelLayer::getNode() const

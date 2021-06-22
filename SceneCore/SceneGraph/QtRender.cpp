@@ -28,10 +28,12 @@ private:
     bool                     m_bAdd; /// 是否增加
 };
 
+/// 渲染
 QtRender::QtRender(QObject *parent) :
     QObject(parent)
 {
     m_pOsgViewer = new osgViewer::CompositeViewer;
+    m_pOsgViewer->addUpdateOperation(new CRenderThreadCall(this));
     m_pOsgViewer->setKeyEventSetsDone(0);
     m_pOsgViewer->setThreadingModel(osgViewer::ViewerBase::CullThreadPerCameraDrawSingle);
 }
@@ -45,7 +47,6 @@ QtRender::~QtRender()
 void QtRender::AddView(osgViewer::View *pView)
 {
     m_pOsgViewer->addUpdateOperation(new CModifyView(m_pOsgViewer.get(),pView,true));
-    m_pOsgViewer->addUpdateOperation(new CUpdateViewbaseThread());
 }
 
 /// 移除视图
@@ -60,11 +61,69 @@ void QtRender::AddUpdateOperation(osg::Operation *pUpdate)
     m_pOsgViewer->addUpdateOperation(pUpdate);
 }
 
+/// 重新构建线程
 void QtRender::ResetupThread()
 {
-    m_pOsgViewer->addUpdateOperation(new CUpdateViewbaseThread());
+   m_bResetThread=true;
 }
 
+/// 订阅消息
+void QtRender::SubMessage(RenderCall *pRenderCall)
+{
+    auto findOne = std::find(m_listMessage.begin(),m_listMessage.end(),pRenderCall);
+    if(m_listMessage.end() == findOne)
+    {
+        m_listMessage.push_back(pRenderCall);
+    }
+}
+
+/// 取消订阅消息
+void QtRender::UnSubMessage(RenderCall *pRenderCall)
+{
+    auto findOne = std::find(m_listMessage.begin(),m_listMessage.end(),pRenderCall);
+    if(m_listMessage.end() != findOne)
+    {
+        m_listMessage.erase(findOne);
+    }
+}
+
+/// 更新渲染
+void QtRender::UpdateRender()
+{
+    /// 当线程需要修改时
+    if(m_bResetThread)
+    {
+        if (m_pOsgViewer->areThreadsRunning())
+        {
+            m_pOsgViewer->stopThreading();
+        }
+
+        if(osgViewer::ViewerBase::SingleThreaded != m_pOsgViewer->getThreadingModel())
+        {
+            m_pOsgViewer->setUpThreading();
+        }
+
+        m_bResetThread=false;
+    }
+
+    /// 遍历所有的订阅者
+    for(auto one=m_listMessage.begin();one != m_listMessage.end();)
+    {
+        (*one)->FrameCall();
+
+        /// 如果只执行一次，则将消息移除
+        if((*one)->m_bCallOne)
+        {
+            one = m_listMessage.erase(one);
+        }
+        else
+        {
+            ++one;
+        }
+    }
+}
+
+/// 响应发送的消息
 bool QtRender::event(QEvent *e)
 {
     switch (int(e->type()))

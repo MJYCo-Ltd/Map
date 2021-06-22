@@ -27,7 +27,7 @@ protected:
     /// 状态更改
     void HudTypeChanged()SET_TRUE_NODE_UPDATE(m_bTypeChanged)
 
-    void UpdateNode()
+    void FrameCall()
     {
         if(m_bPosChanged)
         {
@@ -76,7 +76,8 @@ protected:
             }
             m_bTypeChanged = false;
         }
-        ImplSceneNode<T>::UpdateNode();
+
+        ImplSceneNode<T>::FrameCall();
     }
 protected:
     osg::observer_ptr<osgEarth::Controls::Control> m_pControl;

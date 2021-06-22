@@ -23,7 +23,7 @@ protected:
         ImplSceneGroup<T>::SetGroupNode(m_pCamera.get());
     }
 
-    void UpdateNode()
+    void FrameCall()
     {
         if(m_bIndexChanged)
         {
@@ -31,7 +31,7 @@ protected:
             m_bIndexChanged=false;
         }
 
-        ImplSceneGroup<T>::UpdateNode();
+        ImplSceneGroup<T>::FrameCall();
     }
 
     void RenderIndexChanged()SET_TRUE_NODE_UPDATE(m_bIndexChanged)

@@ -22,7 +22,7 @@ public:
 
 protected:
     void InitNode();
-    void UpdateNode();
+    void FrameCall();
 
     void FontChanged()SET_TRUE_NODE_UPDATE(m_bFontChanged)
     void InfoChanged()SET_TRUE_NODE_UPDATE(m_bInfoChanged)

@@ -27,7 +27,7 @@ protected:
     void DirectionChanged(){m_pbIsOut->set(T::m_bOut);}
     void FreqChanged(){m_pPulseIntervalTime->set(1.f/T::m_unFreq);}
 
-    void UpdateNode()
+    void FrameCall()
     {
         if(m_bDistanceChanged)
         {
@@ -96,7 +96,7 @@ protected:
             m_bShowBackChanged=false;
         }
 
-        ImplSceneShape<T>::UpdateNode();
+        ImplSceneShape<T>::FrameCall();
     }
 
     /// 重写初始化状态
