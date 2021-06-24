@@ -90,7 +90,11 @@ bool CheckPC(char *argv[])
 
         QSurfaceFormat format = QSurfaceFormat::defaultFormat();
         osg::GraphicsContext::Traits traits(osg::DisplaySettings::instance().get());
+
+        /// 由于FBX采用的读取方法是单线程的，开启多线程会崩溃
         osg::DisplaySettings::instance()->setNumOfDatabaseThreadsHint(OpenThreads::GetNumberOfProcessors()-3);
+        osg::DisplaySettings::instance()->setNumOfHttpDatabaseThreadsHint(
+                    osg::DisplaySettings::instance()->getNumOfDatabaseThreadsHint()-1);
         format.setAlphaBufferSize( traits.alpha );
         format.setRedBufferSize( traits.red );
         format.setGreenBufferSize( traits.green );
