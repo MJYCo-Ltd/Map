@@ -17,7 +17,7 @@ public:
 
 protected:
     void InitNode();
-    void UpdateNode();
+    void FrameCall();
     void LayoutTypeChanged()SET_TRUE_NODE_UPDATE(m_bLayoutChanged)
 
 protected:

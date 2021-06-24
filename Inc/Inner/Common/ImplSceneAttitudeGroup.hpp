@@ -15,7 +15,7 @@ public:
     CONSTRUCTOR(ImplSceneAttitudeGroup,ImplSceneGroup<T>)
 
 protected:
-    void UpdateNode()
+    void FrameCall()
     {
         if(m_bPosChanged)
         {
@@ -72,7 +72,7 @@ protected:
             m_bPivotChanged=false;
         }
 
-        ImplSceneGroup<T>::UpdateNode();
+        ImplSceneGroup<T>::FrameCall();
     }
 
     /**

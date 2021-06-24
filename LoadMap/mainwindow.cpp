@@ -573,8 +573,10 @@ void MainWindow::LoadQingxie()
 void MainWindow::on_action12_triggered()
 {
     ISceneGroup* pSceneRoot = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
-    SceneColor color;
 
+    ISceneNode * pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("Model/SJ-2/shixian-2.flt");
+    pSceneRoot->AddSceneNode(pModel);
+    SceneColor color;
 
     color.fR=1.0f;
     color.fG=0.0f;

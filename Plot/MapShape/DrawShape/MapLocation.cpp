@@ -29,7 +29,7 @@ void CMapLocation::UpdateMapNode()
 }
 
 /// 更新
-void CMapLocation::UpdateNode()
+void CMapLocation::FrameCall()
 {
     if(m_bPosChanged)
     {
@@ -37,7 +37,7 @@ void CMapLocation::UpdateNode()
         m_bPosChanged = false;
     }
 
-    ImplSceneNode<IMapLocation>::UpdateNode();
+    ImplMapSceneNode<IMapLocation>::FrameCall();
 }
 
 /// 初始化节点

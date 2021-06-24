@@ -17,7 +17,7 @@ void CHudText::InitNode()
 }
 
 /// 更新节点
-void CHudText::UpdateNode()
+void CHudText::FrameCall()
 {
     if(m_bFontChanged)
     {
@@ -49,5 +49,5 @@ void CHudText::UpdateNode()
         m_bOutColorChanged=false;
     }
 
-    ImplHudNode<IHudText>::UpdateNode();
+    ImplHudNode<IHudText>::FrameCall();
 }

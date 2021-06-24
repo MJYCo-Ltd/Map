@@ -345,7 +345,7 @@ void CMap::InitNode()
 }
 
 /// 更新节点
-void CMap::UpdateNode()
+void CMap::FrameCall()
 {
     if(m_bDateChanged)
     {
@@ -359,8 +359,7 @@ void CMap::UpdateNode()
 
         m_bDateChanged = false;
     }
-
-    ImplSceneGroup<IMap>::UpdateNode();
+    ImplSceneGroup<IMap>::FrameCall();
 }
 
 /// 初始化地图
@@ -380,7 +379,7 @@ void CMap::InitMap()
 #endif
             m_p2DRoot = new osg::Group;
             m_p2DRoot->addChild(node);
-            m_pMap2DNode->addUpdateCallback(m_pUpdateCallBack);
+            m_pMap2DNode->addEventCallback(m_pUpdateCallBack);
 
 
             auto m_pLeftMatrixTransform = new osg::MatrixTransform;

@@ -90,7 +90,7 @@ protected:
     /**
      * @brief 重写回调
      */
-    void UpdateNode()
+    void FrameCall()
     {
         if(m_bTerrainTypeChanged)
         {
@@ -104,7 +104,7 @@ protected:
             s_pTerrain->addTerrainCallback(m_pTerrainCallback);
             m_bInsertIntoTerrain=true;
         }
-        ImplSceneNode<T>::UpdateNode();
+        ImplSceneNode<T>::FrameCall();
     }
 
 protected:

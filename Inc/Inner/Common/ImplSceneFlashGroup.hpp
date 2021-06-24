@@ -54,7 +54,7 @@ protected:
     void FlashColorChanged()SET_TRUE_NODE_UPDATE(m_bColorChanged)
     void FlashFlashChanged()SET_TRUE_NODE_UPDATE(m_bFlashChanged)
 
-    void UpdateNode()
+    void FrameCall()
     {
         if(m_bFlashChanged)
         {
@@ -90,7 +90,7 @@ protected:
 
             m_bStatusChanged=false;
         }
-        ImplSceneGroup<T>::UpdateNode();
+        ImplSceneGroup<T>::FrameCall();
     }
 protected:
     osg::ref_ptr<osg::Uniform>             m_pFlashStartTime;

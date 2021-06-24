@@ -10,6 +10,7 @@
 #include <Inner/ILoadResource.h>
 class CResourceLod:public ILoadResouce
 {
+    friend class MyProxyNode;
 public:
     CResourceLod(){}
     virtual ~CResourceLod(){}

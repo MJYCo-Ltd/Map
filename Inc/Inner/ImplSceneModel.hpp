@@ -25,7 +25,7 @@ public:
     }
 protected:
 
-    void UpdateNode()
+    void FrameCall()
     {
         Math::YPRROTATE type=Math::YPR;
         switch (T::m_stInitAttitude.rotaOrder)
@@ -59,7 +59,7 @@ protected:
                                                                        T::m_stInitAttitude.dYaw*DD2R,
                                                                        type));
 
-        ImplSceneNode<T>::UpdateNode();
+        ImplSceneNode<T>::FrameCall();
     }
     /**
      * @brief 初始化节点

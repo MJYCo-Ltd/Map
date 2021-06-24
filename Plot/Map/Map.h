@@ -113,7 +113,7 @@ protected:
     /**
      * @brief 更新节点
      */
-    void UpdateNode() override;
+    void FrameCall() override;
 
     /**
      * @brief 初始化地图

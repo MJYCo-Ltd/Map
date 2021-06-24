@@ -2,6 +2,7 @@
 #define QTRENDER_H
 
 #include <QObject>
+#include <QMutex>
 #include <QEvent>
 #include <QSize>
 #include <osgViewer/CompositeViewer>
@@ -62,6 +63,21 @@ public:
      */
     void ResetupThread();
 
+    /**
+     * @brief 订阅消息
+     */
+    void SubMessage(RenderCall*pRenderCall);
+
+    /**
+     * @brief UnSubMessage
+     */
+    void UnSubMessage(RenderCall*pRenderCall);
+
+    /**
+     * @brief 更新渲染
+     */
+    void UpdateRender();
+
 signals:
     void RenderAFrame();
 
@@ -76,7 +92,11 @@ private:
     void Render();
     void Release();
 private:
+    bool                                     m_bResetThread{false}; /// 重新构建线程
     osg::ref_ptr<osgViewer::CompositeViewer> m_pOsgViewer;    /// 多视口查看器
+    std::list<RenderCall*>                   m_listMessage;   /// 所有的消息订阅者
+    QMutex                                   m_mutexList;     /// 控制list的读写
+
 };
 
 #endif // QTRENDER_H

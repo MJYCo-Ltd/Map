@@ -16,7 +16,6 @@
 #include <SceneGraph/ViewType.h>
 #include "QtEventMap.h"
 #include "QtFBOWindow.h"
-#include <QDebug>
 inline MouseButtonMask ChangeMouseType(QMouseEvent* event)
 {
     MouseButtonMask button;
@@ -421,7 +420,7 @@ void QtFBOWindow::TouchEvent(QTouchEvent *event)
         }
     }
         break;
-    case Qt::TouchPointMoved:
+    default:
     {
         QList<QTouchEvent::TouchPoint> touchPoints = event->touchPoints();
         unsigned int id = 0;
@@ -439,31 +438,6 @@ void QtFBOWindow::TouchEvent(QTouchEvent *event)
             else
             {
                 osgEvent->addTouchPoint(id, osgGA::GUIEventAdapter::TOUCH_MOVED,
-                                        static_cast<float>(touchPoint.pos().x()),
-                                        static_cast<float>(touchPoint.pos().y()));
-            }
-            ++id;
-        }
-    }
-        break;
-    case Qt::TouchPointStationary:
-    {
-        QList<QTouchEvent::TouchPoint> touchPoints = event->touchPoints();
-        unsigned int id = 0;
-        osg::ref_ptr<osgGA::GUIEventAdapter> osgEvent(nullptr);
-        foreach(const QTouchEvent::TouchPoint& touchPoint, touchPoints)
-        {
-
-            if (!osgEvent.valid())
-            {
-                keyboardModifiers(event);
-                osgEvent = getEventQueue()->touchMoved(id, osgGA::GUIEventAdapter::TOUCH_STATIONERY,
-                                                       static_cast<float>(touchPoint.pos().x()),
-                                                       static_cast<float>(touchPoint.pos().y()));
-            }
-            else
-            {
-                osgEvent->addTouchPoint(id, osgGA::GUIEventAdapter::TOUCH_STATIONERY,
                                         static_cast<float>(touchPoint.pos().x()),
                                         static_cast<float>(touchPoint.pos().y()));
             }

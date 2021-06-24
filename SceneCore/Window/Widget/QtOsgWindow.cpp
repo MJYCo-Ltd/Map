@@ -195,6 +195,16 @@ void QtOsgWindow::wheelEvent(QWheelEvent *event)
     QOpenGLWindow::wheelEvent(event);
 }
 
+void QtOsgWindow::touchEvent(QTouchEvent *event)
+{
+    if(nullptr != m_pFBOWindow)
+    {
+        m_pFBOWindow->TouchEvent(event);
+    }
+
+    QOpenGLWindow::touchEvent(event);
+}
+
 /// 初始化GraphicsView
 void QtOsgWindow::Init()
 {
