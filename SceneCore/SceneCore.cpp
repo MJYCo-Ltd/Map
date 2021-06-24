@@ -90,6 +90,7 @@ bool CheckPC(char *argv[])
 
         QSurfaceFormat format = QSurfaceFormat::defaultFormat();
         osg::GraphicsContext::Traits traits(osg::DisplaySettings::instance().get());
+        osg::DisplaySettings::instance()->setNumOfDatabaseThreadsHint(OpenThreads::GetNumberOfProcessors()-3);
         format.setAlphaBufferSize( traits.alpha );
         format.setRedBufferSize( traits.red );
         format.setGreenBufferSize( traits.green );
