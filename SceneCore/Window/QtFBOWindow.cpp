@@ -59,6 +59,11 @@ QtFBOWindow::~QtFBOWindow()
     }
 }
 
+bool QtFBOWindow::isRealizedImplementation() const
+{
+    return(m_bRealized);
+}
+
 /// 重设窗口大小
 void QtFBOWindow::ReSize(const QSize &rWinSize)
 {
@@ -124,7 +129,8 @@ bool QtFBOWindow::realizeImplementation()
     _state->setModeValidity(GL_LINE_STIPPLE, false);
     _state->setModeValidity(GL_LINE_SMOOTH, false);
 
-    return(true);
+    m_bRealized = true;
+    return(m_bRealized);
 }
 /// 关联设备上下文
 bool QtFBOWindow::makeCurrentImplementation()

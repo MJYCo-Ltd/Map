@@ -336,7 +336,7 @@ void MainWindow::on_action_triggered()
     PlotMap();
 //    LodPlot();
     TestGroup();
-//    LoadQingxie();
+    LoadQingxie();
 }
 
 void MainWindow::on_action_2_triggered()
