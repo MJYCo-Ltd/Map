@@ -55,8 +55,14 @@ protected:
                 }
 
                 m_pLod->setRange(i,0,T::m_vLevelInfos[i-1]);
+
+                m_bLevelsChanged = false;
+                m_bCallOne = true;
             }
-            m_bTypeChanged = false;
+            else
+            {
+                m_bCallOne = false;
+            }
         }
         ImplSceneGroup<T>::FrameCall();
     }

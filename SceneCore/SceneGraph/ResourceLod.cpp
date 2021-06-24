@@ -13,16 +13,21 @@
 class MyProxyNode:public osg::ProxyNode
 {
 public:
-    MyProxyNode(){}
+    MyProxyNode(CResourceLod* pResourceLoad,const std::string& sModelPath):
+        m_pResourceLoad(pResourceLoad),m_sModelPath(sModelPath)
+    {
+        setFileName(0,sModelPath);
+    }
 
     using osg::Group::addChild;
     virtual bool addChild(Node *child)
     {
-        std::cout<<child<<std::endl;
         if(osg::ProxyNode::addChild(child))
         {
-            osgEarth::GenerateGL3LightingUniforms generateUniforms;
-            child->accept(generateUniforms);
+            m_pResourceLoad->m_mapNode[m_sModelPath] = child;
+            osgUtil::optimizeMesh(child);
+            auto pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(child->getOrCreateStateSet());
+            m_pResourceLoad->LoadVirtualProgram(pVirutlProgram,"GLSL/Global.glsl");
             return(true);
         }
 
@@ -31,6 +36,9 @@ public:
 
 protected :
     virtual ~MyProxyNode() {}
+private:
+    CResourceLod* m_pResourceLoad;
+    std::string   m_sModelPath;
 };
 
 
@@ -62,20 +70,7 @@ osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
     {
         if(!osgDB::equalCaseInsensitive(osgDB::getFileExtension(modelPath),"earth"))
         {
-            osg::Node* pNode = osgDB::readNodeFile(modelPath);
-            if(nullptr != pNode)
-            {
-                /// 对模型进行优化
-                osgUtil::optimizeMesh(pNode);
-
-                auto pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(pNode->getOrCreateStateSet());
-                LoadVirtualProgram(pVirutlProgram,"GLSL/Global.glsl");
-
-//                osgEarth::GenerateGL3LightingUniforms generateUniforms;
-//                pNode->accept(generateUniforms);
-
-                m_mapNode[modelPath] = pNode;
-            }
+            MyProxyNode* pNode = new MyProxyNode(this,modelPath);//osgDB::readNodeFile(modelPath);
             return(pNode);
         }
         else
