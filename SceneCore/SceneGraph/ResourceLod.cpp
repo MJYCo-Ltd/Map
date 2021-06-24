@@ -72,6 +72,7 @@ osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
         if(!osgDB::equalCaseInsensitive(osgDB::getFileExtension(modelPath),"earth"))
         {
             MyProxyNode* pNode = new MyProxyNode(this,modelPath);//osgDB::readNodeFile(modelPath);
+            m_mapNode[modelPath] = pNode;
             return(pNode);
         }
         else
