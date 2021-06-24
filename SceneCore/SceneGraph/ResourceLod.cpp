@@ -17,9 +17,10 @@ public:
         m_pResourceLoad(pResourceLoad),m_sModelPath(sModelPath)
     {
         setFileName(0,sModelPath);
+        setCenterMode(UNION_OF_BOUNDING_SPHERE_AND_USER_DEFINED);
+        setRadius(100.f);
     }
 
-    using osg::Group::addChild;
     virtual bool addChild(Node *child)
     {
         if(osg::ProxyNode::addChild(child))
