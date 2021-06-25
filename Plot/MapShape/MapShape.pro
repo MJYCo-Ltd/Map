@@ -9,9 +9,9 @@ CONFIG -= qt
 TARGET = MapShape
 TEMPLATE = lib
 
-SDK_CONFIG *= OSG OsgExtern SceneCore Satellite
+SDK_CONFIG *= OSG OsgExtern SceneCore Satellite PLOT
 
-include($$PWD/../MapPlot.pri)
+include($$PWD/../../SoftSDK.pri)
 
 HEADERS += \
     DrawShape/MapCoverImage.h \

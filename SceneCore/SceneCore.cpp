@@ -117,10 +117,6 @@ bool CheckPC(char *argv[])
         format.setSwapInterval( traits.vsync ? 1 : 0 );
         format.setStereo( traits.quadBufferStereo ? 1 : 0 );
 
-        /// 设置两帧删除
-//        if (!osg::Referenced::getDeleteHandler()) osg::Referenced::setDeleteHandler(new osg::DeleteHandler(2));
-//        else osg::Referenced::getDeleteHandler()->setNumFramesToRetainObjects(2);
-
         QSurfaceFormat::setDefaultFormat(format);
         osgDB::Registry::instance()->getObjectWrapperManager()->findWrapper("osg::Image");
     }

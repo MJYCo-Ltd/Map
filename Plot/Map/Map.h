@@ -3,7 +3,7 @@
 #include <map>
 #include <osgEarth/MapNode>
 #include <osgEarth/Lighting>
-#include <Map/IMap.h>
+#include <Plot/Map/IMap.h>
 #include <Inner/Common/ImplSceneGroup.hpp>
 #include <SceneGraph/IWindow.h>
 #include <Inner/OsgExtern/MapNodeCullBack.h>

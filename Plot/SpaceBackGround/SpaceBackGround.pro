@@ -11,9 +11,9 @@ TEMPLATE = lib
 
 DEFINES += SPACEENV_LIBRARY
 
-SDK_CONFIG *= OSG Satellite OsgExtern SceneCore
+SDK_CONFIG *= OSG Satellite OsgExtern SceneCore PLOT
 
-include($$PWD/../MapPlot.pri)
+include($$PWD/../../SoftSDK.pri)
 
 HEADERS += \
     SkyNode.h \

@@ -4,9 +4,9 @@ TEMPLATE = lib
 
 DEFINES += MAP_LIBRARY
 
-SDK_CONFIG *= OSG OsgExtern SceneCore Satellite
+SDK_CONFIG *= OSG OsgExtern SceneCore Satellite PLOT
 
-include($$PWD/../MapPlot.pri)
+include($$PWD/../../SoftSDK.pri)
 
 HEADERS += \
     Atmosphere.h \

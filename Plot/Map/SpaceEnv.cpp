@@ -3,7 +3,7 @@
 #include <Math/YPRAngle.h>
 #include <Math/Quaternion.h>
 #include <SatelliteToolKit/SatelliteToolKit.h>
-#include <Map/SpaceEnv/ISpaceBackGround.h>
+#include <Plot/Map/SpaceEnv/ISpaceBackGround.h>
 #include <ISceneCore.h>
 #include <Inner/IRender.h>
 #include <Inner/OsgExtern/OsgExtern.h>

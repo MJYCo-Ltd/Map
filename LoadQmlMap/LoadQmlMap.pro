@@ -20,4 +20,5 @@ TRANSLATIONS += \
 
 SDK_CONFIG *= SceneCore Satellite
 unix:SDK_CONFIG *= Satellite OsgExtern
+
 include(../SoftSDK.pri)

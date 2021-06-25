@@ -9,7 +9,7 @@
 #
 #Attention DLLDESTDIR only useful in windows
 #          This will only copy exe or dll to DLLDESTDIR
-
+include(Path.pri)
 lessThan(QT_MAJOR_VERSION, 6):CONFIG += c++11
 greaterThan(QT_MAJOR_VERSION, 5):CONFIG += c++17
 
@@ -22,18 +22,32 @@ win32{
     QMAKE_CXXFLAGS += /MP
 
     LIBS *= -L$$PWD/Lib
-    NEWGL3PATH = D:\MyData\Tencent\QYWX\WXWork\1688851982861420\WeDrive\石家庄沐吉源科技有限公司\石家庄沐吉源科技有限公司\研发部\NewGL3
     contains(TEMPLATE, "app"){
         DESTDIR = $$PWD/../Bin
     }else{
-        DESTDIR = $$PWD/Lib
         DLLDESTDIR = $$PWD/../Bin
+        contains(SDK_CONFIG,PLOT){
+            DLLDESTDIR = $$DLLDESTDIR/MapPlugin/Plot
+        }else{
+            contains(SDK_CONFIG,TOOL){
+            DLLDESTDIR = $$DLLDESTDIR/MapPlugin/Tool
+            }else{
+                DESTDIR = $$PWD/Lib
+            }
+        }
     }
 }
 
 unix{
     DESTDIR = $$PWD/../Bin
-    LIBS *= -L$$DESTDIR
+    contains(SDK_CONFIG,PLOT){
+        DESTDIR = $$DESTDIR/MapPlugin/Plot
+    }else{
+        contains(SDK_CONFIG,TOOL){
+            DESTDIR = $$DESTDIR/MapPlugin/Plot
+        }
+    }
+    LIBS *= -L$$PWD/../Bin
     contains(TEMPLATE, "app"){
         QMAKE_LFLAGS += -Wl,-rpath=.:./osglib:./stklib
     }else{
