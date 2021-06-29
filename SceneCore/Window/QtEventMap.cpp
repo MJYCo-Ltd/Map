@@ -13,10 +13,16 @@ QtEventdMap *QtEventdMap::GetInstance()
 int QtEventdMap::ChangeKeyEvent(QKeyEvent *event)
 {
     KeyMap::iterator itr = mKeyMap.find(event->key());
-
     if (itr == mKeyMap.end())
     {
-        return int(*(event->text().toLatin1().data()));
+        if(!event->text().isEmpty())
+        {
+            return int(*(event->text().toLatin1().data()));
+        }
+        else
+        {
+            return(event->key());
+        }
     }
     else
     {

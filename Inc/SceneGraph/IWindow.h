@@ -29,7 +29,6 @@ public:
 
     /**
      * @brief 鼠标消息
-     * @param pWindow       发出消息的窗口
      * @param MouseButtonMask 鼠标按下的类型
      * @param 第一个int   当前鼠标按下点的屏幕位置的X坐标
      * @param 第二个int   当前鼠标按下点的屏幕位置的Y坐标
@@ -41,9 +40,11 @@ public:
 
     /**
      * @brief 按键消息
+     * @param 除了ASCII码，剩下的都是Qt的Key
+     * @param 第二个为 按下的Qt组合键
      */
-    virtual void KeyDown(char){}
-    virtual void KeyUp(char){}
+    virtual void KeyDown(int,int){}
+    virtual void KeyUp(int,int){}
 };
 
 /**

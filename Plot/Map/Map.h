@@ -23,7 +23,18 @@ public:
     CONSTRUCTOR(CMap,ImplSceneGroup<IMap>)
     ~CMap();
 
+    /**
+     * @brief 初始化地图
+     * @param 地图路径
+     */
+    bool LoadUserMap(const std::string& sFileName,bool bRef) override;
+
+    /**
+     * @brief 设置地图类型
+     * @param type
+     */
     void SetType(MapType type){m_emType = type;}
+
     /**
      * @brief 注册消息
      */
@@ -118,7 +129,18 @@ protected:
     /**
      * @brief 初始化地图
      */
-    void InitMap();
+    void InitMap(osgEarth::MapNode *pMapNode);
+
+    /**
+     * @brief 加载地图
+     */
+    void LoadMap();
+
+    /**
+     * @brief 加载地图数据
+     * @return
+     */
+    osgEarth::MapNode* LoadEarthFile();
 
     /**
      * @brief 初始化3D灯光
@@ -137,12 +159,14 @@ protected:
 protected:
     bool   m_bSelfRotate{false};
     bool   m_bDateChanged{false};
+    std::string m_sUserMapPath;
     std::list<IMapMessageObserver*> m_listObserver;
     osg::ref_ptr<osg::Group>   m_p2DRoot;
     osg::ref_ptr<osg::Group>   m_p3DRoot;
 
     osg::ref_ptr<osgEarth::MapNode> m_pMap3DNode;
     osg::ref_ptr<osgEarth::MapNode> m_pMap2DNode;
+    osg::ref_ptr<osgEarth::MapNode> m_pMapUser;
 
     osg::ref_ptr<osgEarth::LightGL3> m_pLight;
     osg::ref_ptr<osg::Uniform>       m_pLightPosUniform;

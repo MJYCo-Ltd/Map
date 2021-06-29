@@ -166,8 +166,10 @@ void QtSceneGraph::InitSceneGraph()
     m_pRoot = m_pPlot->CreateSceneGroup(STANDARD_GROUP);
 
     /// 如果是Map则加载earth文件
-    if(SCENEGRAPH_USER != m_emType)
+    switch(m_emType)
     {
+    case SCENEGRAPH_2D:
+    case SCENEGRAPH_3D:
         LoadMap();
         if(nullptr != m_pMap)
         {
@@ -184,6 +186,7 @@ void QtSceneGraph::InitSceneGraph()
 
             m_pRoot->AddSceneNode(m_pMap);
         }
+        break;
     }
 
 
@@ -245,10 +248,13 @@ void QtSceneGraph::LoadMap()
     switch(m_emType)
     {
     case SCENEGRAPH_2D:
-        m_pMap = dynamic_cast<IMap*>(m_pPlot->CreateSceneNode("IMap2D"));
+        m_pMap = m_pPlot->CreateSceneNode("IMap2D")->AsIMap();
         break;
     case SCENEGRAPH_3D:
-        m_pMap = dynamic_cast<IMap*>(m_pPlot->CreateSceneNode("IMap3D"));
+        m_pMap = m_pPlot->CreateSceneNode("IMap3D")->AsIMap();
+        break;
+    case SCENEGRAPH_USER_EARTH:
+        m_pMap = m_pPlot->CreateSceneNode("IMapUser")->AsIMap();
         break;
     }
 }
