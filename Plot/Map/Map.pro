@@ -14,7 +14,6 @@ HEADERS += \
     MapLayer.h \
     MapModelLayer.h \
     MapModifyLayer.h \
-    MapNodeChanged.h \
     SpaceEnv.h
 
 SOURCES += \
@@ -23,5 +22,4 @@ SOURCES += \
     MapLayer.cpp \
     MapModelLayer.cpp \
     MapModifyLayer.cpp \
-    MapNodeChanged.cpp \
     SpaceEnv.cpp

@@ -4,6 +4,7 @@
 #include <osgEarth/Terrain>
 #include <osgEarth/Lighting>
 #include <osgEarth/GLUtils>
+#include <osgEarth/LogarithmicDepthBuffer>
 
 #include <GisMath/GisMath.h>
 #include <Satellite/Date.h>
@@ -13,14 +14,12 @@
 #include <Inner/IOsgViewPoint.h>
 #include <Inner/OsgExtern/OsgExtern.h>
 #include <Inner/OsgExtern/IOsgMapSceneNode.h>
-#include <Inner/OsgExtern/MapNodeCullBack.h>
 #include <Inner/IOsgViewPoint.h>
 #include <SceneGraph/IWindow.h>
 #include <SceneGraph/IViewPort.h>
 #include <ISceneCore.h>
 #include <Plot/Map/IMapObserver.h>
 
-#include "MapNodeChanged.h"
 #include "MapModifyLayer.h"
 #include "SpaceEnv.h"
 #include "Atmosphere.h"
@@ -40,16 +39,16 @@ CMap::~CMap()
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_p2DRoot));
         m_p2DRoot = nullptr;
     }
-    if (m_pMap3DNode.valid())
+    if (m_pPreMapNode.valid())
     {
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pMap3DNode));
-        m_pMap3DNode = nullptr;
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pPreMapNode));
+        m_pPreMapNode = nullptr;
     }
 
-    if (m_pMap2DNode.valid())
+    if (m_pCurMapNode.valid())
     {
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pMap2DNode));
-        m_pMap2DNode = nullptr;
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pCurMapNode));
+        m_pCurMapNode = nullptr;
     }
 
     /// 清空根节点
@@ -59,6 +58,8 @@ CMap::~CMap()
 /// 初始化地图路径
 bool CMap::LoadUserMap(const std::string &sFileName, bool bRef)
 {
+    m_emType = MAP_USER;
+
     std::string sRealFileName;
     if(bRef)
     {
@@ -72,8 +73,10 @@ bool CMap::LoadUserMap(const std::string &sFileName, bool bRef)
     /// 如果两者不等
     if(sRealFileName != m_sUserMapPath)
     {
+        m_sUserMapPath = sRealFileName;
+        LoadMap();
     }
-    return(true);
+    return(m_pCurMapNode.valid());
 }
 
 /// 订阅消息
@@ -97,29 +100,69 @@ void CMap::UnSubMessage(IMapMessageObserver *pMsgObr)
 }
 
 /// 坐标转换
-bool CMap::ConvertCoord(float &fX, float &fY, ScenePos &geoPos, short TranType)
+bool CMap::ConvertCoord(int &fX, int &fY, ScenePos &geoPos, short TranType)
 {
     if(0 == TranType)
     {
         osg::Vec3d world;
         osgEarth::GeoPoint geoPoint;
-        auto pOsgViewPoint = m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->AsOsgViewPoint();
-        if(!pOsgViewPoint || !pOsgViewPoint->GetOsgView())
+
+
+        osg::Viewport* pViewPort = m_pView->getCamera()->getViewport();
+
+        static float local_x(0.f), local_y(0.0f);
+        const osg::Camera* camera = m_pView->getCameraContainingPosition(fX, pViewPort ? pViewPort->height() - fY : fY,
+                                                                         local_x, local_y);
+        if (!camera)
         {
-            return(false);
+            camera = m_pView->getCamera();
         }
 
-        osg::Viewport* pViewPort = pOsgViewPoint->GetOsgView()->getCamera()->getViewport();
-        if(nullptr != GetMapNode()->getTerrain() &&
-                GetMapNode()->getTerrain()->getWorldCoordsUnderMouse(pOsgViewPoint->GetOsgView(),
-                                                                fX, pViewPort ? pViewPort->height() - fY : fY, world))
+        /// 构建矩阵
+        osg::Matrixd matrix;
+
+        /// 获取父节点
+        osg::Matrix terrainRefFrame = osg::computeLocalToWorld(m_pCurMapNode->getParentalNodePaths()[0]);
+        matrix.postMult(terrainRefFrame);
+
+        matrix.postMult(camera->getViewMatrix());
+        matrix.postMult(camera->getProjectionMatrix());
+
+        double zNear = -1.0;
+        double zFar = 1.0;
+        if (camera->getViewport())
         {
-            geoPoint.fromWorld(GetMapNode()->getMapSRS(),world);
+            matrix.postMult(camera->getViewport()->computeWindowMatrix());
+            zNear = 0.0, zFar = 1.0;
+        }
+
+        static osg::Matrixd inverse;
+        inverse.invert(matrix);
+
+        static osg::Vec3d vStartVertex,vDir, vUp,vEndVertex;
+        camera->getViewMatrixAsLookAt(vStartVertex, vDir, vUp);
+        vEndVertex = osg::Vec3d(local_x,local_y,zFar) * inverse;
+
+        /// 重置picker类
+        m_pPicker->reset();
+        m_pPicker->setStart(vStartVertex);
+        m_pPicker->setEnd(vEndVertex);
+
+        /// 构建相交遍历器
+        osgUtil::IntersectionVisitor iv(m_pPicker);
+        iv.setTraversalMask(PICK_MASK);
+        m_pCurMapNode->accept(iv);
+
+        /// 判断是否相交
+        if (m_pPicker->containsIntersections())
+        {
+            world = m_pPicker->getIntersections().begin()->getWorldIntersectPoint();
+            geoPoint.fromWorld(m_pCurMapNode->getMapSRS(),world);
             geoPoint.makeGeographic();
             geoPos.fX = geoPoint.x();
             geoPos.fY = geoPoint.y();
             geoPos.fZ = geoPoint.z();
-            return (true);
+            return(true);
         }
         else
         {
@@ -128,26 +171,18 @@ bool CMap::ConvertCoord(float &fX, float &fY, ScenePos &geoPos, short TranType)
     }
     else if(1==TranType)
     {
-        auto pOsgViewPoint = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint());
-        if(!pOsgViewPoint || !pOsgViewPoint->GetOsgView())
-        {
-            return(false);
-        }
-
-        auto pView = pOsgViewPoint->GetOsgView();
-
         osg::Vec3d world;
         osgEarth::GeoPoint geoPoint(osgEarth::SpatialReference::create("wgs84"),geoPos.fX,geoPos.fY,geoPos.fZ),geoOut;
 
-        if(geoPoint.transform(GetMapNode()->getMapSRS(),geoOut) &&
-                GetMapNode()->getMapSRS()->transformToWorld(osg::Vec3d(geoOut.x(),geoOut.y(),geoOut.z()),world))
+        if(geoPoint.transform(m_pCurMapNode->getMapSRS(),geoOut) &&
+                m_pCurMapNode->getMapSRS()->transformToWorld(osg::Vec3d(geoOut.x(),geoOut.y(),geoOut.z()),world))
         {
-            osg::Matrixd _MVPW = pView->getCamera()->getViewMatrix() * pView->getCamera()->getProjectionMatrix()
-                    * pView->getCamera()->getViewport()->computeWindowMatrix();
+            osg::Matrixd _MVPW = m_pView->getCamera()->getViewMatrix() * m_pView->getCamera()->getProjectionMatrix()
+                    * m_pView->getCamera()->getViewport()->computeWindowMatrix();
 
             osg::Vec3d scrennPos = world * _MVPW;
             fX = scrennPos.x();
-            fY = pView->getCamera()->getViewport()->height() - scrennPos.y();
+            fY = m_pView->getCamera()->getViewport()->height() - scrennPos.y();
             return(true);
         }
         else
@@ -165,7 +200,7 @@ float CMap::GetHeight(float fLon, float fLat)
 {
     static osgEarth::SpatialReference* s_pWgs84 = osgEarth::SpatialReference::get("wgs84");
 
-    osgEarth::Terrain* pTerrain=GetMapNode()->getTerrain();
+    osgEarth::Terrain* pTerrain=m_pCurMapNode->getTerrain();
 
     if(nullptr == pTerrain)
     {
@@ -206,7 +241,7 @@ IMapLayer *CMap::CreateLayer(const std::string & sLayerName)
         CMapLayer* pLayer = new CMapLayer(sLayerName,m_pSceneGraph);
         m_userLayers[sLayerName] = pLayer;
 
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(GetMapNode(),pLayer->GetModelLayer(),true));
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(m_pCurMapNode,pLayer->GetModelLayer(),true));
 
         /// 通知观察者
         for(auto one:m_listObserver)
@@ -256,35 +291,18 @@ void CMap::RemoveLayer(UserLayers::iterator itor)
     }
 
     /// 从map中移除节点
-    m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(GetMapNode(),itor->second->GetModelLayer(),false));
+    m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(m_pCurMapNode,itor->second->GetModelLayer(),false));
     delete itor->second;
 
     m_userLayers.erase(itor);
 }
 
-/// 获取正确的mapNode
-osgEarth::MapNode *CMap::GetMapNode()
-{
-    switch (m_emType)
-    {
-    case MAP_2D:
-        return(m_pMap2DNode);
-    case MAP_3D:
-        return(m_pMap3DNode);
-    case MAP_USER:
-        return(m_pMapUser);
-        break;
-    }
-}
-
 void CMap::ClearLayers()
 {
-    osgEarth::MapNode* pMapNode=GetMapNode();
-
     for(auto one = m_userLayers.begin();one != m_userLayers.end();++one)
     {
         /// 从map中移除节点
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(pMapNode,one->second->GetModelLayer(),false));
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(m_pCurMapNode,one->second->GetModelLayer(),false));
         delete one->second;
         m_userLayers.erase(one);
 
@@ -299,6 +317,7 @@ void CMap::ClearLayers()
 /// 更改地图类型
 void CMap::ChangeMapType(MapType mapType)
 {
+    /// 如果是用户地图就返回
     if(MAP_USER == m_emType) return;
 
     if(mapType == m_emType)
@@ -309,12 +328,6 @@ void CMap::ChangeMapType(MapType mapType)
     {
         m_emType = mapType;
         LoadMap();
-
-        IOsgViewPoint* pViewPoint = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint());
-        if(nullptr != pViewPoint)
-        {
-            pViewPoint->ViewPointTypeChanged(MAP_3D == m_emType ? IOsgViewPoint::View_3DMap : IOsgViewPoint::View_2DMap);
-        }
 
         for(auto one:m_listObserver)
         {
@@ -346,16 +359,12 @@ void CMap::SetShowAtmosphere(bool bVisible)
 /// 鼠标移动消息
 void CMap::MouseMove(MouseButtonMask, int nX, int nY)
 {
-    m_pUpdateCallBack->SetMousePos(nX,nY);
-    osgEarth::MapNode* pMapNode=GetMapNode();
+    m_nX = nX;
+    m_nY = nY;
 
-    if(pMapNode&&pMapNode->getUserData())
+    for(auto one:m_listObserver)
     {
-        YtyUserData* pUserData = static_cast<YtyUserData*>(pMapNode->getUserData());
-        for(auto one:m_listObserver)
-        {
-            one->MousePos(pUserData->GetDx(),pUserData->GetDy(),pUserData->GetDz());
-        }
+        one->MousePos(m_stMousePos.fX,m_stMousePos.fY,m_stMousePos.fZ);
     }
 }
 
@@ -363,15 +372,98 @@ void CMap::MouseMove(MouseButtonMask, int nX, int nY)
 void CMap::InitNode()
 {
     m_bOpenLight=true;
-    m_pUpdateCallBack = new CMapNodeCullBack(m_pSceneGraph);
     m_pSceneGraph->GetMainWindow()->SubMessage(this);
+
+    m_pView=m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->AsOsgViewPoint()->GetOsgView();
+
+    /// 设置拾取
+    m_pPicker=new osgUtil::LineSegmentIntersector(osgUtil::Intersector::MODEL,osg::Vec3(),osg::Vec3());
+    m_pPicker->setIntersectionLimit( osgUtil::Intersector::LIMIT_NEAREST );
     ImplSceneGroup<IMap>::InitNode();
+    m_bCallOne=false;
+
     LoadMap();
 }
 
 /// 更新节点
 void CMap::FrameCall()
 {
+    /// 地图更改
+    if(m_bMapChanged)
+    {
+        if(m_pPreMapNode.valid())
+        {
+            for(auto one=m_userLayers.begin();one != m_userLayers.end();++one)
+            {
+                m_pPreMapNode->getMap()->removeLayer(one->second->GetModelLayer());
+            }
+
+
+            IOsgMapSceneNode::SetMapNode(m_pCurMapNode);
+            m_pCurMapNode->getMap()->beginUpdate();
+            for(auto one=m_userLayers.begin();one != m_userLayers.end();++one)
+            {
+                m_pCurMapNode->getMap()->addLayer(one->second->GetModelLayer());
+                one->second->UpdateMapNode();
+            }
+            m_pCurMapNode->getMap()->endUpdate();
+        }
+        else
+        {
+            IOsgMapSceneNode::SetMapNode(m_pCurMapNode);
+        }
+
+        m_pGroup->removeChildren(0,m_pGroup->getNumChildren());
+        /// 如果是三维地球
+        if(m_pCurMapNode->isGeocentric())
+        {
+            if(!m_p3DRoot.valid())
+            {
+                m_p3DRoot = new osg::Group;
+                Init3DLight();
+                m_p3DRoot->addChild(m_pAtmosphere->GetNode());
+            }
+
+            m_p3DRoot->removeChild(m_pPreMapNode);
+            m_p3DRoot->addChild(m_pCurMapNode);
+
+            /// 添加到根节点
+            m_pGroup->addChild(m_pSpaceEnv->AsOsgSceneNode()->GetOsgNode());
+            m_pGroup->addChild(m_p3DRoot);
+
+        }
+        else /// 如果是二维地球
+        {
+            m_pGroup->addChild(m_pCurMapNode);
+
+            auto dWidth = m_pCurMapNode->getMap()->getProfile()->getExtent().width();
+            if(!m_pLeftTran.valid())
+            {
+                m_pLeftTran = new osg::MatrixTransform;
+            }
+            m_pLeftTran->removeChild(m_pPreMapNode);
+            m_pLeftTran->addChild(m_pCurMapNode);
+            m_pLeftTran->setMatrix(osg::Matrix::translate(osg::Vec3d(-dWidth,0.,0.)));
+
+            /// 如果右边的没有
+            if(!m_pRightTran.valid())
+            {
+                m_pRightTran = new osg::MatrixTransform;
+            }
+            m_pRightTran->removeChild(m_pPreMapNode);
+            m_pRightTran->addChild(m_pCurMapNode);
+            m_pRightTran->setMatrix(osg::Matrix::translate(osg::Vec3d(dWidth,0.,0.)));
+
+
+            /// 添加到根节点
+            m_pGroup->addChild(m_pLeftTran);
+            m_pGroup->addChild(m_pRightTran);
+        }
+
+        m_bMapChanged=false;
+    }
+
+    /// 时间更改
     if(m_bDateChanged)
     {
         m_pSpaceEnv->UpdateDate(m_dMJD);
@@ -384,184 +476,111 @@ void CMap::FrameCall()
 
         m_bDateChanged = false;
     }
+
+    /// 每一帧更新一次
+    if(m_pCurMapNode.valid())
+    {
+        if(m_pCurMapNode->isGeocentric())
+        {
+            static osgEarth::LogarithmicDepthBuffer s_logDepthBuffer;
+
+            osg::Vec3d eye,center,up;
+            m_pView->getCamera()->getViewMatrixAsLookAt(eye,center,up);
+            if(eye.length() - R_Earth < 3000)
+            {
+                if(!m_bInstelld)
+                {
+                    s_logDepthBuffer.install(m_pCurMapNode);
+                    m_bInstelld=true;
+                }
+            }
+            else
+            {
+                if(m_bInstelld)
+                {
+                    s_logDepthBuffer.uninstall(m_pCurMapNode);
+                    m_bInstelld=false;
+                }
+            }
+        }
+
+        ConvertCoord(m_nX,m_nY,m_stMousePos,0);
+    }
+
+
     ImplSceneGroup<IMap>::FrameCall();
-}
-
-/// 初始化地图
-void CMap::InitMap(osgEarth::MapNode* pMapNode)
-{
-    m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CClearChildNode(m_pGroup.get()));
-
-    bool bIs3D = pMapNode->isGeocentric();
-    if(MAP_USER == m_emType)
-    {
-        if(bIs3D)
-        {
-        }
-        else
-        {
-        }
-    }
-    else
-    {
-        switch (m_emType)
-        {
-        case MAP_2D:
-        {
-            if(!m_p2DRoot.valid())
-            {
-                m_p2DRoot = new osg::Group;
-                m_p2DRoot->addChild(m_pMap2DNode);
-
-
-                auto m_pLeftMatrixTransform = new osg::MatrixTransform;
-                auto m_pRightMatrixTransform = new osg::MatrixTransform;
-                m_pLeftMatrixTransform->setMatrix(osg::Matrix::translate(
-                                                      osg::Vec3f(-m_pMap2DNode->getMap()->getProfile()->getExtent().width()
-                                                                 ,0.0f,0.0f)));
-
-
-                m_pRightMatrixTransform->setMatrix(osg::Matrix::translate(
-                                                       osg::Vec3f(m_pMap2DNode->getMap()->getProfile()->getExtent().width()
-                                                                  ,0.0f,0.0f)));
-
-                m_pLeftMatrixTransform->addChild(m_pMap2DNode);
-                m_pRightMatrixTransform->addChild(m_pMap2DNode);
-
-                m_p2DRoot->addChild(m_pLeftMatrixTransform);
-                m_p2DRoot->addChild(m_pRightMatrixTransform);
-            }
-
-            AddNode(m_pGroup.get(),m_p2DRoot);
-            if(m_pMap3DNode.valid())
-            {
-                m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapNodeChanged(m_pMap3DNode,m_pMap2DNode,this));
-            }
-            else
-            {
-                IOsgMapSceneNode::SetMapNode(m_pMap2DNode);
-            }
-        }
-            break;
-        case MAP_3D:
-        {
-            if(!m_p3DRoot.valid())
-            {
-                m_p3DRoot = new osg::Group;
-
-                m_pSpaceEnv = new CSpaceEnv(m_pSceneGraph);
-                osg::Camera* pCamera = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
-                        ->GetOsgView()->getCamera();
-                m_pSpaceEnv->SetMainCamara(pCamera);
-                m_pSpaceEnv->Init();
-
-                m_pAtmosphere = new CAtmosphere(m_pSceneGraph);
-                m_pAtmosphere->MakeAtmosphere();
-                m_p3DRoot->addChild(m_pAtmosphere->GetNode());
-
-
-                Init3DLight();
-
-                time_t timep;
-
-                /// 更新时间
-                time(&timep);
-                auto p = gmtime(&timep);
-                Aerospace::CDate data(p->tm_year+1900,p->tm_mon+1
-                                      ,p->tm_mday,p->tm_hour
-                                      ,p->tm_min,p->tm_sec,UTC);
-
-                m_dMJD = data.GetMJD();
-                DateChanged();
-                m_p3DRoot->addChild(m_pMap3DNode);
-            }
-
-            /// 增加更新
-            AddNode(m_pGroup.get(),m_p3DRoot.get());
-            AddNode(m_pGroup.get(),m_pSpaceEnv->AsOsgSceneNode()->GetOsgNode());
-            if(m_pMap2DNode.valid())
-            {
-                m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapNodeChanged(m_pMap2DNode,m_pMap3DNode,this));
-            }
-            else
-            {
-                IOsgMapSceneNode::SetMapNode(m_pMap3DNode);
-            }
-        }
-            break;
-        }
-    }
 }
 
 /// 加载地图数据
 void CMap::LoadMap()
 {
-    osgEarth::MapNode* pEarthMap{};
-
-    switch (m_emType)
-    {
-    case MAP_2D:
-        pEarthMap = m_pMap2DNode.valid() ? m_pMap2DNode.get() : LoadEarthFile();
-        break;
-    case MAP_3D:
-        pEarthMap = m_pMap3DNode.valid() ? m_pMap3DNode.get() : LoadEarthFile();
-        break;
-    case MAP_USER:
-        pEarthMap = m_pMapUser.valid() ? m_pMapUser.get() : LoadEarthFile();
-        break;
-    }
-
-    if(nullptr != pEarthMap)
-    {
-        InitMap(pEarthMap);
-    }
-}
-
-/// 加载地图数据
-osgEarth::MapNode *CMap::LoadEarthFile()
-{
-    osg::Node* pNode{};
+    std::string sFileName;
     switch(m_emType)
     {
     case MAP_2D:
-        pNode = m_pSceneGraph->ResouceLoader()->LoadNode("Earth/Projected.earth");
+        sFileName = GetDataPath()+ "Earth/Projected.earth";
         break;
     case MAP_3D:
-        pNode = m_pSceneGraph->ResouceLoader()->LoadNode("Earth/Geocentric.earth");
+        sFileName = GetDataPath()+ "Earth/Geocentric.earth";
         break;
     case MAP_USER:
-        pNode = m_pSceneGraph->ResouceLoader()->LoadNode(m_sUserMapPath,false);
+        sFileName = m_sUserMapPath;
         break;
     }
+
+    /// 保存之前的状态
+    m_pPreMapNode = m_pCurMapNode;
+
+    auto pNode = m_pSceneGraph->ResouceLoader()->LoadNode(sFileName,false);
 
     /// 如果节点不等于0
     if(nullptr != pNode)
     {
-        auto pEarthMap = osgEarth::MapNode::findMapNode(pNode);
-        if(nullptr != pEarthMap)
+        m_pCurMapNode = osgEarth::MapNode::findMapNode(pNode);
+        if(nullptr != m_pCurMapNode)
         {
 #if OSGEARTH_VERSION_GREATER_OR_EQUAL(3,0,0)
-            pEarthMap->open();
+            m_pCurMapNode->open();
 #endif
-            switch(m_emType)
+            osgEarth::GLUtils::setGlobalDefaults(m_pCurMapNode->getOrCreateStateSet());
+            m_bMapChanged=true;
+            if(m_pCurMapNode->isGeocentric())
             {
-            case MAP_2D:
-                m_pMap2DNode = pEarthMap;
-                break;
-            case MAP_3D:
-                m_pMap3DNode = pEarthMap;
-                break;
-            case MAP_USER:
-                m_pMapUser = pEarthMap;
-                break;
-            }
-            pEarthMap->addEventCallback(m_pUpdateCallBack);
-            osgEarth::GLUtils::setGlobalDefaults(pEarthMap->getOrCreateStateSet());
-        }
-        return(pEarthMap);
-    }
+                if(nullptr == m_pSpaceEnv)
+                {
+                    m_pSpaceEnv = new CSpaceEnv(m_pSceneGraph);
+                    osg::Camera* pCamera = m_pView->getCamera();
+                    m_pSpaceEnv->SetMainCamara(pCamera);
+                    m_pSpaceEnv->Init();
 
-    return(nullptr);
+                    time_t timep;
+
+                    /// 更新时间
+                    time(&timep);
+                    auto p = gmtime(&timep);
+                    Aerospace::CDate data(p->tm_year+1900,p->tm_mon+1
+                                          ,p->tm_mday,p->tm_hour
+                                          ,p->tm_min,p->tm_sec,UTC);
+
+                    m_dMJD = data.GetMJD();
+                    DateChanged();
+                }
+
+                if(nullptr == m_pAtmosphere)
+                {
+                    m_pAtmosphere = new CAtmosphere(m_pSceneGraph);
+                    m_pAtmosphere->MakeAtmosphere();
+                }
+            }
+
+            ///切换视点
+            IOsgViewPoint* pViewPoint = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint());
+            if(nullptr != pViewPoint)
+            {
+                pViewPoint->ViewPointTypeChanged(m_pCurMapNode->isGeocentric() ? IOsgViewPoint::View_3DMap : IOsgViewPoint::View_2DMap);
+            }
+        }
+    }
 }
 
 /// 初始化光线

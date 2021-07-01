@@ -170,18 +170,10 @@ void QtSceneGraph::InitSceneGraph()
     {
     case SCENEGRAPH_2D:
     case SCENEGRAPH_3D:
+    case SCENEGRAPH_USER_EARTH:
         LoadMap();
         if(nullptr != m_pMap)
         {
-            if(SCENEGRAPH_2D == m_emType)
-            {
-                pViewPoint->ViewPointTypeChanged(IOsgViewPoint::View_2DMap);
-            }
-            else
-            {
-                pViewPoint->ViewPointTypeChanged(IOsgViewPoint::View_3DMap);
-            }
-
             m_pMap->AsOsgSceneNode()->Init();
 
             m_pRoot->AddSceneNode(m_pMap);

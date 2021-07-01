@@ -6,7 +6,6 @@
 #include <Plot/Map/IMap.h>
 #include <Inner/Common/ImplSceneGroup.hpp>
 #include <SceneGraph/IWindow.h>
-#include <Inner/OsgExtern/MapNodeCullBack.h>
 
 class CSpaceEnv;
 class ISceneGraph;
@@ -53,7 +52,7 @@ public:
      * @param TranType  转换类型 0表示从屏幕坐标转换成地理坐标，1表示由地理坐标转换成屏幕坐标
      * @return
      */
-    bool ConvertCoord(float& fX, float& fY, ScenePos &geoPos, short TranType) override;
+    bool ConvertCoord(int& fX, int& fY, ScenePos &geoPos, short TranType) override;
 
     /**
      * @brief 获取指定位置的高程
@@ -127,20 +126,9 @@ protected:
     void FrameCall() override;
 
     /**
-     * @brief 初始化地图
-     */
-    void InitMap(osgEarth::MapNode *pMapNode);
-
-    /**
      * @brief 加载地图
      */
     void LoadMap();
-
-    /**
-     * @brief 加载地图数据
-     * @return
-     */
-    osgEarth::MapNode* LoadEarthFile();
 
     /**
      * @brief 初始化3D灯光
@@ -152,25 +140,31 @@ protected:
      */
     void RemoveLayer(UserLayers::iterator itor);
 
-    /**
-     * @brief 获取正确的mapnode
-     */
-    inline osgEarth::MapNode* GetMapNode();
 protected:
+    int    m_nX{};
+    int    m_nY{};
+    ScenePos m_stMousePos;
+
     bool   m_bSelfRotate{false};
     bool   m_bDateChanged{false};
+    bool   m_bMapChanged{false};
+    bool   m_bInstelld{false};
     std::string m_sUserMapPath;
     std::list<IMapMessageObserver*> m_listObserver;
     osg::ref_ptr<osg::Group>   m_p2DRoot;
     osg::ref_ptr<osg::Group>   m_p3DRoot;
+    osg::ref_ptr<osg::MatrixTransform> m_pLeftTran;
+    osg::ref_ptr<osg::MatrixTransform> m_pRightTran;
 
-    osg::ref_ptr<osgEarth::MapNode> m_pMap3DNode;
-    osg::ref_ptr<osgEarth::MapNode> m_pMap2DNode;
-    osg::ref_ptr<osgEarth::MapNode> m_pMapUser;
+    osg::ref_ptr<osgEarth::MapNode> m_pPreMapNode;
+    osg::ref_ptr<osgEarth::MapNode> m_pCurMapNode;
 
     osg::ref_ptr<osgEarth::LightGL3> m_pLight;
     osg::ref_ptr<osg::Uniform>       m_pLightPosUniform;
-    osg::ref_ptr<CMapNodeCullBack>   m_pUpdateCallBack;
+
+    /// 主视口位置
+    osg::observer_ptr<osgViewer::View>            m_pView;
+    osg::ref_ptr<osgUtil::LineSegmentIntersector> m_pPicker;
 
     UserLayers   m_userLayers;
     MapLayers    m_earthFileLayers;

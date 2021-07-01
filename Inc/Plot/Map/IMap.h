@@ -55,7 +55,7 @@ public:
      * @param 转换类型 0表示从屏幕坐标转换成地理坐标，1表示由地理坐标转换成屏幕坐标
      * @return
      */
-    virtual bool ConvertCoord(float&, float&, ScenePos&, short)=0;
+    virtual bool ConvertCoord(int&, int&, ScenePos&, short)=0;
 
     /**
      * @brief 获取指定位置的高程
