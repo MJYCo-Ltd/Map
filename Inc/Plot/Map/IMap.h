@@ -118,6 +118,11 @@ public:
     virtual void SetShowAtmosphere(bool)=0;
 
     /**
+     * @brief 设置黑夜的颜色
+     */
+    virtual void SetNightColor(const SceneColor&)=0;
+
+    /**
      * @brief 更新时间
      * @arg   约简儒略日
      */

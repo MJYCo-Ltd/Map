@@ -356,6 +356,20 @@ void CMap::SetShowAtmosphere(bool bVisible)
     m_pAtmosphere->SetVisible(bVisible);
 }
 
+/// 设置黑夜颜色
+void CMap::SetNightColor(const SceneColor &rColor)
+{
+    if(rColor != m_stNightColor)
+    {
+        m_stNightColor = rColor;
+        if(m_pLight.valid())
+        {
+            m_pLight->setAmbient(osg::Vec4f(m_stNightColor.fR,m_stNightColor.fG
+                                            ,m_stNightColor.fB,m_stNightColor.fA));
+        }
+    }
+}
+
 /// 鼠标移动消息
 void CMap::MouseMove(MouseButtonMask, int nX, int nY)
 {
@@ -590,7 +604,8 @@ void CMap::Init3DLight()
     osg::LightSource* lightSource = new osg::LightSource();
     m_pLight = new osgEarth::LightGL3( 0 );
     m_pLight->setPosition( osg::Vec4f(0.0f, 0.0f, 1.0f, 0.0f) );
-    m_pLight->setAmbient ( osg::Vec4f(0.1f, 0.1f, 0.1f, 1.0f) );
+    m_pLight->setAmbient ( osg::Vec4f(m_stNightColor.fR,m_stNightColor.fG
+                                      ,m_stNightColor.fB,m_stNightColor.fA) );
     m_pLight->setDiffuse ( osg::Vec4f(1.0f, 1.0f, 1.0f, 1.0f) );
     m_pLight->setSpecular( osg::Vec4f(1.0f, 1.0f, 1.0f, 1.0f) );
     lightSource->setLight(m_pLight);

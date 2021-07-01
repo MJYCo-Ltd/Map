@@ -106,6 +106,11 @@ public:
     void SetShowAtmosphere(bool)override;
 
     /**
+     * @brief 设置黑夜的颜色
+     */
+    void SetNightColor(const SceneColor& rColor) override;
+
+    /**
      * @brief时间更新
      */
     void DateChanged() override SET_TRUE_NODE_UPDATE(m_bDateChanged)
@@ -144,6 +149,7 @@ protected:
     int    m_nX{};
     int    m_nY{};
     ScenePos m_stMousePos;
+    SceneColor m_stNightColor{0.1f,0.1f,0.1f};
 
     bool   m_bSelfRotate{false};
     bool   m_bDateChanged{false};
