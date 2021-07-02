@@ -10,8 +10,8 @@
 #include <Plot/IPlot.h>
 #include <Plot/SceneShape/ILine.h>
 #include <Plot/Common/ISceneModel.h>
-#include <Map/IMap.h>
-#include <Map/SpaceEnv/ISpaceEnv.h>
+#include <Plot/Map/IMap.h>
+#include <Plot/Map/SpaceEnv/ISpaceEnv.h>
 #include "SatelliteShow.h"
 
 static char S_3DSatllite[]="ISatellite";

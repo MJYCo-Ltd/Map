@@ -100,13 +100,14 @@ void MainWindow::SetSecenGraph(ISceneGraph *pSceneGraph)
     m_pSceneGraph = pSceneGraph;
     if(m_pSceneGraph->GetMap())
     {
+        m_pSceneGraph->GetMap()->LoadUserMap("E:/Git/Bin/Data/Earth/Geocentric.earth",false);
         m_pLayer = m_pSceneGraph->GetMap()->CreateLayer("Test");
         auto pMap= new MapObser(m_pSceneGraph);
         m_pSceneGraph->GetMainWindow()->SubMessage(pMap);
         m_pSceneGraph->GetMap()->SubMessage(pMap);
-        m_pSceneGraph->GetMap()->GetSpaceEnv()->ShowSpaceBackGround(false);
-        m_pSceneGraph->GetMap()->OpenLight(false);
-        m_pSceneGraph->GetMap()->SetShowAtmosphere(true);
+//        m_pSceneGraph->GetMap()->GetSpaceEnv()->ShowSpaceBackGround(false);
+//        m_pSceneGraph->GetMap()->OpenLight(false);
+//        m_pSceneGraph->GetMap()->SetShowAtmosphere(true);
     }
 }
 
@@ -422,7 +423,7 @@ void MainWindow::PlotMap()
     ScenePos pos;
     ///绘制地图元素
     auto m_pPoint = dynamic_cast<IMapPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPoint"));
-    pos.fX = 121.5;
+    pos.fX = -121.5;
     pos.fY = 25;
     pos.fZ = 1000;
     m_pPoint->GetDrawPoint()->AddPoint(0,pos);
@@ -438,12 +439,27 @@ void MainWindow::PlotMap()
     /// 绘制线
     auto m_pLine = dynamic_cast<IMapLine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLine"));
     m_pLine->GetDrawLine()->AddPoint(0,pos);
-    pos.fX = 122;
+    pos.fX = -92;
     pos.fY = 26;
-    m_pLine->GetDrawLine()->AddPoint(0,pos);
+    m_pLine->GetDrawLine()->AddPoint(1,pos);
+    pos.fX = -45;
+    pos.fY = 45;
+    m_pLine->GetDrawLine()->AddPoint(2,pos);
+    pos.fX = 0;
+    pos.fY = 60;
+    m_pLine->GetDrawLine()->AddPoint(3,pos);
+    pos.fX = 10;
+    pos.fY = 45;
+    m_pLine->GetDrawLine()->AddPoint(4,pos);
+    pos.fX = 40;
+    pos.fY = 35;
+    m_pLine->GetDrawLine()->AddPoint(5,pos);
     pos.fX = 123;
     pos.fY = 27;
-    m_pLine->GetDrawLine()->AddPoint(0,pos);
+    m_pLine->GetDrawLine()->AddPoint(6,pos);
+    pos.fX = 170;
+    pos.fY = 25;
+    m_pLine->GetDrawLine()->AddPoint(7,pos);
     m_pLine->GetDrawLine()->SetColor(color);
     m_pLine->GetDrawLine()->SetLineWidth(20.f);
     m_pLine->GetDrawLine()->OpenGlow(true);

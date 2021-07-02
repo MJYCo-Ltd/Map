@@ -1,7 +1,7 @@
 #ifndef SPACEENV_H
 #define SPACEENV_H
 
-#include <Map/SpaceEnv/ISpaceBackGround.h>
+#include <Plot/Map/SpaceEnv/ISpaceBackGround.h>
 #include <Inner/ImplSceneNode.hpp>
 #include <NoQt.h>
 #include "SkyNode.h"

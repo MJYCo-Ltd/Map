@@ -26,6 +26,18 @@ public:
     CONSTRUCTOR(IMap,ISceneGroup)
 
     /**
+     * @brief 通过文件初始化地图
+     * @param sFileName 文件路径
+     * @param bRef      是否是相对路径
+     */
+    virtual bool LoadUserMap(const std::string& sFileName,bool bRef=true)=0;
+
+    /**
+     * @brief 转换成IMap类型的节点
+     */
+    IMap* AsIMap(){return(this);}
+
+    /**
      * @brief 注册消息
      */
     virtual void SubMessage(IMapMessageObserver* pMsgObr)=0;
@@ -104,6 +116,11 @@ public:
      * @brief 设置大气层是否显示
      */
     virtual void SetShowAtmosphere(bool)=0;
+
+    /**
+     * @brief 设置黑夜的颜色
+     */
+    virtual void SetNightColor(const SceneColor&)=0;
 
     /**
      * @brief 更新时间

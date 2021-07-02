@@ -27,4 +27,5 @@ FORMS += \
 
 SDK_CONFIG *= SceneCore Satellite OSG ExternShape
 unix:SDK_CONFIG *= Satellite OsgExtern ExternShape
+
 include(../SoftSDK.pri)

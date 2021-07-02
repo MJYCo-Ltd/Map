@@ -8,6 +8,7 @@
 #include "../ToolSelector/ToolSelector.h"
 #include "PointPick.h"
 
+#include<QDebug>
 struct RttPickerCallBack:public osgEarth::Util::RTTPicker::Callback
 {
     RttPickerCallBack(CPointPick*pPointPick):m_pPicker(pPointPick){}
@@ -35,11 +36,12 @@ struct RttPickerCallBack:public osgEarth::Util::RTTPicker::Callback
         if(ea.getButton()==ea.LEFT_MOUSE_BUTTON &&ea.getEventType() == ea.DOUBLECLICK)
         {
             m_EventType = 2;
-            return(false);
+            return(true);
         }
         else if(ea.getButton()==ea.LEFT_MOUSE_BUTTON && ea.getEventType() == ea.PUSH)
         {
             m_EventType = 1;
+            return(true);
         }
         else
         {

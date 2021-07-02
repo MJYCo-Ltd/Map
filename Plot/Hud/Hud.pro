@@ -9,8 +9,8 @@ CONFIG -= qt
 TARGET = Hud
 TEMPLATE = lib
 
-SDK_CONFIG *= OSG OsgExtern
-include($$PWD/../MapPlot.pri)
+SDK_CONFIG *= OSG OsgExtern PLOT
+include($$PWD/../../SoftSDK.pri)
 
 HEADERS += \
     HudImage.h \

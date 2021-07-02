@@ -2,7 +2,8 @@ CONFIG -= qt
 TARGET = Analysis
 TEMPLATE = lib
 
-include($$PWD/../Tool.pri)
+SDK_CONFIG *= TOOL
+include($$PWD/../../SoftSDK.pri)
 
 HEADERS += \
     AnalysisTool.h \

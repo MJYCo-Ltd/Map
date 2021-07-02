@@ -2,7 +2,8 @@ CONFIG -= qt
 TARGET = Measure
 TEMPLATE = lib
 
-include($$PWD/../Tool.pri)
+SDK_CONFIG *= TOOL
+include($$PWD/../../SoftSDK.pri)
 
 HEADERS += \
     MeasureTool.h

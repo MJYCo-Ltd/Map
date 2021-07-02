@@ -4,6 +4,7 @@
 #include <SceneGraph/SceneType.h>
 
 class ISceneGraph;
+class IMap;
 class IHudNode;
 class ISceneGroup;
 class ISceneLodGroup;
@@ -89,6 +90,7 @@ public:
     virtual IMapSceneNode* AsMapSceneNode(){return(nullptr);}
     virtual IOsgSceneNode* AsOsgSceneNode(){return(nullptr);}
     virtual IHudNode* AsHudNode(){return(nullptr);}
+    virtual IMap* AsIMap(){return(nullptr);}
 protected:
     virtual ~ISceneNode(){}
     virtual void VisibleChanged()=0;

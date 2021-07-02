@@ -19,7 +19,8 @@ public:
     {
         SCENEGRAPH_3D,   /// 默认加载三维地图场景
         SCENEGRAPH_2D,   /// 默认加载二维地图场景
-        SCENEGRAPH_USER  /// 用户自定义场景
+        SCENEGRAPH_USER, /// 用户自定义场景
+        SCENEGRAPH_USER_EARTH /// 用户自定义地图场景
     };
 
     enum WindowType

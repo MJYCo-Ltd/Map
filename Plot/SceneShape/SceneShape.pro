@@ -9,8 +9,9 @@ CONFIG -= qt
 TARGET = SceneShape
 TEMPLATE = lib
 
-SDK_CONFIG *= OSG Satellite OsgExtern
-include($$PWD/../MapPlot.pri)
+SDK_CONFIG *= OSG Satellite OsgExtern PLOT
+
+include($$PWD/../../SoftSDK.pri)
 
 HEADERS += \
     DrawShape/SceneBox.h \
