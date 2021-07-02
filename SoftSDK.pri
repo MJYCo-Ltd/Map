@@ -22,7 +22,7 @@ win32{
     QMAKE_CXXFLAGS += /MP
 
     LIBS *= -L$$PWD/Lib
-    NEWGL3PATH = D:\MyData\Tencent\QYWX\WXWork\1688851982861420\WeDrive\石家庄沐吉源科技有限公司\石家庄沐吉源科技有限公司\研发部\NewGL3
+    NEWGL3PATH = C:\Users\Admin\Documents\WXWork\1688852020740149\WeDrive\石家庄沐吉源科技有限公司\石家庄沐吉源科技有限公司\研发部\NewGL3
     contains(TEMPLATE, "app"){
         DESTDIR = $$PWD/../Bin
     }else{

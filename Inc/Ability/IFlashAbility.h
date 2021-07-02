@@ -44,7 +44,7 @@ protected:
     virtual void FlashFlashChanged()=0;
 protected:
     bool         m_bFlash{true};
-    SceneColor   m_stFlahColor{1.f,0.f,0.f,1.f};
+    SceneColor   m_stFlahColor{};
     int          m_nFlashHZ{1};
 };
 
