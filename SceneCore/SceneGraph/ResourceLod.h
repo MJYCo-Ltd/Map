@@ -12,7 +12,7 @@ class CResourceLod:public ILoadResouce
 {
     friend class MyProxyNode;
 public:
-    CResourceLod(){}
+    CResourceLod();
     virtual ~CResourceLod(){}
 
     /**

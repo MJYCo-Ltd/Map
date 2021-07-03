@@ -93,8 +93,12 @@ bool CheckPC(char *argv[])
 
         /// 由于FBX采用的读取方法是单线程的，开启多线程会崩溃
         osg::DisplaySettings::instance()->setNumOfDatabaseThreadsHint(OpenThreads::GetNumberOfProcessors()-3);
-        osg::DisplaySettings::instance()->setNumOfHttpDatabaseThreadsHint(
-                    osg::DisplaySettings::instance()->getNumOfDatabaseThreadsHint()-1);
+        int nHttpThreads = osg::DisplaySettings::instance()->getNumOfDatabaseThreadsHint() - 4;
+        if(nHttpThreads < 1)
+        {
+            nHttpThreads = 1;
+        }
+        osg::DisplaySettings::instance()->setNumOfHttpDatabaseThreadsHint(nHttpThreads);
         format.setAlphaBufferSize( traits.alpha );
         format.setRedBufferSize( traits.red );
         format.setGreenBufferSize( traits.green );
