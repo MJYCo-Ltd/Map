@@ -27,6 +27,8 @@ public:
         {
             m_pResourceLoad->m_mapNode[m_sModelPath] = child;
             osgUtil::optimizeMesh(child);
+            osgEarth::GenerateGL3LightingUniforms generateUniforms;
+            child->accept(generateUniforms);
             auto pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(child->getOrCreateStateSet());
             m_pResourceLoad->LoadVirtualProgram(pVirutlProgram,"GLSL/Global.glsl");
             return(true);
