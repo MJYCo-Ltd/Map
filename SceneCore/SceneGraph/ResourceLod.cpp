@@ -91,7 +91,7 @@ osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
         else
         {
             auto pFineOne = s_gNeedAss.find(fileExten);
-            if(s_gNeedAss.end() == pFineOne)
+            if(s_gNeedAss.end() != pFineOne)
             {
                 modelPath +=".ass";
             }
