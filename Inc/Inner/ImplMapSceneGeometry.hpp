@@ -63,50 +63,62 @@ protected:
         {
             vIn.at(nIndex++).set(one.fX,one.fY,one.fZ);
         }
+        bool bIs3D = ImplMapSceneNode<T>::s_pMapNode->isGeocentric();
 
-        /// 将经纬度信息转成地图的投影信息
-        ImplMapSceneNode<T>::s_pWGS84->transform(vIn,ImplMapSceneNode<T>::s_pMapSRS.get());
-
-        std::vector<osg::Vec3d> vOut;
-        vOut.resize(vIn.size());
-        for(int nIndex=vIn.size()-1;nIndex>-1;--nIndex)
+        vAllPos.resize(vIn.size());
+        if(bIs3D)
         {
-            ImplMapSceneNode<T>::s_pMapSRS.get()->transformToWorld(vIn.at(nIndex),vOut.at(nIndex));
-        }
-
-        vAllPos.resize(vOut.size());
-
-        /// 如果是相对位置
-        if(T::RELATIVE_TERRAIN == T::m_emType)
-        {
-            /// 根据高程计算
-            double out_hamsl,dLength;
-
-            osg::ref_ptr<osgEarth::Terrain> terrain;
-            ImplMapSceneNode<T>::s_pTerrain.lock(terrain);
-
-            nIndex=0;
-            for(auto one : listAllPos)
+            std::vector<osg::Vec3d> vOut;
+            vOut.resize(vIn.size());
+            for(int nIndex=vIn.size()-1;nIndex>-1;--nIndex)
             {
-                if(terrain->getHeight(ImplMapSceneNode<T>::s_pWGS84.get(), one.fX, one.fY, &out_hamsl))
+                ImplMapSceneNode<T>::s_pMapSRS->transformToWorld(vIn.at(nIndex),vOut.at(nIndex));
+            }
+
+            /// 如果是相对位置
+            if(T::RELATIVE_TERRAIN == T::m_emType)
+            {
+                /// 根据高程计算
+                double out_hamsl,dLength;
+
+                osg::ref_ptr<osgEarth::Terrain> terrain;
+                ImplMapSceneNode<T>::s_pTerrain.lock(terrain);
+
+                nIndex=0;
+                for(auto one : listAllPos)
                 {
-                    dLength=vOut[nIndex].length();
-                    vOut[nIndex] *= 1 + out_hamsl/dLength;
+                    if(terrain->getHeight(ImplMapSceneNode<T>::s_pWGS84.get(), one.fX, one.fY, &out_hamsl))
+                    {
+                        dLength=vOut[nIndex].length();
+                        vOut[nIndex] *= 1 + out_hamsl/dLength;
+                    }
+                    ++nIndex;
                 }
+            }
+            nIndex=0;
+            for(auto one : vOut)
+            {
+                vAllPos[nIndex].fX = one.x();
+                vAllPos[nIndex].fY = one.y();
+                vAllPos[nIndex].fZ = one.z();
                 ++nIndex;
             }
+            return(true);
         }
-
-        nIndex=0;
-        for(auto one : vOut)
+        else
         {
-            vAllPos[nIndex].fX = one.x();
-            vAllPos[nIndex].fY = one.y();
-            vAllPos[nIndex].fZ = one.z();
-            ++nIndex;
+            /// 将经纬度信息转成地图的投影信息
+            ImplMapSceneNode<T>::s_pWGS84->transform(vIn,ImplMapSceneNode<T>::s_pMapSRS.get());
+            nIndex=0;
+            for(auto one : vIn)
+            {
+                vAllPos[nIndex].fX = one.x();
+                vAllPos[nIndex].fY = one.y();
+                vAllPos[nIndex].fZ = one.z();
+                ++nIndex;
+            }
+            return(true);
         }
-        return(true);
-
     }
 protected:
    IGeometry* m_pGeometry{};

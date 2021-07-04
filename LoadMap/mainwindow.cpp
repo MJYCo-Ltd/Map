@@ -590,8 +590,8 @@ void MainWindow::on_action12_triggered()
 {
     ISceneGroup* pSceneRoot = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
 
-    ISceneNode * pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("D:/MyData/Tencent/BIMGIS_scz20201013/data/3dmodel/tree2.FBX",false);
-    //ISceneNode * pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("F:/zhiwu.obj",false);
+//    ISceneNode * pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("D:/MyData/Tencent/BIMGIS_scz20201013/data/3dmodel/tree2.FBX",false);
+    ISceneNode * pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("F:/zhiwu.obj",false);
     pSceneRoot->AddSceneNode(pModel);
     SceneColor color;
 
