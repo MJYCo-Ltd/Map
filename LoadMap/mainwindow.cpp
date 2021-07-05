@@ -100,7 +100,7 @@ void MainWindow::SetSecenGraph(ISceneGraph *pSceneGraph)
     m_pSceneGraph = pSceneGraph;
     if(m_pSceneGraph->GetMap())
     {
-        m_pSceneGraph->GetMap()->LoadUserMap("E:/Git/Bin/Data/Earth/Geocentric.earth",false);
+//        m_pSceneGraph->GetMap()->LoadUserMap("E:/Git/Bin/Data/Earth/Geocentric.earth",false);
         m_pLayer = m_pSceneGraph->GetMap()->CreateLayer("Test");
         auto pMap= new MapObser(m_pSceneGraph);
         m_pSceneGraph->GetMainWindow()->SubMessage(pMap);
@@ -517,7 +517,7 @@ void MainWindow::LodPlot()
     pLod->AddSceneNode(pAutoImage1);
     pLod->AddSceneNode(pAutoImage2);
 
-    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("Model/AirPlane.ive",true);
+    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("D:/MyData/Tencent/BIMGIS_scz20201013/data/3dmodel/tree2.FBX.ass",false);
     auto pAutoModel = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
     pAutoModel->SetMinScal(1.);
     pAutoModel->AddSceneNode(pModel);
@@ -590,7 +590,8 @@ void MainWindow::on_action12_triggered()
 {
     ISceneGroup* pSceneRoot = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
 
-    ISceneNode * pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("Model/SJ-2/shixian-2.flt");
+//    ISceneNode * pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("D:/MyData/Tencent/BIMGIS_scz20201013/data/3dmodel/tree2.FBX",false);
+    ISceneNode * pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("F:/zhiwu.obj",false);
     pSceneRoot->AddSceneNode(pModel);
     SceneColor color;
 

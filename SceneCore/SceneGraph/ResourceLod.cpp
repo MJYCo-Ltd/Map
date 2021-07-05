@@ -27,6 +27,8 @@ public:
         {
             m_pResourceLoad->m_mapNode[m_sModelPath] = child;
             osgUtil::optimizeMesh(child);
+            osgEarth::GenerateGL3LightingUniforms generateUniforms;
+            child->accept(generateUniforms);
             auto pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(child->getOrCreateStateSet());
             m_pResourceLoad->LoadVirtualProgram(pVirutlProgram,"GLSL/Global.glsl");
             return(true);
@@ -42,8 +44,16 @@ private:
     std::string   m_sModelPath;
 };
 
+static std::set<std::string> s_gNeedAss;
+static const std::string s_gEarth("earth");
 
 /// 初始化路径
+CResourceLod::CResourceLod()
+{
+    s_gNeedAss.insert("fbx");
+    s_gNeedAss.insert("obj");
+}
+
 void CResourceLod::InitPath(const std::string &csAppPath)
 {
     m_sAppPath = csAppPath;
@@ -69,13 +79,8 @@ osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
     }
     else
     {
-        if(!osgDB::equalCaseInsensitive(osgDB::getFileExtension(modelPath),"earth"))
-        {
-            MyProxyNode* pNode = new MyProxyNode(this,modelPath);//osgDB::readNodeFile(modelPath);
-            m_mapNode[modelPath] = pNode;
-            return(pNode);
-        }
-        else
+        auto fileExten = osgDB::getLowerCaseFileExtension(modelPath);
+        if(s_gEarth == fileExten)
         {
             osg::Node* pNode = osgDB::readNodeFile(modelPath);
             if(nullptr != pNode)
@@ -83,6 +88,17 @@ osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
                 m_mapNode[modelPath] = pNode;
             }
 
+            return(pNode);
+        }
+        else
+        {
+            auto pFineOne = s_gNeedAss.find(fileExten);
+            if(s_gNeedAss.end() != pFineOne)
+            {
+                modelPath +=".ass";
+            }
+            MyProxyNode* pNode = new MyProxyNode(this,modelPath);//osgDB::readNodeFile(modelPath);
+            m_mapNode[modelPath] = pNode;
             return(pNode);
         }
     }
