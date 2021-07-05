@@ -72,6 +72,14 @@ osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
         modelPath = sModelPath;
     }
 
+    auto fileExten = osgDB::getLowerCaseFileExtension(modelPath);
+    auto pFineOne = s_gNeedAss.find(fileExten);
+    if(s_gNeedAss.end() != pFineOne)
+    {
+        modelPath +=".ass";
+    }
+
+
     auto itor = m_mapNode.find(modelPath);
     if(m_mapNode.end() != itor && itor->second.valid())
     {
@@ -79,7 +87,6 @@ osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
     }
     else
     {
-        auto fileExten = osgDB::getLowerCaseFileExtension(modelPath);
         if(s_gEarth == fileExten)
         {
             osg::Node* pNode = osgDB::readNodeFile(modelPath);
@@ -92,11 +99,6 @@ osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
         }
         else
         {
-            auto pFineOne = s_gNeedAss.find(fileExten);
-            if(s_gNeedAss.end() != pFineOne)
-            {
-                modelPath +=".ass";
-            }
             MyProxyNode* pNode = new MyProxyNode(this,modelPath);//osgDB::readNodeFile(modelPath);
             m_mapNode[modelPath] = pNode;
             return(pNode);
