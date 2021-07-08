@@ -35,6 +35,7 @@ protected:
     {
         if(m_pTerrainCallback.valid())
         {
+            m_pTerrainCallback->m_pMapSceneNode=nullptr;
             T::m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
                         new RemoveTerrainCullbackScene(s_pTerrain.get(),
                                                        m_pTerrainCallback.get()));
@@ -100,7 +101,8 @@ protected:
 
         if(!m_bInsertIntoTerrain)
         {
-            m_pTerrainCallback = new MayTerrainCallback(this);
+            m_pTerrainCallback = new MayTerrainCallback;
+            m_pTerrainCallback->m_pMapSceneNode=this;
             s_pTerrain->addTerrainCallback(m_pTerrainCallback);
             m_bInsertIntoTerrain=true;
         }
@@ -110,7 +112,7 @@ protected:
 protected:
     bool m_bInsertIntoTerrain{false};
     bool m_bTerrainTypeChanged{false}; /// 贴地模式是否修改
-    osg::ref_ptr<osgEarth::TerrainCallback>     m_pTerrainCallback;
+    osg::ref_ptr<MayTerrainCallback>            m_pTerrainCallback;
     osg::ref_ptr<osgEarth::HorizonCullCallback> m_pHorizonCullBack;
 };
 #endif // IMPL_OSG_MAP_SHAPE_H
