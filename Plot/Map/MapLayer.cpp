@@ -100,7 +100,6 @@ void CMapLayer::UpdateMapNode()
 /// 删除节点
 void CMapLayer::RemoveNode(IMapSceneNode *pSceneNode)
 {
-    pSceneNode->AsOsgSceneNode()->DelFromGroup(m_pModelLayer->getGroup());
     /// 从场景中移除
    m_pModelLayer->RemoveSceneNode(pSceneNode);
 }

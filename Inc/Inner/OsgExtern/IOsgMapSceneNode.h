@@ -32,10 +32,13 @@ public:
 
     struct MayTerrainCallback : public osgEarth::TerrainCallback
     {
-        MayTerrainCallback(IOsgMapSceneNode* pMapSceneNode) : m_pMapSceneNode(pMapSceneNode){}
+        MayTerrainCallback(){}
         void onTileUpdate(const osgEarth::TileKey& key, osg::Node*, osgEarth::TerrainCallbackContext&)
         {
-            m_pMapSceneNode->TileDataChanged(key);
+            if(nullptr != m_pMapSceneNode)
+            {
+                m_pMapSceneNode->TileDataChanged(key);
+            }
         }
         IOsgMapSceneNode* m_pMapSceneNode;
     };
