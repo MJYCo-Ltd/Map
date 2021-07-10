@@ -67,15 +67,16 @@ void CStarEnv::SetMainView(osgViewer::View* pMainView)
     m_pMainCamera = m_pMainView->getCamera();
     setViewport(m_pMainCamera->getViewport());
     setGraphicsContext(m_pMainCamera->getGraphicsContext());
-    double fovy,aspectRatio,zNear,zFar;
-    m_pMainCamera->getProjectionMatrixAsPerspective(fovy,aspectRatio,zNear,zFar);
-    setProjectionMatrixAsPerspective(fovy,aspectRatio,0.00011,1.1);
-//    m_pMainView->addSlave(this,false);
+    InitProjMatrix();
 }
 
 
 void CStarEnv::traverse(osg::NodeVisitor& nv)
 {
+    if(!m_bInit)
+    {
+        InitProjMatrix();
+    }
     if (m_pMainCamera.valid() && osg::NodeVisitor::CULL_VISITOR == nv.getVisitorType())
     {
         osg::Matrix matrix = m_pMainCamera->getViewMatrix();
@@ -124,6 +125,17 @@ void CStarEnv::UpdateMatrix(const CMatrix &rRotate)
                  rRotate(1, 0), rRotate(1, 1), rRotate(1, 2), 0.,
                  rRotate(2, 0), rRotate(2, 1), rRotate(2, 2), 0.,
                  0., 0., 0., 1.);
+}
+
+void CStarEnv::InitProjMatrix()
+{
+    if(!osg::equivalent(m_pMainCamera->getProjectionMatrix()(3,3),1.0))
+    {
+        double fovy,aspectRatio,zNear,zFar;
+        m_pMainCamera->getProjectionMatrixAsPerspective(fovy,aspectRatio,zNear,zFar);
+        setProjectionMatrixAsPerspective(fovy,aspectRatio,0.00011,1.1);
+        m_bInit = true;
+    }
 }
 
 CStarEnv::~CStarEnv()

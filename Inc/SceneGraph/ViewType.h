@@ -75,6 +75,11 @@ struct CameraViewPort
     {
         return(!this->operator==(rOther));
     }
+
+    bool IsValid()const
+    {
+        return(0 != nWidth && 0 != nHeight);
+    }
 };
 
 /// 视口类型

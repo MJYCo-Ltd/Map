@@ -425,7 +425,7 @@ void MainWindow::PlotMap()
     auto m_pPoint = dynamic_cast<IMapPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPoint"));
     pos.fX = -121.5;
     pos.fY = 25;
-    pos.fZ = 1000;
+    pos.fZ = 0;
     m_pPoint->GetDrawPoint()->AddPoint(0,pos);
     SceneColor color;
     color.fG = .0f;

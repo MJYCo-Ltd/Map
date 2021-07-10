@@ -157,8 +157,8 @@ protected:
     bool   m_bInstelld{false};
     std::string m_sUserMapPath;
     std::list<IMapMessageObserver*> m_listObserver;
-    osg::ref_ptr<osg::Group>   m_p2DRoot;
     osg::ref_ptr<osg::Group>   m_p3DRoot;
+    osg::ref_ptr<osg::Group>   m_pNoTran2DMapNode;
     osg::ref_ptr<osg::MatrixTransform> m_pLeftTran;
     osg::ref_ptr<osg::MatrixTransform> m_pRightTran;
 
