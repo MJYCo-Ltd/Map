@@ -115,6 +115,15 @@ public:
     }
 
     /**
+     * @brief 获取所有点的位置
+     * @return
+     */
+    const std::list<ScenePos>& BetterGetMulPos()const
+    {
+        return(m_listAllPos);
+    }
+
+    /**
      * @brief 获取个数
      * @return
      */

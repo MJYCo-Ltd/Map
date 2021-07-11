@@ -38,6 +38,7 @@ public:
      */
     virtual void SetMultPos(const std::vector<ScenePos>&)=0;
     virtual std::vector<ScenePos> GetMulPos()const=0;
+    virtual const std::list<ScenePos>& BetterGetMulPos()const=0;
 
     /**
      * @brief 获取几何图形中点的个数

@@ -14,6 +14,7 @@ public:
     static void SetMapNode(osgEarth::MapNode* pMapNode)
     {
         s_pMapNode = pMapNode;
+        s_bIs3D = pMapNode->isGeocentric();
         s_pMapSRS = pMapNode->getMapSRS();
         s_pTerrain = s_pMapNode->getTerrain();
     }
@@ -43,6 +44,7 @@ public:
         IOsgMapSceneNode* m_pMapSceneNode;
     };
 protected:
+    static bool                                              s_bIs3D;
     static osg::observer_ptr<osgEarth::MapNode>                s_pMapNode;
     static osg::observer_ptr<const osgEarth::SpatialReference> s_pMapSRS;
     static osg::observer_ptr<osgEarth::Terrain>          s_pTerrain;

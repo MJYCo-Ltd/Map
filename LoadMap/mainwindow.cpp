@@ -101,7 +101,6 @@ void MainWindow::SetSecenGraph(ISceneGraph *pSceneGraph)
     if(m_pSceneGraph->GetMap())
     {
 //        m_pSceneGraph->GetMap()->LoadUserMap("E:/Git/Bin/Data/Earth/Geocentric.earth",false);
-        m_pLayer = m_pSceneGraph->GetMap()->CreateLayer("Test");
         auto pMap= new MapObser(m_pSceneGraph);
         m_pSceneGraph->GetMainWindow()->SubMessage(pMap);
         m_pSceneGraph->GetMap()->SubMessage(pMap);
@@ -140,6 +139,7 @@ IImage* pImage=nullptr;
 
 void MainWindow::on_action_triggered()
 {
+    m_pLayer = m_pSceneGraph->GetMap()->CreateLayer("Test");
     m_pSceneGraph->GetMap()->OpenLight(true);
     ScenePos pos11;
     pos11.fX = 126.0;
@@ -425,7 +425,7 @@ void MainWindow::PlotMap()
     auto m_pPoint = dynamic_cast<IMapPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPoint"));
     pos.fX = -121.5;
     pos.fY = 25;
-    pos.fZ = 0;
+    pos.fZ = 100;
     m_pPoint->GetDrawPoint()->AddPoint(0,pos);
     SceneColor color;
     color.fG = .0f;

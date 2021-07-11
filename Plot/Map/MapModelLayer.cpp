@@ -20,8 +20,7 @@ void CMapModelLayer::InitNode()
 {
     init();
     ImplSceneGroup<ISceneGroup>::InitNode();
-//    DepthOffsetAdapter doa;
-//    doa.setGraph(m_pGroup.get());
+
 }
 
 osg::Node* CMapModelLayer::getNode() const
