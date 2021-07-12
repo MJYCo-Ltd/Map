@@ -433,7 +433,7 @@ void MainWindow::PlotMap()
     m_pPoint->GetDrawPoint()->SetColor(color);
     m_pPoint->GetDrawPoint()->SetPointSize(50.f);
     m_pPoint->GetDrawPoint()->SetImage("Image/ship.png");
-    m_pPoint->SetTerrainType(IMapSceneNode::ABSOLUTE_TERRAIN);
+    m_pPoint->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
     m_pLayer->AddSceneNode(m_pPoint);
 
     /// 绘制线
@@ -463,7 +463,7 @@ void MainWindow::PlotMap()
     m_pLine->GetDrawLine()->SetColor(color);
     m_pLine->GetDrawLine()->SetLineWidth(20.f);
     m_pLine->GetDrawLine()->OpenGlow(true);
-    m_pLine->SetTerrainType(IMapSceneNode::ABSOLUTE_TERRAIN);
+    m_pLine->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
     m_pLayer->AddSceneNode(m_pLine);
 
     /// 绘制区域
@@ -482,7 +482,7 @@ void MainWindow::PlotMap()
     pos.fY = 27;
     m_pPolygon->GetDrawPolygon()->AddPoint(4,pos);
     m_pPolygon->GetDrawPolygon()->SetColor(color);
-    m_pPolygon->SetTerrainType(IMapSceneNode::ABSOLUTE_TERRAIN);
+    m_pPolygon->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
     m_pLayer->AddSceneNode(m_pPolygon);
 
     auto pMapLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
@@ -517,7 +517,7 @@ void MainWindow::LodPlot()
     pLod->AddSceneNode(pAutoImage1);
     pLod->AddSceneNode(pAutoImage2);
 
-    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("D:/MyData/Tencent/BIMGIS_scz20201013/data/3dmodel/tree2.FBX.ass",false);
+    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("D:/MyData/Tencent/BIMGIS_scz20201013/data/3dmodel/tree2.FBX",false);
     auto pAutoModel = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
     pAutoModel->SetMinScal(1.);
     pAutoModel->AddSceneNode(pModel);

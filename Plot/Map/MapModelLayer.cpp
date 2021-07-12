@@ -1,5 +1,4 @@
-#include <osgEarth/AnnotationNode>
-#include <osgEarth/DepthOffset>
+#include <osg/PolygonOffset>
 #include "MapModelLayer.h"
 
 using namespace osgEarth;
@@ -20,6 +19,12 @@ void CMapModelLayer::InitNode()
 {
     init();
     ImplSceneGroup<ISceneGroup>::InitNode();
+
+    m_pGroup->getOrCreateStateSet()->setAttributeAndModes(
+                new osg::PolygonOffset(-1, -1), 1);
+
+    m_pGroup->getOrCreateStateSet()->setAttributeAndModes(
+                new osg::Depth(osg::Depth::LEQUAL, 0, 1, true));
 
 }
 

@@ -158,7 +158,6 @@ QtViewPort::QtViewPort(IRender *pRender,ISceneGraph *pSceneGraph):
         break;
     }
 
-    m_pView->addEventHandler(new osgViewer::StatsHandler);
     m_pView->addEventHandler(new ViewPortEventCallback(this));
 
     m_pSelfManipulator = new osgGA::TrackballManipulator;
