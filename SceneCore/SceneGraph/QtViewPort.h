@@ -138,6 +138,7 @@ protected:
     ViewPointType                                  m_emPreType{View_Osg};
     double                                         m_dTimes{0.};
     bool           m_bViewPointChanged{false};
+    bool           m_bViewTypeChanged{false};
     SceneViewPoint m_stViewPoint;
 
     QtViewHud*     m_pHud{};                                         /// 屏显根节点

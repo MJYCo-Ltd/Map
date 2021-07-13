@@ -32,7 +32,10 @@ protected:
         }
     }
 
-    /// 设置绘制几何体
+    /**
+     * @brief 设置绘制几何体
+     * @param 指定的绘制几何体
+     */
     void SetGeometry(IGeometry* pGeometry)
     {
         m_pGeometry=pGeometry;
@@ -41,11 +44,39 @@ protected:
     }
 
     /**
+     * @brief 瓦片数据更新
+     * @param rTileKey
+     */
+    void TileDataChanged(const osgEarth::TileKey& rTileKey)
+    {
+        if(s_bIs3D && T::RELATIVE_TERRAIN==T::m_emType && nullptr != m_pGeometry)
+        {
+            const std::list<ScenePos> & rAllPos = m_pGeometry->BetterGetMulPos();
+            for(const ScenePos& one : rAllPos)
+            {
+                if(rTileKey.getExtent().contains(one.fX,one.fY,s_pWGS84))
+                {
+                    m_pGeometry->NeedUpdate();
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
      * @brief 状态更改
      */
     void UpdateTrerrain()
     {
-        m_pDrapeNode->setDrapingEnabled(T::m_emType==T::CLOSE_TERRAIN);
+        /// 根据高程类型选择是否开启贴地
+        if(s_bIs3D)
+        {
+            m_pDrapeNode->setDrapingEnabled(T::CLOSE_TERRAIN == T::m_emType);
+        }
+        else
+        {
+            m_pDrapeNode->setDrapingEnabled(false);
+        }
         m_pGeometry->NeedUpdate();
     }
 
@@ -63,10 +94,9 @@ protected:
         {
             vIn.at(nIndex++).set(one.fX,one.fY,one.fZ);
         }
-        bool bIs3D = ImplMapSceneNode<T>::s_pMapNode->isGeocentric();
 
         vAllPos.resize(vIn.size());
-        if(bIs3D)
+        if(s_bIs3D)
         {
             std::vector<osg::Vec3d> vOut;
             vOut.resize(vIn.size());

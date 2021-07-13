@@ -34,11 +34,6 @@ CMap::~CMap()
 
     ClearLayers();
 
-    if(m_p2DRoot.valid())
-    {
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_p2DRoot));
-        m_p2DRoot = nullptr;
-    }
     if (m_pPreMapNode.valid())
     {
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pPreMapNode));
@@ -240,7 +235,6 @@ IMapLayer *CMap::CreateLayer(const std::string & sLayerName)
     {
         CMapLayer* pLayer = new CMapLayer(sLayerName,m_pSceneGraph);
         m_userLayers[sLayerName] = pLayer;
-
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(m_pCurMapNode,pLayer->GetModelLayer(),true));
 
         /// 通知观察者
@@ -448,7 +442,13 @@ void CMap::FrameCall()
         }
         else /// 如果是二维地球
         {
-            m_pGroup->addChild(m_pCurMapNode);
+            if(!m_pNoTran2DMapNode.valid())
+            {
+                m_pNoTran2DMapNode = new osg::Group;
+            }
+            m_pNoTran2DMapNode->removeChild(m_pPreMapNode);
+            m_pNoTran2DMapNode->addChild(m_pCurMapNode);
+            m_pGroup->addChild(m_pNoTran2DMapNode);
 
             auto dWidth = m_pCurMapNode->getMap()->getProfile()->getExtent().width();
             if(!m_pLeftTran.valid())
@@ -470,8 +470,15 @@ void CMap::FrameCall()
 
 
             /// 添加到根节点
-            m_pGroup->addChild(m_pLeftTran);
             m_pGroup->addChild(m_pRightTran);
+            m_pGroup->addChild(m_pLeftTran);
+        }
+
+        ///切换视点
+        IOsgViewPoint* pViewPoint = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint());
+        if(nullptr != pViewPoint)
+        {
+            pViewPoint->ViewPointTypeChanged(m_pCurMapNode->isGeocentric() ? IOsgViewPoint::View_3DMap : IOsgViewPoint::View_2DMap);
         }
 
         m_bMapChanged=false;
@@ -481,7 +488,6 @@ void CMap::FrameCall()
     if(m_bDateChanged)
     {
         m_pSpaceEnv->UpdateDate(m_dMJD);
-        m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetViewPoint();
 
         const Math::CVector& vSunPos = m_pSpaceEnv->GetSunPos();
         osg::Vec3 npos(vSunPos.GetX(),vSunPos.GetY(),vSunPos.GetZ());
@@ -585,13 +591,6 @@ void CMap::LoadMap()
                     m_pAtmosphere = new CAtmosphere(m_pSceneGraph);
                     m_pAtmosphere->MakeAtmosphere();
                 }
-            }
-
-            ///切换视点
-            IOsgViewPoint* pViewPoint = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint());
-            if(nullptr != pViewPoint)
-            {
-                pViewPoint->ViewPointTypeChanged(m_pCurMapNode->isGeocentric() ? IOsgViewPoint::View_3DMap : IOsgViewPoint::View_2DMap);
             }
         }
     }

@@ -44,12 +44,7 @@ bool CMyEarthManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIAct
 {
     if(MAP_2D == m_emType && !m_bCalFactor)
     {
-        auto view = us.asView();
-        double dFvoy,dAccept,dNear,dFar;
-        view->getCamera()->getProjectionMatrixAsPerspective(dFvoy,dAccept,dNear,dFar);
-
-        m_dTanFvoy = tan(osg::DegreesToRadians(dFvoy/2.0));
-
+        m_dTanFvoy = tan(osg::DegreesToRadians(15.));
         m_bCalFactor = true;
     }
 

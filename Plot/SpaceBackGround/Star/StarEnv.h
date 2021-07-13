@@ -57,9 +57,10 @@ public:
     void UpdateMatrix(const Math::CMatrix &rRotate);
 
 protected:
-
+    void InitProjMatrix();
     ~CStarEnv();
 private:
+    bool                               m_bInit{false};
     osg::Matrix                        m_rRoate;
     ISceneGraph*                       m_pSceneGraph;
     osg::ref_ptr<CMilkyway>            m_pMilkyway;

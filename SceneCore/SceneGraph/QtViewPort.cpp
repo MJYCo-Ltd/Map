@@ -158,7 +158,6 @@ QtViewPort::QtViewPort(IRender *pRender,ISceneGraph *pSceneGraph):
         break;
     }
 
-    m_pView->addEventHandler(new osgViewer::StatsHandler);
     m_pView->addEventHandler(new ViewPortEventCallback(this));
 
     m_pSelfManipulator = new osgGA::TrackballManipulator;
@@ -186,33 +185,16 @@ void QtViewPort::ViewPointTypeChanged(ViewPointType emType)
         return;
     }
 
-    switch(emType)
+    m_bViewTypeChanged = true;
+    m_bUpdateProject=true;
+
+    if(View_2DMap == emType)
     {
-    case View_2DMap:
-        if(!m_p2DEarthManipulator.valid())
-        {
-            m_p2DEarthManipulator = new CMyEarthManipulator(MAP_2D);
-            m_p2DEarthManipulator->InitHomePoint(m_stHomePoint);
-        }
-        m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_p2DEarthManipulator));
-        break;
-    case View_3DMap:
-        if(!m_p3DEarthManipulator.valid())
-        {
-            m_p3DEarthManipulator = new CMyEarthManipulator(MAP_3D);
-            m_p3DEarthManipulator->InitHomePoint(m_stHomePoint);
-        }
-        m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_p3DEarthManipulator));
-        break;
-    case View_Osg:
-        if(!m_pSelfManipulator.valid())
-        {
-            m_pSelfManipulator = new osgGA::TrackballManipulator;
-        }
-        m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_pSelfManipulator));
-        break;
-    case View_Node:
-        break;
+        m_emProjectType=Ortho;
+    }
+    else
+    {
+        m_emProjectType=Perspective;
     }
 
     m_emType = emType;
@@ -503,7 +485,7 @@ void QtViewPort::FrameEvent()
                     m_emType = View_Node;
 
                     m_pTrackManipulator->setTrackNode(pOsgNode->GetOsgNode());
-                    m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_pTrackManipulator));
+                    m_pView->setCameraManipulator(m_pTrackManipulator);
                 }
                 else
                 {
@@ -518,13 +500,13 @@ void QtViewPort::FrameEvent()
                 switch (m_emPreType)
                 {
                 case View_3DMap:
-                    m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_p3DEarthManipulator));
+                    m_pView->setCameraManipulator(m_p3DEarthManipulator);
                     break;
                 case View_2DMap:
-                    m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_p2DEarthManipulator));
+                    m_pView->setCameraManipulator(m_p2DEarthManipulator);
                     break;
                 default:
-                    m_pRender->AddUpdateOperation(new ChangeManipulator(m_pView,m_pSelfManipulator));
+                    m_pView->setCameraManipulator(m_pSelfManipulator);
                     break;
                 }
             }
@@ -541,17 +523,71 @@ void QtViewPort::FrameEvent()
     /// 更新投影方式
     if(m_bUpdateProject)
     {
-        double dAcesip = static_cast<double>(m_stViewPort.nWidth)/static_cast<double>(m_stViewPort.nHeight);
+        double dAcesip{1.0},dX,dY,dWidth,dHight;
+        if(m_stViewPort.IsValid())
+        {
+            dAcesip = static_cast<double>(m_stViewPort.nWidth)/static_cast<double>(m_stViewPort.nHeight);
+            dX = m_stViewPort.nX;
+            dY = m_stViewPort.nY;
+            dWidth = m_stViewPort.nWidth;
+            dHight = m_stViewPort.nHeight;
+        }
+        else
+        {
+            auto pViewport = m_pView->getCamera()->getViewport();
+            if(pViewport)
+            {
+                dX = pViewport->x();
+                dY = pViewport->y();
+                dWidth = pViewport->width();
+                dHight = pViewport->height();
+                dAcesip = dWidth/dHight;
+            }
+        }
         switch (m_emProjectType)
         {
         case Ortho:
-            m_pView->getCamera()->setProjectionMatrixAsOrtho2D(m_stViewPort.nX,m_stViewPort.nWidth,m_stViewPort.nY,m_stViewPort.nHeight);
+            m_pView->getCamera()->setProjectionMatrixAsOrtho2D(-dWidth/2,dWidth/2,-dHight/2,dHight/2);
             break;
         case Perspective:
             m_pView->getCamera()->setProjectionMatrixAsPerspective(45,dAcesip,0.01,100.);
             break;
         }
         m_bUpdateProject = false;
+    }
+
+    if(m_bViewTypeChanged)
+    {
+        switch(m_emType)
+        {
+        case View_2DMap:
+            if(!m_p2DEarthManipulator.valid())
+            {
+                m_p2DEarthManipulator = new CMyEarthManipulator(MAP_2D);
+                m_p2DEarthManipulator->InitHomePoint(m_stHomePoint);
+            }
+            m_pView->setCameraManipulator(m_p2DEarthManipulator);
+            break;
+        case View_3DMap:
+            if(!m_p3DEarthManipulator.valid())
+            {
+                m_p3DEarthManipulator = new CMyEarthManipulator(MAP_3D);
+                m_p3DEarthManipulator->InitHomePoint(m_stHomePoint);
+            }
+            m_pView->setCameraManipulator(m_p3DEarthManipulator);
+            break;
+        case View_Osg:
+            if(!m_pSelfManipulator.valid())
+            {
+                m_pSelfManipulator = new osgGA::TrackballManipulator;
+            }
+            m_pView->setCameraManipulator(m_pSelfManipulator);
+            break;
+        case View_Node:
+            break;
+        }
+
+        m_bViewTypeChanged=false;
     }
 
 
