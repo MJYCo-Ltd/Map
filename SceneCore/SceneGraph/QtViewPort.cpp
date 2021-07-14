@@ -258,6 +258,13 @@ osgViewer::View *QtViewPort::GetOsgView()
 /// 每一帧都会调用一次
 void QtViewPort::FrameEvent()
 {
+    if(m_bRemoveCapture)
+    {
+        m_pView->getCamera()->removePostDrawCallback(m_pPostDrawBack);
+        m_pPostDrawBack=nullptr;
+        m_bRemoveCapture=false;
+    }
+
     if(m_bStereoChanged)
     {
         RemoveSlave();
@@ -654,8 +661,7 @@ void QtViewPort::EndCapture()
 {
     if(m_pPostDrawBack.valid())
     {
-        m_pView->getCamera()->removePostDrawCallback(m_pPostDrawBack);
-        m_pPostDrawBack=nullptr;
+        m_bRemoveCapture = true;
     }
 }
 

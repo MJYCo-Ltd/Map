@@ -139,6 +139,7 @@ protected:
     double                                         m_dTimes{0.};
     bool           m_bViewPointChanged{false};
     bool           m_bViewTypeChanged{false};
+    bool           m_bRemoveCapture{false};
     SceneViewPoint m_stViewPoint;
 
     QtViewHud*     m_pHud{};                                         /// 屏显根节点
