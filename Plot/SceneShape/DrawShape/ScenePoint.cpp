@@ -1,3 +1,4 @@
+#include <osg/PointSprite>
 #include "ScenePoint.h"
 
 /// 更新形状
@@ -43,6 +44,9 @@ void CScenePoint::CreateShape()
         m_ufPointSize = pSate->getOrCreateUniform("pointSize",osg::Uniform::FLOAT);
         m_ufPointSize->set(m_fPointSize);
         pSate->setMode(GL_VERTEX_PROGRAM_POINT_SIZE,1);
+        osg::PointSprite *sprite = new osg::PointSprite();
+        sprite->setCoordOriginMode(osg::PointSprite::LOWER_LEFT);
+        pSate->setTextureAttributeAndModes(0, sprite, osg::StateAttribute::ON);
     }
 
 
