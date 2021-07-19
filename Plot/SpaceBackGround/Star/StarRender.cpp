@@ -102,6 +102,7 @@ void CStarRender::drawImplementation(osg::RenderInfo &renderInfo) const
 {
     CStarRender* This = (CStarRender*)this;
 
+
     StarsRenderContext ctx;
     ctx.pBuilder = This;
     ctx.pOsgRenderInfo = &renderInfo;
@@ -119,21 +120,22 @@ CStarRender::~CStarRender()
 void CStarRender::init()
 {
     setDataVariance(osg::Object::DYNAMIC);
-    osg::StateSet *state = getOrCreateStateSet();
-    osgEarth::VirtualProgram* vp = osgEarth::VirtualProgram::getOrCreate(state);
+    auto pState = getOrCreateStateSet();
+    osgEarth::VirtualProgram* vp = osgEarth::VirtualProgram::getOrCreate(pState);
     m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(vp,"GLSL/Star.glsl");
 
-    osg::ref_ptr<osg::Texture2D> starTexture1 = m_pSceneGraph->ResouceLoader()->LoadTexture("Space/pixmaps/asterism.png");
-    state->setTextureAttributeAndModes(0, starTexture1.get());
+    auto pStarTexture1 = m_pSceneGraph->ResouceLoader()->LoadTexture("Space/pixmaps/star.png");
+    pState->setTextureAttributeAndModes(0, pStarTexture1);
 
-    osg::ref_ptr<osg::Texture2D> starTexture2 = m_pSceneGraph->ResouceLoader()->LoadTexture("Space/pixmaps/star.png");
-    state->setTextureAttributeAndModes(1, starTexture2.get());
+    auto pStarTexture2 = m_pSceneGraph->ResouceLoader()->LoadTexture("Space/pixmaps/asterism.png");
+    pState->setTextureAttributeAndModes(1, pStarTexture2);
 
-    state->addUniform(new osg::Uniform("starTex", 1));
-    state->setMode(GL_VERTEX_PROGRAM_POINT_SIZE,1);
+    pState->addUniform(new osg::Uniform("baseTexture", 0));
+    pState->addUniform(new osg::Uniform("starTexture", 1));
+    pState->setMode(GL_VERTEX_PROGRAM_POINT_SIZE,1);
 
     /// 设置点大小
-    state->setMode(GL_BLEND,osg::StateAttribute::ON);
+    pState->setMode(GL_BLEND,osg::StateAttribute::ON);
 
     updateEye(45.0);
     setupState();
@@ -141,15 +143,15 @@ void CStarRender::init()
 
 void CStarRender::setupState()
 {
-    osg::StateSet *state = getOrCreateStateSet();
+    auto pState = getOrCreateStateSet();
 
-    state->getOrCreateUniform("lnfovFactor", osg::Uniform::FLOAT)->set(m_fLnfovFactor);
-    state->getOrCreateUniform("lnInputScale", osg::Uniform::FLOAT)->set(m_StarTR.lnInputScale);
-    state->getOrCreateUniform("lnOneOverMaxdL", osg::Uniform::FLOAT)->set(m_StarTR.lnOneOverMaxdL);
-    state->getOrCreateUniform("fLinearScale", osg::Uniform::FLOAT)->set(m_fStarLinearScale);
-    state->getOrCreateUniform("maxMag", osg::Uniform::FLOAT)->set(m_fShowMaxMag);
-    state->getOrCreateUniform("alphaWaOverAlphaDa", osg::Uniform::FLOAT)->set(m_StarTR.alphaWaOverAlphaDa);
-    state->getOrCreateUniform("lnTerm2", osg::Uniform::FLOAT)->set(m_StarTR.lnTerm2);
+    pState->getOrCreateUniform("lnfovFactor", osg::Uniform::FLOAT)->set(m_fLnfovFactor);
+    pState->getOrCreateUniform("lnInputScale", osg::Uniform::FLOAT)->set(m_StarTR.lnInputScale);
+    pState->getOrCreateUniform("lnOneOverMaxdL", osg::Uniform::FLOAT)->set(m_StarTR.lnOneOverMaxdL);
+    pState->getOrCreateUniform("fLinearScale", osg::Uniform::FLOAT)->set(m_fStarLinearScale);
+    pState->getOrCreateUniform("maxMag", osg::Uniform::FLOAT)->set(m_fShowMaxMag);
+    pState->getOrCreateUniform("alphaWaOverAlphaDa", osg::Uniform::FLOAT)->set(m_StarTR.alphaWaOverAlphaDa);
+    pState->getOrCreateUniform("lnTerm2", osg::Uniform::FLOAT)->set(m_StarTR.lnTerm2);
 }
 
 float CStarRender::pointSourceMagToLnLuminance(float mag) const

@@ -19,10 +19,10 @@ void CScenePoint::UpdateShape()
     /// 图片路径修改
     if(m_bImageChanged)
     {
-        osg::ref_ptr<osg::Texture2D> starTexture1 = m_pSceneGraph->ResouceLoader()->LoadTexture(m_sImagePath);
-        if(nullptr != starTexture1)
+        auto pPointTexture = m_pSceneGraph->ResouceLoader()->LoadTexture(m_sImagePath);
+        if(nullptr != pPointTexture)
         {
-            m_pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(0, starTexture1.get());
+            m_pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(0, pPointTexture);
         }
         else
         {
@@ -35,6 +35,7 @@ void CScenePoint::UpdateShape()
 /// 创建形状
 void CScenePoint::CreateShape()
 {
+    m_pGeometry->setCullingActive(false);
     auto pSate = m_pGeometry->getOrCreateStateSet();
     auto pNodeProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
     /// 此处应该不知道
@@ -44,9 +45,9 @@ void CScenePoint::CreateShape()
         m_ufPointSize = pSate->getOrCreateUniform("pointSize",osg::Uniform::FLOAT);
         m_ufPointSize->set(m_fPointSize);
         pSate->setMode(GL_VERTEX_PROGRAM_POINT_SIZE,1);
-        osg::PointSprite *sprite = new osg::PointSprite();
-        sprite->setCoordOriginMode(osg::PointSprite::LOWER_LEFT);
-        pSate->setTextureAttributeAndModes(0, sprite, osg::StateAttribute::ON);
+        auto pSprite = new osg::PointSprite();
+        pSprite->setCoordOriginMode(osg::PointSprite::LOWER_LEFT);
+        pSate->setTextureAttributeAndModes(0, pSprite, osg::StateAttribute::ON);
     }
 
 

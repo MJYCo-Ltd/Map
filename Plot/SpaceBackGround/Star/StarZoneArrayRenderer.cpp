@@ -162,12 +162,10 @@ CStarZoneArrayRenderer::CStarZoneArrayRenderer(ISceneGraph *pSceneGraph, IStarZo
 
     m_vStar.reserve(za->getZonesCount());
 
-    for (unsigned int i = 0; i < m_nStartCount; i++)
+    for (int i = 0; i < m_nStartCount; i++)
     {
-        osg::ref_ptr<osg::Geometry> geom = new osg::Geometry();
-
-        geom->setUseDisplayList(true);
-        m_vStar.push_back(geom);
+        auto pGeom = new osg::Geometry();
+        m_vStar.push_back(pGeom);
     }
 
     ZoneInitContext cp;
