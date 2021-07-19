@@ -2,7 +2,7 @@
 #include <osg/Depth>
 #include <osgEarth/CullingUtils>
 #include <osgGA/GUIEventHandler>
-
+#include <osgEarth/VirtualProgram>
 #include <Math/Matrix.h>
 #include <Satellite/CoorSys.h>
 #include <Satellite/IRESInfo.h>
@@ -35,6 +35,8 @@ CStarEnv::CStarEnv(ISceneGraph *pSceneGraph):
     osg::StateSet *state = getOrCreateStateSet();
     state->setGlobalDefaults();
 
+    osgEarth::VirtualProgram* vp = osgEarth::VirtualProgram::getOrCreate(state);
+    pSceneGraph->ResouceLoader()->LoadVirtualProgram(vp,"GLSL/SpaceEnv.glsl");
 
     state->setMode(GL_BLEND, osg::StateAttribute::ON);
 

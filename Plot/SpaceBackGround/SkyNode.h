@@ -51,11 +51,6 @@ public:
      */
     void SetPlanetsNamesVisible(bool bShow);
 
-    /**
-     * @brief 是否显示大气
-     */
-    void ShowAtmosphere(bool);
-
 
     /**
      * @brief 更新矩阵

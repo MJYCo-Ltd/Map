@@ -8,7 +8,7 @@
 #include <osg/Uniform>
 #include <osg/Point>
 #include <osg/BlendFunc>
-
+#include <osgEarth/VirtualProgram>
 #include <SceneGraph/ISceneGraph.h>
 #include <Inner/ILoadResource.h>
 #include "StarRender.h"
@@ -88,8 +88,8 @@ void CStarRender::setGeodesicGrid(ZoneArrayVector &vZoneData, GeodesicGrid *pGeo
                                                                                  vZoneData[i], dJD,m_pGeodesicGrid,mapStarName);
 
 
-        const std::vector<osg::ref_ptr<osgText::Text> >& crStarNames = render->getStarNames();
-        for(std::vector<osg::ref_ptr<osgText::Text> >::const_iterator itorName = crStarNames.begin();crStarNames.end() != itorName; ++itorName)
+        auto crStarNames = render->getStarNames();
+        for(auto itorName = crStarNames.begin();crStarNames.end() != itorName; ++itorName)
         {
             pRoot->addChild(*itorName);
         }
@@ -100,16 +100,7 @@ void CStarRender::setGeodesicGrid(ZoneArrayVector &vZoneData, GeodesicGrid *pGeo
 /// 重写绘制
 void CStarRender::drawImplementation(osg::RenderInfo &renderInfo) const
 {
-    double fov, zNear, zFar, aspect;
-    if (!renderInfo.getState()->getModelViewMatrix().getPerspective(fov,
-                                                                    aspect, zNear, zFar))
-    {
-        fov = 45.0;
-    }
-
     CStarRender* This = (CStarRender*)this;
-    This->updateEye(fov);
-    This->setupState();
 
     StarsRenderContext ctx;
     ctx.pBuilder = This;
@@ -127,7 +118,10 @@ CStarRender::~CStarRender()
 
 void CStarRender::init()
 {
+    setDataVariance(osg::Object::DYNAMIC);
     osg::StateSet *state = getOrCreateStateSet();
+    osgEarth::VirtualProgram* vp = osgEarth::VirtualProgram::getOrCreate(state);
+    m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(vp,"GLSL/Star.glsl");
 
     osg::ref_ptr<osg::Texture2D> starTexture1 = m_pSceneGraph->ResouceLoader()->LoadTexture("Space/pixmaps/asterism.png");
     state->setTextureAttributeAndModes(0, starTexture1.get());
@@ -135,11 +129,14 @@ void CStarRender::init()
     osg::ref_ptr<osg::Texture2D> starTexture2 = m_pSceneGraph->ResouceLoader()->LoadTexture("Space/pixmaps/star.png");
     state->setTextureAttributeAndModes(1, starTexture2.get());
 
-    state->getOrCreateUniform("baseTexture", osg::Uniform::SAMPLER_2D)->set(0);
-    state->getOrCreateUniform("tex", osg::Uniform::SAMPLER_2D)->set(1);
+    state->addUniform(new osg::Uniform("starTex", 1));
+    state->setMode(GL_VERTEX_PROGRAM_POINT_SIZE,1);
 
     /// 设置点大小
     state->setMode(GL_BLEND,osg::StateAttribute::ON);
+
+    updateEye(45.0);
+    setupState();
 }
 
 void CStarRender::setupState()

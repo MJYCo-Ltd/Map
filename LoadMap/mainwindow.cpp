@@ -106,7 +106,7 @@ void MainWindow::SetSecenGraph(ISceneGraph *pSceneGraph)
         m_pSceneGraph->GetMap()->SubMessage(pMap);
 //        m_pSceneGraph->GetMap()->GetSpaceEnv()->ShowSpaceBackGround(false);
 //        m_pSceneGraph->GetMap()->OpenLight(false);
-//        m_pSceneGraph->GetMap()->SetShowAtmosphere(true);
+//        m_pSceneGraph->GetMap()->SetShowAtmosphere(false);
     }
 }
 
@@ -421,20 +421,13 @@ void MainWindow::on_action_6_triggered()
 void MainWindow::PlotMap()
 {
     ScenePos pos;
-    ///绘制地图元素
-    auto m_pPoint = dynamic_cast<IMapPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPoint"));
+
     pos.fX = -121.5;
     pos.fY = 25;
     pos.fZ = 100;
-    m_pPoint->GetDrawPoint()->AddPoint(0,pos);
     SceneColor color;
     color.fG = .0f;
     color.fB = .0f;
-    m_pPoint->GetDrawPoint()->SetColor(color);
-    m_pPoint->GetDrawPoint()->SetPointSize(50.f);
-    m_pPoint->GetDrawPoint()->SetImage("Image/ship.png");
-    m_pPoint->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
-    m_pLayer->AddSceneNode(m_pPoint);
 
     /// 绘制线
     auto m_pLine = dynamic_cast<IMapLine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLine"));
@@ -462,29 +455,29 @@ void MainWindow::PlotMap()
     m_pLine->GetDrawLine()->AddPoint(7,pos);
     m_pLine->GetDrawLine()->SetColor(color);
     m_pLine->GetDrawLine()->SetLineWidth(20.f);
-    m_pLine->GetDrawLine()->OpenGlow(true);
+    m_pLine->GetDrawLine()->OpenGlow(false);
     m_pLine->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
     m_pLayer->AddSceneNode(m_pLine);
 
     /// 绘制区域
     auto m_pPolygon = dynamic_cast<IMapPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPolygon"));
-    m_pPolygon->GetDrawPolygon()->AddPoint(0,pos);
     pos.fX = 123;
+    pos.fY = 26;
+    m_pPolygon->GetDrawPolygon()->AddPoint(0,pos);
+    pos.fX = 121;
     pos.fY = 26;
     m_pPolygon->GetDrawPolygon()->AddPoint(1,pos);
     pos.fX = 121;
-    pos.fY = 26;
-    m_pPolygon->GetDrawPolygon()->AddPoint(2,pos);
-    pos.fX = 122;
-    pos.fY = 26.5;
-    m_pPolygon->GetDrawPolygon()->AddPoint(3,pos);
-    pos.fX = 121;
     pos.fY = 27;
-    m_pPolygon->GetDrawPolygon()->AddPoint(4,pos);
+    m_pPolygon->GetDrawPolygon()->AddPoint(2,pos);
+    pos.fX = 123;
+    pos.fY = 27;
+    m_pPolygon->GetDrawPolygon()->AddPoint(3,pos);
     m_pPolygon->GetDrawPolygon()->SetColor(color);
     m_pPolygon->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
     m_pLayer->AddSceneNode(m_pPolygon);
 
+    /// 绘制地图上的点
     auto pMapLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     m_pLayer->AddSceneNode(pMapLocation);
     pMapLocation->SetGeoPos(pos);
@@ -492,11 +485,24 @@ void MainWindow::PlotMap()
     auto pBoxSensor = dynamic_cast<IBoxSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IBoxSensor"));
     pMapLocation->SetSceneNode(pBoxSensor);
     pBoxSensor->SetDistance(10000);
-    color.fA = 0.1f;
+    color.fA = .1f;
     pBoxSensor->SetColor(color);
     pBoxSensor->ShowFace(true);
     pBoxSensor->ShowLine(true);
     pBoxSensor->SetShowBack(false);
+
+    ///绘制地图元素
+    color.fG=color.fB=1.f;
+    color.fA = 1.f;
+    pos.fX += 1.0f;
+    auto m_pPoint = dynamic_cast<IMapPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPoint"));
+    m_pPoint->GetDrawPoint()->AddPoint(0,pos);
+    m_pPoint->GetDrawPoint()->SetColor(color);
+    m_pPoint->GetDrawPoint()->SetPointSize(50.f);
+    m_pPoint->GetDrawPoint()->SetImage("Image/China.png");
+    m_pPoint->SetTerrainType(IMapSceneNode::ABSOLUTE_TERRAIN);
+    m_pLayer->AddSceneNode(m_pPoint);
+
 }
 
 void MainWindow::LodPlot()
@@ -591,22 +597,22 @@ void MainWindow::on_action12_triggered()
     ISceneGroup* pSceneRoot = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
 
 //    ISceneNode * pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("D:/MyData/Tencent/BIMGIS_scz20201013/data/3dmodel/tree2.FBX",false);
-    ISceneNode * pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("F:/zhiwu.obj",false);
-    pSceneRoot->AddSceneNode(pModel);
+//    ISceneNode * pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("F:/zhiwu.obj",false);
+//    pSceneRoot->AddSceneNode(pModel);
     SceneColor color;
 
-    color.fR=1.0f;
-    color.fG=0.0f;
-    color.fB=0.0f;
+//    color.fR=1.0f;
+//    color.fG=0.0f;
+//    color.fB=0.0f;
 
     /// 绘制点
     auto pPoint = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
-    pPoint->SetPointSize(50.f);
-    pPoint->SetImage("Image/China.png");
+    pPoint->SetPointSize(100.f);
+    pPoint->SetImage("Image/ship.png");
 
 
     pPoint->SetColor(color);
-//    pSceneRoot->AddSceneNode(pPoint);
+    pSceneRoot->AddSceneNode(pPoint);
 
     /// 绘制线
     auto pLine = dynamic_cast<ILine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILine"));
@@ -629,7 +635,7 @@ void MainWindow::on_action12_triggered()
     pPoint->AddPoint(pPoint->GetCount(),scenePos);
     pLine->AddPoint(3,scenePos);
     pSceneRoot->AddSceneNode(pLine);
-    pLine->SetLineWidth(20);
+    pLine->SetLineWidth(100);
     pLine->OpenGlow(true);
 
     /// 绘制多边形

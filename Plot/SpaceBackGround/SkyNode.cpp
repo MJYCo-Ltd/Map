@@ -1,7 +1,7 @@
 #include <osgUtil/CullVisitor>
-#include "SkyNode.h"
 #include <osgDB/ReadFile>
 #include <osgDB/WriteFile>
+#include "SkyNode.h"
 CSkyNode::CSkyNode(ISceneGraph *pSceneGraph)
 {
     m_pSpaceBackGroundRoot = new osg::Group;
@@ -63,36 +63,12 @@ void CSkyNode::UpdatePos(const std::vector<Math::CVector> &vSolarPos)
 
 void CSkyNode::traverse(osg::NodeVisitor & nv)
 {
-    if (nv.getVisitorType() == nv.CULL_VISITOR)
+    if (nv.getVisitorType() == nv.CULL_VISITOR
+            ||nv.getVisitorType() == nv.UPDATE_VISITOR)
     {
-        osgUtil::CullVisitor* cv = nv.asCullVisitor();
-
-        bool needToRestoreInheritanceMask =
-                (cv->getInheritanceMask() & osg::CullSettings::CLAMP_PROJECTION_MATRIX_CALLBACK) > 0;
-
-        /// 保存原有的计算投影矩阵的回调
-        osg::ref_ptr<osg::CullSettings::ClampProjectionMatrixCallback> cb =
-                cv->getClampProjectionMatrixCallback();
-
-        cv->setClampProjectionMatrixCallback(0L);
         /// 真实的节点进行遍历
         m_pSpaceBackGroundRoot->accept( nv );
 
-        if(cb.valid())
-        {
-            cv->setClampProjectionMatrixCallback(cb.get());
-        }
-
-        if(needToRestoreInheritanceMask)
-        {
-            cv->setInheritanceMask(
-                        cv->getInheritanceMask()|osg::CullSettings::CLAMP_PROJECTION_MATRIX_CALLBACK);
-        }
-    }
-
-    if(nv.getVisitorType() == nv.UPDATE_VISITOR)
-    {
-        m_pSpaceBackGroundRoot->accept(nv);
     }
 
     osg::Group::traverse(nv);
