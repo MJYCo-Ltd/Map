@@ -431,7 +431,6 @@ void CMap::FrameCall()
                 Init3DLight();
                 m_p3DRoot->addChild(m_pAtmosphere->GetNode());
             }
-
             m_p3DRoot->removeChild(m_pPreMapNode);
             m_p3DRoot->addChild(m_pCurMapNode);
 
@@ -613,14 +612,18 @@ void CMap::Init3DLight()
     m_p3DRoot->addChild(lightSource);
 
     lightSource->addCullCallback(new osgEarth::LightSourceGL3UniformGenerator);
-    osg::StateSet* stateset = m_p3DRoot->getOrCreateStateSet();
+    osg::StateSet* stateset = m_pGroup->getOrCreateStateSet();
     m_pLightPosUniform = stateset->getOrCreateUniform("atmos_v3LightDir",osg::Uniform::FLOAT_VEC3);
     m_pLightPosUniform->set( lightPos / lightPos.length());
 
+    float _outerRadius = osg::minimum(R_Earth2,R_Earth) * 1.025f;
+    stateset->getOrCreateUniform( "atmos_fOuterRadius",    osg::Uniform::FLOAT )->set(_outerRadius);
+    stateset->getOrCreateUniform( "atmos_fOuterRadius2",   osg::Uniform::FLOAT )->set(_outerRadius * _outerRadius);
+
+    stateset = m_p3DRoot->getOrCreateStateSet();
     stateset->setDefine("OE_NUM_LIGHTS", "1");
 
     osgEarth::VirtualProgram* vp = osgEarth::VirtualProgram::getOrCreate(stateset);
-    vp->setName( "SimpleSky Scene Lighting");
     m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(vp,"GLSL/PhongLighting.glsl");
 
 }

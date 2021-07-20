@@ -229,7 +229,7 @@ void CStarZoneArrayRenderer::readZones(IStarZoneArray *za, unsigned int idx, con
             QMap<int, QString>::const_iterator itor = m_mapHip2Names.find(zone->getStarHip(i));
             if(m_mapHip2Names.end() != itor)
             {
-                osg::ref_ptr<osgText::Text> text = new osgText::Text;
+                osg::ref_ptr<osgEarth::Text> text = new osgEarth::Text;
                 text->setFontResolution(40, 40);
                 starColor.a() = 1.0;
                 text->setColor(starColor);

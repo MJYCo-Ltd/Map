@@ -2,7 +2,6 @@
 #define STARCONSTELLATION_H
 #include<QMap>
 #include<QVector>
-#include<osgText/Text>
 
 #include "StarZoneArrayRenderer.h"
 
@@ -46,8 +45,6 @@ private:
     ISceneGraph*                               m_pSceneGraph;
     QMap<QString,QVector<int> >                m_mapName2Hips; /// 星座连线
     QMap<int,osg::Vec3>                        m_mapHip2Pos;   /// 星星的位置
-
-    std::vector<osg::ref_ptr<osgText::Text> > m_vNames;
 };
 
 #endif // STARCONSTELLATION_H

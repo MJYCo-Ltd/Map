@@ -58,14 +58,12 @@ void CAtmosphere::MakeAtmosphere()
     int   Samples = 2;
     float Weather = 1.0f;
 
-    float Scale = 1.0f / (_outerRadius - _innerRadius);
+    float Scale = 1.0f / (.025f * _innerRadius);
 
     //TODO: make all these constants. -gw
     atmosSet->getOrCreateUniform( "atmos_v3InvWavelength", osg::Uniform::FLOAT_VEC3 )->set( RGB_wl);
     atmosSet->getOrCreateUniform( "atmos_fInnerRadius",    osg::Uniform::FLOAT )->set(_innerRadius);
     atmosSet->getOrCreateUniform( "atmos_fInnerRadius2",   osg::Uniform::FLOAT )->set(_innerRadius * _innerRadius);
-    atmosSet->getOrCreateUniform( "atmos_fOuterRadius",    osg::Uniform::FLOAT )->set(_outerRadius);
-    atmosSet->getOrCreateUniform( "atmos_fOuterRadius2",   osg::Uniform::FLOAT )->set(_outerRadius * _outerRadius);
     atmosSet->getOrCreateUniform( "atmos_fKrESun",         osg::Uniform::FLOAT )->set(Kr * ESun);
     atmosSet->getOrCreateUniform( "atmos_fKmESun",         osg::Uniform::FLOAT )->set(Km * ESun);
     atmosSet->getOrCreateUniform( "atmos_fKr4PI",          osg::Uniform::FLOAT )->set(Kr4PI);
@@ -80,7 +78,6 @@ void CAtmosphere::MakeAtmosphere()
     atmosSet->getOrCreateUniform( "atmos_fWeather",        osg::Uniform::FLOAT )->set(Weather);
 
     osgEarth::VirtualProgram* vp = osgEarth::VirtualProgram::getOrCreate( atmosSet );
-    vp->setName("SimpleSkyAtmosphere");
     m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(vp,"GLSL/Atmosphere.glsl");
     vp->setInheritShaders(false);
 }

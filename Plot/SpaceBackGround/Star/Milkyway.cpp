@@ -1,4 +1,5 @@
 #include <osg/Texture2D>
+#include <osgEarth/VirtualProgram>
 #include <SceneGraph/ISceneGraph.h>
 #include <Inner/ILoadResource.h>
 
@@ -51,9 +52,11 @@ void CMilkyway::makeMilkyway()
     m_pMilkyway->setColor(osg::Vec4f(1.0f, 1.0f, 1.0f,1.0f));
 
     osg::StateSet *state = m_pMilkyway->getOrCreateStateSet();
+    osgEarth::VirtualProgram* vp = osgEarth::VirtualProgram::getOrCreate(state);
+    m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(vp,"GLSL/Global.glsl");
 
     /// 添加纹理
     osg::Texture2D *txt = m_pSceneGraph->ResouceLoader()->LoadTexture("Space/pixmaps/milkyway.png");
 
-    state->setTextureAttributeAndModes(0, txt);
+    state->setTextureAttribute(0, txt);
 }

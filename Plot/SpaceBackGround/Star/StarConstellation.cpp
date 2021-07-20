@@ -226,7 +226,7 @@ void CStarConstellation::BuildGeometry(osg::Group* pRoot)
         }
         center /= (double)itor.value().size();
 
-        osg::ref_ptr<osgText::Text> text = new osgText::Text;
+        osg::ref_ptr<osgEarth::Text> text = new osgEarth::Text;
         text->setFontResolution(40, 40);
         text->setColor(osg::Vec4(0, 0.25, 0.5, 1.0));
 
@@ -250,7 +250,6 @@ void CStarConstellation::BuildGeometry(osg::Group* pRoot)
         text->setPosition(center);
         text->setAlignment(osgText::Text::CENTER_CENTER);
         pRoot->addChild(text);
-        m_vNames.push_back(text);
 
 
         geom->addPrimitiveSet(el);
