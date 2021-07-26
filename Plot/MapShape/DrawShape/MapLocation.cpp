@@ -53,13 +53,13 @@ void CMapLocation::PosChanged()
 {
     if(!m_pGeoPoint.isValid())
     {
-        m_pGeoPoint.set(IOsgMapSceneNode::s_pWGS84,m_stGeoPos.fX,m_stGeoPos.fY,m_stGeoPos.fZ,osgEarth::ALTMODE_ABSOLUTE);
+        m_pGeoPoint.set(IOsgMapSceneNode::s_pWGS84,m_stGeoPos.dX,m_stGeoPos.dY,m_stGeoPos.dZ,osgEarth::ALTMODE_ABSOLUTE);
     }
     else
     {
-        m_pGeoPoint.x() = m_stGeoPos.fX;
-        m_pGeoPoint.y() = m_stGeoPos.fY;
-        m_pGeoPoint.z() = m_stGeoPos.fZ;
+        m_pGeoPoint.x() = m_stGeoPos.dX;
+        m_pGeoPoint.y() = m_stGeoPos.dY;
+        m_pGeoPoint.z() = m_stGeoPos.dZ;
     }
 
     m_bPosChanged = true;

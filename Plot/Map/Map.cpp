@@ -154,9 +154,9 @@ bool CMap::ConvertCoord(int &fX, int &fY, ScenePos &geoPos, short TranType)
             world = m_pPicker->getIntersections().begin()->getWorldIntersectPoint();
             geoPoint.fromWorld(m_pCurMapNode->getMapSRS(),world);
             geoPoint.makeGeographic();
-            geoPos.fX = geoPoint.x();
-            geoPos.fY = geoPoint.y();
-            geoPos.fZ = geoPoint.z();
+            geoPos.dX = geoPoint.x();
+            geoPos.dY = geoPoint.y();
+            geoPos.dZ = geoPoint.z();
             return(true);
         }
         else
@@ -167,7 +167,7 @@ bool CMap::ConvertCoord(int &fX, int &fY, ScenePos &geoPos, short TranType)
     else if(1==TranType)
     {
         osg::Vec3d world;
-        osgEarth::GeoPoint geoPoint(osgEarth::SpatialReference::create("wgs84"),geoPos.fX,geoPos.fY,geoPos.fZ),geoOut;
+        osgEarth::GeoPoint geoPoint(osgEarth::SpatialReference::create("wgs84"),geoPos.dX,geoPos.dY,geoPos.dZ),geoOut;
 
         if(geoPoint.transform(m_pCurMapNode->getMapSRS(),geoOut) &&
                 m_pCurMapNode->getMapSRS()->transformToWorld(osg::Vec3d(geoOut.x(),geoOut.y(),geoOut.z()),world))
@@ -372,7 +372,7 @@ void CMap::MouseMove(MouseButtonMask, int nX, int nY)
 
     for(auto one:m_listObserver)
     {
-        one->MousePos(m_stMousePos.fX,m_stMousePos.fY,m_stMousePos.fZ);
+        one->MousePos(m_stMousePos.dX,m_stMousePos.dY,m_stMousePos.dZ);
     }
 }
 

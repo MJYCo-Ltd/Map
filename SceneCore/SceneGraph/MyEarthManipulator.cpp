@@ -153,7 +153,7 @@ void CMyEarthManipulator::InitHomePoint(const SceneViewPoint &homePoint)
 {
     osgEarth::Viewpoint vp;
     vp.focalPoint()= osgEarth::GeoPoint(osgEarth::SpatialReference::get("wgs84"),
-                                        homePoint.stPos.fX,homePoint.stPos.fY,homePoint.stPos.fZ);
+                                        homePoint.stPos.dX,homePoint.stPos.dY,homePoint.stPos.dZ);
     vp.heading()->set(homePoint.fAzimuth,osgEarth::Units::DEGREES);
     vp.range()->set(homePoint.fDistance,osgEarth::Units::METERS);
 
@@ -174,7 +174,7 @@ void CMyEarthManipulator::SetViewPoint(const SceneViewPoint &viewPoint,double dT
 {
     osgEarth::Viewpoint vp;
     vp.focalPoint()= osgEarth::GeoPoint(osgEarth::SpatialReference::get("wgs84"),
-                                        viewPoint.stPos.fX,viewPoint.stPos.fY,viewPoint.stPos.fZ);
+                                        viewPoint.stPos.dX,viewPoint.stPos.dY,viewPoint.stPos.dZ);
     vp.heading()->set(viewPoint.fAzimuth,osgEarth::Units::DEGREES);
     vp.range()->set(viewPoint.fDistance,osgEarth::Units::METERS);
 

@@ -53,9 +53,9 @@ void CSatelliteShow::SetJ2000Oribit(const std::vector<double> &vTime, const std:
     int nIndex(0);
     for(auto iter=rOribitInfo.begin();iter!=rOribitInfo.end();++iter,++nIndex)
     {
-        vTemp[nIndex].fX = iter->GetX();
-        vTemp[nIndex].fY = iter->GetY();
-        vTemp[nIndex].fZ = iter->GetZ();
+        vTemp[nIndex].dX = iter->GetX();
+        vTemp[nIndex].dY = iter->GetY();
+        vTemp[nIndex].dZ = iter->GetZ();
     }
     m_pOribit->SetMultPos(vTemp);
 }
@@ -147,9 +147,9 @@ void CSatelliteShow::UpdateJ2000OribitShow(double duration)
         for (auto iter = m_vOribit.begin();iter != m_vOribit.end();++iter)
         {
             ScenePos pos;
-            pos.fX = iter->GetX();
-            pos.fY = iter->GetY();
-            pos.fZ = iter->GetZ();
+            pos.dX = iter->GetX();
+            pos.dY = iter->GetY();
+            pos.dZ = iter->GetZ();
             if (dTimeCount * 86400 > duration)
                 break;
             else
@@ -282,9 +282,9 @@ void CSatelliteShow::NowTimeChanged()
     m_stNowPos(4) = CalItNewton(dTime, m_dNowMJD, 4);
     m_stNowPos(5) = CalItNewton(dTime, m_dNowMJD, 5);
     ScenePos tmpPos;
-    tmpPos.fX = m_stNowPos(0);
-    tmpPos.fY = m_stNowPos(1);
-    tmpPos.fZ = m_stNowPos(2);
+    tmpPos.dX = m_stNowPos(0);
+    tmpPos.dY = m_stNowPos(1);
+    tmpPos.dZ = m_stNowPos(2);
 
     Math::CVector pos = m_stNowPos.slice(0,2);
     Math::CVector vPos = m_stNowPos.slice(3,5);

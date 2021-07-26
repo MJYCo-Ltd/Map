@@ -145,9 +145,9 @@ void CPlanetModel::MakePlanet()
 void CPlanetModel::UpdatePostion(const Math::CVector &rPos)
 {
     ScenePos pos;
-    pos.fX = rPos.GetX();
-    pos.fY = rPos.GetY();
-    pos.fZ = rPos.GetZ();
+    pos.dX = rPos.GetX();
+    pos.dY = rPos.GetY();
+    pos.dZ = rPos.GetZ();
     m_pAttitudeNode->SetPos(pos);
 }
 

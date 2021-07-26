@@ -54,7 +54,7 @@ protected:
             const std::list<ScenePos> & rAllPos = m_pGeometry->BetterGetMulPos();
             for(const ScenePos& one : rAllPos)
             {
-                if(rTileKey.getExtent().contains(one.fX,one.fY,s_pWGS84))
+                if(rTileKey.getExtent().contains(one.dX,one.dY,s_pWGS84))
                 {
                     m_pGeometry->NeedUpdate();
                     break;
@@ -92,7 +92,7 @@ protected:
         vIn.resize(listAllPos.size());
         for(auto one : listAllPos)
         {
-            vIn.at(nIndex++).set(one.fX,one.fY,one.fZ);
+            vIn.at(nIndex++).set(one.dX,one.dY,one.dZ);
         }
 
         vAllPos.resize(vIn.size());
@@ -117,7 +117,7 @@ protected:
                 nIndex=0;
                 for(auto one : listAllPos)
                 {
-                    if(terrain->getHeight(ImplMapSceneNode<T>::s_pWGS84.get(), one.fX, one.fY, &out_hamsl))
+                    if(terrain->getHeight(ImplMapSceneNode<T>::s_pWGS84.get(), one.dX, one.dY, &out_hamsl))
                     {
                         dLength=vOut[nIndex].length();
                         vOut[nIndex] *= 1 + out_hamsl/dLength;
@@ -128,9 +128,9 @@ protected:
             nIndex=0;
             for(auto one : vOut)
             {
-                vAllPos[nIndex].fX = one.x();
-                vAllPos[nIndex].fY = one.y();
-                vAllPos[nIndex].fZ = one.z();
+                vAllPos[nIndex].dX = one.x();
+                vAllPos[nIndex].dY = one.y();
+                vAllPos[nIndex].dZ = one.z();
                 ++nIndex;
             }
             return(true);
@@ -142,9 +142,9 @@ protected:
             nIndex=0;
             for(auto one : vIn)
             {
-                vAllPos[nIndex].fX = one.x();
-                vAllPos[nIndex].fY = one.y();
-                vAllPos[nIndex].fZ = one.z();
+                vAllPos[nIndex].dX = one.x();
+                vAllPos[nIndex].dY = one.y();
+                vAllPos[nIndex].dZ = one.z();
                 ++nIndex;
             }
             return(true);

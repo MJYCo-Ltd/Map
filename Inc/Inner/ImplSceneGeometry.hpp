@@ -106,9 +106,9 @@ public:
         {
             ScenePos& rPos = vTempPos.at(nIndex++);
 
-            rPos.fX = one.fX;
-            rPos.fY = one.fY;
-            rPos.fZ = one.fZ;
+            rPos.dX = one.dX;
+            rPos.dY = one.dY;
+            rPos.dZ = one.dZ;
         }
 
         return(vTempPos);
@@ -178,14 +178,14 @@ protected:
         {
             for(auto one : vAllConverdPos)
             {
-                ImplSceneShape<T>::m_pVertexArray->at(nIndex++).set(one.fX,one.fY,one.fZ);
+                ImplSceneShape<T>::m_pVertexArray->at(nIndex++).set(one.dX,one.dY,one.dZ);
             }
         }
         else
         {
             for(auto one : m_listAllPos)
             {
-                ImplSceneShape<T>::m_pVertexArray->at(nIndex++).set(one.fX,one.fY,one.fZ);
+                ImplSceneShape<T>::m_pVertexArray->at(nIndex++).set(one.dX,one.dY,one.dZ);
             }
         }
     }

@@ -41,51 +41,51 @@ void CMapRectange::InitNode()
 void CMapRectange::UpdateNode()
 {
     ScenePos tPos_2,tPos_4;
-    if(m_stPos1.fX < m_stPos2.fX)
+    if(m_stPos1.dX < m_stPos2.dX)
     {
-        if(m_stPos1.fY>m_stPos2.fY)         //左上
+        if(m_stPos1.dY>m_stPos2.dY)         //左上
         {
-            tPos_2.fX = m_stPos2.fX;
-            tPos_2.fY = m_stPos1.fY;
-            tPos_2.fZ =m_stPos1.fZ;
+            tPos_2.dX = m_stPos2.dX;
+            tPos_2.dY = m_stPos1.dY;
+            tPos_2.dZ =m_stPos1.dZ;
 
-            tPos_4.fX = m_stPos1.fX;
-            tPos_4.fY = m_stPos2.fY;
-            tPos_4.fZ =m_stPos1.fZ;
+            tPos_4.dX = m_stPos1.dX;
+            tPos_4.dY = m_stPos2.dY;
+            tPos_4.dZ =m_stPos1.dZ;
         }
         else                //左下
         {
-            tPos_4.fX = m_stPos1.fX;
-            tPos_4.fY = m_stPos2.fY;
-            tPos_4.fZ =m_stPos1.fZ;
+            tPos_4.dX = m_stPos1.dX;
+            tPos_4.dY = m_stPos2.dY;
+            tPos_4.dZ =m_stPos1.dZ;
 
-            tPos_2.fX = m_stPos2.fX;
-            tPos_2.fY = m_stPos1.fY;
-            tPos_2.fZ =m_stPos1.fZ;
+            tPos_2.dX = m_stPos2.dX;
+            tPos_2.dY = m_stPos1.dY;
+            tPos_2.dZ =m_stPos1.dZ;
         }
     }
     else
     {
 
-        if(m_stPos1.fY>m_stPos2.fY)     //右上
+        if(m_stPos1.dY>m_stPos2.dY)     //右上
         {
-            tPos_2.fX = m_stPos1.fX;
-            tPos_2.fY = m_stPos2.fY;
-            tPos_2.fZ =m_stPos1.fZ;
+            tPos_2.dX = m_stPos1.dX;
+            tPos_2.dY = m_stPos2.dY;
+            tPos_2.dZ =m_stPos1.dZ;
 
-            tPos_4.fX = m_stPos2.fX;
-            tPos_4.fY = m_stPos1.fY;
-            tPos_4.fZ =m_stPos1.fZ;
+            tPos_4.dX = m_stPos2.dX;
+            tPos_4.dY = m_stPos1.dY;
+            tPos_4.dZ =m_stPos1.dZ;
         }
         else
         {
-            tPos_2.fX = m_stPos1.fX;
-            tPos_2.fY = m_stPos2.fY;
-            tPos_2.fZ =m_stPos1.fZ;
+            tPos_2.dX = m_stPos1.dX;
+            tPos_2.dY = m_stPos2.dY;
+            tPos_2.dZ =m_stPos1.dZ;
 
-            tPos_4.fX = m_stPos2.fX;
-            tPos_4.fY = m_stPos1.fY;
-            tPos_4.fZ =m_stPos1.fZ;
+            tPos_4.dX = m_stPos2.dX;
+            tPos_4.dY = m_stPos1.dY;
+            tPos_4.dZ =m_stPos1.dZ;
         }
     }
 

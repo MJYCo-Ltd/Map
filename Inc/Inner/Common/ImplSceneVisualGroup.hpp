@@ -82,7 +82,7 @@ protected:
                                                         T::m_stViewPoint.fDistance*1e-4,T::m_stViewPoint.fDistance);
             m_pDepth->set(T::m_stViewPoint.fDistance);
 
-            Math::CMatrix local2Global = GisMath::LOCAL2GLOBAL(T::m_stViewPoint.stPos.fX*DD2R,T::m_stViewPoint.stPos.fY*DD2R);
+            Math::CMatrix local2Global = GisMath::LOCAL2GLOBAL(T::m_stViewPoint.stPos.dX*DD2R,T::m_stViewPoint.stPos.dY*DD2R);
             /// 计算射线方线
             Math::CVector vLocal = Math::CVecMat::VecPolar((90-T::m_stViewPoint.fAzimuth)*DD2R,T::m_stViewPoint.fElev*DD2R
                                                            ,T::m_stViewPoint.fDistance);
@@ -90,7 +90,7 @@ protected:
 
             /// 将经纬度转成
             double dX,dY,dZ;
-            GisMath::LBH2XYZ(T::m_stViewPoint.stPos.fX*DD2R,T::m_stViewPoint.stPos.fY*DD2R,T::m_stViewPoint.stPos.fZ,
+            GisMath::LBH2XYZ(T::m_stViewPoint.stPos.dX*DD2R,T::m_stViewPoint.stPos.dY*DD2R,T::m_stViewPoint.stPos.dZ,
                              dX,dY,dZ);
 
             vGlobal(0) += dX;

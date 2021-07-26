@@ -56,25 +56,21 @@ void CSimpleLabel::MouseMove(MouseButtonMask, int x, int y)
 {
     ScenePos mapPos;
 //    m_pSceneGraph->GetMap()->ConvertCoord(x,y,mapPos,0);
-    double dX,dY,dZ;
-    GisMath::LBH2XYZ(mapPos.fX*DD2R,mapPos.fY*DD2R,mapPos.fZ-1000,dX,dY,dZ);
+    ScenePos pos;
+    GisMath::LBH2XYZ(mapPos.dX*DD2R,mapPos.dY*DD2R,mapPos.dZ-1000,pos.dX,pos.dY,pos.dZ);
 
-    ScenePos pox;
-    pox.fX = dX;
-    pox.fY = dY;
-    pox.fZ = dZ;
     //m_pRoot->SetGeoPos(mapPos);
-    m_pLabel->SetPos(pox);
-    m_pLine->UpdatePoint(1,pox);
-    float  fLon , fLat, fHeight;
+    m_pLabel->SetPos(pos);
+    m_pLine->UpdatePoint(1,pos);
+//    float  fLon , fLat, fHeight;
 //    m_pTarget->GetPosition(&fLon,&fLat,&fHeight);
 
     double dx,dy,dz;
-    GisMath::LBH2XYZ(fLon*DD2R,fLat*DD2R,fHeight, dx,dy,dz);
+//    GisMath::LBH2XYZ(fLon*DD2R,fLat*DD2R,fHeight, dx,dy,dz);
 
-    m_TX = dX - dx ;
-    m_TY = dY - dy;
-    m_TZ = dZ -dz;
+    m_TX = pos.dX - dx ;
+    m_TY = pos.dY - dy;
+    m_TZ = pos.dZ -dz;
 
 }
 
@@ -104,25 +100,20 @@ void CSimpleLabel::SetTarget(IPlotBase* pTarget)
     ScenePos geoPos;
 //    pTarget->GetPosition(&geoPos.fLon,&geoPos.fLat,&geoPos.fHeight);
 
-    double x,y,z;
+    ScenePos pos1;
 
-    GisMath::LBH2XYZ(geoPos.fX*DD2R,geoPos.fY*DD2R,geoPos.fZ,x,y,z);
+    GisMath::LBH2XYZ(geoPos.dX*DD2R,geoPos.dY*DD2R,geoPos.dZ,pos1.dX,pos1.dY,pos1.dZ);
 
     m_TargetPos = geoPos;
 
-    ScenePos pos1;
-    pos1.fX = x;
-    pos1.fY = y;
-    pos1.fZ = z;
-
     ScenePos pos;
-    pos.fX = x +m_TX;
-    pos.fY = y +m_TY;
-    pos.fZ = z +m_TZ+1000000;
+    pos.dX = pos1.dX +m_TX;
+    pos.dY = pos1.dY +m_TY;
+    pos.dZ = pos1.dZ +m_TZ+1000000;
     m_pLabel->SetPos(pos);
 
     double  fLon , fLat, fHeight;
-    GisMath::XYZ2LBH(pos.fX,pos.fY,pos.fZ,fLon,fLat,fHeight);
+    GisMath::XYZ2LBH(pos.dX,pos.dY,pos.dZ,fLon,fLat,fHeight);
 
 //    MapGeoPos tPos;
 //    tPos.fHeight = fHeight;
@@ -205,14 +196,14 @@ void CSimpleLabel::update()
         ScenePos tmPos1,tmPos2;
 
         double x,y,z;
-        GisMath::LBH2XYZ(geoPos.fX*DD2R,geoPos.fY*DD2R,geoPos.fZ, x,y,z);
+        GisMath::LBH2XYZ(geoPos.dX*DD2R,geoPos.dY*DD2R,geoPos.dZ, x,y,z);
 
-        tmPos1.fX = x;
-        tmPos1.fY = y;
-        tmPos1.fZ = z;
-        tmPos2.fX = x + m_TX;
-        tmPos2.fY = y + m_TY;
-        tmPos2.fZ = z + m_TZ;
+        tmPos1.dX = x;
+        tmPos1.dY = y;
+        tmPos1.dZ = z;
+        tmPos2.dX = x + m_TX;
+        tmPos2.dY = y + m_TY;
+        tmPos2.dZ = z + m_TZ;
 
         m_pLabel->SetPos(tmPos2);
         m_pLine->UpdatePoint(0,tmPos1);
