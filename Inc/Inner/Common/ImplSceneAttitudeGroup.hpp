@@ -19,7 +19,7 @@ protected:
     {
         if(m_bPosChanged)
         {
-            m_pOsgAttitudeNode->setPosition(osg::Vec3d(T::m_stPos.fX,T::m_stPos.fY,T::m_stPos.fZ));
+            m_pOsgAttitudeNode->setPosition(osg::Vec3d(T::m_stPos.dX,T::m_stPos.dY,T::m_stPos.dZ));
             m_bPosChanged=false;
         }
 
@@ -68,7 +68,7 @@ protected:
 
         if(m_bPivotChanged)
         {
-            m_pOsgAttitudeNode->setPivotPoint(osg::Vec3(T::m_stPivot.fX,T::m_stPivot.fY,T::m_stPivot.fZ));
+            m_pOsgAttitudeNode->setPivotPoint(osg::Vec3(T::m_stPivot.dX,T::m_stPivot.dY,T::m_stPivot.dZ));
             m_bPivotChanged=false;
         }
 

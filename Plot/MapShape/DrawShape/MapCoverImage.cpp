@@ -179,10 +179,10 @@ void CMapCoverImage::SetBound(const ScenePos &rLeftUp, const ScenePos &rRightDow
         AddNode(m_pCoverRoot.get(),m_pImage);
     }
 
-    m_pImage->setWest(rLeftUp.fX);
-    m_pImage->setEast(rRightDown.fX);
-    m_pImage->setNorth(rLeftUp.fY);
-    m_pImage->setSouth(rRightDown.fY);
+    m_pImage->setWest(rLeftUp.dX);
+    m_pImage->setEast(rRightDown.dX);
+    m_pImage->setNorth(rLeftUp.dY);
+    m_pImage->setSouth(rRightDown.dY);
 
     auto pImage =  m_pSceneGraph->ResouceLoader()->LoadImage(sImagePath,0,0,false);
     m_pImage->setImage(pImage);

@@ -32,9 +32,9 @@ void CPlotMap::PlotLine()
 
     /// 绘制点
     auto m_pPoint = dynamic_cast<IMapPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPoint"));
-    pos.fX = 121;
-    pos.fY = 25;
-    pos.fZ = 1000;
+    pos.dX = 121;
+    pos.dY = 25;
+    pos.dZ = 1000;
     m_pPoint->GetDrawPoint()->AddPoint(0,pos);
     SceneColor color;
     color.fG = .0f;
@@ -47,11 +47,11 @@ void CPlotMap::PlotLine()
     /// 绘制线
     auto m_pLine = dynamic_cast<IMapLine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLine"));
     m_pLine->GetDrawLine()->AddPoint(0,pos);
-    pos.fX = 122;
-    pos.fY = 26;
+    pos.dX = 122;
+    pos.dY = 26;
     m_pLine->GetDrawLine()->AddPoint(0,pos);
-    pos.fX = 123;
-    pos.fY = 27;
+    pos.dX = 123;
+    pos.dY = 27;
     m_pLine->GetDrawLine()->AddPoint(0,pos);
     m_pLine->GetDrawLine()->SetColor(color);
     m_pLine->GetDrawLine()->SetLineWidth(10.f);
@@ -60,11 +60,11 @@ void CPlotMap::PlotLine()
     /// 绘制区域
     auto m_pPolygon = dynamic_cast<IMapPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPolygon"));
     m_pPolygon->GetDrawPolygon()->AddPoint(0,pos);
-    pos.fX = 123;
-    pos.fY = 26;
+    pos.dX = 123;
+    pos.dY = 26;
     m_pPolygon->GetDrawPolygon()->AddPoint(1,pos);
-    pos.fX = 121;
-    pos.fY = 26.5;
+    pos.dX = 121;
+    pos.dY = 26.5;
     m_pPolygon->GetDrawPolygon()->AddPoint(2,pos);
     m_pPolygon->GetDrawPolygon()->SetColor(color);
     pLayer->AddSceneNode(m_pPolygon);

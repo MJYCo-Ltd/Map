@@ -31,7 +31,7 @@ struct IMapMessageObserver
      * @param 第2个参数 纬度信息 [deg][-90,90]
      * @param 第3个参数 高度信息 [m] 相对于wgs84椭球表面的高度
      */
-    virtual void MousePos(float,float,float){}
+    virtual void MousePos(double,double,double){}
 };
 
 #endif /// INTERFACE_MAP_OBSERVER_HEARDER_H

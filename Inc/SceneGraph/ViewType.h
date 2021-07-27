@@ -22,17 +22,10 @@ struct SceneViewPoint
             return(true);
         }
 
-        if(rOther.stPos == stPos &&
-                fabs(rOther.fElev - fElev) < FLT_EPSILON &&
-                fabs(rOther.fAzimuth - fAzimuth) < FLT_EPSILON &&
-                fabs(rOther.fDistance-fDistance) < FLT_EPSILON)
-        {
-            return(true);
-        }
-        else
-        {
-            return(false);
-        }
+        return(rOther.stPos == stPos &&
+           JUDGE_FLOAT_EQUAL(fAzimuth,rOther.fAzimuth) &&
+           JUDGE_FLOAT_EQUAL(fElev,rOther.fElev) &&
+           JUDGE_FLOAT_EQUAL(fDistance,rOther.fDistance));
     }
 
     bool operator !=(const SceneViewPoint& rOther) const
@@ -57,17 +50,10 @@ struct CameraViewPort
             return(true);
         }
 
-        if(rOther.nX == nX &&
-                rOther.nY == nY &&
-                rOther.nWidth == nWidth &&
-                rOther.nHeight == nHeight)
-        {
-            return(true);
-        }
-        else
-        {
-            return(false);
-        }
+        return(rOther.nX == nX &&
+               rOther.nY == nY &&
+               rOther.nWidth == nWidth &&
+               rOther.nHeight == nHeight);
     }
 
     /// 判断两者是否不相等

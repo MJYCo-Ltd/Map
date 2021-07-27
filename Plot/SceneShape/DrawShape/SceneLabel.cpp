@@ -18,9 +18,9 @@ bool CSceneLabel::SetAttachNode(ISceneNode *pSceneNode)
         auto bound = m_pAttachNode->AsOsgSceneNode()->GetOsgNode()->getBound();
         osg::Vec3 pos = bound._center;
         pos.x() += bound._radius;
-        m_stPos.fX = pos.x();
-        m_stPos.fY = pos.y();
-        m_stPos.fZ = pos.z();
+        m_stPos.dX = pos.x();
+        m_stPos.dY = pos.y();
+        m_stPos.dZ = pos.z();
 
         ImplSceneNode<ILabel>::NodeChanged();
 
@@ -135,7 +135,7 @@ void CSceneLabel::FrameCall()
 
     if(m_bPosChanged)
     {
-        m_pText->setPosition(osg::Vec3(m_stPos.fX,m_stPos.fY,m_stPos.fZ));
+        m_pText->setPosition(osg::Vec3(m_stPos.dX,m_stPos.dY,m_stPos.dZ));
         m_bPosChanged = false;
     }
 

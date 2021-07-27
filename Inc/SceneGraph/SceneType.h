@@ -104,9 +104,9 @@ struct SceneAttitude
  */
 struct ScenePos
 {
-    float fX{};    /// x轴坐标 或者 经度[deg]
-    float fY{};    /// y轴坐标 或者 纬度[deg]
-    float fZ{};    /// z轴坐标 或者 高度[m]
+    double dX{};    /// x轴坐标 或者 经度[deg]
+    double dY{};    /// y轴坐标 或者 纬度[deg]
+    double dZ{};    /// z轴坐标 或者 高度[m]
 
     bool operator == (const ScenePos& rOther) const
     {
@@ -115,9 +115,9 @@ struct ScenePos
             return(true);
         }
 
-        return(JUDGE_FLOAT_EQUAL(fX,rOther.fX)
-        &&JUDGE_FLOAT_EQUAL(fY,rOther.fY)
-        &&JUDGE_FLOAT_EQUAL(fZ,rOther.fZ));
+        return(JUDGE_DOUBLE_EQUAL(dX,rOther.dX)
+        &&JUDGE_DOUBLE_EQUAL(dY,rOther.dY)
+        &&JUDGE_DOUBLE_EQUAL(dZ,rOther.dZ));
     }
 
     bool operator !=(const ScenePos& rOther) const
@@ -127,7 +127,7 @@ struct ScenePos
 
     bool IsValidMap()
     {
-        return(fX>-180&&fX<180&&fY>=-90&&fY<=-90);
+        return(dX>-180&&dX<180&&dY>=-90&&dY<=-90);
     }
 };
 

@@ -51,11 +51,11 @@ struct MapObser:public IMapMessageObserver,public IWindowMessageObserver
 {
     MapObser(ISceneGraph* pSceneGraph):m_pSceneGraph(pSceneGraph){}
 
-    void MousePos(float fLon,float fLat,float fHeight)
+    void MousePos(double dLon,double dLat,double dHeight)
     {
-        pos.fX = fLon;
-        pos.fY = fLat;
-        pos.fZ = fHeight;
+        pos.dX = dLon;
+        pos.dY = dLat;
+        pos.dZ = dHeight;
     }
 
     void MovePos(const ScenePos& wordPos)
@@ -142,9 +142,9 @@ void MainWindow::on_action_triggered()
     m_pLayer = m_pSceneGraph->GetMap()->CreateLayer("Test");
     m_pSceneGraph->GetMap()->OpenLight(true);
     ScenePos pos11;
-    pos11.fX = 126.0;
-    pos11.fY = 45.6;
-    pos11.fZ = 10;
+    pos11.dX = 126.0;
+    pos11.dY = 45.6;
+    pos11.dZ = 10;
 
     SceneColor color11;
     color11.fR =1.0;
@@ -356,8 +356,8 @@ void MainWindow::on_action_2_triggered()
 //    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudText);
 //    pEarthLocation->SetVisible(!pEarthLocation->IsVisible());
     SceneViewPoint viewPoint;
-    viewPoint.stPos.fX = 108.78107;
-    viewPoint.stPos.fY = 34.11611;
+    viewPoint.stPos.dX = 108.78107;
+    viewPoint.stPos.dY = 34.11611;
     viewPoint.fDistance = 1000;
     viewPoint.fAzimuth = 0;
     viewPoint.fElev = 80;
@@ -422,9 +422,9 @@ void MainWindow::PlotMap()
 {
     ScenePos pos;
 
-    pos.fX = -121.5;
-    pos.fY = 25;
-    pos.fZ = 100;
+    pos.dX = -121.5;
+    pos.dY = 25;
+    pos.dZ = 100;
     SceneColor color;
     color.fG = .0f;
     color.fB = .0f;
@@ -432,26 +432,26 @@ void MainWindow::PlotMap()
     /// 绘制线
     auto m_pLine = dynamic_cast<IMapLine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLine"));
     m_pLine->GetDrawLine()->AddPoint(0,pos);
-    pos.fX = -92;
-    pos.fY = 26;
+    pos.dX = -92;
+    pos.dY = 26;
     m_pLine->GetDrawLine()->AddPoint(1,pos);
-    pos.fX = -45;
-    pos.fY = 45;
+    pos.dX = -45;
+    pos.dY = 45;
     m_pLine->GetDrawLine()->AddPoint(2,pos);
-    pos.fX = 0;
-    pos.fY = 60;
+    pos.dX = 0;
+    pos.dY = 60;
     m_pLine->GetDrawLine()->AddPoint(3,pos);
-    pos.fX = 10;
-    pos.fY = 45;
+    pos.dX = 10;
+    pos.dY = 45;
     m_pLine->GetDrawLine()->AddPoint(4,pos);
-    pos.fX = 40;
-    pos.fY = 35;
+    pos.dX = 40;
+    pos.dY = 35;
     m_pLine->GetDrawLine()->AddPoint(5,pos);
-    pos.fX = 123;
-    pos.fY = 27;
+    pos.dX = 123;
+    pos.dY = 27;
     m_pLine->GetDrawLine()->AddPoint(6,pos);
-    pos.fX = 170;
-    pos.fY = 25;
+    pos.dX = 170;
+    pos.dY = 25;
     m_pLine->GetDrawLine()->AddPoint(7,pos);
     m_pLine->GetDrawLine()->SetColor(color);
     m_pLine->GetDrawLine()->SetLineWidth(20.f);
@@ -461,17 +461,17 @@ void MainWindow::PlotMap()
 
     /// 绘制区域
     auto m_pPolygon = dynamic_cast<IMapPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPolygon"));
-    pos.fX = 123;
-    pos.fY = 26;
+    pos.dX = 123;
+    pos.dY = 26;
     m_pPolygon->GetDrawPolygon()->AddPoint(0,pos);
-    pos.fX = 121;
-    pos.fY = 26;
+    pos.dX = 121;
+    pos.dY = 26;
     m_pPolygon->GetDrawPolygon()->AddPoint(1,pos);
-    pos.fX = 121;
-    pos.fY = 27;
+    pos.dX = 121;
+    pos.dY = 27;
     m_pPolygon->GetDrawPolygon()->AddPoint(2,pos);
-    pos.fX = 123;
-    pos.fY = 27;
+    pos.dX = 123;
+    pos.dY = 27;
     m_pPolygon->GetDrawPolygon()->AddPoint(3,pos);
     m_pPolygon->GetDrawPolygon()->SetColor(color);
     m_pPolygon->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
@@ -494,7 +494,7 @@ void MainWindow::PlotMap()
     ///绘制地图元素
     color.fG=color.fB=1.f;
     color.fA = 1.f;
-    pos.fX += 1.0f;
+    pos.dX += 1.0f;
     auto m_pPoint = dynamic_cast<IMapPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPoint"));
     m_pPoint->GetDrawPoint()->AddPoint(0,pos);
     m_pPoint->GetDrawPoint()->SetColor(color);
@@ -536,9 +536,9 @@ void MainWindow::LodPlot()
     pLod->SetLevelsInfo(vLevelInfo);
 
     ScenePos pos;
-    pos.fX = 121.f;
-    pos.fY = 27.f;
-    pos.fZ = 1000.f;
+    pos.dX = 121.f;
+    pos.dY = 27.f;
+    pos.dZ = 1000.f;
     auto pEarthLocation1 = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     pEarthLocation1->SetSceneNode(pLod);
     pEarthLocation1->SetGeoPos(pos);
@@ -581,9 +581,9 @@ void MainWindow::TestGroup()
 void MainWindow::LoadQingxie()
 {
     ScenePos pos;
-    pos.fX = 108.78107;
-    pos.fY = 34.11611;
-    pos.fZ = 100.;
+    pos.dX = 108.78107;
+    pos.dY = 34.11611;
+    pos.dZ = 100.;
     auto pEarthLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     auto pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("F:/BaiduNetdiskDownload/shancheng/shanchengzhen/Data/out.osgb",false);
     pEarthLocation->SetGeoPos(pos);
@@ -619,19 +619,19 @@ void MainWindow::on_action12_triggered()
     pLine->SetColor(color);
 
     ScenePos scenePos;
-    scenePos.fZ = 10.f;
+    scenePos.dZ = 10.f;
     pLine->AddPoint(0,scenePos);
 
-    scenePos.fX = 100.f;
+    scenePos.dX = 100.f;
     pPoint->AddPoint(pPoint->GetCount(),scenePos);
     pLine->AddPoint(1,scenePos);
 
-    scenePos.fX = 100.f;
-    scenePos.fY = 100.f;
+    scenePos.dX = 100.f;
+    scenePos.dY = 100.f;
     pPoint->AddPoint(pPoint->GetCount(),scenePos);
     pLine->AddPoint(2,scenePos);
 
-    scenePos.fX = 0.f;
+    scenePos.dX = 0.f;
     pPoint->AddPoint(pPoint->GetCount(),scenePos);
     pLine->AddPoint(3,scenePos);
     pSceneRoot->AddSceneNode(pLine);
@@ -642,8 +642,8 @@ void MainWindow::on_action12_triggered()
     auto pPolygon = dynamic_cast<IPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPolygon"));
 //    pSceneRoot->AddSceneNode(pPolygon);
     pPolygon->SetMultPos(pLine->GetMulPos());
-    scenePos.fX=50.f;
-    scenePos.fY=50.f;
+    scenePos.dX=50.f;
+    scenePos.dY=50.f;
     pPolygon->AddPoint(pPolygon->GetCount(),scenePos);
     pPolygon->SetColor(color);
     m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);

@@ -81,8 +81,8 @@ QtViewPort::QtViewPort(IRender *pRender,ISceneGraph *pSceneGraph):
     m_stHomePoint.fAzimuth = 0.f;
     m_stHomePoint.fElev = 90.f;
     m_stHomePoint.fDistance = 12000e3;
-    m_stHomePoint.stPos.fX = 118.8f;
-    m_stHomePoint.stPos.fY = 32.1f;
+    m_stHomePoint.stPos.dX = 118.8f;
+    m_stHomePoint.stPos.dY = 32.1f;
 }
 
 /// 析构函数
@@ -377,8 +377,8 @@ void QtViewPort::FrameEvent()
             break;
         case View_Osg:
             m_pSelfManipulator->setDistance(m_stViewPoint.fDistance);
-            m_pSelfManipulator->setCenter(osg::Vec3(m_stViewPoint.stPos.fX,m_stViewPoint.stPos.fY,
-                                                    m_stViewPoint.stPos.fZ));
+            m_pSelfManipulator->setCenter(osg::Vec3(m_stViewPoint.stPos.dX,m_stViewPoint.stPos.dY,
+                                                    m_stViewPoint.stPos.dZ));
             m_pSelfManipulator->setHeading(osg::DegreesToRadians(m_stViewPoint.fAzimuth));
             m_pSelfManipulator->setElevation(osg::DegreesToRadians(m_stViewPoint.fElev));
             break;
@@ -671,9 +671,9 @@ void QtViewPort::EyePos(double dX, double dY, double dZ)
     auto iter = m_pAllOserver.begin();
     auto tmpIter = iter;
 
-    s_stWordPos.fX = dX;
-    s_stWordPos.fY = dY;
-    s_stWordPos.fZ = dZ;
+    s_stWordPos.dX = dX;
+    s_stWordPos.dY = dY;
+    s_stWordPos.dZ = dZ;
 
     for(;iter != m_pAllOserver.end();)
     {
@@ -690,9 +690,9 @@ void QtViewPort::LookDir(double dX, double dY, double dZ)
     auto iter = m_pAllOserver.begin();
     auto tmpIter = iter;
 
-    s_stWordPos.fX = dX;
-    s_stWordPos.fY = dY;
-    s_stWordPos.fZ = dZ;
+    s_stWordPos.dX = dX;
+    s_stWordPos.dY = dY;
+    s_stWordPos.dZ = dZ;
 
     for(;iter != m_pAllOserver.end();)
     {
@@ -742,17 +742,17 @@ void QtViewPort::UpdateViewPoint(CMyEarthManipulator *pEarthManipulator)
     m_stViewPoint.fAzimuth = ViewPoint.heading()->as(osgEarth::Units::DEGREES);
     m_stViewPoint.fElev = -ViewPoint.pitch()->as(osgEarth::Units::DEGREES);
     m_stViewPoint.fDistance=ViewPoint.range()->as(osgEarth::Units::METERS);
-    m_stViewPoint.stPos.fX = ViewPoint.focalPoint()->x();
-    m_stViewPoint.stPos.fY = ViewPoint.focalPoint()->y();
-    m_stViewPoint.stPos.fZ = ViewPoint.focalPoint()->z();
+    m_stViewPoint.stPos.dX = ViewPoint.focalPoint()->x();
+    m_stViewPoint.stPos.dY = ViewPoint.focalPoint()->y();
+    m_stViewPoint.stPos.dZ = ViewPoint.focalPoint()->z();
 }
 
 void QtViewPort::UpdateViewPoint(osgGA::OrbitManipulator *pManipulator)
 {
     const osg::Vec3d& rCenter = pManipulator->getCenter();
-    m_stViewPoint.stPos.fX = rCenter.x();
-    m_stViewPoint.stPos.fY = rCenter.y();
-    m_stViewPoint.stPos.fZ = rCenter.z();
+    m_stViewPoint.stPos.dX = rCenter.x();
+    m_stViewPoint.stPos.dY = rCenter.y();
+    m_stViewPoint.stPos.dZ = rCenter.z();
     m_stViewPoint.fAzimuth = osg::RadiansToDegrees(pManipulator->getHeading());
     m_stViewPoint.fElev = osg::RadiansToDegrees(pManipulator->getElevation());
     m_stViewPoint.fDistance = pManipulator->getDistance();

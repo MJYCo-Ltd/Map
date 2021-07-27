@@ -43,17 +43,18 @@ void CMapCircle::InitNode()
 void CMapCircle::UpdateNode()
 {
     if(m_fRadius <0.01)
+    {
         return;
+    }
     double dTmpOffset = D2PI/m_nFineness;
-    double dLon, dLat,dHeight;
     ScenePos Pos;
     std::vector<ScenePos> GeoMuPos;
     for(int i =0 ; i<= m_nFineness;i++)
     {
-        GisMath::GeoCalEndGeo(m_stCenter.fX*DD2R,m_stCenter.fY*DD2R,0,i*dTmpOffset, 0, m_fRadius,dLon, dLat,dHeight);
-        Pos.fX = dLat*DR2D;
-        Pos.fY = dLon*DR2D;
-        Pos.fZ = dHeight;
+        GisMath::GeoCalEndGeo(m_stCenter.dX*DD2R,m_stCenter.dY*DD2R,0,i*dTmpOffset, 0,
+                              m_fRadius,Pos.dX, Pos.dY,Pos.dZ);
+        Pos.dX *= DR2D;
+        Pos.dY *= DR2D;
         GeoMuPos.push_back(Pos);
     }
     m_pPolygon->GetDrawPolygon()->SetMultPos(GeoMuPos);
