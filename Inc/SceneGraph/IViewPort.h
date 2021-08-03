@@ -128,6 +128,12 @@ public:
      * @param dt 距离上次调用的时间间隔[s]
      */
     virtual void UpdateTime(double dt)=0;
+
+    /**
+     * @brief 设置视口背景颜色
+     * @param PortColor
+     */
+    virtual void SetPortBackColor(const SceneColor& stPortColor)JUDGE_EQUAL_SET_TRUE(stPortColor,m_stBackColor,m_bBackColor);
 #ifdef NEED_VR
     /**
      * @brief 将视口的内容显示到VR上
@@ -152,10 +158,12 @@ protected:
     bool           m_bTraceNodeChanged{false};   /// 跟踪节点更改
     bool           m_bUpdateProject{false};      /// 投影方式更改
     bool           m_bUpdateViewPort{false};     /// 视口更改
+    bool           m_bBackColor{false};          /// 窗口背景颜色修改
     ProjectType    m_emProjectType{Perspective}; /// 投影类型
     ISceneNode*    m_pTrackNode{};
     SceneViewPoint m_stHomePoint;
     CameraViewPort m_stViewPort;
+    SceneColor     m_stBackColor;                /// 设置背景颜色
 };
 
 #endif
