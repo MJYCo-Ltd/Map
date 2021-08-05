@@ -477,6 +477,13 @@ void QtViewPort::FrameEvent()
         m_bUpdateProject = false;
     }
 
+    /// 背景颜色修改
+    if(m_bBackColor)
+    {
+        m_pView->getCamera()->setClearColor(osg::Vec4(m_stBackColor.fR,m_stBackColor.fG,m_stBackColor.fB,m_stBackColor.fA));
+        m_bBackColor = false;
+    }
+
     if(m_bViewTypeChanged)
     {
         switch(m_emType)
