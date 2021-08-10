@@ -37,7 +37,7 @@ public:
      * @brief 设置多个位置
      */
     virtual void SetMultPos(const std::vector<ScenePos>&)=0;
-    virtual std::vector<ScenePos> GetMulPos()const=0;
+    virtual std::vector<ScenePos> GetMulPos()=0;
     virtual const std::list<ScenePos>& BetterGetMulPos()const=0;
 
     /**
@@ -53,7 +53,7 @@ public:
      * @attention 如果返回 0,0,0 切记检查是否越界
      * @return
      */
-    virtual ScenePos GetPoint(int)const=0;
+    virtual ScenePos GetPoint(int)=0;
 
     /**
      * @brief 清空所有的点

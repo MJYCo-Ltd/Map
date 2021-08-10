@@ -2,6 +2,7 @@
 #define IMPL_SCENE_GEOMETRY_H
 
 #include <Inner/ImplSceneShape.hpp>
+#include <OpenThreads/Mutex>
 
 /**
  *  实现ISceneGeomerty所有的接口
@@ -17,6 +18,8 @@ public:
      */
     void AddPoint(int nIndex, const ScenePos &rScenePos)
     {
+        bool bUnlock = 0 == m_listMutex.trylock();
+
         if(nIndex <=0)
         {
             m_listAllPos.push_front(rScenePos);
@@ -33,6 +36,11 @@ public:
             m_listAllPos.insert(pIter,rScenePos);
         }
 
+        if(bUnlock)
+        {
+            m_listMutex.unlock();
+        }
+
         NeedUpdate();
     }
 
@@ -47,9 +55,15 @@ public:
             return(false);
         }
 
+        bool bUnlock = 0 == m_listMutex.trylock();
         auto pIter = m_listAllPos.begin();
         for(int i=0; i<nIndex;++i,++pIter){}
         m_listAllPos.erase(pIter);
+
+        if(bUnlock)
+        {
+            m_listMutex.unlock();
+        }
 
         NeedUpdate();
         return(true);
@@ -66,6 +80,8 @@ public:
             return(false);
         }
 
+        bool bUnlock = 0 == m_listMutex.trylock();
+
         auto pIter = m_listAllPos.begin();
         for(int i=0; i<nIndex;++i,++pIter){}
 
@@ -73,6 +89,11 @@ public:
         {
             *pIter = rPos;
             NeedUpdate();
+        }
+
+        if(bUnlock)
+        {
+            m_listMutex.unlock();
         }
 
         return(true);
@@ -83,11 +104,17 @@ public:
      */
     void SetMultPos(const std::vector<ScenePos> & vAllPoints)
     {
+        bool bUnlock = 0 == m_listMutex.trylock();
         m_listAllPos.clear();
 
         for(auto one : vAllPoints)
         {
             m_listAllPos.push_back(one);
+        }
+
+        if(bUnlock)
+        {
+            m_listMutex.unlock();
         }
 
         NeedUpdate();
@@ -97,11 +124,13 @@ public:
      * @brief 获取位置点
      * @return
      */
-    std::vector<ScenePos> GetMulPos()const
+    std::vector<ScenePos> GetMulPos()
     {
         std::vector<ScenePos> vTempPos;
         vTempPos.resize(m_listAllPos.size());
         int nIndex(0);
+
+        bool bUnlock = 0 == m_listMutex.trylock();
         for(auto one : m_listAllPos)
         {
             ScenePos& rPos = vTempPos.at(nIndex++);
@@ -109,6 +138,11 @@ public:
             rPos.dX = one.dX;
             rPos.dY = one.dY;
             rPos.dZ = one.dZ;
+        }
+
+        if(bUnlock)
+        {
+            m_listMutex.unlock();
         }
 
         return(vTempPos);
@@ -136,17 +170,24 @@ public:
      * @brief GetPoint
      * @return
      */
-    ScenePos GetPoint(int nIndex)const
+    ScenePos GetPoint(int nIndex)
     {
+        ScenePos tmpPos;
         if(nIndex<0 || nIndex >= m_listAllPos.size())
         {
-            return(ScenePos());
+            return(tmpPos);
         }
 
+        bool bUnlock = 0 == m_listMutex.trylock();
         auto pIter = m_listAllPos.begin();
         for(int i=0; i<nIndex;++i,++pIter){}
+        tmpPos = *pIter;
+        if(bUnlock)
+        {
+            m_listMutex.unlock();
+        }
 
-        return(*pIter);
+        return(tmpPos);
     }
 
     /**
@@ -154,7 +195,13 @@ public:
      */
     void Clear()
     {
+        bool bUnlock = 0 == m_listMutex.trylock();
         m_listAllPos.clear();
+        if(bUnlock)
+        {
+            m_listMutex.unlock();
+        }
+
         NeedUpdate();
     }
 protected:
@@ -205,6 +252,7 @@ protected:
     }
 protected:
     bool                   m_bCountChanged{false};
+    OpenThreads::Mutex     m_listMutex;
     std::list<ScenePos>    m_listAllPos;
     osg::ref_ptr<osg::DrawArrays> m_pDrawArrays;
 };
