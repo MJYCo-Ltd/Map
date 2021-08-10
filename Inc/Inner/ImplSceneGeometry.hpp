@@ -216,6 +216,7 @@ protected:
      */
     void UpdateVetrix()
     {
+        bool bUnlock = 0 == m_listMutex.trylock();
         ImplSceneShape<T>::m_pVertexArray->resize(m_listAllPos.size());
 
         int nIndex=0;
@@ -234,6 +235,10 @@ protected:
             {
                 ImplSceneShape<T>::m_pVertexArray->at(nIndex++).set(one.dX,one.dY,one.dZ);
             }
+        }
+        if(bUnlock)
+        {
+            m_listMutex.unlock();
         }
     }
 
