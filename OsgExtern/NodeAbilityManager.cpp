@@ -17,6 +17,8 @@ INodeAbility *CNodeAbilityManager::CreateAbility(ABILITY_TYPE emType)
         break;
     case MOTION_ABILITY:
         break;
+    default:
+        break;
     }
     return(nullptr);
 }

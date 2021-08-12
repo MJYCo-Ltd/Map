@@ -9,14 +9,13 @@
 #
 #Attention DLLDESTDIR only useful in windows
 #          This will only copy exe or dll to DLLDESTDIR
-include(Path.pri)
 lessThan(QT_MAJOR_VERSION, 6):CONFIG += c++11
 greaterThan(QT_MAJOR_VERSION, 5):CONFIG += c++17
 
 INCLUDEPATH *= $$PWD/Inc
 win32{
+include(Path.pri)
     DEFINES -= UNICODE
-    # 开启utf-8 编码方式支持
     QMAKE_CXXFLAGS += /utf-8
     QMAKE_CXXFLAGS += /wd"4100"
     QMAKE_CXXFLAGS += /MP
@@ -44,7 +43,7 @@ unix{
         DESTDIR = $$DESTDIR/MapPlugin/Plot
     }else{
         contains(SDK_CONFIG,TOOL){
-            DESTDIR = $$DESTDIR/MapPlugin/Plot
+            DESTDIR = $$DESTDIR/MapPlugin/Tool
         }
     }
     LIBS *= -L$$PWD/../Bin
@@ -74,31 +73,33 @@ contains(SDK_CONFIG,OSG){
     win32{
         INCLUDEPATH *=$${NEWGL3PATH}/include
         LIBS *= -L$${NEWGL3PATH}/lib
+        CONFIG (debug, debug|release){
+     #threads
+            LIBS *= -lOpenThreadsd
+     # osg libs
+            LIBS *= -losgd -losgDBd -losgGAd -losgSimd -losgViewerd -losgUtild -losgTextd -losgManipulatord -losgWidgetd
+     #osgEarth libs
+            LIBS *= -losgEarthd
+        }else{
+            LIBS *= -lOpenThreads
+            LIBS *= -losg -losgDB -losgGA -losgSim -losgViewer -losgUtil  -losgText  -losgManipulator  -losgWidget
+            LIBS *= -losgEarth
+        }
     }
 
     unix{
-        LIBS *= -L$$DESTDIR/osglib
+        LIBS *= -L$$PWD/../Bin/osglib
+        LIBS *= -lOpenThreads
+        LIBS *= -losg -losgDB -losgGA -losgSim -losgViewer -losgUtil  -losgText  -losgManipulator  -losgWidget
+        LIBS *= -losgEarth
     }
-
-   CONFIG (debug, debug|release){
-#threads
-       LIBS *= -lOpenThreadsd
-# osg libs
-       LIBS *= -losgd -losgDBd -losgGAd -losgSimd -losgViewerd -losgUtild -losgTextd -losgManipulatord -losgWidgetd
-#osgEarth libs
-       LIBS *= -losgEarthd
-   }else{
-       LIBS *= -lOpenThreads
-       LIBS *= -losg -losgDB -losgGA -losgSim -losgViewer -losgUtil  -losgText  -losgManipulator  -losgWidget
-       LIBS *= -losgEarth
-   }
 }
 
 contains(SDK_CONFIG,Satellite){
     MathPath=$${PWD}/../VersionMath
     INCLUDEPATH *= $${MathPath}/Inc $${MathPath}/Inc/Math
     win32:LIBS *= -L$${MathPath}/Lib
-    unix:LIBS *= -L$$DESTDIR/stklib
+    unix:LIBS *= -L$$PWD/../Bin/stklib
     CONFIG (debug, debug|release){
         LIBS *= -lSatellited -lMathd -lGisMathd -lSatelliteToolKitd
     }else{

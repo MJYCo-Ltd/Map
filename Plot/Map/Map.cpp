@@ -389,7 +389,7 @@ void CMap::InitNode()
     m_pPicker->setIntersectionLimit( osgUtil::Intersector::LIMIT_NEAREST );
     ImplSceneGroup<IMap>::InitNode();
     m_bCallOne=false;
-
+    m_stNightColor.fR = m_stNightColor.fG = m_stNightColor.fB = 0.1f;
     LoadMap();
 }
 

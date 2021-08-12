@@ -10,9 +10,9 @@ QT += widgets quick
 TARGET = SceneCore
 TEMPLATE = lib
 
-DEFINES += SCENECORE_LIBRARY NEED_VR
+DEFINES += SCENECORE_LIBRARY
 
-SDK_CONFIG *= OSG OsgExtern VR
+SDK_CONFIG *= OSG OsgExtern
 
 include(../SoftSDK.pri)
 

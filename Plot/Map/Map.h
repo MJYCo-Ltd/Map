@@ -149,7 +149,7 @@ protected:
     int    m_nX{};
     int    m_nY{};
     ScenePos m_stMousePos;
-    SceneColor m_stNightColor{0.1f,0.1f,0.1f};
+    SceneColor m_stNightColor;
 
     bool   m_bSelfRotate{false};
     bool   m_bDateChanged{false};
