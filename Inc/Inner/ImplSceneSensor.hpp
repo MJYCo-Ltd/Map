@@ -87,11 +87,11 @@ protected:
             {
                 /// 开启背面裁剪
                 m_pCullFace = new osg::CullFace;
-                m_pGeometry->getOrCreateStateSet()->setAttributeAndModes(m_pCullFace);
+                ImplSceneShape<T>::m_pGeometry->getOrCreateStateSet()->setAttributeAndModes(m_pCullFace);
             }
             else
             {
-                m_pGeometry->getOrCreateStateSet()->removeAssociatedModes(m_pCullFace);
+                ImplSceneShape<T>::m_pGeometry->getOrCreateStateSet()->removeAssociatedModes(m_pCullFace);
             }
             m_bShowBackChanged=false;
         }

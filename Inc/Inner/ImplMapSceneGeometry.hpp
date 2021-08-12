@@ -39,7 +39,7 @@ protected:
     void SetGeometry(IGeometry* pGeometry)
     {
         m_pGeometry=pGeometry;
-        AddNode(m_pDrapeNode.get(),pGeometry->AsOsgSceneNode()->GetOsgNode());
+        ImplSceneNode<T>::AddNode(m_pDrapeNode.get(),pGeometry->AsOsgSceneNode()->GetOsgNode());
         m_pGeometry->SetDealPoint(this);
     }
 
@@ -49,12 +49,12 @@ protected:
      */
     void TileDataChanged(const osgEarth::TileKey& rTileKey)
     {
-        if(s_bIs3D && T::RELATIVE_TERRAIN==T::m_emType && nullptr != m_pGeometry)
+        if(IOsgMapSceneNode::s_bIs3D && T::RELATIVE_TERRAIN==T::m_emType && nullptr != m_pGeometry)
         {
             const std::list<ScenePos> & rAllPos = m_pGeometry->BetterGetMulPos();
             for(const ScenePos& one : rAllPos)
             {
-                if(rTileKey.getExtent().contains(one.dX,one.dY,s_pWGS84))
+                if(rTileKey.getExtent().contains(one.dX,one.dY,IOsgMapSceneNode::s_pWGS84))
                 {
                     m_pGeometry->NeedUpdate();
                     break;
@@ -69,7 +69,7 @@ protected:
     void UpdateTrerrain()
     {
         /// 根据高程类型选择是否开启贴地
-        if(s_bIs3D)
+        if(IOsgMapSceneNode::s_bIs3D)
         {
             m_pDrapeNode->setDrapingEnabled(T::CLOSE_TERRAIN == T::m_emType);
         }
@@ -96,7 +96,7 @@ protected:
         }
 
         vAllPos.resize(vIn.size());
-        if(s_bIs3D)
+        if(IOsgMapSceneNode::s_bIs3D)
         {
             std::vector<osg::Vec3d> vOut;
             vOut.resize(vIn.size());
