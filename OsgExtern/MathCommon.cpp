@@ -2,10 +2,11 @@
 #include <VersionMathCommon.h>
 #include <Inner/OsgExtern/MathCommon.h>
 #include <Inner/OsgExtern/IOsgMapSceneNode.h>
-bool IOsgMapSceneNode::s_bIs3D{false};
-osg::observer_ptr<osgEarth::MapNode>                IOsgMapSceneNode::s_pMapNode;
-osg::observer_ptr<const osgEarth::SpatialReference> IOsgMapSceneNode::s_pMapSRS;
-osg::observer_ptr<osgEarth::Terrain>          IOsgMapSceneNode::s_pTerrain;
+
+std::map<ISceneGraph*,bool> IOsgMapSceneNode::s_mapIs3D;
+std::map<ISceneGraph*,osg::observer_ptr<osgEarth::MapNode>> IOsgMapSceneNode::s_mapMapNode;
+std::map<ISceneGraph*,osg::observer_ptr<const osgEarth::SpatialReference>> IOsgMapSceneNode::s_mapMapSRS;
+std::map<ISceneGraph*,osg::observer_ptr<osgEarth::Terrain>> IOsgMapSceneNode::s_mapTerrain;
 osg::ref_ptr<osgEarth::SpatialReference> IOsgMapSceneNode::s_pWGS84=osgEarth::SpatialReference::get("WGS84");
 
 CMathCommon *CMathCommon::GetInstance()

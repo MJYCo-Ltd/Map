@@ -37,7 +37,7 @@ protected:
         {
             m_pTerrainCallback->m_pMapSceneNode=nullptr;
             T::m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
-                        new RemoveTerrainCullbackScene(s_pTerrain.get(),
+                        new RemoveTerrainCullbackScene(IOsgMapSceneNode::s_mapTerrain[T::m_pSceneGraph].get(),
                                                        m_pTerrainCallback.get()));
         }
     }
@@ -56,7 +56,7 @@ protected:
 
     void UpdateMapNode() override
     {
-        m_pHorizonCullBack->setEnabled(ImplMapSceneNode<T>::s_pMapNode->isGeocentric());
+        m_pHorizonCullBack->setEnabled(IOsgMapSceneNode::s_mapIs3D[T::m_pSceneGraph]);
     }
 
     /**
@@ -103,7 +103,7 @@ protected:
         {
             m_pTerrainCallback = new MayTerrainCallback;
             m_pTerrainCallback->m_pMapSceneNode=this;
-            s_pTerrain->addTerrainCallback(m_pTerrainCallback);
+            IOsgMapSceneNode::s_mapTerrain[T::m_pSceneGraph]->addTerrainCallback(m_pTerrainCallback);
             m_bInsertIntoTerrain=true;
         }
         ImplSceneNode<T>::FrameCall();

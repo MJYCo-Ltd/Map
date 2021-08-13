@@ -407,7 +407,7 @@ void CMap::FrameCall()
             }
 
 
-            IOsgMapSceneNode::SetMapNode(m_pCurMapNode);
+            IOsgMapSceneNode::SetMapNode(m_pCurMapNode,m_pSceneGraph);
             m_pCurMapNode->getMap()->beginUpdate();
             for(auto one=m_userLayers.begin();one != m_userLayers.end();++one)
             {
@@ -418,7 +418,7 @@ void CMap::FrameCall()
         }
         else
         {
-            IOsgMapSceneNode::SetMapNode(m_pCurMapNode);
+            IOsgMapSceneNode::SetMapNode(m_pCurMapNode,m_pSceneGraph);
         }
 
         m_pGroup->removeChildren(0,m_pGroup->getNumChildren());
