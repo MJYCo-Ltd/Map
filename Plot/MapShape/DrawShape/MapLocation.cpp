@@ -73,9 +73,9 @@ void CMapLocation::TerrainTypeChanged()
 ///重新计算矩阵
 void CMapLocation::ReCalculatMatrix()
 {
-    if (!IOsgMapSceneNode::s_pMapSRS->isEquivalentTo(m_pGeoPoint.getSRS()))
+    if (!IOsgMapSceneNode::s_mapMapSRS[m_pSceneGraph]->isEquivalentTo(m_pGeoPoint.getSRS()))
     {
-        osgEarth::GeoPoint p = m_pGeoPoint.transform(IOsgMapSceneNode::s_pMapSRS.get());
+        osgEarth::GeoPoint p = m_pGeoPoint.transform(IOsgMapSceneNode::s_mapMapSRS[m_pSceneGraph].get());
 
         osg::Matrixd local2world;
         p.createLocalToWorld( local2world );

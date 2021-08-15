@@ -70,7 +70,7 @@ void CSceneLine::UpdateShape()
         ImplSceneGeometry<ILine>::UpdateShape();
 
         /// 更新上一个顶点和下一个顶点的值
-        int nSize = m_listAllPos.size();
+        int nSize = m_pVertexArray->size();
         if(nSize > 1)
         {
             m_pPreviousPoints->resize(nSize);

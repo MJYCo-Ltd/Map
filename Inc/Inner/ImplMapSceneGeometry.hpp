@@ -39,7 +39,7 @@ protected:
     void SetGeometry(IGeometry* pGeometry)
     {
         m_pGeometry=pGeometry;
-        AddNode(m_pDrapeNode.get(),pGeometry->AsOsgSceneNode()->GetOsgNode());
+        ImplSceneNode<T>::AddNode(m_pDrapeNode.get(),pGeometry->AsOsgSceneNode()->GetOsgNode());
         m_pGeometry->SetDealPoint(this);
     }
 
@@ -49,12 +49,12 @@ protected:
      */
     void TileDataChanged(const osgEarth::TileKey& rTileKey)
     {
-        if(s_bIs3D && T::RELATIVE_TERRAIN==T::m_emType && nullptr != m_pGeometry)
+        if(IOsgMapSceneNode::s_mapIs3D[T::m_pSceneGraph] && T::RELATIVE_TERRAIN==T::m_emType && nullptr != m_pGeometry)
         {
             const std::list<ScenePos> & rAllPos = m_pGeometry->BetterGetMulPos();
             for(const ScenePos& one : rAllPos)
             {
-                if(rTileKey.getExtent().contains(one.dX,one.dY,s_pWGS84))
+                if(rTileKey.getExtent().contains(one.dX,one.dY,IOsgMapSceneNode::s_pWGS84))
                 {
                     m_pGeometry->NeedUpdate();
                     break;
@@ -69,7 +69,7 @@ protected:
     void UpdateTrerrain()
     {
         /// 根据高程类型选择是否开启贴地
-        if(s_bIs3D)
+        if(IOsgMapSceneNode::s_mapIs3D[T::m_pSceneGraph])
         {
             m_pDrapeNode->setDrapingEnabled(T::CLOSE_TERRAIN == T::m_emType);
         }
@@ -96,13 +96,13 @@ protected:
         }
 
         vAllPos.resize(vIn.size());
-        if(s_bIs3D)
+        if(IOsgMapSceneNode::s_mapIs3D[T::m_pSceneGraph])
         {
             std::vector<osg::Vec3d> vOut;
             vOut.resize(vIn.size());
             for(int nIndex=vIn.size()-1;nIndex>-1;--nIndex)
             {
-                ImplMapSceneNode<T>::s_pMapSRS->transformToWorld(vIn.at(nIndex),vOut.at(nIndex));
+                IOsgMapSceneNode::s_mapMapSRS[T::m_pSceneGraph]->transformToWorld(vIn.at(nIndex),vOut.at(nIndex));
             }
 
             /// 如果是相对位置
@@ -112,12 +112,12 @@ protected:
                 double out_hamsl,dLength;
 
                 osg::ref_ptr<osgEarth::Terrain> terrain;
-                ImplMapSceneNode<T>::s_pTerrain.lock(terrain);
+                IOsgMapSceneNode::s_mapTerrain[T::m_pSceneGraph].lock(terrain);
 
                 nIndex=0;
                 for(auto one : listAllPos)
                 {
-                    if(terrain->getHeight(ImplMapSceneNode<T>::s_pWGS84.get(), one.dX, one.dY, &out_hamsl))
+                    if(terrain->getHeight(IOsgMapSceneNode::s_pWGS84.get(), one.dX, one.dY, &out_hamsl))
                     {
                         dLength=vOut[nIndex].length();
                         vOut[nIndex] *= 1 + out_hamsl/dLength;
@@ -138,7 +138,7 @@ protected:
         else
         {
             /// 将经纬度信息转成地图的投影信息
-            ImplMapSceneNode<T>::s_pWGS84->transform(vIn,ImplMapSceneNode<T>::s_pMapSRS.get());
+            IOsgMapSceneNode::s_pWGS84.get()->transform(vIn,IOsgMapSceneNode::s_mapMapSRS[T::m_pSceneGraph].get());
             nIndex=0;
             for(auto one : vIn)
             {

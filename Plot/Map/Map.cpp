@@ -389,7 +389,7 @@ void CMap::InitNode()
     m_pPicker->setIntersectionLimit( osgUtil::Intersector::LIMIT_NEAREST );
     ImplSceneGroup<IMap>::InitNode();
     m_bCallOne=false;
-
+    m_stNightColor.fR = m_stNightColor.fG = m_stNightColor.fB = 0.1f;
     LoadMap();
 }
 
@@ -407,7 +407,7 @@ void CMap::FrameCall()
             }
 
 
-            IOsgMapSceneNode::SetMapNode(m_pCurMapNode);
+            IOsgMapSceneNode::SetMapNode(m_pCurMapNode,m_pSceneGraph);
             m_pCurMapNode->getMap()->beginUpdate();
             for(auto one=m_userLayers.begin();one != m_userLayers.end();++one)
             {
@@ -418,7 +418,7 @@ void CMap::FrameCall()
         }
         else
         {
-            IOsgMapSceneNode::SetMapNode(m_pCurMapNode);
+            IOsgMapSceneNode::SetMapNode(m_pCurMapNode,m_pSceneGraph);
         }
 
         m_pGroup->removeChildren(0,m_pGroup->getNumChildren());

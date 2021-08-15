@@ -1,6 +1,7 @@
 #ifndef H_SCENE_TYPE_INCLUDE_H
 #define H_SCENE_TYPE_INCLUDE_H
 
+#include <cstring>
 #include <string>
 #include <cmath>
 #include <cfloat>
@@ -25,8 +26,8 @@
 #define JUDGE_EQUAL_SET_TRUE(VA,VB,VC) {if(VA != VB){VB = VA;VC=true;}}
 
 #define CONSTRUCTOR(VA,VB) VA(ISceneGraph* pSceneGraph):VB(pSceneGraph){}
-#define SET_TRUE_NODE_UPDATE(VA) {VA=true;NodeChanged();}
-#define SET_TRUE_SHAPE_UPDATE(VA) {VA=true;ShapeChanged();}
+#define SET_TRUE_NODE_UPDATE(VA) {VA=true;this->NodeChanged();}
+#define SET_TRUE_SHAPE_UPDATE(VA) {VA=true;this->ShapeChanged();}
 
 enum ABILITY_TYPE
 {
