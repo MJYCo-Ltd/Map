@@ -36,21 +36,23 @@ void CScenePoint::UpdateShape()
 void CScenePoint::CreateShape()
 {
     m_pGeometry->setCullingActive(false);
-    auto pSate = m_pGeometry->getOrCreateStateSet();
-    auto pNodeProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
-    /// 此处应该不知道
-    if(m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(pNodeProgram,"GLSL/Point.glsl"))
+    auto pStateSet = m_pSceneGraph->ResouceLoader()->LoadVirtualProgram("GLSL/Point.glsl");
+    auto pNodeState = m_pGeometry->getStateSet();
+    if(nullptr == pNodeState)
     {
-        /// 获取点大小
-        m_ufPointSize = pSate->getOrCreateUniform("pointSize",osg::Uniform::FLOAT);
-        m_ufPointSize->set(m_fPointSize);
-        pSate->setMode(GL_VERTEX_PROGRAM_POINT_SIZE,1);
-        auto pSprite = new osg::PointSprite();
-        pSprite->setCoordOriginMode(osg::PointSprite::LOWER_LEFT);
-        pSate->setTextureAttributeAndModes(0, pSprite, osg::StateAttribute::ON);
+        pNodeState = new osg::StateSet;
     }
+
+    /// 获取点大小
+    m_ufPointSize = pNodeState->getOrCreateUniform("pointSize",osg::Uniform::FLOAT);
+    m_ufPointSize->set(m_fPointSize);
+    pNodeState->setMode(GL_VERTEX_PROGRAM_POINT_SIZE,1);
+    auto pSprite = new osg::PointSprite();
+    pSprite->setCoordOriginMode(osg::PointSprite::LOWER_LEFT);
+    pNodeState->setTextureAttributeAndModes(0, pSprite, osg::StateAttribute::ON);
 
 
     m_pDrawArrays=new osg::DrawArrays(GL_POINTS,0,m_pVertexArray->size());
     m_pGeometry->addPrimitiveSet(m_pDrawArrays);
+    m_pGeometry->setStateSet(m_pSceneGraph->ResouceLoader()->MergeStateSet(pStateSet,pNodeState));
 }

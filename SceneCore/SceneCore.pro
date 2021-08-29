@@ -24,6 +24,7 @@ SOURCES += \
     SceneGraph/QtSceneGraph.cpp \
     SceneGraph/QtViewHud.cpp \
     SceneGraph/QtViewPort.cpp \
+    SceneGraph/ResourceLoadExtern.cpp \
     SceneGraph/ResourceLod.cpp \
     SceneGraph/SceneGraphManager.cpp \
     Window/Qml/QtOsgItem.cpp \

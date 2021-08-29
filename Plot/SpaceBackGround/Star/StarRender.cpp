@@ -121,8 +121,6 @@ void CStarRender::init()
 {
     setDataVariance(osg::Object::DYNAMIC);
     auto pState = getOrCreateStateSet();
-    osgEarth::VirtualProgram* vp = osgEarth::VirtualProgram::getOrCreate(pState);
-    m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(vp,"GLSL/Star.glsl");
 
     auto pStarTexture1 = m_pSceneGraph->ResouceLoader()->LoadTexture("Space/pixmaps/star.png");
     pState->setTextureAttributeAndModes(0, pStarTexture1);

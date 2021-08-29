@@ -12,9 +12,17 @@ void CSceneImage::ImageSizeChanged()
 
 void CSceneImage::CreateShape()
 {
-    auto pSate = m_pGeometry->getOrCreateStateSet();
-    auto m_pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
-    m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(m_pVirutlProgram,"GLSL/Global.glsl");
+    auto pStateSet = m_pSceneGraph->ResouceLoader()->LoadVirtualProgram("GLSL/Global.glsl");
+    auto pNodeState = m_pGeometry->getStateSet();
+    if(nullptr == pNodeState)
+    {
+        m_pGeometry->setStateSet(pStateSet);
+    }
+    else
+    {
+        m_pGeometry->setStateSet(m_pSceneGraph->ResouceLoader()->MergeStateSet(pStateSet,pNodeState));
+    }
+
     m_pTexCoordArray = new osg::Vec2Array;
     m_pVertexArray->resize(4);
     m_pTexCoordArray->resize(4);
@@ -86,7 +94,19 @@ void CSceneImage::UpdateShape()
         pTexture->setFilter(osg::Texture::MAG_FILTER, osg::Texture::LINEAR);
         pTexture->setResizeNonPowerOfTwoHint(false);
 
-        m_pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(0,pTexture);
+        auto pStateSet = m_pSceneGraph->ResouceLoader()->LoadVirtualProgram("GLSL/Global.glsl");
+        auto pNodeState = m_pGeometry->getStateSet();
+        if(pStateSet == pNodeState)
+        {
+            auto pNewState = new osg::StateSet;
+            pNewState->setTextureAttributeAndModes(0,pTexture);
+
+            m_pGeometry->setStateSet(m_pSceneGraph->ResouceLoader()->MergeStateSet(pStateSet,pNewState));
+        }
+        else
+        {
+            m_pGeometry->getStateSet()->setTextureAttributeAndModes(0,pTexture);
+        }
 
         if(!m_stImageSize || !m_stImageSize.bOutSet)
         {

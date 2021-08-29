@@ -1,0 +1,4 @@
+#ifndef SAFETY_MAP_HEADER_H
+#define SAFETY_MAP_HEADER_H
+
+#endif SAFETY_MAP_HEADER_H

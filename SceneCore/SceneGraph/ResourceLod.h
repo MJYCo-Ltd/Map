@@ -1,13 +1,13 @@
 #ifndef RESOURCELOD_H
 #define RESOURCELOD_H
 
-#include <QImage>
 #include <osg/Texture2D>
 #include <osg/Node>
 #include <osgText/Font>
-#include <osgEarth/VirtualProgram>
 
 #include <Inner/ILoadResource.h>
+class QImage;
+
 class CResourceLod:public ILoadResouce
 {
     friend class MyProxyNode;
@@ -61,8 +61,22 @@ public:
      * @param bIsRef
      * @return
      */
-    bool LoadVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const std::string& sGLSLPath,bool bIsRef=true);
-    bool RemoveVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const std::string& sGLSLPath,bool bIsRef=true);
+    osg::StateSet* LoadVirtualProgram(const std::string& sGLSLPath,bool bIsRef=true);
+
+    /**
+     * @brief 合并渲染状态
+     * @param pParent 原始状态
+     * @param pChild  子状态
+     * @return
+     */
+    osg::StateSet* MergeStateSet(osg::StateSet* pParent,osg::StateSet* pStateSet);
+
+    /**
+     * @brief 移除着色器
+     * @param sGLSLPath
+     * @param pParentStateSet
+     */
+    void RemoveVirtualProgram(const std::string& sGLSLPath,osg::StateSet* pParentStateSet,bool bIsRef=true);
 
     /**
      * @brief 清空不再使用的资源
@@ -70,13 +84,16 @@ public:
     void ClearNoUse();
 protected:
     osg::Image* TransformQImage(const QImage& rQImage);
+    void InitSateSet(osg::StateSet* pStateSete,const std::string& sFileName);
 protected:
     std::string m_sAppPath;
     std::map<std::string,osg::ref_ptr<osg::Node>>      m_mapNode;    /// 模型映射
     std::map<std::string,osg::ref_ptr<osg::Image>>     m_mapImage;   /// 图片映射
     std::map<std::string,osg::ref_ptr<osg::Texture2D>> m_mapTexture; /// 纹理映射
     std::map<std::string,osg::ref_ptr<osgText::Font>>  m_mapFont;    /// 字体映射
-    std::map<std::string,osg::ref_ptr<osgEarth::VirtualProgram>>m_mapProgram; /// shader程序
+    std::map<std::string,osg::ref_ptr<osg::StateSet>>  m_mapStateSet; /// shader程序加载的状态集合
+    std::map<osg::observer_ptr<osg::StateSet>,
+    std::list<osg::ref_ptr<osg::StateSet>>>           m_mapMergeStateSet;
 };
 
 #endif // RESOURCELOD_H

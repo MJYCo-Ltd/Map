@@ -65,12 +65,12 @@ void CSimpleLabel::MouseMove(MouseButtonMask, int x, int y)
 //    float  fLon , fLat, fHeight;
 //    m_pTarget->GetPosition(&fLon,&fLat,&fHeight);
 
-    double dx,dy,dz;
+//    double dx,dy,dz;
 //    GisMath::LBH2XYZ(fLon*DD2R,fLat*DD2R,fHeight, dx,dy,dz);
 
-    m_TX = pos.dX - dx ;
-    m_TY = pos.dY - dy;
-    m_TZ = pos.dZ -dz;
+    m_TX = pos.dX ;
+    m_TY = pos.dY;
+    m_TZ = pos.dZ;
 
 }
 
@@ -149,7 +149,7 @@ void CSimpleLabel::setColor(long uColor)
 
 bool CSimpleLabel::JudgeID(int unSelected,unsigned int type)
 {
-    int nnID= m_pSceneGroup->PickID() ;
+//    int nnID= m_pSceneGroup->PickID() ;
     if(type == 1 && !m_bSelect &&  m_pSceneGroup->PickID() == unSelected)
     {
         m_bSelect = true;

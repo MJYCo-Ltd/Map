@@ -444,12 +444,10 @@ void QtViewPort::FrameEvent()
     /// 更新投影方式
     if(m_bUpdateProject)
     {
-        double dAcesip{1.0},dX,dY,dWidth,dHight;
+        double dAcesip{1.0},dWidth,dHight;
         if(m_stViewPort.IsValid())
         {
             dAcesip = static_cast<double>(m_stViewPort.nWidth)/static_cast<double>(m_stViewPort.nHeight);
-            dX = m_stViewPort.nX;
-            dY = m_stViewPort.nY;
             dWidth = m_stViewPort.nWidth;
             dHight = m_stViewPort.nHeight;
         }
@@ -458,8 +456,6 @@ void QtViewPort::FrameEvent()
             auto pViewport = m_pView->getCamera()->getViewport();
             if(pViewport)
             {
-                dX = pViewport->x();
-                dY = pViewport->y();
                 dWidth = pViewport->width();
                 dHight = pViewport->height();
                 dAcesip = dWidth/dHight;

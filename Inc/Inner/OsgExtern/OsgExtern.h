@@ -84,8 +84,7 @@ public:
         auto parentList = m_pOldNode->getParents();
         for(auto one : parentList)
         {
-            one->removeChild(m_pOldNode);
-            one->addChild(m_pNewNode);
+            one->setChild(one->getChildIndex(m_pOldNode),m_pNewNode);
         }
     }
 private:

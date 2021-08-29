@@ -245,12 +245,6 @@ void QtFBOWindow::KeyUp(QKeyEvent *event)
 
     int nKey = QtEventdMap::GetInstance()->ChangeKeyEvent(event);
 
-    int nQtKey = nKey;
-    if(event->text().isEmpty())
-    {
-        nQtKey = event->key();
-    }
-
     for(;iter != m_pAllOserver->end(); )
     {
         ++tmpIter;

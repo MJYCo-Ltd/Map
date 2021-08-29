@@ -115,6 +115,8 @@ protected:
         if(m_bChildInsert)
         {
 
+            auto pStateSet = T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram("GLSL/Visual.glsl");
+            m_pCamera->setStateSet(T::m_pSceneGraph->ResouceLoader()->MergeStateSet(pStateSet,m_pCamera->getStateSet()));
             for(auto one : m_listInsertChild)
             {
                 one->getOrCreateStateSet()->setTextureAttributeAndModes(1, m_pTexture2D.get(), osg::StateAttribute::ON);
@@ -125,8 +127,6 @@ protected:
                 one->getOrCreateStateSet()->addUniform(m_pVisibleColor);
                 one->getOrCreateStateSet()->addUniform(m_pHiddenColor);
                 one->getOrCreateStateSet()->addUniform(m_pDepth);
-                auto pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(one->getOrCreateStateSet());
-                T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(pVirutlProgram,"GLSL/Visual.glsl");
             }
             m_listInsertChild.clear();
             m_bChildInsert=false;
@@ -134,11 +134,7 @@ protected:
 
         if(m_bChildRemove)
         {
-            for(auto one : m_listInsertChild)
-            {
-                auto pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(one->getOrCreateStateSet());
-                T::m_pSceneGraph->ResouceLoader()->RemoveVirtualProgram(pVirutlProgram,"GLSL/Visual.glsl");
-            }
+            T::m_pSceneGraph->ResouceLoader()->RemoveVirtualProgram("GLSL/Visual.glsl",m_pCamera->getStateSet());
             m_listInsertChild.clear();
             m_bChildRemove=false;
         }

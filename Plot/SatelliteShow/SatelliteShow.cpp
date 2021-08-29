@@ -138,8 +138,6 @@ void CSatelliteShow::UpdateJ2000OribitShow(double duration)
 {
     if (m_vdMjd.size() > 2)
     {
-        double dStart = m_vdMjd[0];
-        double dEnd = m_vdMjd[m_vdMjd.size() - 1];
         double dStep = m_vdMjd[1] - m_vdMjd[0];
         double dTimeCount = 0;
 

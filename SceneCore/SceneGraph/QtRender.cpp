@@ -30,9 +30,9 @@ private:
 
 /// 渲染
 QtRender::QtRender(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    m_pOsgViewer(new osgViewer::CompositeViewer)
 {
-    m_pOsgViewer = new osgViewer::CompositeViewer;
     m_pOsgViewer->addUpdateOperation(new CRenderThreadCall(this));
     m_pOsgViewer->setKeyEventSetsDone(0);
     m_pOsgViewer->setThreadingModel(osgViewer::ViewerBase::CullThreadPerCameraDrawSingle);
@@ -64,26 +64,26 @@ void QtRender::AddUpdateOperation(osg::Operation *pUpdate)
 /// 重新构建线程
 void QtRender::ResetupThread()
 {
-   m_bResetThread=true;
+    m_bResetThread=true;
 }
 
 /// 订阅消息
 void QtRender::SubMessage(RenderCall *pRenderCall)
 {
-    auto findOne = std::find(m_listMessage.begin(),m_listMessage.end(),pRenderCall);
-    if(m_listMessage.end() == findOne)
+    auto findOne = m_setMessage.find(pRenderCall);
+    if(m_setMessage.end() == findOne)
     {
-        m_listMessage.push_back(pRenderCall);
+        m_setMessage.insert(pRenderCall);
     }
 }
 
 /// 取消订阅消息
 void QtRender::UnSubMessage(RenderCall *pRenderCall)
 {
-    auto findOne = std::find(m_listMessage.begin(),m_listMessage.end(),pRenderCall);
-    if(m_listMessage.end() != findOne)
+    auto findOne = m_setMessage.find(pRenderCall);
+    if(m_setMessage.end() != findOne)
     {
-        m_listMessage.erase(findOne);
+        m_setMessage.erase(findOne);
     }
 }
 
@@ -107,14 +107,14 @@ void QtRender::UpdateRender()
     }
 
     /// 遍历所有的订阅者
-    for(auto one=m_listMessage.begin();one != m_listMessage.end();)
+    for(auto one=m_setMessage.begin();one != m_setMessage.end();)
     {
         (*one)->FrameCall();
 
         /// 如果只执行一次，则将消息移除
         if((*one)->m_bCallOne)
         {
-            one = m_listMessage.erase(one);
+            one = m_setMessage.erase(one);
         }
         else
         {

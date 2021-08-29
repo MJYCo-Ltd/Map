@@ -41,7 +41,6 @@ void CAtmosphere::MakeAtmosphere()
     atmosSet->setAttributeAndModes( new osg::BlendFunc( GL_ONE, GL_ONE ), osg::StateAttribute::ON );
 
     float _innerRadius=osg::minimum(R_Earth2,R_Earth);
-    float _outerRadius = _innerRadius * 1.025f;
     // calculate and apply the uniforms:
     // TODO: perhaps we can just hard-code most of these as GLSL consts.
     float r_wl = ::powf( .65f, 4.0f );
@@ -77,9 +76,10 @@ void CAtmosphere::MakeAtmosphere()
     atmosSet->getOrCreateUniform( "atmos_fSamples",        osg::Uniform::FLOAT )->set((float)Samples);
     atmosSet->getOrCreateUniform( "atmos_fWeather",        osg::Uniform::FLOAT )->set(Weather);
 
-    osgEarth::VirtualProgram* vp = osgEarth::VirtualProgram::getOrCreate( atmosSet );
-    m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(vp,"GLSL/Atmosphere.glsl");
+    auto pStateSet = m_pSceneGraph->ResouceLoader()->LoadVirtualProgram("GLSL/Atmosphere.glsl");
+    osgEarth::VirtualProgram* vp = dynamic_cast<osgEarth::VirtualProgram*>(pStateSet->getAttribute(osg::StateAttribute::PROGRAM));
     vp->setInheritShaders(false);
+    pOsgNode->setStateSet(m_pSceneGraph->ResouceLoader()->MergeStateSet(pStateSet,atmosSet));
 }
 
 osg::Node *CAtmosphere::GetNode()

@@ -7,6 +7,7 @@
 #include <osgEarth/MapNode>
 #include <osgEarth/Lighting>
 #include <osgEarth/Utils>
+#include <osgEarth/VirtualProgram>
 
 #include "ResourceLod.h"
 
@@ -25,11 +26,20 @@ public:
     {
         if(osg::ProxyNode::addChild(child))
         {
+            auto pStateSet = m_pResourceLoad->LoadVirtualProgram("GLSL/Global.glsl");
+            if(child->getStateSet())
+            {
+                child->setStateSet(m_pResourceLoad->MergeStateSet(pStateSet,child->getStateSet()));
+            }
+            else
+            {
+                child->setStateSet(pStateSet);
+            }
+
             m_pResourceLoad->m_mapNode[m_sModelPath] = child;
             osgEarth::GenerateGL3LightingUniforms generateUniforms;
             child->accept(generateUniforms);
-            auto pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(child->getOrCreateStateSet());
-            m_pResourceLoad->LoadVirtualProgram(pVirutlProgram,"GLSL/Global.glsl");
+
             return(true);
         }
 
@@ -233,24 +243,11 @@ osg::Image *CResourceLod::LoadImage(const std::string &sImagePath, int nWidth, i
     }
 }
 
-/// 将QImage转成OsgImage
-osg::Image *CResourceLod::QImage2OsgImage(const QImage &rQImage)
-{
-    if(rQImage.format() != QImage::Format_RGBA8888)
-    {
-       QImage tmpImage = rQImage.convertToFormat(QImage::Format_RGBA8888);
-       return(TransformQImage(tmpImage));
-    }
-    else
-    {
-        return(TransformQImage(rQImage));
-    }
-}
-
 /// 加载virtualProgram
-bool CResourceLod::LoadVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const std::string& sGLSLPath,bool bIsRef)
+osg::StateSet* CResourceLod::LoadVirtualProgram(const std::string& sGLSLPath,bool bIsRef)
 {
     std::string glslPath;
+
     if(bIsRef)
     {
         glslPath = m_sAppPath + sGLSLPath;
@@ -260,27 +257,65 @@ bool CResourceLod::LoadVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,
         glslPath = sGLSLPath;
     }
 
+    auto itor = m_mapStateSet.find(glslPath);
 
-    static osgEarth::Util::Shaders shader;
-    return(shader.load(pVirtualProgram,glslPath));
+    if(m_mapStateSet.end() != itor && itor->second.valid())
+    {
+        return(itor->second.get());
+    }
+    else
+    {
+        osg::StateSet* pParentStateSet = new osg::StateSet;
+        static osgEarth::Util::Shaders shader;
+
+        /// 创建方程
+        auto pVirtualProgram = osgEarth::VirtualProgram::getOrCreate(pParentStateSet);
+        shader.load(pVirtualProgram,glslPath);
+
+        InitSateSet(pParentStateSet,osgDB::getSimpleFileName(glslPath));
+
+        m_mapStateSet[glslPath] = pParentStateSet;
+
+        return(pParentStateSet);
+    }
 }
 
-/// 移除virtualProgram
-bool CResourceLod::RemoveVirtualProgram(osgEarth::VirtualProgram *pVirtualProgram, const std::string &sGLSLPath, bool bIsRef)
+/// 合并状态
+osg::StateSet *CResourceLod::MergeStateSet(osg::StateSet *pParent, osg::StateSet *pStateSet)
 {
-    std::string glslPath;
-    if(bIsRef)
+    /// 构造混合了两个状态的状态集合
+    osg::ref_ptr<osg::StateSet> pChildStateSet = new osg::StateSet;
+    pChildStateSet->merge(*pParent);
+    pChildStateSet->merge(*pStateSet);
+
+    /// 如果合并状态跟没合并之前一致，则直接返回
+    if(0 == pChildStateSet->compare(*pParent,true))
     {
-        glslPath = m_sAppPath + sGLSLPath;
+        return(pParent);
+    }
+
+    auto findOne = m_mapMergeStateSet.find(pParent);
+    if(m_mapMergeStateSet.end() != findOne)
+    {
+        /// 遍历所有的状态集合，如果有状态相等的则直接返回
+        for(auto one=findOne->second.begin();one!=findOne->second.end();++one)
+        {
+            if(0 == pChildStateSet->compare(**one,true))
+            {
+                return(*one);
+            }
+        }
+
+        /// 如果没有找到则新建
+        findOne->second.push_back(pChildStateSet);
+
+        return(pChildStateSet);
     }
     else
     {
-        glslPath = sGLSLPath;
+        m_mapMergeStateSet[pParent].push_back(pChildStateSet);
+        return(pChildStateSet);
     }
-
-
-    static osgEarth::Shaders shader;
-    return(shader.unload(pVirtualProgram,glslPath));
 }
 
 template <typename T>
@@ -306,26 +341,5 @@ void CResourceLod::ClearNoUse()
     ClearMap(m_mapImage);
     ClearMap(m_mapTexture);
     ClearMap(m_mapFont);
-    ClearMap(m_mapProgram);
-}
-
-/// 转换QImage成osgImage
-osg::Image *CResourceLod::TransformQImage(const QImage &rQImage)
-{
-    int nHeight = rQImage.height();
-#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
-    auto size = rQImage.byteCount();
-#else
-    auto size = rQImage.sizeInBytes();
-#endif
-    unsigned char* pTempBuffer = new unsigned char[size]();
-    size = rQImage.bytesPerLine();
-    for(int i=nHeight-1,j=0; i>-1; --i,++j)
-    {
-        memcpy(pTempBuffer+size*i,rQImage.scanLine(j),size);
-    }
-
-    auto image = new osg::Image;
-    image->setImage(rQImage.width(), nHeight, 1, GL_RGBA,GL_RGBA, GL_UNSIGNED_BYTE,pTempBuffer,osg::Image::USE_NEW_DELETE);
-    return(image);
+    ClearMap(m_mapStateSet);
 }

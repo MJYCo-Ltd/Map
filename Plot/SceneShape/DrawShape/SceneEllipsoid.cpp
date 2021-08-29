@@ -2,17 +2,6 @@
 #include <VersionMathCommon.h>
 #include "SceneEllipsoid.h"
 
-static bool checkFunctions(const osgEarth::VirtualProgram* attr)
-{
-    osgEarth::ShaderComp::FunctionLocationMap functions;
-    attr->getFunctions(functions);
-
-    unsigned count = 0;
-    for (osgEarth::ShaderComp::FunctionLocationMap::const_iterator loc = functions.begin(); loc != functions.end(); ++loc)
-        count += loc->second.size();
-    return count > 0;
-}
-
 /// 形状 更新
 void CSceneEllipsoid::UpdateShape()
 {
@@ -58,13 +47,16 @@ void CSceneEllipsoid::UpdateShape()
 
 
             m_pGeometry->setTexCoordArray(0,m_pTexCoords);
-            m_pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(0, pTexture,osg::StateAttribute::ON);
-
-            /// 如果VP中没有函数则添加
-            if(!checkFunctions(m_pVirutlProgram))
+            auto pNodeState = m_pGeometry->getStateSet();
+            if(nullptr == pNodeState)
             {
-                m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(m_pVirutlProgram,"GLSL/Global.glsl");
+                pNodeState = new osg::StateSet;
             }
+
+            pNodeState->setTextureAttributeAndModes(0, pTexture,osg::StateAttribute::ON);
+
+            auto pStateSet = m_pSceneGraph->ResouceLoader()->LoadVirtualProgram("GLSL/Global.glsl");
+            m_pGeometry->setStateSet(m_pSceneGraph->ResouceLoader()->MergeStateSet(pStateSet,pNodeState));
         }
         else
         {
@@ -73,10 +65,8 @@ void CSceneEllipsoid::UpdateShape()
             m_pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(0, nullptr,osg::StateAttribute::OFF);
 
             /// 如果VP中有函数则移除
-            if(checkFunctions(m_pVirutlProgram))
-            {
-                m_pSceneGraph->ResouceLoader()->RemoveVirtualProgram(m_pVirutlProgram,"GLSL/Global.glsl");
-            }
+
+            m_pSceneGraph->ResouceLoader()->RemoveVirtualProgram("GLSL/Global.glsl",m_pGeometry->getStateSet());
         }
     }
         break;
@@ -249,6 +239,5 @@ void CSceneEllipsoid::CreateShape()
     m_pTexCoords = new osg::Vec2Array(osg::Array::BIND_PER_VERTEX);
     m_pNormals = new osg::Vec3Array(osg::Array::BIND_PER_VERTEX);
     m_pGeometry->setNormalArray(m_pNormals);
-    m_pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(m_pGeometry->getOrCreateStateSet());
     UpdateShape();
 }

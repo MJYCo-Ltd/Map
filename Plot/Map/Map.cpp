@@ -32,7 +32,7 @@ CMap::~CMap()
 {
     m_pSceneGraph->GetMainWindow()->UnSubMessage(this);
 
-    ClearLayers();
+    CMap::ClearLayers();
 
     if (m_pPreMapNode.valid())
     {
@@ -123,12 +123,11 @@ bool CMap::ConvertCoord(int &fX, int &fY, ScenePos &geoPos, short TranType)
         matrix.postMult(camera->getViewMatrix());
         matrix.postMult(camera->getProjectionMatrix());
 
-        double zNear = -1.0;
         double zFar = 1.0;
         if (camera->getViewport())
         {
             matrix.postMult(camera->getViewport()->computeWindowMatrix());
-            zNear = 0.0, zFar = 1.0;
+            zFar = 1.0;
         }
 
         static osg::Matrixd inverse;
@@ -598,6 +597,7 @@ void CMap::LoadMap()
 /// 初始化光线
 void CMap::Init3DLight()
 {
+    auto pStateSet = m_pSceneGraph->ResouceLoader()->LoadVirtualProgram("GLSL/PhongLighting.glsl");
     osg::Vec3f lightPos(0.0f, 0.0f, 1.0f);
     osg::LightSource* lightSource = new osg::LightSource();
     m_pLight = new osgEarth::LightGL3( 0 );
@@ -623,9 +623,7 @@ void CMap::Init3DLight()
     stateset = m_p3DRoot->getOrCreateStateSet();
     stateset->setDefine("OE_NUM_LIGHTS", "1");
 
-    osgEarth::VirtualProgram* vp = osgEarth::VirtualProgram::getOrCreate(stateset);
-    m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(vp,"GLSL/PhongLighting.glsl");
-
+    m_p3DRoot->setStateSet(m_pSceneGraph->ResouceLoader()->MergeStateSet(pStateSet,stateset));
 }
 
 static const char s_sMap2D[]="IMap2D";

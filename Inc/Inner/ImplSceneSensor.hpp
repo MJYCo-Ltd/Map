@@ -61,7 +61,8 @@ protected:
         {
             if(!m_sCurrentVirtulProgram.empty())
             {
-                T::m_pSceneGraph->ResouceLoader()->RemoveVirtualProgram(m_pVirutlProgram,m_sCurrentVirtulProgram);
+                T::m_pSceneGraph->ResouceLoader()->RemoveVirtualProgram(
+                            m_sCurrentVirtulProgram,ImplSceneShape<T>::m_pGeometry->getStateSet());
             }
 
             switch(T::m_emEffect)
@@ -76,7 +77,17 @@ protected:
 
             if(!m_sCurrentVirtulProgram.empty())
             {
-                T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(m_pVirutlProgram,m_sCurrentVirtulProgram);
+                auto pStateSet = T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(m_sCurrentVirtulProgram);
+                auto pNodeStateSet = ImplSceneShape<T>::m_pGeometry->getStateSet();
+                if(nullptr == pNodeStateSet)
+                {
+                    ImplSceneShape<T>::m_pGeometry->setStateSet(pStateSet);
+                }
+                else
+                {
+                    ImplSceneShape<T>::m_pGeometry->setStateSet(T::m_pSceneGraph->ResouceLoader()->MergeStateSet(
+                                                                    pStateSet,pNodeStateSet));
+                }
             }
             m_bEffectChanged=false;
         }
@@ -86,12 +97,28 @@ protected:
             if(!T::m_bShowBack)
             {
                 /// 开启背面裁剪
-                m_pCullFace = new osg::CullFace;
-                ImplSceneShape<T>::m_pGeometry->getOrCreateStateSet()->setAttributeAndModes(m_pCullFace);
+                if(!m_pCullFace.valid())
+                {
+                    m_pCullFace = new osg::CullFace;
+                    auto pStateSet = new osg::StateSet;
+                    pStateSet->setAttributeAndModes(m_pCullFace);
+
+                    auto pNodeStateSet = ImplSceneShape<T>::m_pGeometry->getStateSet();
+                    if(nullptr == pNodeStateSet)
+                    {
+                        ImplSceneShape<T>::m_pGeometry->setStateSet(pStateSet);
+                    }
+                    else
+                    {
+                        ImplSceneShape<T>::m_pGeometry->setStateSet(T::m_pSceneGraph->ResouceLoader()->MergeStateSet(
+                                                                        pNodeStateSet,pStateSet));
+                    }
+
+                }
             }
             else
             {
-                ImplSceneShape<T>::m_pGeometry->getOrCreateStateSet()->removeAssociatedModes(m_pCullFace);
+                ImplSceneShape<T>::m_pGeometry->getStateSet()->removeAssociatedModes(m_pCullFace);
             }
             m_bShowBackChanged=false;
         }

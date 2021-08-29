@@ -7,11 +7,7 @@ namespace osg
     class Node;
     class Image;
     class Texture2D;
-}
-
-namespace osgEarth
-{
-    class VirtualProgram;
+    class StateSet;
 }
 
 namespace osgText
@@ -79,8 +75,22 @@ public:
      * @param bIsRef
      * @return
      */
-    virtual bool LoadVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const std::string& sGLSLPath,bool bIsRef=true)=0;
-    virtual bool RemoveVirtualProgram(osgEarth::VirtualProgram* pVirtualProgram,const std::string& sGLSLPath,bool bIsRef=true)=0;
+    virtual osg::StateSet* LoadVirtualProgram(const std::string& sGLSLPath,bool bIsRef=true)=0;
+
+    /**
+     * @brief 合并渲染状态
+     * @param pParent 原始状态
+     * @param pChild  子状态
+     * @return
+     */
+    virtual osg::StateSet* MergeStateSet(osg::StateSet* pParent,osg::StateSet* pStateSet)=0;
+
+    /**
+     * @brief 移除着色器
+     * @param sGLSLPath
+     * @param pParentStateSet
+     */
+    virtual void RemoveVirtualProgram(const std::string& sGLSLPath,osg::StateSet* pParentStateSet,bool bIsRef=true)=0;
 
     /**
      * @brief 清空不再使用的资源

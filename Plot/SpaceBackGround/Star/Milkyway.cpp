@@ -51,12 +51,17 @@ void CMilkyway::makeMilkyway()
 
     m_pMilkyway->setColor(osg::Vec4f(1.0f, 1.0f, 1.0f,1.0f));
 
-    auto pState = m_pMilkyway->getOrCreateStateSet();
-    auto pVp = osgEarth::VirtualProgram::getOrCreate(pState);
-    m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(pVp,"GLSL/Global.glsl");
+
+    auto pStateSet = m_pSceneGraph->ResouceLoader()->LoadVirtualProgram("GLSL/Global.glsl");
+    auto pNodeStateSet = m_pMilkyway->getStateSet();
+    if(nullptr == pNodeStateSet)
+    {
+        pNodeStateSet = new osg::StateSet;
+    }
 
     /// 添加纹理
     auto pTexture = m_pSceneGraph->ResouceLoader()->LoadTexture("Space/pixmaps/milkyway.png");
 
-    pState->setTextureAttribute(0, pTexture);
+    pNodeStateSet->setTextureAttribute(0, pTexture);
+    m_pMilkyway->setStateSet(m_pSceneGraph->ResouceLoader()->MergeStateSet(pStateSet,pNodeStateSet));
 }

@@ -28,6 +28,7 @@ public:
      */
     virtual ~ImplSceneNode()
     {
+        T::m_pSceneGraph->SceneGraphRender()->UnSubMessage(this);
         T::m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(m_pRootNode));
         m_pRootNode = nullptr;
     }

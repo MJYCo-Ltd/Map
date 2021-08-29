@@ -2,11 +2,12 @@
 #define QTRENDER_H
 
 #include <QObject>
-#include <QMutex>
 #include <QEvent>
 #include <QSize>
 #include <osgViewer/CompositeViewer>
 #include <Inner/IRender.h>
+#include <Inner/ThreadSafety/SafetyList.h>
+#include <Inner/ThreadSafety/SafetyMap.h>
 
 class QtFBOWindow;
 enum RenderEvent
@@ -94,8 +95,7 @@ private:
 private:
     bool                                     m_bResetThread{false}; /// 重新构建线程
     osg::ref_ptr<osgViewer::CompositeViewer> m_pOsgViewer;    /// 多视口查看器
-    std::list<RenderCall*>                   m_listMessage;   /// 所有的消息订阅者
-    QMutex                                   m_mutexList;     /// 控制list的读写
+    std::set<RenderCall*>                    m_setMessage;   /// 所有的消息订阅者
 
 };
 

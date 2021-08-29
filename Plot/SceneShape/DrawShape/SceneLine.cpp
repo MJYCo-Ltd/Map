@@ -43,12 +43,14 @@ void CSceneLine::CreateShape()
     m_pGeometry->setVertexAttribArray(osg::Drawable::ATTRIBUTE_7, m_pNextPoints);
 
     auto pSate = m_pGeometry->getOrCreateStateSet();
-    auto pNodeProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
+    auto pStateSet = m_pSceneGraph->ResouceLoader()->LoadVirtualProgram("GLSL/Line.glsl");
+
+    osgEarth::VirtualProgram* vp = dynamic_cast<osgEarth::VirtualProgram*>(pStateSet->getAttribute(osg::StateAttribute::PROGRAM));
     /// 此处应该不知道
-    if(m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(pNodeProgram,"GLSL/Line.glsl"))
+    if(vp)
     {
-        pNodeProgram->addBindAttribLocation("Line_prev_point",osg::Drawable::ATTRIBUTE_6);
-        pNodeProgram->addBindAttribLocation("Line_next_point",osg::Drawable::ATTRIBUTE_7);
+        vp->addBindAttribLocation("Line_prev_point",osg::Drawable::ATTRIBUTE_6);
+        vp->addBindAttribLocation("Line_next_point",osg::Drawable::ATTRIBUTE_7);
     }
     m_uLineWidth = pSate->getOrCreateUniform("LineWidth",osg::Uniform::FLOAT);
     m_uLineWidth->set(static_cast<float>(m_nLineWidth));
@@ -61,6 +63,7 @@ void CSceneLine::CreateShape()
 
     /// 设置默认状态
     pSate->setMode(GL_CULL_FACE, osg::StateAttribute::OFF | osg::StateAttribute::OVERRIDE | osg::StateAttribute::PROTECTED);
+    m_pGeometry->setStateSet(m_pSceneGraph->ResouceLoader()->MergeStateSet(pStateSet,pSate));
 }
 
 void CSceneLine::UpdateShape()
