@@ -37,11 +37,7 @@ void CScenePoint::CreateShape()
 {
     m_pGeometry->setCullingActive(false);
     auto pStateSet = m_pSceneGraph->ResouceLoader()->LoadVirtualProgram("GLSL/Point.glsl");
-    auto pNodeState = m_pGeometry->getStateSet();
-    if(nullptr == pNodeState)
-    {
-        pNodeState = new osg::StateSet;
-    }
+    auto pNodeState = m_pGeometry->getOrCreateStateSet();
 
     /// 获取点大小
     m_ufPointSize = pNodeState->getOrCreateUniform("pointSize",osg::Uniform::FLOAT);

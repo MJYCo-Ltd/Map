@@ -12,17 +12,6 @@ void CSceneImage::ImageSizeChanged()
 
 void CSceneImage::CreateShape()
 {
-    auto pStateSet = m_pSceneGraph->ResouceLoader()->LoadVirtualProgram("GLSL/Global.glsl");
-    auto pNodeState = m_pGeometry->getStateSet();
-    if(nullptr == pNodeState)
-    {
-        m_pGeometry->setStateSet(pStateSet);
-    }
-    else
-    {
-        m_pGeometry->setStateSet(m_pSceneGraph->ResouceLoader()->MergeStateSet(pStateSet,pNodeState));
-    }
-
     m_pTexCoordArray = new osg::Vec2Array;
     m_pVertexArray->resize(4);
     m_pTexCoordArray->resize(4);
@@ -44,7 +33,10 @@ void CSceneImage::UpdateShape()
         auto pTexture = m_pSceneGraph->ResouceLoader()->LoadTexture(m_sImagePath);
         if(nullptr != pTexture)
         {
-            m_pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(0,pTexture);
+            auto pStateSet = m_pSceneGraph->ResouceLoader()->LoadVirtualProgram("GLSL/Global.glsl");
+            auto pNodeState = m_pGeometry->getOrCreateStateSet();
+            pNodeState->setTextureAttributeAndModes(0,pTexture);
+            m_pGeometry->setStateSet(m_pSceneGraph->ResouceLoader()->MergeStateSet(pStateSet,pNodeState));
 
             if(!m_stImageSize || !m_stImageSize.bOutSet)
             {
@@ -95,18 +87,9 @@ void CSceneImage::UpdateShape()
         pTexture->setResizeNonPowerOfTwoHint(false);
 
         auto pStateSet = m_pSceneGraph->ResouceLoader()->LoadVirtualProgram("GLSL/Global.glsl");
-        auto pNodeState = m_pGeometry->getStateSet();
-        if(pStateSet == pNodeState)
-        {
-            auto pNewState = new osg::StateSet;
-            pNewState->setTextureAttributeAndModes(0,pTexture);
-
-            m_pGeometry->setStateSet(m_pSceneGraph->ResouceLoader()->MergeStateSet(pStateSet,pNewState));
-        }
-        else
-        {
-            m_pGeometry->getStateSet()->setTextureAttributeAndModes(0,pTexture);
-        }
+        auto pNodeState = m_pGeometry->getOrCreateStateSet();
+        pNodeState->setTextureAttributeAndModes(0,pTexture);
+        m_pGeometry->setStateSet(m_pSceneGraph->ResouceLoader()->MergeStateSet(pStateSet,pNodeState));
 
         if(!m_stImageSize || !m_stImageSize.bOutSet)
         {

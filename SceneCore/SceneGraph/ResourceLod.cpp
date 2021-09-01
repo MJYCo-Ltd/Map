@@ -27,6 +27,11 @@ public:
         if(osg::ProxyNode::addChild(child))
         {
             auto pStateSet = m_pResourceLoad->LoadVirtualProgram("GLSL/Global.glsl");
+
+            m_pResourceLoad->m_mapNode[m_sModelPath] = child;
+            osgEarth::GenerateGL3LightingUniforms generateUniforms;
+            child->accept(generateUniforms);
+
             if(child->getStateSet())
             {
                 child->setStateSet(m_pResourceLoad->MergeStateSet(pStateSet,child->getStateSet()));
@@ -35,10 +40,6 @@ public:
             {
                 child->setStateSet(pStateSet);
             }
-
-            m_pResourceLoad->m_mapNode[m_sModelPath] = child;
-            osgEarth::GenerateGL3LightingUniforms generateUniforms;
-            child->accept(generateUniforms);
 
             return(true);
         }

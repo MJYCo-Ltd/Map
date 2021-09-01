@@ -72,6 +72,7 @@ QtViewPort::QtViewPort(IRender *pRender,ISceneGraph *pSceneGraph):
         m_pView->getCamera()->setProjectionMatrixAsOrtho2D(0,C_WINDOW_WIDTH,0,C_WINDOW_HEIGHT);
     }
 
+    m_pView->addEventHandler(new osgViewer::StatsHandler);
     m_pView->addEventHandler(new ViewPortEventCallback(this));
 
     m_pSelfManipulator = new osgGA::TrackballManipulator;

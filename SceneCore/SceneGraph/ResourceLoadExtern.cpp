@@ -80,12 +80,12 @@ void CResourceLod::RemoveVirtualProgram(const std::string& sGLSLPath, osg::State
     static osgEarth::Util::Shaders shader;
     if(sFileName == "Flash.glsl")
     {
-        auto pVirtualProgram = dynamic_cast<osgEarth::VirtualProgram*>(pStateSet->getAttribute(osg::StateAttribute::PROGRAM));
-        shader.unload(pVirtualProgram,glslPath);
-
         pParentStateSet->removeUniform("flashStartTime");
         pParentStateSet->removeUniform("flashDurTime");
         pParentStateSet->removeUniform("flashIntervalTime");
         pParentStateSet->removeUniform("flashColor");
     }
+
+    auto pVirtualProgram = dynamic_cast<osgEarth::VirtualProgram*>(pStateSet->getAttribute(osg::StateAttribute::PROGRAM));
+    shader.unload(pVirtualProgram,glslPath);
 }

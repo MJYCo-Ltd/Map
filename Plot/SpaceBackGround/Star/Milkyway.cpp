@@ -53,11 +53,7 @@ void CMilkyway::makeMilkyway()
 
 
     auto pStateSet = m_pSceneGraph->ResouceLoader()->LoadVirtualProgram("GLSL/Global.glsl");
-    auto pNodeStateSet = m_pMilkyway->getStateSet();
-    if(nullptr == pNodeStateSet)
-    {
-        pNodeStateSet = new osg::StateSet;
-    }
+    auto pNodeStateSet = m_pMilkyway->getOrCreateStateSet();
 
     /// 添加纹理
     auto pTexture = m_pSceneGraph->ResouceLoader()->LoadTexture("Space/pixmaps/milkyway.png");
