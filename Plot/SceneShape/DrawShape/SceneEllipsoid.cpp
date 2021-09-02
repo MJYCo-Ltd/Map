@@ -231,8 +231,10 @@ void CSceneEllipsoid::UpdateShape()
 void CSceneEllipsoid::CreateShape()
 {
     m_pEllipsoidModel = new osg::EllipsoidModel;
+
     m_pTexCoords = new osg::Vec2Array(osg::Array::BIND_PER_VERTEX);
     m_pNormals = new osg::Vec3Array(osg::Array::BIND_PER_VERTEX);
     m_pGeometry->setNormalArray(m_pNormals);
+    m_pGeometry->setDrawCallback(new CJudgeGeometry("Ellispoid"));
     UpdateShape();
 }

@@ -54,8 +54,6 @@ protected:
     {
         m_pRootNode = pNode;
         m_preMask = m_pRootNode->getNodeMask();
-
-        LightChanged();
     }
 
     /**

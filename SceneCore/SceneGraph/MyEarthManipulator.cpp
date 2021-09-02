@@ -20,12 +20,14 @@ void CMyEarthManipulator::ChangeMap(MapType emType)
         switch (m_emType)
         {
         case MAP_3D:
+        {
             getSettings()->setThrowingEnabled(true);
             getSettings()->setThrowDecayRate(0.009);
             getSettings()->setMinMaxDistance(100,DBL_MAX);
             getSettings()->setLockAzimuthWhilePanning(false);
             getSettings()->setTerrainAvoidanceEnabled(true);
             getSettings()->setTerrainAvoidanceMinimumDistance(1);
+        }
             break;
         case MAP_2D:
             getSettings()->setMinMaxDistance(100,m_dMaxDistance);
@@ -109,16 +111,35 @@ void CMyEarthManipulator::rotate(double dx, double dy)
     }
 }
 
+#include <iostream>
 void CMyEarthManipulator::zoom(double dx, double dy, osg::View *view)
 {
     osgEarth::Util::EarthManipulator::zoom(-dx,-dy,view);
-    if(MAP_2D == m_emType)
+    switch(m_emType)
+    {
+    case MAP_3D:
+    {
+        osgEarth::Viewpoint here = getViewpoint();
+        if(dy>0)
+        {
+            here.range() = here.range().get() * 0.9;
+        }
+        else
+        {
+            here.range() = here.range().get() * 1.1;
+        }
+        setViewpoint( here, 0.5 );
+    }
+        break;
+    case MAP_2D:
     {
         auto vp = getViewpoint();
         if(AdjustViewPoint(vp))
         {
             setViewpoint(vp);
         }
+        break;
+    }
     }
 }
 

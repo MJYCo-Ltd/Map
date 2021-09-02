@@ -622,6 +622,7 @@ void CMap::Init3DLight()
 
     stateset = m_p3DRoot->getOrCreateStateSet();
     stateset->setDefine("OE_NUM_LIGHTS", "1");
+    osgEarth::GLUtils::setLighting(stateset,osg::StateAttribute::ON);
 
     m_p3DRoot->setStateSet(m_pSceneGraph->ResouceLoader()->MergeStateSet(pStateSet,stateset));
 }

@@ -62,7 +62,7 @@ void CResourceLod::InitSateSet(osg::StateSet* pStateSete,const std::string& sFil
         osgEarth::VirtualProgram* vp = osgEarth::VirtualProgram::get(pStateSete);
         if(nullptr != vp)
         {
-            vp->setInheritShaders(true);
+            vp->setInheritShaders(false);
         }
 
         pStateSete->setAttributeAndModes(
@@ -94,8 +94,7 @@ void CResourceLod::InitSateSet(osg::StateSet* pStateSete,const std::string& sFil
 
         float Scale = 1.0f / (.025f * _innerRadius);
 
-        //TODO: make all these constants. -gw
-        pStateSete->getOrCreateUniform( "atmos_v3InvWavelength", osg::Uniform::FLOAT_VEC3 )->set( RGB_wl);
+        pStateSete->getOrCreateUniform( "atmos_v3InvWavelength", osg::Uniform::FLOAT_VEC3 )->set(RGB_wl);
         pStateSete->getOrCreateUniform( "atmos_fInnerRadius",    osg::Uniform::FLOAT )->set(_innerRadius);
         pStateSete->getOrCreateUniform( "atmos_fInnerRadius2",   osg::Uniform::FLOAT )->set(_innerRadius * _innerRadius);
         pStateSete->getOrCreateUniform( "atmos_fKrESun",         osg::Uniform::FLOAT )->set(Kr * ESun);
