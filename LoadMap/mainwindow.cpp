@@ -260,6 +260,7 @@ void MainWindow::on_action_triggered()
         pSatellite->SetScale(10000.);
         IFlashAbility* pFLash = pSatellite->GetOrCreateAbility(FLASH_ABILITY)->AsFlashAbility();
         pFLash->SetFlashColor(color);
+        pFLash->SetFlash(false);
         CDate mjBein(2021,4,6,12,0,0);
         Satellite::CSGP4 spg41("1 91001U          20061.66666667 -.00000001  00000-0 -13106-2 0 00008",
                                "2 91001 045.0073 000.0048 0004655 268.5152 091.4846 07.15404217000017");

@@ -62,7 +62,8 @@ void CFlashAbility::UpdateAbility()
         }
         else
         {
-//            m_pSceneNode->AsOsgSceneNode()->GetOsgNode()->setStateSet(m_pOldStateSet.get());
+           m_pSceneNode->GetBoundSceneGraph()->ResouceLoader()->RemoveVirtualProgram("GLSL/Flash.glsl",
+                                                                                     m_pSceneNode->AsOsgSceneNode()->GetOsgNode()->getStateSet());
         }
         m_bFlashChanged=false;
     }

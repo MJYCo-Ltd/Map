@@ -6,8 +6,7 @@
 #include <QSize>
 #include <osgViewer/CompositeViewer>
 #include <Inner/IRender.h>
-#include <Inner/ThreadSafety/SafetyList.h>
-#include <Inner/ThreadSafety/SafetyMap.h>
+#include <Inner/ThreadSafety/SafetySet.h>
 
 class QtFBOWindow;
 enum RenderEvent
@@ -70,11 +69,6 @@ public:
     void SubMessage(RenderCall*pRenderCall);
 
     /**
-     * @brief UnSubMessage
-     */
-    void UnSubMessage(RenderCall*pRenderCall);
-
-    /**
      * @brief 更新渲染
      */
     void UpdateRender();
@@ -95,7 +89,7 @@ private:
 private:
     bool                                     m_bResetThread{false}; /// 重新构建线程
     osg::ref_ptr<osgViewer::CompositeViewer> m_pOsgViewer;    /// 多视口查看器
-    std::set<RenderCall*>                    m_setMessage;   /// 所有的消息订阅者
+    SafetySet<RenderCall*>                    m_setMessage;   /// 所有的消息订阅者
 
 };
 

@@ -1,12 +1,12 @@
 #include <GisMath/GisMath.h>
 #include <VersionMathCommon.h>
 #include "SceneEllipsoid.h"
+#include <Inner/OsgExtern/JudgeGeometry.h>
 
 /// 形状 更新
 void CSceneEllipsoid::UpdateShape()
 {
     m_pGeometry->removePrimitiveSet(0,m_pGeometry->getNumPrimitiveSets());
-
     m_pEllipsoidModel->setRadiusEquator(m_dEquator);
     m_pEllipsoidModel->setRadiusPolar(m_dPolar);
 

@@ -12,7 +12,7 @@ TEMPLATE = lib
 
 DEFINES += SCENECORE_LIBRARY
 
-SDK_CONFIG *= OSG OsgExtern
+SDK_CONFIG *= OSG OsgExtern Satellite
 
 include(../SoftSDK.pri)
 

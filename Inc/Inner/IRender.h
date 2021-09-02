@@ -41,11 +41,6 @@ public:
     virtual void SubMessage(RenderCall*)=0;
 
     /**
-     * @brief 取消消息
-     */
-    virtual void UnSubMessage(RenderCall*)=0;
-
-    /**
      * @brief 更新所有的渲染消息
      */
     virtual void UpdateRender()=0;

@@ -76,7 +76,7 @@ public:
      * @param sGLSLPath
      * @param pParentStateSet
      */
-    void RemoveVirtualProgram(const std::string& sGLSLPath,osg::StateSet* pParentStateSet,bool bIsRef=true);
+    void RemoveVirtualProgram(const std::string& sGLSLPath, osg::StateSet* pParentStateSet);
 
     /**
      * @brief 清空不再使用的资源

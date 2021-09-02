@@ -70,20 +70,9 @@ void QtRender::ResetupThread()
 /// 订阅消息
 void QtRender::SubMessage(RenderCall *pRenderCall)
 {
-    auto findOne = m_setMessage.find(pRenderCall);
-    if(m_setMessage.end() == findOne)
+    if(!m_setMessage.Contain(pRenderCall))
     {
-        m_setMessage.insert(pRenderCall);
-    }
-}
-
-/// 取消订阅消息
-void QtRender::UnSubMessage(RenderCall *pRenderCall)
-{
-    auto findOne = m_setMessage.find(pRenderCall);
-    if(m_setMessage.end() != findOne)
-    {
-        m_setMessage.erase(findOne);
+        m_setMessage.Add(pRenderCall);
     }
 }
 
@@ -105,20 +94,15 @@ void QtRender::UpdateRender()
 
         m_bResetThread=false;
     }
-
+    std::set<RenderCall*> allMessage;
+    m_setMessage.Take(allMessage);
     /// 遍历所有的订阅者
-    for(auto one=m_setMessage.begin();one != m_setMessage.end();)
+    for(auto one:allMessage)
     {
-        (*one)->FrameCall();
-
-        /// 如果只执行一次，则将消息移除
-        if((*one)->m_bCallOne)
+        one->FrameCall();
+        if(!one->m_bCallOne)
         {
-            one = m_setMessage.erase(one);
-        }
-        else
-        {
-            ++one;
+            m_setMessage.Add(one);
         }
     }
 }
