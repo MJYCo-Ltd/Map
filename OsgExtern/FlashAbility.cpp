@@ -4,19 +4,11 @@
 
 void CFlashAbility::InitAbility()
 {
-    m_pFlashStateSet = m_pSceneNode->GetBoundSceneGraph()->ResouceLoader()->LoadVirtualProgram("GLSL/Flash.glsl");
-    /// 如果节点下有着色器
-    if(m_pSceneNode->AsOsgSceneNode()->GetOsgNode()->getStateSet())
-    {
-        m_pSceneNode->AsOsgSceneNode()->GetOsgNode()->setStateSet(
-                    m_pSceneNode->GetBoundSceneGraph()->ResouceLoader()->MergeStateSet(
-                        m_pFlashStateSet.get(),
-                        m_pSceneNode->AsOsgSceneNode()->GetOsgNode()->getStateSet()));
-    }
-    else
-    {
-        m_pSceneNode->AsOsgSceneNode()->GetOsgNode()->setStateSet(m_pFlashStateSet.get());
-    }
+    m_pSceneNode->AsOsgSceneNode()->GetRealNode()->setStateSet(
+                m_pSceneNode->GetBoundSceneGraph()->ResouceLoader()->GetOrCreateStateSet("GLSL/Flash.glsl"));
+
+    m_pSceneNode->AsOsgSceneNode()->GetOsgNode()->getOrCreateStateSet()
+            ->getOrCreateUniform("flashStartTime",osg::Uniform::FLOAT)->set((float)osg::Timer::instance()->time_s());
 }
 
 void CFlashAbility::UpdateAbility()
@@ -39,8 +31,10 @@ void CFlashAbility::UpdateAbility()
         }
 
         /// 更新数据
-//        m_pFlashDurTime->set(.5f/nFlashHZ);
-//        m_pFlashIntervalTime->set(1.f/nFlashHZ);
+        m_pSceneNode->AsOsgSceneNode()->GetOsgNode()->getOrCreateStateSet()
+                ->getOrCreateUniform("flashDurTime",osg::Uniform::FLOAT)->set(.5f/nFlashHZ);
+        m_pSceneNode->AsOsgSceneNode()->GetOsgNode()->getOrCreateStateSet()
+                ->getOrCreateUniform("flashIntervalTime",osg::Uniform::FLOAT)->set(1.f/nFlashHZ);
 
         m_bStatusChanged=false;
     }
@@ -48,7 +42,9 @@ void CFlashAbility::UpdateAbility()
     /// 闪烁颜色更改
     if(m_bColorChanged)
     {
-//        m_pFlashColor->set(osg::Vec4(m_stFlahColor.fR,m_stFlahColor.fG,m_stFlahColor.fB,m_stFlahColor.fA));
+        m_pSceneNode->AsOsgSceneNode()->GetOsgNode()->getOrCreateStateSet()
+                ->getOrCreateUniform("flashColor",osg::Uniform::FLOAT_VEC4)
+                ->set(osg::Vec4(m_stFlahColor.fR,m_stFlahColor.fG,m_stFlahColor.fB,m_stFlahColor.fA));
 
         m_bColorChanged=false;
     }
@@ -62,8 +58,7 @@ void CFlashAbility::UpdateAbility()
         }
         else
         {
-           m_pSceneNode->GetBoundSceneGraph()->ResouceLoader()->RemoveVirtualProgram("GLSL/Flash.glsl",
-                                                                                     m_pSceneNode->AsOsgSceneNode()->GetOsgNode()->getStateSet());
+            m_pSceneNode->AsOsgSceneNode()->GetRealNode()->setStateSet(nullptr);
         }
         m_bFlashChanged=false;
     }

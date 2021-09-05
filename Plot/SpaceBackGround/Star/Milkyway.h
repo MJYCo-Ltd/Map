@@ -26,6 +26,7 @@ private:
 
 private:
     ISceneGraph* m_pSceneGraph;
+    osg::ref_ptr<osg::Geode>         m_pProgramNode;
     osg::ref_ptr<osg::ShapeDrawable> m_pMilkyway;
 };
 

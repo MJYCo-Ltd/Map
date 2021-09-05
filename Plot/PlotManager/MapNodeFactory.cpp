@@ -24,7 +24,7 @@ CMapNodeFactory::~CMapNodeFactory()
     killTimer(m_nTimerID);
     for(auto one : m_allCreateNode)
     {
-        auto pGroup =one->AsOsgSceneNode()->GetOsgNode();
+        auto pGroup =one->AsOsgSceneNode()->GetRealNode();
         if(nullptr != pGroup)
         {
             m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(pGroup));

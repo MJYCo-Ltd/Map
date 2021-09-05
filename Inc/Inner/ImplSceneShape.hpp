@@ -17,6 +17,7 @@ public:
      */
     void InitNode()
     {
+        ImplSceneNode<T>::InitNode();
         m_pGeometry = new osg::Geometry;
         m_pGeometry->setDataVariance(osg::Object::DYNAMIC);
 
@@ -46,7 +47,6 @@ public:
          */
         CreateShape();
 
-        ImplSceneNode<T>::InitNode();
         m_pGeometry->setNodeMask(~PICK_MASK);
         ImplSceneNode<T>::SetOsgNode(m_pGeometry.get());
     }

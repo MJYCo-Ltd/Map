@@ -65,6 +65,11 @@ void CSpaceBackGround::UpdateMatrix(const Math::CMatrix &matRotate)
     m_pSkyNode->UpdateMatrix(matRotate);
 }
 
+osg::Node *CSpaceBackGround::GetRealNode()
+{
+    return(m_pSkyNode.get());
+}
+
 
 static const char s_sSpaceBackGround[]="ISpaceBackGround";
 

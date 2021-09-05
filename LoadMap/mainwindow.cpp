@@ -135,11 +135,12 @@ IHudText*   pHudText=nullptr;
 IMapLocation* pEarthLocation=nullptr;
 ISceneFlashGroup* pFlash=nullptr;
 ISatellite*  pSatellite = nullptr;
-IImage* pImage=nullptr;
 
 void MainWindow::on_action_triggered()
 {
     m_pLayer = m_pSceneGraph->GetMap()->CreateLayer("Test");
+    TestGroup();
+    TestHud();
     m_pSceneGraph->GetMap()->OpenLight(true);
     ScenePos pos11;
     pos11.dX = 126.0;
@@ -192,64 +193,7 @@ void MainWindow::on_action_triggered()
 //    pRectangle->SetColor(color11);
 
 
-
-
-    QImage image = QImage("E:/splash-620x300.png").convertToFormat(QImage::Format_RGBA8888);
-    pImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
-//    pImage->SetImagePath("Image/Mine/17.png");
-    RGBAData data;
-    data.unWidth = image.width();
-    data.unHeight = image.height();
-    data.bFlipVertically=true;
-    data.pRGBAData = new unsigned char[image.byteCount()]();
-    memcpy(data.pRGBAData,image.bits(),image.byteCount());
-    pImage->SetRGBAData(data);
     SceneColor color;
-    color.fG=color.fB=.0f;
-    pImage->SetColor(color);
-
-    SceneImageSize size;
-    size.unHeight=32;
-    size.unWidth=32;
-    size.bOutSet=true;
-    pImage->SetImageSize(size);
-
-    ISceneGroup* pSceneRoot = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
-
-    auto pAutoImage = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
-    pAutoImage->SetMinScal(1.);
-    pAutoImage->AddSceneNode(pImage);
-
-    pHudLayout = dynamic_cast<IHudLayout*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudLayout"));
-
-    pHudText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
-    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudLayout);
-
-//    auto pHudImage = dynamic_cast<IHudImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudImage"));
-//    pHudImage->SetImage("Image/ship.png");
-//    pHudLayout->AddHudNode(pHudImage);
-    pHudLayout->AddHudNode(pHudText);
-    pHudLayout->SetPosType(HUD_DOWN_RIGHT);
-//    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudImage);
-
-    auto pLod = m_pSceneGraph->GetPlot()->CreateSceneGroup(LOD_GROUP)->AsSceneLodGroup();
-    pLod->AddSceneNode(pAutoImage);
-
-
-    color.fR=0.0f;
-    color.fG=0.0f;
-    color.fB=1.0f;
-    pHudText->SetText("Hello world");
-    pHudText->SetColor(color);
-
-//    color.fG=color.fB = 1.f;
-    color.fR = color.fG = color.fB=0.f;
-    pHudText->SetOutColor(color);
-    color.fG = 1.f;
-//    return;
-
-
-    pSceneRoot->AddSceneNode(pLod);
 
     if(MAP_3D == m_pSceneGraph->GetMap()->GetMapType())
     {
@@ -258,9 +202,11 @@ void MainWindow::on_action_triggered()
 
         pSatellite->SetName("卫星");
         pSatellite->SetScale(10000.);
+        pSatellite->SetPicPath("Image/ship.png");
         IFlashAbility* pFLash = pSatellite->GetOrCreateAbility(FLASH_ABILITY)->AsFlashAbility();
+        color.fB = 1.0f;
         pFLash->SetFlashColor(color);
-        pFLash->SetFlash(false);
+        pFLash->SetFlash(true);
         CDate mjBein(2021,4,6,12,0,0);
         Satellite::CSGP4 spg41("1 91001U          20061.66666667 -.00000001  00000-0 -13106-2 0 00008",
                                "2 91001 045.0073 000.0048 0004655 268.5152 091.4846 07.15404217000017");
@@ -337,8 +283,7 @@ void MainWindow::on_action_triggered()
     }
     PlotMap();
 //    LodPlot();
-    TestGroup();
-    LoadQingxie();
+//    LoadQingxie();
 }
 
 void MainWindow::on_action_2_triggered()
@@ -458,7 +403,7 @@ void MainWindow::PlotMap()
     m_pLine->GetDrawLine()->SetLineWidth(20.f);
     m_pLine->GetDrawLine()->OpenGlow(false);
     m_pLine->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
-    m_pLayer->AddSceneNode(m_pLine);
+//    m_pLayer->AddSceneNode(m_pLine);
 
     /// 绘制区域
     auto m_pPolygon = dynamic_cast<IMapPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPolygon"));
@@ -592,6 +537,28 @@ void MainWindow::LoadQingxie()
     m_pLayer->AddSceneNode(pEarthLocation);
 }
 
+void MainWindow::TestHud()
+{
+    SceneColor color;
+    pHudLayout = dynamic_cast<IHudLayout*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudLayout"));
+
+    pHudText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
+    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudLayout);
+
+//    auto pHudImage = dynamic_cast<IHudImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudImage"));
+//    pHudImage->SetImage("Image/ship.png");
+//    pHudLayout->AddHudNode(pHudImage);
+    pHudLayout->AddHudNode(pHudText);
+    pHudLayout->SetPosType(HUD_DOWN_RIGHT);
+    color.fR=1.0f;
+    color.fG=0.0f;
+    color.fB=0.0f;
+    pHudText->SetText("Hello world");
+    pHudText->SetColor(color);
+    color.fR = color.fG = color.fB=0.f;
+    pHudText->SetOutColor(color);
+}
+
 /// 测试标绘模型
 void MainWindow::on_action12_triggered()
 {
@@ -603,8 +570,8 @@ void MainWindow::on_action12_triggered()
     SceneColor color;
 
 //    color.fR=1.0f;
-//    color.fG=0.0f;
-//    color.fB=0.0f;
+    color.fG=0.0f;
+    color.fB=0.0f;
 
     /// 绘制点
     auto pPoint = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
@@ -638,6 +605,36 @@ void MainWindow::on_action12_triggered()
     pSceneRoot->AddSceneNode(pLine);
     pLine->SetLineWidth(100);
     pLine->OpenGlow(true);
+
+    /// 绘制图片
+    QImage image = QImage("E:/splash-620x300.png").convertToFormat(QImage::Format_RGBA8888);
+    auto pImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
+//    pImage->SetImagePath("Image/Mine/17.png");
+    RGBAData data;
+    data.unWidth = image.width();
+    data.unHeight = image.height();
+    data.bFlipVertically=true;
+    data.pRGBAData = new unsigned char[image.byteCount()]();
+    memcpy(data.pRGBAData,image.bits(),image.byteCount());
+    pImage->SetRGBAData(data);
+
+    color.fG=color.fB=.0f;
+    pImage->SetColor(color);
+
+    SceneImageSize size;
+    size.unHeight=32;
+    size.unWidth=32;
+    size.bOutSet=true;
+    pImage->SetImageSize(size);
+    auto pAutoImage = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
+    pAutoImage->SetMinScal(1.);
+    pAutoImage->AddSceneNode(pImage);
+
+//    auto pLod = m_pSceneGraph->GetPlot()->CreateSceneGroup(LOD_GROUP)->AsSceneLodGroup();
+//    pLod->AddSceneNode(pAutoImage);
+
+
+    pSceneRoot->AddSceneNode(pAutoImage);
 
     /// 绘制多边形
     auto pPolygon = dynamic_cast<IPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPolygon"));

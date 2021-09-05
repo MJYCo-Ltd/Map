@@ -25,7 +25,7 @@ void CMilkyway::SetVisible(bool bVisible)
 
 osg::Node *CMilkyway::getNode()
 {
-    return(m_pMilkyway.get());
+    return(m_pProgramNode.get());
 }
 
 CMilkyway::~CMilkyway()
@@ -46,18 +46,19 @@ void CMilkyway::makeMilkyway()
     pHints->setCreateBody(false);
     pHints->setCreateBottom(false);
 
+    m_pProgramNode = new osg::Geode;
     osg::ref_ptr<osg::Sphere> pShape = new osg::Sphere(osg::Vec3(),1.0999f);
     m_pMilkyway = new osg::ShapeDrawable(pShape,pHints);
+    m_pProgramNode->addChild(m_pMilkyway);
 
     m_pMilkyway->setColor(osg::Vec4f(1.0f, 1.0f, 1.0f,1.0f));
 
 
-    auto pStateSet = m_pSceneGraph->ResouceLoader()->LoadVirtualProgram("GLSL/Global.glsl");
+    m_pProgramNode->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Global.glsl"));
     auto pNodeStateSet = m_pMilkyway->getOrCreateStateSet();
 
     /// 添加纹理
     auto pTexture = m_pSceneGraph->ResouceLoader()->LoadTexture("Space/pixmaps/milkyway.png");
 
     pNodeStateSet->setTextureAttribute(0, pTexture);
-    m_pMilkyway->setStateSet(m_pSceneGraph->ResouceLoader()->MergeStateSet(pStateSet,pNodeStateSet));
 }

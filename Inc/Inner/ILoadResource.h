@@ -75,22 +75,7 @@ public:
      * @param bIsRef
      * @return
      */
-    virtual osg::StateSet* LoadVirtualProgram(const std::string& sGLSLPath,bool bIsRef=true)=0;
-
-    /**
-     * @brief 合并渲染状态
-     * @param pParent 原始状态
-     * @param pChild  子状态
-     * @return
-     */
-    virtual osg::StateSet* MergeStateSet(osg::StateSet* pParent,osg::StateSet* pStateSet)=0;
-
-    /**
-     * @brief 移除着色器
-     * @param sGLSLPath
-     * @param pParentStateSet
-     */
-    virtual void RemoveVirtualProgram(const std::string& sGLSLPath,osg::StateSet* pParentStateSet)=0;
+    virtual osg::StateSet* GetOrCreateStateSet(const std::string& sGLSLPath,bool bIsRef=true)=0;
 
     /**
      * @brief 清空不再使用的资源

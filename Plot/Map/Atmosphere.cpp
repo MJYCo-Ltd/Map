@@ -9,8 +9,9 @@
 CAtmosphere::CAtmosphere(ISceneGraph* pSceneGraph):
     m_pSceneGraph(pSceneGraph)
 {
+    m_pProgramNode = new osg::Group;
 }
-#include <iostream>
+
 void CAtmosphere::MakeAtmosphere()
 {
     IPlot* pPlot=m_pSceneGraph->GetPlot();
@@ -23,16 +24,15 @@ void CAtmosphere::MakeAtmosphere()
     m_pEllipsoid->SetLatSegMents(100);
 
     IOsgSceneNode* pOsgSceneNode = m_pEllipsoid->AsOsgSceneNode();
-    auto pOsgNode = pOsgSceneNode->GetOsgNode();
 
-    auto pStateSet = m_pSceneGraph->ResouceLoader()->LoadVirtualProgram("GLSL/Atmosphere.glsl");
-
-    pOsgNode->setStateSet(pStateSet);
+    m_pProgramNode->setStateSet(
+                m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Atmosphere.glsl"));
+    m_pProgramNode->addChild(pOsgSceneNode->GetRealNode());
 }
 
 osg::Node *CAtmosphere::GetNode()
 {
-    return(m_pEllipsoid->AsOsgSceneNode()->GetOsgNode());
+    return(m_pProgramNode);
 }
 
 void CAtmosphere::SetVisible(bool bVisilbe)

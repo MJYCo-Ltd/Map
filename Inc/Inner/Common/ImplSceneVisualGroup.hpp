@@ -34,7 +34,6 @@ public:
 protected:
     void InitNode()
     {
-        T::m_bOpenLight=false;
         ImplSceneNode<T>::InitNode();
 
         m_pTexture2D = new osg::Texture2D;
@@ -115,8 +114,8 @@ protected:
         if(m_bChildInsert)
         {
 
-            auto pStateSet = T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram("GLSL/Visual.glsl");
-            m_pCamera->setStateSet(T::m_pSceneGraph->ResouceLoader()->MergeStateSet(pStateSet,m_pCamera->getStateSet()));
+            auto pStateSet = T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Visual.glsl");
+            m_pProgramNode->setStateSet(pStateSet);
             for(auto one : m_listInsertChild)
             {
                 one->getOrCreateStateSet()->setTextureAttributeAndModes(1, m_pTexture2D.get(), osg::StateAttribute::ON);
@@ -134,7 +133,7 @@ protected:
 
         if(m_bChildRemove)
         {
-            T::m_pSceneGraph->ResouceLoader()->RemoveVirtualProgram("GLSL/Visual.glsl",m_pCamera->getStateSet());
+            m_pProgramNode->setStateSet(nullptr);
             m_listInsertChild.clear();
             m_bChildRemove=false;
         }

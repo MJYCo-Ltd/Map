@@ -406,7 +406,7 @@ void QtViewPort::FrameEvent()
                     m_emPreType = m_emType;
                     m_emType = View_Node;
 
-                    m_pTrackManipulator->setTrackNode(pOsgNode->GetOsgNode());
+                    m_pTrackManipulator->setTrackNode(pOsgNode->GetRealNode());
                     m_pView->setCameraManipulator(m_pTrackManipulator);
                 }
                 else
@@ -414,7 +414,7 @@ void QtViewPort::FrameEvent()
                     m_pTrackManipulator->setRotationMode(osgGA::NodeTrackerManipulator::ELEVATION_AZIM);
                     m_emPreType = m_emType;
                     m_emType = View_Node;
-                    m_pTrackManipulator->setTrackNode(pOsgNode->GetOsgNode());
+                    m_pTrackManipulator->setTrackNode(pOsgNode->GetRealNode());
                 }
             }
             else

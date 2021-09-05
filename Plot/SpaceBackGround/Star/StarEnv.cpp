@@ -35,7 +35,7 @@ CStarEnv::CStarEnv(ISceneGraph *pSceneGraph):
     osg::StateSet *state = getOrCreateStateSet();
     state->setGlobalDefaults();
 
-    auto pSpaceEnvStateSet = pSceneGraph->ResouceLoader()->LoadVirtualProgram("GLSL/SpaceEnv.glsl");
+    auto pSpaceEnvStateSet = pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/SpaceEnv.glsl");
     state->merge(*pSpaceEnvStateSet);
 
     state->setMode(GL_BLEND, osg::StateAttribute::ON);

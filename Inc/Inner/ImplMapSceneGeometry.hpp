@@ -39,7 +39,7 @@ protected:
     void SetGeometry(IGeometry* pGeometry)
     {
         m_pGeometry=pGeometry;
-        ImplSceneNode<T>::AddNode(m_pDrapeNode.get(),pGeometry->AsOsgSceneNode()->GetOsgNode());
+        ImplSceneNode<T>::AddNode(m_pDrapeNode.get(),pGeometry->AsOsgSceneNode()->GetRealNode());
         m_pGeometry->SetDealPoint(this);
     }
 

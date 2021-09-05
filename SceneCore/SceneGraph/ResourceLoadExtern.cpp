@@ -8,7 +8,38 @@
 #include <osg/Depth>
 #include <osg/BlendFunc>
 #include <osgEarth/GLUtils>
+#include <osg/PointSprite>
+#include <osgViewer/View>
 #include "ResourceLod.h"
+
+class ViewPortChanged:public osg::StateSet::Callback
+{
+public:
+    ViewPortChanged(osg::Uniform* pUniform):cameraSize(pUniform){}
+
+    /// 回调函数
+    void operator() (osg::StateSet*, osg::NodeVisitor*nv)
+    {
+        if(nv)
+        {
+            auto eventVisitor = nv->asEventVisitor();
+            if(eventVisitor)
+            {
+                osgViewer::View* view = dynamic_cast<osgViewer::View*>(eventVisitor->getActionAdapter());
+                osg::Camera* camera = (view!=0) ? view->getCamera() : 0;
+
+                auto pViewPort = camera->getViewport();
+                if(pViewPort)
+                {
+                    osg::Vec2 size(pViewPort->width(),pViewPort->height());
+                    cameraSize->set(size);
+                }
+            }
+        }
+    }
+private:
+    osg::ref_ptr<osg::Uniform> cameraSize;
+};
 
 osg::ref_ptr<osgEarth::VirtualProgram> g_pGlobal;
 
@@ -110,29 +141,28 @@ void CResourceLod::InitSateSet(osg::StateSet* pStateSete,const std::string& sFil
         pStateSete->getOrCreateUniform( "atmos_fSamples",        osg::Uniform::FLOAT )->set((float)Samples);
         pStateSete->getOrCreateUniform( "atmos_fWeather",        osg::Uniform::FLOAT )->set(Weather);
     }
-}
-
-/// 移除着色器
-void CResourceLod::RemoveVirtualProgram(const std::string& sGLSLPath, osg::StateSet* pParentStateSet)
-{
-    if(nullptr == pParentStateSet)
+    else if(sFileName == "Point.glsl")
     {
-        return;
+        pStateSete->getOrCreateUniform("pointSize",osg::Uniform::FLOAT)->set(1.0f);
+        pStateSete->setMode(GL_VERTEX_PROGRAM_POINT_SIZE,1);
+        auto pSprite = new osg::PointSprite();
+        pSprite->setCoordOriginMode(osg::PointSprite::LOWER_LEFT);
+        pStateSete->setTextureAttributeAndModes(0, pSprite, osg::StateAttribute::ON);
+    }
+    else if(sFileName == "Line.glsl")
+    {
+        osgEarth::VirtualProgram* vp = osgEarth::VirtualProgram::get(pStateSete);
+        if(nullptr != vp)
+        {
+            vp->addBindAttribLocation("Line_prev_point",osg::Drawable::ATTRIBUTE_6);
+            vp->addBindAttribLocation("Line_next_point",osg::Drawable::ATTRIBUTE_7);
+        }
+
+        pStateSete->getOrCreateUniform("LineWidth",osg::Uniform::FLOAT)->set(1.0f);
+        pStateSete->getOrCreateUniform("cameraSize",osg::Uniform::FLOAT_VEC2);
+        pStateSete->setMode(GL_CULL_FACE, osg::StateAttribute::OFF | osg::StateAttribute::OVERRIDE | osg::StateAttribute::PROTECTED);
+        pStateSete->setEventCallback(new ViewPortChanged(pStateSete->getUniform("cameraSize")));
     }
 
-    /// 如果该状态被多个人使用
-    if(1 < pParentStateSet->getNumParents())
-    {
-    }
-
-    std::string sFileName = osgDB::getSimpleFileName(sGLSLPath);
-    static osgEarth::Util::Shaders shader;
-    if(sFileName == "Flash.glsl")
-    {
-        pParentStateSet->removeUniform("flashStartTime");
-        pParentStateSet->removeUniform("flashDurTime");
-        pParentStateSet->removeUniform("flashIntervalTime");
-        pParentStateSet->removeUniform("flashColor");
-    }
-    pParentStateSet->setAttribute(g_pGlobal.get());
+    osgEarth::GLUtils::setLighting(pStateSete,osg::StateAttribute::OFF);
 }

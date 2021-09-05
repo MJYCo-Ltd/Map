@@ -67,7 +67,7 @@ IWindow *QtSceneGraph::CreateNewWindow()
     newWindow->InitWindow();
     auto pViewPoint = static_cast<QtViewPort*>(newWindow->GetMainViewPoint());
     osgViewer::View* pView = pViewPoint->GetOsgView();
-    auto pOsgNode = m_pRoot->AsOsgSceneNode()->GetOsgNode();
+    auto pOsgNode = m_pRoot->AsOsgSceneNode()->GetRealNode();
     pView->setSceneData(pOsgNode);
 
     ///将主视图关联到渲染器
@@ -184,7 +184,7 @@ void QtSceneGraph::InitSceneGraph()
 
     ///将场景树给主视口
     osgViewer::View* pView = pViewPoint->GetOsgView();
-    auto pOsgNode = m_pRoot->AsOsgSceneNode()->GetOsgNode();
+    auto pOsgNode = m_pRoot->AsOsgSceneNode()->GetRealNode();
     pView->setSceneData(pOsgNode);
 
     ///将主视图关联到渲染器

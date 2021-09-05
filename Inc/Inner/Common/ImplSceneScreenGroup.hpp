@@ -26,7 +26,6 @@ protected:
         auto options = osgEarth::ScreenSpaceLayout::getOptions();
         options.technique() = options.TECHNIQUE_CALLOUTS;
         osgEarth::ScreenSpaceLayout::setOptions(options);
-
         IOsgSceneNode::m_pRootNode->setCullingActive(false);
     }
 

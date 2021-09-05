@@ -119,16 +119,16 @@ void CMyEarthManipulator::zoom(double dx, double dy, osg::View *view)
     {
     case MAP_3D:
     {
-        osgEarth::Viewpoint here = getViewpoint();
-        if(dy>0)
-        {
-            here.range() = here.range().get() * 0.9;
-        }
-        else
-        {
-            here.range() = here.range().get() * 1.1;
-        }
-        setViewpoint( here, 0.5 );
+//        osgEarth::Viewpoint here = getViewpoint();
+//        if(dy>0)
+//        {
+//            here.range() = here.range().get() * 0.9;
+//        }
+//        else
+//        {
+//            here.range() = here.range().get() * 1.1;
+//        }
+//        setViewpoint( here, 0.5 );
     }
         break;
     case MAP_2D:

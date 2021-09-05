@@ -21,7 +21,7 @@ bool QtViewHud::AddHudNode(IHudNode *pHudNode)
 
     m_setHudNode.insert(pHudNode);
 
-    AddControl(m_pControlCanvas.get(),dynamic_cast<osgEarth::Controls::Control*>(pHudNode->AsOsgSceneNode()->GetOsgNode()));
+    AddControl(m_pControlCanvas.get(),dynamic_cast<osgEarth::Controls::Control*>(pHudNode->AsOsgSceneNode()->GetRealNode()));
     return(true);
 }
 
@@ -34,7 +34,7 @@ bool QtViewHud::RemoveHudNode(IHudNode *pHudNode)
         return(false);
     }
 
-    DelControl(m_pControlCanvas.get(),dynamic_cast<osgEarth::Controls::Control*>(pHudNode->AsOsgSceneNode()->GetOsgNode()));
+    DelControl(m_pControlCanvas.get(),dynamic_cast<osgEarth::Controls::Control*>(pHudNode->AsOsgSceneNode()->GetRealNode()));
     m_setHudNode.erase(pHudNode);
     return(true);
 }
@@ -53,6 +53,8 @@ void QtViewHud::Clear()
 /// 初始化节点
 void QtViewHud::InitNode()
 {
+    ImplSceneNode<IViewHud>::InitNode();
+
     osgEarth::Controls::ControlCanvas* canvas = osgEarth::findTopMostNodeOfType<osgEarth::Controls::ControlCanvas>(m_pView->getCamera());
     if ( canvas )
     {
@@ -64,7 +66,7 @@ void QtViewHud::InitNode()
         m_pControlCanvas = new osgEarth::Controls::ControlCanvas();
     }
 
-    m_pRootNode = m_pControlCanvas.get();
+    ImplSceneNode<IViewHud>::SetOsgNode(m_pControlCanvas.get());
 }
 
 void QtViewHud::AddControl(osgEarth::Util::Controls::ControlCanvas *pCanvas, osgEarth::Util::Controls::Control *pControl)

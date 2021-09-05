@@ -36,8 +36,6 @@ protected:
      */
     void UpdateShape();
 protected:
-    osg::ref_ptr<osg::Uniform> m_uLineWidth;
-    osg::ref_ptr<osg::Uniform> m_uCameraSize;
     osg::ref_ptr<osg::Vec3Array> m_pPreviousPoints;
     osg::ref_ptr<osg::Vec3Array> m_pNextPoints;
     bool                       m_bWidthChanged{false};

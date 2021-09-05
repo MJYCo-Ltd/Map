@@ -59,11 +59,6 @@ protected:
 
         if(m_bEffectChanged)
         {
-            if(!m_sCurrentVirtulProgram.empty())
-            {
-                T::m_pSceneGraph->ResouceLoader()->RemoveVirtualProgram(
-                            m_sCurrentVirtulProgram,ImplSceneShape<T>::m_pGeometry->getStateSet());
-            }
 
             switch(T::m_emEffect)
             {
@@ -77,17 +72,8 @@ protected:
 
             if(!m_sCurrentVirtulProgram.empty())
             {
-                auto pStateSet = T::m_pSceneGraph->ResouceLoader()->LoadVirtualProgram(m_sCurrentVirtulProgram);
-                auto pNodeStateSet = ImplSceneShape<T>::m_pGeometry->getStateSet();
-                if(nullptr == pNodeStateSet)
-                {
-                    ImplSceneShape<T>::m_pGeometry->setStateSet(pStateSet);
-                }
-                else
-                {
-                    ImplSceneShape<T>::m_pGeometry->setStateSet(T::m_pSceneGraph->ResouceLoader()->MergeStateSet(
-                                                                    pStateSet,pNodeStateSet));
-                }
+                auto pStateSet = T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(m_sCurrentVirtulProgram);
+                m_pProgramNode->setStateSet(pStateSet);
             }
             m_bEffectChanged=false;
         }
@@ -100,25 +86,17 @@ protected:
                 if(!m_pCullFace.valid())
                 {
                     m_pCullFace = new osg::CullFace;
-                    auto pStateSet = new osg::StateSet;
-                    pStateSet->setAttributeAndModes(m_pCullFace);
-
-                    auto pNodeStateSet = ImplSceneShape<T>::m_pGeometry->getStateSet();
-                    if(nullptr == pNodeStateSet)
-                    {
-                        ImplSceneShape<T>::m_pGeometry->setStateSet(pStateSet);
-                    }
-                    else
-                    {
-                        ImplSceneShape<T>::m_pGeometry->setStateSet(T::m_pSceneGraph->ResouceLoader()->MergeStateSet(
-                                                                        pNodeStateSet,pStateSet));
-                    }
-
+                    auto pNodeStateSet = ImplSceneShape<T>::m_pGeometry->getOrCreateStateSet();
+                    pNodeStateSet->setAttributeAndModes(m_pCullFace);
                 }
             }
             else
             {
-                ImplSceneShape<T>::m_pGeometry->getStateSet()->removeAssociatedModes(m_pCullFace);
+                auto pStateSet = ImplSceneShape<T>::m_pGeometry->getStateSet();
+                if(nullptr != pStateSet)
+                {
+                    pStateSet->removeAssociatedModes(m_pCullFace);
+                }
             }
             m_bShowBackChanged=false;
         }

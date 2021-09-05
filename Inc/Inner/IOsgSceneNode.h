@@ -1,6 +1,6 @@
 #ifndef INTERFACE_OSG_SCENE_NODE_H
 #define INTERFACE_OSG_SCENE_NODE_H
-#include <osg/Node>
+#include <osg/Group>
 
 /**
  * @brief 场景依附节点
@@ -41,12 +41,18 @@ public:
      */
     void Init(){if(!m_bInit){m_bInit = true;InitNode();}}
 
-    virtual void InitNode(){}
+    virtual void InitNode(){m_pProgramNode=new osg::Group;}
     /**
      * @brief 获取显示节点
      * @return
      */
     osg::Node* GetOsgNode(){return(m_pRootNode);}
+
+    /**
+     * @brief 获取真正的根节点
+     * @return
+     */
+    virtual osg::Node* GetRealNode(){return(m_pProgramNode);}
 
     /**
      * @brief 设置是否可以定时删除
@@ -58,7 +64,7 @@ public:
      * @brief 判断节点是可以删除
      * @return
      */
-    bool CanDelete() const{return(m_bCanDelete && m_bInit && m_pRootNode->referenceCount()<2);}
+    bool CanDelete() const{return(m_bCanDelete && m_bInit && m_pProgramNode->referenceCount()<2);}
 
     /**
      * @brief BindAttach
@@ -126,6 +132,7 @@ protected:
 protected:
     bool                    m_bInit{false};
     osg::ref_ptr<osg::Node> m_pRootNode;
+    osg::ref_ptr<osg::Group> m_pProgramNode;
     std::set<ISceneNodeAttach*> m_allAttach; ///依附的点
     bool                    m_bCanDelete{true};
 };

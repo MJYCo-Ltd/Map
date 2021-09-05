@@ -434,7 +434,7 @@ void CMap::FrameCall()
             m_p3DRoot->addChild(m_pCurMapNode);
 
             /// 添加到根节点
-            m_pGroup->addChild(m_pSpaceEnv->AsOsgSceneNode()->GetOsgNode());
+            m_pGroup->addChild(m_pSpaceEnv->AsOsgSceneNode()->GetRealNode());
             m_pGroup->addChild(m_p3DRoot);
 
         }
@@ -597,7 +597,7 @@ void CMap::LoadMap()
 /// 初始化光线
 void CMap::Init3DLight()
 {
-    auto pStateSet = m_pSceneGraph->ResouceLoader()->LoadVirtualProgram("GLSL/PhongLighting.glsl");
+    m_p3DRoot->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/PhongLighting.glsl"));
     osg::Vec3f lightPos(0.0f, 0.0f, 1.0f);
     osg::LightSource* lightSource = new osg::LightSource();
     m_pLight = new osgEarth::LightGL3( 0 );
@@ -622,9 +622,12 @@ void CMap::Init3DLight()
 
     stateset = m_p3DRoot->getOrCreateStateSet();
     stateset->setDefine("OE_NUM_LIGHTS", "1");
-    osgEarth::GLUtils::setLighting(stateset,osg::StateAttribute::ON);
+    if(m_bOpenLight)
+    {
+        osgEarth::GLUtils::setLighting(m_pCurMapNode->getOrCreateStateSet(),osg::StateAttribute::ON);
+    }
 
-    m_p3DRoot->setStateSet(m_pSceneGraph->ResouceLoader()->MergeStateSet(pStateSet,stateset));
+    m_p3DRoot->setStateSet(stateset);
 }
 
 static const char s_sMap2D[]="IMap2D";

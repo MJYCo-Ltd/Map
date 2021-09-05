@@ -21,7 +21,7 @@ bool CHudLayout::AddHudNode(IHudNode *pNode)
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
                     new CAddControl2Container(
                         m_pLayout.get(),
-                        dynamic_cast<osgEarth::Controls::Control*>(pOsgSceneNode->GetOsgNode())));
+                        dynamic_cast<osgEarth::Controls::Control*>(pOsgSceneNode->GetRealNode())));
         m_pAllChild.push_back(pOsgSceneNode);
         return(true);
     }
@@ -49,7 +49,7 @@ bool CHudLayout::RemoveHudNode(IHudNode *pNode)
         {
             if(one != pOsgSceneNode)
             {
-                vControl.push_back(dynamic_cast<osgEarth::Controls::Control*>(one->GetOsgNode()));
+                vControl.push_back(dynamic_cast<osgEarth::Controls::Control*>(one->GetRealNode()));
             }
         }
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
@@ -88,7 +88,7 @@ void CHudLayout::FrameCall()
         osgEarth::Controls::ControlVector vControl;
         for(auto one : m_pAllChild)
         {
-            vControl.push_back(dynamic_cast<osgEarth::Controls::Control*>(one->GetOsgNode()));
+            vControl.push_back(dynamic_cast<osgEarth::Controls::Control*>(one->GetRealNode()));
         }
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
                     new CAddControls2Container(

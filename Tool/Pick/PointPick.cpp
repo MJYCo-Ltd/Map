@@ -67,7 +67,7 @@ bool CPointPick::InitTool()
     m_pPicker->setCullMask(PICK_MASK);
 
     m_pPicker->setDefaultCallback(new RttPickerCallBack(this));
-    m_pPicker->addChild(pOsgNode->GetOsgNode());
+    m_pPicker->addChild(pOsgNode->GetRealNode());
     m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
                 new CModifyViewHandler(pView->GetOsgView(),m_pPicker.get(),true));
 

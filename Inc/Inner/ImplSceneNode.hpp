@@ -13,7 +13,6 @@
 #include <SceneGraph/SceneType.h>
 #include <SceneGraph/INodeAbility.h>
 #include <Inner/OsgExtern/NodeAbilityManager.h>
-
 /**
  *  实现ISceneNode所有的接口
  */
@@ -43,6 +42,7 @@ protected:
     /// 初始化节点
     virtual void InitNode()
     {
+        IOsgSceneNode::InitNode();
         m_bCallOne=true;
     }
 
@@ -52,6 +52,20 @@ protected:
      */
     void SetOsgNode(osg::Node* pNode)
     {
+        if(nullptr != pNode->asGroup())
+        {
+            m_pProgramNode = pNode->asGroup();
+        }
+        else
+        {
+            if(m_pRootNode.valid())
+            {
+                m_pProgramNode->removeChild(m_pRootNode.get());
+            }
+            m_pProgramNode->addChild(pNode);
+            m_pProgramNode->dirtyBound();
+        }
+
         m_pRootNode = pNode;
         m_preMask = m_pRootNode->getNodeMask();
     }

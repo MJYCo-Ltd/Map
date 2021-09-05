@@ -153,5 +153,5 @@ void CPlanetModel::UpdatePostion(const Math::CVector &rPos)
 
 osg::Node *CPlanetModel::GetNode()
 {
-    return(m_pAttitudeNode->AsOsgSceneNode()->GetOsgNode());
+    return(m_pAttitudeNode->AsOsgSceneNode()->GetRealNode());
 }

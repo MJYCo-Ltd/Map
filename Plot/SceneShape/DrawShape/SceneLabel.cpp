@@ -15,7 +15,7 @@ bool CSceneLabel::SetAttachNode(ISceneNode *pSceneNode)
         m_pAttachNode->AsOsgSceneNode()->BindAttach(this);
 
         m_bPosChanged = true;
-        auto bound = m_pAttachNode->AsOsgSceneNode()->GetOsgNode()->getBound();
+        auto bound = m_pAttachNode->AsOsgSceneNode()->GetRealNode()->getBound();
         osg::Vec3 pos = bound._center;
         pos.x() += bound._radius;
         m_stPos.dX = pos.x();
@@ -26,8 +26,8 @@ bool CSceneLabel::SetAttachNode(ISceneNode *pSceneNode)
 
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
                     new COSGAttachNode(
-                        pSceneNode->AsOsgSceneNode()->GetOsgNode()
-                        ,GetOsgNode()
+                        pSceneNode->AsOsgSceneNode()->GetRealNode()
+                        ,GetRealNode()
                         ,true));
         return(true);
     }
@@ -44,8 +44,8 @@ bool CSceneLabel::DisAttachNode(ISceneNode *pSceneNode)
 
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(
                     new COSGAttachNode(
-                        pSceneNode->AsOsgSceneNode()->GetOsgNode()
-                        ,GetOsgNode()
+                        pSceneNode->AsOsgSceneNode()->GetRealNode()
+                        ,GetRealNode()
                         ,false));
         return(true);
     }
@@ -60,18 +60,20 @@ void CSceneLabel::NodeVisibleChanged(bool bVisible)
 
 void CSceneLabel::AddIntoParent(osg::Group *pParent)
 {
-    ImplSceneNode<ILabel>::AddNode(pParent,GetOsgNode());
+    ImplSceneNode<ILabel>::AddNode(pParent,GetRealNode());
 }
 
 void CSceneLabel::DelFromParent(osg::Group *pParent)
 {
-    ImplSceneNode<ILabel>::DelNode(pParent,GetOsgNode());
+    ImplSceneNode<ILabel>::DelNode(pParent,GetRealNode());
 }
+
 
 /// 初始化节点
 void CSceneLabel::InitNode()
 {
     ImplSceneNode<ILabel>::InitNode();
+    m_pProgramNode->setCullingActive(false);
 
     m_pText = new osgEarth::Text;
     m_pText->setDataVariance(osg::Object::DYNAMIC);

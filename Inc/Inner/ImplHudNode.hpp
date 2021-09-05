@@ -15,7 +15,6 @@ public:
 protected:
     void SetControlNode(osgEarth::Controls::Control* pControl)
     {
-        T::m_bOpenLight=false;
         m_pControl = pControl;
         m_pControl->setAlign(osgEarth::Controls::Control::ALIGN_LEFT,osgEarth::Controls::Control::ALIGN_BOTTOM);
         ImplSceneNode<T>::SetOsgNode(pControl);

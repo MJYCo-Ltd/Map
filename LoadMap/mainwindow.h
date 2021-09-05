@@ -58,6 +58,7 @@ protected:
     void LodPlot();
     void TestGroup();
     void LoadQingxie();
+    void TestHud();
 
 private:
     Ui::MainWindow *ui;

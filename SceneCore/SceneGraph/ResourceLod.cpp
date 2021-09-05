@@ -24,22 +24,14 @@ public:
 
     virtual bool addChild(Node *child)
     {
-        if(osg::ProxyNode::addChild(child))
+        osg::ref_ptr<osg::Group> pProgramNode = new osg::Group;
+        pProgramNode->setStateSet(m_pResourceLoad->GetOrCreateStateSet("GLSL/Global.glsl"));
+        pProgramNode->addChild(child);
+        if(osg::ProxyNode::addChild(pProgramNode.get()))
         {
-            auto pStateSet = m_pResourceLoad->LoadVirtualProgram("GLSL/Global.glsl");
-
-            m_pResourceLoad->m_mapNode[m_sModelPath] = child;
+            m_pResourceLoad->m_mapNode[m_sModelPath] = pProgramNode;
             osgEarth::GenerateGL3LightingUniforms generateUniforms;
             child->accept(generateUniforms);
-
-            if(child->getStateSet())
-            {
-                child->setStateSet(m_pResourceLoad->MergeStateSet(pStateSet,child->getStateSet()));
-            }
-            else
-            {
-                child->setStateSet(pStateSet);
-            }
 
             return(true);
         }
@@ -248,77 +240,46 @@ osg::Image *CResourceLod::LoadImage(const std::string &sImagePath, int nWidth, i
 }
 
 /// 加载virtualProgram
-osg::StateSet* CResourceLod::LoadVirtualProgram(const std::string& sGLSLPath,bool bIsRef)
+osg::StateSet* CResourceLod::GetOrCreateStateSet(const std::string& sGLSLPath,bool bIsRef)
 {
-    std::string glslPath;
-
-    if(bIsRef)
+    if(sGLSLPath.npos != sGLSLPath.find("GLSL"))
     {
-        glslPath = m_sAppPath + sGLSLPath;
-    }
-    else
-    {
-        glslPath = sGLSLPath;
-    }
+        std::string glslPath;
 
-    auto itor = m_mapStateSet.find(glslPath);
-
-    if(m_mapStateSet.end() != itor && itor->second.valid())
-    {
-        return(itor->second.get());
-    }
-    else
-    {
-        osg::StateSet* pParentStateSet = new osg::StateSet;
-        static osgEarth::Util::Shaders shader;
-
-        /// 创建方程
-        auto pVirtualProgram = osgEarth::VirtualProgram::getOrCreate(pParentStateSet);
-        shader.load(pVirtualProgram,glslPath);
-
-        InitSateSet(pParentStateSet,osgDB::getSimpleFileName(glslPath));
-
-        m_mapStateSet[glslPath] = pParentStateSet;
-
-        return(pParentStateSet);
-    }
-}
-
-/// 合并状态
-osg::StateSet *CResourceLod::MergeStateSet(osg::StateSet *pParent, osg::StateSet *pStateSet)
-{
-    /// 构造混合了两个状态的状态集合
-    osg::ref_ptr<osg::StateSet> pChildStateSet = new osg::StateSet;
-    pChildStateSet->merge(*pParent);
-    pChildStateSet->merge(*pStateSet);
-
-    /// 如果合并状态跟没合并之前一致，则直接返回
-    if(0 == pChildStateSet->compare(*pParent,true))
-    {
-        return(pParent);
-    }
-
-    auto findOne = m_mapMergeStateSet.find(pParent);
-    if(m_mapMergeStateSet.end() != findOne)
-    {
-        /// 遍历所有的状态集合，如果有状态相等的则直接返回
-        for(auto one=findOne->second.begin();one!=findOne->second.end();++one)
+        if(bIsRef)
         {
-            if(0 == pChildStateSet->compare(**one,true))
-            {
-                return(*one);
-            }
+            glslPath = m_sAppPath + sGLSLPath;
+        }
+        else
+        {
+            glslPath = sGLSLPath;
         }
 
-        /// 如果没有找到则新建
-        findOne->second.push_back(pChildStateSet);
+        auto itor = m_mapStateSet.find(glslPath);
 
-        return(pChildStateSet);
+        if(m_mapStateSet.end() != itor && itor->second.valid())
+        {
+            return(itor->second.get());
+        }
+        else
+        {
+            osg::StateSet* pParentStateSet = new osg::StateSet;
+            static osgEarth::Util::Shaders shader;
+
+            /// 创建方程
+            auto pVirtualProgram = osgEarth::VirtualProgram::getOrCreate(pParentStateSet);
+            shader.load(pVirtualProgram,glslPath);
+
+            InitSateSet(pParentStateSet,osgDB::getSimpleFileName(glslPath));
+
+            m_mapStateSet[glslPath] = pParentStateSet;
+
+            return(pParentStateSet);
+        }
     }
     else
     {
-        m_mapMergeStateSet[pParent].push_back(pChildStateSet);
-        return(pChildStateSet);
+        return(nullptr);
     }
 }
 

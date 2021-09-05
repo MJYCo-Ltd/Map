@@ -6,7 +6,7 @@ void CMapLocation::SetSceneNode(ISceneNode *pNode)
 {
     if(nullptr != m_pSceneNode)
     {
-        DelNode(m_pGeoTransform.get(),m_pSceneNode->AsOsgSceneNode()->GetOsgNode());
+        DelNode(m_pGeoTransform.get(),m_pSceneNode->AsOsgSceneNode()->GetRealNode());
     }
 
     /// 如果两者不是同一个渲染器,则返回
@@ -17,7 +17,7 @@ void CMapLocation::SetSceneNode(ISceneNode *pNode)
 
     m_pSceneNode = pNode;
 
-    AddNode(m_pGeoTransform.get(),pNode->AsOsgSceneNode()->GetOsgNode());
+    AddNode(m_pGeoTransform.get(),pNode->AsOsgSceneNode()->GetRealNode());
 }
 
 void CMapLocation::UpdateMapNode()

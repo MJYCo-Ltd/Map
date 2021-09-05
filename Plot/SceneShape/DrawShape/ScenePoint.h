@@ -28,7 +28,6 @@ protected:
      */
     void CreateShape() override;
 protected:
-    osg::ref_ptr<osg::Uniform> m_ufPointSize;
     bool     m_bPointSizeChanged{false};
     bool     m_bImageChanged{false};
 };

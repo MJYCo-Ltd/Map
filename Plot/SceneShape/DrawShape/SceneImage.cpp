@@ -12,10 +12,10 @@ void CSceneImage::ImageSizeChanged()
 
 void CSceneImage::CreateShape()
 {
+    m_pProgramNode->setCullingActive(false);
     m_pTexCoordArray = new osg::Vec2Array;
     m_pVertexArray->resize(4);
     m_pTexCoordArray->resize(4);
-    UpdateShape();
     osg::DrawArrays* pDrawCone = new osg::DrawArrays(GL_TRIANGLE_STRIP,0,m_pVertexArray->size());
     m_pGeometry->addPrimitiveSet(pDrawCone);
     m_pGeometry->setTexCoordArray(0,m_pTexCoordArray);
@@ -23,6 +23,9 @@ void CSceneImage::CreateShape()
     m_pTexCoordArray->at(1).set(0,1);
     m_pTexCoordArray->at(2).set(1,0);
     m_pTexCoordArray->at(3).set(1,1);
+
+    auto pStateSet = m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Global.glsl");
+    m_pProgramNode->setStateSet(pStateSet);
 }
 
 void CSceneImage::UpdateShape()
@@ -33,10 +36,8 @@ void CSceneImage::UpdateShape()
         auto pTexture = m_pSceneGraph->ResouceLoader()->LoadTexture(m_sImagePath);
         if(nullptr != pTexture)
         {
-            auto pStateSet = m_pSceneGraph->ResouceLoader()->LoadVirtualProgram("GLSL/Global.glsl");
             auto pNodeState = m_pGeometry->getOrCreateStateSet();
             pNodeState->setTextureAttributeAndModes(0,pTexture);
-            m_pGeometry->setStateSet(m_pSceneGraph->ResouceLoader()->MergeStateSet(pStateSet,pNodeState));
 
             if(!m_stImageSize || !m_stImageSize.bOutSet)
             {
@@ -86,10 +87,8 @@ void CSceneImage::UpdateShape()
         pTexture->setFilter(osg::Texture::MAG_FILTER, osg::Texture::LINEAR);
         pTexture->setResizeNonPowerOfTwoHint(false);
 
-        auto pStateSet = m_pSceneGraph->ResouceLoader()->LoadVirtualProgram("GLSL/Global.glsl");
         auto pNodeState = m_pGeometry->getOrCreateStateSet();
         pNodeState->setTextureAttributeAndModes(0,pTexture);
-        m_pGeometry->setStateSet(m_pSceneGraph->ResouceLoader()->MergeStateSet(pStateSet,pNodeState));
 
         if(!m_stImageSize || !m_stImageSize.bOutSet)
         {

@@ -29,18 +29,14 @@ CStarManager::CStarManager(ISceneGraph *pSceneGraph)
     m_pRoot->addChild(m_pStarName);
     m_pRoot->addChild(m_pConstell);
 
-    auto pStarStateSet  = m_pSceneGraph->ResouceLoader()->LoadVirtualProgram("GLSL/Star.glsl");
-    m_pStarRender = new CStarRender(pSceneGraph,m_fShowMaxMag);
-    if(nullptr != m_pStarRender->getStateSet())
-    {
-        m_pStarRender->setStateSet(m_pSceneGraph->ResouceLoader()->MergeStateSet(pStarStateSet,m_pStarRender->getStateSet()));
-    }
-    else
-    {
-       m_pStarRender->setStateSet(pStarStateSet);
-    }
+    auto pStarStateSet  = m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Star.glsl");
+    osg::ref_ptr<osg::Geode> pProgramNode = new osg::Geode;
 
-    m_pRoot->addChild(m_pStarRender);
+    m_pStarRender = new CStarRender(pSceneGraph,m_fShowMaxMag);
+    pProgramNode->setStateSet(pStarStateSet);
+    pProgramNode->addChild(m_pStarRender);
+
+    m_pRoot->addChild(pProgramNode);
 
     m_pStarConstellation = new CStarConstellation(pSceneGraph);
 }

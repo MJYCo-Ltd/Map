@@ -61,22 +61,7 @@ public:
      * @param bIsRef
      * @return
      */
-    osg::StateSet* LoadVirtualProgram(const std::string& sGLSLPath,bool bIsRef=true);
-
-    /**
-     * @brief 合并渲染状态
-     * @param pParent 原始状态
-     * @param pChild  子状态
-     * @return
-     */
-    osg::StateSet* MergeStateSet(osg::StateSet* pParent,osg::StateSet* pStateSet);
-
-    /**
-     * @brief 移除着色器
-     * @param sGLSLPath
-     * @param pParentStateSet
-     */
-    void RemoveVirtualProgram(const std::string& sGLSLPath, osg::StateSet* pParentStateSet);
+    osg::StateSet* GetOrCreateStateSet(const std::string& sGLSLPath,bool bIsRef=true);
 
     /**
      * @brief 清空不再使用的资源
@@ -92,8 +77,6 @@ protected:
     std::map<std::string,osg::ref_ptr<osg::Texture2D>> m_mapTexture; /// 纹理映射
     std::map<std::string,osg::ref_ptr<osgText::Font>>  m_mapFont;    /// 字体映射
     std::map<std::string,osg::ref_ptr<osg::StateSet>>  m_mapStateSet; /// shader程序加载的状态集合
-    std::map<osg::observer_ptr<osg::StateSet>,
-    std::list<osg::ref_ptr<osg::StateSet>>>           m_mapMergeStateSet;
 };
 
 #endif // RESOURCELOD_H

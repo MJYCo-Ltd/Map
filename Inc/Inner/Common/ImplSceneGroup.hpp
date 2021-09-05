@@ -32,10 +32,10 @@ public:
         auto findItor = m_setChildNode.find(pOsgSceneNode);
         if (findItor == m_setChildNode.end())
         {
-            ImplSceneNode<T>::AddNode(m_pGroup.get(),pOsgSceneNode->GetOsgNode());
+            ImplSceneNode<T>::AddNode(m_pGroup.get(),pOsgSceneNode->GetRealNode());
             pSceneNode->AsOsgSceneNode()->AddToGroup(m_pGroup.get());
             m_setChildNode.insert(pOsgSceneNode);
-            InsertChildNode(pOsgSceneNode->GetOsgNode());
+            InsertChildNode(pOsgSceneNode->GetRealNode());
             return(true);
         }
 
@@ -56,8 +56,8 @@ public:
         if (findItor != m_setChildNode.end())
         {
             pSceneNode->AsOsgSceneNode()->DelFromGroup(m_pGroup.get());
-            RemoveChildNode(pOsgSceneNode->GetOsgNode());
-            ImplSceneNode<T>::DelNode(m_pGroup.get(),pOsgSceneNode->GetOsgNode());
+            RemoveChildNode(pOsgSceneNode->GetRealNode());
+            ImplSceneNode<T>::DelNode(m_pGroup.get(),pOsgSceneNode->GetRealNode());
 
             m_setChildNode.erase(findItor);
             return(true);

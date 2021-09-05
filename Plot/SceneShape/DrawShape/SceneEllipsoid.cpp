@@ -1,7 +1,6 @@
 #include <GisMath/GisMath.h>
 #include <VersionMathCommon.h>
 #include "SceneEllipsoid.h"
-#include <Inner/OsgExtern/JudgeGeometry.h>
 
 /// 形状 更新
 void CSceneEllipsoid::UpdateShape()
@@ -51,8 +50,8 @@ void CSceneEllipsoid::UpdateShape()
 
             pNodeState->setTextureAttributeAndModes(0, pTexture,osg::StateAttribute::ON);
 
-            auto pStateSet = m_pSceneGraph->ResouceLoader()->LoadVirtualProgram("GLSL/Global.glsl");
-            m_pGeometry->setStateSet(m_pSceneGraph->ResouceLoader()->MergeStateSet(pStateSet,pNodeState));
+            auto pStateSet = m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Global.glsl");
+            m_pProgramNode->setStateSet(pStateSet);
         }
         else
         {
@@ -61,7 +60,7 @@ void CSceneEllipsoid::UpdateShape()
             m_pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(0, nullptr,osg::StateAttribute::OFF);
 
             /// 如果VP中有函数则移除
-            m_pSceneGraph->ResouceLoader()->RemoveVirtualProgram("GLSL/Global.glsl",m_pGeometry->getStateSet());
+            m_pProgramNode->setStateSet(nullptr);
         }
     }
         break;
@@ -235,6 +234,5 @@ void CSceneEllipsoid::CreateShape()
     m_pTexCoords = new osg::Vec2Array(osg::Array::BIND_PER_VERTEX);
     m_pNormals = new osg::Vec3Array(osg::Array::BIND_PER_VERTEX);
     m_pGeometry->setNormalArray(m_pNormals);
-    m_pGeometry->setDrawCallback(new CJudgeGeometry("Ellispoid"));
     UpdateShape();
 }

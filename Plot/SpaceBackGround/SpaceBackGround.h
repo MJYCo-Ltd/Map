@@ -67,6 +67,8 @@ public:
      * @brief 更新矩阵
      */
     void UpdateMatrix(const Math::CMatrix&);
+
+    osg::Node* GetRealNode();
 protected:
     osg::observer_ptr<CSkyNode> m_pSkyNode;
 };

@@ -33,7 +33,7 @@ void CSatelliteShow::InitNode()
 	m_pSatellite->AddSceneNode(m_pSatelliteAtt);
 
     m_pOribit = dynamic_cast<ILine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILine"));
-    m_pOribit->OpenGlow(true);
+//    m_pOribit->OpenGlow(true);
     AddSceneNode(m_pSatellite);
     AddSceneNode(m_pOribit);
 }
@@ -190,6 +190,9 @@ void CSatelliteShow::ModelChanged()
 	auto pImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
 	pImage->SetImagePath(m_sPicPath);
 	pImage->OpenLight(false);
+    SceneColor color;
+    color.fB = color.fR = 0.f;
+    pImage->SetColor(color);
 	//pImage->AlwasOnTop(true);
 	auto pAutoImage = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
 	pAutoImage->SetAutoScal(true);
