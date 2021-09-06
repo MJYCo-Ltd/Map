@@ -32,6 +32,7 @@ void CScenePoint::UpdateShape()
 /// 创建形状
 void CScenePoint::CreateShape()
 {
+    m_bOpenCull=false;
     m_pGeometry->setCullingActive(false);
     auto pStateSet = m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Point.glsl");
     m_pProgramNode->setStateSet(pStateSet);

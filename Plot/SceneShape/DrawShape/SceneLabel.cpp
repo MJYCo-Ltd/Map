@@ -73,6 +73,7 @@ void CSceneLabel::DelFromParent(osg::Group *pParent)
 void CSceneLabel::InitNode()
 {
     ImplSceneNode<ILabel>::InitNode();
+    m_bOpenCull=false;
     m_pProgramNode->setCullingActive(false);
 
     m_pText = new osgEarth::Text;

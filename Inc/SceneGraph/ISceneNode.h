@@ -55,6 +55,12 @@ public:
     bool IsOpenLight() const{return(m_bOpenLight);}
 
     /**
+     * @brief 设置节点是否开启裁剪
+     */
+    void OpenCull(bool bOpen)JUDGE_EQUAL_CALL_FUNCTION(bOpen,m_bOpenCull,CullChanged)
+    bool isOpenCull(){return(m_bOpenCull);}
+
+    /**
      * @brief 设置节点总是显示
      */
     void AlwasOnTop(bool bOpen)JUDGE_EQUAL_CALL_FUNCTION(bOpen,m_bShowTop,ShowTopChanged)
@@ -97,6 +103,7 @@ protected:
     virtual void PickStateChanged()=0;
     virtual void LightChanged()=0;
     virtual void ShowTopChanged()=0;
+    virtual void CullChanged()=0;
 
 protected:
     ISceneGraph* m_pSceneGraph{};
@@ -105,6 +112,7 @@ protected:
     bool         m_bCanPick{false};
     bool         m_bOpenLight{false};
     bool         m_bShowTop{false};
+    bool         m_bOpenCull{true};
     unsigned int m_unID{};
 };
 

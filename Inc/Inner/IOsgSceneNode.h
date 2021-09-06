@@ -41,6 +41,9 @@ public:
      */
     void Init(){if(!m_bInit){m_bInit = true;InitNode();}}
 
+    /**
+     * @brief 初始化节点
+     */
     virtual void InitNode(){m_pProgramNode=new osg::Group;}
     /**
      * @brief 获取显示节点

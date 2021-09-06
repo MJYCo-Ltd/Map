@@ -12,7 +12,6 @@ void CSceneImage::ImageSizeChanged()
 
 void CSceneImage::CreateShape()
 {
-    m_pProgramNode->setCullingActive(false);
     m_pTexCoordArray = new osg::Vec2Array;
     m_pVertexArray->resize(4);
     m_pTexCoordArray->resize(4);

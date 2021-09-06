@@ -40,6 +40,7 @@ void CPlaceNode::SetImagePath(const std::string &sPath)
     if(nullptr == m_pImage)
     {
         m_pImage=dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
+        m_pImage->OpenCull(false);
     }
     SceneImageSize size;
     size.unHeight=32;

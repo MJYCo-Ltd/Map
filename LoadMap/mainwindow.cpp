@@ -104,6 +104,7 @@ void MainWindow::SetSecenGraph(ISceneGraph *pSceneGraph)
         auto pMap= new MapObser(m_pSceneGraph);
         m_pSceneGraph->GetMainWindow()->SubMessage(pMap);
         m_pSceneGraph->GetMap()->SubMessage(pMap);
+
 //        m_pSceneGraph->GetMap()->GetSpaceEnv()->ShowSpaceBackGround(false);
 //        m_pSceneGraph->GetMap()->OpenLight(false);
 //        m_pSceneGraph->GetMap()->SetShowAtmosphere(false);
@@ -138,6 +139,14 @@ ISatellite*  pSatellite = nullptr;
 
 void MainWindow::on_action_triggered()
 {
+    int nX(width()/2),nY(height()/2);
+    ScenePos pos;
+    qDebug()<<nX<<','<<nY;
+    m_pSceneGraph->GetMap()->ConvertCoord(nX,nY,pos,0);
+    m_pSceneGraph->GetMap()->ConvertCoord(nX,nY,pos,1);
+    qDebug()<<nX<<','<<nY;
+    pos.dX += 1.;
+
     m_pLayer = m_pSceneGraph->GetMap()->CreateLayer("Test");
     TestGroup();
     TestHud();

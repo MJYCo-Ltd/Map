@@ -155,6 +155,18 @@ protected:
         }
     }
 
+    void CullChanged()
+    {
+        if(T::m_bOpenCull)
+        {
+            m_pProgramNode->setCullingActive(true);
+        }
+        else
+        {
+            m_pProgramNode->setCullingActive(false);
+        }
+    }
+
     void NodeChanged()
     {
         T::m_pSceneGraph->SceneGraphRender()->SubMessage(this);

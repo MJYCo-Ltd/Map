@@ -378,6 +378,7 @@ void CMap::MouseMove(MouseButtonMask, int nX, int nY)
 /// 初始化场景
 void CMap::InitNode()
 {
+    ImplSceneGroup<IMap>::InitNode();
     m_bOpenLight=true;
     m_pSceneGraph->GetMainWindow()->SubMessage(this);
 
@@ -386,7 +387,6 @@ void CMap::InitNode()
     /// 设置拾取
     m_pPicker=new osgUtil::LineSegmentIntersector(osgUtil::Intersector::MODEL,osg::Vec3(),osg::Vec3());
     m_pPicker->setIntersectionLimit( osgUtil::Intersector::LIMIT_NEAREST );
-    ImplSceneGroup<IMap>::InitNode();
     m_bCallOne=false;
     m_stNightColor.fR = m_stNightColor.fG = m_stNightColor.fB = 0.1f;
     LoadMap();
@@ -589,6 +589,10 @@ void CMap::LoadMap()
                     m_pAtmosphere = new CAtmosphere(m_pSceneGraph);
                     m_pAtmosphere->MakeAtmosphere();
                 }
+            }
+            else
+            {
+                this->NodeChanged();
             }
         }
     }
