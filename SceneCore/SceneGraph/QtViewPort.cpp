@@ -746,6 +746,7 @@ void QtViewPort::UpdateViewPoint(CMyEarthManipulator *pEarthManipulator)
     m_stViewPoint.fAzimuth = ViewPoint.heading()->as(osgEarth::Units::DEGREES);
     m_stViewPoint.fElev = -ViewPoint.pitch()->as(osgEarth::Units::DEGREES);
     m_stViewPoint.fDistance=ViewPoint.range()->as(osgEarth::Units::METERS);
+    ViewPoint.focalPoint()->makeGeographic();
     m_stViewPoint.stPos.dX = ViewPoint.focalPoint()->x();
     m_stViewPoint.stPos.dY = ViewPoint.focalPoint()->y();
     m_stViewPoint.stPos.dZ = ViewPoint.focalPoint()->z();
