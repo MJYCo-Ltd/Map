@@ -56,11 +56,7 @@ struct MapObser:public IMapMessageObserver,public IWindowMessageObserver
         pos.dX = dLon;
         pos.dY = dLat;
         pos.dZ = dHeight;
-    }
-
-    void MovePos(const ScenePos& wordPos)
-    {
-//        std::cout<<wordPos.fX<<','<<wordPos.fY<<','<<wordPos.fZ<<std::endl;
+        std::cout<<dLon<<','<<dLat<<','<<dHeight<<std::endl;
     }
 //    void MouseDown(MouseButtonMask, int, int)
 //    {
@@ -212,10 +208,10 @@ void MainWindow::on_action_triggered()
         pSatellite->SetName("卫星");
         pSatellite->SetScale(10000.);
         pSatellite->SetPicPath("Image/ship.png");
-        IFlashAbility* pFLash = pSatellite->GetOrCreateAbility(FLASH_ABILITY)->AsFlashAbility();
-        color.fB = 1.0f;
-        pFLash->SetFlashColor(color);
-        pFLash->SetFlash(true);
+//        IFlashAbility* pFLash = pSatellite->GetOrCreateAbility(FLASH_ABILITY)->AsFlashAbility();
+//        color.fB = 1.0f;
+//        pFLash->SetFlashColor(color);
+//        pFLash->SetFlash(true);
         CDate mjBein(2021,4,6,12,0,0);
         Satellite::CSGP4 spg41("1 91001U          20061.66666667 -.00000001  00000-0 -13106-2 0 00008",
                                "2 91001 045.0073 000.0048 0004655 268.5152 091.4846 07.15404217000017");

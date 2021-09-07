@@ -97,6 +97,11 @@ void CMapLayer::UpdateMapNode()
     }
 }
 
+void CMapLayer::SetRenderOrder(int nOrder)
+{
+    m_pModelLayer->getGroup()->getOrCreateStateSet()->setRenderBinDetails(nOrder,"RenderBin");
+}
+
 /// 删除节点
 void CMapLayer::RemoveNode(IMapSceneNode *pSceneNode)
 {

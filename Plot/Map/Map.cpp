@@ -234,6 +234,7 @@ IMapLayer *CMap::CreateLayer(const std::string & sLayerName)
     {
         CMapLayer* pLayer = new CMapLayer(sLayerName,m_pSceneGraph);
         m_userLayers[sLayerName] = pLayer;
+        pLayer->SetRenderOrder(m_pCurMapNode->getMap()->getNumLayers());
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(m_pCurMapNode,pLayer->GetModelLayer(),true));
 
         /// 通知观察者
@@ -379,6 +380,8 @@ void CMap::MouseMove(MouseButtonMask, int nX, int nY)
 void CMap::InitNode()
 {
     ImplSceneGroup<IMap>::InitNode();
+    m_pDepth = new osg::Depth;
+    m_pGroup->getOrCreateStateSet()->setAttributeAndModes(m_pDepth);
     m_bOpenLight=true;
     m_pSceneGraph->GetMainWindow()->SubMessage(this);
 
@@ -424,14 +427,20 @@ void CMap::FrameCall()
         /// 如果是三维地球
         if(m_pCurMapNode->isGeocentric())
         {
+            m_pGroup->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,1);
+            m_pDepth->setWriteMask(true);
             if(!m_p3DRoot.valid())
             {
                 m_p3DRoot = new osg::Group;
                 Init3DLight();
                 m_p3DRoot->addChild(m_pAtmosphere->GetNode());
             }
-            m_p3DRoot->removeChild(m_pPreMapNode);
-            m_p3DRoot->addChild(m_pCurMapNode);
+
+            if(!m_p3DRoot->containsNode(m_pCurMapNode))
+            {
+                m_p3DRoot->removeChildren(2,1);
+                m_p3DRoot->addChild(m_pCurMapNode);
+            }
 
             /// 添加到根节点
             m_pGroup->addChild(m_pSpaceEnv->AsOsgSceneNode()->GetRealNode());
@@ -440,12 +449,22 @@ void CMap::FrameCall()
         }
         else /// 如果是二维地球
         {
+            dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
+                    ->GetOsgView()->getCamera()->setClearMask(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
+            m_pGroup->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,0);
+            m_pDepth->setWriteMask(false);
+
             if(!m_pNoTran2DMapNode.valid())
             {
                 m_pNoTran2DMapNode = new osg::Group;
             }
-            m_pNoTran2DMapNode->removeChild(m_pPreMapNode);
-            m_pNoTran2DMapNode->addChild(m_pCurMapNode);
+
+            if(!m_pNoTran2DMapNode->containsNode(m_pCurMapNode))
+            {
+                m_pNoTran2DMapNode->removeChildren(0,1);
+                m_pNoTran2DMapNode->addChild(m_pCurMapNode);
+            }
+
             m_pGroup->addChild(m_pNoTran2DMapNode);
 
             auto dWidth = m_pCurMapNode->getMap()->getProfile()->getExtent().width();
@@ -453,18 +472,26 @@ void CMap::FrameCall()
             {
                 m_pLeftTran = new osg::MatrixTransform;
             }
-            m_pLeftTran->removeChild(m_pPreMapNode);
-            m_pLeftTran->addChild(m_pCurMapNode);
-            m_pLeftTran->setMatrix(osg::Matrix::translate(osg::Vec3d(-dWidth,0.,0.)));
+
+            if(!m_pLeftTran->containsNode(m_pCurMapNode))
+            {
+                m_pLeftTran->removeChildren(0,1);
+                m_pLeftTran->addChild(m_pCurMapNode);
+                m_pLeftTran->setMatrix(osg::Matrix::translate(osg::Vec3d(-dWidth,0.,0.)));
+            }
 
             /// 如果右边的没有
             if(!m_pRightTran.valid())
             {
                 m_pRightTran = new osg::MatrixTransform;
             }
-            m_pRightTran->removeChild(m_pPreMapNode);
-            m_pRightTran->addChild(m_pCurMapNode);
-            m_pRightTran->setMatrix(osg::Matrix::translate(osg::Vec3d(dWidth,0.,0.)));
+
+            if(!m_pRightTran->containsNode(m_pCurMapNode))
+            {
+                m_pRightTran->removeChildren(0,1);
+                m_pRightTran->addChild(m_pCurMapNode);
+                m_pRightTran->setMatrix(osg::Matrix::translate(osg::Vec3d(dWidth,0.,0.)));
+            }
 
 
             /// 添加到根节点

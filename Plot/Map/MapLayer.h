@@ -58,6 +58,12 @@ public:
      * @return
      */
     CMapModelLayer* GetModelLayer(){return(m_pModelLayer.get());}
+
+    /**
+     * @brief 设置渲染顺序
+     * @param nOrder
+     */
+    void SetRenderOrder(int nOrder);
 protected:
     /**
      * @brief 移除节点

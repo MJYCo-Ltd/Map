@@ -4,6 +4,7 @@ CMyEarthManipulator::CMyEarthManipulator(MapType type):
     osgEarth::Util::EarthManipulator()
 {
     ChangeMap(type);
+    _lastKnownVFOV=45;
 }
 
 ///
@@ -46,7 +47,7 @@ bool CMyEarthManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIAct
 {
     if(MAP_2D == m_emType && !m_bCalFactor)
     {
-        m_dTanFvoy = tan(osg::DegreesToRadians(15.));
+        m_dTanFvoy = tan(osg::DegreesToRadians(_lastKnownVFOV/2.));
         m_bCalFactor = true;
     }
 

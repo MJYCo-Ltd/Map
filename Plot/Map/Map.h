@@ -167,6 +167,7 @@ protected:
 
     osg::ref_ptr<osgEarth::LightGL3> m_pLight;
     osg::ref_ptr<osg::Uniform>       m_pLightPosUniform;
+    osg::ref_ptr<osg::Depth>         m_pDepth;
 
     /// 主视口位置
     osg::observer_ptr<osgViewer::View>            m_pView;

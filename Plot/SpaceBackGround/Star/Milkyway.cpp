@@ -23,6 +23,11 @@ void CMilkyway::SetVisible(bool bVisible)
     }
 }
 
+bool CMilkyway::Visible()
+{
+    return(0 != m_pMilkyway->getNodeMask());
+}
+
 osg::Node *CMilkyway::getNode()
 {
     return(m_pProgramNode.get());

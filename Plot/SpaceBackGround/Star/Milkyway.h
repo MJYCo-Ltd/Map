@@ -16,6 +16,7 @@ public:
      * @brief 设置显隐
      */
     void SetVisible(bool);
+    bool Visible();
 
     osg::Node* getNode();
 protected:

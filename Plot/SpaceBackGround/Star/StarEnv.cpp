@@ -79,11 +79,17 @@ void CStarEnv::traverse(osg::NodeVisitor& nv)
     {
         InitProjMatrix();
     }
+
     if (m_pMainCamera.valid() && osg::NodeVisitor::CULL_VISITOR == nv.getVisitorType())
     {
         osg::Matrix matrix = m_pMainCamera->getViewMatrix();
         matrix.getRotate().get(matrix);
         this->setViewMatrix(m_rRoate*matrix);
+
+        if(GL_DEPTH_BUFFER_BIT != m_pMainCamera->getClearMask() && m_pMilkyway->Visible())
+        {
+            m_pMainCamera->setClearMask(GL_DEPTH_BUFFER_BIT);
+        }
     }
 
     osg::Camera::traverse( nv );
