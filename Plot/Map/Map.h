@@ -5,6 +5,7 @@
 #include <osgEarth/Lighting>
 #include <Plot/Map/IMap.h>
 #include <Inner/Common/ImplSceneGroup.hpp>
+#include <Inner/ThreadSafety/SafetySet.h>
 #include <SceneGraph/IWindow.h>
 
 class CSpaceEnv;
@@ -113,7 +114,7 @@ public:
     /**
      * @brief时间更新
      */
-    void DateChanged() override SET_TRUE_NODE_UPDATE(m_bDateChanged)
+    void DateChanged() override {m_bDateChanged=true;}
 
     /**
      * @brief 鼠标移动消息
@@ -148,15 +149,19 @@ protected:
 protected:
     int    m_nX{};
     int    m_nY{};
-    ScenePos m_stMousePos;
-    SceneColor m_stNightColor;
 
     bool   m_bSelfRotate{false};
     bool   m_bDateChanged{false};
     bool   m_bMapChanged{false};
     bool   m_bInstelld{false};
+    bool   m_bMouseMove{false};
+    bool   m_bIs3D{false};
+
+    ScenePos m_stMousePos;                      ///保留鼠标位置
+    SceneColor m_stNightColor;
+    osgEarth::GeoExtent m_extent;
     std::string m_sUserMapPath;
-    std::list<IMapMessageObserver*> m_listObserver;
+    SafetySet<IMapMessageObserver*> m_setObserver;
     osg::ref_ptr<osg::Group>   m_p3DRoot;
     osg::ref_ptr<osg::Group>   m_pNoTran2DMapNode;
     osg::ref_ptr<osg::MatrixTransform> m_pLeftTran;

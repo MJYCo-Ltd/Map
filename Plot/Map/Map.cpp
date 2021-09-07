@@ -5,6 +5,7 @@
 #include <osgEarth/Lighting>
 #include <osgEarth/GLUtils>
 #include <osgEarth/LogarithmicDepthBuffer>
+#include <osgEarth/EarthManipulator>
 
 #include <GisMath/GisMath.h>
 #include <Satellite/Date.h>
@@ -77,21 +78,13 @@ bool CMap::LoadUserMap(const std::string &sFileName, bool bRef)
 /// 订阅消息
 void CMap::SubMessage(IMapMessageObserver *pMsgObr)
 {
-    auto findResult = find(m_listObserver.begin(),m_listObserver.end(),pMsgObr);
-    if(m_listObserver.end() == findResult)
-    {
-        m_listObserver.push_back(pMsgObr);
-    }
+    m_setObserver.Add(pMsgObr);
 }
 
 /// 取消订阅
 void CMap::UnSubMessage(IMapMessageObserver *pMsgObr)
 {
-    auto findResult = find(m_listObserver.begin(),m_listObserver.end(),pMsgObr);
-    if(findResult != m_listObserver.end())
-    {
-        m_listObserver.erase(findResult);
-    }
+    m_setObserver.Remove(pMsgObr);
 }
 
 /// 坐标转换
@@ -99,64 +92,70 @@ bool CMap::ConvertCoord(int &fX, int &fY, ScenePos &geoPos, short TranType)
 {
     if(0 == TranType)
     {
-        osg::Vec3d world;
-        osgEarth::GeoPoint geoPoint;
-
-
-        osg::Viewport* pViewPort = m_pView->getCamera()->getViewport();
-
-        static float local_x(0.f), local_y(0.0f);
-        const osg::Camera* camera = m_pView->getCameraContainingPosition(fX, pViewPort ? pViewPort->height() - fY : fY,
-                                                                         local_x, local_y);
-        if (!camera)
+        if(m_bIs3D)
         {
-            camera = m_pView->getCamera();
-        }
+            osg::Vec3d world;
+            osgEarth::GeoPoint geoPoint;
 
-        /// 构建矩阵
-        osg::Matrixd matrix;
 
-        /// 获取父节点
-        osg::Matrix terrainRefFrame = osg::computeLocalToWorld(m_pCurMapNode->getParentalNodePaths()[0]);
-        matrix.postMult(terrainRefFrame);
+            osg::Viewport* pViewPort = m_pView->getCamera()->getViewport();
 
-        matrix.postMult(camera->getViewMatrix());
-        matrix.postMult(camera->getProjectionMatrix());
+            static float local_x(0.f), local_y(0.0f);
+            const osg::Camera* camera = m_pView->getCameraContainingPosition(fX, pViewPort ? pViewPort->height() - fY : fY,
+                                                                             local_x, local_y);
+            if (!camera)
+            {
+                camera = m_pView->getCamera();
+            }
 
-        double zFar = 1.0;
-        if (camera->getViewport())
-        {
-            matrix.postMult(camera->getViewport()->computeWindowMatrix());
-            zFar = 1.0;
-        }
+            /// 构建矩阵
+            osg::Matrixd matrix;
 
-        static osg::Matrixd inverse;
-        inverse.invert(matrix);
+            /// 获取父节点
+            osg::Matrix terrainRefFrame = osg::computeLocalToWorld(m_pCurMapNode->getParentalNodePaths()[0]);
+            matrix.postMult(terrainRefFrame);
 
-        static osg::Vec3d vStartVertex,vDir, vUp,vEndVertex;
-        camera->getViewMatrixAsLookAt(vStartVertex, vDir, vUp);
-        vEndVertex = osg::Vec3d(local_x,local_y,zFar) * inverse;
+            matrix.postMult(camera->getViewMatrix());
+            matrix.postMult(camera->getProjectionMatrix());
 
-        /// 重置picker类
-        m_pPicker->reset();
-        m_pPicker->setStart(vStartVertex);
-        m_pPicker->setEnd(vEndVertex);
+            double zFar = 1.0;
+            if (camera->getViewport())
+            {
+                matrix.postMult(camera->getViewport()->computeWindowMatrix());
+                zFar = 1.0;
+            }
 
-        /// 构建相交遍历器
-        osgUtil::IntersectionVisitor iv(m_pPicker);
-        iv.setTraversalMask(PICK_MASK);
-        m_pCurMapNode->accept(iv);
+            static osg::Matrixd inverse;
+            inverse.invert(matrix);
 
-        /// 判断是否相交
-        if (m_pPicker->containsIntersections())
-        {
-            world = m_pPicker->getIntersections().begin()->getWorldIntersectPoint();
-            geoPoint.fromWorld(m_pCurMapNode->getMapSRS(),world);
-            geoPoint.makeGeographic();
-            geoPos.dX = geoPoint.x();
-            geoPos.dY = geoPoint.y();
-            geoPos.dZ = geoPoint.z();
-            return(true);
+            static osg::Vec3d vStartVertex,vDir, vUp,vEndVertex,vCenter;
+            camera->getViewMatrixAsLookAt(vStartVertex, vDir, vUp);
+            vEndVertex = osg::Vec3d(local_x,local_y,zFar) * inverse;
+
+            /// 重置picker类
+            m_pPicker->reset();
+            m_pPicker->setStart(vStartVertex);
+            m_pPicker->setEnd(vEndVertex);
+
+            /// 构建相交遍历器
+            osgUtil::IntersectionVisitor iv(m_pPicker);
+            iv.setTraversalMask(PICK_MASK);
+            m_pCurMapNode->accept(iv);
+
+            /// 判断是否相交
+            if (m_pPicker->containsIntersections())
+            {
+                world = m_pPicker->getIntersections().begin()->getWorldIntersectPoint();
+                geoPoint.fromWorld(m_pCurMapNode->getMapSRS(),world);
+                geoPos.dX = geoPoint.x();
+                geoPos.dY = geoPoint.y();
+                geoPos.dZ = geoPoint.z();
+                return(true);
+            }
+            else
+            {
+                return(false);
+            }
         }
         else
         {
@@ -165,29 +164,30 @@ bool CMap::ConvertCoord(int &fX, int &fY, ScenePos &geoPos, short TranType)
     }
     else if(1==TranType)
     {
-        osg::Vec3d world;
-        osgEarth::GeoPoint geoPoint(osgEarth::SpatialReference::create("wgs84"),geoPos.dX,geoPos.dY,geoPos.dZ),geoOut;
-
-        if(geoPoint.transform(m_pCurMapNode->getMapSRS(),geoOut) &&
-                m_pCurMapNode->getMapSRS()->transformToWorld(osg::Vec3d(geoOut.x(),geoOut.y(),geoOut.z()),world))
+        if(m_bIs3D)
         {
-            osg::Matrixd _MVPW = m_pView->getCamera()->getViewMatrix() * m_pView->getCamera()->getProjectionMatrix()
-                    * m_pView->getCamera()->getViewport()->computeWindowMatrix();
+            osg::Vec3d world;
+            osgEarth::GeoPoint geoPoint(osgEarth::SpatialReference::create("wgs84"),geoPos.dX,geoPos.dY,geoPos.dZ),geoOut;
 
-            osg::Vec3d scrennPos = world * _MVPW;
-            fX = scrennPos.x();
-            fY = m_pView->getCamera()->getViewport()->height() - scrennPos.y();
-            return(true);
-        }
-        else
-        {
-            return(false);
+            if(geoPoint.transform(m_pCurMapNode->getMapSRS(),geoOut) &&
+                    m_pCurMapNode->getMapSRS()->transformToWorld(osg::Vec3d(geoOut.x(),geoOut.y(),geoOut.z()),world))
+            {
+                osg::Matrixd _MVPW = m_pView->getCamera()->getViewMatrix() * m_pView->getCamera()->getProjectionMatrix()
+                        * m_pView->getCamera()->getViewport()->computeWindowMatrix();
+
+                osg::Vec3d scrennPos = world * _MVPW;
+                fX = scrennPos.x();
+                fY = m_pView->getCamera()->getViewport()->height() - scrennPos.y();
+                return(true);
+            }
+            else
+            {
+                return(false);
+            }
         }
     }
-    else
-    {
-        return(false);
-    }
+
+    return(false);
 }
 
 float CMap::GetHeight(float fLon, float fLat)
@@ -238,10 +238,13 @@ IMapLayer *CMap::CreateLayer(const std::string & sLayerName)
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(m_pCurMapNode,pLayer->GetModelLayer(),true));
 
         /// 通知观察者
-        for(auto one:m_listObserver)
+        static std::vector<IMapMessageObserver*> allObserver;
+        m_setObserver.GetAll(allObserver);
+        for(auto one:allObserver)
         {
             one->AddLayer(sLayerName);
         }
+        allObserver.clear();
 
         return (pLayer);
     }
@@ -279,10 +282,13 @@ bool CMap::RemoveLayer(const std::string& sLayerName)
 void CMap::RemoveLayer(UserLayers::iterator itor)
 {
     /// 通知观察者
-    for(auto oneObserver:m_listObserver)
+    static std::vector<IMapMessageObserver*> allObserver;
+    m_setObserver.GetAll(allObserver);
+    for(auto one:allObserver)
     {
-        oneObserver->RemoveLayer(itor->first);
+        one->RemoveLayer(itor->first);
     }
+    allObserver.clear();
 
     /// 从map中移除节点
     m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(m_pCurMapNode,itor->second->GetModelLayer(),false));
@@ -293,6 +299,9 @@ void CMap::RemoveLayer(UserLayers::iterator itor)
 
 void CMap::ClearLayers()
 {
+    static std::vector<IMapMessageObserver*> allObserver;
+    m_setObserver.GetAll(allObserver);
+
     for(auto one = m_userLayers.begin();one != m_userLayers.end();++one)
     {
         /// 从map中移除节点
@@ -300,12 +309,13 @@ void CMap::ClearLayers()
         delete one->second;
         m_userLayers.erase(one);
 
-        /// 通知观察者
-        for(auto oneObserver:m_listObserver)
+
+        for(auto oneObserver:allObserver)
         {
             oneObserver->RemoveLayer(one->first);
         }
     }
+    allObserver.clear();
 }
 
 /// 更改地图类型
@@ -323,10 +333,13 @@ void CMap::ChangeMapType(MapType mapType)
         m_emType = mapType;
         LoadMap();
 
-        for(auto one:m_listObserver)
+        static std::vector<IMapMessageObserver*> allObserver;
+        m_setObserver.GetAll(allObserver);
+        for(auto one:allObserver)
         {
             one->MapTypeChanged(mapType);
         }
+        allObserver.clear();
     }
 }
 
@@ -370,10 +383,14 @@ void CMap::MouseMove(MouseButtonMask, int nX, int nY)
     m_nX = nX;
     m_nY = nY;
 
-    for(auto one:m_listObserver)
+    m_bMouseMove=true;
+    static std::vector<IMapMessageObserver*> allObserver;
+    m_setObserver.GetAll(allObserver);
+    for(auto one:allObserver)
     {
         one->MousePos(m_stMousePos.dX,m_stMousePos.dY,m_stMousePos.dZ);
     }
+    allObserver.clear();
 }
 
 /// 初始化场景
@@ -392,6 +409,7 @@ void CMap::InitNode()
     m_pPicker->setIntersectionLimit( osgUtil::Intersector::LIMIT_NEAREST );
     m_bCallOne=false;
     m_stNightColor.fR = m_stNightColor.fG = m_stNightColor.fB = 0.1f;
+    m_pSceneGraph->SceneGraphRender()->SubMessage(this);
     LoadMap();
 }
 
@@ -425,7 +443,7 @@ void CMap::FrameCall()
 
         m_pGroup->removeChildren(0,m_pGroup->getNumChildren());
         /// 如果是三维地球
-        if(m_pCurMapNode->isGeocentric())
+        if(m_bIs3D)
         {
             m_pGroup->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,1);
             m_pDepth->setWriteMask(true);
@@ -503,7 +521,7 @@ void CMap::FrameCall()
         IOsgViewPoint* pViewPoint = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint());
         if(nullptr != pViewPoint)
         {
-            pViewPoint->ViewPointTypeChanged(m_pCurMapNode->isGeocentric() ? IOsgViewPoint::View_3DMap : IOsgViewPoint::View_2DMap);
+            pViewPoint->ViewPointTypeChanged(m_bIs3D ? IOsgViewPoint::View_3DMap : IOsgViewPoint::View_2DMap);
         }
 
         m_bMapChanged=false;
@@ -525,13 +543,14 @@ void CMap::FrameCall()
     /// 每一帧更新一次
     if(m_pCurMapNode.valid())
     {
-        if(m_pCurMapNode->isGeocentric())
+        if(m_bIs3D)
         {
             static osgEarth::LogarithmicDepthBuffer s_logDepthBuffer;
 
-            osg::Vec3d eye,center,up;
-            m_pView->getCamera()->getViewMatrixAsLookAt(eye,center,up);
-            if(eye.length() - R_Earth < 3000)
+            auto pEarthManipulator= static_cast<osgEarth::Util::EarthManipulator *>(m_pView->getCameraManipulator());
+
+            /// 获取操作器的距离
+            if(pEarthManipulator->getDistance() - R_Earth < 3000)
             {
                 if(!m_bInstelld)
                 {
@@ -549,7 +568,11 @@ void CMap::FrameCall()
             }
         }
 
-        ConvertCoord(m_nX,m_nY,m_stMousePos,0);
+        if(m_bMouseMove)
+        {
+            ConvertCoord(m_nX,m_nY,m_stMousePos,0);
+            m_bMouseMove=false;
+        }
     }
 
 
@@ -591,6 +614,7 @@ void CMap::LoadMap()
             m_bMapChanged=true;
             if(m_pCurMapNode->isGeocentric())
             {
+                m_bIs3D = true;
                 if(nullptr == m_pSpaceEnv)
                 {
                     m_pSpaceEnv = new CSpaceEnv(m_pSceneGraph);
@@ -619,7 +643,7 @@ void CMap::LoadMap()
             }
             else
             {
-                this->NodeChanged();
+                m_bIs3D=false;
             }
         }
     }

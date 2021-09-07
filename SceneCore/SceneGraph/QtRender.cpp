@@ -70,10 +70,7 @@ void QtRender::ResetupThread()
 /// 订阅消息
 void QtRender::SubMessage(RenderCall *pRenderCall)
 {
-    if(!m_setMessage.Contain(pRenderCall))
-    {
-        m_setMessage.Add(pRenderCall);
-    }
+    m_setMessage.Add(pRenderCall);
 }
 
 /// 更新渲染
@@ -94,7 +91,7 @@ void QtRender::UpdateRender()
 
         m_bResetThread=false;
     }
-    std::set<RenderCall*> allMessage;
+    static std::vector<RenderCall*> allMessage;
     m_setMessage.Take(allMessage);
     /// 遍历所有的订阅者
     for(auto one:allMessage)
@@ -105,6 +102,7 @@ void QtRender::UpdateRender()
             m_setMessage.Add(one);
         }
     }
+    allMessage.clear();
 }
 
 /// 响应发送的消息

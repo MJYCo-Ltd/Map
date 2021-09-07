@@ -1,6 +1,7 @@
 #ifndef SAFETYSET_HEADER_H
 #define SAFETYSET_HEADER_H
 #include <set>
+#include <vector>
 #include <OpenThreads/Mutex>
 #include <OpenThreads/ScopedLock>
 template<typename T>
@@ -15,6 +16,17 @@ public:
     {
         OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_setMutex);
         m_setData.insert(crT);
+    }
+
+    /**
+     * @brief 移除数据
+     * @param crT
+     */
+    void Remove(const T& crT)
+    {
+        OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_setMutex);
+
+        m_setData.erase(crT);
     }
 
     /**
@@ -33,7 +45,7 @@ public:
      * @param rAll
      * @return
      */
-    bool Take(std::set<T>& rAll)
+    bool Take(std::vector<T>& rAll)
     {
         OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_setMutex);
         if(m_setData.empty())
@@ -42,11 +54,33 @@ public:
         }
         else
         {
+            rAll.reserve(m_setData.size());
             for(auto one : m_setData)
             {
-                rAll.insert(one);
+                rAll.push_back(one);
             }
             m_setData.clear();
+        }
+        return(true);
+    }
+
+    /**
+     * @brief 获取所有数据
+     * @param rAll
+     * @return
+     */
+    void GetAll(std::vector<T>& rAll)
+    {
+        OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_setMutex);
+        if(m_setData.empty())
+        {
+            return;
+        }
+
+        rAll.reserve(m_setData.size());
+        for(auto one : m_setData)
+        {
+            rAll.push_back(one);
         }
     }
 
