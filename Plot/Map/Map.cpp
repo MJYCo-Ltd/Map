@@ -90,52 +90,46 @@ void CMap::UnSubMessage(IMapMessageObserver *pMsgObr)
 /// 坐标转换
 bool CMap::ConvertCoord(int &fX, int &fY, ScenePos &geoPos, short TranType)
 {
+
+    osg::Viewport* pViewPort = m_pView->getCamera()->getViewport();
+
+    static float local_x(0.f), local_y(0.0f);
+    const osg::Camera* camera = m_pView->getCameraContainingPosition(fX, pViewPort ? pViewPort->height() - fY : fY,
+                                                                     local_x, local_y);
+    if (!camera)
+    {
+        camera = m_pView->getCamera();
+    }
+
     if(0 == TranType)
     {
         if(m_bIs3D)
         {
-            osg::Vec3d world;
-            osgEarth::GeoPoint geoPoint;
-
-
-            osg::Viewport* pViewPort = m_pView->getCamera()->getViewport();
-
-            static float local_x(0.f), local_y(0.0f);
-            const osg::Camera* camera = m_pView->getCameraContainingPosition(fX, pViewPort ? pViewPort->height() - fY : fY,
-                                                                             local_x, local_y);
-            if (!camera)
-            {
-                camera = m_pView->getCamera();
-            }
-
+            static osg::Vec3d vStartVertex,vIgnore;
             /// 构建矩阵
-            osg::Matrixd matrix;
+            static osg::Matrixd matrix,terrainRefFrame,inverse;
+
+            matrix.makeIdentity();
 
             /// 获取父节点
-            osg::Matrix terrainRefFrame = osg::computeLocalToWorld(m_pCurMapNode->getParentalNodePaths()[0]);
+            terrainRefFrame = osg::computeLocalToWorld(m_pCurMapNode->getParentalNodePaths()[0]);
             matrix.postMult(terrainRefFrame);
 
             matrix.postMult(camera->getViewMatrix());
             matrix.postMult(camera->getProjectionMatrix());
 
-            double zFar = 1.0;
-            if (camera->getViewport())
-            {
-                matrix.postMult(camera->getViewport()->computeWindowMatrix());
-                zFar = 1.0;
-            }
-
-            static osg::Matrixd inverse;
+            matrix.postMult(pViewPort->computeWindowMatrix());
             inverse.invert(matrix);
 
-            static osg::Vec3d vStartVertex,vDir, vUp,vEndVertex,vCenter;
-            camera->getViewMatrixAsLookAt(vStartVertex, vDir, vUp);
-            vEndVertex = osg::Vec3d(local_x,local_y,zFar) * inverse;
+            static osg::Vec3d vCenter,vFar(1.,1.,1.);
+            camera->getViewMatrixAsLookAt(vStartVertex, vIgnore, vIgnore);
+            vFar.x() = local_x;
+            vFar.y() = local_y;
 
             /// 重置picker类
             m_pPicker->reset();
             m_pPicker->setStart(vStartVertex);
-            m_pPicker->setEnd(vEndVertex);
+            m_pPicker->setEnd(vFar * inverse);
 
             /// 构建相交遍历器
             osgUtil::IntersectionVisitor iv(m_pPicker);
@@ -145,21 +139,45 @@ bool CMap::ConvertCoord(int &fX, int &fY, ScenePos &geoPos, short TranType)
             /// 判断是否相交
             if (m_pPicker->containsIntersections())
             {
-                world = m_pPicker->getIntersections().begin()->getWorldIntersectPoint();
-                geoPoint.fromWorld(m_pCurMapNode->getMapSRS(),world);
+                static osgEarth::GeoPoint geoPoint;
+                vIgnore = m_pPicker->getIntersections().begin()->getWorldIntersectPoint();
+                geoPoint.fromWorld(m_pCurMapNode->getMapSRS(),vIgnore);
                 geoPos.dX = geoPoint.x();
                 geoPos.dY = geoPoint.y();
                 geoPos.dZ = geoPoint.z();
                 return(true);
             }
-            else
-            {
-                return(false);
-            }
+
+            return(false);
         }
         else
         {
-            return(false);
+            static double dHafX,dHafY,dIgnore;
+            camera->getProjectionMatrixAsOrtho(dIgnore,dHafX,dIgnore,dHafY,dIgnore,dIgnore);
+            auto pEarthManipulator = static_cast<osgEarth::Util::EarthManipulator*>(m_pView->getCameraManipulator());
+
+            static osgEarth::GeoPoint geoPoint;
+            geoPoint = pEarthManipulator->getViewpoint().focalPoint().get();
+            geoPoint.x() += (local_x*2/pViewPort->width()-1)*dHafX;
+            geoPoint.y() += (local_y*2/pViewPort->height()-1)*dHafY;
+
+            if(geoPoint.x() > m_extent.xMax())
+            {
+                geoPoint.x() -= m_extent.width();
+            }
+
+            if(geoPoint.x() < m_extent.xMin())
+            {
+                geoPoint.x() += m_extent.width();
+            }
+            geoPoint.makeGeographic();
+
+
+            geoPos.dX = geoPoint.x();
+            geoPos.dY = geoPoint.y();
+            geoPos.dZ = 0;
+
+            return(true);
         }
     }
     else if(1==TranType)
@@ -172,12 +190,12 @@ bool CMap::ConvertCoord(int &fX, int &fY, ScenePos &geoPos, short TranType)
             if(geoPoint.transform(m_pCurMapNode->getMapSRS(),geoOut) &&
                     m_pCurMapNode->getMapSRS()->transformToWorld(osg::Vec3d(geoOut.x(),geoOut.y(),geoOut.z()),world))
             {
-                osg::Matrixd _MVPW = m_pView->getCamera()->getViewMatrix() * m_pView->getCamera()->getProjectionMatrix()
-                        * m_pView->getCamera()->getViewport()->computeWindowMatrix();
+                osg::Matrixd _MVPW = camera->getViewMatrix() * camera->getProjectionMatrix()
+                        * camera->getViewport()->computeWindowMatrix();
 
                 osg::Vec3d scrennPos = world * _MVPW;
                 fX = scrennPos.x();
-                fY = m_pView->getCamera()->getViewport()->height() - scrennPos.y();
+                fY = pViewPort->height() - scrennPos.y();
                 return(true);
             }
             else
@@ -643,6 +661,7 @@ void CMap::LoadMap()
             }
             else
             {
+                m_extent = m_pCurMapNode->getMap()->getProfile()->getExtent();
                 m_bIs3D=false;
             }
         }
