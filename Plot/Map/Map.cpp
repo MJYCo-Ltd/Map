@@ -185,7 +185,7 @@ bool CMap::ConvertCoord(int &fX, int &fY, ScenePos &geoPos, short TranType)
         if(m_bIs3D)
         {
             osg::Vec3d world;
-            osgEarth::GeoPoint geoPoint(osgEarth::SpatialReference::create("wgs84"),geoPos.dX,geoPos.dY,geoPos.dZ),geoOut;
+            osgEarth::GeoPoint geoPoint(IOsgMapSceneNode::s_pWGS84,geoPos.dX,geoPos.dY,geoPos.dZ),geoOut;
 
             if(geoPoint.transform(m_pCurMapNode->getMapSRS(),geoOut) &&
                     m_pCurMapNode->getMapSRS()->transformToWorld(osg::Vec3d(geoOut.x(),geoOut.y(),geoOut.z()),world))
@@ -210,8 +210,6 @@ bool CMap::ConvertCoord(int &fX, int &fY, ScenePos &geoPos, short TranType)
 
 float CMap::GetHeight(float fLon, float fLat)
 {
-    static osgEarth::SpatialReference* s_pWgs84 = osgEarth::SpatialReference::get("wgs84");
-
     osgEarth::Terrain* pTerrain=m_pCurMapNode->getTerrain();
 
     if(nullptr == pTerrain)
@@ -220,7 +218,7 @@ float CMap::GetHeight(float fLon, float fLat)
     }
 
     static double dHeight;
-    pTerrain->getHeight(s_pWgs84,fLon,fLat,&dHeight);
+    pTerrain->getHeight(IOsgMapSceneNode::s_pWGS84,fLon,fLat,&dHeight);
     return(dHeight);
 }
 

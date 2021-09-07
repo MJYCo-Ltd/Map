@@ -1,3 +1,4 @@
+#include <Inner/OsgExtern/IOsgMapSceneNode.h>
 #include "MyEarthManipulator.h"
 
 CMyEarthManipulator::CMyEarthManipulator(MapType type):
@@ -174,7 +175,7 @@ bool CMyEarthManipulator::AdjustViewPoint(osgEarth::Viewpoint& vp)
 void CMyEarthManipulator::InitHomePoint(const SceneViewPoint &homePoint)
 {
     osgEarth::Viewpoint vp;
-    vp.focalPoint()= osgEarth::GeoPoint(osgEarth::SpatialReference::get("wgs84"),
+    vp.focalPoint()= osgEarth::GeoPoint(IOsgMapSceneNode::s_pWGS84,
                                         homePoint.stPos.dX,homePoint.stPos.dY,homePoint.stPos.dZ);
     vp.heading()->set(homePoint.fAzimuth,osgEarth::Units::DEGREES);
     vp.range()->set(homePoint.fDistance,osgEarth::Units::METERS);
@@ -195,7 +196,7 @@ void CMyEarthManipulator::InitHomePoint(const SceneViewPoint &homePoint)
 void CMyEarthManipulator::SetViewPoint(const SceneViewPoint &viewPoint,double dTimes)
 {
     osgEarth::Viewpoint vp;
-    vp.focalPoint()= osgEarth::GeoPoint(osgEarth::SpatialReference::get("wgs84"),
+    vp.focalPoint()= osgEarth::GeoPoint(IOsgMapSceneNode::s_pWGS84,
                                         viewPoint.stPos.dX,viewPoint.stPos.dY,viewPoint.stPos.dZ);
     vp.heading()->set(viewPoint.fAzimuth,osgEarth::Units::DEGREES);
     vp.range()->set(viewPoint.fDistance,osgEarth::Units::METERS);
