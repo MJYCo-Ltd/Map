@@ -7,7 +7,6 @@
 #include <osg/Image>
 #include <osg/Uniform>
 #include <osg/Point>
-#include <osg/BlendFunc>
 #include <osgEarth/VirtualProgram>
 #include <SceneGraph/ISceneGraph.h>
 #include <Inner/ILoadResource.h>

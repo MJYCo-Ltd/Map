@@ -38,10 +38,7 @@ CStarEnv::CStarEnv(ISceneGraph *pSceneGraph):
     auto pSpaceEnvStateSet = pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/SpaceEnv.glsl");
     state->merge(*pSpaceEnvStateSet);
 
-    state->setAttributeAndModes(
-                new osg::BlendFunc(osg::BlendFunc::SRC_ALPHA,
-                                   osg::BlendFunc::ONE_MINUS_SRC_ALPHA),
-                osg::StateAttribute::ON);
+    state->setMode(GL_BLEND,osg::StateAttribute::ON);
 
     state->setAttributeAndModes(
                 new osg::Depth(osg::Depth::LESS, 0, 1, false),

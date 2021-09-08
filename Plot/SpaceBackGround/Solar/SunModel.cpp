@@ -86,9 +86,7 @@ public:
 
         // configure the stateset
         state->setTextureMode(0, GL_TEXTURE_2D, osg::StateAttribute::OFF);
-        state->setAttributeAndModes(new osg::BlendFunc(
-                                        osg::BlendFunc::SRC_ALPHA, osg::BlendFunc::ONE_MINUS_SRC_ALPHA),
-                                    osg::StateAttribute::ON);
+        state->setMode(GL_BLEND,osg::StateAttribute::ON);
         state->setAttributeAndModes(new osg::FrontFace(
                                         osg::FrontFace::CLOCKWISE), osg::StateAttribute::ON);
 
