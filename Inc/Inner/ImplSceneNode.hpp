@@ -112,9 +112,8 @@ protected:
         /// 是否一直显示
         if(m_bShowTopChanged)
         {
-            m_pRootNode->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,(T::m_bShowTop ?
-                                                                           osg::StateAttribute::OFF : osg::StateAttribute::ON)
-                                                        | osg::StateAttribute::OVERRIDE);
+            m_pProgramNode->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,
+                                                        T::m_bShowTop ? osg::StateAttribute::OFF : osg::StateAttribute::ON);
             m_bShowTopChanged=false;
         }
 

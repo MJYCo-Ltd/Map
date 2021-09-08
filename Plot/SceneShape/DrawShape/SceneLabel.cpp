@@ -68,7 +68,7 @@ void CSceneLabel::DelFromParent(osg::Group *pParent)
     ImplSceneNode<ILabel>::DelNode(pParent,GetRealNode());
 }
 
-
+#include <iostream>
 /// 初始化节点
 void CSceneLabel::InitNode()
 {
@@ -91,9 +91,10 @@ void CSceneLabel::InitNode()
     m_pText->setDrawMode(osgText::Text::TEXT);
     m_pText->setBoundingBoxColor(osg::Vec4(m_stBoundingBoxColor.fR,m_stBoundingBoxColor.fG
                                            ,m_stBoundingBoxColor.fB,m_stBoundingBoxColor.fA));
-    m_pText->setAutoRotateToScreen(true);
+//    m_pText->setAutoRotateToScreen(true);
     m_pText->setBackdropType(osgText::Text::OUTLINE);
 
+    std::cout<<"Lable"<<m_pText->asGroup()<<std::endl;
     ImplSceneNode<ILabel>::SetOsgNode(m_pText.get());
 }
 
