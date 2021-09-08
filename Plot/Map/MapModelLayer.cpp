@@ -19,7 +19,6 @@ void CMapModelLayer::InitNode()
 {
     init();
     ImplSceneGroup<ISceneGroup>::InitNode();
-
 }
 
 osg::Node* CMapModelLayer::getNode() const

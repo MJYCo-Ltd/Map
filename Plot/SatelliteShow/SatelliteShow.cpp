@@ -13,11 +13,15 @@
 #include <Plot/Map/IMap.h>
 #include <Plot/Map/SpaceEnv/ISpaceEnv.h>
 #include "SatelliteShow.h"
+#include "GisMath/GisMath.h"
 
 static char S_3DSatllite[]="ISatellite";
 
 void CSatelliteShow::InitNode()
 {
+    m_pLayer = m_pSceneGraph->GetMap()->CreateLayer("test");
+    m_mapType = m_pSceneGraph->GetMap()->GetMapType();
+
     m_stNowPos.Resize(6);
     m_satelliteWgs84PV.Resize(6);
     ImplSceneGroup<ISatellite>::InitNode();
@@ -33,9 +37,21 @@ void CSatelliteShow::InitNode()
 	m_pSatellite->AddSceneNode(m_pSatelliteAtt);
 
     m_pOribit = dynamic_cast<ILine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILine"));
-//    m_pOribit->OpenGlow(true);
-    AddSceneNode(m_pSatellite);
+    m_pOribit->OpenGlow(true);
     AddSceneNode(m_pOribit);
+
+    if (m_mapType == MAP_3D)
+    {
+        AddSceneNode(m_pSatellite);
+    }
+    else
+    {
+        m_pOribit->SetVisible(false);
+        //2D卫星
+        m_pSatellitShow2D = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+        m_pSatellitShow2D->SetSceneNode(m_pSatelliteAtt);
+        m_pLayer->AddSceneNode(m_pSatellitShow2D);
+    }
 }
 
 
@@ -51,18 +67,24 @@ void CSatelliteShow::SetJ2000Oribit(const std::vector<double> &vTime, const std:
     std::vector<ScenePos> vTemp;
     vTemp.resize(rOribitInfo.size());
     int nIndex(0);
-    for(auto iter=rOribitInfo.begin();iter!=rOribitInfo.end();++iter,++nIndex)
+    if (m_mapType == MAP_3D)
     {
-        vTemp[nIndex].dX = iter->GetX();
-        vTemp[nIndex].dY = iter->GetY();
-        vTemp[nIndex].dZ = iter->GetZ();
+        for (auto iter = rOribitInfo.begin(); iter != rOribitInfo.end(); ++iter, ++nIndex)
+        {
+            vTemp[nIndex].dX = iter->GetX();
+            vTemp[nIndex].dY = iter->GetY();
+            vTemp[nIndex].dZ = iter->GetZ();
+        }
+        m_pOribit->SetMultPos(vTemp);
+        //m_pOribit2D->SetVisible(false);
+        //m_pOribit->SetVisible(true);
     }
-    m_pOribit->SetMultPos(vTemp);
 }
 
 void CSatelliteShow::SetECFOribit(const std::vector<Math::CVector>& vOribitInfo)
 {
     m_vEcfOribit = vOribitInfo;
+    Cal2DOribit(vOribitInfo);
 }
 
 /// 增加传感器
@@ -134,27 +156,43 @@ const SceneAttitude &CSatelliteShow::GetSensorAttitude(int id) const
     }
 }
 
-void CSatelliteShow::UpdateJ2000OribitShow(double duration)
+void CSatelliteShow::UpdateJ2000OribitShow(double beginTime, double duration)
 {
     if (m_vdMjd.size() > 2)
     {
+        double dStart = m_vdMjd[0];
+        double dEnd = m_vdMjd[m_vdMjd.size() - 1];
         double dStep = m_vdMjd[1] - m_vdMjd[0];
         double dTimeCount = 0;
 
         std::vector<ScenePos> vTemp;
+        std::vector<Math::CVector> v2DOribitInfo;
+        int index = 0;
         for (auto iter = m_vOribit.begin();iter != m_vOribit.end();++iter)
         {
             ScenePos pos;
             pos.dX = iter->GetX();
             pos.dY = iter->GetY();
             pos.dZ = iter->GetZ();
-            if (dTimeCount * 86400 > duration)
+            if (duration == 0)
                 break;
-            else
+            if (dTimeCount * 86400 >= beginTime)
+            {
                 vTemp.push_back(pos);
+                v2DOribitInfo.push_back(m_vEcfOribit[index]);
+            }
+            if (dTimeCount * 86400 > (duration + beginTime))
+                break;
+            //else
+            //{
+            //    vTemp.push_back(pos);
+            //    v2DOribitInfo.push_back(m_vEcfOribit[index]);
+            //}
             dTimeCount += dStep;
+            index++;
         }
         m_pOribit->SetMultPos(vTemp);
+        Cal2DOribit(v2DOribitInfo);
     }
 }
 
@@ -173,6 +211,27 @@ void CSatelliteShow::SetLodDis(double dis)
     m_lodDis = dis;
 }
 
+void CSatelliteShow::Clear2DNodes()
+{
+    m_pLayer->RemoveSceneNode(m_pSatellitShow2D);
+    for (auto c : m_pOribit2DList)
+    {
+        m_pLayer->RemoveSceneNode(c);
+    }
+    m_pOribit2DList.clear();
+}
+
+void CSatelliteShow::SetOribitWidth(int width)
+{
+    if (m_mapType != MAP_3D)
+    {
+        for (auto c : m_pOribit2DList)
+            c->GetDrawLine()->SetLineWidth(width);
+    }
+    else
+        m_pOribit->SetLineWidth(width);
+}
+
 /// 模型修改
 void CSatelliteShow::ModelChanged()
 {
@@ -183,39 +242,54 @@ void CSatelliteShow::ModelChanged()
             m_pSatelliteName->DisAttachNode(m_pModel);
         }
 
-        m_pSatelliteScale->RemoveSceneNode(m_pModel);
+        m_pSatelliteScale->RemoveSceneNode(m_pModel); 
     }
 
-	//2D图标
-	auto pImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
-	pImage->SetImagePath(m_sPicPath);
-	pImage->OpenLight(false);
-    SceneColor color;
-    color.fB = color.fR = 0.f;
-    pImage->SetColor(color);
-	//pImage->AlwasOnTop(true);
-	auto pAutoImage = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
-	pAutoImage->SetAutoScal(true);
-	pAutoImage->SetMinScal(1.);
-	pAutoImage->AddSceneNode(pImage);
-    //3D模型
-    m_pModel = m_pSceneGraph->GetPlot()->LoadSceneNode(m_sModelPath)->AsSceneModel();
-    m_pSatelliteScale->AddSceneNode(m_pModel);
-    //分级显示
-    auto pLod = m_pSceneGraph->GetPlot()->CreateSceneGroup(LOD_GROUP)->AsSceneLodGroup();
-    pLod->AddSceneNode(pAutoImage);
-    pLod->AddSceneNode(m_pSatelliteScale);
-    std::vector<float> vLevelInfo;
-    vLevelInfo.push_back(m_lodDis);
-    pLod->SetLevelsInfo(vLevelInfo);
-    m_pSatelliteAtt->AddSceneNode(pLod);
-
-    if(nullptr == m_pSatelliteName)
+    if (nullptr == m_pSatelliteName)
     {
         m_pSatelliteName = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
         m_pSatelliteName->SetText(m_sName);
         m_pSatelliteName->SetFontSize(15);
         m_pSatelliteName->SetFont("fonts/msyh.ttf");
+    }
+
+	//2D图标
+    auto pAttPic = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();      //调整图标头尾姿态
+    SceneAttitude attPic;
+    attPic.dYaw = 180;
+    if (m_mapType == MAP_3D)
+        pAttPic->SetAttitude(attPic);
+	auto pImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
+	pImage->SetImagePath(m_sPicPath);
+	//pImage->OpenLight(false);
+	//pImage->AlwasOnTop(true);
+	auto pAutoImage = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
+	pAutoImage->SetAutoScal(true);
+	pAutoImage->SetMinScal(1.);
+	pAutoImage->AddSceneNode(pImage);
+    pAttPic->AddSceneNode(pAutoImage);
+    if (m_mapType == MAP_3D)
+    {
+        //3D模型
+        m_pModel = m_pSceneGraph->GetPlot()->LoadSceneNode(m_sModelPath)->AsSceneModel();
+        m_pSatelliteScale->AddSceneNode(m_pModel);
+        //分级显示
+        auto pLod = m_pSceneGraph->GetPlot()->CreateSceneGroup(LOD_GROUP)->AsSceneLodGroup();
+        pLod->AddSceneNode(pAttPic);
+        pLod->AddSceneNode(m_pSatelliteScale);
+        std::vector<float> vLevelInfo;
+        vLevelInfo.push_back(m_lodDis);
+        pLod->SetLevelsInfo(vLevelInfo);
+        m_pSatelliteAtt->AddSceneNode(pLod);
+
+        //m_pSatelliteName->SetAttachNode(m_pSatelliteAtt);
+    }
+    else
+    {
+        pImage->AlwasOnTop(true);
+        m_pSatelliteName->AlwasOnTop(true);
+        m_pSatelliteAtt->AddSceneNode(pAttPic);
+        //m_pSatelliteName->SetAttachNode(pAttPic);
     }
 
     m_pSatelliteName->SetAttachNode(m_pSatelliteAtt);
@@ -311,13 +385,32 @@ void CSatelliteShow::NowTimeChanged()
     rotate.SetRow(2,rZ);
 
     /// 更新卫星的位置和旋转矩阵
-    m_pSatellite->SetPos(tmpPos);
     m_pSatellite->SetAttitude(rotate);
+    if (m_mapType == MAP_3D)
+    {
+        m_pSatellite->SetPos(tmpPos);
+    }
+    else
+    {
+        double dL, dB, dH;
+        GisMath::XYZ2LBH(m_satelliteWgs84PV(0), m_satelliteWgs84PV(1), m_satelliteWgs84PV(2), dL, dB, dH);
+        tmpPos.dX = dL * DR2D;
+        tmpPos.dY = dB * DR2D;
+        tmpPos.dZ = 0;
+        //m_pSatellite->SetPos(tmpPos);
+        m_pSatellitShow2D->SetGeoPos(tmpPos);
+    }
 }
 
 void CSatelliteShow::OribitColorChanged()
 {
-    m_pOribit->SetColor(m_sColor);
+    if (m_mapType != MAP_3D)
+    {
+        for (auto c : m_pOribit2DList)
+            c->GetDrawLine()->SetColor(m_sColor);
+    }
+    else
+        m_pOribit->SetColor(m_sColor);
 }
 
 /// 计算插值
@@ -339,6 +432,98 @@ double CSatelliteShow::CalItNewtonEcf(double* dX, double dT, int nDim)
     dY[2] = m_vEcfOribit[m_nIndex + 1](nDim);
 
     return(Numerical::Cntpol::ItNewton(3, dX, dY, dT));
+}
+
+void CSatelliteShow::Cal2DOribit(const std::vector<Math::CVector>& vOribitInfo)
+{
+    std::vector<std::vector<ScenePos>> vTempList;     //线的点列表
+    std::vector<ScenePos> vTemp;     //单条线点列表                   
+    int len = vOribitInfo.size();
+    //vTemp.resize(len);
+    int nIndex(0);
+    if (m_mapType != MAP_3D)
+    {
+        //点处理
+        for (int i = 0; i < len; i++)
+        {
+            double dL1, dB1, dH1;
+            GisMath::XYZ2LBH(vOribitInfo[i].GetX(), vOribitInfo[i].GetY(), vOribitInfo[i].GetZ(), dL1, dB1, dH1);
+            ScenePos temp1;
+            temp1.dX = dL1 * DR2D;
+            temp1.dY = dB1 * DR2D;
+            temp1.dZ = 0;
+            vTemp.push_back(temp1);
+            //第二个点
+            if (i + 1 < len)
+            {
+                double dL2, dB2, dH2;
+                GisMath::XYZ2LBH(vOribitInfo[i + 1].GetX(), vOribitInfo[i + 1].GetY(), vOribitInfo[i + 1].GetZ(), dL2, dB2, dH2);
+                ScenePos temp2;
+                temp2.dX = dL2 * DR2D;
+                temp2.dY = dB2 * DR2D;
+                temp2.dZ = 0;
+                if (fabs(temp1.dX - temp2.dX) > 180)   //过180
+                {
+                    int dInsertLon;     //切割点的经度
+                    if (temp1.dX >= 0)
+                        dInsertLon = 180;
+                    else
+                        dInsertLon = -180;
+                    //切出来的第一条轨迹
+                    double dBInsert = (temp2.dY - temp1.dY) / (360 - fabs(temp2.dX) - fabs(temp1.dX)) * (180 - fabs(temp1.dX)) + temp1.dY;      //切割点的纬度
+                    ScenePos tempInsert;
+                    tempInsert.dX = dInsertLon;
+                    tempInsert.dY = dBInsert;
+                    tempInsert.dZ = 0;
+                    vTemp.push_back(tempInsert);
+                    vTempList.push_back(vTemp);
+                    vTemp.clear();
+                    //切出来的第二条轨迹
+                    tempInsert.dX *= -1;
+                    vTemp.push_back(tempInsert);
+                }
+            }
+            else    //最后一个点
+            {
+                vTempList.push_back(vTemp);
+                vTemp.clear();
+            }
+        }
+        //轨迹
+        for (int i = 0; i < vTempList.size(); i++)
+        {
+            if (m_pOribit2DList.size() <= i)    //新建
+            {
+                auto pOribit2D = dynamic_cast<IMapLine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLine"));
+                pOribit2D->GetDrawLine()->SetLineWidth(3);
+                SceneColor tmpColor = { 255.0 / 255,0.0 / 255,0.0 / 255,1.0f };
+                pOribit2D->GetDrawLine()->SetColor(tmpColor);
+                pOribit2D->GetDrawLine()->SetLineWidth(3);
+                pOribit2D->SetTerrainType(IMapSceneNode::ABSOLUTE_TERRAIN);
+                m_pLayer->AddSceneNode(pOribit2D);
+                pOribit2D->GetDrawLine()->SetMultPos(vTempList[i]);
+                m_pOribit2DList.push_back(pOribit2D);
+            }
+            else
+                m_pOribit2DList[i]->GetDrawLine()->SetMultPos(vTempList[i]);
+        }
+        //m_pOribit2DList的长度大于vTempList的长度时，清理掉m_pOribit2DList多余的部分
+        int len1 = m_pOribit2DList.size();
+        int len2 = vTempList.size();
+        if (len1 > len2)
+        {
+            int deta = len1 - len2;
+            for (int i = len1 - 1; i > len2 - 1; i--)
+            {
+                m_pLayer->RemoveSceneNode(m_pOribit2DList[i]);
+            }
+            for (int i = 0; i < deta; i++)
+            {
+                m_pOribit2DList.pop_back();
+            }
+        }
+        OribitColorChanged();
+    }
 }
 
 /// 创建节点
