@@ -20,6 +20,13 @@ void CMapModelLayer::InitNode()
     init();
     ImplSceneGroup<ISceneGroup>::InitNode();
 
+    m_pGroup->getOrCreateStateSet()->setAttributeAndModes(
+                new osg::PolygonOffset(-1, -1), 1);
+
+    m_pGroup->getOrCreateStateSet()->setAttributeAndModes(
+                new osg::Depth(osg::Depth::LEQUAL, 0, 1, true));
+
+    m_pGroup->getOrCreateStateSet()->setRenderBinDetails(20, "RenderBin");
 }
 
 osg::Node* CMapModelLayer::getNode() const

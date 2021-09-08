@@ -88,8 +88,9 @@ public:
     /// <summary>
     /// 按给定的时长更新轨道的显示
     /// </summary>
-    /// <param name="duration">时长</param>
-    virtual void UpdateJ2000OribitShow(double duration) = 0;
+    /// <param name="beginTime">开始时间（s）</param>
+    /// <param name="duration">时长(s)</param>
+    virtual void UpdateJ2000OribitShow(double beginTime, double duration) = 0;
 
     /**
      * @brief 更新时间
@@ -118,6 +119,16 @@ public:
      * @brief 设置分级显示距离
      */
     virtual void SetLodDis(double dis) = 0;
+
+    /**
+     * @brief 清理2D节点
+     */
+    virtual void Clear2DNodes() = 0;
+
+    /**
+     * @brief 设置轨道线宽
+     */
+    virtual void SetOribitWidth(int width) = 0;
 protected:
     virtual ~ISatellite(){}
     virtual void ModelChanged()=0;

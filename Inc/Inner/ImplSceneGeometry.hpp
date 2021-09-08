@@ -18,7 +18,7 @@ public:
      */
     void AddPoint(int nIndex, const ScenePos &rScenePos)
     {
-        bool bUnlock = 0 == m_listMutex.trylock();
+        bool bUnlock = 0 == m_listMutex.lock();
 
         if(nIndex <=0)
         {
@@ -55,7 +55,7 @@ public:
             return(false);
         }
 
-        bool bUnlock = 0 == m_listMutex.trylock();
+        bool bUnlock = 0 == m_listMutex.lock();
         auto pIter = m_listAllPos.begin();
         for(int i=0; i<nIndex;++i,++pIter){}
         m_listAllPos.erase(pIter);
@@ -80,7 +80,7 @@ public:
             return(false);
         }
 
-        bool bUnlock = 0 == m_listMutex.trylock();
+        bool bUnlock = 0 == m_listMutex.lock();
 
         auto pIter = m_listAllPos.begin();
         for(int i=0; i<nIndex;++i,++pIter){}
@@ -104,7 +104,7 @@ public:
      */
     void SetMultPos(const std::vector<ScenePos> & vAllPoints)
     {
-        bool bUnlock = 0 == m_listMutex.trylock();
+        bool bUnlock = 0 == m_listMutex.lock();
         m_listAllPos.clear();
 
         for(auto one : vAllPoints)
@@ -130,7 +130,7 @@ public:
         vTempPos.resize(m_listAllPos.size());
         int nIndex(0);
 
-        bool bUnlock = 0 == m_listMutex.trylock();
+        bool bUnlock = 0 == m_listMutex.lock();
         for(auto one : m_listAllPos)
         {
             ScenePos& rPos = vTempPos.at(nIndex++);
@@ -178,7 +178,7 @@ public:
             return(tmpPos);
         }
 
-        bool bUnlock = 0 == m_listMutex.trylock();
+        bool bUnlock = 0 == m_listMutex.lock();
         auto pIter = m_listAllPos.begin();
         for(int i=0; i<nIndex;++i,++pIter){}
         tmpPos = *pIter;
@@ -195,7 +195,7 @@ public:
      */
     void Clear()
     {
-        bool bUnlock = 0 == m_listMutex.trylock();
+        bool bUnlock = 0 == m_listMutex.lock();
         m_listAllPos.clear();
         if(bUnlock)
         {
@@ -216,7 +216,7 @@ protected:
      */
     void UpdateVetrix()
     {
-        bool bUnlock = 0 == m_listMutex.trylock();
+        bool bUnlock = 0 == m_listMutex.lock();
         ImplSceneShape<T>::m_pVertexArray->resize(m_listAllPos.size());
 
         int nIndex=0;

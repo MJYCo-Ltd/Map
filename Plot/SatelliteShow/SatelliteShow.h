@@ -8,6 +8,11 @@
 
 #include <Plot/SatelliteShow/ISatellite.h>
 #include <Plot/SceneShape/ILabel.h>
+#include <Plot/Map/IMap.h>
+#include <Plot/Map/IMapLayer.h>
+#include <Plot/IPlot.h>
+#include <Plot/Map/IMapLine.h>
+#include <Plot/Map/IMapLocation.h>
 
 #include <Inner/Common/ImplSceneGroup.hpp>
 
@@ -86,8 +91,9 @@ public:
     /// <summary>
     /// 按给定的时长更新轨道的显示
     /// </summary>
-    /// <param name="duration">时长</param>
-    void UpdateJ2000OribitShow(double duration);
+    /// <param name="beginTime">开始时间（s）</param>
+    /// <param name="duration">时长(s)</param>
+    void UpdateJ2000OribitShow(double beginTime, double duration);
 
     /// <summary>
     /// 设置卫星字体
@@ -106,6 +112,16 @@ public:
      * @brief 设置分级显示距离
      */
     void SetLodDis(double dis);
+
+    /**
+     * @brief 清理2D节点
+     */
+    void Clear2DNodes();
+
+    /**
+     * @brief 设置轨道线宽
+     */
+    void SetOribitWidth(int width);
 protected:
     void ModelChanged();
     void NameChanged();
@@ -116,20 +132,26 @@ protected:
      */
     double CalItNewton(double *dX, double dT, int nDim);
     double CalItNewtonEcf(double*,double,int);
-
+    //计算2D轨迹
+    void Cal2DOribit(const std::vector<Math::CVector>&);
 protected:
-    ISceneAttitudeGroup*       m_pSatellite{};      //卫星根节点
+    IMapLayer* m_pLayer;
+    MapType m_mapType;
 
-    ISceneAttitudeGroup*       m_pSatelliteAtt{};     //卫星调姿节点
-    ISceneScaleGroup*          m_pSatelliteScale{}; //卫星缩放节点
-    ISceneModel*               m_pModel{};    //3D模型
-    IImage*                    m_pImage{};  //2D图标
-    double                     m_lodDis{1e6};  //分级显示距离
+    ISceneAttitudeGroup*       m_pSatellite{};          //卫星根节点
+    IMapLocation* m_pSatellitShow2D;
+
+    ISceneAttitudeGroup*       m_pSatelliteAtt{};       //卫星调姿节点
+    ISceneScaleGroup*          m_pSatelliteScale{};     //卫星缩放节点
+    ISceneModel*               m_pModel{};              //3D模型
+    IImage*                    m_pImage{};              //2D图标
+    double                     m_lodDis{1e6};           //分级显示距离
     ILabel*                    m_pSatelliteName{};
 
     ILine*                     m_pOribit{};
+    std::vector<IMapLine*>     m_pOribit2DList{};
     std::vector<Math::CVector> m_vOribit;    /// J2000坐标系下的数据
-    std::vector<Math::CVector> m_vEcfOribit; /// 地固系下的轨道数据
+    std::vector<Math::CVector> m_vEcfOribit; /// 地固系下的轨道数据（wgs84）
 
     std::set<ISensor*>              m_vSensor;
     std::map<int, ISceneAttitudeGroup*> m_SensorAttMap; //传感器调姿map
