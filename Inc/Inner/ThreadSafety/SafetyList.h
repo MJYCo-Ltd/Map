@@ -2,6 +2,7 @@
 #define SAFETY_LIST_HEADER_H
 
 #include <list>
+#include <vector>
 #include <OpenThreads/Mutex>
 #include <OpenThreads/ScopedLock>
 
@@ -20,24 +21,98 @@ public:
     }
 
     /**
-     * @brief 获取所有的值，清空列表
-     * @param rAll
-     * @return
+     * @brief 根据指定位置增加数据
+     * @param nIndex
+     * @param crT
      */
-    bool Take(std::list<T>& rAll)
+    void Add(int nIndex, const T& crT)
     {
         OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_listMutex);
-        if(m_listData.empty())
+        if(nIndex <=0)
         {
-            return(false);
+            m_listData.push_front(crT);
+        }
+        else if(nIndex >= m_listData.size())
+        {
+            m_listData.push_back(crT);
         }
         else
         {
-            rAll.splice(rAll.end(), m_listData);
-            m_listData.clear();
+            auto pIter = m_listData.begin();
+            for(int i=0; i<nIndex;++i,++pIter){}
+
+            m_listData.insert(pIter,crT);
         }
     }
 
+    /**
+     * @brief 移除指定位置的点
+     * @param nIndex
+     */
+    void RemoveIndex(int nIndex)
+    {
+        OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_listMutex);
+
+        auto iter = m_listData.begin();
+        for(int i=0;i<nIndex;++i) ++iter;
+        m_listData.erase(iter);
+    }
+
+    /**
+     * @brief 获取数组大小
+     * @return
+     */
+    int Size() const
+    {
+        OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_listMutex);
+        return(m_listData.size());
+    }
+
+    /**
+     * @brief 获取所有的值
+     * @param rAll
+     * @return
+     */
+    void Get(std::vector<T>& rAll) const
+    {
+        OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_listMutex);
+        rAll.reserve(m_listData.size());
+
+        for(auto one : m_listData)
+        {
+            rAll.push_back(one);
+        }
+    }
+
+    void Get(int nIndex,T& rT) const
+    {
+        OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_listMutex);
+        auto iter = m_listData.begin();
+        for(int i=0;i<nIndex;++i) ++iter;
+        rT = *iter;
+    }
+
+    /**
+     * @brief 更新所有的数据
+     * @param vAll
+     */
+    void Update(const std::vector<T>& vAll)
+    {
+        OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_listMutex);
+        m_listData.clear();
+        for(auto one : vAll)
+        {
+            m_listData.push_back(one);
+        }
+    }
+
+    void Update(int nIndex,const T& crT)
+    {
+        OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_listMutex);
+        auto iter = m_listData.begin();
+        for(int i=0;i<nIndex;++i) ++iter;
+        *iter=crT;
+    }
     /**
      * @brief 清空所有的
      */

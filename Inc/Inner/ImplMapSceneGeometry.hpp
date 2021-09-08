@@ -51,7 +51,7 @@ protected:
     {
         if(IOsgMapSceneNode::s_mapIs3D[T::m_pSceneGraph] && T::RELATIVE_TERRAIN==T::m_emType && nullptr != m_pGeometry)
         {
-            const std::list<ScenePos> & rAllPos = m_pGeometry->BetterGetMulPos();
+            std::vector<ScenePos> rAllPos = m_pGeometry->GetMulPos();
             for(const ScenePos& one : rAllPos)
             {
                 if(rTileKey.getExtent().contains(one.dX,one.dY,IOsgMapSceneNode::s_pWGS84))
@@ -84,13 +84,13 @@ protected:
      * @brief 坐标转换
      * @return
      */
-    bool Conversion(const std::list<ScenePos>& listAllPos, std::vector<ScenePos>& vAllPos)
+    bool Conversion(const std::vector<ScenePos>& vSourcePos, std::vector<ScenePos>& vAllPos)
     {
         std::vector<osg::Vec3d> vIn;
 
         int nIndex(0);
-        vIn.resize(listAllPos.size());
-        for(auto one : listAllPos)
+        vIn.resize(vSourcePos.size());
+        for(auto one : vSourcePos)
         {
             vIn.at(nIndex++).set(one.dX,one.dY,one.dZ);
         }
@@ -115,7 +115,7 @@ protected:
                 IOsgMapSceneNode::s_mapTerrain[T::m_pSceneGraph].lock(terrain);
 
                 nIndex=0;
-                for(auto one : listAllPos)
+                for(auto one : vSourcePos)
                 {
                     if(terrain->getHeight(IOsgMapSceneNode::s_pWGS84.get(), one.dX, one.dY, &out_hamsl))
                     {

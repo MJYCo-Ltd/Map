@@ -13,6 +13,7 @@
 #include <SceneGraph/SceneType.h>
 #include <SceneGraph/INodeAbility.h>
 #include <Inner/OsgExtern/NodeAbilityManager.h>
+#include <iostream>
 /**
  *  实现ISceneNode所有的接口
  */
@@ -114,6 +115,8 @@ protected:
         {
             m_pProgramNode->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,
                                                         T::m_bShowTop ? osg::StateAttribute::OFF : osg::StateAttribute::ON);
+            std::cout<<"gltestchaned"<<std::endl;
+
             m_bShowTopChanged=false;
         }
 

@@ -12,17 +12,20 @@ void CScenePolygon::CreateShape()
 /// 更新多边形
 void CScenePolygon::UpdateShape()
 {
-    ImplSceneGeometry<IPolygon>::UpdateShape();
-    /// 进行凹多边形裁剪
-
-    m_pGeometry->removePrimitiveSet(0,m_pGeometry->getNumPrimitiveSets());
-    m_pGeometry->addPrimitiveSet(m_pDrawArrays);
-    osgEarth::Tessellator oeTess;
-    if (!oeTess.tessellateGeometry(*m_pGeometry))
+    if(m_listAllPos.Size() > 2)
     {
-        osgUtil::Tessellator tess;
-        tess.setTessellationType(osgUtil::Tessellator::TESS_TYPE_GEOMETRY);
-        tess.setWindingType(osgUtil::Tessellator::TESS_WINDING_POSITIVE);
-        tess.retessellatePolygons(*m_pGeometry);
+        ImplSceneGeometry<IPolygon>::UpdateShape();
+        /// 进行凹多边形裁剪
+
+        m_pGeometry->removePrimitiveSet(0,m_pGeometry->getNumPrimitiveSets());
+        m_pGeometry->addPrimitiveSet(m_pDrawArrays);
+        osgEarth::Tessellator oeTess;
+        if (!oeTess.tessellateGeometry(*m_pGeometry))
+        {
+            osgUtil::Tessellator tess;
+            tess.setTessellationType(osgUtil::Tessellator::TESS_TYPE_GEOMETRY);
+            tess.setWindingType(osgUtil::Tessellator::TESS_WINDING_POSITIVE);
+            tess.retessellatePolygons(*m_pGeometry);
+        }
     }
 }
