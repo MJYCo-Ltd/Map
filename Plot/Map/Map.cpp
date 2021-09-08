@@ -414,7 +414,7 @@ void CMap::InitNode()
 {
     ImplSceneGroup<IMap>::InitNode();
     m_pDepth = new osg::Depth;
-    m_pGroup->getOrCreateStateSet()->setAttributeAndModes(m_pDepth);
+    m_pGroup->getOrCreateStateSet()->setAttribute(m_pDepth);
     m_bOpenLight=true;
     m_pSceneGraph->GetMainWindow()->SubMessage(this);
 

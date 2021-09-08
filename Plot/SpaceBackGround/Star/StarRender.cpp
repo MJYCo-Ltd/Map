@@ -123,10 +123,10 @@ void CStarRender::init()
     auto pState = getOrCreateStateSet();
 
     auto pStarTexture1 = m_pSceneGraph->ResouceLoader()->LoadTexture("Space/pixmaps/star.png");
-    pState->setTextureAttributeAndModes(0, pStarTexture1);
+    pState->setTextureAttribute(0, pStarTexture1);
 
     auto pStarTexture2 = m_pSceneGraph->ResouceLoader()->LoadTexture("Space/pixmaps/asterism.png");
-    pState->setTextureAttributeAndModes(1, pStarTexture2);
+    pState->setTextureAttribute(1, pStarTexture2);
 
     pState->addUniform(new osg::Uniform("baseTexture", 0));
     pState->addUniform(new osg::Uniform("starTexture", 1));

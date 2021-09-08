@@ -408,7 +408,7 @@ void MainWindow::PlotMap()
     m_pLine->GetDrawLine()->SetLineWidth(20.f);
     m_pLine->GetDrawLine()->OpenGlow(false);
     m_pLine->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
-    m_pLayer->AddSceneNode(m_pLine);
+    //m_pLayer->AddSceneNode(m_pLine);
     qDebug()<<"hhhh";
 
     /// 绘制区域

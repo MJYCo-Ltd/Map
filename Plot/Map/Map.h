@@ -1,6 +1,7 @@
 ﻿#ifndef CMAP_INCLUDE_HEADER_H
 #define CMAP_INCLUDE_HEADER_H
 #include <map>
+#include <osg/Depth>
 #include <osgEarth/MapNode>
 #include <osgEarth/Lighting>
 #include <Plot/Map/IMap.h>

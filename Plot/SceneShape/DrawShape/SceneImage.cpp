@@ -36,7 +36,7 @@ void CSceneImage::UpdateShape()
         if(nullptr != pTexture)
         {
             auto pNodeState = m_pGeometry->getOrCreateStateSet();
-            pNodeState->setTextureAttributeAndModes(0,pTexture);
+            pNodeState->setTextureAttribute(0,pTexture);
 
             if(!m_stImageSize || !m_stImageSize.bOutSet)
             {
@@ -87,7 +87,7 @@ void CSceneImage::UpdateShape()
         pTexture->setResizeNonPowerOfTwoHint(false);
 
         auto pNodeState = m_pGeometry->getOrCreateStateSet();
-        pNodeState->setTextureAttributeAndModes(0,pTexture);
+        pNodeState->setTextureAttribute(0,pTexture);
 
         if(!m_stImageSize || !m_stImageSize.bOutSet)
         {

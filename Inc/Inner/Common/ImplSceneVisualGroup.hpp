@@ -118,7 +118,7 @@ protected:
             m_pProgramNode->setStateSet(pStateSet);
             for(auto one : m_listInsertChild)
             {
-                one->getOrCreateStateSet()->setTextureAttributeAndModes(1, m_pTexture2D.get(), osg::StateAttribute::ON);
+                one->getOrCreateStateSet()->setTextureAttribute(1, m_pTexture2D.get());
                 one->getOrCreateStateSet()->addUniform(m_pRenderTextureMatrix);
                 one->getOrCreateStateSet()->addUniform(m_pTextureProjMatrix);
                 one->getOrCreateStateSet()->addUniform(m_pTextureViewMatrix);

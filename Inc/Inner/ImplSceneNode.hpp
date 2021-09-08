@@ -1,7 +1,6 @@
 #ifndef IMPL_SCENE_NODE_H
 #define IMPL_SCENE_NODE_H
 
-#include <osg/Depth>
 #include <osgEarth/Registry>
 #include <osgEarth/ObjectIndex>
 #include <osgEarth/GLUtils>

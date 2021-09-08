@@ -47,7 +47,6 @@ void CTrajectoryShow::SetTrajectory(const std::vector<Math::CVector> &vTrajector
 
 
     m_Oribit->addPrimitiveSet(new osg::DrawArrays(GL_LINE_STRIP,0,pArray->size()));
-    m_Oribit->getOrCreateStateSet()->setAttributeAndModes(new osg::LineWidth(3.0));
 
 
     QOsgItem::GetInstance()->AddOperation(new COsgAddNodeOperation(m_pRoot,m_Oribit));

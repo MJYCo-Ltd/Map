@@ -94,7 +94,7 @@ public:
 
         osg::ref_ptr<osg::Depth> depth = new osg::Depth;
         depth->setWriteMask(false);
-        state->setAttributeAndModes(depth.get(), osg::StateAttribute::ON);
+        state->setAttribute(depth.get());
     }
 };
 

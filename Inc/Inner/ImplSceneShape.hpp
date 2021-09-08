@@ -2,6 +2,7 @@
 #define IMPL_SCENE_SHAPE_H
 #include <osg/Geometry>
 #include <Inner/ImplSceneNode.hpp>
+#include <osg/Depth>
 
 /**
  *  实现ISceneNode所有的接口
@@ -24,11 +25,9 @@ public:
         auto pState = m_pGeometry->getOrCreateStateSet();
         /// 开启颜色混合
         pState->setMode(GL_BLEND,osg::StateAttribute::ON);
-
-        /// 关闭写深度缓存
-        osg::Depth* pDepth = new osg::Depth;
+        auto pDepth = new osg::Depth;
         pDepth->setWriteMask(false);
-        pState->setAttributeAndModes(pDepth);
+        pState->setAttribute(pDepth);
         pState->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
 
 

@@ -19,11 +19,11 @@ void CScenePoint::UpdateShape()
         auto pPointTexture = m_pSceneGraph->ResouceLoader()->LoadTexture(m_sImagePath);
         if(nullptr != pPointTexture)
         {
-            m_pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(0, pPointTexture);
+            m_pGeometry->getOrCreateStateSet()->setTextureAttribute(0, pPointTexture);
         }
         else
         {
-            m_pGeometry->getOrCreateStateSet()->removeTextureAttribute(0, osg::StateAttribute::TEXTURE);
+            m_pGeometry->getOrCreateStateSet()->removeTextureAttribute(0, pPointTexture);
         }
         m_bImageChanged= false;
     }

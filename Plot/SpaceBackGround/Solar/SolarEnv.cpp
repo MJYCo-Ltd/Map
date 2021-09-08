@@ -21,9 +21,6 @@ CSolarEnv::CSolarEnv(ISceneGraph *pSceneGraph)
 
     osg::StateSet *state = getOrCreateStateSet();
 
-
-    state->setMode(GL_BLEND, osg::StateAttribute::ON);
-
     state->setAttributeAndModes(
                 new osg::BlendFunc(osg::BlendFunc::SRC_ALPHA,
                                    osg::BlendFunc::ONE_MINUS_SRC_ALPHA),

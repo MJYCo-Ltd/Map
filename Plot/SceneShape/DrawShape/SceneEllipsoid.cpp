@@ -48,7 +48,7 @@ void CSceneEllipsoid::UpdateShape()
             m_pGeometry->setTexCoordArray(0,m_pTexCoords);
             auto pNodeState = m_pGeometry->getOrCreateStateSet();
 
-            pNodeState->setTextureAttributeAndModes(0, pTexture,osg::StateAttribute::ON);
+            pNodeState->setTextureAttribute(0, pTexture);
 
             auto pStateSet = m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Global.glsl");
             m_pProgramNode->setStateSet(pStateSet);
@@ -57,7 +57,7 @@ void CSceneEllipsoid::UpdateShape()
         {
             m_pGeometry->setTexCoordArray(0,nullptr);
             m_pGeometry->setNormalArray(nullptr);
-            m_pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(0, nullptr,osg::StateAttribute::OFF);
+            m_pGeometry->getOrCreateStateSet()->removeTextureAttribute(0,pTexture);
 
             /// 如果VP中有函数则移除
             m_pProgramNode->setStateSet(nullptr);

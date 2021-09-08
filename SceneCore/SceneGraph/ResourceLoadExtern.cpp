@@ -102,8 +102,8 @@ void CResourceLod::InitSateSet(osg::StateSet* pStateSete,const std::string& sFil
 
         osgEarth::GLUtils::setLighting(pStateSete, osg::StateAttribute::OFF);
         pStateSete->setAttributeAndModes( new osg::CullFace(osg::CullFace::FRONT), osg::StateAttribute::ON );
-        pStateSete->setAttributeAndModes( new osg::Depth( osg::Depth::LESS, 0, 1, false ) ); // no depth write
-        pStateSete->setAttributeAndModes( new osg::Depth(osg::Depth::ALWAYS, 0, 1, false) ); // no zbuffer
+        pStateSete->setAttribute( new osg::Depth( osg::Depth::LESS, 0, 1, false ) ); // no depth write
+        pStateSete->setAttribute( new osg::Depth(osg::Depth::ALWAYS, 0, 1, false) ); // no zbuffer
         pStateSete->setAttributeAndModes( new osg::BlendFunc( GL_ONE, GL_ONE ), osg::StateAttribute::ON );
 
         float _innerRadius=osg::minimum(R_Earth2,R_Earth);
