@@ -563,10 +563,11 @@ void CMap::FrameCall()
         {
             static osgEarth::LogarithmicDepthBuffer s_logDepthBuffer;
 
-            auto pEarthManipulator= static_cast<osgEarth::Util::EarthManipulator *>(m_pView->getCameraManipulator());
+            static osg::Vec3d eye,ignor;
+            m_pView->getCamera()->getViewMatrixAsLookAt(eye,ignor,ignor);
 
             /// 获取操作器的距离
-            if(pEarthManipulator->getDistance() - R_Earth < 3000)
+            if(eye.length() - R_Earth < 3000)
             {
                 if(!m_bInstelld)
                 {

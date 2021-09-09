@@ -70,6 +70,14 @@ public:
     virtual osg::Image* QImage2OsgImage(const QImage& rQImage)=0;
 
     /**
+     * @brief 根据图片创建节点
+     * @param sImagePath
+     * @param bIsRef
+     * @return
+     */
+    virtual osg::Node* CreateImageNode(const std::string& sImagePath, bool bIsRef=true)=0;
+
+    /**
      * @brief 加载着色器
      * @param sGLSLPath
      * @param bIsRef

@@ -56,6 +56,16 @@ public:
     osg::Image* QImage2OsgImage(const QImage& rQImage);
 
     /**
+     * @brief 根据图片创建节点
+     * @param sImagePath
+     * @param nWidth
+     * @param nHeight
+     * @param bIsRef
+     * @return
+     */
+    osg::Node* CreateImageNode(const std::string& sImagePath, bool bIsRef);
+
+    /**
      * @brief 加载着色器
      * @param sGLSLPath
      * @param bIsRef
@@ -77,6 +87,7 @@ protected:
     std::map<std::string,osg::ref_ptr<osg::Texture2D>> m_mapTexture; /// 纹理映射
     std::map<std::string,osg::ref_ptr<osgText::Font>>  m_mapFont;    /// 字体映射
     std::map<std::string,osg::ref_ptr<osg::StateSet>>  m_mapStateSet; /// shader程序加载的状态集合
+    std::map<std::string,osg::ref_ptr<osg::Node>>      m_mapImageNode;/// 图片节点
 };
 
 #endif // RESOURCELOD_H

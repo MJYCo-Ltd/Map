@@ -57,6 +57,66 @@ osg::Image *CResourceLod::QImage2OsgImage(const QImage &rQImage)
     }
 }
 
+/// 将图片转成节点
+osg::Node *CResourceLod::CreateImageNode(const std::string &sImagePath, bool bIsRef)
+{
+    static std::string imagePath;
+
+    if(bIsRef)
+    {
+        imagePath = m_sAppPath + sImagePath;
+    }
+    else
+    {
+        imagePath = sImagePath;
+    }
+
+    auto pFind = m_mapImageNode.find(imagePath);
+    if(m_mapImageNode.end()!= pFind)
+    {
+        return(pFind->second);
+    }
+    else
+    {
+        auto pVertexColor = new osg::Vec4Array(1);
+        auto pVertexArray = new osg::Vec3Array(4);
+        auto pTexCoordArray = new osg::Vec2Array(4);
+
+        auto pDrawArray = new osg::DrawArrays(GL_TRIANGLE_STRIP,0,4);
+        auto pGeometry = new osg::Geometry;
+
+        pVertexColor->at(0).set(1.f,1.f,1.f,1.f);
+
+        pGeometry->addPrimitiveSet(pDrawArray);
+        pGeometry->setTexCoordArray(0,pTexCoordArray);
+        pGeometry->setVertexArray(pVertexArray);
+        pGeometry->setColorArray(pVertexColor,osg::Array::BIND_OVERALL);
+
+        pTexCoordArray->at(1).set(0,1);
+        pTexCoordArray->at(2).set(1,0);
+        pTexCoordArray->at(3).set(1,1);
+
+        auto pTexture = LoadTexture(sImagePath,bIsRef);
+
+        int nX(pTexture->getImage()->s()/2);
+        int nY(pTexture->getImage()->t()/2);
+
+        pVertexArray->at(0).set(-nX,-nY,0);
+        pVertexArray->at(1).set(-nX,nY,0);
+        pVertexArray->at(2).set(nX,-nY,0);
+        pVertexArray->at(3).set(nX,nY,0);
+
+        pGeometry->getOrCreateStateSet()->setTextureAttribute(0,pTexture);
+        pGeometry->getOrCreateStateSet()->setMode(GL_BLEND,true);
+        pGeometry->getOrCreateStateSet()->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
+        auto pDepth = new osg::Depth;
+        pDepth->setWriteMask(false);
+        pGeometry->getOrCreateStateSet()->setAttribute(pDepth);
+        m_mapImageNode[imagePath] = pGeometry;
+        return(pGeometry);
+    }
+}
+
 /// 转换QImage成osgImage
 osg::Image *CResourceLod::TransformQImage(const QImage &rQImage)
 {

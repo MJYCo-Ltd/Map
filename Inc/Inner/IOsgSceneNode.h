@@ -1,6 +1,7 @@
 #ifndef INTERFACE_OSG_SCENE_NODE_H
 #define INTERFACE_OSG_SCENE_NODE_H
 #include <osg/Group>
+#include <osg/Depth>
 
 /**
  * @brief 场景依附节点
@@ -25,6 +26,11 @@ public:
      * @brief 从父节点移除
      */
     virtual void DelFromParent(osg::Group*){}
+};
+
+enum STATESET_TYPE
+{
+    SCENESHAPE
 };
 
 /**
@@ -124,6 +130,38 @@ public:
         }
     }
 
+    /**
+     * @brief 获取或者创建指定的渲染指示器
+     * @return
+     */
+    osg::StateSet* GetOrCreateStateSet(STATESET_TYPE type)
+    {
+        auto pFindone = s_globalStateSets.find(type);
+        if(s_globalStateSets.end() != pFindone)
+        {
+            return(pFindone->second);
+        }
+        else
+        {
+            switch (type)
+            {
+            case SCENESHAPE:
+            {
+                auto pStateSet = new osg::StateSet;
+                s_globalStateSets[type] = pStateSet;
+                pStateSet->setMode(GL_BLEND,osg::StateAttribute::ON);
+                auto pDepth = new osg::Depth;
+                pDepth->setWriteMask(false);
+                pStateSet->setAttribute(pDepth);
+                return(pStateSet);
+            }
+                break;
+            }
+        }
+
+        return(nullptr);
+    }
+
 protected:
 
     /**
@@ -133,10 +171,11 @@ protected:
     virtual void DelNode(osg::Group* pGroup,osg::Node* pNode)=0;
 	
 protected:
-    bool                    m_bInit{false};
-    osg::ref_ptr<osg::Node> m_pRootNode;
-    osg::ref_ptr<osg::Group> m_pProgramNode;
+    bool                       m_bInit{false};
+    osg::ref_ptr<osg::Node>    m_pRootNode;
+    osg::ref_ptr<osg::Group>   m_pProgramNode;
     std::set<ISceneNodeAttach*> m_allAttach; ///依附的点
-    bool                    m_bCanDelete{true};
+    bool                       m_bCanDelete{true};
+    static std::map<STATESET_TYPE,osg::ref_ptr<osg::StateSet>> s_globalStateSets;
 };
 #endif

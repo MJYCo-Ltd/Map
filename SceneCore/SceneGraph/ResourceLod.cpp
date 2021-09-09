@@ -181,7 +181,7 @@ osgText::Font *CResourceLod::LoadFont(const std::string &sFontPath, bool bIsRef)
 /// 读取图片
 osg::Image *CResourceLod::LoadImage(const std::string &sImagePath, int nWidth, int nHeight, bool bIsRef)
 {
-    static std::string imagePath;
+    static std::string imagePath,sForFind;
     static bool bScale;
 
     if(bIsRef)
@@ -193,8 +193,7 @@ osg::Image *CResourceLod::LoadImage(const std::string &sImagePath, int nWidth, i
         imagePath = sImagePath;
     }
 
-    std::string sForFind = imagePath;
-    std::map<std::string,osg::ref_ptr<osg::Image> >::iterator itor;
+    sForFind = imagePath;
     if(0 != nWidth && 0 != nHeight)
     {
         bScale = true;
@@ -215,7 +214,7 @@ osg::Image *CResourceLod::LoadImage(const std::string &sImagePath, int nWidth, i
         sForFind += buffer;
     }
 
-    itor = m_mapImage.find(sForFind);
+    auto itor = m_mapImage.find(sForFind);
 
     if(m_mapImage.end() != itor && itor->second.valid())
     {
@@ -244,7 +243,7 @@ osg::StateSet* CResourceLod::GetOrCreateStateSet(const std::string& sGLSLPath,bo
 {
     if(sGLSLPath.npos != sGLSLPath.find("GLSL"))
     {
-        std::string glslPath;
+        static std::string glslPath;
 
         if(bIsRef)
         {

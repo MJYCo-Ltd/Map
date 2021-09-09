@@ -56,7 +56,7 @@ struct MapObser:public IMapMessageObserver,public IWindowMessageObserver
         pos.dX = dLon;
         pos.dY = dLat;
         pos.dZ = dHeight;
-        std::cout<<dLon<<','<<dLat<<','<<dHeight<<std::endl;
+//        std::cout<<dLon<<','<<dLat<<','<<dHeight<<std::endl;
     }
 //    void MouseDown(MouseButtonMask, int, int)
 //    {
