@@ -2,6 +2,7 @@
 #define INTERFACE_OSG_SCENE_NODE_H
 #include <osg/Group>
 #include <osg/Depth>
+#include <osg/PolygonMode>
 
 /**
  * @brief 场景依附节点
@@ -30,7 +31,9 @@ public:
 
 enum STATESET_TYPE
 {
-    SCENESHAPE
+    BLEND_STATE,
+    LINE_STATE,
+    FACE_STATE
 };
 
 /**
@@ -143,23 +146,41 @@ public:
         }
         else
         {
+            osg::StateSet* pStateSet{nullptr};
+
             switch (type)
             {
-            case SCENESHAPE:
+            case BLEND_STATE:
             {
-                auto pStateSet = new osg::StateSet;
-                s_globalStateSets[type] = pStateSet;
+                pStateSet= new osg::StateSet;
                 pStateSet->setMode(GL_BLEND,osg::StateAttribute::ON);
                 auto pDepth = new osg::Depth;
                 pDepth->setWriteMask(false);
                 pStateSet->setAttribute(pDepth);
-                return(pStateSet);
+            }
+                break;
+            case FACE_STATE:
+            {
+                pStateSet= new osg::StateSet;
+                pStateSet->setAttributeAndModes(
+                new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK,osg::PolygonMode::FILL));
+            }
+                break;
+            case LINE_STATE:
+            {
+                pStateSet= new osg::StateSet;
+                pStateSet->setAttributeAndModes(
+                new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK,osg::PolygonMode::LINE));
             }
                 break;
             }
-        }
 
-        return(nullptr);
+            if(nullptr != pStateSet)
+            {
+                s_globalStateSets[type] = pStateSet;
+            }
+            return(pStateSet);
+        }
     }
 
 protected:

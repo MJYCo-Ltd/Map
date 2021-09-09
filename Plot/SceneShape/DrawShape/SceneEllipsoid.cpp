@@ -234,5 +234,6 @@ void CSceneEllipsoid::CreateShape()
     m_pTexCoords = new osg::Vec2Array(osg::Array::BIND_PER_VERTEX);
     m_pNormals = new osg::Vec3Array(osg::Array::BIND_PER_VERTEX);
     m_pGeometry->setNormalArray(m_pNormals);
+//    m_pGeometry->setStateSet(GetOrCreateStateSet(SCENESHAPE));
     UpdateShape();
 }

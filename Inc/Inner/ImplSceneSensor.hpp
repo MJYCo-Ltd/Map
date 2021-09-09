@@ -23,9 +23,12 @@ protected:
     void DistanceChanged()SET_TRUE_NODE_UPDATE(m_bDistanceChanged)
     void EffectsChanged()SET_TRUE_NODE_UPDATE(m_bEffectChanged)
     void ShowBackChanged()SET_TRUE_NODE_UPDATE(m_bShowBackChanged)
-    void CountChanged(){m_pPulseStep->set(1.f/T::m_unCount);}
-    void DirectionChanged(){m_pbIsOut->set(T::m_bOut);}
-    void FreqChanged(){m_pPulseIntervalTime->set(1.f/T::m_unFreq);}
+    void CountChanged(){T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Pulse.glsl")->
+                getOrCreateUniform("fPulseStep",osg::Uniform::FLOAT)->set(1.f/T::m_unCount);}
+    void DirectionChanged(){T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Pulse.glsl")->
+                getOrCreateUniform("bIsOut",osg::Uniform::BOOL)->set(T::m_bOut);}
+    void FreqChanged(){T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Pulse.glsl")->
+                getOrCreateUniform("fPulseIntervalTime",osg::Uniform::FLOAT)->set(1.f/T::m_unFreq);}
 
     void FrameCall()
     {
@@ -82,21 +85,21 @@ protected:
         {
             if(!T::m_bShowBack)
             {
-                /// 开启背面裁剪
-                if(!m_pCullFace.valid())
-                {
-                    m_pCullFace = new osg::CullFace;
-                    auto pNodeStateSet = ImplSceneShape<T>::m_pGeometry->getOrCreateStateSet();
-                    pNodeStateSet->setAttributeAndModes(m_pCullFace);
-                }
-            }
-            else
-            {
-                auto pStateSet = ImplSceneShape<T>::m_pGeometry->getStateSet();
-                if(nullptr != pStateSet)
-                {
-                    pStateSet->removeAssociatedModes(m_pCullFace);
-                }
+//                /// 开启背面裁剪
+//                if(!m_pCullFace.valid())
+//                {
+//                    m_pCullFace = new osg::CullFace;
+//                    auto pNodeStateSet = ImplSceneShape<T>::m_pGeometry->getOrCreateStateSet();
+//                    pNodeStateSet->setAttributeAndModes(m_pCullFace);
+//                }
+//            }
+//            else
+//            {
+//                auto pStateSet = ImplSceneShape<T>::m_pGeometry->getStateSet();
+//                if(nullptr != pStateSet)
+//                {
+//                    pStateSet->removeAssociatedModes(m_pCullFace);
+//                }
             }
             m_bShowBackChanged=false;
         }
@@ -108,20 +111,13 @@ protected:
     void InitNode()
     {
         ImplSceneShape<T>::InitNode();
+        m_pGeometry->setStateSet(GetOrCreateStateSet(BLEND_STATE));
 
         m_pLineGroup = new osg::Group;
         m_pFaceGroup = new osg::Group;
         m_pScalTransform = new osg::MatrixTransform;
 
-        auto pSate = m_pScalTransform->getOrCreateStateSet();
-        m_pVirutlProgram = osgEarth::VirtualProgram::getOrCreate(pSate);
-        m_pPulseStartTime = pSate->getOrCreateUniform("fPulseStartTime",osg::Uniform::FLOAT);
-        m_pPulseIntervalTime = pSate->getOrCreateUniform("fPulseIntervalTime",osg::Uniform::FLOAT);
-        m_pbIsOut=pSate->getOrCreateUniform("bIsOut",osg::Uniform::BOOL);
-        m_pPulseStep=pSate->getOrCreateUniform("fPulseStep",osg::Uniform::FLOAT);
-
         /// 设置绑定的属性
-        m_pPulseStartTime->set((float)osg::Timer::instance()->time_s());
         CountChanged();
         DirectionChanged();
         FreqChanged();
@@ -134,10 +130,8 @@ protected:
         m_pFaceGroup->addChild(ImplSceneShape<T>::m_pGeometry.get());
 
         /// 线模型只绘制线 面模型只绘制面
-        m_pLineGroup->getOrCreateStateSet()->setAttributeAndModes(new osg::PolygonMode
-                                                                  (osg::PolygonMode::FRONT_AND_BACK,osg::PolygonMode::LINE));
-        m_pFaceGroup->getOrCreateStateSet()->setAttributeAndModes(new osg::PolygonMode
-                                                                  (osg::PolygonMode::FRONT_AND_BACK,osg::PolygonMode::FILL));
+        m_pLineGroup->setStateSet(this->GetOrCreateStateSet(LINE_STATE));
+        m_pFaceGroup->setStateSet(this->GetOrCreateStateSet(FACE_STATE));
 
         ImplSceneShape<T>::SetOsgNode(m_pScalTransform.get());
     }
@@ -145,12 +139,6 @@ protected:
     osg::observer_ptr<osg::Group>    m_pFaceGroup;
     osg::observer_ptr<osg::Group>    m_pLineGroup;
     osg::observer_ptr<osg::MatrixTransform> m_pScalTransform;
-    osg::ref_ptr<osgEarth::VirtualProgram> m_pVirutlProgram;
-    osg::ref_ptr<osg::CullFace>            m_pCullFace;
-    osg::ref_ptr<osg::Uniform>             m_pPulseStartTime;
-    osg::ref_ptr<osg::Uniform>             m_pPulseIntervalTime;
-    osg::ref_ptr<osg::Uniform>             m_pbIsOut;
-    osg::ref_ptr<osg::Uniform>             m_pPulseStep;
     std::string m_sCurrentVirtulProgram;
     bool       m_bDistanceChanged{false};
     bool       m_bShowTypeChanged{false};

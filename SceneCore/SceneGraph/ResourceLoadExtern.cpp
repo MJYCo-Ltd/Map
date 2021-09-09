@@ -223,6 +223,13 @@ void CResourceLod::InitSateSet(osg::StateSet* pStateSete,const std::string& sFil
         pStateSete->setMode(GL_CULL_FACE, osg::StateAttribute::OFF | osg::StateAttribute::OVERRIDE | osg::StateAttribute::PROTECTED);
         pStateSete->setEventCallback(new ViewPortChanged(pStateSete->getUniform("cameraSize")));
     }
+    else if(sFileName == "Pulse.glsl")
+    {
+        pStateSete->getOrCreateUniform("bIsOut",osg::Uniform::BOOL)->set(true);
+        pStateSete->getOrCreateUniform("fPulseStartTime",osg::Uniform::FLOAT)->set((float)osg::Timer::instance()->time_s());
+        pStateSete->getOrCreateUniform("fPulseIntervalTime",osg::Uniform::FLOAT)->set(1.f);
+        pStateSete->getOrCreateUniform("fPulseStep",osg::Uniform::FLOAT)->set(.1f);
+    }
 
     osgEarth::GLUtils::setLighting(pStateSete,osg::StateAttribute::OFF);
 }

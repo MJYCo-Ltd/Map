@@ -7,6 +7,7 @@ void CScenePolygon::CreateShape()
 {
     m_pDrawArrays = new osg::DrawArrays(GL_TRIANGLE_FAN,0,m_pVertexArray->size());
     m_pGeometry->addPrimitiveSet(m_pDrawArrays);
+    m_pGeometry->setStateSet(GetOrCreateStateSet(BLEND_STATE));
 }
 
 /// 更新多边形
