@@ -128,5 +128,13 @@ void CSceneImage::FrameCall()
             m_bColorChanged = false;
         }
     }
+    /// 是否一直显示
+    if (m_bShowTopChanged)
+    {
+        m_pRootNode->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,
+                                                    m_bShowTop ? osg::StateAttribute::OFF : osg::StateAttribute::ON);
+
+        m_bShowTopChanged = false;
+    }
     ImplSceneNode<IImage>::FrameCall();
 }
