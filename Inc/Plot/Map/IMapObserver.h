@@ -3,7 +3,7 @@
 
 #include <string>
 #include <Plot/Map/MapType.h>
-
+#include <SceneGraph/IWindow.h>
 /// 地图消息观察者
 struct IMapMessageObserver
 {
@@ -32,6 +32,8 @@ struct IMapMessageObserver
      * @param 第3个参数 高度信息 [m] 相对于wgs84椭球表面的高度
      */
     virtual void MousePos(double,double,double){}
+
+    virtual void MouseDown(MouseButtonMask type, double,double,double){};
 };
 
 #endif /// INTERFACE_MAP_OBSERVER_HEARDER_H

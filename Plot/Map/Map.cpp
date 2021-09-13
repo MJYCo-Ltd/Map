@@ -408,7 +408,18 @@ void CMap::MouseMove(MouseButtonMask, int nX, int nY)
     }
     allObserver.clear();
 }
-
+void CMap::MouseDown(MouseButtonMask type, int nX, int nY)
+{
+    m_nX = nX;
+    m_nY = nY;
+    static std::vector<IMapMessageObserver*> allObserver;
+    m_setObserver.GetAll(allObserver);
+    for(auto one:allObserver)
+    {
+        one->MouseDown(type,m_stMousePos.dX,m_stMousePos.dY,m_stMousePos.dZ);
+    }
+    allObserver.clear();
+}
 /// 初始化场景
 void CMap::InitNode()
 {

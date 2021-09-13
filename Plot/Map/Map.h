@@ -121,6 +121,10 @@ public:
      * @brief 鼠标移动消息
      */
     void MouseMove(MouseButtonMask, int, int)override;
+    /**
+     * @brief 鼠标点击消息
+     */
+    void MouseDown(MouseButtonMask, int, int)override;
 protected:
     /**
      * @brief 初始化节点

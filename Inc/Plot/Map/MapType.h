@@ -10,5 +10,4 @@ enum MapType
     MAP_2D,   /// 二维地图
     MAP_USER  /// 用户自定义地图
 };
-
 #endif

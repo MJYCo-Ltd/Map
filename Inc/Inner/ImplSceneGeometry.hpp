@@ -56,6 +56,7 @@ public:
         }
 
         m_listAllPos.Update(nIndex,rPos);
+        NeedUpdate();
         return(true);
     }
 
@@ -136,10 +137,10 @@ protected:
      */
     void UpdateVetrix()
     {
-        /*static */int nIndex{};
+        static int nIndex{};
 
-        /*static */std::vector<ScenePos> vAllConverdPos;
-        /*static*/ std::vector<ScenePos> vSourcePos;
+        static std::vector<ScenePos> vAllConverdPos;
+        static std::vector<ScenePos> vSourcePos;
         vSourcePos.clear();
         vAllConverdPos.clear();
 

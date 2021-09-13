@@ -49,10 +49,14 @@ enum Scene_ROTATE
 /// 场景颜色
 struct SceneColor
 {
-    float fR{1.f};
-    float fG{1.f};
-    float fB{1.f};
-    float fA{1.f};
+    SceneColor(float r = 1.f,float g = 1.f,float b = 1.f,float a = 1.f):fR(r),fG(g),fB(b),fA(a)
+    {
+
+    }
+    float fR;
+    float fG;
+    float fB;
+    float fA;
 
     bool operator == (const SceneColor& rOther) const
     {
