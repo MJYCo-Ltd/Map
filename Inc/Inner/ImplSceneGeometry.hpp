@@ -137,26 +137,30 @@ protected:
      */
     void UpdateVetrix()
     {
-        static int nIndex{};
+        int nIndex{0};
+        std::vector<ScenePos> vSourcePos;
 
-        static std::vector<ScenePos> vAllConverdPos;
-        static std::vector<ScenePos> vSourcePos;
-        vSourcePos.clear();
-        vAllConverdPos.clear();
-
-        m_listAllPos.Get(vSourcePos);
-        ImplSceneShape<T>::m_pVertexArray->resize(vSourcePos.size());
-
-        nIndex=0;
-        if(nullptr != T::m_pDealPoint && T::m_pDealPoint->Conversion(vSourcePos,vAllConverdPos))
+        if(nullptr != T::m_pDealPoint)
         {
-            for(auto one : vAllConverdPos)
+            /// 首先通知形状更改，查看是否需要进行修改
+            T::m_pDealPoint->ShapeChanged();
+
+            m_listAllPos.Get(vSourcePos);
+            ImplSceneShape<T>::m_pVertexArray->resize(vSourcePos.size());
+
+            std::vector<ScenePos> vAllConverdPos(vSourcePos.size());
+            if(T::m_pDealPoint->Conversion(vSourcePos,vAllConverdPos))
             {
-                ImplSceneShape<T>::m_pVertexArray->at(nIndex++).set(one.dX,one.dY,one.dZ);
+                for(auto one : vAllConverdPos)
+                {
+                    ImplSceneShape<T>::m_pVertexArray->at(nIndex++).set(one.dX,one.dY,one.dZ);
+                }
             }
         }
         else
         {
+            m_listAllPos.Get(vSourcePos);
+            ImplSceneShape<T>::m_pVertexArray->resize(vSourcePos.size());
             for(auto one : vSourcePos)
             {
                 ImplSceneShape<T>::m_pVertexArray->at(nIndex++).set(one.dX,one.dY,one.dZ);

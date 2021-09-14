@@ -115,6 +115,7 @@ protected:
 
         m_pLineGroup = new osg::Group;
         m_pFaceGroup = new osg::Group;
+        m_pRenderGroup = new osg::Group;
         m_pScalTransform = new osg::MatrixTransform;
 
         /// 设置绑定的属性
@@ -126,10 +127,14 @@ protected:
         m_pScalTransform->addChild(m_pLineGroup.get());
         m_pScalTransform->addChild(m_pFaceGroup.get());
 
-        m_pLineGroup->addChild(ImplSceneShape<T>::m_pGeometry.get());
-        m_pFaceGroup->addChild(ImplSceneShape<T>::m_pGeometry.get());
+        m_pRenderGroup->addChild(ImplSceneShape<T>::m_pGeometry.get());
+        m_pRenderGroup->addChild(ImplSceneShape<T>::m_pGeometry.get());
+
+        m_pLineGroup->addChild(m_pRenderGroup);
+        m_pFaceGroup->addChild(m_pRenderGroup);
 
         /// 线模型只绘制线 面模型只绘制面
+        m_pRenderGroup->setStateSet(this->GetOrCreateStateSet(BLEND_STATE));
         m_pLineGroup->setStateSet(this->GetOrCreateStateSet(LINE_STATE));
         m_pFaceGroup->setStateSet(this->GetOrCreateStateSet(FACE_STATE));
 
@@ -138,6 +143,7 @@ protected:
 protected:
     osg::observer_ptr<osg::Group>    m_pFaceGroup;
     osg::observer_ptr<osg::Group>    m_pLineGroup;
+    osg::ref_ptr<osg::Group>         m_pRenderGroup;
     osg::observer_ptr<osg::MatrixTransform> m_pScalTransform;
     std::string m_sCurrentVirtulProgram;
     bool       m_bDistanceChanged{false};

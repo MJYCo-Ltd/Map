@@ -157,6 +157,7 @@ public:
                 auto pDepth = new osg::Depth;
                 pDepth->setWriteMask(false);
                 pStateSet->setAttribute(pDepth);
+                pStateSet->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
             }
                 break;
             case FACE_STATE:

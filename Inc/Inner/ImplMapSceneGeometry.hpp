@@ -49,6 +49,7 @@ protected:
      */
     void TileDataChanged(const osgEarth::TileKey& rTileKey)
     {
+        /// 如果采用的是相对高程的数据，一旦瓦片数据更新，都需要重新计算
         if(IOsgMapSceneNode::s_mapIs3D[T::m_pSceneGraph] && T::RELATIVE_TERRAIN==T::m_emType && nullptr != m_pGeometry)
         {
             std::vector<ScenePos> rAllPos = m_pGeometry->GetMulPos();
@@ -86,16 +87,17 @@ protected:
      */
     bool Conversion(const std::vector<ScenePos>& vSourcePos, std::vector<ScenePos>& vAllPos)
     {
-        std::vector<osg::Vec3d> vIn;
+        std::vector<osg::Vec3d> vIn(vAllPos.size());
 
         int nIndex(0);
-        vIn.resize(vSourcePos.size());
         for(auto one : vSourcePos)
         {
             vIn.at(nIndex++).set(one.dX,one.dY,one.dZ);
         }
 
         vAllPos.resize(vIn.size());
+
+        /// 三维需要进行相对位置的提升
         if(IOsgMapSceneNode::s_mapIs3D[T::m_pSceneGraph])
         {
             std::vector<osg::Vec3d> vOut;

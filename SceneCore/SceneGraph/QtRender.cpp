@@ -70,8 +70,10 @@ void QtRender::ResetupThread()
 /// 订阅消息
 void QtRender::SubMessage(RenderCall *pRenderCall)
 {
-    if (pRenderCall)
+    if (nullptr!=pRenderCall)
+    {
         m_setMessage.Add(pRenderCall);
+    }
 }
 
 /// 更新渲染

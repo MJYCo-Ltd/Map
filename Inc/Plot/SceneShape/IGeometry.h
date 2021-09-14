@@ -4,9 +4,21 @@
 #include <list>
 #include <Plot/SceneShape/IShape.h>
 
+/**
+ * @brief 点的位置处理器
+ */
 struct DealPoint
 {
+    /**
+     * @brief 点位置坐标转换函数
+     * @return
+     */
     virtual bool Conversion(const std::vector<ScenePos>&, std::vector<ScenePos>&){return(false);}
+
+    /**
+     * @brief 几何图形形状改变消息
+     */
+    virtual void ShapeChanged(){}
 };
 
 /**
