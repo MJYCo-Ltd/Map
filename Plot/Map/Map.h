@@ -166,7 +166,7 @@ protected:
     SceneColor m_stNightColor;
     osgEarth::GeoExtent m_extent;
     std::string m_sUserMapPath;
-    SafetySet<IMapMessageObserver*> m_setObserver;
+    CSafetySet<IMapMessageObserver*> m_setObserver;
     osg::ref_ptr<osg::Group>   m_p3DRoot;
     osg::ref_ptr<osg::Group>   m_pNoTran2DMapNode;
     osg::ref_ptr<osg::MatrixTransform> m_pLeftTran;

@@ -5,7 +5,7 @@
 #include <OpenThreads/Mutex>
 #include <OpenThreads/ScopedLock>
 template<typename T>
-class SafetySet
+class CSafetySet
 {
 public:
     /**

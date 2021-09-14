@@ -94,10 +94,11 @@ void QtRender::UpdateRender()
 
         m_bResetThread=false;
     }
-    static std::vector<RenderCall*> allMessage;
-    m_setMessage.Take(allMessage);
+    m_setMessage.Get(m_tmpRenderCall);
+    m_setMessage.Clear();
+
     /// 遍历所有的订阅者
-    for(auto one:allMessage)
+    for(auto one:m_tmpRenderCall)
     {
         one->FrameCall();
         if(!one->m_bCallOne)
@@ -105,7 +106,8 @@ void QtRender::UpdateRender()
             m_setMessage.Add(one);
         }
     }
-    allMessage.clear();
+
+    m_tmpRenderCall.clear();
 }
 
 /// 响应发送的消息

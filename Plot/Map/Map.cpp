@@ -454,7 +454,7 @@ void CMap::FrameCall()
             }
 
 
-            IOsgMapSceneNode::SetMapNode(m_pCurMapNode,m_pSceneGraph);
+
             m_pCurMapNode->getMap()->beginUpdate();
             for(auto one=m_userLayers.begin();one != m_userLayers.end();++one)
             {
@@ -463,10 +463,8 @@ void CMap::FrameCall()
             }
             m_pCurMapNode->getMap()->endUpdate();
         }
-        else
-        {
-            IOsgMapSceneNode::SetMapNode(m_pCurMapNode,m_pSceneGraph);
-        }
+
+        IOsgMapSceneNode::SetMapNode(m_pCurMapNode,m_pSceneGraph);
 
         m_pGroup->removeChildren(0,m_pGroup->getNumChildren());
         /// 如果是三维地球
