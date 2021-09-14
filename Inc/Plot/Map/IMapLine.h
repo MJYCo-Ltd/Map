@@ -41,6 +41,8 @@ public:
      * @return
      */
     void SetTessellation(int nTessellation ){m_dTessellation =nTessellation*1000.0; }
+
+    virtual void Update() = 0;
 protected:
     virtual ~IMapLine(){}
 protected:

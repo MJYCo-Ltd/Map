@@ -6,6 +6,6 @@ SUBDIRS =\
     Plot\
     Tool\
     ExternShape\
-    LoadMap\
-    LoadQmlMap 
+    MapUserInterFace\
+    LoadMap 
 CONFIG *= ordered

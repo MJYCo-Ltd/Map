@@ -36,7 +36,7 @@ struct RttPickerCallBack:public osgEarth::Util::RTTPicker::Callback
         if(ea.getButton()==ea.LEFT_MOUSE_BUTTON &&ea.getEventType() == ea.DOUBLECLICK)
         {
             m_EventType = 2;
-            return(true);
+            return(false);
         }
         else if(ea.getButton()==ea.LEFT_MOUSE_BUTTON && ea.getEventType() == ea.PUSH)
         {

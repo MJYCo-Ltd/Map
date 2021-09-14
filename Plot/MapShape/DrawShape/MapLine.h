@@ -14,6 +14,8 @@ public:
     virtual bool UpdatePoint(int,const ScenePos&) override;
     virtual bool DelPoint(int,const ScenePos&) override;
     virtual void SetMultPos(const std::list<ScenePos>&)override;
+
+    virtual void Update(){PointChange();}
     /**
      * @brief 初始化节点
      */
