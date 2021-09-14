@@ -427,7 +427,6 @@ void CMap::InitNode()
     m_pDepth = new osg::Depth;
     m_pGroup->getOrCreateStateSet()->setAttribute(m_pDepth);
     m_bOpenLight=true;
-    m_pSceneGraph->GetMainWindow()->SubMessage(this);
 
     m_pView=m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->AsOsgViewPoint()->GetOsgView();
 
@@ -436,8 +435,9 @@ void CMap::InitNode()
     m_pPicker->setIntersectionLimit( osgUtil::Intersector::LIMIT_NEAREST );
     m_bCallOne=false;
     m_stNightColor.fR = m_stNightColor.fG = m_stNightColor.fB = 0.1f;
-    m_pSceneGraph->SceneGraphRender()->SubMessage(this);
     LoadMap();
+    m_pSceneGraph->GetMainWindow()->SubMessage(this);
+    m_pSceneGraph->SceneGraphRender()->SubMessage(this);
 }
 
 /// 更新节点
