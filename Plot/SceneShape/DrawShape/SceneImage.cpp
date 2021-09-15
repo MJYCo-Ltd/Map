@@ -112,6 +112,11 @@ void CSceneImage::FrameCall()
 {
     if(m_bPathChanged)
     {
+        if(m_pDrawNode.valid())
+        {
+            DelNode(m_pProgramNode.get(),m_pDrawNode.get());
+        }
+
         m_pDrawNode = m_pSceneGraph->ResouceLoader()->CreateImageNode(m_sImagePath)->asGeometry();
         m_pRootNode = m_pDrawNode.get();
         AddNode(m_pProgramNode.get(),m_pDrawNode.get());
@@ -128,7 +133,7 @@ void CSceneImage::FrameCall()
             m_bColorChanged = false;
         }
     }
-    /// �Ƿ�һֱ��ʾ
+    /// 是否一直显示
     if (m_bShowTopChanged)
     {
         m_pRootNode->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,

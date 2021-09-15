@@ -446,14 +446,14 @@ void CMap::FrameCall()
     /// 地图更改
     if(m_bMapChanged)
     {
+        IOsgMapSceneNode::SetMapNode(m_pCurMapNode,m_pSceneGraph);
+
         if(m_pPreMapNode.valid())
         {
             for(auto one=m_userLayers.begin();one != m_userLayers.end();++one)
             {
                 m_pPreMapNode->getMap()->removeLayer(one->second->GetModelLayer());
             }
-
-
 
             m_pCurMapNode->getMap()->beginUpdate();
             for(auto one=m_userLayers.begin();one != m_userLayers.end();++one)
@@ -464,13 +464,12 @@ void CMap::FrameCall()
             m_pCurMapNode->getMap()->endUpdate();
         }
 
-        IOsgMapSceneNode::SetMapNode(m_pCurMapNode,m_pSceneGraph);
-
         m_pGroup->removeChildren(0,m_pGroup->getNumChildren());
         /// 如果是三维地球
         if(m_bIs3D)
         {
             m_pGroup->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,1);
+            m_pGroup->getOrCreateStateSet()->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
             m_pDepth->setWriteMask(true);
             if(!m_p3DRoot.valid())
             {
@@ -494,6 +493,7 @@ void CMap::FrameCall()
         {
             dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
                     ->GetOsgView()->getCamera()->setClearMask(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
+            m_pGroup->getOrCreateStateSet()->setRenderingHint(osg::StateSet::DEFAULT_BIN);
             m_pGroup->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,0);
             m_pDepth->setWriteMask(false);
 

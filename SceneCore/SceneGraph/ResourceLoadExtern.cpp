@@ -108,7 +108,6 @@ osg::Node *CResourceLod::CreateImageNode(const std::string &sImagePath, bool bIs
 
         pGeometry->getOrCreateStateSet()->setTextureAttribute(0,pTexture);
         pGeometry->getOrCreateStateSet()->setMode(GL_BLEND,true);
-        pGeometry->getOrCreateStateSet()->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
         auto pDepth = new osg::Depth;
         pDepth->setWriteMask(false);
         pGeometry->getOrCreateStateSet()->setAttribute(pDepth);
