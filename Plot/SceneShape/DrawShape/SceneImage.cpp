@@ -6,7 +6,6 @@ void CSceneImage::ImageSizeChanged()
     {
         m_stImageSize.bOutSet = true;
         m_bSizeChanged=true;
-        ShapeChanged();
     }
 }
 
@@ -110,18 +109,20 @@ void CSceneImage::InitNode()
 ///
 void CSceneImage::FrameCall()
 {
-    if(m_bPathChanged)
+    if(m_bPathChanged || m_bSizeChanged)
     {
         if(m_pDrawNode.valid())
         {
             DelNode(m_pProgramNode.get(),m_pDrawNode.get());
         }
 
-        m_pDrawNode = m_pSceneGraph->ResouceLoader()->CreateImageNode(m_sImagePath)->asGeometry();
+        m_pDrawNode = m_pSceneGraph->ResouceLoader()->
+                CreateImageNode(m_sImagePath,m_stImageSize.unWidth,m_stImageSize.unHeight)->asGeometry();
         m_pRootNode = m_pDrawNode.get();
         AddNode(m_pProgramNode.get(),m_pDrawNode.get());
 
         m_bPathChanged=false;
+        m_bSizeChanged=false;
     }
 
     if(m_bColorChanged)

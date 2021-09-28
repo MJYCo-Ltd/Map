@@ -58,20 +58,12 @@ osg::Image *CResourceLod::QImage2OsgImage(const QImage &rQImage)
 }
 
 /// 将图片转成节点
-osg::Node *CResourceLod::CreateImageNode(const std::string &sImagePath, bool bIsRef)
+osg::Node *CResourceLod::CreateImageNode(const std::string &sImagePath,int nWidth,int nHeight,bool bIsRef)
 {
-    static std::string imagePath;
+    auto pImage = LoadImage(sImagePath,nWidth,nHeight,bIsRef);
 
-    if(bIsRef)
-    {
-        imagePath = m_sAppPath + sImagePath;
-    }
-    else
-    {
-        imagePath = sImagePath;
-    }
 
-    auto pFind = m_mapImageNode.find(imagePath);
+    auto pFind = m_mapImageNode.find(pImage);
     if(m_mapImageNode.end()!= pFind)
     {
         return(pFind->second);
@@ -98,8 +90,8 @@ osg::Node *CResourceLod::CreateImageNode(const std::string &sImagePath, bool bIs
 
         auto pTexture = LoadTexture(sImagePath,bIsRef);
 
-        int nX(pTexture->getImage()->s()/2);
-        int nY(pTexture->getImage()->t()/2);
+        int nX(pImage->s()/2);
+        int nY(pImage->t()/2);
 
         pVertexArray->at(0).set(-nX,-nY,0);
         pVertexArray->at(1).set(-nX,nY,0);
@@ -111,7 +103,7 @@ osg::Node *CResourceLod::CreateImageNode(const std::string &sImagePath, bool bIs
         auto pDepth = new osg::Depth;
         pDepth->setWriteMask(false);
         pGeometry->getOrCreateStateSet()->setAttribute(pDepth);
-        m_mapImageNode[imagePath] = pGeometry;
+        m_mapImageNode[pImage] = pGeometry;
         return(pGeometry);
     }
 }

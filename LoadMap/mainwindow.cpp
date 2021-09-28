@@ -502,7 +502,9 @@ void MainWindow::TestGroup()
 {
     CPlaceNode* pPlaceNode = new CPlaceNode(m_pSceneGraph);
     pPlaceNode->SetPos(120.,24.);
-    pPlaceNode->SetImagePath("Image/ship.png");
+    pPlaceNode->SetImagePath("Image/Mine/1.png");
+    SceneImageSize size{24,24};
+    pPlaceNode->SetImageSize(size);
     pPlaceNode->SetText("Hello world");
     m_pLayer->AddSceneNode(pPlaceNode->GetLocationNode());
 

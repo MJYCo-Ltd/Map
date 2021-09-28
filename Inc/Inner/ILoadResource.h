@@ -75,7 +75,7 @@ public:
      * @param bIsRef
      * @return
      */
-    virtual osg::Node* CreateImageNode(const std::string& sImagePath, bool bIsRef=true)=0;
+    virtual osg::Node* CreateImageNode(const std::string& sImagePath, int nWidth=0 , int nHeight=0, bool bIsRef=true)=0;
 
     /**
      * @brief 加载着色器
