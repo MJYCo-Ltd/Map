@@ -3,6 +3,9 @@
 
 #include <Plot/SceneShape/IBoxSensor.h>
 #include <Inner/ImplSceneSensor.hpp>
+/**
+ * @brief 绘制盒子
+ */
 class CSceneBox:public ImplSceneSensor<IBoxSensor>
 {
 public:

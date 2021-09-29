@@ -7,6 +7,7 @@
 #include "DrawShape/SceneImage.h"
 #include "DrawShape/SceneLabel.h"
 #include "DrawShape/SceneBox.h"
+#include "DrawShape/ScenePolygon3D.h"
 #include "SceneShape.h"
 
 static const char s_sPoint[]="IPoint";
@@ -14,6 +15,7 @@ static const char s_sLine[]="ILine";
 static const char s_sArc[]="IArc";
 static const char s_sRectangle[]="IRectangle";
 static const char s_sPolygon[]="IPolygon";
+static const char s_sPolygon3D[]="IPolygon3D";
 static const char s_sCone[]="ICone";
 static const char s_sImage[]="IImage";
 static const char s_sConeSensor[]="IConeSensor";
@@ -60,6 +62,10 @@ ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName
     {
         return(new CSceneBox(pSceneGraph));
     }
+    else if(s_sPolygon3D == sInterfaceName)
+    {
+        return(new CScenePolygon3D(pSceneGraph));
+    }
 
     return(nullptr);
 }
@@ -77,6 +83,8 @@ bool QueryInterface(std::string& sInterfaceName)
     sInterfaceName += s_sRectangle;
     sInterfaceName += " ";
     sInterfaceName += s_sPolygon;
+    sInterfaceName += " ";
+    sInterfaceName += s_sPolygon3D;
     sInterfaceName += " ";
     sInterfaceName += s_sCone;
     sInterfaceName += " ";

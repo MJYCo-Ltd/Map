@@ -1,6 +1,6 @@
 #ifndef INTERFACE_POLYGON_HEARDER_H
 #define INTERFACE_POLYGON_HEARDER_H
-#include <vector>
+
 #include <Plot/SceneShape/IGeometry.h>
 
 /**

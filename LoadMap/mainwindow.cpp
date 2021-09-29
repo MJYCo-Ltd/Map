@@ -37,9 +37,11 @@
 #include <Plot/SceneShape/ILabel.h>
 #include <Plot/Common/ISceneScreenGroup.h>
 #include <Plot/SceneShape/IBoxSensor.h>
+#include <Plot/Map/IMapPolygon3D.h>
 #include <Hud/IViewHud.h>
 #include <Inner/ILoadResource.h>
 #include <Plot/Map/IMapObserver.h>
+#include <Plot/SceneShape/IPolygon3D.h>
 #include <Ability/IFlashAbility.h>
 
 #include "mainwindow.h"
@@ -455,6 +457,29 @@ void MainWindow::PlotMap()
     m_pPoint->SetTerrainType(IMapSceneNode::ABSOLUTE_TERRAIN);
     m_pLayer->AddSceneNode(m_pPoint);
 
+    auto m_pPolygon3D = dynamic_cast<IMapPolygon3D*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPolygon3D"));
+
+    pos.dX = 123;
+    pos.dY = 27;
+    m_pPolygon3D->GetDrawPolygon()->AddPoint(pos);
+    pos.dX = 124;
+    pos.dY = 27;
+    m_pPolygon3D->GetDrawPolygon()->AddPoint(pos);
+    pos.dX = 124;
+    pos.dY = 28;
+    m_pPolygon3D->GetDrawPolygon()->AddPoint(pos);
+    pos.dX = 123.5;
+    pos.dY = 29;
+    m_pPolygon3D->GetDrawPolygon()->AddPoint(pos);
+    pos.dX = 123;
+    pos.dY = 28;
+    m_pPolygon3D->GetDrawPolygon()->AddPoint(pos);
+    color.fR = 1.f;
+    color.fA = 0.6f;
+    m_pPolygon3D->GetDrawPolygon()->SetColor(color);
+    m_pPolygon3D->GetDrawPolygon()->SetHeight(100000);
+    m_pPolygon3D->SetTerrainType(IMapSceneNode::ABSOLUTE_TERRAIN);
+    m_pLayer->AddSceneNode(m_pPolygon3D);
 }
 
 void MainWindow::LodPlot()

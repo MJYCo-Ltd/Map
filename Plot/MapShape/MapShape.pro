@@ -19,6 +19,7 @@ HEADERS += \
     DrawShape/MapLocation.h \
     DrawShape/MapPoint.h \
     DrawShape/MapPolygon.h \
+    DrawShape/MapPolygon3D.h \
     MapShape.h
 
 SOURCES += \
@@ -27,4 +28,5 @@ SOURCES += \
     DrawShape/MapLocation.cpp \
     DrawShape/MapPoint.cpp \
     DrawShape/MapPolygon.cpp \
+    DrawShape/MapPolygon3D.cpp \
     MapShape.cpp
