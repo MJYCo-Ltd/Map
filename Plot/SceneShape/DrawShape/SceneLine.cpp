@@ -25,7 +25,7 @@ void CSceneLine::UpdateShape()
 
             /// 更新上一个顶点和下一个顶点的值
             int nSize = m_pVertexArray->size();
-            if(nSize > 1)
+            if(nSize > 1 && m_nLineWidth > 1)
             {
                 m_pPreviousPoints->resize(nSize);
                 m_pNextPoints->resize(nSize);
@@ -58,6 +58,7 @@ void CSceneLine::UpdateShape()
         m_bCountChanged=false;
     }
 
+    /// 如果宽度修改
     if(m_bWidthChanged)
     {
         m_pProgramNode->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Line.glsl"));
@@ -66,18 +67,35 @@ void CSceneLine::UpdateShape()
         m_bWidthChanged=false;
     }
 
+    /// 是否开启发光
     if(m_bGlowChanged)
     {
         if(m_bOpenGlow)
         {
             m_pProgramNode->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Line.glsl"));
             m_pGeometry->getOrCreateStateSet()->setDefine("LINE_GLOW");
+            m_pGeometry->getOrCreateStateSet()->setMode(GL_BLEND,osg::StateAttribute::ON);
         }
         else
         {
             m_pGeometry->getOrCreateStateSet()->removeDefine("LINE_GLOW");
+            m_pGeometry->getOrCreateStateSet()->removeMode(GL_BLEND);
         }
         m_bGlowChanged=false;
     }
 
+    /// 如果线性修改
+    if(m_bLineTypeChanged)
+    {
+        m_pProgramNode->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Line.glsl"));
+        switch(m_emLineType)
+        {
+        case SOLID_LINE:
+            m_pGeometry->getOrCreateStateSet()->getOrCreateUniform("LineStipplePattern",osg::Uniform::INT)->set(0xFFFF);
+            break;
+        case DOTTED_LINE:
+            m_pGeometry->getOrCreateStateSet()->getOrCreateUniform("LineStipplePattern",osg::Uniform::INT)->set(0xFF00);
+            break;
+        }
+    }
 }

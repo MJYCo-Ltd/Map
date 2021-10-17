@@ -12,6 +12,7 @@ void CSceneImage::ImageSizeChanged()
 void CSceneImage::InitNode()
 {
     ImplSceneNode<IImage>::InitNode();
+    m_pProgramNode->setCullingActive(false);
     auto pStateSet = m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Global.glsl");
     m_pProgramNode->setStateSet(pStateSet);
 }

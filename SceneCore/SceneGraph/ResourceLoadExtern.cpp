@@ -210,6 +210,8 @@ void CResourceLod::InitSateSet(osg::StateSet* pStateSete,const std::string& sFil
         }
 
         pStateSete->getOrCreateUniform("LineWidth",osg::Uniform::FLOAT)->set(1.0f);
+        pStateSete->getOrCreateUniform("LineStipplePattern",osg::Uniform::INT)->set(0xFFFF);
+        pStateSete->getOrCreateUniform("LineStippleFactor",osg::Uniform::INT)->set(1);
         pStateSete->getOrCreateUniform("cameraSize",osg::Uniform::FLOAT_VEC2);
         pStateSete->setMode(GL_CULL_FACE, osg::StateAttribute::OFF | osg::StateAttribute::OVERRIDE | osg::StateAttribute::PROTECTED);
         pStateSete->setEventCallback(new ViewPortChanged(pStateSete->getUniform("cameraSize")));

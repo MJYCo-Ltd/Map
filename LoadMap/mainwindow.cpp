@@ -635,14 +635,17 @@ void MainWindow::on_action12_triggered()
     scenePos.dX = 0.f;
     pPoint->AddPoint(pPoint->GetCount(),scenePos);
     pLine->AddPoint(3,scenePos);
+    scenePos.dY = 0.f;
+    pLine->AddPoint(4,scenePos);
     pSceneRoot->AddSceneNode(pLine);
-    pLine->SetLineWidth(100);
+    pLine->SetLineWidth(10);
+    pLine->SetLineType(pLine->DOTTED_LINE);
     pLine->OpenGlow(true);
 
     /// 绘制图片
     QImage image = QImage("E:/splash-620x300.png").convertToFormat(QImage::Format_RGBA8888);
     auto pImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
-//    pImage->SetImagePath("Image/Mine/17.png");
+    pImage->SetImagePath("Image/Mine/17.png");
     RGBAData data;
     data.unWidth = image.width();
     data.unHeight = image.height();
