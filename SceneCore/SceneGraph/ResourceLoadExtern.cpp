@@ -103,6 +103,7 @@ osg::Node *CResourceLod::CreateImageNode(const std::string &sImagePath,int nWidt
         auto pDepth = new osg::Depth;
         pDepth->setWriteMask(false);
         pGeometry->getOrCreateStateSet()->setAttribute(pDepth);
+        pGeometry->getOrCreateStateSet()->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
         m_mapImageNode[pImage] = pGeometry;
         return(pGeometry);
     }

@@ -75,11 +75,16 @@ void CSceneLine::UpdateShape()
             m_pProgramNode->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Line.glsl"));
             m_pGeometry->getOrCreateStateSet()->setDefine("LINE_GLOW");
             m_pGeometry->getOrCreateStateSet()->setMode(GL_BLEND,osg::StateAttribute::ON);
+            auto pDepth = new osg::Depth;
+            pDepth->setWriteMask(false);
+            m_pGeometry->getOrCreateStateSet()->setAttribute(pDepth);
+            m_pGeometry->getOrCreateStateSet()->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
         }
         else
         {
             m_pGeometry->getOrCreateStateSet()->removeDefine("LINE_GLOW");
             m_pGeometry->getOrCreateStateSet()->removeMode(GL_BLEND);
+            m_pGeometry->getOrCreateStateSet()->setRenderingHint(osg::StateSet::DEFAULT_BIN);
         }
         m_bGlowChanged=false;
     }

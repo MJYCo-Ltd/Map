@@ -468,8 +468,7 @@ void CMap::FrameCall()
         /// 如果是三维地球
         if(m_bIs3D)
         {
-            m_pGroup->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,1);
-            m_pGroup->getOrCreateStateSet()->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
+            m_pGroup->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,osg::StateAttribute::ON);
             m_pDepth->setWriteMask(true);
             if(!m_p3DRoot.valid())
             {
@@ -493,8 +492,7 @@ void CMap::FrameCall()
         {
             dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
                     ->GetOsgView()->getCamera()->setClearMask(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
-            m_pGroup->getOrCreateStateSet()->setRenderingHint(osg::StateSet::DEFAULT_BIN);
-            m_pGroup->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,0);
+            m_pGroup->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,osg::StateAttribute::OFF);
             m_pDepth->setWriteMask(false);
 
             if(!m_pNoTran2DMapNode.valid())
