@@ -122,6 +122,8 @@ void CSceneImage::FrameCall()
         m_pRootNode = m_pDrawNode.get();
         AddNode(m_pProgramNode.get(),m_pDrawNode.get());
 
+        static_cast<osg::Vec4Array*>(m_pDrawNode->getColorArray())
+                ->at(0).set(m_stColor.fR,m_stColor.fG,m_stColor.fB,m_stColor.fA);
         m_bPathChanged=false;
         m_bSizeChanged=false;
     }
