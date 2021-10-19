@@ -312,7 +312,67 @@ void CMap::RemoveLayer(UserLayers::iterator itor)
 
     m_userLayers.erase(itor);
 }
+void CMap::GetXYZ(double dLon,double dLat,double dHeight,double& x,double& y ,double&z)
+{
+    if(m_emType == MAP_3D)
+    {
+        osg::Vec3d vIn(dLon,dLat,dHeight);
+        osg::Vec3d vOut;
+        m_pCurMapNode->getMapSRS()->transformToWorld(vIn,vOut);
+        x = vOut.x();
+        y = vOut.y();
+        z = vOut.z();
+    }
+    else
+    {
+        std::vector<osg::Vec3d> input;
+        osg::Vec3d vIn(dLon,dLat,dHeight);
+        input.push_back(vIn);
+        IOsgMapSceneNode::s_pWGS84.get()->transform(input,m_pCurMapNode->getMapSRS());
+        vIn = input[0];
+        x = vIn.x();
+        y = vIn.y();
+        z = vIn.z();
+    }
+}
+void CMap::GetPOS(double x,double y,double z,double& dLon,double& dLat ,double&dHeight  )
+{
+    if(m_emType == MAP_3D)
+    {
+        osg::Vec3d vIn(x,y,z);
+        osg::Vec3d vOut;
+        m_pCurMapNode->getMapSRS()->transformFromWorld(vIn,vOut);
+        dLon = vOut.x();
+        dLat = vOut.y();
+        dHeight = vOut.z();
+    }
+    else
+    {
+        std::vector<osg::Vec3d> input;
+        osg::Vec3d vIn(dLon,dLat,dHeight);
+        input.push_back(vIn);
 
+        m_pCurMapNode->getMapSRS()->transform(input,IOsgMapSceneNode::s_pWGS84.get());
+        vIn = input[0];
+        dLon = vIn.x();
+        dLat = vIn.y();
+        dHeight = vIn.z();
+    }
+}
+void CMap::getScreenXY(int& x,int& y)
+{
+    osg::Vec3d out_world;
+
+    m_pCurMapNode->getTerrain()->getWorldCoordsUnderMouse(m_pView.get(), x, y, out_world);
+
+    osgEarth::GeoPoint eqcPos;
+
+    eqcPos.fromWorld(m_pCurMapNode->getMapSRS(), out_world);
+    eqcPos.makeGeographic();
+   
+    x = eqcPos.vec3d().x();
+    y = eqcPos.vec3d().y();
+}
 void CMap::ClearLayers()
 {
     static std::vector<IMapMessageObserver*> allObserver;

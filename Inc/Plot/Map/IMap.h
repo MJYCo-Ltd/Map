@@ -123,6 +123,14 @@ public:
     virtual void SetNightColor(const SceneColor&)=0;
 
     /**
+     * @brief 获取世界坐标
+     */
+    virtual void GetXYZ(double dLon,double dLat,double dHeight,double& x,double& y ,double&z) =0;
+    /**
+     * @brief 获取地理坐标
+     */
+    virtual void GetPOS(double x,double y,double z,double& dLon,double& dLat ,double&dHeight  ) =0;
+    /**
      * @brief 更新时间
      * @arg   约简儒略日
      */

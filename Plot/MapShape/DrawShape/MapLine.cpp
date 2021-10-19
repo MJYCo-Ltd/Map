@@ -90,7 +90,7 @@ void CMapLine::PointChange()
         double dAzim=0.0 ,dElev=0.0,dDist=0.0;
         while(iter != m_listAllPos.end())
         {
-            GisMath::CalAzElGeo(_tPos.dX*DD2R,_tPos.dY*DD2R,_tPos.dZ*DD2R,iter->dX*DD2R,iter->dY*DD2R,iter->dZ*DD2R,dAzim,dElev,dDist);
+            GisMath::CalAzElGeo(_tPos.dX*DD2R,_tPos.dY*DD2R,_tPos.dZ,iter->dX*DD2R,iter->dY*DD2R,iter->dZ,dAzim,dElev,dDist);
 
             double dTessellation =dDist/m_dTessellation;
             if(dTessellation <1.1f)
@@ -102,10 +102,10 @@ void CMapLine::PointChange()
             }
             double tmpElev = dTessellation>0?dElev/dTessellation:0;
 
-            for(int i=0;i<dTessellation;i++)
+            for(int i=0;i<dTessellation-1;i++)
             {
                 double dLon,dLat,dHeight;
-                GisMath::GeoCalEndGeo(_tPos.dX*DD2R,_tPos.dY*DD2R,_tPos.dZ*DD2R,dAzim,tmpElev*(i+1),m_dTessellation*(i+1),dLon,dLat,dHeight);
+                GisMath::GeoCalEndGeo(_tPos.dX*DD2R,_tPos.dY*DD2R,_tPos.dZ,dAzim,tmpElev*(i+1),m_dTessellation*(i+1),dLon,dLat,dHeight);
                 ScenePos _tmpPos;
                 _tmpPos.dX =dLon*DR2D;
                 _tmpPos.dY =dLat*DR2D;

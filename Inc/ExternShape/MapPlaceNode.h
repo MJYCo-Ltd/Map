@@ -22,7 +22,7 @@ public:
      * @param fLon
      * @param fLat
      */
-    void SetPos(double fLon, double fLat);
+    void SetPos(double fLon, double fLat,double dHeight);
     const ScenePos GetPos();
 
     /**

@@ -151,6 +151,10 @@ protected:
      */
     void RemoveLayer(UserLayers::iterator itor);
 
+    void GetXYZ(double dLon,double dLat,double dHeight,double& x,double& y ,double&z  );
+    void GetPOS(double x,double y,double z,double& dLon,double& dLat ,double&dHeight  );
+
+    void getScreenXY(int& x,int& y) ;
 protected:
     int    m_nX{};
     int    m_nY{};
