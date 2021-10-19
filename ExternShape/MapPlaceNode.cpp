@@ -11,11 +11,12 @@ CPlaceNode::CPlaceNode(ISceneGraph *pSceneGraph):m_pSceneGraph(pSceneGraph)
     InitNode();
 }
 
-void CPlaceNode::SetPos(double fLon, double fLat)
+void CPlaceNode::SetPos(double fLon, double fLat,double dHeight)
 {
     ScenePos pos;
     pos.dX = fLon;
     pos.dY = fLat;
+    pos.dZ = dHeight;
     m_pLocation->SetGeoPos(pos);
 }
 
