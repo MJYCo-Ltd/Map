@@ -1,5 +1,5 @@
 #include "SceneImage.h"
-
+#include <osgDB/WriteFile>
 void CSceneImage::ImageSizeChanged()
 {
     if(m_stImageSize)
@@ -108,26 +108,46 @@ void CSceneImage::InitNode()
 //}
 
 ///
+void CSceneImage::ImagePathChanged()
+{
+    if(m_pDrawNode.valid())
+        DelNode(m_pProgramNode.get(),m_pDrawNode.get());
+    m_pDrawNode = m_pSceneGraph->ResouceLoader()->CreateImageNode(m_sImagePath)->asGeometry();
+    m_pRootNode = m_pDrawNode.get();
+
+    AddNode(m_pProgramNode.get(),m_pDrawNode.get());
+}
+void CSceneImage::ImageDataChanged()
+{
+    int size = m_stRGBAData.unWidth*4;
+    unsigned char* pTempBuffer = new unsigned char[size]();
+    if(m_stRGBAData.bFlipVertically)
+    {
+        for(int i=m_stRGBAData.unHeight-1,j=0; i>j; --i,++j)
+        {
+            memcpy(pTempBuffer,m_stRGBAData.pRGBAData+j*size,size);
+            memcpy(m_stRGBAData.pRGBAData+j*size,m_stRGBAData.pRGBAData+i*size,size);
+            memcpy(m_stRGBAData.pRGBAData+i*size,pTempBuffer,size);
+        }
+    }
+    delete[]pTempBuffer;
+
+    osg::ref_ptr<osg::Image> pImage = new osg::Image;
+    pImage->setImage(m_stRGBAData.unWidth, m_stRGBAData.unHeight, 1,
+                    GL_RGBA,GL_RGBA, GL_UNSIGNED_BYTE,m_stRGBAData.pRGBAData,osg::Image::NO_DELETE);
+
+
+    osgDB::writeImageFile(*pImage,"./Data/abc.png");
+
+    m_pDrawNode = m_pSceneGraph->ResouceLoader()->CreateImageNode("abc.png",m_stRGBAData.unWidth, m_stRGBAData.unHeight)->asGeometry();
+    m_pRootNode = m_pDrawNode.get();
+
+    pImage.release();
+    AddNode(m_pProgramNode.get(),m_pDrawNode.get());
+
+}
 void CSceneImage::FrameCall()
 {
-    if(m_bPathChanged || m_bSizeChanged)
-    {
-        if(m_pDrawNode.valid())
-        {
-            DelNode(m_pProgramNode.get(),m_pDrawNode.get());
-        }
-
-        m_pDrawNode = m_pSceneGraph->ResouceLoader()->
-                CreateImageNode(m_sImagePath,m_stImageSize.unWidth,m_stImageSize.unHeight)->asGeometry();
-        m_pRootNode = m_pDrawNode.get();
-        AddNode(m_pProgramNode.get(),m_pDrawNode.get());
-
-        static_cast<osg::Vec4Array*>(m_pDrawNode->getColorArray())
-                ->at(0).set(m_stColor.fR,m_stColor.fG,m_stColor.fB,m_stColor.fA);
-        m_bPathChanged=false;
-        m_bSizeChanged=false;
-    }
-
     if(m_bColorChanged)
     {
         if(m_pDrawNode.valid())

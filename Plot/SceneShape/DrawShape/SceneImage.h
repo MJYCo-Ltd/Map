@@ -9,23 +9,18 @@ public:
     CONSTRUCTOR(CSceneImage,ImplSceneNode<IImage>)
 protected:
     void ImageSizeChanged();
-    void ImagePathChanged()SET_TRUE_NODE_UPDATE(m_bPathChanged)
-    void ImageDataChanged()SET_TRUE_NODE_UPDATE(m_bImageDataChanged)
+    void ImagePathChanged();//SET_TRUE_NODE_UPDATE(m_bPathChanged)
+    void ImageDataChanged();//SET_TRUE_NODE_UPDATE(m_bImageDataChanged)
 
-    /**
-     * @brief实现父类方法
-     */
-    void ShapeChanged(){}
-
-    /**
-     * @brief 重写父类方法
-     */
     void InitNode();
     /**
      * @brief 初始化节点
      */
     void ColorChanged() SET_TRUE_NODE_UPDATE(m_bColorChanged)
-
+    /**
+     * @brief实现父类方法
+     */
+    void ShapeChanged(){}
     /**
      * @brief 重写父类
      */
