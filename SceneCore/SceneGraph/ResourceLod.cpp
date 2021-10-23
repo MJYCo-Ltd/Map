@@ -237,7 +237,36 @@ osg::Image *CResourceLod::LoadImage(const std::string &sImagePath, int nWidth, i
         return(pImage);
     }
 }
+/// 创建virtualProgram
+osg::StateSet* CResourceLod::CreateStateSet(const std::string& sGLSLPath,bool bIsRef)
+{
+    if(sGLSLPath.npos != sGLSLPath.find("GLSL"))
+    {
+        static std::string glslPath;
 
+        if(bIsRef)
+        {
+            glslPath = m_sAppPath + sGLSLPath;
+        }
+        else
+        {
+            glslPath = sGLSLPath;
+        }
+        osg::StateSet* pParentStateSet = new osg::StateSet;
+        static osgEarth::Util::Shaders shader;
+
+        /// 创建方程
+        auto pVirtualProgram = osgEarth::VirtualProgram::getOrCreate(pParentStateSet);
+        shader.load(pVirtualProgram,glslPath);
+
+        InitSateSet(pParentStateSet,osgDB::getSimpleFileName(glslPath));
+
+        m_mapStateSet[glslPath] = pParentStateSet;
+
+        return(pParentStateSet);
+    }
+    return(nullptr);
+}
 /// 加载virtualProgram
 osg::StateSet* CResourceLod::GetOrCreateStateSet(const std::string& sGLSLPath,bool bIsRef)
 {

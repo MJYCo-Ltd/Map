@@ -66,6 +66,13 @@ public:
     osg::Node* CreateImageNode(const std::string& sImagePath, int nWidth, int nHeight, bool bIsRef);
 
     /**
+     * @brief 创建着色器
+     * @param sGLSLPath
+     * @param bIsRef
+     * @return
+     */
+    osg::StateSet* CreateStateSet(const std::string& sGLSLPath,bool bIsRef=true);
+    /**
      * @brief 加载着色器
      * @param sGLSLPath
      * @param bIsRef
