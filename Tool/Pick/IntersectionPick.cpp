@@ -63,7 +63,7 @@ IToolBase(pSceneGraph,pToolSelector){}
 bool IntersectionPick::InitTool()
 {
     auto pView = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint());
-    osg::ref_ptr<osg::Group> mapNode = m_pSceneGraph->GetMap()->getOSGGroup();
+    osg::ref_ptr<osg::Group> mapNode = dynamic_cast<IOsgSceneNode*>(m_pSceneGraph->GetMap())->GetOsgNode()->asGroup();
     mIntersectionHandle = new ObjectIntersectionHandle(mapNode,this);
     pView->GetOsgView()->addEventHandler(mIntersectionHandle );
     return true;

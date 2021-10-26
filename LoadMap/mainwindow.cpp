@@ -526,7 +526,7 @@ void MainWindow::LodPlot()
 void MainWindow::TestGroup()
 {
     CPlaceNode* pPlaceNode = new CPlaceNode(m_pSceneGraph);
-    pPlaceNode->SetPos(120.,24.);
+    pPlaceNode->SetPos(120.,24.,10);
     pPlaceNode->SetImagePath("Image/Mine/1.png");
     SceneImageSize size{24,24};
     pPlaceNode->SetImageSize(size);
