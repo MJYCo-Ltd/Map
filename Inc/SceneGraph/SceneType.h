@@ -51,8 +51,8 @@ struct SceneColor
 {
     SceneColor(float r = 1.f,float g = 1.f,float b = 1.f,float a = 1.f):fR(r),fG(g),fB(b),fA(a)
     {
-
     }
+
     float fR;
     float fG;
     float fB;
@@ -174,6 +174,7 @@ struct RGBAData
     unsigned int   unDataSize{};
     unsigned char* pRGBAData{};
     bool           bFlipVertically{false};
+    std::string    sInnerName;
 
     RGBAData(){}
 
@@ -186,6 +187,7 @@ struct RGBAData
         int nSize = unWidth*unHeight*4;
         pRGBAData = new unsigned char[nSize]();
         memcpy(pRGBAData,rOther.pRGBAData,nSize);
+        sInnerName = rOther.sInnerName;
     }
 
     RGBAData& operator=(const RGBAData& rOther)
@@ -203,6 +205,7 @@ struct RGBAData
             int nSize = unWidth*unHeight*4;
             pRGBAData = new unsigned char[nSize]();
             memcpy(pRGBAData,rOther.pRGBAData,nSize);
+            sInnerName = rOther.sInnerName;
         }
     }
     ~RGBAData()
@@ -220,7 +223,8 @@ struct RGBAData
         return(unWidth == rOther.unWidth
                && unHeight == rOther.unHeight
                && pRGBAData == rOther.pRGBAData
-               && bFlipVertically == rOther.bFlipVertically);
+               && bFlipVertically == rOther.bFlipVertically
+               && sInnerName == rOther.sInnerName);
     }
 
     bool operator !=(const RGBAData& rOther)const

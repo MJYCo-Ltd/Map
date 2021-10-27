@@ -52,22 +52,19 @@ protected:
      */
     void SetOsgNode(osg::Node* pNode)
     {
-        if(nullptr != pNode->asGroup())
+        if(m_pRootNode.valid())
         {
-            m_pProgramNode = pNode->asGroup();
+            m_pProgramNode->removeChild(m_pRootNode.get());
+            pNode->setNodeMask(m_preMask);
         }
         else
         {
-            if(m_pRootNode.valid())
-            {
-                m_pProgramNode->removeChild(m_pRootNode.get());
-            }
-            m_pProgramNode->addChild(pNode);
-            m_pProgramNode->dirtyBound();
+            m_preMask = pNode->getNodeMask();
         }
 
+        m_pProgramNode->addChild(pNode);
+
         m_pRootNode = pNode;
-        m_preMask = m_pRootNode->getNodeMask();
     }
 
     /**
@@ -113,12 +110,8 @@ protected:
         if(m_bShowTopChanged)
         {
             //移动目标闪烁版本
-            m_pProgramNode->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,
+            m_pRootNode->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,
                                                         T::m_bShowTop ? osg::StateAttribute::OFF : osg::StateAttribute::ON);
-
-            //X文字透视版本
-            //m_pRootNode->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,
-            //                                            T::m_bShowTop ? osg::StateAttribute::OFF : osg::StateAttribute::ON);
 
             m_bShowTopChanged=false;
         }

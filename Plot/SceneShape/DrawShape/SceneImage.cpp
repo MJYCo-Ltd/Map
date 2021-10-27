@@ -5,149 +5,47 @@ void CSceneImage::ImageSizeChanged()
     if(m_stImageSize)
     {
         m_stImageSize.bOutSet = true;
-        m_bSizeChanged=true;
+        SET_TRUE_NODE_UPDATE(m_bSizeChanged)
     }
+}
+
+void CSceneImage::SetQImage(const QImage &rImage)
+{
+    m_pQImageDrawNode = m_pSceneGraph->ResouceLoader()->CreateImageNode(rImage)->asGeometry();
+    SET_TRUE_NODE_UPDATE(m_bGeomertyChanged)
 }
 
 void CSceneImage::InitNode()
 {
     ImplSceneNode<IImage>::InitNode();
-    m_pProgramNode->setCullingActive(false);
-    auto pStateSet = m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Global.glsl");
-    m_pProgramNode->setStateSet(pStateSet);
+    m_bOpenCull=false;
+    m_pProgramNode->setCullingActive(m_bOpenCull);
+    m_pProgramNode->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Global.glsl"));
 }
 
-//void CSceneImage::CreateShape()
-//{
-//    m_pTexCoordArray = new osg::Vec2Array;
-//    m_pVertexArray->resize(4);
-//    m_pTexCoordArray->resize(4);
-//    osg::DrawArrays* pDrawCone = new osg::DrawArrays(GL_TRIANGLE_STRIP,0,m_pVertexArray->size());
-//    m_pGeometry->addPrimitiveSet(pDrawCone);
-//    m_pGeometry->setTexCoordArray(0,m_pTexCoordArray);
-
-//    m_pTexCoordArray->at(1).set(0,1);
-//    m_pTexCoordArray->at(2).set(1,0);
-//    m_pTexCoordArray->at(3).set(1,1);
-
-//    auto pStateSet = m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Global.glsl");
-//    m_pProgramNode->setStateSet(pStateSet);
-//}
-
-//void CSceneImage::UpdateShape()
-//{
-
-//    if(m_bPathChanged)
-//    {
-//        auto pTexture = m_pSceneGraph->ResouceLoader()->LoadTexture(m_sImagePath);
-//        if(nullptr != pTexture)
-//        {
-//            auto pNodeState = m_pGeometry->getOrCreateStateSet();
-//            pNodeState->setTextureAttribute(0,pTexture);
-
-//            if(!m_stImageSize || !m_stImageSize.bOutSet)
-//            {
-//                m_stImageSize.unWidth = pTexture->getImage()->s();
-//                m_stImageSize.unHeight = pTexture->getImage()->t();
-//                m_bSizeChanged = true;
-//            }
-//        }
-
-//        m_bPathChanged=false;
-//    }
-
-//    if(m_bSizeChanged)
-//    {
-//        int nX(m_stImageSize.unWidth/2),nY(m_stImageSize.unHeight/2);
-
-//        m_pVertexArray->at(0).set(-nX,-nY,0);
-//        m_pVertexArray->at(1).set(-nX,nY,0);
-//        m_pVertexArray->at(2).set(nX,-nY,0);
-//        m_pVertexArray->at(3).set(nX,nY,0);
-
-//        m_bSizeChanged=false;
-//    }
-
-//    if(m_bImageDataChanged)
-//    {
-//        int size = m_stRGBAData.unWidth*4;
-//        unsigned char* pTempBuffer = new unsigned char[size]();
-//        if(m_stRGBAData.bFlipVertically)
-//        {
-//            for(int i=m_stRGBAData.unHeight-1,j=0; i>j; --i,++j)
-//            {
-//                memcpy(pTempBuffer,m_stRGBAData.pRGBAData+j*size,size);
-//                memcpy(m_stRGBAData.pRGBAData+j*size,m_stRGBAData.pRGBAData+i*size,size);
-//                memcpy(m_stRGBAData.pRGBAData+i*size,pTempBuffer,size);
-//            }
-//        }
-//        delete[]pTempBuffer;
-
-//        auto pImage = new osg::Image;
-//        pImage->setImage(m_stRGBAData.unWidth, m_stRGBAData.unHeight, 1,
-//                        GL_RGBA,GL_RGBA, GL_UNSIGNED_BYTE,m_stRGBAData.pRGBAData,osg::Image::NO_DELETE);
-
-//        auto pTexture = new osg::Texture2D;
-//        pTexture->setImage(pImage);
-//        pTexture->setFilter(osg::Texture::MIN_FILTER, osg::Texture::LINEAR);
-//        pTexture->setFilter(osg::Texture::MAG_FILTER, osg::Texture::LINEAR);
-//        pTexture->setResizeNonPowerOfTwoHint(false);
-
-//        auto pNodeState = m_pGeometry->getOrCreateStateSet();
-//        pNodeState->setTextureAttribute(0,pTexture);
-
-//        if(!m_stImageSize || !m_stImageSize.bOutSet)
-//        {
-//            m_stImageSize.unWidth = m_stRGBAData.unWidth;
-//            m_stImageSize.unHeight = m_stRGBAData.unHeight;
-//            m_bSizeChanged = true;
-//        }
-//        m_bImageDataChanged=false;
-//    }
-
-//}
-
-///
-void CSceneImage::ImagePathChanged()
-{
-    if(m_pDrawNode.valid())
-        DelNode(m_pProgramNode.get(),m_pDrawNode.get());
-    m_pDrawNode = m_pSceneGraph->ResouceLoader()->CreateImageNode(m_sImagePath)->asGeometry();
-    m_pRootNode = m_pDrawNode.get();
-
-    AddNode(m_pProgramNode.get(),m_pDrawNode.get());
-}
-void CSceneImage::ImageDataChanged()
-{
-    int size = m_stRGBAData.unWidth*4;
-    unsigned char* pTempBuffer = new unsigned char[size]();
-    if(m_stRGBAData.bFlipVertically)
-    {
-        for(int i=m_stRGBAData.unHeight-1,j=0; i>j; --i,++j)
-        {
-            memcpy(pTempBuffer,m_stRGBAData.pRGBAData+j*size,size);
-            memcpy(m_stRGBAData.pRGBAData+j*size,m_stRGBAData.pRGBAData+i*size,size);
-            memcpy(m_stRGBAData.pRGBAData+i*size,pTempBuffer,size);
-        }
-    }
-    delete[]pTempBuffer;
-
-    osg::ref_ptr<osg::Image> pImage = new osg::Image;
-    pImage->setImage(m_stRGBAData.unWidth, m_stRGBAData.unHeight, 1,
-                    GL_RGBA,GL_RGBA, GL_UNSIGNED_BYTE,m_stRGBAData.pRGBAData,osg::Image::NO_DELETE);
-
-
-    osgDB::writeImageFile(*pImage,"./Data/abc.png");
-
-    m_pDrawNode = m_pSceneGraph->ResouceLoader()->CreateImageNode("abc.png",m_stRGBAData.unWidth, m_stRGBAData.unHeight)->asGeometry();
-    m_pRootNode = m_pDrawNode.get();
-
-    pImage.release();
-    AddNode(m_pProgramNode.get(),m_pDrawNode.get());
-
-}
 void CSceneImage::FrameCall()
 {
+    if(m_bGeomertyChanged)
+    {
+        m_pDrawNode = m_pQImageDrawNode;
+        SetOsgNode(m_pDrawNode.get());
+        m_bGeomertyChanged = false;
+    }
+
+    if(m_bPathChanged)
+    {
+        m_pDrawNode = m_pSceneGraph->ResouceLoader()->CreateImageNode(m_sImagePath)->asGeometry();
+        SetOsgNode(m_pDrawNode.get());
+        m_bPathChanged =false;
+    }
+
+    if(m_bImageDataChanged)
+    {
+        m_pDrawNode = m_pSceneGraph->ResouceLoader()->CreateImageNode(&(IImage::m_stRGBAData))->asGeometry();
+        SetOsgNode(m_pDrawNode.get());
+        m_bImageDataChanged = false;
+    }
+
     if(m_bColorChanged)
     {
         if(m_pDrawNode.valid())
@@ -157,13 +55,20 @@ void CSceneImage::FrameCall()
             m_bColorChanged = false;
         }
     }
-    /// 是否一直显示
-    if (m_bShowTopChanged)
-    {
-        m_pRootNode->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,
-                                                    m_bShowTop ? osg::StateAttribute::OFF : osg::StateAttribute::ON);
 
-        m_bShowTopChanged = false;
+    if(m_stImageSize.bOutSet)
+    {
+        if(m_pDrawNode.valid())
+        {
+            auto pVertexArray = static_cast<osg::Vec3Array*>(m_pDrawNode->getVertexArray());
+            int nX(m_stImageSize.unWidth/2);
+            int nY(m_stImageSize.unHeight/2);
+
+            pVertexArray->at(0).set(-nX,-nY,0);
+            pVertexArray->at(1).set(-nX,nY,0);
+            pVertexArray->at(2).set(nX,-nY,0);
+            pVertexArray->at(3).set(nX,nY,0);
+        }
     }
     ImplSceneNode<IImage>::FrameCall();
 }

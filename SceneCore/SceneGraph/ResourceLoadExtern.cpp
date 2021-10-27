@@ -10,6 +10,7 @@
 #include <osgEarth/GLUtils>
 #include <osg/PointSprite>
 #include <osgViewer/View>
+#include <SceneGraph/SceneType.h>
 #include "ResourceLod.h"
 
 class ViewPortChanged:public osg::StateSet::Callback
@@ -44,7 +45,7 @@ private:
 osg::ref_ptr<osgEarth::VirtualProgram> g_pGlobal;
 
 /// 将QImage转成OsgImage
-osg::Image *CResourceLod::QImage2OsgImage(const QImage &rQImage)
+osg::Image *CResourceLod::LoadImage(const QImage &rQImage)
 {
     if(rQImage.format() != QImage::Format_RGBA8888)
     {
@@ -57,12 +58,55 @@ osg::Image *CResourceLod::QImage2OsgImage(const QImage &rQImage)
     }
 }
 
-/// 将图片转成节点
+/// 将根据内存中的数据构建图片
+osg::Image *CResourceLod::LoadImage(const RGBAData *rImageData)
+{
+    auto pFindOne = m_mapImage.find(rImageData->sInnerName);
+    if(m_mapImage.end() != pFindOne)
+    {
+        return(pFindOne->second);
+    }
+    else
+    {
+        int size = rImageData->unWidth*4;
+        unsigned char* pTempBuffer = new unsigned char[size]();
+        if(rImageData->bFlipVertically)
+        {
+            for(int i=rImageData->unHeight-1,j=0; i>j; --i,++j)
+            {
+                memcpy(pTempBuffer,rImageData->pRGBAData+j*size,size);
+                memcpy(rImageData->pRGBAData+j*size,rImageData->pRGBAData+i*size,size);
+                memcpy(rImageData->pRGBAData+i*size,pTempBuffer,size);
+            }
+        }
+        delete[]pTempBuffer;
+
+        osg::ref_ptr<osg::Image> pImage = new osg::Image;
+        pImage->setImage(rImageData->unWidth, rImageData->unHeight, 1,
+                         GL_RGBA,GL_RGBA, GL_UNSIGNED_BYTE,rImageData->pRGBAData,osg::Image::NO_DELETE);
+        return(pImage);
+    }
+}
+/// 将图片转成节点 begin
+osg::Node* CResourceLod::CreateImageNode(const QImage& rQImage)
+{
+    return(GetOrCreateNodeByImage(LoadImage(rQImage)));
+}
+
+osg::Node *CResourceLod::CreateImageNode(const RGBAData *rImageData)
+{
+    return(GetOrCreateNodeByImage(LoadImage(rImageData)));
+}
+
 osg::Node *CResourceLod::CreateImageNode(const std::string &sImagePath,int nWidth,int nHeight,bool bIsRef)
 {
-    auto pImage = LoadImage(sImagePath,nWidth,nHeight,bIsRef);
+    return(GetOrCreateNodeByImage(LoadImage(sImagePath,nWidth,nHeight,bIsRef)));
+}
+/// 将图片转成节点 end
 
-
+/// 根据图片创建节点
+osg::Node* CResourceLod::GetOrCreateNodeByImage(osg::Image* pImage)
+{
     auto pFind = m_mapImageNode.find(pImage);
     if(m_mapImageNode.end()!= pFind)
     {
@@ -88,7 +132,7 @@ osg::Node *CResourceLod::CreateImageNode(const std::string &sImagePath,int nWidt
         pTexCoordArray->at(2).set(1,0);
         pTexCoordArray->at(3).set(1,1);
 
-        auto pTexture = LoadTexture(sImagePath,bIsRef);
+        auto pTexture = LoadTexture(pImage);
 
         int nX(pImage->s()/2);
         int nY(pImage->t()/2);

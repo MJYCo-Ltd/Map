@@ -114,36 +114,26 @@ osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
 /// 加载纹理
 osg::Texture2D *CResourceLod::LoadTexture(const std::string &sTexturePath,bool bIsRef)
 {
-    std::string texturePath;
-    if(bIsRef)
+    return(LoadTexture(LoadImage(sTexturePath,0,0,bIsRef)));
+}
+
+/// 通过图片加载纹理
+osg::Texture2D* CResourceLod::LoadTexture(osg::Image* pImage)
+{
+    auto pFindOne = m_mapTexture.find(pImage);
+    if(m_mapTexture.end() != pFindOne)
     {
-        texturePath = m_sAppPath + sTexturePath;
+        return(pFindOne->second);
     }
     else
     {
-        texturePath = sTexturePath;
-    }
+        auto pTexture = new osg::Texture2D;
+        pTexture->setImage(pImage);
+        pTexture->setFilter(osg::Texture::MIN_FILTER, osg::Texture::LINEAR);
+        pTexture->setFilter(osg::Texture::MAG_FILTER, osg::Texture::LINEAR);
+        pTexture->setResizeNonPowerOfTwoHint(false);
 
-    auto itor = m_mapTexture.find(texturePath);
-    if(m_mapTexture.end() != itor)
-    {
-        return(itor->second.get());
-    }
-    else
-    {
-        osg::Image* pImage = LoadImage(texturePath,0,0,false);
-        osg::Texture2D* pTexture = nullptr;
-        if(nullptr != pImage)
-        {
-            pTexture = new osg::Texture2D;
-            pTexture->setImage(pImage);
-            pTexture->setFilter(osg::Texture::MIN_FILTER, osg::Texture::LINEAR);
-            pTexture->setFilter(osg::Texture::MAG_FILTER, osg::Texture::LINEAR);
-            pTexture->setResizeNonPowerOfTwoHint(false);
-
-            m_mapTexture[texturePath] = pTexture;
-        }
-
+        m_mapTexture[pImage] = pTexture;
         return(pTexture);
     }
 }
@@ -237,36 +227,7 @@ osg::Image *CResourceLod::LoadImage(const std::string &sImagePath, int nWidth, i
         return(pImage);
     }
 }
-/// 创建virtualProgram
-osg::StateSet* CResourceLod::CreateStateSet(const std::string& sGLSLPath,bool bIsRef)
-{
-    if(sGLSLPath.npos != sGLSLPath.find("GLSL"))
-    {
-        static std::string glslPath;
 
-        if(bIsRef)
-        {
-            glslPath = m_sAppPath + sGLSLPath;
-        }
-        else
-        {
-            glslPath = sGLSLPath;
-        }
-        osg::StateSet* pParentStateSet = new osg::StateSet;
-        static osgEarth::Util::Shaders shader;
-
-        /// 创建方程
-        auto pVirtualProgram = osgEarth::VirtualProgram::getOrCreate(pParentStateSet);
-        shader.load(pVirtualProgram,glslPath);
-
-        InitSateSet(pParentStateSet,osgDB::getSimpleFileName(glslPath));
-
-        m_mapStateSet[glslPath] = pParentStateSet;
-
-        return(pParentStateSet);
-    }
-    return(nullptr);
-}
 /// 加载virtualProgram
 osg::StateSet* CResourceLod::GetOrCreateStateSet(const std::string& sGLSLPath,bool bIsRef)
 {

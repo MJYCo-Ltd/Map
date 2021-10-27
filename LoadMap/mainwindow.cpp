@@ -643,16 +643,16 @@ void MainWindow::on_action12_triggered()
     pLine->OpenGlow(true);
 
     /// 绘制图片
-    QImage image = QImage("E:/splash-620x300.png").convertToFormat(QImage::Format_RGBA8888);
+//    QImage image = QImage("E:/splash-620x300.png").convertToFormat(QImage::Format_RGBA8888);
     auto pImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
     pImage->SetImagePath("Image/Mine/17.png");
-    RGBAData data;
-    data.unWidth = image.width();
-    data.unHeight = image.height();
-    data.bFlipVertically=true;
-    data.pRGBAData = new unsigned char[image.byteCount()]();
-    memcpy(data.pRGBAData,image.bits(),image.byteCount());
-    pImage->SetRGBAData(data);
+//    RGBAData data;
+//    data.unWidth = image.width();
+//    data.unHeight = image.height();
+//    data.bFlipVertically=true;
+//    data.pRGBAData = new unsigned char[image.byteCount()]();
+//    memcpy(data.pRGBAData,image.bits(),image.byteCount());
+//    pImage->SetRGBAData(data);
 
     color.fG=color.fB=.0f;
     pImage->SetColor(color);

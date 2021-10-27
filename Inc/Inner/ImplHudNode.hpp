@@ -17,7 +17,7 @@ protected:
     {
         m_pControl = pControl;
         m_pControl->setAlign(osgEarth::Controls::Control::ALIGN_LEFT,osgEarth::Controls::Control::ALIGN_BOTTOM);
-        ImplSceneNode<T>::SetOsgNode(pControl);
+        ImplSceneNode<T>::m_pProgramNode = pControl;
     }
 
     /// 位置更改

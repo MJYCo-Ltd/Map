@@ -9,8 +9,9 @@ public:
     CONSTRUCTOR(CSceneImage,ImplSceneNode<IImage>)
 protected:
     void ImageSizeChanged();
-    void ImagePathChanged();//SET_TRUE_NODE_UPDATE(m_bPathChanged)
-    void ImageDataChanged();//SET_TRUE_NODE_UPDATE(m_bImageDataChanged)
+    void ImagePathChanged()SET_TRUE_NODE_UPDATE(m_bPathChanged)
+    void ImageDataChanged()SET_TRUE_NODE_UPDATE(m_bImageDataChanged)
+    void SetQImage(const QImage& rImage);
 
     void InitNode();
     /**
@@ -31,7 +32,9 @@ protected:
     bool m_bPathChanged{false};
     bool m_bImageDataChanged{false};
     bool m_bColorChanged{false};
+    bool m_bGeomertyChanged{false};
     osg::observer_ptr<osg::Geometry> m_pDrawNode;
+    osg::observer_ptr<osg::Geometry> m_pQImageDrawNode;
 };
 
 #endif // CSCENEIMAGE_H

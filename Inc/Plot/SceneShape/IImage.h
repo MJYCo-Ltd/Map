@@ -2,6 +2,8 @@
 #define INTERFACE_IMAGE_HEARDER_H
 #include <string>
 #include <Plot/SceneShape/IShape.h>
+
+class QImage;
 /**
  * @brief 图片尺寸结构体
  */
@@ -56,8 +58,14 @@ public:
      * @brief 设置内存图片
      */
     void SetRGBAData(const RGBAData& rRGBAData)JUDGE_EQUAL_CALL_FUNCTION(rRGBAData,m_stRGBAData,ImageDataChanged)
-    protected:
-        virtual ~IImage(){}
+
+    /**
+     * @brief 通过设置QImage设置图片内容
+     * @param rImage
+     */
+    virtual void SetQImage(const QImage& rImage)=0;
+protected:
+    virtual ~IImage(){}
 
     /// 状态更改
     virtual void ImageSizeChanged()=0;
