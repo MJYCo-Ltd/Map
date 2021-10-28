@@ -289,7 +289,7 @@ void MainWindow::on_action_triggered()
         m_pTrackNode = pSatelliteSensor;
     }
     PlotMap();
-//    LodPlot();
+    LodPlot();
 //    LoadQingxie();
 }
 
@@ -377,40 +377,42 @@ void MainWindow::PlotMap()
 
     pos.dX = -121.5;
     pos.dY = 25;
-    pos.dZ = 100;
+    pos.dZ = 1050;
     SceneColor color;
     color.fG = .0f;
     color.fB = .0f;
 
     /// 绘制线
     auto m_pLine = dynamic_cast<IMapLine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLine"));
+    pos.dX = 122.8;
+    pos.dY = 26.8;
     m_pLine->GetDrawLine()->AddPoint(pos);
-    pos.dX = -92;
-    pos.dY = 26;
+    pos.dX = 122.82;
+    pos.dY = 26.82;
     m_pLine->GetDrawLine()->AddPoint(pos);
-    pos.dX = -45;
-    pos.dY = 45;
+    pos.dX = 122.83;
+    pos.dY = 26.84;
     m_pLine->GetDrawLine()->AddPoint(pos);
-    pos.dX = 0;
-    pos.dY = 60;
+    pos.dX = 122.84;
+    pos.dY = 26.83;
     m_pLine->GetDrawLine()->AddPoint(pos);
-    pos.dX = 10;
-    pos.dY = 45;
+    pos.dX = 122.84;
+    pos.dY = 26.83;
     m_pLine->GetDrawLine()->AddPoint(pos);
-    pos.dX = 40;
-    pos.dY = 35;
+    pos.dX = 122.85;
+    pos.dY = 26.84;
     m_pLine->GetDrawLine()->AddPoint(pos);
-    pos.dX = 123;
+    pos.dX = 122.85;
     pos.dY = 27;
     m_pLine->GetDrawLine()->AddPoint(pos);
-    pos.dX = 170;
-    pos.dY = 25;
+    pos.dX = 123;
+    pos.dY = 27.6;
     m_pLine->GetDrawLine()->AddPoint(pos);
     m_pLine->GetDrawLine()->SetColor(color);
-    m_pLine->GetDrawLine()->SetLineWidth(20.f);
-    m_pLine->GetDrawLine()->OpenGlow(false);
+    m_pLine->GetDrawLine()->SetLineWidth(2.f);
+//    m_pLine->GetDrawLine()->OpenGlow(false);
     m_pLine->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
-    //m_pLayer->AddSceneNode(m_pLine);
+    m_pLayer->AddSceneNode(m_pLine);
     qDebug()<<"hhhh";
 
     /// 绘制区域
@@ -487,22 +489,22 @@ void MainWindow::LodPlot()
     auto pNewImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
     pNewImage->SetImagePath("Image/China.png");
     auto pAutoImage1 = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
-    pAutoImage1->SetMinScal(1.);
+    pAutoImage1->SetAutoScal(true);
     pAutoImage1->AddSceneNode(pNewImage);
 
     auto pNewImage1 = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
     pNewImage1->SetImagePath("Image/ship.png");
     auto pAutoImage2 = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
-    pAutoImage2->SetMinScal(1.);
+    pAutoImage2->SetAutoScal(true);
     pAutoImage2->AddSceneNode(pNewImage1);
 
     auto pLod = m_pSceneGraph->GetPlot()->CreateSceneGroup(LOD_GROUP)->AsSceneLodGroup();
     pLod->AddSceneNode(pAutoImage1);
     pLod->AddSceneNode(pAutoImage2);
 
-    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("D:/MyData/Tencent/BIMGIS_scz20201013/data/3dmodel/tree2.FBX",false);
+    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("Model/AirPlane.ive");
     auto pAutoModel = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
-    pAutoModel->SetMinScal(1.);
+    pAutoModel->SetAutoScal(true);
     pAutoModel->AddSceneNode(pModel);
     pLod->AddSceneNode(pAutoModel);
 
@@ -513,8 +515,8 @@ void MainWindow::LodPlot()
     pLod->SetLevelsInfo(vLevelInfo);
 
     ScenePos pos;
-    pos.dX = 121.f;
-    pos.dY = 27.f;
+    pos.dX = 122.84;
+    pos.dY = 26.83;
     pos.dZ = 1000.f;
     auto pEarthLocation1 = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
     pEarthLocation1->SetSceneNode(pLod);
