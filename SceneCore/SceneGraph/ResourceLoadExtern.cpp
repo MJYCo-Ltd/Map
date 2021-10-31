@@ -9,6 +9,7 @@
 #include <osg/BlendFunc>
 #include <osgEarth/GLUtils>
 #include <osg/PointSprite>
+#include <osg/PolygonOffset>
 #include <osgViewer/View>
 #include <SceneGraph/SceneType.h>
 #include "ResourceLod.h"
@@ -147,6 +148,7 @@ osg::Node* CResourceLod::GetOrCreateNodeByImage(osg::Image* pImage)
         auto pDepth = new osg::Depth;
         pDepth->setWriteMask(false);
         pGeometry->getOrCreateStateSet()->setAttribute(pDepth);
+        pGeometry->getOrCreateStateSet()->setAttributeAndModes(new osg::PolygonOffset(-1.f,-1.f));
         pGeometry->getOrCreateStateSet()->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
         m_mapImageNode[pImage] = pGeometry;
         return(pGeometry);
@@ -198,7 +200,6 @@ void CResourceLod::InitSateSet(osg::StateSet* pStateSete,const std::string& sFil
 
         osgEarth::GLUtils::setLighting(pStateSete, osg::StateAttribute::OFF);
         pStateSete->setAttributeAndModes( new osg::CullFace(osg::CullFace::FRONT), osg::StateAttribute::ON );
-        pStateSete->setAttribute( new osg::Depth( osg::Depth::LESS, 0, 1, false ) ); // no depth write
         pStateSete->setAttribute( new osg::Depth(osg::Depth::ALWAYS, 0, 1, false) ); // no zbuffer
         pStateSete->setAttributeAndModes( new osg::BlendFunc( GL_ONE, GL_ONE ), osg::StateAttribute::ON );
 

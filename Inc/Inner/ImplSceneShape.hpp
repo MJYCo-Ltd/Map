@@ -18,11 +18,15 @@ public:
     void InitNode()
     {
         ImplSceneNode<T>::InitNode();
+
+        /// 创建显示叶节点
+        m_pShapeGeod = new osg::Geode;
+        m_pShapeGeod->setStateSet(GetOrCreateStateSet(BLEND_STATE));
+
+        /// 创建显示体
         m_pGeometry = new osg::Geometry;
         m_pGeometry->setDataVariance(osg::Object::DYNAMIC);
-
-//        m_pGeometry->setStateSet(GetOrCreateStateSet(SCENESHAPE));
-
+        m_pShapeGeod->addDrawable(m_pGeometry.get());
 
         /// 创建颜色
         m_pColorArray = new osg::Vec4Array;
@@ -39,7 +43,9 @@ public:
         CreateShape();
 
         m_pGeometry->setNodeMask(~PICK_MASK);
-        ImplSceneNode<T>::SetOsgNode(m_pGeometry.get());
+
+        ImplSceneNode<T>::m_pProgramNode->addChild(m_pShapeGeod);
+        ImplSceneNode<T>::m_pRootNode = m_pGeometry.get();
     }
 
 protected:
@@ -79,6 +85,7 @@ protected:
     }
 protected:
     osg::observer_ptr<osg::Geometry> m_pGeometry;
+    osg::ref_ptr<osg::Geode>         m_pShapeGeod;
     osg::ref_ptr<osg::Vec3Array>     m_pVertexArray;
     osg::ref_ptr<osg::Vec4Array>     m_pColorArray;
     bool       m_bColorChanged{false};

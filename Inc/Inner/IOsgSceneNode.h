@@ -3,6 +3,7 @@
 #include <osg/Group>
 #include <osg/Depth>
 #include <osg/PolygonMode>
+#include <osg/PolygonOffset>
 
 /**
  * @brief 场景依附节点
@@ -29,11 +30,13 @@ public:
     virtual void DelFromParent(osg::Group*){}
 };
 
+///
 enum STATESET_TYPE
 {
     BLEND_STATE,
     LINE_STATE,
-    FACE_STATE
+    FACE_STATE,
+    POLYGON_OFFSET_STATE
 };
 
 /**
@@ -157,6 +160,7 @@ public:
                 auto pDepth = new osg::Depth;
                 pDepth->setWriteMask(false);
                 pStateSet->setAttribute(pDepth);
+                pStateSet->setAttributeAndModes(new osg::PolygonOffset(-1.f,-1.f));
                 pStateSet->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
             }
                 break;
@@ -164,14 +168,21 @@ public:
             {
                 pStateSet= new osg::StateSet;
                 pStateSet->setAttributeAndModes(
-                new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK,osg::PolygonMode::FILL));
+                            new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK,osg::PolygonMode::FILL));
             }
                 break;
             case LINE_STATE:
             {
                 pStateSet= new osg::StateSet;
                 pStateSet->setAttributeAndModes(
-                new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK,osg::PolygonMode::LINE));
+                            new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK,osg::PolygonMode::LINE));
+            }
+                break;
+
+            case POLYGON_OFFSET_STATE:
+            {
+                pStateSet= new osg::StateSet;
+                pStateSet->setAttributeAndModes(new osg::PolygonOffset(-1.f,-1.f));
             }
                 break;
             }
