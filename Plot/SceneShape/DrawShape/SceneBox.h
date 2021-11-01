@@ -14,9 +14,6 @@ protected:
     void UpdateShape();
 
     void CreateShape();
-protected:
-//    osg::ref_ptr<osg::Vec2Array> m_pTexCoords;
-    osg::ref_ptr<osg::Vec3Array> m_pNormals;
 };
 
 #endif // CSCENEBOX_H

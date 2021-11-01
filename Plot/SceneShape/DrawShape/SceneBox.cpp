@@ -46,7 +46,6 @@ void CSceneBox::CreateShape()
     m_pVertexArray->resize(24);
     UpdateShape();
 
-    m_pNormals = new osg::Vec3Array(osg::Array::BIND_PER_VERTEX);
     // -ve y plane
     m_pNormals->push_back(osg::Vec3(0.0f,-1.0f,0.0f));
     //TexCoord2f(0.0f,1.0f);

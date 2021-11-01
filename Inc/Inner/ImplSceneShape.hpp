@@ -38,8 +38,7 @@ public:
         m_pGeometry->setVertexArray(m_pVertexArray);
 
         ///创建法线
-        m_pNormals = new osg::Vec3Array(osg::Array::BIND_OVERALL);
-        m_pNormals->push_back(osg::Vec3(0.f,0.f,1.f));
+        m_pNormals = new osg::Vec3Array(osg::Array::BIND_PER_VERTEX);
         m_pGeometry->setNormalArray(m_pNormals);
 
         /**

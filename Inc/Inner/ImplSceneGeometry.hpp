@@ -146,24 +146,39 @@ protected:
             T::m_pDealPoint->ShapeChanged();
 
             m_listAllPos.Get(vSourcePos);
-            ImplSceneShape<T>::m_pVertexArray->resize(vSourcePos.size());
 
             std::vector<ScenePos> vAllConverdPos(vSourcePos.size());
             if(T::m_pDealPoint->Conversion(vSourcePos,vAllConverdPos))
             {
+                ImplSceneShape<T>::m_pVertexArray->resize(vSourcePos.size());
+                ImplSceneShape<T>::m_pNormals->resize(vSourcePos.size());
+                osg::Vec3 vPos;
                 for(auto one : vAllConverdPos)
                 {
-                    ImplSceneShape<T>::m_pVertexArray->at(nIndex++).set(one.dX,one.dY,one.dZ);
+                    ImplSceneShape<T>::m_pVertexArray->at(nIndex).set(one.dX,one.dY,one.dZ);
+                    vPos.set(one.dX,one.dY,one.dZ);
+                    vPos.normalize();
+                    ImplSceneShape<T>::m_pNormals->at(nIndex).set(vPos);
+                    ++nIndex;
                 }
+
+                return;
             }
         }
-        else
+
+        /// 不更改的
         {
             m_listAllPos.Get(vSourcePos);
             ImplSceneShape<T>::m_pVertexArray->resize(vSourcePos.size());
+            ImplSceneShape<T>::m_pNormals->resize(vSourcePos.size());
+            osg::Vec3 vPos;
             for(auto one : vSourcePos)
             {
-                ImplSceneShape<T>::m_pVertexArray->at(nIndex++).set(one.dX,one.dY,one.dZ);
+                vPos.set(one.dX,one.dY,one.dZ);
+                ImplSceneShape<T>::m_pVertexArray->at(nIndex).set(one.dX,one.dY,one.dZ);
+                vPos.normalize();
+                ImplSceneShape<T>::m_pNormals->at(nIndex).set(vPos);
+                ++nIndex;
             }
         }
     }
