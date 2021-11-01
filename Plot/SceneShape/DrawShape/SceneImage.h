@@ -8,6 +8,7 @@ class CSceneImage:public ImplSceneNode<IImage>
 public:
     CONSTRUCTOR(CSceneImage,ImplSceneNode<IImage>)
 protected:
+    ~CSceneImage();
     void ImageSizeChanged();
     void ImagePathChanged()SET_TRUE_NODE_UPDATE(m_bPathChanged)
     void ImageDataChanged()SET_TRUE_NODE_UPDATE(m_bImageDataChanged)
@@ -34,7 +35,8 @@ protected:
     bool m_bColorChanged{false};
     bool m_bGeomertyChanged{false};
     osg::observer_ptr<osg::Geometry> m_pDrawNode;
-    osg::observer_ptr<osg::Geometry> m_pQImageDrawNode;
+    osg::ref_ptr<osg::Geometry> m_pQImageDrawNode;
+    static std::map<std::string,osg::observer_ptr<osg::Geometry>>s_mapID2ImageNode;
 };
 
 #endif // CSCENEIMAGE_H

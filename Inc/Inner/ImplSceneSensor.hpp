@@ -111,7 +111,7 @@ protected:
     void InitNode()
     {
         ImplSceneShape<T>::InitNode();
-        m_pGeometry->setStateSet(GetOrCreateStateSet(BLEND_STATE));
+        ImplSceneShape<T>::m_pGeometry->setStateSet(ImplSceneShape<T>::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(BLEND_STATE));
 
         m_pLineGroup = new osg::Group;
         m_pFaceGroup = new osg::Group;
@@ -134,9 +134,9 @@ protected:
         m_pFaceGroup->addChild(m_pRenderGroup);
 
         /// 线模型只绘制线 面模型只绘制面
-        m_pRenderGroup->setStateSet(this->GetOrCreateStateSet(BLEND_STATE));
-        m_pLineGroup->setStateSet(this->GetOrCreateStateSet(LINE_STATE));
-        m_pFaceGroup->setStateSet(this->GetOrCreateStateSet(FACE_STATE));
+        m_pRenderGroup->setStateSet(ImplSceneShape<T>::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(BLEND_STATE));
+        m_pLineGroup->setStateSet(ImplSceneShape<T>::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(LINE_STATE));
+        m_pFaceGroup->setStateSet(ImplSceneShape<T>::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(FACE_STATE));
 
         ImplSceneShape<T>::SetOsgNode(m_pScalTransform.get());
     }

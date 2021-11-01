@@ -75,6 +75,14 @@ struct SceneColor
     {
         return(!(this->operator==(rOther)));
     }
+
+    bool IsDefault()
+    {
+        return(JUDGE_FLOAT_EQUAL(fR,1.f)
+               && JUDGE_FLOAT_EQUAL(fG,1.f)
+               && JUDGE_FLOAT_EQUAL(fB,1.f)
+               && JUDGE_FLOAT_EQUAL(fA,1.f));
+    }
 };
 
 /// 姿态信息

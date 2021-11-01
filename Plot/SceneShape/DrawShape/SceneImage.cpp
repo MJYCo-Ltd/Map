@@ -1,5 +1,23 @@
 #include "SceneImage.h"
 #include <osgDB/WriteFile>
+std::map<std::string,osg::observer_ptr<osg::Geometry>> CSceneImage::s_mapID2ImageNode;
+
+CSceneImage::~CSceneImage()
+{
+    /// 移除没有用的节点
+    for(auto one=s_mapID2ImageNode.begin();one!=s_mapID2ImageNode.end();)
+    {
+        if(!one->second.valid())
+        {
+            one = s_mapID2ImageNode.erase(one);
+        }
+        else
+        {
+            ++one;
+        }
+    }
+}
+
 void CSceneImage::ImageSizeChanged()
 {
     if(m_stImageSize)
@@ -29,6 +47,7 @@ void CSceneImage::FrameCall()
     {
         m_pDrawNode = m_pQImageDrawNode;
         SetOsgNode(m_pDrawNode.get());
+        m_pQImageDrawNode=nullptr;
         m_bGeomertyChanged = false;
     }
 
@@ -46,29 +65,62 @@ void CSceneImage::FrameCall()
         m_bImageDataChanged = false;
     }
 
-    if(m_bColorChanged)
+    if(m_pDrawNode.valid())
     {
-        if(m_pDrawNode.valid())
+        void* ss = reinterpret_cast<void*>(m_pDrawNode.get());
+        std::stringstream ss1;
+        ss1 << ss ;
+        ss1 << '_';
+
+        if(m_bColorChanged)
         {
-            static_cast<osg::Vec4Array*>(m_pDrawNode->getColorArray())
-                    ->at(0).set(m_stColor.fR,m_stColor.fG,m_stColor.fB,m_stColor.fA);
-            m_bColorChanged = false;
+            ss1<<(int)(m_stColor.fR*1e3+m_stColor.fG*1e2+m_stColor.fB*10+m_stColor.fA);
+            ss1<<'_';
+        }
+
+        if(m_bSizeChanged)
+        {
+            ss1<<"width_"<<m_stImageSize.unWidth<<"height_"<<m_stImageSize.unHeight;
+        }
+
+        /// 如果颜色修改或者大小修改
+        if(m_bColorChanged || m_bSizeChanged)
+        {
+            auto pFindOne = s_mapID2ImageNode.find(ss1.str());
+            if(s_mapID2ImageNode.end() != pFindOne && pFindOne->second.valid())
+            {
+                SetOsgNode(pFindOne->second.get());
+            }
+            else
+            {
+                auto pNewNode = reinterpret_cast<osg::Geometry*>(m_pDrawNode->clone(osg::CopyOp::DEEP_COPY_ARRAYS
+                                                                           |osg::CopyOp::DEEP_COPY_PRIMITIVES));
+
+                if(m_bColorChanged)
+                {
+                    static_cast<osg::Vec4Array*>(pNewNode->getColorArray())
+                            ->at(0).set(m_stColor.fR,m_stColor.fG,m_stColor.fB,m_stColor.fA);
+                    m_bColorChanged = false;
+                }
+
+                if(m_bSizeChanged)
+                {
+                    auto pVertexArray = reinterpret_cast<osg::Vec3Array*>(pNewNode->getVertexArray());
+                    int nX(m_stImageSize.unWidth/2);
+                    int nY(m_stImageSize.unHeight/2);
+
+                    pVertexArray->at(0).set(-nX,-nY,0);
+                    pVertexArray->at(1).set(-nX,nY,0);
+                    pVertexArray->at(2).set(nX,-nY,0);
+                    pVertexArray->at(3).set(nX,nY,0);
+                    m_bSizeChanged=false;
+                }
+
+                SetOsgNode(pNewNode);
+                s_mapID2ImageNode[ss1.str()] = pNewNode;
+            }
         }
     }
 
-    if(m_stImageSize.bOutSet)
-    {
-        if(m_pDrawNode.valid())
-        {
-            auto pVertexArray = static_cast<osg::Vec3Array*>(m_pDrawNode->getVertexArray());
-            int nX(m_stImageSize.unWidth/2);
-            int nY(m_stImageSize.unHeight/2);
-
-            pVertexArray->at(0).set(-nX,-nY,0);
-            pVertexArray->at(1).set(-nX,nY,0);
-            pVertexArray->at(2).set(nX,-nY,0);
-            pVertexArray->at(3).set(nX,nY,0);
-        }
-    }
     ImplSceneNode<IImage>::FrameCall();
 }

@@ -21,7 +21,7 @@ public:
 
         /// 创建显示叶节点
         m_pShapeGeod = new osg::Geode;
-        m_pShapeGeod->setStateSet(GetOrCreateStateSet(BLEND_STATE));
+        m_pShapeGeod->setStateSet(ImplSceneNode<T>::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(BLEND_STATE));
 
         /// 创建显示体
         m_pGeometry = new osg::Geometry;

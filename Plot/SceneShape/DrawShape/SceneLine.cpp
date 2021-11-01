@@ -1,3 +1,4 @@
+#include <osg/Depth>
 #include "SceneLine.h"
 
 void CSceneLine::CreateShape()

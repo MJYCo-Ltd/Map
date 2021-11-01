@@ -49,14 +49,11 @@ private:
 static std::set<std::string> s_gNeedAss;
 static const std::string s_gEarth("earth");
 
-extern osg::ref_ptr<osgEarth::VirtualProgram> g_pGlobal;
 /// 初始化路径
 CResourceLod::CResourceLod()
 {
     s_gNeedAss.insert("fbx");
     s_gNeedAss.insert("obj");
-    g_pGlobal = new osgEarth::VirtualProgram;
-    g_pGlobal->setInheritShaders(true);
 }
 
 void CResourceLod::InitPath(const std::string &csAppPath)
@@ -296,4 +293,5 @@ void CResourceLod::ClearNoUse()
     ClearMap(m_mapTexture);
     ClearMap(m_mapFont);
     ClearMap(m_mapStateSet);
+    ClearMap(m_mapType2StateSets);
 }

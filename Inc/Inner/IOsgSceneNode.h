@@ -1,9 +1,6 @@
 #ifndef INTERFACE_OSG_SCENE_NODE_H
 #define INTERFACE_OSG_SCENE_NODE_H
 #include <osg/Group>
-#include <osg/Depth>
-#include <osg/PolygonMode>
-#include <osg/PolygonOffset>
 
 /**
  * @brief 场景依附节点
@@ -28,15 +25,6 @@ public:
      * @brief 从父节点移除
      */
     virtual void DelFromParent(osg::Group*){}
-};
-
-///
-enum STATESET_TYPE
-{
-    BLEND_STATE,
-    LINE_STATE,
-    FACE_STATE,
-    POLYGON_OFFSET_STATE
 };
 
 /**
@@ -136,65 +124,6 @@ public:
         }
     }
 
-    /**
-     * @brief 获取或者创建指定的渲染指示器
-     * @return
-     */
-    osg::StateSet* GetOrCreateStateSet(STATESET_TYPE type)
-    {
-        auto pFindone = s_globalStateSets.find(type);
-        if(s_globalStateSets.end() != pFindone)
-        {
-            return(pFindone->second);
-        }
-        else
-        {
-            osg::StateSet* pStateSet{nullptr};
-
-            switch (type)
-            {
-            case BLEND_STATE:
-            {
-                pStateSet= new osg::StateSet;
-                pStateSet->setMode(GL_BLEND,osg::StateAttribute::ON);
-                auto pDepth = new osg::Depth;
-                pDepth->setWriteMask(false);
-                pStateSet->setAttribute(pDepth);
-                pStateSet->setAttributeAndModes(new osg::PolygonOffset(-1.f,-1.f));
-                pStateSet->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
-            }
-                break;
-            case FACE_STATE:
-            {
-                pStateSet= new osg::StateSet;
-                pStateSet->setAttributeAndModes(
-                            new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK,osg::PolygonMode::FILL));
-            }
-                break;
-            case LINE_STATE:
-            {
-                pStateSet= new osg::StateSet;
-                pStateSet->setAttributeAndModes(
-                            new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK,osg::PolygonMode::LINE));
-            }
-                break;
-
-            case POLYGON_OFFSET_STATE:
-            {
-                pStateSet= new osg::StateSet;
-                pStateSet->setAttributeAndModes(new osg::PolygonOffset(-1.f,-1.f));
-            }
-                break;
-            }
-
-            if(nullptr != pStateSet)
-            {
-                s_globalStateSets[type] = pStateSet;
-            }
-            return(pStateSet);
-        }
-    }
-
 protected:
 
     /**
@@ -209,6 +138,5 @@ protected:
     osg::ref_ptr<osg::Group>   m_pProgramNode; /// 用于设置着色器程序的节点
     std::set<ISceneNodeAttach*> m_allAttach;   /// 依附的点
     bool                       m_bCanDelete{true};
-    static std::map<STATESET_TYPE,osg::ref_ptr<osg::StateSet>> s_globalStateSets;
 };
 #endif

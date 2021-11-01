@@ -43,7 +43,61 @@ private:
     osg::ref_ptr<osg::Uniform> cameraSize;
 };
 
-osg::ref_ptr<osgEarth::VirtualProgram> g_pGlobal;
+/// 根据类型创建渲染状态
+osg::StateSet* CResourceLod::GetOrCreateStateSet(STATESET_TYPE enType)
+{
+    auto pFindone = m_mapType2StateSets.find(enType);
+    if(m_mapType2StateSets.end() != pFindone)
+    {
+        return(pFindone->second);
+    }
+    else
+    {
+        osg::StateSet* pStateSet{nullptr};
+
+        switch (enType)
+        {
+        case BLEND_STATE:
+        {
+            pStateSet= new osg::StateSet;
+            pStateSet->setMode(GL_BLEND,osg::StateAttribute::ON);
+            auto pDepth = new osg::Depth;
+            pDepth->setWriteMask(false);
+            pStateSet->setAttribute(pDepth);
+            pStateSet->setAttributeAndModes(new osg::PolygonOffset(-1.f,-1.f));
+            pStateSet->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
+        }
+            break;
+        case FACE_STATE:
+        {
+            pStateSet= new osg::StateSet;
+            pStateSet->setAttributeAndModes(
+                        new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK,osg::PolygonMode::FILL));
+        }
+            break;
+        case LINE_STATE:
+        {
+            pStateSet= new osg::StateSet;
+            pStateSet->setAttributeAndModes(
+                        new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK,osg::PolygonMode::LINE));
+        }
+            break;
+
+        case POLYGON_OFFSET_STATE:
+        {
+            pStateSet= new osg::StateSet;
+            pStateSet->setAttributeAndModes(new osg::PolygonOffset(-1.f,-1.f));
+        }
+            break;
+        }
+
+        if(nullptr != pStateSet)
+        {
+            m_mapType2StateSets[enType] = pStateSet;
+        }
+        return(pStateSet);
+    }
+}
 
 /// 将QImage转成OsgImage
 osg::Image *CResourceLod::LoadImage(const QImage &rQImage)

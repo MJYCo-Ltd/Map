@@ -23,7 +23,7 @@ static const char s_sSConeSensor[]="ISConeSensor";
 static const char s_sEllipsoidSensor[]="IEllipsoidSensor";
 static const char s_sBoxSensor[]="IBoxSensor";
 static const char s_sLabel[]="ILabel";
-std::map<STATESET_TYPE,osg::ref_ptr<osg::StateSet>> IOsgSceneNode::s_globalStateSets;
+
 ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName)
 {
     if(sInterfaceName == s_sConeSensor)

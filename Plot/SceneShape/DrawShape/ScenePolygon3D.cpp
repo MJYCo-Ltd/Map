@@ -4,7 +4,7 @@
 
 void CScenePolygon3D::CreateShape()
 {
-    m_pGeometry->setStateSet(GetOrCreateStateSet(BLEND_STATE));
+    m_pGeometry->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(BLEND_STATE));
 }
 
 /// 更新图形

@@ -55,6 +55,7 @@ public:
      * @brief 加载着色器
      */
     osg::StateSet* GetOrCreateStateSet(const std::string& sGLSLPath,bool bIsRef=true);
+    osg::StateSet* GetOrCreateStateSet(STATESET_TYPE enType);
 
     /**
      * @brief 清空不再使用的资源
@@ -72,6 +73,7 @@ protected:
     std::map<std::string,osg::ref_ptr<osg::StateSet>>  m_mapStateSet; /// shader程序加载的状态集合
     std::map<osg::Image*,osg::ref_ptr<osg::Texture2D>> m_mapTexture; /// 纹理映射
     std::map<osg::Image*,osg::ref_ptr<osg::Node>>      m_mapImageNode;/// 图片节点
+    std::map<STATESET_TYPE,osg::ref_ptr<osg::StateSet>> m_mapType2StateSets;
 };
 
 #endif // RESOURCELOD_H

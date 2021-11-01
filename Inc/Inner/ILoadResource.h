@@ -18,6 +18,15 @@ namespace osgText
 class QImage;
 struct RGBAData;
 
+/// 状态集合类型
+enum STATESET_TYPE
+{
+    BLEND_STATE,
+    LINE_STATE,
+    FACE_STATE,
+    POLYGON_OFFSET_STATE
+};
+
 /**
  * @brief 资源加载器
  */
@@ -92,6 +101,7 @@ public:
      * @return
      */
     virtual osg::StateSet* GetOrCreateStateSet(const std::string& sGLSLPath,bool bIsRef=true)=0;
+    virtual osg::StateSet* GetOrCreateStateSet(STATESET_TYPE enType)=0;
 
     /**
      * @brief 清空不再使用的资源

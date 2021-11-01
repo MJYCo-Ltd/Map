@@ -152,6 +152,7 @@ protected:
             {
                 ImplSceneShape<T>::m_pVertexArray->resize(vSourcePos.size());
                 ImplSceneShape<T>::m_pNormals->resize(vSourcePos.size());
+
                 osg::Vec3 vPos;
                 for(auto one : vAllConverdPos)
                 {

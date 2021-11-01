@@ -487,13 +487,20 @@ void MainWindow::PlotMap()
 void MainWindow::LodPlot()
 {
     auto pNewImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
-    pNewImage->SetImagePath("Image/China.png");
+    pNewImage->SetImagePath("Image/ship.png");
+    SceneImageSize stSize;
+    stSize.unWidth = stSize.unHeight = 100;
+    pNewImage->SetImageSize(stSize);
     auto pAutoImage1 = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
     pAutoImage1->SetAutoScal(true);
     pAutoImage1->AddSceneNode(pNewImage);
 
     auto pNewImage1 = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
     pNewImage1->SetImagePath("Image/ship.png");
+    SceneColor blueColor;
+    blueColor.fB = blueColor.fR = 0.f;
+    pNewImage1->SetColor(blueColor);
+
     auto pAutoImage2 = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
     pAutoImage2->SetAutoScal(true);
     pAutoImage2->AddSceneNode(pNewImage1);
