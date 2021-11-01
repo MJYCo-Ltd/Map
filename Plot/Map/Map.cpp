@@ -631,10 +631,10 @@ void CMap::FrameCall()
             static osgEarth::LogarithmicDepthBuffer s_logDepthBuffer;
 
             static osg::Vec3d eye,ignor;
-            m_pView->getCamera()->getViewMatrixAsLookAt(eye,ignor,ignor);
+            auto pEarthManipulator = static_cast<osgEarth::EarthManipulator*>(m_pView->getCameraManipulator());
 
             /// 获取操作器的距离
-            if(eye.length() - R_Earth < 3000)
+            if(pEarthManipulator->getViewpoint().range().value() < 22000)
             {
                 if(!m_bInstelld)
                 {
@@ -756,7 +756,8 @@ void CMap::Init3DLight()
     m_pLightPosUniform = stateset->getOrCreateUniform("atmos_v3LightDir",osg::Uniform::FLOAT_VEC3);
     m_pLightPosUniform->set( lightPos / lightPos.length());
 
-    float _outerRadius = osg::minimum(R_Earth2,R_Earth) * 1.025f;
+    const osgEarth::Ellipsoid& rEllipsoid = m_pCurMapNode->getMapSRS()->getEllipsoid();
+    float _outerRadius = osg::minimum(rEllipsoid.getRadiusEquator(),rEllipsoid.getRadiusPolar()) * 1.025f;
     stateset->getOrCreateUniform( "atmos_fOuterRadius",    osg::Uniform::FLOAT )->set(_outerRadius);
     stateset->getOrCreateUniform( "atmos_fOuterRadius2",   osg::Uniform::FLOAT )->set(_outerRadius * _outerRadius);
 

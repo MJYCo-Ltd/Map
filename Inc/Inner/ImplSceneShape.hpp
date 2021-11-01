@@ -37,6 +37,11 @@ public:
         m_pVertexArray = new osg::Vec3Array;
         m_pGeometry->setVertexArray(m_pVertexArray);
 
+        ///创建法线
+        m_pNormals = new osg::Vec3Array(osg::Array::BIND_OVERALL);
+        m_pNormals->push_back(osg::Vec3(0.f,0.f,1.f));
+        m_pGeometry->setNormalArray(m_pNormals);
+
         /**
          * @brief 构建绘制的形状
          */
@@ -88,6 +93,7 @@ protected:
     osg::ref_ptr<osg::Geode>         m_pShapeGeod;
     osg::ref_ptr<osg::Vec3Array>     m_pVertexArray;
     osg::ref_ptr<osg::Vec4Array>     m_pColorArray;
+    osg::ref_ptr<osg::Vec3Array>     m_pNormals;
     bool       m_bColorChanged{false};
     bool       m_bShapeChanged{false};
 };

@@ -22,6 +22,7 @@ void CSceneEllipsoid::UpdateShape()
     {
     case FULL_PART:
     {
+        m_pGeometry->setNormalBinding(osg::Geometry::BIND_PER_VERTEX);
         dLatSegmentSize = (dStartLat-dEndLat)/(double)nLatSegments; // degrees
         dLonSegmentSize = (dEndLon-dStartLon)/(double)nLonSegments; // degrees
         m_pVertexArray->reserve((nLatSegments+1) * (nLonSegments+1));
@@ -230,10 +231,6 @@ void CSceneEllipsoid::UpdateShape()
 void CSceneEllipsoid::CreateShape()
 {
     m_pEllipsoidModel = new osg::EllipsoidModel;
-
     m_pTexCoords = new osg::Vec2Array(osg::Array::BIND_PER_VERTEX);
-    m_pNormals = new osg::Vec3Array(osg::Array::BIND_PER_VERTEX);
-    m_pGeometry->setNormalArray(m_pNormals);
-//    m_pGeometry->setStateSet(GetOrCreateStateSet(SCENESHAPE));
     UpdateShape();
 }

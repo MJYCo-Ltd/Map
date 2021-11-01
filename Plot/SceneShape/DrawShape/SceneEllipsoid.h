@@ -21,7 +21,6 @@ protected:
 protected:
     osg::ref_ptr<osg::EllipsoidModel> m_pEllipsoidModel;
     osg::ref_ptr<osg::Vec2Array> m_pTexCoords;
-    osg::ref_ptr<osg::Vec3Array> m_pNormals;
 };
 
 #endif // CSCENEELLIPSOID_H
