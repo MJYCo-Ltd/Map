@@ -631,23 +631,26 @@ void CMap::FrameCall()
             static osgEarth::LogarithmicDepthBuffer s_logDepthBuffer;
 
             static osg::Vec3d eye,ignor;
-            auto pEarthManipulator = static_cast<osgEarth::EarthManipulator*>(m_pView->getCameraManipulator());
+            auto pEarthManipulator = dynamic_cast<osgEarth::EarthManipulator*>(m_pView->getCameraManipulator());
 
             /// 获取操作器的距离
-            if(pEarthManipulator->getViewpoint().range().value() < 22000)
+            if(nullptr != pEarthManipulator)
             {
-                if(!m_bInstelld)
+                if(pEarthManipulator->getViewpoint().range().value() < 22000)
                 {
-                    s_logDepthBuffer.install(m_pCurMapNode);
-                    m_bInstelld=true;
+                    if(!m_bInstelld)
+                    {
+                        s_logDepthBuffer.install(m_pCurMapNode);
+                        m_bInstelld=true;
+                    }
                 }
-            }
-            else
-            {
-                if(m_bInstelld)
+                else
                 {
-                    s_logDepthBuffer.uninstall(m_pCurMapNode);
-                    m_bInstelld=false;
+                    if(m_bInstelld)
+                    {
+                        s_logDepthBuffer.uninstall(m_pCurMapNode);
+                        m_bInstelld=false;
+                    }
                 }
             }
         }
