@@ -12,7 +12,6 @@
 #include <SceneGraph/SceneType.h>
 #include <SceneGraph/INodeAbility.h>
 #include <Inner/OsgExtern/NodeAbilityManager.h>
-#include <iostream>
 /**
  *  实现ISceneNode所有的接口
  */

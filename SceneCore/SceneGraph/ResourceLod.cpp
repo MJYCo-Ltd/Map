@@ -274,7 +274,7 @@ void ClearMap(T& value)
 {
     for(auto one = value.begin();one != value.end();)
     {
-        if(1 == one->second->referenceCount())
+        if(2 > one->second->referenceCount())
         {
             one = value.erase(one);
         }
@@ -294,4 +294,5 @@ void CResourceLod::ClearNoUse()
     ClearMap(m_mapFont);
     ClearMap(m_mapStateSet);
     ClearMap(m_mapType2StateSets);
+    ClearMap(m_mapImageNode);
 }

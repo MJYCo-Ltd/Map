@@ -17,15 +17,18 @@ public:
      */
     void operator()(osg::Object*)
     {
-        if(auto pGroup = m_pParent->asGroup())
+        if(m_pParent.valid())
         {
-            pGroup->removeChildren(0,pGroup->getNumChildren());
-        }
+            if(auto pGroup = m_pParent->asGroup())
+            {
+                pGroup->removeChildren(0,pGroup->getNumChildren());
+            }
 
-        auto parents = m_pParent->getParents();
-        for(auto one : parents)
-        {
-            one->removeChild(m_pParent);
+            auto parents = m_pParent->getParents();
+            for(auto one : parents)
+            {
+                one->removeChild(m_pParent);
+            }
         }
     }
 private:
@@ -39,7 +42,13 @@ class CClearChildNode:public osg::Operation
 {
 public:
     CClearChildNode(osg::Group* pParent):m_pParent(pParent){}
-    void operator()(osg::Object*){m_pParent->removeChildren(0,m_pParent->getNumChildren());}
+    void operator()(osg::Object*)
+    {
+        if(m_pParent.valid())
+        {
+            m_pParent->removeChildren(0,m_pParent->getNumChildren());
+        }
+    }
 private:
     osg::ref_ptr<osg::Group> m_pParent; /// 父节点
 };
@@ -52,17 +61,20 @@ class CModifyNode:public osg::Operation
 public:
     CModifyNode(osg::Group* pParent,osg::Node* pChild,
                 bool bAdd):m_pParent(pParent)
-                ,m_pChild(pChild),m_bAdd(bAdd){}
+      ,m_pChild(pChild),m_bAdd(bAdd){}
 
     void operator()(osg::Object*)
     {
-        if(m_bAdd)
+        if(m_pParent.valid())
         {
-            m_pParent->addChild(m_pChild);
-        }
-        else
-        {
-            m_pParent->removeChild(m_pChild);
+            if(m_bAdd)
+            {
+                m_pParent->addChild(m_pChild);
+            }
+            else
+            {
+                m_pParent->removeChild(m_pChild);
+            }
         }
     }
 private:
@@ -81,10 +93,13 @@ public:
 
     void operator()(osg::Object*)
     {
-        auto parentList = m_pOldNode->getParents();
-        for(auto one : parentList)
+        if(m_pOldNode.valid())
         {
-            one->setChild(one->getChildIndex(m_pOldNode),m_pNewNode);
+            auto parentList = m_pOldNode->getParents();
+            for(auto one : parentList)
+            {
+                one->setChild(one->getChildIndex(m_pOldNode),m_pNewNode);
+            }
         }
     }
 private:
@@ -104,13 +119,16 @@ public:
 
     void operator()(osg::Object*)
     {
-        if(m_bAdd)
+        if(m_pCanvas.valid())
         {
-            m_pCanvas->addControl(m_pControl.get());
-        }
-        else
-        {
-            m_pCanvas->removeControl(m_pControl.get());
+            if(m_bAdd)
+            {
+                m_pCanvas->addControl(m_pControl.get());
+            }
+            else
+            {
+                m_pCanvas->removeControl(m_pControl.get());
+            }
         }
     }
 private:
@@ -132,8 +150,8 @@ public:
 
     void operator()(osg::Object*)
     {
-        m_pControl->setAlign(osgEarth::Controls::Control::ALIGN_NONE,osgEarth::Controls::Control::ALIGN_NONE);
-        m_pContainer->addControl(m_pControl.get());
+        if(m_pControl.valid()) m_pControl->setAlign(osgEarth::Controls::Control::ALIGN_NONE,osgEarth::Controls::Control::ALIGN_NONE);
+        if(m_pContainer.valid()) m_pContainer->addControl(m_pControl.get());
     }
 private:
     osg::ref_ptr<osgEarth::Controls::Container> m_pContainer;
@@ -147,13 +165,13 @@ class CAddControls2Container:public osg::Operation
 {
 public:
     CAddControls2Container(osgEarth::Controls::Container* pContainer
-                   ,osgEarth::Controls::ControlVector pControl):
+                           ,osgEarth::Controls::ControlVector pControl):
         m_pContainer(pContainer)
-       ,m_pControl(pControl){}
+      ,m_pControl(pControl){}
 
     void operator()(osg::Object*)
     {
-        m_pContainer->addControls(m_pControl);
+        if(m_pContainer.valid()) m_pContainer->addControls(m_pControl);
     }
 private:
     osg::ref_ptr<osgEarth::Controls::Container> m_pContainer;
@@ -167,11 +185,11 @@ class CClearContainer:public osg::Operation
 {
 public:
     CClearContainer(osgEarth::Controls::Container* pContainer):
-    m_pContainer(pContainer){}
+        m_pContainer(pContainer){}
 
     void operator()(osg::Object*)
     {
-        m_pContainer->clearControls();
+        if(m_pContainer.valid()) m_pContainer->clearControls();
     }
 private:
     osg::ref_ptr<osgEarth::Controls::Container> m_pContainer;
@@ -188,16 +206,19 @@ public:
 
     void operator()(osg::Object*)
     {
-        auto parents = m_pToAttachNode->getParents();
-        for(auto one : parents)
+        if(m_pToAttachNode.valid())
         {
-            if(m_bAdd)
+            auto parents = m_pToAttachNode->getParents();
+            for(auto one : parents)
             {
-                one->addChild(m_pAttachNode);
-            }
-            else
-            {
-                one->removeChild(m_pAttachNode);
+                if(m_bAdd)
+                {
+                    one->addChild(m_pAttachNode);
+                }
+                else
+                {
+                    one->removeChild(m_pAttachNode);
+                }
             }
         }
     }
@@ -218,14 +239,16 @@ public:
 
     void operator()(osg::Object*)
     {
-
-        if(m_bAdd)
+        if(m_pView.valid())
         {
-            m_pView->addEventHandler(m_pEventHandler);
-        }
-        else
-        {
-            m_pView->removeEventHandler(m_pEventHandler);
+            if(m_bAdd)
+            {
+                m_pView->addEventHandler(m_pEventHandler);
+            }
+            else
+            {
+                m_pView->removeEventHandler(m_pEventHandler);
+            }
         }
     }
 private:
@@ -248,4 +271,4 @@ private:
     IRender* m_pRender;
 };
 
-#endif // MAP_GLOBAL_H
+#endif // OSGEXTERN_HEADER_H
