@@ -84,9 +84,17 @@ void CSceneImage::FrameCall()
         }
         else
         {
-            auto pNewNode = reinterpret_cast<osg::Geometry*>(pDrawGeomerty->clone(osg::CopyOp::DEEP_COPY_ARRAYS
-                                                                                  |osg::CopyOp::DEEP_COPY_PRIMITIVES
-                                                                                  |osg::CopyOp::DEEP_COPY_STATESETS));
+            osg::ref_ptr<osg::Geometry> pNewNode;
+            if(s_mapID2ImageNode[m_pSceneGraph].empty())
+            {
+                pNewNode = pDrawGeomerty;
+            }
+            else
+            {
+                pNewNode = reinterpret_cast<osg::Geometry*>(pDrawGeomerty->clone(osg::CopyOp::DEEP_COPY_ARRAYS
+                                                                                      |osg::CopyOp::DEEP_COPY_PRIMITIVES
+                                                                                      |osg::CopyOp::DEEP_COPY_STATESETS));
+            }
 
             static_cast<osg::Vec4Array*>(pNewNode->getColorArray())
                     ->at(0).set(m_stColor.fR,m_stColor.fG,m_stColor.fB,m_stColor.fA);

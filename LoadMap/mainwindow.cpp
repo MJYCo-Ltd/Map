@@ -43,6 +43,7 @@
 #include <Plot/Map/IMapObserver.h>
 #include <Plot/SceneShape/IPolygon3D.h>
 #include <Ability/IFlashAbility.h>
+#include <ExternShape/MapPlaceNode.h>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -84,6 +85,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    startTimer(1000);
     ui->setupUi(this);
     ui->mainToolBar->show();
 }
@@ -111,6 +113,17 @@ void MainWindow::SetSecenGraph(ISceneGraph *pSceneGraph)
 
 void MainWindow::timerEvent(QTimerEvent *event)
 {
+    static int nIndex{};
+    if(nullptr != m_pTestNode)
+    {
+        QString sImagePath=QString("Image/Mine/%1.png").arg((nIndex++%74) + 1);
+        m_pTestNode->SetImagePath(sImagePath.toStdString());
+        m_pTestNode->SetText(sImagePath.toStdString());
+        SceneColor color;
+        color.fG = color.fB = 0.f;
+        color.fR = float(nIndex++%74)/74;
+        m_pTestNode1->SetColor(color);
+    }
 }
 
 bool bClick=false;
@@ -530,31 +543,30 @@ void MainWindow::LodPlot()
     m_pLayer->AddSceneNode(pEarthLocation1);
 }
 
-#include <ExternShape/MapPlaceNode.h>
 void MainWindow::TestGroup()
 {
-    CPlaceNode* pPlaceNode = new CPlaceNode(m_pSceneGraph);
-    pPlaceNode->SetPos(120.,24.,10);
-    pPlaceNode->SetImagePath("Image/Mine/1.png");
-    pPlaceNode->SetText("Hello world");
-    m_pLayer->AddSceneNode(pPlaceNode->GetLocationNode());
+    m_pTestNode = new CPlaceNode(m_pSceneGraph);
+    m_pTestNode->SetPos(120.,24.,10);
+    m_pTestNode->SetImagePath("Image/Mine/1.png");
+    m_pTestNode->SetText("Hello world");
+    m_pLayer->AddSceneNode(m_pTestNode->GetLocationNode());
 
     SceneColor color;
     color.fR = color.fB = 0.f;
 
-    pPlaceNode = new CPlaceNode(m_pSceneGraph);
+    auto pPlaceNode = new CPlaceNode(m_pSceneGraph);
     pPlaceNode->SetPos(120.,34.,10);
     pPlaceNode->SetImagePath("Image/Mine/1.png");
     pPlaceNode->SetColor(color);
     pPlaceNode->SetText("next dfdlj");
     m_pLayer->AddSceneNode(pPlaceNode->GetLocationNode());
 
-    pPlaceNode = new CPlaceNode(m_pSceneGraph);
-    pPlaceNode->SetPos(140.,34.,10);
-    pPlaceNode->SetImagePath("Image/Mine/1.png");
-    pPlaceNode->SetColor(color);
-    pPlaceNode->SetText("sdweedfeeff dfdlj");
-    m_pLayer->AddSceneNode(pPlaceNode->GetLocationNode());
+    m_pTestNode1 = new CPlaceNode(m_pSceneGraph);
+    m_pTestNode1->SetPos(140.,34.,10);
+    m_pTestNode1->SetImagePath("Image/Mine/1.png");
+    m_pTestNode1->SetColor(color);
+    m_pTestNode1->SetText("sdweedfeeff dfdlj");
+    m_pLayer->AddSceneNode(m_pTestNode1->GetLocationNode());
 
 //    ScenePos pos;
 //    pos.fX = 120.f;

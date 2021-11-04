@@ -16,6 +16,7 @@ class IMapLine;
 class IModel;
 class ISceneNode;
 class IMapLayer;
+class CPlaceNode;
 
 class MainWindow : public QMainWindow
 {
@@ -78,6 +79,8 @@ private:
     IMapLine*        m_pLine = nullptr;
     IModel*       m_pModel=nullptr;
     ISceneNode*    m_pTrackNode=nullptr;
+    CPlaceNode*    m_pTestNode{};
+    CPlaceNode*    m_pTestNode1{};
 };
 
 #endif // MAINWINDOW_H
