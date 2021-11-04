@@ -1,15 +1,15 @@
 #include "SceneImage.h"
 #include <osgDB/WriteFile>
-std::map<std::string,osg::observer_ptr<osg::Geometry>> CSceneImage::s_mapID2ImageNode;
+std::map<ISceneGraph*,std::map<std::string,osg::observer_ptr<osg::Geometry>>> CSceneImage::s_mapID2ImageNode;
 
 CSceneImage::~CSceneImage()
 {
     /// 移除没有用的节点
-    for(auto one=s_mapID2ImageNode.begin();one!=s_mapID2ImageNode.end();)
+    for(auto one=s_mapID2ImageNode[m_pSceneGraph].begin();one!=s_mapID2ImageNode[m_pSceneGraph].end();)
     {
         if(!one->second.valid())
         {
-            one = s_mapID2ImageNode.erase(one);
+            one = s_mapID2ImageNode[m_pSceneGraph].erase(one);
         }
         else
         {
@@ -77,8 +77,8 @@ void CSceneImage::FrameCall()
         ss1<<'_';
         ss1<<"width_"<<m_stImageSize.unWidth<<"height_"<<m_stImageSize.unHeight;
 
-        auto pFindOne = s_mapID2ImageNode.find(ss1.str());
-        if(s_mapID2ImageNode.end() != pFindOne && pFindOne->second.valid())
+        auto pFindOne = s_mapID2ImageNode[m_pSceneGraph].find(ss1.str());
+        if(s_mapID2ImageNode[m_pSceneGraph].end() != pFindOne && pFindOne->second.valid())
         {
             SetOsgNode(pFindOne->second.get());
         }
@@ -104,7 +104,7 @@ void CSceneImage::FrameCall()
             }
 
             SetOsgNode(pNewNode);
-            s_mapID2ImageNode[ss1.str()] = pNewNode;
+            s_mapID2ImageNode[m_pSceneGraph][ss1.str()] = pNewNode;
         }
     }
 

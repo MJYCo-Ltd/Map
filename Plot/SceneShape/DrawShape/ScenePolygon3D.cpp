@@ -25,7 +25,7 @@ void CScenePolygon3D::UpdateShape()
             osg::DrawElementsUShort* elBottom = new osg::DrawElementsUShort(GL_TRIANGLE_FAN);
             m_pGeometry->addPrimitiveSet(elBottom);
 
-            for(int nIndex=nVertexCount-1;nIndex>0;--nIndex)
+            for(int nIndex=nVertexCount-1;nIndex>-1;--nIndex)
             {
                 elBottom->push_back(nIndex);
             }

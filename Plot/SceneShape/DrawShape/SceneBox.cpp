@@ -48,81 +48,39 @@ void CSceneBox::CreateShape()
 
     // -ve y plane
     m_pNormals->push_back(osg::Vec3(0.0f,-1.0f,0.0f));
-    //TexCoord2f(0.0f,1.0f);
-
     m_pNormals->push_back(osg::Vec3(0.0f,-1.0f,0.0f));
-    //TexCoord2f(0.0f,0.0f);
-
     m_pNormals->push_back(osg::Vec3(0.0f,-1.0f,0.0f));
-    //TexCoord2f(1.0f,0.0f);
-
     m_pNormals->push_back(osg::Vec3(0.0f,-1.0f,0.0f));
-    //TexCoord2f(1.0f,1.0f);
 
     // +ve y plane
     m_pNormals->push_back(osg::Vec3(0.0f,1.0f,0.0f));
-    //TexCoord2f(0.0f,1.0f);
-
     m_pNormals->push_back(osg::Vec3(0.0f,1.0f,0.0f));
-    //TexCoord2f(0.0f,0.0f);
-
     m_pNormals->push_back(osg::Vec3(0.0f,1.0f,0.0f));
-    //TexCoord2f(1.0f,0.0f);
-
     m_pNormals->push_back(osg::Vec3(0.0f,1.0f,0.0f));
-    //TexCoord2f(1.0f,1.0f);
 
     // +ve x plane
     m_pNormals->push_back(osg::Vec3(1.0f,0.0f,0.0f));
-    //TexCoord2f(0.0f,1.0f);
-
     m_pNormals->push_back(osg::Vec3(1.0f,0.0f,0.0f));
-    //TexCoord2f(0.0f,0.0f);
-
     m_pNormals->push_back(osg::Vec3(1.0f,0.0f,0.0f));
-    //TexCoord2f(1.0f,0.0f);
-
     m_pNormals->push_back(osg::Vec3(1.0f,0.0f,0.0f));
-    //TexCoord2f(1.0f,1.0f);
 
     // -ve x plane
     m_pNormals->push_back(osg::Vec3(-1.0f,0.0f,0.0f));
-    //TexCoord2f(0.0f,1.0f);
-
     m_pNormals->push_back(osg::Vec3(-1.0f,0.0f,0.0f));
-    //TexCoord2f(0.0f,0.0f);
-
     m_pNormals->push_back(osg::Vec3(-1.0f,0.0f,0.0f));
-    //TexCoord2f(1.0f,0.0f);
-
     m_pNormals->push_back(osg::Vec3(-1.0f,0.0f,0.0f));
-    //TexCoord2f(1.0f,1.0f);
 
     // +ve z plane
     m_pNormals->push_back(osg::Vec3(0.0f,0.0f,1.0f));
-    //TexCoord2f(0.0f,1.0f);
-
     m_pNormals->push_back(osg::Vec3(0.0f,0.0f,1.0f));
-    //TexCoord2f(0.0f,0.0f);
-
     m_pNormals->push_back(osg::Vec3(0.0f,0.0f,1.0f));
-    //TexCoord2f(1.0f,0.0f);
-
     m_pNormals->push_back(osg::Vec3(0.0f,0.0f,1.0f));
-    //TexCoord2f(1.0f,1.0f);
 
     // -ve z plane
     m_pNormals->push_back(osg::Vec3(0.0f,0.0f,-1.0f));
-    //TexCoord2f(0.0f,1.0f);
-
     m_pNormals->push_back(osg::Vec3(0.0f,0.0f,-1.0f));
-    //TexCoord2f(0.0f,0.0f);
-
     m_pNormals->push_back(osg::Vec3(0.0f,0.0f,-1.0f));
-    //TexCoord2f(1.0f,0.0f);
-
     m_pNormals->push_back(osg::Vec3(0.0f,0.0f,-1.0f));
-    //TexCoord2f(1.0f,1.0f);
 
     osg::ref_ptr<osg::DrawElements> primitives =  new osg::DrawElementsUShort(GL_TRIANGLES);
     m_pGeometry->addPrimitiveSet(primitives.get());
