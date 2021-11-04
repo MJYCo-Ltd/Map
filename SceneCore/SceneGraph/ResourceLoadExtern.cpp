@@ -162,6 +162,11 @@ osg::Node *CResourceLod::CreateImageNode(const std::string &sImagePath,int nWidt
 /// 根据图片创建节点
 osg::Node* CResourceLod::GetOrCreateNodeByImage(osg::Image* pImage)
 {
+    if(nullptr == pImage)
+    {
+        return(nullptr);
+    }
+
     auto pFind = m_mapImageNode.find(pImage);
     if(m_mapImageNode.end()!= pFind)
     {

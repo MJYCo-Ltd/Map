@@ -117,6 +117,11 @@ osg::Texture2D *CResourceLod::LoadTexture(const std::string &sTexturePath,bool b
 /// 通过图片加载纹理
 osg::Texture2D* CResourceLod::LoadTexture(osg::Image* pImage)
 {
+    if(nullptr == pImage)
+    {
+        return(nullptr);
+    }
+
     auto pFindOne = m_mapTexture.find(pImage);
     if(m_mapTexture.end() != pFindOne)
     {

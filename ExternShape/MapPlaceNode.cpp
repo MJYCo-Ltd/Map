@@ -43,6 +43,9 @@ void CPlaceNode::SetImagePath(const std::string &sPath)
         m_pImage=dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
         m_pImage->OpenCull(false);
     }
+    SceneColor stColor;
+    stColor.fB = stColor.fG = 0.f;
+    m_pImage->SetColor(stColor);
     SceneImageSize size;
     size.unHeight=32;
     size.unWidth=32;

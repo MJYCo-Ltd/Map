@@ -413,7 +413,6 @@ void MainWindow::PlotMap()
 //    m_pLine->GetDrawLine()->OpenGlow(false);
     m_pLine->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
     m_pLayer->AddSceneNode(m_pLine);
-    qDebug()<<"hhhh";
 
     /// 绘制区域
     auto m_pPolygon = dynamic_cast<IMapPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPolygon"));
@@ -537,9 +536,24 @@ void MainWindow::TestGroup()
     CPlaceNode* pPlaceNode = new CPlaceNode(m_pSceneGraph);
     pPlaceNode->SetPos(120.,24.,10);
     pPlaceNode->SetImagePath("Image/Mine/1.png");
-    SceneImageSize size{24,24};
-    pPlaceNode->SetImageSize(size);
     pPlaceNode->SetText("Hello world");
+    m_pLayer->AddSceneNode(pPlaceNode->GetLocationNode());
+
+    SceneColor color;
+    color.fR = color.fB = 0.f;
+
+    pPlaceNode = new CPlaceNode(m_pSceneGraph);
+    pPlaceNode->SetPos(120.,34.,10);
+    pPlaceNode->SetImagePath("Image/Mine/1.png");
+    pPlaceNode->SetColor(color);
+    pPlaceNode->SetText("next dfdlj");
+    m_pLayer->AddSceneNode(pPlaceNode->GetLocationNode());
+
+    pPlaceNode = new CPlaceNode(m_pSceneGraph);
+    pPlaceNode->SetPos(140.,34.,10);
+    pPlaceNode->SetImagePath("Image/Mine/1.png");
+    pPlaceNode->SetColor(color);
+    pPlaceNode->SetText("sdweedfeeff dfdlj");
     m_pLayer->AddSceneNode(pPlaceNode->GetLocationNode());
 
 //    ScenePos pos;
