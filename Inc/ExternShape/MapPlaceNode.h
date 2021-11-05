@@ -71,7 +71,7 @@ protected:
       */
     void InitNode();
 
-    void TypeChanged();
+    void CreateImage();
 protected:
     ISceneGraph*  m_pSceneGraph{};
     IMapLocation* m_pLocation{};

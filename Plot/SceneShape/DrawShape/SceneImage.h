@@ -39,7 +39,7 @@ protected:
     bool m_bImageDataChanged{false};
     bool m_bGeomertyChanged{false};
     osg::ref_ptr<osg::Geometry> m_pQImageDrawNode;
-    static std::map<ISceneGraph*,std::map<std::string,osg::observer_ptr<osg::Geometry>>>s_mapID2ImageNode;
+    static std::map<ISceneGraph*,std::map<std::string,osg::ref_ptr<osg::Geometry>>>s_mapID2ImageNode;
 };
 
 #endif // CSCENEIMAGE_H

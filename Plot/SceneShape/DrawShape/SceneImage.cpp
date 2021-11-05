@@ -1,13 +1,13 @@
 #include "SceneImage.h"
 #include <osgDB/WriteFile>
-std::map<ISceneGraph*,std::map<std::string,osg::observer_ptr<osg::Geometry>>> CSceneImage::s_mapID2ImageNode;
+std::map<ISceneGraph*,std::map<std::string,osg::ref_ptr<osg::Geometry>>> CSceneImage::s_mapID2ImageNode;
 
 CSceneImage::~CSceneImage()
 {
     /// 移除没有用的节点
     for(auto one=s_mapID2ImageNode[m_pSceneGraph].begin();one!=s_mapID2ImageNode[m_pSceneGraph].end();)
     {
-        if(!one->second.valid())
+        if(2 > one->second->referenceCount())
         {
             one = s_mapID2ImageNode[m_pSceneGraph].erase(one);
         }
@@ -60,14 +60,17 @@ void CSceneImage::FrameCall()
     if(!pDrawGeomerty.valid())
     {
         pDrawGeomerty = TryChangeToGeomerty(m_pRootNode);
+        if(!pDrawGeomerty.valid())
+        {
+            pDrawGeomerty = TryChangeToGeomerty(m_pSceneGraph->ResouceLoader()->CreateImageNode(m_sImagePath));
+        }
     }
 
     /// 如果节点有效
     if(pDrawGeomerty.valid())
     {
-        void* ss = reinterpret_cast<void*>(pDrawGeomerty.get());
         std::stringstream ss1;
-        ss1 << ss ;
+        ss1 << m_sImagePath;
         ss1 << '_';
 
         ss1<<"Red_"<<int(m_stColor.fR*255)
@@ -78,23 +81,17 @@ void CSceneImage::FrameCall()
         ss1<<"width_"<<m_stImageSize.unWidth<<"height_"<<m_stImageSize.unHeight;
 
         auto pFindOne = s_mapID2ImageNode[m_pSceneGraph].find(ss1.str());
-        if(s_mapID2ImageNode[m_pSceneGraph].end() != pFindOne && pFindOne->second.valid())
+        if(s_mapID2ImageNode[m_pSceneGraph].end() != pFindOne)
         {
             SetOsgNode(pFindOne->second.get());
         }
         else
         {
-            osg::ref_ptr<osg::Geometry> pNewNode;
-            if(s_mapID2ImageNode[m_pSceneGraph].empty())
-            {
-                pNewNode = pDrawGeomerty;
-            }
-            else
-            {
-                pNewNode = reinterpret_cast<osg::Geometry*>(pDrawGeomerty->clone(osg::CopyOp::DEEP_COPY_ARRAYS
-                                                                                      |osg::CopyOp::DEEP_COPY_PRIMITIVES
-                                                                                      |osg::CopyOp::DEEP_COPY_STATESETS));
-            }
+            osg::ref_ptr<osg::Geometry> pNewNode = new osg::Geometry(*pDrawGeomerty,osg::CopyOp::DEEP_COPY_ARRAYS
+                                             |osg::CopyOp::DEEP_COPY_PRIMITIVES
+                                             |osg::CopyOp::DEEP_COPY_STATESETS);
+
+
 
             static_cast<osg::Vec4Array*>(pNewNode->getColorArray())
                     ->at(0).set(m_stColor.fR,m_stColor.fG,m_stColor.fB,m_stColor.fA);
@@ -110,7 +107,6 @@ void CSceneImage::FrameCall()
                 pVertexArray->at(2).set(nX,-nY,0);
                 pVertexArray->at(3).set(nX,nY,0);
             }
-
             SetOsgNode(pNewNode);
             s_mapID2ImageNode[m_pSceneGraph][ss1.str()] = pNewNode;
         }
