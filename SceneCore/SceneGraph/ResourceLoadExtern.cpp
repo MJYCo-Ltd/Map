@@ -89,6 +89,18 @@ osg::StateSet* CResourceLod::GetOrCreateStateSet(STATESET_TYPE enType)
             pStateSet->setAttributeAndModes(new osg::PolygonOffset(-1.f,-1.f));
         }
             break;
+        case IMAGE_STATE:
+        {
+            pStateSet = new osg::StateSet;
+            pStateSet->merge(*GetOrCreateStateSet("GLSL/Global.glsl"));
+            pStateSet->setAttributeAndModes(new osg::PolygonOffset(-1.f,-1.f));
+            pStateSet->setMode(GL_BLEND,true);
+            auto pDepth = new osg::Depth;
+            pDepth->setWriteMask(false);
+            pStateSet->setAttribute(pDepth);
+            pStateSet->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
+        }
+            break;
         }
 
         if(nullptr != pStateSet)
@@ -203,12 +215,6 @@ osg::Node* CResourceLod::GetOrCreateNodeByImage(osg::Image* pImage)
         pVertexArray->at(3).set(nX,nY,0);
 
         pGeometry->getOrCreateStateSet()->setTextureAttribute(0,pTexture);
-        pGeometry->getOrCreateStateSet()->setMode(GL_BLEND,true);
-        auto pDepth = new osg::Depth;
-        pDepth->setWriteMask(false);
-        pGeometry->getOrCreateStateSet()->setAttribute(pDepth);
-        pGeometry->getOrCreateStateSet()->setAttributeAndModes(new osg::PolygonOffset(-1.f,-1.f));
-        pGeometry->getOrCreateStateSet()->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
         m_mapImageNode[pImage] = pGeometry;
         return(pGeometry);
     }

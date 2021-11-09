@@ -30,7 +30,6 @@ void CPlaceNode::SetText(const std::string &sTextInfo)
     m_pLabel->SetText(sTextInfo);
 }
 
-
 void CPlaceNode::SetColor(const SceneColor &rColor)
 {
     if(nullptr == m_pImage)
@@ -47,6 +46,7 @@ void CPlaceNode::SetImagePath(const std::string &sPath)
     {
         CreateImage();
     }
+
     m_pImage->SetImagePath(sPath);
 }
 

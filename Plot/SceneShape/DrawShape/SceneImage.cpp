@@ -31,7 +31,10 @@ void CSceneImage::InitNode()
     ImplSceneNode<IImage>::InitNode();
     m_bOpenCull=false;
     m_pProgramNode->setCullingActive(m_bOpenCull);
-    m_pProgramNode->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Global.glsl"));
+    m_pProgramNode->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(IMAGE_STATE));
+    m_pImageGeode = new osg::Geode;
+    m_pImageGeode->setCullingActive(m_bOpenCull);
+    SetOsgNode(m_pImageGeode);
 }
 
 void CSceneImage::FrameCall()
@@ -69,6 +72,8 @@ void CSceneImage::FrameCall()
     /// 如果节点有效
     if(pDrawGeomerty.valid())
     {
+        m_pImageGeode->removeDrawables(0,m_pImageGeode->getNumDrawables());
+
         std::stringstream ss1;
         ss1 << m_sImagePath;
         ss1 << '_';
@@ -83,14 +88,13 @@ void CSceneImage::FrameCall()
         auto pFindOne = s_mapID2ImageNode[m_pSceneGraph].find(ss1.str());
         if(s_mapID2ImageNode[m_pSceneGraph].end() != pFindOne)
         {
-            SetOsgNode(pFindOne->second.get());
+            m_pImageGeode->addDrawable(pFindOne->second.get());
         }
         else
         {
             osg::ref_ptr<osg::Geometry> pNewNode = new osg::Geometry(*pDrawGeomerty,osg::CopyOp::DEEP_COPY_ARRAYS
                                              |osg::CopyOp::DEEP_COPY_PRIMITIVES
                                              |osg::CopyOp::DEEP_COPY_STATESETS);
-
 
 
             static_cast<osg::Vec4Array*>(pNewNode->getColorArray())
@@ -107,7 +111,7 @@ void CSceneImage::FrameCall()
                 pVertexArray->at(2).set(nX,-nY,0);
                 pVertexArray->at(3).set(nX,nY,0);
             }
-            SetOsgNode(pNewNode);
+            m_pImageGeode->addDrawable(pNewNode);
             s_mapID2ImageNode[m_pSceneGraph][ss1.str()] = pNewNode;
         }
     }

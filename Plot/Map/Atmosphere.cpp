@@ -18,8 +18,8 @@ void CAtmosphere::MakeAtmosphere()
     m_pEllipsoid=dynamic_cast<IEllipsoidSensor*>(pPlot->CreateSceneNode("IEllipsoidSensor"));
 
     m_pEllipsoid->SetDrawType(IEllipsoidSensor::FULL_PART);
-    m_pEllipsoid->SetEquator(R_Earth2*1.025);
-    m_pEllipsoid->SetPolar(R_Earth*1.025);
+    m_pEllipsoid->SetEquator(R_Earth*1.025);
+    m_pEllipsoid->SetPolar(R_Earth2*1.025);
     m_pEllipsoid->ShowLine(false);
     m_pEllipsoid->SetLatSegMents(100);
 

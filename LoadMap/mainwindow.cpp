@@ -552,8 +552,11 @@ void MainWindow::TestGroup()
     m_pLayer->AddSceneNode(m_pTestNode->GetLocationNode());
 
     SceneColor color;
-    color.fR = color.fB = 0.f;
+    color.fG = color.fB = 0.f;
+    m_pTestNode->SetColor(color);
 
+    color.fR = color.fB = 0.f;
+    color.fG = 1.f;
     auto pPlaceNode = new CPlaceNode(m_pSceneGraph);
     pPlaceNode->SetPos(120.,34.,10);
     pPlaceNode->SetImagePath("Image/Mine/1.png");
