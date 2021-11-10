@@ -21,11 +21,22 @@ struct RGBAData;
 /// 状态集合类型
 enum STATESET_TYPE
 {
-    BLEND_STATE,
-    LINE_STATE,
-    FACE_STATE,
-    POLYGON_OFFSET_STATE,
-    IMAGE_STATE
+    BLEND_STATE=1,                /// 透明渲染
+    LINE_STATE=1<<1,              /// 绘制线框模式
+    FACE_STATE=1<<2,              /// 绘制面模式
+    POLYGON_OFFSET_STATE=1<<3,    /// 多边形偏移
+    GLOBAL_DRAW_STATE=1<<4,       /// 绘制图片着色器
+    FLASH_DRAW_STATE=1<<5,        /// 闪烁着色器
+    ATMOSPHERE_DRAW_STATE=1<<6,   /// 大气着色器
+    POINT_DRAW_STATE=1<<7,        /// 点着色器
+    LINE_DRAW_STATE=1<<8,         /// 线着色器
+    PULSE_DRAW_STATE=1<<9,        /// 脉冲波着色器
+    STAR_DRAW_STATE=1<<10,        /// 星星着色器
+    SPACEENV_STATE=1<<11,         /// 太空着色器
+    PHONGLIGHTING_STATE=1<<12,    /// 冯氏光照着色器
+    VISUAL_STATE=1<<13,           /// 视域分析着色器
+    FLAT_STATE=1<<14,             /// 平定模型着色器
+    LIGHTING_STATE=1<<15          /// 光照状态
 };
 
 /**
@@ -96,13 +107,10 @@ public:
     virtual osg::Node* CreateImageNode(const RGBAData*)=0;
 
     /**
-     * @brief 加载着色器
-     * @param sGLSLPath  着色器文件路径
-     * @param bIsRef     是否是相对路径 [相对GetPath()下的路径]
+     * @brief 查找或者创建着色器
      * @return
      */
-    virtual osg::StateSet* GetOrCreateStateSet(const std::string& sGLSLPath,bool bIsRef=true)=0;
-    virtual osg::StateSet* GetOrCreateStateSet(STATESET_TYPE enType)=0;
+    virtual osg::StateSet* GetOrCreateStateSet(unsigned enType)=0;
 
     /**
      * @brief 清空不再使用的资源

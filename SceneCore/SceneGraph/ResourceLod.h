@@ -51,11 +51,8 @@ public:
     osg::Node* CreateImageNode(const QImage& rQImage);
     osg::Node* CreateImageNode(const RGBAData* rImageData);
 
-    /**
-     * @brief 加载着色器
-     */
-    osg::StateSet* GetOrCreateStateSet(const std::string& sGLSLPath,bool bIsRef=true);
-    osg::StateSet* GetOrCreateStateSet(STATESET_TYPE enType);
+
+    osg::StateSet* GetOrCreateStateSet(unsigned enType);
 
     /**
      * @brief 清空不再使用的资源
@@ -65,15 +62,15 @@ protected:
     osg::Image* TransformQImage(const QImage& rQImage);
     osg::Node*  GetOrCreateNodeByImage(osg::Image* pImage);
     void InitSateSet(osg::StateSet* pStateSete,const std::string& sFileName);
+    void LoadShader(const std::string& sGLSLPath, osg::StateSet *pStateSet);
 protected:
     std::string m_sAppPath;
     std::map<std::string,osg::ref_ptr<osg::Node>>      m_mapNode;    /// 模型映射
     std::map<std::string,osg::ref_ptr<osg::Image>>     m_mapImage;   /// 图片映射
     std::map<std::string,osg::ref_ptr<osgText::Font>>  m_mapFont;    /// 字体映射
-    std::map<std::string,osg::ref_ptr<osg::StateSet>>  m_mapStateSet; /// shader程序加载的状态集合
     std::map<osg::Image*,osg::ref_ptr<osg::Texture2D>> m_mapTexture; /// 纹理映射
     std::map<osg::Image*,osg::ref_ptr<osg::Node>>      m_mapImageNode;/// 图片节点
-    std::map<STATESET_TYPE,osg::ref_ptr<osg::StateSet>> m_mapType2StateSets;
+    std::map<unsigned,osg::ref_ptr<osg::StateSet>> m_mapType2StateSets;
 };
 
 #endif // RESOURCELOD_H

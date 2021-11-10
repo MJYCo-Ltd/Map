@@ -28,13 +28,12 @@ void CSceneImage::SetQImage(const QImage &rImage)
 /// 初始化节点
 void CSceneImage::InitNode()
 {
+    m_unStateSet = GLOBAL_DRAW_STATE|BLEND_STATE;
     ImplSceneNode<IImage>::InitNode();
     m_bOpenCull=false;
     m_pProgramNode->setCullingActive(m_bOpenCull);
-    m_pProgramNode->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(IMAGE_STATE));
-    m_pImageGeode = new osg::Geode;
-    m_pImageGeode->setCullingActive(m_bOpenCull);
-    SetOsgNode(m_pImageGeode);
+    m_pProgramNode->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(m_unStateSet));
+    SetOsgNode(m_pProgramNode);
 }
 
 void CSceneImage::FrameCall()
@@ -72,8 +71,6 @@ void CSceneImage::FrameCall()
     /// 如果节点有效
     if(pDrawGeomerty.valid())
     {
-        m_pImageGeode->removeDrawables(0,m_pImageGeode->getNumDrawables());
-
         std::stringstream ss1;
         ss1 << m_sImagePath;
         ss1 << '_';
@@ -88,7 +85,7 @@ void CSceneImage::FrameCall()
         auto pFindOne = s_mapID2ImageNode[m_pSceneGraph].find(ss1.str());
         if(s_mapID2ImageNode[m_pSceneGraph].end() != pFindOne)
         {
-            m_pImageGeode->addDrawable(pFindOne->second.get());
+            SetOsgNode(pFindOne->second.get());
         }
         else
         {
@@ -111,7 +108,7 @@ void CSceneImage::FrameCall()
                 pVertexArray->at(2).set(nX,-nY,0);
                 pVertexArray->at(3).set(nX,nY,0);
             }
-            m_pImageGeode->addDrawable(pNewNode);
+            SetOsgNode(pNewNode);
             s_mapID2ImageNode[m_pSceneGraph][ss1.str()] = pNewNode;
         }
     }

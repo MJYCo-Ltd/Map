@@ -5,7 +5,8 @@
 void CFlashAbility::InitAbility()
 {
     m_pSceneNode->AsOsgSceneNode()->GetRealNode()->setStateSet(
-                m_pSceneNode->GetBoundSceneGraph()->ResouceLoader()->GetOrCreateStateSet("GLSL/Flash.glsl"));
+                m_pSceneNode->GetBoundSceneGraph()->ResouceLoader()->GetOrCreateStateSet(
+                    m_pSceneNode->AsOsgSceneNode()->GetStateSet()|FLASH_DRAW_STATE));
 
     m_pSceneNode->AsOsgSceneNode()->GetOsgNode()->getOrCreateStateSet()
             ->getOrCreateUniform("flashStartTime",osg::Uniform::FLOAT)->set((float)osg::Timer::instance()->time_s());

@@ -124,6 +124,11 @@ public:
         }
     }
 
+    unsigned GetStateSet()
+    {
+        return(m_unStateSet);
+    }
+
 protected:
 
     /**
@@ -134,9 +139,10 @@ protected:
 	
 protected:
     bool                       m_bInit{false};
+    bool                       m_bCanDelete{true};
+    unsigned                   m_unStateSet{};
     osg::ref_ptr<osg::Node>    m_pRootNode;    /// 真实的节点
     osg::ref_ptr<osg::Group>   m_pProgramNode; /// 用于设置着色器程序的节点
     std::set<ISceneNodeAttach*> m_allAttach;   /// 依附的点
-    bool                       m_bCanDelete{true};
 };
 #endif

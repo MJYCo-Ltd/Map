@@ -25,8 +25,9 @@ void CAtmosphere::MakeAtmosphere()
 
     IOsgSceneNode* pOsgSceneNode = m_pEllipsoid->AsOsgSceneNode();
 
+
     m_pProgramNode->setStateSet(
-                m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Atmosphere.glsl"));
+                m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(ATMOSPHERE_DRAW_STATE));
     m_pProgramNode->addChild(pOsgSceneNode->GetRealNode());
 }
 

@@ -59,7 +59,7 @@ void CMilkyway::makeMilkyway()
     m_pMilkyway->setColor(osg::Vec4f(1.0f, 1.0f, 1.0f,1.0f));
 
 
-    m_pProgramNode->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Global.glsl"));
+    m_pProgramNode->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(GLOBAL_DRAW_STATE));
     auto pNodeStateSet = m_pMilkyway->getOrCreateStateSet();
 
     /// 添加纹理

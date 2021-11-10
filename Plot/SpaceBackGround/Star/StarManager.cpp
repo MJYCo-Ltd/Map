@@ -29,7 +29,7 @@ CStarManager::CStarManager(ISceneGraph *pSceneGraph)
     m_pRoot->addChild(m_pStarName);
     m_pRoot->addChild(m_pConstell);
 
-    auto pStarStateSet  = m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Star.glsl");
+    auto pStarStateSet  = m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(STAR_DRAW_STATE);
     osg::ref_ptr<osg::Geode> pProgramNode = new osg::Geode;
 
     m_pStarRender = new CStarRender(pSceneGraph,m_fShowMaxMag);

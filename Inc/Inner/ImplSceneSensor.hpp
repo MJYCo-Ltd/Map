@@ -23,12 +23,12 @@ protected:
     void DistanceChanged()SET_TRUE_NODE_UPDATE(m_bDistanceChanged)
     void EffectsChanged()SET_TRUE_NODE_UPDATE(m_bEffectChanged)
     void ShowBackChanged()SET_TRUE_NODE_UPDATE(m_bShowBackChanged)
-    void CountChanged(){T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Pulse.glsl")->
-                getOrCreateUniform("fPulseStep",osg::Uniform::FLOAT)->set(1.f/T::m_unCount);}
-    void DirectionChanged(){T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Pulse.glsl")->
-                getOrCreateUniform("bIsOut",osg::Uniform::BOOL)->set(T::m_bOut);}
-    void FreqChanged(){T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Pulse.glsl")->
-                getOrCreateUniform("fPulseIntervalTime",osg::Uniform::FLOAT)->set(1.f/T::m_unFreq);}
+    void CountChanged(){/*T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Pulse.glsl")->
+                getOrCreateUniform("fPulseStep",osg::Uniform::FLOAT)->set(1.f/T::m_unCount);*/}
+    void DirectionChanged(){/*T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Pulse.glsl")->
+                getOrCreateUniform("bIsOut",osg::Uniform::BOOL)->set(T::m_bOut);*/}
+    void FreqChanged(){/*T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Pulse.glsl")->
+                getOrCreateUniform("fPulseIntervalTime",osg::Uniform::FLOAT)->set(1.f/T::m_unFreq);*/}
 
     void FrameCall()
     {
@@ -62,22 +62,19 @@ protected:
 
         if(m_bEffectChanged)
         {
-
             switch(T::m_emEffect)
             {
             case T::UNIFORM_MOTION:
-                m_sCurrentVirtulProgram="GLSL/Pulse.glsl";
+                ImplSceneShape<T>::m_unStateSet |= PULSE_DRAW_STATE;
                 break;
             default:
-                m_sCurrentVirtulProgram="";
+                ImplSceneShape<T>::m_unStateSet &= ~PULSE_DRAW_STATE;
                 break;
             }
 
-            if(!m_sCurrentVirtulProgram.empty())
-            {
-                auto pStateSet = T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(m_sCurrentVirtulProgram);
-                m_pProgramNode->setStateSet(pStateSet);
-            }
+
+            auto pStateSet = T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(ImplSceneShape<T>::m_unStateSet);
+            m_pProgramNode->setStateSet(pStateSet);
             m_bEffectChanged=false;
         }
 
@@ -145,7 +142,6 @@ protected:
     osg::observer_ptr<osg::Group>    m_pLineGroup;
     osg::ref_ptr<osg::Group>         m_pRenderGroup;
     osg::observer_ptr<osg::MatrixTransform> m_pScalTransform;
-    std::string m_sCurrentVirtulProgram;
     bool       m_bDistanceChanged{false};
     bool       m_bShowTypeChanged{false};
     bool       m_bEffectChanged{false};

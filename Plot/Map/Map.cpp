@@ -740,7 +740,8 @@ void CMap::LoadMap()
 /// 初始化光线
 void CMap::Init3DLight()
 {
-    m_p3DRoot->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/PhongLighting.glsl"));
+    m_unStateSet = PHONGLIGHTING_STATE;
+    m_p3DRoot->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(m_unStateSet));
     osg::Vec3f lightPos(0.0f, 0.0f, 1.0f);
     osg::LightSource* lightSource = new osg::LightSource();
     m_pLight = new osgEarth::LightGL3( 0 );

@@ -51,7 +51,8 @@ void CSceneEllipsoid::UpdateShape()
 
             pNodeState->setTextureAttribute(0, pTexture);
 
-            auto pStateSet = m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Global.glsl");
+            m_unStateSet = GLOBAL_DRAW_STATE;
+            auto pStateSet = m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(m_unStateSet);
             m_pProgramNode->setStateSet(pStateSet);
         }
         else

@@ -113,8 +113,8 @@ protected:
 
         if(m_bChildInsert)
         {
-
-            auto pStateSet = T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Visual.glsl");
+            ImplSceneGroup<T>::m_unStateSet = VISUAL_STATE;
+            auto pStateSet = T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(ImplSceneGroup<T>::m_unStateSet);
             m_pProgramNode->setStateSet(pStateSet);
             for(auto one : m_listInsertChild)
             {

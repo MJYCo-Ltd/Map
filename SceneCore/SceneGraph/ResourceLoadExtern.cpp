@@ -44,69 +44,120 @@ private:
 };
 
 /// 根据类型创建渲染状态
-osg::StateSet* CResourceLod::GetOrCreateStateSet(STATESET_TYPE enType)
+osg::StateSet* CResourceLod::GetOrCreateStateSet(unsigned unType)
 {
-    auto pFindone = m_mapType2StateSets.find(enType);
+    auto pFindone = m_mapType2StateSets.find(unType);
     if(m_mapType2StateSets.end() != pFindone)
     {
         return(pFindone->second);
     }
     else
     {
-        osg::StateSet* pStateSet{nullptr};
+        osg::StateSet* pStateSet=new osg::StateSet;
 
-        switch (enType)
+        /// 开启光照
+        if(unType & LIGHTING_STATE)
         {
-        case BLEND_STATE:
+            osgEarth::GLUtils::setLighting(pStateSet, osg::StateAttribute::ON);
+        }
+
+        /// 如果透明开启
+        if(unType & BLEND_STATE)
         {
-            pStateSet= new osg::StateSet;
             pStateSet->setMode(GL_BLEND,osg::StateAttribute::ON);
             auto pDepth = new osg::Depth;
             pDepth->setWriteMask(false);
             pStateSet->setAttribute(pDepth);
-            pStateSet->setAttributeAndModes(new osg::PolygonOffset(-1.f,-1.f));
             pStateSet->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
         }
-            break;
-        case FACE_STATE:
+
+        /// 如果开启多边形偏移
+        if(unType & POLYGON_OFFSET_STATE)
         {
-            pStateSet= new osg::StateSet;
+            pStateSet->setAttributeAndModes(new osg::PolygonOffset(-1.f,-1.f));
+        }
+
+        /// 开启画面模式
+        if(unType & FACE_STATE)
+        {
             pStateSet->setAttributeAndModes(
                         new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK,osg::PolygonMode::FILL));
         }
-            break;
-        case LINE_STATE:
+
+        /// 开启画线模式
+        if(unType &LINE_STATE)
         {
-            pStateSet= new osg::StateSet;
             pStateSet->setAttributeAndModes(
                         new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK,osg::PolygonMode::LINE));
         }
-            break;
 
-        case POLYGON_OFFSET_STATE:
+        /// 添加全局着色器
+        if(unType & GLOBAL_DRAW_STATE)
         {
-            pStateSet= new osg::StateSet;
-            pStateSet->setAttributeAndModes(new osg::PolygonOffset(-1.f,-1.f));
-        }
-            break;
-        case IMAGE_STATE:
-        {
-            pStateSet = new osg::StateSet;
-            pStateSet->merge(*GetOrCreateStateSet("GLSL/Global.glsl"));
-            pStateSet->setAttributeAndModes(new osg::PolygonOffset(-1.f,-1.f));
-            pStateSet->setMode(GL_BLEND,true);
-            auto pDepth = new osg::Depth;
-            pDepth->setWriteMask(false);
-            pStateSet->setAttribute(pDepth);
-            pStateSet->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
-        }
-            break;
+            LoadShader("GLSL/Global.glsl",pStateSet);
         }
 
-        if(nullptr != pStateSet)
+        /// 添加闪烁着色器
+        if(unType & FLASH_DRAW_STATE)
         {
-            m_mapType2StateSets[enType] = pStateSet;
+            LoadShader("GLSL/Flash.glsl",pStateSet);
         }
+
+        /// 添加大气着色器
+        if(unType & ATMOSPHERE_DRAW_STATE)
+        {
+            LoadShader("GLSL/Atmosphere.glsl",pStateSet);
+        }
+
+        /// 添加点着色器
+        if(unType & POINT_DRAW_STATE)
+        {
+            LoadShader("GLSL/Point.glsl",pStateSet);
+        }
+
+        /// 添加线着色器
+        if(unType & LINE_DRAW_STATE)
+        {
+            LoadShader("GLSL/Line.glsl",pStateSet);
+        }
+
+        /// 添加脉冲波着色器
+        if(unType & PULSE_DRAW_STATE)
+        {
+            LoadShader("GLSL/Pulse.glsl",pStateSet);
+        }
+
+        /// 添加恒星着色器
+        if(unType & STAR_DRAW_STATE)
+        {
+            LoadShader("GLSL/Star.glsl",pStateSet);
+        }
+
+        /// 添加太空着色器
+        if(unType & SPACEENV_STATE)
+        {
+            LoadShader("GLSL/SpaceEnv.glsl",pStateSet);
+        }
+
+        /// 添加冯氏光照着色器
+        if(unType & PHONGLIGHTING_STATE)
+        {
+            LoadShader("GLSL/PhongLighting.glsl",pStateSet);
+        }
+
+        /// 添加视域分析着色器
+        if(unType & VISUAL_STATE)
+        {
+            LoadShader("GLSL/Visual.glsl",pStateSet);
+        }
+
+        /// 添加平定模型着色器
+        if(unType & FLAT_STATE)
+        {
+            LoadShader("GLSL/Flash.glsl",pStateSet);
+        }
+
+        m_mapType2StateSets[unType] = pStateSet;
         return(pStateSet);
     }
 }
@@ -324,7 +375,6 @@ void CResourceLod::InitSateSet(osg::StateSet* pStateSete,const std::string& sFil
         pStateSete->getOrCreateUniform("LineStipplePattern",osg::Uniform::INT)->set(0xFFFF);
         pStateSete->getOrCreateUniform("LineStippleFactor",osg::Uniform::INT)->set(1);
         pStateSete->getOrCreateUniform("cameraSize",osg::Uniform::FLOAT_VEC2);
-        pStateSete->setMode(GL_CULL_FACE, osg::StateAttribute::OFF | osg::StateAttribute::OVERRIDE | osg::StateAttribute::PROTECTED);
         pStateSete->setEventCallback(new ViewPortChanged(pStateSete->getUniform("cameraSize")));
     }
     else if(sFileName == "Pulse.glsl")

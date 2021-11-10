@@ -25,7 +25,7 @@ public:
     virtual bool addChild(Node *child)
     {
         osg::ref_ptr<osg::Group> pProgramNode = new osg::Group;
-        pProgramNode->setStateSet(m_pResourceLoad->GetOrCreateStateSet("GLSL/Global.glsl"));
+        pProgramNode->setStateSet(m_pResourceLoad->GetOrCreateStateSet(GLOBAL_DRAW_STATE));
         pProgramNode->addChild(child);
         if(osg::ProxyNode::addChild(pProgramNode.get()))
         {
@@ -231,46 +231,19 @@ osg::Image *CResourceLod::LoadImage(const std::string &sImagePath, int nWidth, i
 }
 
 /// 加载virtualProgram
-osg::StateSet* CResourceLod::GetOrCreateStateSet(const std::string& sGLSLPath,bool bIsRef)
+void CResourceLod::LoadShader(const std::string& sGLSLPath,osg::StateSet* pStateSet)
 {
     if(sGLSLPath.npos != sGLSLPath.find("GLSL"))
     {
-        static std::string glslPath;
+        std::string glslPath = m_sAppPath + sGLSLPath;
 
-        if(bIsRef)
-        {
-            glslPath = m_sAppPath + sGLSLPath;
-        }
-        else
-        {
-            glslPath = sGLSLPath;
-        }
+        static osgEarth::Util::Shaders shader;
 
-        auto itor = m_mapStateSet.find(glslPath);
+        /// 创建方程
+        auto pVirtualProgram = osgEarth::VirtualProgram::getOrCreate(pStateSet);
+        shader.load(pVirtualProgram,glslPath);
 
-        if(m_mapStateSet.end() != itor && itor->second.valid())
-        {
-            return(itor->second.get());
-        }
-        else
-        {
-            osg::StateSet* pParentStateSet = new osg::StateSet;
-            static osgEarth::Util::Shaders shader;
-
-            /// 创建方程
-            auto pVirtualProgram = osgEarth::VirtualProgram::getOrCreate(pParentStateSet);
-            shader.load(pVirtualProgram,glslPath);
-
-            InitSateSet(pParentStateSet,osgDB::getSimpleFileName(glslPath));
-
-            m_mapStateSet[glslPath] = pParentStateSet;
-
-            return(pParentStateSet);
-        }
-    }
-    else
-    {
-        return(nullptr);
+        InitSateSet(pStateSet,osgDB::getSimpleFileName(glslPath));
     }
 }
 
@@ -297,7 +270,6 @@ void CResourceLod::ClearNoUse()
     ClearMap(m_mapImage);
     ClearMap(m_mapTexture);
     ClearMap(m_mapFont);
-    ClearMap(m_mapStateSet);
     ClearMap(m_mapType2StateSets);
     ClearMap(m_mapImageNode);
 }

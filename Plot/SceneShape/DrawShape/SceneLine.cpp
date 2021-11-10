@@ -3,6 +3,7 @@
 
 void CSceneLine::CreateShape()
 {
+    m_unStateSet = LINE_DRAW_STATE;
     m_pPreviousPoints = new osg::Vec3Array;
     m_pPreviousPoints->setBinding(osg::Array::BIND_PER_VERTEX);
     m_pGeometry->setVertexAttribArray(osg::Drawable::ATTRIBUTE_6, m_pPreviousPoints);
@@ -62,7 +63,7 @@ void CSceneLine::UpdateShape()
     /// 如果宽度修改
     if(m_bWidthChanged)
     {
-        m_pProgramNode->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Line.glsl"));
+        m_pProgramNode->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(m_unStateSet));
 
         m_pGeometry->getOrCreateStateSet()->getOrCreateUniform("LineWidth",osg::Uniform::FLOAT)->set(static_cast<float>(m_nLineWidth));
         m_bWidthChanged=false;
@@ -73,7 +74,7 @@ void CSceneLine::UpdateShape()
     {
         if(m_bOpenGlow)
         {
-            m_pProgramNode->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Line.glsl"));
+            m_pProgramNode->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(m_unStateSet));
             m_pGeometry->getOrCreateStateSet()->setDefine("LINE_GLOW");
             m_pGeometry->getOrCreateStateSet()->setMode(GL_BLEND,osg::StateAttribute::ON);
             auto pDepth = new osg::Depth;
@@ -93,7 +94,7 @@ void CSceneLine::UpdateShape()
     /// 如果线性修改
     if(m_bLineTypeChanged)
     {
-        m_pProgramNode->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet("GLSL/Line.glsl"));
+        m_pProgramNode->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(m_unStateSet));
         switch(m_emLineType)
         {
         case SOLID_LINE:
