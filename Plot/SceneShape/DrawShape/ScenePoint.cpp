@@ -32,11 +32,8 @@ void CScenePoint::UpdateShape()
 /// 创建形状
 void CScenePoint::CreateShape()
 {
-    m_unStateSet = POINT_DRAW_STATE;
-    m_bOpenCull=false;
-    m_pGeometry->setCullingActive(false);
-    auto pStateSet = m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(m_unStateSet);
-    m_pProgramNode->setStateSet(pStateSet);
+    MergeStateSet(POINT_DRAW_STATE);
+    OpenCull(false);
 
     m_pDrawArrays=new osg::DrawArrays(GL_POINTS,0,m_pVertexArray->size());
     m_pGeometry->addPrimitiveSet(m_pDrawArrays);

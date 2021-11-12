@@ -30,9 +30,7 @@ void CSceneImage::InitNode()
 {
     m_unStateSet = GLOBAL_DRAW_STATE|BLEND_STATE;
     ImplSceneNode<IImage>::InitNode();
-    m_bOpenCull=false;
-    m_pProgramNode->setCullingActive(m_bOpenCull);
-    m_pProgramNode->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(m_unStateSet));
+    OpenCull(false);
     SetOsgNode(m_pProgramNode);
 }
 

@@ -725,7 +725,6 @@ void CMap::LoadMap()
                 if(nullptr == m_pAtmosphere)
                 {
                     m_pAtmosphere = new CAtmosphere(m_pSceneGraph);
-                    m_pAtmosphere->MakeAtmosphere();
                 }
             }
             else

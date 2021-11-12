@@ -124,11 +124,6 @@ public:
         }
     }
 
-    unsigned GetStateSet()
-    {
-        return(m_unStateSet);
-    }
-
 protected:
 
     /**

@@ -51,9 +51,7 @@ void CSceneEllipsoid::UpdateShape()
 
             pNodeState->setTextureAttribute(0, pTexture);
 
-            m_unStateSet = GLOBAL_DRAW_STATE;
-            auto pStateSet = m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(m_unStateSet);
-            m_pProgramNode->setStateSet(pStateSet);
+            MergeStateSet(GLOBAL_DRAW_STATE);
         }
         else
         {
@@ -62,7 +60,7 @@ void CSceneEllipsoid::UpdateShape()
             m_pGeometry->getOrCreateStateSet()->removeTextureAttribute(0,pTexture);
 
             /// 如果VP中有函数则移除
-            m_pProgramNode->setStateSet(nullptr);
+            RemoveStateSet(GLOBAL_DRAW_STATE);
         }
     }
         break;

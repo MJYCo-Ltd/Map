@@ -4,9 +4,7 @@
 
 void CFlashAbility::InitAbility()
 {
-    m_pSceneNode->AsOsgSceneNode()->GetRealNode()->setStateSet(
-                m_pSceneNode->GetBoundSceneGraph()->ResouceLoader()->GetOrCreateStateSet(
-                    m_pSceneNode->AsOsgSceneNode()->GetStateSet()|FLASH_DRAW_STATE));
+    m_pSceneNode->MergeStateSet(FLASH_DRAW_STATE);
 
     m_pSceneNode->AsOsgSceneNode()->GetOsgNode()->getOrCreateStateSet()
             ->getOrCreateUniform("flashStartTime",osg::Uniform::FLOAT)->set((float)osg::Timer::instance()->time_s());
@@ -59,7 +57,7 @@ void CFlashAbility::UpdateAbility()
         }
         else
         {
-            m_pSceneNode->AsOsgSceneNode()->GetRealNode()->setStateSet(nullptr);
+            m_pSceneNode->RemoveStateSet(FLASH_DRAW_STATE);
         }
         m_bFlashChanged=false;
     }

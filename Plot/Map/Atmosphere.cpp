@@ -6,15 +6,9 @@
 #include <osgEarth/SpatialReference>
 #include "Atmosphere.h"
 
-CAtmosphere::CAtmosphere(ISceneGraph* pSceneGraph):
-    m_pSceneGraph(pSceneGraph)
+CAtmosphere::CAtmosphere(ISceneGraph* pSceneGraph)
 {
-    m_pProgramNode = new osg::Group;
-}
-
-void CAtmosphere::MakeAtmosphere()
-{
-    IPlot* pPlot=m_pSceneGraph->GetPlot();
+    IPlot* pPlot=pSceneGraph->GetPlot();
     m_pEllipsoid=dynamic_cast<IEllipsoidSensor*>(pPlot->CreateSceneNode("IEllipsoidSensor"));
 
     m_pEllipsoid->SetDrawType(IEllipsoidSensor::FULL_PART);
@@ -23,17 +17,17 @@ void CAtmosphere::MakeAtmosphere()
     m_pEllipsoid->ShowLine(false);
     m_pEllipsoid->SetLatSegMents(100);
 
-    IOsgSceneNode* pOsgSceneNode = m_pEllipsoid->AsOsgSceneNode();
+    m_pEllipsoid->MergeStateSet(ATMOSPHERE_DRAW_STATE);
+}
 
+void CAtmosphere::MakeAtmosphere()
+{
 
-    m_pProgramNode->setStateSet(
-                m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(ATMOSPHERE_DRAW_STATE));
-    m_pProgramNode->addChild(pOsgSceneNode->GetRealNode());
 }
 
 osg::Node *CAtmosphere::GetNode()
 {
-    return(m_pProgramNode);
+    return(m_pEllipsoid->AsOsgSceneNode()->GetRealNode());
 }
 
 void CAtmosphere::SetVisible(bool bVisilbe)

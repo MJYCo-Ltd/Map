@@ -1,7 +1,6 @@
 #ifndef CATMOSPHERE_H
 #define CATMOSPHERE_H
 #include <osg/Node>
-#include <Plot/Common/ISceneCameraGroup.h>
 #include <Plot/SceneShape/IEllipsoidSensor.h>
 
 class CAtmosphere
@@ -26,9 +25,7 @@ public:
      */
     void SetVisible(bool bVisilbe);
 protected:
-    osg::ref_ptr<osg::Group> m_pProgramNode;
     IEllipsoidSensor*    m_pEllipsoid{nullptr};
-    ISceneGraph*         m_pSceneGraph{nullptr};
 };
 
 #endif // CATMOSPHERE_H

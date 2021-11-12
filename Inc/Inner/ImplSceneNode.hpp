@@ -42,6 +42,8 @@ protected:
     virtual void InitNode()
     {
         IOsgSceneNode::InitNode();
+        m_pProgramNode->setStateSet(
+                    T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(m_unStateSet));
         m_bCallOne=true;
     }
 
@@ -65,6 +67,35 @@ protected:
 
         m_pRootNode = pNode;
     }
+
+    /**
+     * @brief 合并状态集合
+     */
+    void MergeStateSet(unsigned uState)
+    {
+        unsigned unPreStateSet = m_unStateSet;
+        m_unStateSet |= uState;
+        if(unPreStateSet != m_unStateSet)
+        {
+            m_bStateChanged=true;
+            NodeChanged();
+        }
+    }
+
+    /**
+     * @brief 移除状态集合
+     */
+    void RemoveStateSet(unsigned uState)
+    {
+        unsigned unPreStateSet = m_unStateSet;
+        m_unStateSet &= ~uState;
+        if(unPreStateSet != m_unStateSet)
+        {
+            m_bStateChanged=true;
+            NodeChanged();
+        }
+    }
+
 
     /**
      * @brief 节点更新回调
@@ -123,6 +154,13 @@ protected:
                 one.second->UpdateAbility();
             }
             m_bAbilityChanged=false;
+        }
+
+        /// 渲染状态修改
+        if(m_bStateChanged)
+        {
+            m_pProgramNode->setStateSet(T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(m_unStateSet));
+            m_bStateChanged = false;
         }
     }
 
@@ -184,6 +222,8 @@ protected:
         T::m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CModifyNode(pGroup,pNode,false));
     }
 
+
+    ///创建一个能力
     INodeAbility* GetOrCreateAbility(ABILITY_TYPE type)
     {
         INodeAbility* pReturn{nullptr};
@@ -204,6 +244,7 @@ protected:
         return(pReturn);
     }
 
+    /// 移除能力
     bool RemoveAbility(ABILITY_TYPE type)
     {
         if(T::m_emAbility & type)
@@ -222,7 +263,8 @@ protected:
     bool m_bLightingChanged{false};
     bool m_bShowTopChanged{false};
     bool m_bAbilityChanged{false};
-    std::map<ABILITY_TYPE,INodeAbility*> m_mapAbility;
+    bool m_bStateChanged{false};
+    std::map<ABILITY_TYPE,INodeAbility*> m_mapAbility; /// 根据能力类型创建能力
 };
 
 #endif // IMPL_SCENE_NODE_H
