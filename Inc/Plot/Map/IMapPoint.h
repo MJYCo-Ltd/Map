@@ -10,6 +10,7 @@ class IMapPoint:public IMapSceneNode
 {
 public:
     CONSTRUCTOR(IMapPoint,IMapSceneNode)
+
     /**
      * @brief 获取真实的绘制体
      * @return

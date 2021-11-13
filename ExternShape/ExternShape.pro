@@ -11,6 +11,7 @@ HEADERS +=
 
 SOURCES += \
     MapCircle.cpp \
+    MapExternLine.cpp \
     MapPlaceNode.cpp \
     MapRectange.cpp
 CONFIG *= ordered

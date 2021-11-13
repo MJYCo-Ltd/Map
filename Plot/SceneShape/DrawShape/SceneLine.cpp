@@ -62,7 +62,7 @@ void CSceneLine::UpdateShape()
     /// 如果宽度修改
     if(m_bWidthChanged)
     {
-        MergeStateSet(LINE_DRAW_STATE);
+        MergeStateSet(LINE_DRAW_STATE|BLEND_STATE);
 
         m_pGeometry->getOrCreateStateSet()->getOrCreateUniform("LineWidth",osg::Uniform::FLOAT)->set(static_cast<float>(m_nLineWidth));
         m_bWidthChanged=false;
@@ -79,7 +79,6 @@ void CSceneLine::UpdateShape()
         else
         {
             m_pGeometry->getOrCreateStateSet()->removeDefine("LINE_GLOW");
-            RemoveStateSet(LINE_DRAW_STATE|BLEND_STATE);
         }
         m_bGlowChanged=false;
     }
