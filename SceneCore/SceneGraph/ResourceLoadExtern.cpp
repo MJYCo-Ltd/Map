@@ -165,14 +165,22 @@ osg::StateSet* CResourceLod::GetOrCreateStateSet(unsigned unType)
 /// 将QImage转成OsgImage
 osg::Image *CResourceLod::LoadImage(const QImage &rQImage)
 {
-    if(rQImage.format() != QImage::Format_RGBA8888)
+    auto pFindOne = m_mapQtImage.find(rQImage.cacheKey());
+    if(m_mapQtImage.end() != pFindOne)
     {
-       QImage tmpImage = rQImage.convertToFormat(QImage::Format_RGBA8888);
-       return(TransformQImage(tmpImage));
+        return(pFindOne->second);
     }
     else
     {
-        return(TransformQImage(rQImage));
+        if(rQImage.format() != QImage::Format_RGBA8888)
+        {
+            QImage tmpImage = rQImage.convertToFormat(QImage::Format_RGBA8888);
+            return(TransformQImage(tmpImage));
+        }
+        else
+        {
+            return(TransformQImage(rQImage));
+        }
     }
 }
 
@@ -214,6 +222,12 @@ osg::Node* CResourceLod::CreateImageNode(const QImage& rQImage)
 osg::Node *CResourceLod::CreateImageNode(const RGBAData *rImageData)
 {
     return(GetOrCreateNodeByImage(LoadImage(rImageData)));
+}
+
+/// 根据
+std::string CResourceLod::FindQImageKey(const QImage &rQImage)
+{
+    return(QString("%1_QImage").arg(rQImage.cacheKey()).toLatin1().data());
 }
 
 osg::Node *CResourceLod::CreateImageNode(const std::string &sImagePath,int nWidth,int nHeight,bool bIsRef)
@@ -289,6 +303,7 @@ osg::Image *CResourceLod::TransformQImage(const QImage &rQImage)
 
     auto image = new osg::Image;
     image->setImage(rQImage.width(), nHeight, 1, GL_RGBA,GL_RGBA, GL_UNSIGNED_BYTE,pTempBuffer,osg::Image::USE_NEW_DELETE);
+    m_mapQtImage[rQImage.cacheKey()] = image;
     return(image);
 }
 

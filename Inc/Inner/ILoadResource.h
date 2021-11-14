@@ -107,6 +107,12 @@ public:
     virtual osg::Node* CreateImageNode(const RGBAData*)=0;
 
     /**
+     * @brief 根据QImage产生某一值
+     * @return
+     */
+    virtual std::string FindQImageKey(const QImage& rQImage)=0;
+
+    /**
      * @brief 查找或者创建着色器
      * @return
      */

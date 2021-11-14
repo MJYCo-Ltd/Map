@@ -1,12 +1,12 @@
 #ifndef RESOURCELOD_H
 #define RESOURCELOD_H
 
+#include <QImage>
 #include <osg/Texture2D>
 #include <osg/Node>
 #include <osgText/Font>
 
 #include <Inner/ILoadResource.h>
-class QImage;
 
 class CResourceLod:public ILoadResouce
 {
@@ -51,6 +51,11 @@ public:
     osg::Node* CreateImageNode(const QImage& rQImage);
     osg::Node* CreateImageNode(const RGBAData* rImageData);
 
+    /**
+     * @brief 根据QImage产生某一值
+     * @return
+     */
+    virtual std::string FindQImageKey(const QImage& rQImage);
 
     osg::StateSet* GetOrCreateStateSet(unsigned enType);
 
@@ -67,6 +72,7 @@ protected:
     std::string m_sAppPath;
     std::map<std::string,osg::ref_ptr<osg::Node>>      m_mapNode;    /// 模型映射
     std::map<std::string,osg::ref_ptr<osg::Image>>     m_mapImage;   /// 图片映射
+    std::map<qint64,osg::ref_ptr<osg::Image>>          m_mapQtImage; /// Qt图片映射
     std::map<std::string,osg::ref_ptr<osgText::Font>>  m_mapFont;    /// 字体映射
     std::map<osg::Image*,osg::ref_ptr<osg::Texture2D>> m_mapTexture; /// 纹理映射
     std::map<osg::Image*,osg::ref_ptr<osg::Node>>      m_mapImageNode;/// 图片节点

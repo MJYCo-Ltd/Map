@@ -272,4 +272,5 @@ void CResourceLod::ClearNoUse()
     ClearMap(m_mapFont);
     ClearMap(m_mapType2StateSets);
     ClearMap(m_mapImageNode);
+    ClearMap(m_mapQtImage);
 }

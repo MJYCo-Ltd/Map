@@ -22,6 +22,7 @@ CSceneImage::~CSceneImage()
 void CSceneImage::SetQImage(const QImage &rImage)
 {
     m_pQImageDrawNode = TryChangeToGeomerty(m_pSceneGraph->ResouceLoader()->CreateImageNode(rImage));
+    m_sImagePath = m_pSceneGraph->ResouceLoader()->FindQImageKey(rImage);
     SET_TRUE_NODE_UPDATE(m_bGeomertyChanged)
 }
 
