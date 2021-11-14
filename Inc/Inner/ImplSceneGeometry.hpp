@@ -135,7 +135,7 @@ protected:
     /**
      * @brief 更新点信息
      */
-    void UpdateVetrix()
+    virtual void UpdateVetrix()
     {
         int nIndex{0};
         std::vector<ScenePos> vSourcePos;

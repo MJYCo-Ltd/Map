@@ -443,6 +443,7 @@ void MainWindow::PlotMap()
     m_pPolygon->GetDrawPolygon()->AddPoint(pos);
     m_pPolygon->GetDrawPolygon()->SetColor(color);
     m_pPolygon->SetTerrainType(IMapSceneNode::RELATIVE_TERRAIN);
+    m_pPolygon->GetDrawPolygon()->ShowOutLine(true);
     m_pLayer->AddSceneNode(m_pPolygon);
 
     /// 绘制地图上的点
