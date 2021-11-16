@@ -81,6 +81,7 @@ void CSceneImage::FrameCall()
         ss1<<'_';
         ss1<<"width_"<<m_stImageSize.unWidth<<"height_"<<m_stImageSize.unHeight;
 
+//        std::cout<<ss1.str()<<'\t'<<m_pProgramNode->getStateSet()<<std::endl;
         auto pFindOne = s_mapID2ImageNode[m_pSceneGraph].find(ss1.str());
         if(s_mapID2ImageNode[m_pSceneGraph].end() != pFindOne)
         {

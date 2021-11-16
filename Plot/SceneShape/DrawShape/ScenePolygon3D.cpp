@@ -22,12 +22,15 @@ void CScenePolygon3D::UpdateShape()
 
             /// 移除所有的节点
             m_pGeometry->removePrimitiveSet(0,m_pGeometry->getNumPrimitiveSets());
-            osg::DrawElementsUShort* elBottom = new osg::DrawElementsUShort(GL_TRIANGLE_FAN);
-            m_pGeometry->addPrimitiveSet(elBottom);
-
-            for(int nIndex=nVertexCount-1;nIndex>-1;--nIndex)
+            if(m_bShowBottom)
             {
-                elBottom->push_back(nIndex);
+                osg::DrawElementsUShort* elBottom = new osg::DrawElementsUShort(GL_TRIANGLE_FAN);
+                m_pGeometry->addPrimitiveSet(elBottom);
+
+                for(int nIndex=nVertexCount-1;nIndex>-1;--nIndex)
+                {
+                    elBottom->push_back(nIndex);
+                }
             }
 
             osg::DrawElementsUShort* elTop = new osg::DrawElementsUShort(GL_TRIANGLE_FAN);
@@ -37,6 +40,17 @@ void CScenePolygon3D::UpdateShape()
                 elTop->push_back(nIndex+nVertexCount);
             }
 
+            /// 对凹多边形进行剖分
+//            osgEarth::Tessellator oeTess;
+//            if (!oeTess.tessellateGeometry(*m_pGeometry))
+            {
+                osgUtil::Tessellator tess;
+                tess.setTessellationType(osgUtil::Tessellator::TESS_TYPE_GEOMETRY);
+                tess.setWindingType(osgUtil::Tessellator::TESS_WINDING_ODD);
+                tess.retessellatePolygons(*m_pGeometry);
+            }
+
+            /// 绘制边
             osg::DrawElementsUShort* elSide = new osg::DrawElementsUShort(GL_TRIANGLE_STRIP);
             m_pGeometry->addPrimitiveSet(elSide);
             for(int nIndex=0;nIndex<nVertexCount;++nIndex)
@@ -48,16 +62,6 @@ void CScenePolygon3D::UpdateShape()
             elSide->push_back(0);
             elSide->push_back(nVertexCount);
 
-
-//            /// 对凹多边形进行剖分
-//            osgEarth::Tessellator oeTess;
-//            if (!oeTess.tessellateGeometry(*m_pGeometry))
-//            {
-//                osgUtil::Tessellator tess;
-//                tess.setTessellationType(osgUtil::Tessellator::TESS_TYPE_GEOMETRY);
-//                tess.setWindingType(osgUtil::Tessellator::TESS_WINDING_POSITIVE);
-//                tess.retessellatePolygons(*m_pGeometry);
-//            }
         }
 
         m_bCountChanged = false;

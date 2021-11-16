@@ -494,6 +494,7 @@ void MainWindow::PlotMap()
     m_pPolygon3D->GetDrawPolygon()->SetColor(color);
     m_pPolygon3D->GetDrawPolygon()->SetHeight(100000);
     m_pPolygon3D->SetTerrainType(IMapSceneNode::ABSOLUTE_TERRAIN);
+    m_pPolygon3D->GetDrawPolygon()->ShowBottom(false);
     m_pLayer->AddSceneNode(m_pPolygon3D);
 }
 
