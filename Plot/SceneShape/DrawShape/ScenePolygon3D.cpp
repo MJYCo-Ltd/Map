@@ -1,4 +1,3 @@
-#include <osgEarth/Tessellator>
 #include <osgUtil/Tessellator>
 #include "ScenePolygon3D.h"
 
@@ -40,9 +39,17 @@ void CScenePolygon3D::UpdateShape()
                 elTop->push_back(nIndex+nVertexCount);
             }
 
-            /// 对凹多边形进行剖分
-//            osgEarth::Tessellator oeTess;
-//            if (!oeTess.tessellateGeometry(*m_pGeometry))
+            /// 根据包围盒中心重新计算法线
+            const osg::BoundingBox& rBoundBox = m_pGeometry->getBoundingBox();
+            const osg::Vec3f& vCenter = rBoundBox.center();
+            m_pNormals->resize(m_pVertexArray->size());
+            for(int nIndex=m_pVertexArray->size()-1; nIndex>-1;--nIndex)
+            {
+                m_pNormals->at(nIndex) = m_pVertexArray->at(nIndex) - vCenter;
+                m_pNormals->at(nIndex).normalize();
+            }
+
+            /// 防止多边形为凹多边形
             {
                 osgUtil::Tessellator tess;
                 tess.setTessellationType(osgUtil::Tessellator::TESS_TYPE_GEOMETRY);

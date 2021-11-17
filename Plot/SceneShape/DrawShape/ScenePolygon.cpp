@@ -1,5 +1,4 @@
 #include <osgUtil/Tessellator>
-#include <osgEarth/Tessellator>
 #include "ScenePolygon.h"
 
 /// 创建多边形
@@ -32,12 +31,12 @@ void CScenePolygon::UpdateShape()
         if(m_bFill)
         {
             m_pGeometry->addPrimitiveSet(m_pDrawArrays);
-            osgEarth::Tessellator oeTess;
-            if (!oeTess.tessellateGeometry(*m_pGeometry))
+
+            /// 防止多边形为凹多边形
             {
                 osgUtil::Tessellator tess;
                 tess.setTessellationType(osgUtil::Tessellator::TESS_TYPE_GEOMETRY);
-                tess.setWindingType(osgUtil::Tessellator::TESS_WINDING_POSITIVE);
+                tess.setWindingType(osgUtil::Tessellator::TESS_WINDING_ODD);
                 tess.retessellatePolygons(*m_pGeometry);
             }
         }
