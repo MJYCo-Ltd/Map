@@ -131,8 +131,14 @@ protected:
         /// 如果光照可见
         if(m_bLightingChanged)
         {
-            osgEarth::GLUtils::setLighting(m_pRootNode->getOrCreateStateSet(),
-                                           T::m_bOpenLight?osg::StateAttribute::ON:osg::StateAttribute::OFF);
+            if(T::m_bOpenLight)
+            {
+                MergeStateSet(LIGHTING_STATE);
+            }
+            else
+            {
+                RemoveStateSet(LIGHTING_STATE);
+            }
             m_bLightingChanged=false;
         }
 

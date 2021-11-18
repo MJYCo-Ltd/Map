@@ -17,7 +17,7 @@ public:
      */
     void InitNode()
     {
-        ImplSceneNode<T>::m_unStateSet = BLEND_STATE|POLYGON_OFFSET_STATE;
+        ImplSceneNode<T>::m_unStateSet |= BLEND_STATE|POLYGON_OFFSET_STATE;
 
         ImplSceneNode<T>::InitNode();
         /// 创建显示体

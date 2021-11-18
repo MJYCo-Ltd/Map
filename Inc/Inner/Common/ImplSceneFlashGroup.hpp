@@ -25,10 +25,8 @@ protected:
      */
     void InitNode()
     {
-        ImplSceneGroup<T>::m_unStateSet = FLASH_DRAW_STATE;
+        ImplSceneGroup<T>::m_unStateSet |= FLASH_DRAW_STATE;
         ImplSceneGroup<T>::InitNode();
-        ImplSceneGroup<T>::m_pProgramNode->setStateSet(
-                    T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(ImplSceneGroup<T>::m_unStateSet));
     }
 
     void FlashStatusChanged()SET_TRUE_NODE_UPDATE(m_bStatusChanged)

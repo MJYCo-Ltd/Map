@@ -29,7 +29,7 @@ void CSceneImage::SetQImage(const QImage &rImage)
 /// 初始化节点
 void CSceneImage::InitNode()
 {
-    m_unStateSet = GLOBAL_DRAW_STATE|BLEND_STATE;
+    m_unStateSet |= GLOBAL_DRAW_STATE|BLEND_STATE;
     ImplSceneNode<IImage>::InitNode();
     OpenCull(false);
     SetOsgNode(m_pProgramNode);

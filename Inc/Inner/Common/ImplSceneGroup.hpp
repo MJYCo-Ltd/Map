@@ -29,12 +29,12 @@ public:
 
         IOsgSceneNode* pOsgSceneNode = pSceneNode->AsOsgSceneNode();
 
-        auto findItor = m_setChildNode.find(pOsgSceneNode);
+        auto findItor = m_setChildNode.find(pSceneNode);
         if (findItor == m_setChildNode.end())
         {
             ImplSceneNode<T>::AddNode(m_pGroup.get(),pOsgSceneNode->GetRealNode());
             pOsgSceneNode->AddToGroup(m_pGroup.get());
-            m_setChildNode.insert(pOsgSceneNode);
+            m_setChildNode.insert(pSceneNode);
             InsertChildNode(pOsgSceneNode->GetRealNode());
             return(true);
         }
@@ -52,7 +52,7 @@ public:
 
         IOsgSceneNode* pOsgSceneNode = pSceneNode->AsOsgSceneNode();
 
-        auto findItor = m_setChildNode.find(pOsgSceneNode);
+        auto findItor = m_setChildNode.find(pSceneNode);
         if (findItor != m_setChildNode.end())
         {
             pOsgSceneNode->DelFromGroup(m_pGroup.get());
@@ -80,11 +80,20 @@ protected:
         ImplSceneNode<T>::SetOsgNode(m_pGroup.get());
     }
 
+    void LightChanged()
+    {
+        ImplSceneNode<T>::LightChanged();
+        for(auto one : m_setChildNode)
+        {
+            one->OpenLight(T::m_bOpenLight);
+        }
+    }
+
     virtual void InsertChildNode(osg::Node*){}
     virtual void RemoveChildNode(osg::Node*){}
 protected:
-    std::set<IOsgSceneNode*>       m_setChildNode;/// 子节点
-    osg::observer_ptr<osg::Group>m_pGroup;      /// 本节点
+    std::set<ISceneNode*>       m_setChildNode;/// 子节点
+    osg::observer_ptr<osg::Group>m_pGroup;        /// 本节点
 };
 
 #endif // IMPL_SCENE_GROUP_H

@@ -46,6 +46,11 @@ private:
 /// 根据类型创建渲染状态
 osg::StateSet* CResourceLod::GetOrCreateStateSet(unsigned unType)
 {
+    if(0 == unType)
+    {
+        return(nullptr);
+    }
+
     auto pFindone = m_mapType2StateSets.find(unType);
     if(m_mapType2StateSets.end() != pFindone)
     {
@@ -60,11 +65,15 @@ osg::StateSet* CResourceLod::GetOrCreateStateSet(unsigned unType)
         {
             osgEarth::GLUtils::setLighting(pStateSet, osg::StateAttribute::ON);
         }
+        else
+        {
+            osgEarth::GLUtils::setLighting(pStateSet, osg::StateAttribute::OFF);
+        }
 
         /// 如果透明开启
         if(unType & BLEND_STATE)
         {
-            pStateSet->setMode(GL_BLEND,osg::StateAttribute::ON);
+            pStateSet->setAttributeAndModes( new osg::BlendFunc( GL_ONE, GL_ONE ), osg::StateAttribute::ON );
             auto pDepth = new osg::Depth;
             pDepth->setWriteMask(false);
             pStateSet->setAttribute(pDepth);
@@ -324,27 +333,9 @@ void CResourceLod::InitSateSet(osg::StateSet* pStateSete,const std::string& sFil
         {
             vp->setInheritShaders(false);
         }
-
-        pStateSete->setAttributeAndModes(
-                    new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::FILL),
-                    osg::StateAttribute::PROTECTED);
-
-        osgEarth::GLUtils::setLighting(pStateSete, osg::StateAttribute::OFF);
-        pStateSete->setAttributeAndModes( new osg::CullFace(osg::CullFace::FRONT), osg::StateAttribute::ON );
-        pStateSete->setAttributeAndModes( new osg::Depth( osg::Depth::LESS, 0, 1, false ) ); // no depth write
-        pStateSete->setAttributeAndModes( new osg::BlendFunc( GL_ONE, GL_ONE ), osg::StateAttribute::ON );
+        pStateSete->setRenderingHint(osg::StateSet::DEFAULT_BIN);
         pStateSete->setRenderBinDetails( -1, "RenderBin" );
 
-        osg::ref_ptr<const osgEarth::SpatialReference> wgs84 = osgEarth::SpatialReference::get("wgs84");
-        const osgEarth::Ellipsoid& rEllipsoid = wgs84->getEllipsoid();
-        float fInnerRadius = std::min(
-                    rEllipsoid.getRadiusPolar(),
-                    rEllipsoid.getRadiusEquator() );
-
-        float fOuterRadius = fInnerRadius * 1.025;
-
-        pStateSete->getOrCreateUniform("atmos_fInnerRadius", osg::Uniform::FLOAT)->set(fInnerRadius);
-        pStateSete->getOrCreateUniform("atmos_fOuterRadius", osg::Uniform::FLOAT)->set(fOuterRadius);
         pStateSete->getOrCreateUniform("oe_sky_exposure", osg::Uniform::FLOAT)->set(1.f);
     }
     else if(sFileName == "Point.glsl")

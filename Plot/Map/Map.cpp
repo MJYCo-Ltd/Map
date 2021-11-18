@@ -739,7 +739,7 @@ void CMap::LoadMap()
 /// 初始化光线
 void CMap::Init3DLight()
 {
-    m_unStateSet = PHONGLIGHTING_STATE;
+    m_unStateSet |= PHONGLIGHTING_STATE;
     m_p3DRoot->setStateSet(m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(m_unStateSet));
     osg::Vec3f lightPos(0.0f, 0.0f, 1.0f);
     osg::LightSource* lightSource = new osg::LightSource();
@@ -760,9 +760,11 @@ void CMap::Init3DLight()
     m_pLightPosUniform->set( lightPos / lightPos.length());
 
     const osgEarth::Ellipsoid& rEllipsoid = m_pCurMapNode->getMapSRS()->getEllipsoid();
-    float _outerRadius = osg::minimum(rEllipsoid.getRadiusEquator(),rEllipsoid.getRadiusPolar()) * 1.025f;
-    stateset->getOrCreateUniform( "atmos_fOuterRadius",    osg::Uniform::FLOAT )->set(_outerRadius);
-    stateset->getOrCreateUniform( "atmos_fOuterRadius2",   osg::Uniform::FLOAT )->set(_outerRadius * _outerRadius);
+    float fInnerRadius = osg::minimum(rEllipsoid.getRadiusEquator(),rEllipsoid.getRadiusPolar());
+    float fOuterRadius = fInnerRadius * 1.025;
+
+    stateset->getOrCreateUniform("atmos_fInnerRadius", osg::Uniform::FLOAT)->set(fInnerRadius);
+    stateset->getOrCreateUniform("atmos_fOuterRadius", osg::Uniform::FLOAT)->set(fOuterRadius);
 
     stateset = m_p3DRoot->getOrCreateStateSet();
     stateset->setDefine("OE_NUM_LIGHTS", "1");
