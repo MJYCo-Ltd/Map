@@ -383,6 +383,7 @@ void MainWindow::on_action_6_triggered()
 #include <Plot/Map/IMapLine.h>
 #include <Plot/Map/IMapPoint.h>
 #include <Plot/Map/IMapPolygon.h>
+#include <Plot/Common/ISceneVisualGroup.h>
 
 void MainWindow::PlotMap()
 {
@@ -470,7 +471,7 @@ void MainWindow::PlotMap()
     m_pPoint->GetDrawPoint()->SetPointSize(50.f);
     m_pPoint->GetDrawPoint()->SetImage("Image/China.png");
     m_pPoint->SetTerrainType(IMapSceneNode::ABSOLUTE_TERRAIN);
-    m_pLayer->AddSceneNode(m_pPoint);
+//    m_pLayer->AddSceneNode(m_pPoint);
 
     auto m_pPolygon3D = dynamic_cast<IMapPolygon3D*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPolygon3D"));
 
@@ -496,6 +497,25 @@ void MainWindow::PlotMap()
     m_pPolygon3D->SetTerrainType(IMapSceneNode::ABSOLUTE_TERRAIN);
     m_pPolygon3D->GetDrawPolygon()->ShowBottom(false);
     m_pLayer->AddSceneNode(m_pPolygon3D);
+
+    /// 添加
+    IMapLocation*  pMapLocation1 = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+
+    pos.dX = 123;
+    pos.dY = 27;
+    pMapLocation1->SetGeoPos(pos);
+    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("Model/AirPlane.ive");
+    pModel->SetCanPick(true);
+    ISceneVisualGroup* pVisualGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(VISUAL_GROUP)->AsSceneVisualGroup();
+    SceneViewPoint viePoint;
+    viePoint.fAzimuth = 90;
+    viePoint.fDistance = 100000;
+    viePoint.stPos = pos;
+    pVisualGroup->SetViewPoint(viePoint);
+    pVisualGroup->AddSceneNode(pModel);
+    pMapLocation1->SetSceneNode(pModel);
+    m_pSceneGraph->GetRoot()->AddSceneNode(pVisualGroup);
+    m_pLayer->AddSceneNode(pMapLocation1);
 }
 
 void MainWindow::LodPlot()

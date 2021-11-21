@@ -113,11 +113,17 @@ protected:
 
         if(m_bChildInsert)
         {
-            ImplSceneGroup<T>::m_unStateSet |= VISUAL_STATE;
-            auto pStateSet = T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(ImplSceneGroup<T>::m_unStateSet);
-            m_pProgramNode->setStateSet(pStateSet);
             for(auto one : m_listInsertChild)
             {
+                for(auto oneSceneNode :m_setChildNode)
+                {
+                    if(one == oneSceneNode->AsOsgSceneNode()->GetRealNode())
+                    {
+                        oneSceneNode->StateSet()|=VISUAL_STATE;
+                        one->setStateSet(T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(oneSceneNode->StateSet()));
+                    }
+                }
+
                 one->getOrCreateStateSet()->setTextureAttribute(1, m_pTexture2D.get());
                 one->getOrCreateStateSet()->addUniform(m_pRenderTextureMatrix);
                 one->getOrCreateStateSet()->addUniform(m_pTextureProjMatrix);
@@ -133,7 +139,6 @@ protected:
 
         if(m_bChildRemove)
         {
-            m_pProgramNode->setStateSet(nullptr);
             m_listInsertChild.clear();
             m_bChildRemove=false;
         }

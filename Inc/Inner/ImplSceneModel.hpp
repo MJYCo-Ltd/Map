@@ -66,6 +66,7 @@ protected:
      */
     void InitNode()
     {
+        ImplSceneModel<T>::m_unStateSet |= GLOBAL_DRAW_STATE;
         ImplSceneNode<T>::InitNode();
         m_pInitAttitudeMatrix = new CMyMatrixTransform;
         ImplSceneNode<T>::SetOsgNode(m_pInitAttitudeMatrix.get());

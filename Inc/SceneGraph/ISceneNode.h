@@ -82,6 +82,7 @@ public:
 
     virtual void MergeStateSet(unsigned uState)=0;
     virtual void RemoveStateSet(unsigned uState)=0;
+    virtual unsigned& StateSet()=0;
 
     /**
      * @brief 转换成想要的类型

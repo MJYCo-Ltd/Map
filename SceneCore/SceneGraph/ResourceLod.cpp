@@ -24,12 +24,9 @@ public:
 
     virtual bool addChild(Node *child)
     {
-        osg::ref_ptr<osg::Group> pProgramNode = new osg::Group;
-        pProgramNode->setStateSet(m_pResourceLoad->GetOrCreateStateSet(GLOBAL_DRAW_STATE));
-        pProgramNode->addChild(child);
-        if(osg::ProxyNode::addChild(pProgramNode.get()))
+        if(osg::ProxyNode::addChild(child))
         {
-            m_pResourceLoad->m_mapNode[m_sModelPath] = pProgramNode;
+            m_pResourceLoad->m_mapNode[m_sModelPath] = child;
             osgEarth::GenerateGL3LightingUniforms generateUniforms;
             child->accept(generateUniforms);
 

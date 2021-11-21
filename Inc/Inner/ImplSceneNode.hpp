@@ -96,6 +96,11 @@ protected:
         }
     }
 
+    unsigned& StateSet()
+    {
+        return(m_unStateSet);
+    }
+
 
     /**
      * @brief 节点更新回调
