@@ -33,16 +33,24 @@ public:
 
     /**
      * @brief 设置分析位置
-     * @attention rViewPint.stPos 位置为
+     * @attention rViewPint.stPos 位置为具体的位置
      */
     void SetViewPoint(const SceneViewPoint& rViewPoint)JUDGE_EQUAL_CALL_FUNCTION(rViewPoint,m_stViewPoint,ParameterChanged)
     const SceneViewPoint& ViewPoint()const{return(m_stViewPoint);}
+
+    /**
+     * @brief 设置视点是不是地理信息
+     * @attention
+     */
+    void SetPosIsGeo(bool bIsGeo)JUDGE_EQUAL_CALL_FUNCTION(bIsGeo,m_bIsGeoPos,ParameterChanged);
+    bool PosIsGeo(){return(m_bIsGeoPos);}
 protected:
     virtual ~ISceneVisualGroup(){}
     virtual void ParameterChanged()=0;
 protected:
     double m_dFovy{45.};   /// 张角
     double m_dAspect{1.};  /// 纵横比
+    bool   m_bIsGeoPos{true};/// 位置是否是地理信息
     SceneViewPoint m_stViewPoint; ///视点位置
 };
 

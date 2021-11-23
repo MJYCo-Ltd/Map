@@ -368,6 +368,4 @@ void CResourceLod::InitSateSet(osg::StateSet* pStateSete,const std::string& sFil
         pStateSete->getOrCreateUniform("fPulseIntervalTime",osg::Uniform::FLOAT)->set(1.f);
         pStateSete->getOrCreateUniform("fPulseStep",osg::Uniform::FLOAT)->set(.1f);
     }
-
-    osgEarth::GLUtils::setLighting(pStateSete,osg::StateAttribute::OFF);
 }

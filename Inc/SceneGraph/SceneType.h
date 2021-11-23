@@ -138,9 +138,10 @@ struct ScenePos
         return(!(this->operator==(rOther)));
     }
 
-    bool IsValidMap()
+    bool IsValidGeoPos()
     {
-        return(dX>-180&&dX<180&&dY>=-90&&dY<=-90);
+        return(dX>-180&&dX<180&&
+               dY>=-90&&dY<=-90);
     }
 };
 

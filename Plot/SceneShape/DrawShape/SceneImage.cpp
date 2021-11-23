@@ -32,7 +32,6 @@ void CSceneImage::InitNode()
     m_unStateSet |= GLOBAL_DRAW_STATE|BLEND_STATE;
     ImplSceneNode<IImage>::InitNode();
     OpenCull(false);
-    SetOsgNode(m_pProgramNode);
 }
 
 void CSceneImage::FrameCall()
@@ -80,8 +79,6 @@ void CSceneImage::FrameCall()
            <<"_Alpha_"<<int(m_stColor.fA*255);
         ss1<<'_';
         ss1<<"width_"<<m_stImageSize.unWidth<<"height_"<<m_stImageSize.unHeight;
-
-//        std::cout<<ss1.str()<<'\t'<<m_pProgramNode->getStateSet()<<std::endl;
         auto pFindOne = s_mapID2ImageNode[m_pSceneGraph].find(ss1.str());
         if(s_mapID2ImageNode[m_pSceneGraph].end() != pFindOne)
         {
@@ -89,10 +86,7 @@ void CSceneImage::FrameCall()
         }
         else
         {
-            osg::ref_ptr<osg::Geometry> pNewNode = new osg::Geometry(*pDrawGeomerty,osg::CopyOp::DEEP_COPY_ARRAYS
-                                             |osg::CopyOp::DEEP_COPY_PRIMITIVES
-                                             |osg::CopyOp::DEEP_COPY_STATESETS);
-
+            osg::ref_ptr<osg::Geometry> pNewNode = new osg::Geometry(*pDrawGeomerty,osg::CopyOp::DEEP_COPY_ARRAYS);
 
             static_cast<osg::Vec4Array*>(pNewNode->getColorArray())
                     ->at(0).set(m_stColor.fR,m_stColor.fG,m_stColor.fB,m_stColor.fA);

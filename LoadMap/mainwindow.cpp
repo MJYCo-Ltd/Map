@@ -513,6 +513,7 @@ void MainWindow::PlotMap()
     viePoint.stPos = pos;
     pVisualGroup->SetViewPoint(viePoint);
     pVisualGroup->AddSceneNode(pModel);
+    pVisualGroup->SetPosIsGeo(true);
     pMapLocation1->SetSceneNode(pModel);
     m_pSceneGraph->GetRoot()->AddSceneNode(pVisualGroup);
     m_pLayer->AddSceneNode(pMapLocation1);
@@ -665,15 +666,16 @@ void MainWindow::on_action12_triggered()
 //    color.fR=1.0f;
     color.fG=0.0f;
     color.fB=0.0f;
+    color.fA=0.1f;
 
     /// 绘制点
     auto pPoint = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
     pPoint->SetPointSize(100.f);
-    pPoint->SetImage("Image/ship.png");
+//    pPoint->SetImage("Image/ship.png");
 
 
     pPoint->SetColor(color);
-    pSceneRoot->AddSceneNode(pPoint);
+//    pSceneRoot->AddSceneNode(pPoint);
 
     /// 绘制线
     auto pLine = dynamic_cast<ILine*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILine"));
@@ -697,7 +699,7 @@ void MainWindow::on_action12_triggered()
     pLine->AddPoint(3,scenePos);
     scenePos.dY = 0.f;
     pLine->AddPoint(4,scenePos);
-    pSceneRoot->AddSceneNode(pLine);
+//    pSceneRoot->AddSceneNode(pLine);
     pLine->SetLineWidth(10);
     pLine->SetLineType(pLine->DOTTED_LINE);
     pLine->OpenGlow(true);
@@ -714,23 +716,51 @@ void MainWindow::on_action12_triggered()
 //    memcpy(data.pRGBAData,image.bits(),image.byteCount());
 //    pImage->SetRGBAData(data);
 
-    color.fG=color.fB=.0f;
+    color.fG=color.fB=0.0f;
     pImage->SetColor(color);
 
     SceneImageSize size;
-    size.unHeight=32;
-    size.unWidth=32;
+    size.unHeight=56;
+    size.unWidth=56;
     size.bOutSet=true;
     pImage->SetImageSize(size);
-    auto pAutoImage = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
-    pAutoImage->SetMinScal(1.);
-    pAutoImage->AddSceneNode(pImage);
 
+
+    ISceneVisualGroup* pVisualGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(VISUAL_GROUP)->AsSceneVisualGroup();
+    SceneViewPoint viePoint;
+    viePoint.fAzimuth = 90;
+    viePoint.fDistance = 80;
+    viePoint.fElev=-30;
+    scenePos.dX=-28;
+    scenePos.dZ=28;
+
+    viePoint.stPos = scenePos;
+    pVisualGroup->SetViewPoint(viePoint);
+    pVisualGroup->SetPosIsGeo(false);
+    pSceneRoot->AddSceneNode(pVisualGroup);
+
+    ISConeSensor* pSCone = dynamic_cast<ISConeSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISConeSensor"));
+    pSCone->SetColor(color);
+    pSCone->SetHAngle(25);
+    pSCone->SetVAngle(25);
+    pSCone->SetDistance(viePoint.fDistance);
+    pSCone->ShowLine(true);
+    pSCone->ShowFace(false);
+
+    ISceneAttitudeGroup* pAttitude = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
+    pAttitude->AddSceneNode(pSCone);
+    pAttitude->SetPos(viePoint.stPos);
+    SceneAttitude attitude;
+    attitude.dRoll=-90;
+    attitude.dYaw = -viePoint.fAzimuth;
+    attitude.dPitch = -viePoint.fElev;
+    pAttitude->SetAttitude(attitude);
+    pSceneRoot->AddSceneNode(pAttitude);
 //    auto pLod = m_pSceneGraph->GetPlot()->CreateSceneGroup(LOD_GROUP)->AsSceneLodGroup();
 //    pLod->AddSceneNode(pAutoImage);
 
 
-    pSceneRoot->AddSceneNode(pAutoImage);
+//    pSceneRoot->AddSceneNode(pImage);
 
     /// 绘制多边形
     auto pPolygon = dynamic_cast<IPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPolygon"));
@@ -740,6 +770,18 @@ void MainWindow::on_action12_triggered()
     scenePos.dY=50.f;
     pPolygon->AddPoint(pPolygon->GetCount(),scenePos);
     pPolygon->SetColor(color);
+    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("Model/AirPlane.ive");
+    pSceneRoot->AddSceneNode(pModel);
+    pModel->SetCanPick(true);
+    pVisualGroup->AddSceneNode(pModel);
+    IBoxSensor* pBox = dynamic_cast<IBoxSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IBoxSensor"));
+    pBox->SetDistance(10);
+//    pBox->SetShowBack(true);
+    pBox->ShowLine(true);
+    pBox->ShowFace(false);
+//    pVisualGroup->AddSceneNode(pBox);
+//    pSceneRoot->AddSceneNode(pBox);
+
     m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);
 }
 
