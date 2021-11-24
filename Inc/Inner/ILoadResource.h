@@ -36,7 +36,9 @@ enum STATESET_TYPE
     PHONGLIGHTING_STATE=1<<12,    /// 冯氏光照着色器
     VISUAL_STATE=1<<13,           /// 视域分析着色器
     FLAT_STATE=1<<14,             /// 平定模型着色器
-    LIGHTING_STATE=1<<15          /// 光照状态
+    LIGHTING_STATE=1<<15,         /// 光照状态
+    CULL_BACK=1<<16,              /// 开启背面裁剪
+    DONT_WRIT_DEPTH=1<<17         /// 不写深度值
 };
 
 /**

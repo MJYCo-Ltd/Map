@@ -229,6 +229,7 @@ void CSceneEllipsoid::UpdateShape()
 /// 创建模型
 void CSceneEllipsoid::CreateShape()
 {
+    MergeStateSet(DONT_WRIT_DEPTH|BLEND_STATE);
     m_pEllipsoidModel = new osg::EllipsoidModel;
     m_pTexCoords = new osg::Vec2Array(osg::Array::BIND_PER_VERTEX);
     UpdateShape();

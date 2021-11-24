@@ -74,9 +74,6 @@ osg::StateSet* CResourceLod::GetOrCreateStateSet(unsigned unType)
         if(unType & BLEND_STATE)
         {
             pStateSet->setAttributeAndModes( new osg::BlendFunc( GL_ONE, GL_ONE ), osg::StateAttribute::ON );
-            auto pDepth = new osg::Depth;
-            pDepth->setWriteMask(false);
-            pStateSet->setAttribute(pDepth);
             pStateSet->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
         }
 
@@ -98,6 +95,18 @@ osg::StateSet* CResourceLod::GetOrCreateStateSet(unsigned unType)
         {
             pStateSet->setAttributeAndModes(
                         new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK,osg::PolygonMode::LINE));
+        }
+
+        if(unType & CULL_BACK)
+        {
+            pStateSet->setAttributeAndModes(new osg::CullFace);
+        }
+
+        if(unType & DONT_WRIT_DEPTH)
+        {
+            auto pDepth = new osg::Depth;
+            pDepth->setWriteMask(false);
+            pStateSet->setAttribute(pDepth);
         }
 
         /// 添加全局着色器
@@ -263,11 +272,15 @@ osg::Node* CResourceLod::GetOrCreateNodeByImage(osg::Image* pImage)
         auto pVertexColor = new osg::Vec4Array(1);
         auto pVertexArray = new osg::Vec3Array(4);
         auto pTexCoordArray = new osg::Vec2Array(4);
+        auto pNormals = new osg::Vec3Array(osg::Array::BIND_OVERALL);
 
         auto pDrawArray = new osg::DrawArrays(GL_TRIANGLE_STRIP,0,4);
         auto pGeometry = new osg::Geometry;
+        pGeometry->setDataVariance(osg::Object::DYNAMIC);
 
         pVertexColor->at(0).set(1.f,1.f,1.f,1.f);
+        pNormals->push_back(osg::Vec3f(0.f,0.f,1.f));
+        pGeometry->setNormalArray(pNormals);
 
         pGeometry->addPrimitiveSet(pDrawArray);
         pGeometry->setTexCoordArray(0,pTexCoordArray);

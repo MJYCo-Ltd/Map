@@ -40,6 +40,7 @@ void CSceneBox::UpdateShape()
 /// 创建多边形
 void CSceneBox::CreateShape()
 {
+    MergeStateSet(CULL_BACK);
     m_pVertexArray->resize(8);
     m_pNormals->resize(8);
     UpdateShape();

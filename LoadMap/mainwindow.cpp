@@ -508,15 +508,35 @@ void MainWindow::PlotMap()
     pModel->SetCanPick(true);
     ISceneVisualGroup* pVisualGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(VISUAL_GROUP)->AsSceneVisualGroup();
     SceneViewPoint viePoint;
-    viePoint.fAzimuth = 90;
-    viePoint.fDistance = 100000;
+    viePoint.fAzimuth = 0;
+    viePoint.fDistance = 10000;
     viePoint.stPos = pos;
+    viePoint.stPos.dY -= 0.005;
     pVisualGroup->SetViewPoint(viePoint);
-    pVisualGroup->AddSceneNode(pModel);
-    pVisualGroup->SetPosIsGeo(true);
+    pVisualGroup->AddSceneNode(pMapLocation1);
     pMapLocation1->SetSceneNode(pModel);
     m_pSceneGraph->GetRoot()->AddSceneNode(pVisualGroup);
     m_pLayer->AddSceneNode(pMapLocation1);
+
+    ISConeSensor* pSCone = dynamic_cast<ISConeSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISConeSensor"));
+    pSCone->SetColor(color);
+    pSCone->SetHAngle(25);
+    pSCone->SetVAngle(25);
+    pSCone->SetDistance(viePoint.fDistance);
+    pSCone->ShowLine(true);
+    pSCone->ShowFace(false);
+
+    ISceneAttitudeGroup* pAttitude = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
+    pAttitude->AddSceneNode(pSCone);
+    SceneAttitude attitude;
+    attitude.dRoll=-90;
+    attitude.dYaw = -viePoint.fAzimuth;
+    attitude.dPitch = -viePoint.fElev;
+    pAttitude->SetAttitude(attitude);
+    IMapLocation*  pMapLocation2 = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+    pMapLocation2->SetGeoPos(viePoint.stPos);
+    pMapLocation2->SetSceneNode(pAttitude);
+    m_pLayer->AddSceneNode(pMapLocation2);
 }
 
 void MainWindow::LodPlot()
@@ -716,7 +736,7 @@ void MainWindow::on_action12_triggered()
 //    memcpy(data.pRGBAData,image.bits(),image.byteCount());
 //    pImage->SetRGBAData(data);
 
-    color.fG=color.fB=0.0f;
+    color.fG=color.fB=1.0f;
     pImage->SetColor(color);
 
     SceneImageSize size;
@@ -760,7 +780,7 @@ void MainWindow::on_action12_triggered()
 //    pLod->AddSceneNode(pAutoImage);
 
 
-//    pSceneRoot->AddSceneNode(pImage);
+    pSceneRoot->AddSceneNode(pImage);
 
     /// 绘制多边形
     auto pPolygon = dynamic_cast<IPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPolygon"));
@@ -770,17 +790,18 @@ void MainWindow::on_action12_triggered()
     scenePos.dY=50.f;
     pPolygon->AddPoint(pPolygon->GetCount(),scenePos);
     pPolygon->SetColor(color);
-    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("Model/AirPlane.ive");
-    pSceneRoot->AddSceneNode(pModel);
-    pModel->SetCanPick(true);
-    pVisualGroup->AddSceneNode(pModel);
+//    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("Model/AirPlane.ive");
+//    pSceneRoot->AddSceneNode(pModel);
+//    pModel->SetCanPick(true);
+//    pVisualGroup->AddSceneNode(pModel);
+    pVisualGroup->AddSceneNode(pImage);
     IBoxSensor* pBox = dynamic_cast<IBoxSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IBoxSensor"));
     pBox->SetDistance(10);
 //    pBox->SetShowBack(true);
     pBox->ShowLine(true);
-    pBox->ShowFace(false);
-//    pVisualGroup->AddSceneNode(pBox);
-//    pSceneRoot->AddSceneNode(pBox);
+//    pBox->ShowFace(false);
+    pVisualGroup->AddSceneNode(pBox);
+    pSceneRoot->AddSceneNode(pBox);
 
     m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);
 }

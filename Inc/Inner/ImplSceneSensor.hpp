@@ -65,16 +65,12 @@ protected:
             switch(T::m_emEffect)
             {
             case T::UNIFORM_MOTION:
-                ImplSceneShape<T>::m_unStateSet |= PULSE_DRAW_STATE;
+                ImplSceneShape<T>::MergeStateSet(PULSE_DRAW_STATE);
                 break;
             default:
-                ImplSceneShape<T>::m_unStateSet &= ~PULSE_DRAW_STATE;
+                ImplSceneShape<T>::RemoveStateSet(PULSE_DRAW_STATE);
                 break;
             }
-
-
-            auto pStateSet = T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(ImplSceneShape<T>::m_unStateSet);
-            m_pProgramNode->setStateSet(pStateSet);
             m_bEffectChanged=false;
         }
 
@@ -108,11 +104,9 @@ protected:
     void InitNode()
     {
         ImplSceneShape<T>::InitNode();
-        ImplSceneShape<T>::m_pGeometry->setStateSet(ImplSceneShape<T>::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(BLEND_STATE));
 
         m_pLineGroup = new osg::Group;
         m_pFaceGroup = new osg::Group;
-        m_pRenderGroup = new osg::Group;
         m_pScalTransform = new osg::MatrixTransform;
 
         /// 设置绑定的属性
@@ -124,14 +118,10 @@ protected:
         m_pScalTransform->addChild(m_pLineGroup.get());
         m_pScalTransform->addChild(m_pFaceGroup.get());
 
-        m_pRenderGroup->addChild(ImplSceneShape<T>::m_pGeometry.get());
-        m_pRenderGroup->addChild(ImplSceneShape<T>::m_pGeometry.get());
-
-        m_pLineGroup->addChild(m_pRenderGroup);
-        m_pFaceGroup->addChild(m_pRenderGroup);
+        m_pLineGroup->addChild(ImplSceneShape<T>::m_pGeometry.get());
+        m_pFaceGroup->addChild(ImplSceneShape<T>::m_pGeometry.get());
 
         /// 线模型只绘制线 面模型只绘制面
-        m_pRenderGroup->setStateSet(ImplSceneShape<T>::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(BLEND_STATE));
         m_pLineGroup->setStateSet(ImplSceneShape<T>::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(LINE_STATE));
         m_pFaceGroup->setStateSet(ImplSceneShape<T>::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(FACE_STATE));
 
@@ -140,7 +130,6 @@ protected:
 protected:
     osg::observer_ptr<osg::Group>    m_pFaceGroup;
     osg::observer_ptr<osg::Group>    m_pLineGroup;
-    osg::ref_ptr<osg::Group>         m_pRenderGroup;
     osg::observer_ptr<osg::MatrixTransform> m_pScalTransform;
     bool       m_bDistanceChanged{false};
     bool       m_bShowTypeChanged{false};

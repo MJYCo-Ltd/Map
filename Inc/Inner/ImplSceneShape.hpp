@@ -17,7 +17,7 @@ public:
      */
     void InitNode()
     {
-        ImplSceneNode<T>::m_unStateSet |= BLEND_STATE|POLYGON_OFFSET_STATE;
+        ImplSceneNode<T>::m_unStateSet |= POLYGON_OFFSET_STATE;
 
         ImplSceneNode<T>::InitNode();
         /// 创建显示体
@@ -55,6 +55,14 @@ protected:
     /// 颜色修改
     virtual void UpdateColor()
     {
+        if(JUDGE_FLOAT_EQUAL(T::m_stColor.fA,1.f))
+        {
+            ImplSceneNode<T>::RemoveStateSet(BLEND_STATE);
+        }
+        else
+        {
+            ImplSceneNode<T>::MergeStateSet(BLEND_STATE);
+        }
         m_pColorArray->at(0).set(T::m_stColor.fR,T::m_stColor.fG,T::m_stColor.fB,T::m_stColor.fA);
     }
 
