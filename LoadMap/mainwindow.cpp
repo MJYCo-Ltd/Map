@@ -727,7 +727,7 @@ void MainWindow::on_action12_triggered()
     /// 绘制图片
 //    QImage image = QImage("E:/splash-620x300.png").convertToFormat(QImage::Format_RGBA8888);
     auto pImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
-    pImage->SetImagePath("Image/Mine/17.png");
+    pImage->SetImagePath("Image/Mine/1.png");
 //    RGBAData data;
 //    data.unWidth = image.width();
 //    data.unHeight = image.height();
@@ -736,7 +736,7 @@ void MainWindow::on_action12_triggered()
 //    memcpy(data.pRGBAData,image.bits(),image.byteCount());
 //    pImage->SetRGBAData(data);
 
-    color.fG=color.fB=1.0f;
+    color.fG=color.fB=0.0f;
     pImage->SetColor(color);
 
     SceneImageSize size;
@@ -757,7 +757,7 @@ void MainWindow::on_action12_triggered()
     viePoint.stPos = scenePos;
     pVisualGroup->SetViewPoint(viePoint);
     pVisualGroup->SetPosIsGeo(false);
-    pSceneRoot->AddSceneNode(pVisualGroup);
+//    pSceneRoot->AddSceneNode(pVisualGroup);
 
     ISConeSensor* pSCone = dynamic_cast<ISConeSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISConeSensor"));
     pSCone->SetColor(color);
@@ -775,11 +775,13 @@ void MainWindow::on_action12_triggered()
     attitude.dYaw = -viePoint.fAzimuth;
     attitude.dPitch = -viePoint.fElev;
     pAttitude->SetAttitude(attitude);
-    pSceneRoot->AddSceneNode(pAttitude);
+//    pSceneRoot->AddSceneNode(pAttitude);
 //    auto pLod = m_pSceneGraph->GetPlot()->CreateSceneGroup(LOD_GROUP)->AsSceneLodGroup();
 //    pLod->AddSceneNode(pAutoImage);
 
-
+    ILabel* pLable = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
+    pLable->SetText("hello world");
+    pLable->SetAttachNode(pImage);
     pSceneRoot->AddSceneNode(pImage);
 
     /// 绘制多边形
@@ -794,13 +796,13 @@ void MainWindow::on_action12_triggered()
 //    pSceneRoot->AddSceneNode(pModel);
 //    pModel->SetCanPick(true);
 //    pVisualGroup->AddSceneNode(pModel);
-    pVisualGroup->AddSceneNode(pImage);
+//    pVisualGroup->AddSceneNode(pImage);
     IBoxSensor* pBox = dynamic_cast<IBoxSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IBoxSensor"));
     pBox->SetDistance(10);
 //    pBox->SetShowBack(true);
     pBox->ShowLine(true);
 //    pBox->ShowFace(false);
-    pVisualGroup->AddSceneNode(pBox);
+//    pVisualGroup->AddSceneNode(pBox);
     pSceneRoot->AddSceneNode(pBox);
 
     m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);

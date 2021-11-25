@@ -153,6 +153,27 @@ protected:
 
         if(m_bChildRemove)
         {
+            for(auto one : m_listInsertChild)
+            {
+                for(auto oneSceneNode :m_setChildNode)
+                {
+                    if(one == oneSceneNode->AsOsgSceneNode()->GetRealNode())
+                    {
+                        oneSceneNode->StateSet()|= ~VISUAL_STATE;
+                        one->setStateSet(T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(oneSceneNode->StateSet()));
+                    }
+                }
+
+                one->getOrCreateStateSet()->removeTextureAttribute(1, m_pTexture2D.get());
+                one->getOrCreateStateSet()->removeUniform(m_pTextureProjMatrix);
+                one->getOrCreateStateSet()->removeUniform(m_pTextureViewMatrix);
+                one->getOrCreateStateSet()->removeUniform(m_pDepthTexture);
+                one->getOrCreateStateSet()->removeUniform(m_pVisibleColor);
+                one->getOrCreateStateSet()->removeUniform(m_pHiddenColor);
+                one->getOrCreateStateSet()->removeUniform(m_pFar);
+                one->getOrCreateStateSet()->removeUniform(m_pNear);
+            }
+
             m_listInsertChild.clear();
             m_bChildRemove=false;
         }
