@@ -73,7 +73,7 @@ osg::StateSet* CResourceLod::GetOrCreateStateSet(unsigned unType)
         /// 如果透明开启
         if(unType & BLEND_STATE)
         {
-            pStateSet->setAttributeAndModes( new osg::BlendFunc( GL_ONE, GL_ONE ), osg::StateAttribute::ON );
+            pStateSet->setAttributeAndModes( new osg::BlendFunc, osg::StateAttribute::ON );
             pStateSet->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
         }
 
@@ -348,6 +348,7 @@ void CResourceLod::InitSateSet(osg::StateSet* pStateSete,const std::string& sFil
         }
         pStateSete->setRenderingHint(osg::StateSet::DEFAULT_BIN);
         pStateSete->setRenderBinDetails( -1, "RenderBin" );
+        pStateSete->setAttributeAndModes( new osg::BlendFunc(GL_ONE,GL_ONE), osg::StateAttribute::ON );
 
         pStateSete->getOrCreateUniform("oe_sky_exposure", osg::Uniform::FLOAT)->set(1.f);
     }

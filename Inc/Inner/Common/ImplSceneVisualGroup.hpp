@@ -151,47 +151,28 @@ protected:
             m_bChildInsert=false;
         }
 
-        if(m_bChildRemove)
-        {
-            for(auto one : m_listInsertChild)
-            {
-                for(auto oneSceneNode :m_setChildNode)
-                {
-                    if(one == oneSceneNode->AsOsgSceneNode()->GetRealNode())
-                    {
-                        oneSceneNode->StateSet()|= ~VISUAL_STATE;
-                        one->setStateSet(T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(oneSceneNode->StateSet()));
-                    }
-                }
-
-                one->getOrCreateStateSet()->removeTextureAttribute(1, m_pTexture2D.get());
-                one->getOrCreateStateSet()->removeUniform(m_pTextureProjMatrix);
-                one->getOrCreateStateSet()->removeUniform(m_pTextureViewMatrix);
-                one->getOrCreateStateSet()->removeUniform(m_pDepthTexture);
-                one->getOrCreateStateSet()->removeUniform(m_pVisibleColor);
-                one->getOrCreateStateSet()->removeUniform(m_pHiddenColor);
-                one->getOrCreateStateSet()->removeUniform(m_pFar);
-                one->getOrCreateStateSet()->removeUniform(m_pNear);
-            }
-
-            m_listInsertChild.clear();
-            m_bChildRemove=false;
-        }
         ImplSceneGroup<T>::FrameCall();
     }
 
     /// 增加了一个节点
     void InsertChildNode(osg::Node* pNode)
     {
-        m_bChildInsert=true;
+        SET_TRUE_NODE_UPDATE(m_bChildInsert)
         m_listInsertChild.push_back(pNode);
+
     }
 
     /// 删除了一个节点
     void RemoveChildNode(osg::Node* pNode)
     {
-        m_bChildRemove=true;
-        m_listInsertChild.push_back(pNode);
+        for(auto oneSceneNode :m_setChildNode)
+        {
+            if(pNode == oneSceneNode->AsOsgSceneNode()->GetRealNode())
+            {
+                oneSceneNode->RemoveStateSet(VISUAL_STATE);
+                break;
+            }
+        }
     }
 
     /// 参数更新
@@ -211,7 +192,6 @@ protected:
     std::list<osg::ref_ptr<osg::Node>> m_listInsertChild;
     bool m_bParameterChanged{false};
     bool m_bChildInsert{false};
-    bool m_bChildRemove{false};
 };
 
 #endif // IMPL_SCENE_GROUP_H

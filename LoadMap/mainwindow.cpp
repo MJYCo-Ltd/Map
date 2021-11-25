@@ -44,6 +44,10 @@
 #include <Plot/SceneShape/IPolygon3D.h>
 #include <Ability/IFlashAbility.h>
 #include <ExternShape/MapPlaceNode.h>
+#include <Plot/Map/IMapLine.h>
+#include <Plot/Map/IMapPoint.h>
+#include <Plot/Map/IMapPolygon.h>
+#include <Plot/Common/ISceneVisualGroup.h>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -305,7 +309,8 @@ void MainWindow::on_action_triggered()
     LodPlot();
 //    LoadQingxie();
 }
-
+ISceneVisualGroup* pVisualGroup =nullptr;
+IMapLocation*  pMapLocation1=nullptr;
 void MainWindow::on_action_2_triggered()
 {
 //    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->HomeViewPoint();
@@ -321,13 +326,14 @@ void MainWindow::on_action_2_triggered()
 //    pHudLayout->RemoveHudNode(pHudText);
 //    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pHudText);
 //    pEarthLocation->SetVisible(!pEarthLocation->IsVisible());
-    SceneViewPoint viewPoint;
-    viewPoint.stPos.dX = 108.78107;
-    viewPoint.stPos.dY = 34.11611;
-    viewPoint.fDistance = 1000;
-    viewPoint.fAzimuth = 0;
-    viewPoint.fElev = 80;
-    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->SetViewPoint(viewPoint,15u);
+    pVisualGroup->RemoveSceneNode(pMapLocation1);
+//    SceneViewPoint viewPoint;
+//    viewPoint.stPos.dX = 108.78107;
+//    viewPoint.stPos.dY = 34.11611;
+//    viewPoint.fDistance = 1000;
+//    viewPoint.fAzimuth = 0;
+//    viewPoint.fElev = 80;
+//    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->SetViewPoint(viewPoint,15u);
 }
 
 #include <Tool/ITool.h>
@@ -380,10 +386,6 @@ void MainWindow::on_action_6_triggered()
     m_pSceneGraph->GetMainWindow()->SetFrameRate(10);
 }
 
-#include <Plot/Map/IMapLine.h>
-#include <Plot/Map/IMapPoint.h>
-#include <Plot/Map/IMapPolygon.h>
-#include <Plot/Common/ISceneVisualGroup.h>
 
 void MainWindow::PlotMap()
 {
@@ -499,14 +501,14 @@ void MainWindow::PlotMap()
     m_pLayer->AddSceneNode(m_pPolygon3D);
 
     /// 添加
-    IMapLocation*  pMapLocation1 = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+    pMapLocation1 = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
 
     pos.dX = 123;
     pos.dY = 27;
     pMapLocation1->SetGeoPos(pos);
     ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("Model/AirPlane.ive");
     pModel->SetCanPick(true);
-    ISceneVisualGroup* pVisualGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(VISUAL_GROUP)->AsSceneVisualGroup();
+    pVisualGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(VISUAL_GROUP)->AsSceneVisualGroup();
     SceneViewPoint viePoint;
     viePoint.fAzimuth = 0;
     viePoint.fDistance = 10000;
@@ -686,8 +688,7 @@ void MainWindow::on_action12_triggered()
 //    color.fR=1.0f;
     color.fG=0.0f;
     color.fB=0.0f;
-    color.fA=0.1f;
-
+    color.fA=1.f;
     /// 绘制点
     auto pPoint = dynamic_cast<IPoint*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IPoint"));
     pPoint->SetPointSize(100.f);

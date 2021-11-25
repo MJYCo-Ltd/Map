@@ -17,7 +17,7 @@ CAtmosphere::CAtmosphere(ISceneGraph* pSceneGraph)
     m_pEllipsoid->ShowLine(false);
     m_pEllipsoid->SetLatSegMents(100);
 
-    m_pEllipsoid->MergeStateSet(ATMOSPHERE_DRAW_STATE);
+    m_pEllipsoid->MergeStateSet(ATMOSPHERE_DRAW_STATE|DONT_WRIT_DEPTH);
 }
 
 void CAtmosphere::MakeAtmosphere()
