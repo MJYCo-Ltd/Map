@@ -32,9 +32,10 @@
 enum ABILITY_TYPE
 {
     NO_ABILITY=0,               /// 没有能力
-    FLASH_ABILITY=0x1,          /// 闪烁
-    AUTOSCAL_ABILITY=0x2,       /// 自动缩放
-    MOTION_ABILITY=0x4          /// 运动能力
+    FLASH_ABILITY=1<<0,         /// 闪烁
+    AUTOSCAL_ABILITY=1<<1,      /// 自动缩放
+    MOTION_ABILITY=1<<2,        /// 运动能力
+    FLAT_ABILITY=1<<3           /// 平整能力
 };
 
 /**

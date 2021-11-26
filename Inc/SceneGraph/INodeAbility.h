@@ -2,6 +2,7 @@
 #define INTERFACE_NODE_ABILITY_HEARDER_H
 
 class IFlashAbility;
+class IFlatAbility;
 class ISceneNode;
 
 /**
@@ -25,6 +26,7 @@ public:
      * @return
      */
     virtual IFlashAbility* AsFlashAbility(){return(nullptr);}
+    virtual IFlatAbility* AsFlatAbility(){return(nullptr);}
 };
 
 #endif //INTERFACE_NODE_ABILITY_HEARDER_H

@@ -11,6 +11,7 @@ include(../SoftSDK.pri)
 
 SOURCES += \
     FlashAbility.cpp \
+    FlatAbility.cpp \
     Grid2TriangleStrip.cpp \
     JudgeGeometry.cpp \
     MathCommon.cpp \
@@ -21,4 +22,5 @@ SOURCES += \
 
 HEADERS += \
     FlashAbility.h \
+    FlatAbility.h \
     ImplNodeAbility.hpp

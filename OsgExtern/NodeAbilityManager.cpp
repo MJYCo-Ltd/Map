@@ -1,5 +1,6 @@
 #include<Inner/OsgExtern/NodeAbilityManager.h>
 #include "FlashAbility.h"
+#include "FlatAbility.h"
 
 CNodeAbilityManager *CNodeAbilityManager::GetInstance()
 {
@@ -16,6 +17,9 @@ INodeAbility *CNodeAbilityManager::CreateAbility(ABILITY_TYPE emType)
     case AUTOSCAL_ABILITY:
         break;
     case MOTION_ABILITY:
+        break;
+    case FLAT_ABILITY:
+        return(new CFlatAbility);
         break;
     default:
         break;
