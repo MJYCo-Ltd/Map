@@ -11,9 +11,14 @@ void CFlatAbility::UpdateAbility()
     ImplNodeAbility<IFlatAbility>::UpdateAbility();
 }
 
-int CFlatAbility::AddHole(const ScenePos &leftUp, const ScenePos &rightDown)
+int CFlatAbility::AddHole(const FlatArea &flatArea)
 {
-    return(-1);
+    if(m_mapId2Hole.size() > 9)
+    {
+        return(-1);
+    }
+    m_vInsertHole.push_back(flatArea);
+    m_pSceneNode->AbilityChanged();
 }
 
 bool CFlatAbility::RemoveHole(int nIndex)

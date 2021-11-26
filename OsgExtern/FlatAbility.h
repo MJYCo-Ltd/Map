@@ -19,14 +19,15 @@ public:
     /**
      * @brief 添加洞
      */
-    int AddHole(const ScenePos& leftUp,const ScenePos& rightDown);
+    int AddHole(const FlatArea& flatArea);
 
     /**
      * @brief 移除洞
      */
     bool RemoveHole(int nIndex);
 protected:
-    std::map<int,osg::ref_ptr<osg::Uniform>> m_mapId2Hole;
+    std::map<int,FlatArea> m_mapId2Hole;
+    std::vector<FlatArea> m_vInsertHole;
 };
 
 #endif // CFLATABILITY_H
