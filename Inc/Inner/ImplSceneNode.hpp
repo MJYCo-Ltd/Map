@@ -252,6 +252,21 @@ protected:
                 m_mapAbility.insert(std::make_pair(FLASH_ABILITY,pReturn));
             }
         }
+
+        if(type & FLAT_ABILITY)
+        {
+            auto findOne = m_mapAbility.find(FLAT_ABILITY);
+            if(m_mapAbility.end() != findOne)
+            {
+                pReturn = findOne->second;
+            }
+            else
+            {
+                pReturn = CNodeAbilityManager::GetInstance()->CreateAbility(FLAT_ABILITY);
+                pReturn->BoundNode(this);
+                m_mapAbility.insert(std::make_pair(FLAT_ABILITY,pReturn));
+            }
+        }
         return(pReturn);
     }
 

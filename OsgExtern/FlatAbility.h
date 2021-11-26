@@ -27,7 +27,8 @@ public:
     bool RemoveHole(int nIndex);
 protected:
     std::map<int,FlatArea> m_mapId2Hole;
-    std::vector<FlatArea> m_vInsertHole;
+    osg::ref_ptr<osg::Uniform> m_pHoleMatrix;
+    osg::ref_ptr<osg::Uniform> m_pHoleNum;
 };
 
 #endif // CFLATABILITY_H
