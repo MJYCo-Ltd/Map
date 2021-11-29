@@ -7,16 +7,22 @@ void CFlatAbility::InitAbility()
 
     m_pHoleMatrix = new osg::Uniform(osg::Uniform::FLOAT_MAT4x2,"inVertex",10);
     m_pHoleNum = new osg::Uniform(osg::Uniform::INT,"polySize");
+    m_pHoleNum->set(0);
 
     /// 增加
     m_pSceneNode->AsOsgSceneNode()->GetOsgNode()->getOrCreateStateSet()->addUniform(m_pHoleMatrix);
     m_pSceneNode->AsOsgSceneNode()->GetOsgNode()->getOrCreateStateSet()->addUniform(m_pHoleNum);
 }
 
+void CFlatAbility::RemoveAbility()
+{
+    m_pSceneNode->RemoveStateSet(FLAT_STATE);
+}
+
 void CFlatAbility::UpdateAbility()
 {
     ImplNodeAbility<IFlatAbility>::UpdateAbility();
-    m_pHoleNum->set(m_mapId2Hole.size());
+    m_pHoleNum->set(int(m_mapId2Hole.size()));
 
     int nIndex=0;
     osg::Matrix4x2 tmpMat;

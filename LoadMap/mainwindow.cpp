@@ -48,6 +48,7 @@
 #include <Plot/Map/IMapPoint.h>
 #include <Plot/Map/IMapPolygon.h>
 #include <Plot/Common/ISceneVisualGroup.h>
+#include <Ability/IFlatAbility.h>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -800,6 +801,20 @@ void MainWindow::on_action12_triggered()
 //    pVisualGroup->AddSceneNode(pImage);
     IBoxSensor* pBox = dynamic_cast<IBoxSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IBoxSensor"));
     pBox->SetDistance(10);
+    IFlatAbility* pFlatAbility = pBox->GetOrCreateAbility(FLAT_ABILITY)->AsFlatAbility();
+    FlatArea area;
+    area.stLeftUp.dX = -5;
+    area.stLeftUp.dY = 5;
+
+    area.stRightUp.dX = 5;
+    area.stRightUp.dY = 5;
+
+    area.stRightDown.dX = 5;
+    area.stRightDown.dY = 0;
+
+    area.stLeftDown.dX = -5;
+    area.stLeftDown.dY = 0;
+    pFlatAbility->AddHole(area);
 //    pBox->SetShowBack(true);
     pBox->ShowLine(true);
 //    pBox->ShowFace(false);

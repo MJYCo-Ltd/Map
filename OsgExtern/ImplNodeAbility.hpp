@@ -10,7 +10,16 @@ template <typename T>
 class ImplNodeAbility:public T
 {
 public:
+    /**
+     * @brief 初始化能力
+     */
     virtual void InitAbility()=0;
+
+    /**
+     * @brief 移除能力
+     */
+    virtual void RemoveAbility()=0;
+
     /**
      * @brief 绑定场景节点
      * @param pNode 场景节点

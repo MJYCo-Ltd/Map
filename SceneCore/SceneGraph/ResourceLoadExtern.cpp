@@ -172,7 +172,7 @@ osg::StateSet* CResourceLod::GetOrCreateStateSet(unsigned unType)
         /// 添加平定模型着色器
         if(unType & FLAT_STATE)
         {
-            LoadShader("GLSL/Flash.glsl",pStateSet);
+            LoadShader("GLSL/Flat.glsl",pStateSet);
         }
 
         m_mapType2StateSets[unType] = pStateSet;

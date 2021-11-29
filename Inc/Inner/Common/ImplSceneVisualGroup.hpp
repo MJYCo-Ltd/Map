@@ -81,7 +81,7 @@ protected:
             m_pCamera->setProjectionMatrixAsPerspective(T::m_dFovy,T::m_dAspect,
                                                         T::m_stViewPoint.fDistance*1e-4,T::m_stViewPoint.fDistance);
             m_pFar->set(T::m_stViewPoint.fDistance);
-            m_pNear->set(T::m_stViewPoint.fDistance*1e-4);
+            m_pNear->set(float(T::m_stViewPoint.fDistance*1e-4));
 
             osg::Vec3d eye,center,up;
             if(T::m_bIsGeoPos)

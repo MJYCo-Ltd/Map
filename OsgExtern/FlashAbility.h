@@ -14,6 +14,11 @@ public:
     void InitAbility();
 
     /**
+     * @brief 移除能力
+     */
+    void RemoveAbility();
+
+    /**
      * @brief 更新能力
      */
     void UpdateAbility();

@@ -10,6 +10,11 @@ void CFlashAbility::InitAbility()
             ->getOrCreateUniform("flashStartTime",osg::Uniform::FLOAT)->set((float)osg::Timer::instance()->time_s());
 }
 
+void CFlashAbility::RemoveAbility()
+{
+    m_pSceneNode->RemoveStateSet(FLASH_DRAW_STATE);
+}
+
 void CFlashAbility::UpdateAbility()
 {
     ImplNodeAbility<IFlashAbility>::UpdateAbility();
