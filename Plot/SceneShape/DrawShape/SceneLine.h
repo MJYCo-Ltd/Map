@@ -14,7 +14,7 @@ protected:
     /**
      * @brief 线宽更改
      */
-    void LineWidthChanged()SET_TRUE_NODE_UPDATE(m_bWidthChanged)
+    void LineWidthChanged()SET_TRUE_SHAPE_UPDATE(m_bWidthChanged)
 
     /**
      * @brief 线型更改

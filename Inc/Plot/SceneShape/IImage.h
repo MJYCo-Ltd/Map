@@ -9,8 +9,8 @@ class QImage;
  */
 struct SceneImageSize
 {
-    unsigned short unWidth=0u;  /// 图片宽度
-    unsigned short unHeight=0u; /// 图片高度
+    unsigned int unWidth=0u;  /// 图片宽度
+    unsigned int unHeight=0u; /// 图片高度
     bool         bOutSet=false;///是否是外部设置
 
     bool operator == (const SceneImageSize& rOther)const

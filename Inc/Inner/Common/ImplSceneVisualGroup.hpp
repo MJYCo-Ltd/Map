@@ -129,7 +129,7 @@ protected:
         {
             for(auto one : m_listInsertChild)
             {
-                for(auto oneSceneNode :m_setChildNode)
+                for(auto oneSceneNode :this->m_setChildNode)
                 {
                     if(one == oneSceneNode->AsOsgSceneNode()->GetRealNode())
                     {
@@ -165,7 +165,7 @@ protected:
     /// 删除了一个节点
     void RemoveChildNode(osg::Node* pNode)
     {
-        for(auto oneSceneNode :m_setChildNode)
+        for(auto oneSceneNode :this->m_setChildNode)
         {
             if(pNode == oneSceneNode->AsOsgSceneNode()->GetRealNode())
             {
