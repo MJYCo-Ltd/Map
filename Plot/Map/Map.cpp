@@ -551,11 +551,16 @@ void CMap::FrameCall()
             {
                 m_pAutoClip = new osgEarth::Util::AutoClipPlaneCullCallback(m_pCurMapNode);
                 m_pAutoClip->setClampFarClipPlane(false);
-                m_pView->getCamera()->setCullCallback(m_pAutoClip);
             }
+
+            m_pView->getCamera()->setCullCallback(m_pAutoClip);
         }
         else /// 如果是二维地球
         {
+            if(m_pAutoClip.valid())
+            {
+                m_pView->getCamera()->setCullCallback(nullptr);
+            }
             dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
                     ->GetOsgView()->getCamera()->setClearMask(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
             m_pGroup->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,osg::StateAttribute::OFF);
