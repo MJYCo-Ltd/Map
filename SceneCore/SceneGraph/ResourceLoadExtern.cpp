@@ -338,6 +338,7 @@ void CResourceLod::InitSateSet(osg::StateSet* pStateSete,const std::string& sFil
         pStateSete->getOrCreateUniform("flashDurTime",osg::Uniform::FLOAT)->set(.5f);
         pStateSete->getOrCreateUniform("flashIntervalTime",osg::Uniform::FLOAT)->set(1.f);
         pStateSete->getOrCreateUniform("flashColor",osg::Uniform::FLOAT_VEC4)->set(osg::Vec4(1.f,0.f,0.f,1.f));
+        pStateSete->getOrCreateUniform("openFlag",osg::Uniform::BOOL)->set(true);
     }
     else if(sFileName == "Atmosphere.glsl")
     {

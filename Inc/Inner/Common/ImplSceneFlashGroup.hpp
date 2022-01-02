@@ -29,14 +29,6 @@ protected:
         ImplSceneGroup<T>::InitNode();
         ImplSceneGroup<T>::m_pProgramNode->setStateSet(
         T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(ImplSceneGroup<T>::m_unStateSet));
-
-        auto pState = ImplSceneGroup<T>::m_pRootNode->getOrCreateStateSet();
-        pState->getOrCreateUniform("flashStartTime",osg::Uniform::FLOAT)->set((float)osg::Timer::instance()->time_s());
-        pState->getOrCreateUniform("flashIntervalTime",osg::Uniform::FLOAT)->set(1.f/T::m_fFlashHZ);
-        pState->getOrCreateUniform("flashDurTime",osg::Uniform::FLOAT)->set(0.5f/T::m_fFlashHZ);
-        pState->getOrCreateUniform("openFlag",osg::Uniform::BOOL)->set(T::m_bFlash);
-        pState->getOrCreateUniform("flashColor",osg::Uniform::FLOAT_VEC4)->
-            set(osg::Vec4(T::m_stFlahColor.fR,T::m_stFlahColor.fG,T::m_stFlahColor.fB,T::m_stFlahColor.fA));
     }
 
     void FlashStatusChanged()SET_TRUE_NODE_UPDATE(m_bStatusChanged)
