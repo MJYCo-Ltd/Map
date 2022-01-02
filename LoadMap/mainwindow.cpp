@@ -291,11 +291,12 @@ void MainWindow::on_action_triggered()
         pSatellite->SetModelPath("Model/SJ-2/shixian-2.flt");
         m_pSceneGraph->GetMap()->GetSpaceEnv()->OpenLight(false);
 
-        auto pSatelliteSensor = dynamic_cast<ISConeSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISConeSensor"));
+        auto pSatelliteSensor = dynamic_cast<IConeSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IConeSensor"));
         color.fG=1.f;
-        color.fA=.6f;
-        pSatelliteSensor->SetHAngle(.4f);
-        pSatelliteSensor->SetVAngle(1.f);
+        color.fA=.1f;
+        pSatelliteSensor->SetAngle(1.f);
+//        pSatelliteSensor->SetHAngle(.4f);
+//        pSatelliteSensor->SetVAngle(1.f);
         pSatelliteSensor->SetColor(color);
         pSatellite->SetOribitColor(color);
         pSatellite->AddSensor(0, pSatelliteSensor);
@@ -433,16 +434,16 @@ void MainWindow::PlotMap()
 
     /// 绘制区域
     auto m_pPolygon = dynamic_cast<IMapPolygon*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPolygon"));
-    pos.dX = 123;
-    pos.dY = 26;
+    pos.dX = -10;
+    pos.dY = 0;
     m_pPolygon->GetDrawPolygon()->AddPoint(pos);
-    pos.dX = 121;
-    pos.dY = 26;
+    pos.dX = 10;
+    pos.dY = 0;
     m_pPolygon->GetDrawPolygon()->AddPoint(pos);
-    pos.dX = 121;
+    pos.dX = 10;
     pos.dY = 27;
     m_pPolygon->GetDrawPolygon()->AddPoint(pos);
-    pos.dX = 123;
+    pos.dX = -10;
     pos.dY = 27;
     m_pPolygon->GetDrawPolygon()->AddPoint(pos);
     m_pPolygon->GetDrawPolygon()->SetColor(color);
@@ -474,7 +475,7 @@ void MainWindow::PlotMap()
     m_pPoint->GetDrawPoint()->SetPointSize(50.f);
     m_pPoint->GetDrawPoint()->SetImage("Image/China.png");
     m_pPoint->SetTerrainType(IMapSceneNode::ABSOLUTE_TERRAIN);
-//    m_pLayer->AddSceneNode(m_pPoint);
+    m_pLayer->AddSceneNode(m_pPoint);
 
     auto m_pPolygon3D = dynamic_cast<IMapPolygon3D*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapPolygon3D"));
 
@@ -504,10 +505,11 @@ void MainWindow::PlotMap()
     /// 添加
     pMapLocation1 = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
 
-    pos.dX = 123;
-    pos.dY = 27;
+    pos.dX = 122.85;
+    pos.dY = 26.84;
+    pos.dZ -= 400;
     pMapLocation1->SetGeoPos(pos);
-    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("Model/AirPlane.ive");
+    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("F:/BaiduNetdiskDownload/xian/Data/out.osgb",false);
     pModel->SetCanPick(true);
     pVisualGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(VISUAL_GROUP)->AsSceneVisualGroup();
     SceneViewPoint viePoint;
@@ -540,6 +542,25 @@ void MainWindow::PlotMap()
     pMapLocation2->SetGeoPos(viePoint.stPos);
     pMapLocation2->SetSceneNode(pAttitude);
     m_pLayer->AddSceneNode(pMapLocation2);
+
+    /// clh
+    ScenePos poss;
+    poss.dX = 30;
+    poss.dY = 30;
+    poss.dZ =0;
+    auto pNewImage = dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
+    pNewImage->SetImagePath("Image/ship.png");
+    SceneImageSize stSize;
+    stSize.unWidth = stSize.unHeight = 100;
+    pNewImage->SetImageSize(stSize);
+    auto pAutoImage1 = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
+    pAutoImage1->SetAutoScal(true);
+    pAutoImage1->AddSceneNode(pNewImage);
+
+    auto pMapLocationCLH = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+    m_pLayer->AddSceneNode(pMapLocationCLH);
+    pMapLocation->SetGeoPos(poss);
+    pMapLocation->SetSceneNode(pAutoImage1);
 }
 
 void MainWindow::LodPlot()
@@ -592,7 +613,7 @@ void MainWindow::LodPlot()
 void MainWindow::TestGroup()
 {
     m_pTestNode = new CPlaceNode(m_pSceneGraph);
-    m_pTestNode->SetPos(120.,24.,10);
+    m_pTestNode->SetPos(10,10,10);
     m_pTestNode->SetImagePath("Image/Mine/1.png");
     m_pTestNode->SetText("Hello world");
     m_pLayer->AddSceneNode(m_pTestNode->GetLocationNode());
@@ -611,7 +632,7 @@ void MainWindow::TestGroup()
     m_pLayer->AddSceneNode(pPlaceNode->GetLocationNode());
 
     m_pTestNode1 = new CPlaceNode(m_pSceneGraph);
-    m_pTestNode1->SetPos(140.,34.,10);
+    m_pTestNode1->SetPos(130.,34.,10);
     m_pTestNode1->SetImagePath("Image/Mine/1.png");
     m_pTestNode1->SetColor(color);
     m_pTestNode1->SetText("sdweedfeeff dfdlj");

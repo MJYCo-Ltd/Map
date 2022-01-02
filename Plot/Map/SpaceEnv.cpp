@@ -75,7 +75,7 @@ void CSpaceEnv::InitNode()
 /// 更新时间
 void CSpaceEnv::UpdateDate(double dMJD)
 {
-    m_matAttitude = Aerospace::CCoorSys::ECF2ECI(dMJD);
+    m_matAttitude = Aerospace::CCoorSys::ECF2J2000(dMJD);
 
     m_pOsgAttitudeNode->SetRotateMatrix(m_matAttitude);
 

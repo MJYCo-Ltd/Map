@@ -8,6 +8,7 @@
 #include <Inner/Common/ImplSceneGroup.hpp>
 #include <Inner/ThreadSafety/SafetySet.h>
 #include <SceneGraph/IWindow.h>
+#include <osgEarth/AutoClipPlaneHandler>
 
 class CSpaceEnv;
 class ISceneGraph;
@@ -186,6 +187,7 @@ protected:
     /// 主视口位置
     osg::observer_ptr<osgViewer::View>            m_pView;
     osg::ref_ptr<osgUtil::LineSegmentIntersector> m_pPicker;
+    osg::ref_ptr<osgEarth::Util::AutoClipPlaneCullCallback> m_pAutoClip;
 
     UserLayers   m_userLayers;
     MapLayers    m_earthFileLayers;

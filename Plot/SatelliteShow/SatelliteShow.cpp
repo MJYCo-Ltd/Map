@@ -420,7 +420,7 @@ double CSatelliteShow::CalItNewton(double *dX, double dT, int nDim)
     dY[1] = m_vOribit[m_nIndex](nDim);
     dY[2] = m_vOribit[m_nIndex+1](nDim);
 
-    return(Numerical::Cntpol::ItNewton(3,dX,dY,dT));
+    return(Numerical::Intpol::ItNewton(3,dX,dY,dT));
 }
 
 double CSatelliteShow::CalItNewtonEcf(double* dX, double dT, int nDim)
@@ -430,7 +430,7 @@ double CSatelliteShow::CalItNewtonEcf(double* dX, double dT, int nDim)
     dY[1] = m_vEcfOribit[m_nIndex](nDim);
     dY[2] = m_vEcfOribit[m_nIndex + 1](nDim);
 
-    return(Numerical::Cntpol::ItNewton(3, dX, dY, dT));
+    return(Numerical::Intpol::ItNewton(3, dX, dY, dT));
 }
 
 void CSatelliteShow::Cal2DOribit(const std::vector<Math::CVector>& vOribitInfo)

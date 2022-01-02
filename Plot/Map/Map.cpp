@@ -547,6 +547,12 @@ void CMap::FrameCall()
             m_pGroup->addChild(m_pSpaceEnv->AsOsgSceneNode()->GetRealNode());
             m_pGroup->addChild(m_p3DRoot);
 
+            if(!m_pAutoClip.valid())
+            {
+                m_pAutoClip = new osgEarth::Util::AutoClipPlaneCullCallback(m_pCurMapNode);
+                m_pAutoClip->setClampFarClipPlane(false);
+                m_pView->getCamera()->setCullCallback(m_pAutoClip);
+            }
         }
         else /// 如果是二维地球
         {
