@@ -7,6 +7,15 @@
 class ISceneNode;
 class ISceneGraph;
 
+/**
+ * @brief 判断节点是否可以删除
+ */
+struct CanDeleteNode
+{
+    int nTimes{};
+    ISceneNode* pSceneNode{};
+};
+
 class CMapNodeFactory:public QObject
 {
     Q_OBJECT
@@ -72,7 +81,7 @@ private:
     std::map<std::string,MapSceneFun> m_mapTypeFunc;
 
     std::map<std::string, std::string> m_mapTypeDllName; /// 类型和dll的
-    std::list<ISceneNode*> m_allCreateNode;
+    std::list<CanDeleteNode> m_allCreateNode;            /// 所有的节点
 };
 
 #endif // CMAPNODEFACTORY_H

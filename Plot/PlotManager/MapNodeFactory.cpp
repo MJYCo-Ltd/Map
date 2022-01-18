@@ -22,9 +22,9 @@ CMapNodeFactory::CMapNodeFactory(ISceneGraph *pSceneGraph):
 CMapNodeFactory::~CMapNodeFactory()
 {
     killTimer(m_nTimerID);
-    for(auto one : m_allCreateNode)
+    for(const CanDeleteNode &one : m_allCreateNode)
     {
-        auto pGroup =one->AsOsgSceneNode()->GetRealNode();
+        auto pGroup =one.pSceneNode->AsOsgSceneNode()->GetRealNode();
         if(nullptr != pGroup)
         {
             m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new RemoveFromeScene(pGroup));
@@ -52,8 +52,10 @@ ISceneNode *CMapNodeFactory::CreateSceneNode(const std::string& sInterface)
         ISceneNode* pNode = findOne->second.pCrete(m_pSceneGraph,sInterface);
         if(nullptr != pNode)
         {
+            CanDeleteNode tmpDelete;
+            tmpDelete.pSceneNode = pNode;
             pNode->AsOsgSceneNode()->Init();
-            m_allCreateNode.push_back(pNode);
+            m_allCreateNode.push_back(tmpDelete);
         }
 
         return(pNode);
@@ -69,14 +71,21 @@ void CMapNodeFactory::DeleteNoUseSceneNode()
 {
     for(auto one=m_allCreateNode.begin();one != m_allCreateNode.end();)
     {
-        auto pMapSceneNode = *one;
-        if(pMapSceneNode->AsOsgSceneNode()->CanDelete())
+        if(one->nTimes > 3)
         {
-            delete pMapSceneNode->AsOsgSceneNode();
+            delete one->pSceneNode->AsOsgSceneNode();
             one = m_allCreateNode.erase(one);
         }
         else
         {
+            if(one->pSceneNode->AsOsgSceneNode()->CanDelete())
+            {
+                ++(one->nTimes);
+            }
+            else
+            {
+                one->nTimes = 0;
+            }
             ++one;
         }
     }
@@ -110,20 +119,22 @@ void CMapNodeFactory::InitFactory()
 /// 插入场景节点
 void CMapNodeFactory::InsertNode(ISceneNode *pNode)
 {
-    m_allCreateNode.push_back(pNode);
+    CanDeleteNode tmpDelete;
+    tmpDelete.pSceneNode = pNode;
+    m_allCreateNode.push_back(tmpDelete);
 }
 
 ///根据模型ID获取模型
 ISceneNode *CMapNodeFactory::FindNodeByID(unsigned int unPickID)
 {
     /// 遍历所有创建的节点
-    for(auto one : m_allCreateNode)
+    for(const CanDeleteNode& one : m_allCreateNode)
     {
-        if(one->CanPick())
+        if(one.pSceneNode->CanPick())
         {
-            if(unPickID == one->PickID())
+            if(unPickID == one.pSceneNode->PickID())
             {
-                return(one);
+                return(one.pSceneNode);
             }
         }
     }
