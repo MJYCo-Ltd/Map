@@ -46,7 +46,8 @@ int CFlatAbility::AddHole(const FlatArea &flatArea)
     }
 
     /// 插入值
-    for(int nIndex=0;nIndex<10;++nIndex)
+    int nIndex=0;
+    for(;nIndex<9;++nIndex)
     {
         if(m_mapId2Hole.end() == m_mapId2Hole.find(nIndex))
         {
@@ -56,6 +57,7 @@ int CFlatAbility::AddHole(const FlatArea &flatArea)
     }
 
     m_pSceneNode->AbilityChanged();
+    return nIndex;
 }
 
 bool CFlatAbility::RemoveHole(int nIndex)
