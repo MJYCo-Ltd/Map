@@ -9,11 +9,13 @@ CONFIG -= qt
 TARGET = SceneShape
 TEMPLATE = lib
 
-SDK_CONFIG *= OSG Satellite OsgExtern PLOT
+SDK_CONFIG *= OSG Satellite OsgExtern PLOT SceneCore
 
 include($$PWD/../../SoftSDK.pri)
 
 HEADERS += \
+    DrawShape/BeamSensor.h \
+    DrawShape/RadarSensor.h \
     DrawShape/SceneBox.h \
     DrawShape/SceneCone.h \
     DrawShape/SceneEllipsoid.h \
@@ -27,6 +29,8 @@ HEADERS += \
     SceneShape.h
 
 SOURCES += \
+    DrawShape/BeamSensor.cpp \
+    DrawShape/RadarSensor.cpp \
     DrawShape/SceneBox.cpp \
     DrawShape/SceneCone.cpp \
     DrawShape/SceneEllipsoid.cpp \

@@ -35,7 +35,7 @@ public:
     bool IsShowLine()const{return(m_bShowLine);}
 
     /**
-     * @brief 设置探测距离
+     * @brief 设置距离
      */
     void SetDistance(double dDistance)JUDGE_DOUBLE_CALL_FUNCTION(dDistance,m_dDistance,DistanceChanged)
     double Distance()const{return(m_dDistance);}
