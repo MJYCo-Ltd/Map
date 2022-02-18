@@ -376,6 +376,15 @@ void QtFBOWindow::Drop(QDropEvent *event, qreal rScal)
 
 void QtFBOWindow::WheelEvent(QWheelEvent *event)
 {
+    auto iter = m_pAllOserver->begin();
+    auto tmpIter = iter;
+    for(;iter != m_pAllOserver->end(); )
+    {
+        ++tmpIter;
+        (*iter)->WheelMove(event->pixelDelta().y());
+        iter = tmpIter;
+    }
+
     keyboardModifiers(event);
     getEventQueue()->mouseScroll(QtEventdMap::GetInstance()->ChangeWheelEvent(event));
 }
@@ -383,79 +392,113 @@ void QtFBOWindow::WheelEvent(QWheelEvent *event)
 /// 触屏消息
 void QtFBOWindow::TouchEvent(QTouchEvent *event)
 {
+    static int snID;
+    snID = 0;
+    QList<QTouchEvent::TouchPoint> touchPoints = event->touchPoints();
+    m_vTouchInfo.resize(touchPoints.size());
+    osg::ref_ptr<osgGA::GUIEventAdapter> osgEvent(nullptr);
+
     switch (event->touchPointStates())
     {
     case Qt::TouchPointPressed:
     {
-        QList<QTouchEvent::TouchPoint> touchPoints = event->touchPoints();
-        unsigned int id = 0;
-        osg::ref_ptr<osgGA::GUIEventAdapter> osgEvent(nullptr);
         foreach(const QTouchEvent::TouchPoint& touchPoint, touchPoints)
         {
             if (!osgEvent.valid())
             {
                 keyboardModifiers(event);
-                osgEvent = getEventQueue()->touchBegan(id, osgGA::GUIEventAdapter::TOUCH_BEGAN,
+                osgEvent = getEventQueue()->touchBegan(touchPoint.id(), osgGA::GUIEventAdapter::TOUCH_BEGAN,
                                                        static_cast<float>(touchPoint.pos().x()),
                                                        static_cast<float>(touchPoint.pos().y()));
             }
             else
             {
-                osgEvent->addTouchPoint(id, osgGA::GUIEventAdapter::TOUCH_BEGAN,
+                osgEvent->addTouchPoint(touchPoint.id(), osgGA::GUIEventAdapter::TOUCH_BEGAN,
                                         static_cast<float>(touchPoint.pos().x()),
                                         static_cast<float>(touchPoint.pos().y()));
             }
-            id++;
+            m_vTouchInfo[snID].nId = touchPoint.id();
+            m_vTouchInfo[snID].nX = touchPoint.pos().x();
+            m_vTouchInfo[snID].nY = touchPoint.pos().y();
+            ++snID;
+        }
+
+        auto iter = m_pAllOserver->begin();
+        auto tmpIter = iter;
+        for(;iter != m_pAllOserver->end(); )
+        {
+            ++tmpIter;
+            (*iter)->TouchPointPress(snID,m_vTouchInfo);
+            iter = tmpIter;
         }
     }
         break;
     case Qt::TouchPointReleased:
     {
-        QList<QTouchEvent::TouchPoint> touchPoints =event->touchPoints();
-        unsigned int id = 0;
-        osg::ref_ptr<osgGA::GUIEventAdapter> osgEvent(nullptr);
         foreach(const QTouchEvent::TouchPoint& touchPoint, touchPoints)
         {
             unsigned int tap_count = static_cast<unsigned int>(touchPoints.size());
             if (!osgEvent.valid())
             {
                 keyboardModifiers(event);
-                osgEvent = getEventQueue()->touchEnded(id, osgGA::GUIEventAdapter::TOUCH_ENDED,
+                osgEvent = getEventQueue()->touchEnded(touchPoint.id(), osgGA::GUIEventAdapter::TOUCH_ENDED,
                                                        static_cast<float>(touchPoint.pos().x()),
                                                        static_cast<float>(touchPoint.pos().y()), tap_count);
             }
             else
             {
-                osgEvent->addTouchPoint(id, osgGA::GUIEventAdapter::TOUCH_ENDED,
+                osgEvent->addTouchPoint(touchPoint.id(), osgGA::GUIEventAdapter::TOUCH_ENDED,
                                         static_cast<float>(touchPoint.pos().x()),
                                         static_cast<float>(touchPoint.pos().y()));
             }
-            ++id;
+            m_vTouchInfo[snID].nId = touchPoint.id();
+            m_vTouchInfo[snID].nX = touchPoint.pos().x();
+            m_vTouchInfo[snID].nY = touchPoint.pos().y();
+            ++snID;
+        }
+
+        auto iter = m_pAllOserver->begin();
+        auto tmpIter = iter;
+        for(;iter != m_pAllOserver->end(); )
+        {
+            ++tmpIter;
+            (*iter)->TouchPointReleased(snID,m_vTouchInfo);
+            iter = tmpIter;
         }
     }
         break;
     default:
     {
-        QList<QTouchEvent::TouchPoint> touchPoints = event->touchPoints();
-        unsigned int id = 0;
-        osg::ref_ptr<osgGA::GUIEventAdapter> osgEvent(nullptr);
         foreach(const QTouchEvent::TouchPoint& touchPoint, touchPoints)
         {
 
             if (!osgEvent.valid())
             {
                 keyboardModifiers(event);
-                osgEvent = getEventQueue()->touchMoved(id, osgGA::GUIEventAdapter::TOUCH_MOVED,
+                osgEvent = getEventQueue()->touchMoved(touchPoint.id(), osgGA::GUIEventAdapter::TOUCH_MOVED,
                                                        static_cast<float>(touchPoint.pos().x()),
                                                        static_cast<float>(touchPoint.pos().y()));
             }
             else
             {
-                osgEvent->addTouchPoint(id, osgGA::GUIEventAdapter::TOUCH_MOVED,
+                osgEvent->addTouchPoint(touchPoint.id(), osgGA::GUIEventAdapter::TOUCH_MOVED,
                                         static_cast<float>(touchPoint.pos().x()),
                                         static_cast<float>(touchPoint.pos().y()));
             }
-            ++id;
+
+            m_vTouchInfo[snID].nId = touchPoint.id();
+            m_vTouchInfo[snID].nX = touchPoint.pos().x();
+            m_vTouchInfo[snID].nY = touchPoint.pos().y();
+            ++snID;
+        }
+
+        auto iter = m_pAllOserver->begin();
+        auto tmpIter = iter;
+        for(;iter != m_pAllOserver->end(); )
+        {
+            ++tmpIter;
+            (*iter)->TouchPointMove(snID,m_vTouchInfo);
+            iter = tmpIter;
         }
     }
         break;

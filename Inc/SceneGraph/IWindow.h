@@ -1,6 +1,7 @@
 #ifndef INTERFACE_WINDOW_H
 #define INTERFACE_WINDOW_H
 
+#include <vector>
 class QWindow;
 class QWidget;
 class QQuickItem;
@@ -16,6 +17,13 @@ enum MouseButtonMask
     LEFT_MOUSE_BUTTON    = 1<<0,
     MIDDLE_MOUSE_BUTTON  = 1<<1,
     RIGHT_MOUSE_BUTTON   = 1<<2
+};
+
+struct TouchInfo
+{
+    int nId;
+    int nX;
+    int nY;
 };
 
 /**
@@ -37,6 +45,19 @@ public:
     virtual void MouseUp(MouseButtonMask, int, int){}
     virtual void MouseMove(MouseButtonMask, int, int){}
     virtual void MouseDblClick(MouseButtonMask, int, int){}
+
+    /**
+     * @brief 滚轮消息
+     */
+    virtual void WheelMove(int){}
+
+    /**
+     * @brief 触屏消息
+     * @param 触控点个数,以及每个点的信息
+     */
+    virtual void TouchPointPress(int,std::vector<TouchInfo>&){}
+    virtual void TouchPointReleased(int,std::vector<TouchInfo>&){}
+    virtual void TouchPointMove(int,std::vector<TouchInfo>&){}
 
     /**
      * @brief 按键消息

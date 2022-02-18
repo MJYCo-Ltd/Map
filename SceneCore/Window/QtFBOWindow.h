@@ -3,12 +3,13 @@
 
 /**
   *  每一个FBOWindow 与一个窗口对应
-   **/
-
-#include<QSize>
-#include <QImage>
-#include<osgViewer/GraphicsWindow>
+ **/
 #include <list>
+#include <QSize>
+#include <QImage>
+#include <osgViewer/GraphicsWindow>
+#include <SceneGraph/IWindow.h>
+
 
 class QOpenGLFramebufferObject;
 class QOffscreenSurface;
@@ -106,6 +107,7 @@ private:
     QSize                                          m_stTextureSize;  /// 纹理大小
     qreal                                          m_rMouseX{};
     qreal                                          m_rMouseY{};
+    std::vector<TouchInfo>                         m_vTouchInfo;
 
     QOffscreenSurface    *m_pOffScreenSurface{}; /// 离屏渲染表面
     QOpenGLContext       *m_pOpenglContext{};    /// opengl设备上下文
