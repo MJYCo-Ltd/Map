@@ -23,6 +23,11 @@ public:
      * @param emType
      */
     virtual void ViewPointTypeChanged(ViewPointType emType){}
+
+    /**
+     * @brief 锁定视角
+     */
+    virtual void SetLockView(bool){};
 	
     /**
      * @brief 获取osgView
