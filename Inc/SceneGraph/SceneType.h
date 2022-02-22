@@ -118,9 +118,9 @@ struct SceneAttitude
  */
 struct ScenePos
 {
-    double dX =0;    /// x轴坐标 或者 经度[deg]
-    double dY = 0;    /// y轴坐标 或者 纬度[deg]
-    double dZ =0;    /// z轴坐标 或者 高度[m]
+    double dX {};    /// x轴坐标 或者 经度[deg]
+    double dY {};    /// y轴坐标 或者 纬度[deg]
+    double dZ {};    /// z轴坐标 或者 高度[m]
 
     bool operator == (const ScenePos& rOther) const
     {
@@ -133,13 +133,20 @@ struct ScenePos
         &&JUDGE_DOUBLE_EQUAL(dY,rOther.dY)
         &&JUDGE_DOUBLE_EQUAL(dZ,rOther.dZ));
     }
+
     ScenePos& operator=(const ScenePos& rOther)
     {
+        if(&rOther == this)
+        {
+            return(*this);
+        }
+
         dX = rOther.dX;
         dY = rOther.dY;
         dZ = rOther.dZ;
         return *this;
     }
+
     bool operator !=(const ScenePos& rOther) const
     {
         return(!(this->operator==(rOther)));

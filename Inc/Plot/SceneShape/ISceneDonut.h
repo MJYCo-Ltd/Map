@@ -1,6 +1,6 @@
 #ifndef INTERFACE_SCENE_DONUT_HEARDER_H
 #define INTERFACE_SCENE_DONUT_HEARDER_H
-#include "ISensor.h"
+#include <Plot/SceneShape/ISensor.h>
 
 /**
  * @brief 甜甜圈
@@ -8,7 +8,7 @@
 class ISceneDonut:public ISensor
 {
 public:
-    ISceneDonut(ISceneGraph* pSceneGraph):ISensor(pSceneGraph){}
+    CONSTRUCTOR(ISceneDonut,ISensor)
     /**
      * @brief 设内半径
      */

@@ -74,10 +74,6 @@ ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName
     {
         return(new CSceneDonuts(pSceneGraph));
     }
-    else if(s_sBall == sInterfaceName)
-    {
-        return(new CSceneBall(pSceneGraph));
-    }
     else if(s_sRadarSensor == sInterfaceName)
     {
         return(new CRadarSensor(pSceneGraph));
