@@ -349,7 +349,7 @@ void CMap::GetPOS(double x,double y,double z,double& dLon,double& dLat ,double&d
     else
     {
         std::vector<osg::Vec3d> input;
-        osg::Vec3d vIn(dLon,dLat,dHeight);
+        osg::Vec3d vIn(x,y,z);
         input.push_back(vIn);
 
         m_pCurMapNode->getMapSRS()->transform(input,IOsgMapSceneNode::s_pWGS84.get());
@@ -378,18 +378,18 @@ void CMap::ClearLayers()
     static std::vector<IMapMessageObserver*> allObserver;
     m_setObserver.GetAll(allObserver);
 
-    for(auto one = m_userLayers.begin();one != m_userLayers.end();++one)
+    for(auto one = m_userLayers.begin();one != m_userLayers.end();)
     {
-        /// 从map中移除节点
-        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(m_pCurMapNode,one->second->GetModelLayer(),false));
-        delete one->second;
-        m_userLayers.erase(one);
-
-
         for(auto oneObserver:allObserver)
         {
             oneObserver->RemoveLayer(one->first);
         }
+        /// 从map中移除节点
+        m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(m_pCurMapNode,one->second->GetModelLayer(),false));
+        delete one->second;
+
+       one =  m_userLayers.erase(one);
+
     }
     allObserver.clear();
 }
@@ -453,6 +453,11 @@ void CMap::SetNightColor(const SceneColor &rColor)
     }
 }
 
+void CMap::DateChanged()
+{
+    m_pSpaceEnv->UpdateDate(m_dMJD);
+}
+
 /// 鼠标移动消息
 void CMap::MouseMove(MouseButtonMask, int nX, int nY)
 {
@@ -480,6 +485,23 @@ void CMap::MouseDown(MouseButtonMask type, int nX, int nY)
     }
     allObserver.clear();
 }
+
+void CMap::SetLockView(bool bLock)
+{
+     dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())->SetLockView(bLock);
+}
+
+void CMap::SetViewPos(const ScenePos & pos)
+{
+
+}
+
+double CMap::getEvelation(double dLon, double dLat)
+{
+    double dHeight;
+    m_pCurMapNode->getTerrain()->getHeight(m_pCurMapNode->getMapSRS(),dLon,dLat,&dHeight);
+    return dHeight;
+}
 /// 初始化场景
 void CMap::InitNode()
 {
@@ -506,10 +528,15 @@ void CMap::FrameCall()
     /// 地图更改
     if(m_bMapChanged)
     {
-        IOsgMapSceneNode::SetMapNode(m_pCurMapNode,m_pSceneGraph);
 
         if(m_pPreMapNode.valid())
         {
+			
+            for(auto one=m_userLayers.begin();one != m_userLayers.end();++one)
+            {
+                one->second->GetModelLayer()->SetCanDelete(false);
+            }
+
             for(auto one=m_userLayers.begin();one != m_userLayers.end();++one)
             {
                 m_pPreMapNode->getMap()->removeLayer(one->second->GetModelLayer());
@@ -522,7 +549,13 @@ void CMap::FrameCall()
                 one->second->UpdateMapNode();
             }
             m_pCurMapNode->getMap()->endUpdate();
+
+            for(auto one=m_userLayers.begin();one != m_userLayers.end();++one)
+            {
+                one->second->GetModelLayer()->SetCanDelete(true);
+            }
         }
+        IOsgMapSceneNode::SetMapNode(m_pCurMapNode,m_pSceneGraph);
 
         m_pGroup->removeChildren(0,m_pGroup->getNumChildren());
         /// 如果是三维地球
@@ -621,18 +654,7 @@ void CMap::FrameCall()
         m_bMapChanged=false;
     }
 
-    /// 时间更改
-    if(m_bDateChanged)
-    {
-        m_pSpaceEnv->UpdateDate(m_dMJD);
-
-        const Math::CVector& vSunPos = m_pSpaceEnv->GetSunPos();
-        osg::Vec3 npos(vSunPos.GetX(),vSunPos.GetY(),vSunPos.GetZ());
-        m_pLight->setPosition(osg::Vec4(npos,.0));
-        m_pLightPosUniform->set(npos/npos.length());
-
-        m_bDateChanged = false;
-    }
+    
 
     /// 每一帧更新一次
     if(m_pCurMapNode.valid())
@@ -785,6 +807,12 @@ void CMap::Init3DLight()
     }
 
     m_p3DRoot->setStateSet(stateset);
+
+
+    const Math::CVector& vSunPos = m_pSpaceEnv->GetSunPos();
+    osg::Vec3 npos(vSunPos.GetX(),vSunPos.GetY(),vSunPos.GetZ());
+    m_pLight->setPosition(osg::Vec4(npos,.0));
+    m_pLightPosUniform->set(npos/npos.length());
 }
 
 static const char s_sMap2D[]="IMap2D";

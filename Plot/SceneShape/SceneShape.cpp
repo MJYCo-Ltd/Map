@@ -8,6 +8,8 @@
 #include "DrawShape/SceneLabel.h"
 #include "DrawShape/SceneBox.h"
 #include "DrawShape/ScenePolygon3D.h"
+#include "DrawShape/SceneDonuts.h"
+#include "DrawShape/RadarSensor.h"
 #include "SceneShape.h"
 
 static const char s_sPoint[]="IPoint";
@@ -23,6 +25,8 @@ static const char s_sSConeSensor[]="ISConeSensor";
 static const char s_sEllipsoidSensor[]="IEllipsoidSensor";
 static const char s_sBoxSensor[]="IBoxSensor";
 static const char s_sLabel[]="ILabel";
+static const char s_sDonuts[]="IDonuts";
+static const char s_sRadarSensor[]="IRadarSensor";
 
 ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName)
 {
@@ -66,7 +70,18 @@ ISceneNode* CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName
     {
         return(new CScenePolygon3D(pSceneGraph));
     }
-
+    else if(s_sDonuts == sInterfaceName)
+    {
+        return(new CSceneDonuts(pSceneGraph));
+    }
+    else if(s_sBall == sInterfaceName)
+    {
+        return(new CSceneBall(pSceneGraph));
+    }
+    else if(s_sRadarSensor == sInterfaceName)
+    {
+        return(new CRadarSensor(pSceneGraph));
+    }
     return(nullptr);
 }
 
@@ -99,6 +114,9 @@ bool QueryInterface(std::string& sInterfaceName)
     sInterfaceName += s_sBoxSensor;
     sInterfaceName += " ";
     sInterfaceName += s_sLabel;
-
+    sInterfaceName += " ";
+    sInterfaceName += s_sDonuts;
+    sInterfaceName += " ";
+    sInterfaceName += s_sRadarSensor;
     return(true);
 }

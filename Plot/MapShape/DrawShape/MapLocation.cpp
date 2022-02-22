@@ -84,6 +84,7 @@ void CMapLocation::ReCalculatMatrix()
     else
     {
         osg::Matrixd local2world;
+
         m_pGeoPoint.createLocalToWorld(local2world );
         m_pGeoTransform->setMatrix(local2world);
     }

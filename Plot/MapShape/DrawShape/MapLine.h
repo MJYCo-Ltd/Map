@@ -14,6 +14,8 @@ public:
      * @brief 初始化节点
      */
     void InitNode() override;
+
+    virtual void Update();
 };
 
 #endif // CSCENELINE_H

@@ -16,6 +16,7 @@ public:
      * @return
      */
     ILine* GetDrawLine(){return(m_pDrawLine);}
+    virtual void Update() =0;
 protected:
     virtual ~IMapLine(){}
 protected:

@@ -226,11 +226,11 @@ void QtFBOWindow::KeyPress(QKeyEvent *event)
     {
         nQtKey = event->key();
     }
-
+    int modkey = event->modifiers() & (Qt::ShiftModifier | Qt::ControlModifier | Qt::AltModifier);
     for(;iter != m_pAllOserver->end(); )
     {
         ++tmpIter;
-        (*iter)->KeyDown(nQtKey,event->modifiers());
+        (*iter)->KeyDown(nQtKey,modkey);
         iter = tmpIter;
     }
 
@@ -245,10 +245,15 @@ void QtFBOWindow::KeyUp(QKeyEvent *event)
 
     int nKey = QtEventdMap::GetInstance()->ChangeKeyEvent(event);
 
+    if(event->text().isEmpty())
+    {
+        nKey = event->key();
+    }
+    int modkey = event->modifiers() & (Qt::ShiftModifier | Qt::ControlModifier | Qt::AltModifier);
     for(;iter != m_pAllOserver->end(); )
     {
         ++tmpIter;
-        (*iter)->KeyUp(nKey,event->modifiers());
+        (*iter)->KeyUp(nKey,modkey);
         iter = tmpIter;
     }
 

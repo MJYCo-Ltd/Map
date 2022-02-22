@@ -62,7 +62,6 @@ void QtViewHud::InitNode()
     }
     else
     {
-
         m_pControlCanvas = new osgEarth::Controls::ControlCanvas();
     }
 

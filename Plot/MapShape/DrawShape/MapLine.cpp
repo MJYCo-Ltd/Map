@@ -10,3 +10,7 @@ void CMapLine::InitNode()
         SetGeometry(m_pDrawLine);
     }
 }
+void CMapLine::Update()
+{
+    UpdateMapNode();
+}

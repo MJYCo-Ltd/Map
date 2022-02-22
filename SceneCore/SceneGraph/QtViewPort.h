@@ -94,6 +94,10 @@ public:
      */
     void UpdateTime(double dt)override;
 
+    /**
+     * @brief 锁定视角
+     */
+    void SetLockView(bool)override;
 #ifdef NEED_VR
     /**
      * @brief 将视口的内容显示到VR上

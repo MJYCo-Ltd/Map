@@ -46,6 +46,16 @@ void CMyEarthManipulator::ChangeMap(MapType emType)
 /// 处理处理消息
 bool CMyEarthManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& us)
 {
+    switch (ea.getEventType())
+    {
+        case osgGA::GUIEventAdapter::DOUBLECLICK:
+            return true;
+        case osgGA::GUIEventAdapter::KEYDOWN:
+        {
+            if(ea.getKey()==32 &&m_bLockView) //锁定视角排除空格事件
+                return true;
+        }
+    }
     if(MAP_2D == m_emType && !m_bCalFactor)
     {
         m_dTanFvoy = tan(osg::DegreesToRadians(_lastKnownVFOV/2.));
@@ -68,6 +78,8 @@ bool CMyEarthManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIAct
 
 void CMyEarthManipulator::pan(double dx, double dy)
 {
+    if(m_bLockView)
+        return;
     osgEarth::Util::EarthManipulator::pan(dx,dy);
 
     if(MAP_2D == m_emType)
@@ -103,6 +115,8 @@ void CMyEarthManipulator::pan(double dx, double dy)
 
 void CMyEarthManipulator::rotate(double dx, double dy)
 {
+    if(m_bLockView)
+        return;
     if(MAP_3D == m_emType)
     {
         osgEarth::Util::EarthManipulator::rotate(dx,dy);
@@ -116,6 +130,8 @@ void CMyEarthManipulator::rotate(double dx, double dy)
 #include <iostream>
 void CMyEarthManipulator::zoom(double dx, double dy, osg::View *view)
 {
+    if(m_bLockView)
+        return;
     osgEarth::Util::EarthManipulator::zoom(-dx,-dy,view);
     switch(m_emType)
     {
@@ -210,4 +226,9 @@ void CMyEarthManipulator::SetViewPoint(const SceneViewPoint &viewPoint,double dT
         vp.pitch()->set(-viewPoint.fElev,osgEarth::Units::DEGREES);
     }
     setViewpoint(vp,dTimes);
+}
+
+void CMyEarthManipulator::SetLockView(bool bLock)
+{
+    m_bLockView = bLock;
 }

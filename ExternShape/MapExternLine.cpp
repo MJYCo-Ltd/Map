@@ -14,7 +14,7 @@ bool CMapExternLine::AddPoint(int nIndex, const ScenePos &rScenePos)
 {
     if(nIndex <=0)
     {
-        m_listAllPos.push_front(rScenePos);
+        m_listAllPos.insert(m_listAllPos.begin(),rScenePos);
     }
     else if(nIndex >= m_listAllPos.size())
     {
@@ -27,8 +27,20 @@ bool CMapExternLine::AddPoint(int nIndex, const ScenePos &rScenePos)
 
         m_listAllPos.insert(pIter,rScenePos);
     }
-
+     PointUpdate();
     return(true);
+}
+void CMapExternLine::SetColor(SceneColor color)
+{
+    m_pMapLine->GetDrawLine()->SetColor(color);
+}
+void CMapExternLine::SetLineWidth(float fLineWidth)
+{
+    m_pMapLine->GetDrawLine()->SetLineWidth(fLineWidth);
+}
+void CMapExternLine::SetVisible(bool bVisible)
+{
+    m_pMapLine->SetVisible(bVisible);
 }
 
 bool CMapExternLine::UpdatePoint(int nIndex, const ScenePos &rPos)
@@ -45,7 +57,7 @@ bool CMapExternLine::UpdatePoint(int nIndex, const ScenePos &rPos)
     {
         *pIter = rPos;
     }
-
+     PointUpdate();
     return(true);
 }
 
@@ -62,17 +74,32 @@ bool CMapExternLine::DelPoint(int nIndex)
 
     return(true);
 }
+ScenePos CMapExternLine::GetPoint(int nIndex)
+{
+    if(nIndex <0 || nIndex >m_listAllPos.size())
+        return ScenePos();
 
-void CMapExternLine::SetMultPos(const std::list<ScenePos> &posVec)
+    return m_listAllPos[nIndex];
+}
+void CMapExternLine::SetTerrainType(IMapSceneNode::MAP_TERRAIN type)
+{
+    m_pMapLine->SetTerrainType(type);
+
+    mTerrainType = type;
+    PointUpdate();
+}
+void CMapExternLine::SetMultPos(const std::vector<ScenePos> &posVec)
 {
     m_listAllPos.clear();
     m_listAllPos =posVec;
+
+    PointUpdate();
 }
 
 void CMapExternLine::PointUpdate()
 {
     m_listVirtualPos.clear();
-    if(m_listAllPos.size()<=1 ||m_dTessellation <=1.0f)
+    if(m_listAllPos.size()<=1 ||m_dTessellation <=1.0f ||mTerrainType==IMapSceneNode::CLOSE_TERRAIN)
     {
         auto iter = m_listAllPos.begin();
         while(iter != m_listAllPos.end())
@@ -106,11 +133,11 @@ void CMapExternLine::PointUpdate()
             for(int i=0;i<dTessellation-1;i++)
             {
                 double dLon,dLat,dHeight;
-                GisMath::GeoCalEndGeo(_tPos.dX*DD2R,_tPos.dY*DD2R,_tPos.dZ,dAzim,tmpElev*(i+1),m_dTessellation*(i+1),dLon,dLat,dHeight);
+                GisMath::CalBaiser(_tPos.dX*DD2R,_tPos.dY*DD2R,dAzim,m_dTessellation*(i+1),dLon,dLat);
                 ScenePos _tmpPos;
                 _tmpPos.dX =dLon*DR2D;
                 _tmpPos.dY =dLat*DR2D;
-                _tmpPos.dZ =dHeight;
+                _tmpPos.dZ =_tPos.dZ;
                 m_listVirtualPos.push_back(_tmpPos);
             }
             _tPos = *iter;
@@ -118,5 +145,10 @@ void CMapExternLine::PointUpdate()
             iter++;
         }
     }
+
     m_pMapLine->GetDrawLine()->SetMultPos(m_listVirtualPos);
+}
+void CMapExternLine::Update()
+{
+    PointUpdate();
 }

@@ -10,12 +10,16 @@ class OSGEXTERNSHARED_EXPORT CMapExternLine
 {
 public:
     CMapExternLine(ISceneGraph* pSceneGraph);
-
+    IMapSceneNode* getNode(){return  m_pMapLine;}
     bool AddPoint(int,const ScenePos&);
     bool UpdatePoint(int,const ScenePos&);
     bool DelPoint(int);
-    void SetMultPos(const std::list<ScenePos>&);
-
+    ScenePos GetPoint(int);
+    void SetMultPos(const std::vector<ScenePos>&);
+    void SetTerrainType(IMapSceneNode::MAP_TERRAIN);
+    void SetColor(SceneColor color);
+    void SetLineWidth(float);
+    void SetVisible(bool);
     /**
      * @brief 设置细分参数
      * @param dTessellation [m]
@@ -23,6 +27,11 @@ public:
      */
     void SetTessellation(double dTessellation)JUDGE_DOUBLE_CALL_FUNCTION(dTessellation,m_dTessellation,PointUpdate)
     double Tessellation(){return(m_dTessellation);}
+
+    /**
+     * @brief 强制更新
+     */
+    void Update();
 protected:
     /**
      * @brief 点更新
@@ -31,8 +40,9 @@ protected:
 protected:
     ISceneGraph*  m_pSceneGraph{};
     IMapLine*     m_pMapLine{};
-    double        m_dTessellation{1000.};
-    std::list<ScenePos>   m_listAllPos;
+    double        m_dTessellation{300.};
+    IMapSceneNode::MAP_TERRAIN mTerrainType;
+    std::vector<ScenePos>   m_listAllPos;
     std::vector<ScenePos> m_listVirtualPos;
 };
 

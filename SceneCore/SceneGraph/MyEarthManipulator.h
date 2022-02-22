@@ -39,6 +39,10 @@ public:
      */
     void SetViewPoint(const SceneViewPoint& viewPoint, double dTimes);
 
+    /**
+     * @锁定视角
+     */
+    void SetLockView(bool);
 protected:
 
     /**
@@ -47,7 +51,7 @@ protected:
     bool AdjustViewPoint(osgEarth::Viewpoint &vp);
 
 private:
-    MapType m_emType;
+    MapType m_emType= MAP_USER;
     osgEarth::GeoExtent m_extent;
     double m_dHalfY{};
     double m_dFactor{};
@@ -55,6 +59,7 @@ private:
     double m_dMaxDistance{360000000};
     bool   m_bCalFactor{false};
     bool   m_bInit{false};
+    bool m_bLockView = false;
 };
 
 #endif // CFLATEARTHMANIPULATOR_H

@@ -116,7 +116,7 @@ public:
     /**
      * @brief时间更新
      */
-    void DateChanged() override {m_bDateChanged=true;}
+    void DateChanged();
 
     /**
      * @brief 鼠标移动消息
@@ -126,6 +126,20 @@ public:
      * @brief 鼠标点击消息
      */
     void MouseDown(MouseButtonMask, int, int)override;
+
+    /**
+     * 设置锁定视角
+     */
+    virtual void SetLockView(bool) override;
+
+    /**
+     * @brief 设置视角
+     */
+    virtual void SetViewPos(const ScenePos& ) override;
+
+    virtual double getSimulationTime()override{return m_dMJD;}
+
+    virtual double getEvelation(double,double)override;
 protected:
     /**
      * @brief 初始化节点

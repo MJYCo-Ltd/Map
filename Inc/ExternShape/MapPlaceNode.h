@@ -3,6 +3,7 @@
 
 #include <ExternShape/ExternShape_Global.h>
 #include <string>
+#include <QImage>
 class ISceneGraph;
 class IMapLocation;
 class ILabel;
@@ -11,7 +12,8 @@ class ISceneScreenGroup;
 struct ScenePos;
 struct SceneColor;
 struct SceneImageSize;
-
+struct SceneAttitude;
+class ISceneAttitudeGroup;
 class OSGEXTERNSHARED_EXPORT CPlaceNode
 {
 public:
@@ -32,10 +34,15 @@ public:
     void SetText(const std::string& sTextInfo);
 
     /**
+     * @brief 设置旋转
+     */
+    void SetAttitude(const SceneAttitude&);
+    /**
      * @brief 设置图标颜色
      */
     void SetColor(const SceneColor&);
 
+    void SetQImage(const QImage&);
     /**
      * @brief 设置图片路径
      * @param sPath
@@ -64,6 +71,7 @@ public:
      * @brief 获取图片
      * @return
      */
+
     IImage* GetImage(){return(m_pImage);}
 protected:
     /**
@@ -76,6 +84,7 @@ protected:
     ISceneGraph*  m_pSceneGraph{};
     IMapLocation* m_pLocation{};
     ISceneScreenGroup* m_pSceneScreenGroup{};
+    ISceneAttitudeGroup* m_pAttitudeGroup = nullptr;
     ILabel*       m_pLabel{};
     IImage*       m_pImage{};
 };

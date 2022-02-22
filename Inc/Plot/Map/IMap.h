@@ -130,11 +130,29 @@ public:
      * @brief 获取地理坐标
      */
     virtual void GetPOS(double x,double y,double z,double& dLon,double& dLat ,double&dHeight  ) =0;
+
+    /**
+     * 设置锁定视角
+     */
+    virtual void SetLockView(bool) =0;
+
+    /**
+     * @brief 设置视角
+     */
+    virtual void SetViewPos(const ScenePos& ) =0;
     /**
      * @brief 更新时间
      * @arg   约简儒略日
      */
     void UpdateDate(double dMJD)JUDGE_DOUBLE_CALL_FUNCTION(dMJD,m_dMJD,DateChanged)
+
+    virtual double getSimulationTime()=0;
+
+    /**
+     * @brief 获取高程信息
+     * @return
+     */
+    virtual double getEvelation(double,double)=0;
 protected:
     virtual ~IMap(){}
     virtual void DateChanged()=0;

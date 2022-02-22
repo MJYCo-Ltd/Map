@@ -588,6 +588,18 @@ void QtViewPort::UpdateTime(double dt)
 {
 }
 
+void QtViewPort::SetLockView(bool bLock)
+{
+    if(m_p2DEarthManipulator.valid())
+    {
+        m_p2DEarthManipulator.get()->SetLockView(bLock);
+    }
+    if(m_p3DEarthManipulator.valid())
+    {
+        m_p3DEarthManipulator.get()->SetLockView(bLock);
+    }
+}
+
 #ifdef NEED_VR
 
 /// 显示到VR上

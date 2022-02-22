@@ -18,6 +18,7 @@ HEADERS += \
     DrawShape/RadarSensor.h \
     DrawShape/SceneBox.h \
     DrawShape/SceneCone.h \
+    DrawShape/SceneDonuts.h \
     DrawShape/SceneEllipsoid.h \
     DrawShape/SceneImage.h \
     DrawShape/SceneLabel.h \
@@ -33,6 +34,7 @@ SOURCES += \
     DrawShape/RadarSensor.cpp \
     DrawShape/SceneBox.cpp \
     DrawShape/SceneCone.cpp \
+    DrawShape/SceneDonuts.cpp \
     DrawShape/SceneEllipsoid.cpp \
     DrawShape/SceneImage.cpp \
     DrawShape/SceneLabel.cpp \
