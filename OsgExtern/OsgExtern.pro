@@ -14,6 +14,7 @@ SOURCES += \
     FlatAbility.cpp \
     Grid2TriangleStrip.cpp \
     JudgeGeometry.cpp \
+    LoadGLSL.cpp \
     MathCommon.cpp \
     MyMatrixTransform.cpp \
     MyPositionAttitudeTransform.cpp \

@@ -263,6 +263,8 @@ void QtFBOWindow::KeyUp(QKeyEvent *event)
 
 void QtFBOWindow::MouseDouble(QMouseEvent *event, qreal rScal)
 {
+    if(!FilterTouchMouse(event)) return;
+
     m_rMouseX = event->x()*rScal;
     m_rMouseY = event->y()*rScal;
 
@@ -283,6 +285,8 @@ void QtFBOWindow::MouseDouble(QMouseEvent *event, qreal rScal)
 /// 鼠标按下
 void QtFBOWindow::MousePress(QMouseEvent *event,qreal rScal)
 {
+    if(!FilterTouchMouse(event)) return;
+
     m_rMouseX = event->x()*rScal;
     m_rMouseY = event->y()*rScal;
 
@@ -304,6 +308,8 @@ void QtFBOWindow::MousePress(QMouseEvent *event,qreal rScal)
 /// 鼠标弹起
 void QtFBOWindow::MouseUp(QMouseEvent *event,qreal rScal)
 {
+    if(!FilterTouchMouse(event)) return;
+
     m_rMouseX = event->x()*rScal;
     m_rMouseY = event->y()*rScal;
 
@@ -325,6 +331,8 @@ void QtFBOWindow::MouseUp(QMouseEvent *event,qreal rScal)
 /// 鼠标移动
 void QtFBOWindow::MouseMove(QMouseEvent *event,qreal rScal)
 {
+    if(!FilterTouchMouse(event)) return;
+
     m_rMouseX = event->x()*rScal;
     m_rMouseY = event->y()*rScal;
 
@@ -508,4 +516,9 @@ void QtFBOWindow::TouchEvent(QTouchEvent *event)
     }
         break;
     }
+}
+
+bool QtFBOWindow::FilterTouchMouse(QMouseEvent *event)
+{
+    return(event->source() == Qt::MouseEventNotSynthesized);
 }
