@@ -815,8 +815,8 @@ void MainWindow::on_action12_triggered()
     scenePos.dY=50.f;
     pPolygon->AddPoint(pPolygon->GetCount(),scenePos);
     pPolygon->SetColor(color);
-//    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("Model/AirPlane.ive");
-//    pSceneRoot->AddSceneNode(pModel);
+    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("D:/ubvr/test/cube-color-material/cube-color-material.ubvr",false);
+    pSceneRoot->AddSceneNode(pModel);
 //    pModel->SetCanPick(true);
 //    pVisualGroup->AddSceneNode(pModel);
 //    pVisualGroup->AddSceneNode(pImage);
