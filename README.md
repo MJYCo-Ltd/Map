@@ -2,6 +2,8 @@
 
 使用QT基于osg和osgearth封装的渲染平台
 
+*![avatar](LoadMap/LoadMap.png)
+
 主要工作：
 
 * 真实的恒星位置、星座、星区，显示

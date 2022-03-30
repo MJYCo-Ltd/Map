@@ -53,7 +53,7 @@ struct Field
         switch (type)
         {
         case FIELD_INT:
-//            return(itoa(value.nValue,10));
+            return(itoa(value.nValue,s_sBuffer,10));
         case FIELD_FLOAT:
             break;
         case FIELD_BOOL:
@@ -71,6 +71,7 @@ struct Field
             break;
         }
     }
+    static char s_sBuffer[256];
 };
 
 /**

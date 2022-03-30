@@ -780,7 +780,7 @@ void MainWindow::on_action12_triggered()
     viePoint.stPos = scenePos;
     pVisualGroup->SetViewPoint(viePoint);
     pVisualGroup->SetPosIsGeo(false);
-//    pSceneRoot->AddSceneNode(pVisualGroup);
+    pSceneRoot->AddSceneNode(pVisualGroup);
 
     ISConeSensor* pSCone = dynamic_cast<ISConeSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ISConeSensor"));
     pSCone->SetColor(color);
@@ -815,32 +815,32 @@ void MainWindow::on_action12_triggered()
     scenePos.dY=50.f;
     pPolygon->AddPoint(pPolygon->GetCount(),scenePos);
     pPolygon->SetColor(color);
-    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("D:/ubvr/test/cube-color-material/cube-color-material.ubvr",false);
+    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("E:/Git/MJY/Bin/Data/Model/AirPlane.ive",false);
     pSceneRoot->AddSceneNode(pModel);
 //    pModel->SetCanPick(true);
-//    pVisualGroup->AddSceneNode(pModel);
+    pVisualGroup->AddSceneNode(pModel);
 //    pVisualGroup->AddSceneNode(pImage);
     IBoxSensor* pBox = dynamic_cast<IBoxSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IBoxSensor"));
     pBox->SetDistance(10);
-    IFlatAbility* pFlatAbility = pBox->GetOrCreateAbility(FLAT_ABILITY)->AsFlatAbility();
-    FlatArea area;
-    area.stLeftUp.dX = -5;
-    area.stLeftUp.dY = 5;
+//    IFlatAbility* pFlatAbility = pBox->GetOrCreateAbility(FLAT_ABILITY)->AsFlatAbility();
+//    FlatArea area;
+//    area.stLeftUp.dX = -5;
+//    area.stLeftUp.dY = 5;
 
-    area.stRightUp.dX = 5;
-    area.stRightUp.dY = 5;
+//    area.stRightUp.dX = 5;
+//    area.stRightUp.dY = 5;
 
-    area.stRightDown.dX = 5;
-    area.stRightDown.dY = 0;
+//    area.stRightDown.dX = 5;
+//    area.stRightDown.dY = 0;
 
-    area.stLeftDown.dX = -5;
-    area.stLeftDown.dY = 0;
-    pFlatAbility->AddHole(area);
+//    area.stLeftDown.dX = -5;
+//    area.stLeftDown.dY = 0;
+//    pFlatAbility->AddHole(area);
 //    pBox->SetShowBack(true);
     pBox->ShowLine(true);
 //    pBox->ShowFace(false);
 //    pVisualGroup->AddSceneNode(pBox);
-    pSceneRoot->AddSceneNode(pBox);
+//    pSceneRoot->AddSceneNode(pBox);
 
     m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);
 }
