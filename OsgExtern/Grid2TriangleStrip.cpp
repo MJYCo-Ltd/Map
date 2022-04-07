@@ -55,16 +55,16 @@ void CGrid2TriangleStrip::GenerateIndex()
         tmpVIndex.resize(2*m_unLineCount);
     }
 
-    int nBase;
+    unsigned int nBase;
 
     /// 开始构建索引数组
-    for(int nIndexRow = 0; nIndexRow < m_unRowCount; ++nIndexRow)
+    for(unsigned int nIndexRow = 0; nIndexRow < m_unRowCount; ++nIndexRow)
     {
         if(m_unRowCount -1 != nIndexRow)
         {
             nBase = (m_unRowCount - 1 - nIndexRow) * m_unLineCount;
             /// 循环生成
-            for(int nIndexLine = 0; nIndexLine < m_unLineCount; ++nIndexLine)
+            for(unsigned int nIndexLine = 0; nIndexLine < m_unLineCount; ++nIndexLine)
             {
                 tmpVIndex[nIndexLine*2] = nBase + nIndexLine;
                 tmpVIndex[1 + nIndexLine*2] = nBase + nIndexLine - m_unLineCount;
@@ -80,6 +80,4 @@ void CGrid2TriangleStrip::GenerateIndex()
             m_vIndex.push_back(tmpVIndex);
         }
     }
-
-    int i=0;
 }
