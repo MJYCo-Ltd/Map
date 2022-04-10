@@ -233,10 +233,12 @@ void MainWindow::on_action_triggered()
 //        pFLash->SetFlashColor(color);
 //        pFLash->SetFlash(true);
         CDate mjBein(2021,4,6,12,0,0);
-        Satellite::CSGP4 spg41("1 91001U          20061.66666667 -.00000001  00000-0 -13106-2 0 00008",
-                               "2 91001 045.0073 000.0048 0004655 268.5152 091.4846 07.15404217000017");
+        Satellite::CSGP4 spg41("1 24792U 97020A 15295.80870870 .00000395 00000-0 13414-3 0  9995",
+                               "2 24792 86.4009 210.8757 0002055 81.6361 278.5068 14.34222478966712");
 
-        double dMJD = mjBein.GetMJD();
+        double dMJD = spg41.GetTLEEpoch();
+        CDate temedata(dMJD);
+        cout<<temedata;
         vector<CVector> vPos;
         vector<double> vTime;
         CVector vPV;

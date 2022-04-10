@@ -20,9 +20,15 @@ protected:
      */
     void InitNode()
     {
+        if(!s_pStateSet.valid())
+        {
+            s_pStateSet = new osg::StateSet;
+            osgEarth::ScreenSpaceLayout::activate(s_pStateSet);
+        }
+
         T::m_bOpenCull=false;
         ImplSceneGroup<T>::InitNode();
-        osgEarth::ScreenSpaceLayout::activate(IOsgSceneNode::m_pRootNode->getOrCreateStateSet());
+        ImplSceneGroup<T>::m_pGroup->setStateSet(s_pStateSet);
         osgEarth::ScreenSpaceLayout::setDeclutteringEnabled(false);
         auto options = osgEarth::ScreenSpaceLayout::getOptions();
         options.technique() = options.TECHNIQUE_CALLOUTS;
@@ -41,6 +47,9 @@ protected:
             osgEarth::ScreenSpaceLayout::setDeclutteringEnabled(false);
         }
     }
+    static osg::ref_ptr<osg::StateSet> s_pStateSet;
 };
 
+template <typename T>
+osg::ref_ptr<osg::StateSet> ImplSceneScreenGroup<T>::s_pStateSet;
 #endif // IMPL_SCENE_FLASH_GROUP_H
