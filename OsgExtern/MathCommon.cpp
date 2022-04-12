@@ -7,6 +7,7 @@ std::map<ISceneGraph*,bool> IOsgMapSceneNode::s_mapIs3D;
 std::map<ISceneGraph*,osg::observer_ptr<osgEarth::MapNode>> IOsgMapSceneNode::s_mapMapNode;
 std::map<ISceneGraph*,osg::observer_ptr<const osgEarth::SpatialReference>> IOsgMapSceneNode::s_mapMapSRS;
 std::map<ISceneGraph*,osg::observer_ptr<osgEarth::Terrain>> IOsgMapSceneNode::s_mapTerrain;
+std::map<ISceneGraph*,osg::ref_ptr<osgEarth::HorizonCullCallback>> IOsgMapSceneNode::s_mapHorizonCullBack;
 osg::ref_ptr<osgEarth::SpatialReference> IOsgMapSceneNode::s_pWGS84=osgEarth::SpatialReference::get("WGS84");
 
 CMathCommon *CMathCommon::GetInstance()

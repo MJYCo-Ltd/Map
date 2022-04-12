@@ -46,17 +46,8 @@ protected:
     {
         ImplSceneNode<T>::InitNode();
 
-        /// 增加地平面回调
-        m_pHorizonCullBack = new osgEarth::HorizonCullCallback;
-        m_pHorizonCullBack->setEnabled(true);
-
         /// 需要增加到
         ImplSceneNode<T>::NodeChanged();
-    }
-
-    void UpdateMapNode() override
-    {
-        m_pHorizonCullBack->setEnabled(IOsgMapSceneNode::s_mapIs3D[T::m_pSceneGraph]);
     }
 
     /**
@@ -65,14 +56,20 @@ protected:
      */
     void SetMapSceneNode(osg::Node* pNode)
     {
+        osg::ref_ptr<osgEarth::HorizonCullCallback>& pHorizonCullBack = IOsgMapSceneNode::s_mapHorizonCullBack[T::m_pSceneGraph];
+        if(!pHorizonCullBack.valid())
+        {
+            pHorizonCullBack = new osgEarth::HorizonCullCallback;
+        }
+
         if(IOsgSceneNode::m_pRootNode.valid())
         {
-            IOsgSceneNode::m_pRootNode->removeCullCallback(m_pHorizonCullBack);
+            IOsgSceneNode::m_pRootNode->removeCullCallback(pHorizonCullBack);
         }
 
         if(nullptr != pNode)
         {
-            pNode->addCullCallback(m_pHorizonCullBack);
+            pNode->addCullCallback(pHorizonCullBack);
         }
 
         ImplSceneNode<T>::SetOsgNode(pNode);
@@ -113,6 +110,5 @@ protected:
     bool m_bInsertIntoTerrain{false};
     bool m_bTerrainTypeChanged{false}; /// 贴地模式是否修改
     osg::ref_ptr<MayTerrainCallback>            m_pTerrainCallback;
-    osg::ref_ptr<osgEarth::HorizonCullCallback> m_pHorizonCullBack;
 };
 #endif // IMPL_OSG_MAP_SHAPE_H

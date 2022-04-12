@@ -3,6 +3,7 @@
 #include <Inner/OsgExtern/OsgExtern_Global.h>
 #include <osgEarth/MapNode>
 #include <osgEarth/Terrain>
+#include <osgEarth/Horizon>
 
 class ISceneGraph;
 
@@ -19,6 +20,13 @@ public:
         s_mapIs3D[pSceneGraph] = pMapNode->isGeocentric();
         s_mapMapSRS[pSceneGraph] = pMapNode->getMapSRS();
         s_mapTerrain[pSceneGraph] = pMapNode->getTerrain();
+
+        osg::ref_ptr<osgEarth::HorizonCullCallback>& pHorizonCullBack = s_mapHorizonCullBack[pSceneGraph];
+        if(!pHorizonCullBack.valid())
+        {
+            pHorizonCullBack = new osgEarth::HorizonCullCallback;
+        }
+        pHorizonCullBack->setEnabled(pMapNode->isGeocentric());
     }
 
     /**
@@ -50,6 +58,7 @@ protected:
     static std::map<ISceneGraph*,osg::observer_ptr<osgEarth::MapNode>> s_mapMapNode;
     static std::map<ISceneGraph*,osg::observer_ptr<const osgEarth::SpatialReference>> s_mapMapSRS;
     static std::map<ISceneGraph*,osg::observer_ptr<osgEarth::Terrain>>          s_mapTerrain;
+    static std::map<ISceneGraph*,osg::ref_ptr<osgEarth::HorizonCullCallback>> s_mapHorizonCullBack;
 public:
     static osg::ref_ptr<osgEarth::SpatialReference>       s_pWGS84;
 };
