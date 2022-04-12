@@ -76,7 +76,7 @@ void CPlaceNode::SetImageSize(const SceneImageSize &stSize)
     ScenePixelOffset spOffset;
     spOffset.sHeight=0;
     spOffset.sWidth=stSize.unWidth/2;
-    //m_pLabel->SetPixelOffset(spOffset);
+    m_pLabel->SetPixelOffset(spOffset);
 }
 
 void CPlaceNode::InitNode()
@@ -102,9 +102,9 @@ void CPlaceNode::CreateImage()
     size.bOutSet=true;
     m_pImage->SetImageSize(size);
     m_pImage->AlwasOnTop(true);
-    m_pAttitudeGroup->AddSceneNode(m_pImage);
+    m_pSceneScreenGroup->AddSceneNode(m_pImage);
     ScenePixelOffset spOffset;
     spOffset.sHeight=0;
     spOffset.sWidth=16;
-    //m_pLabel->SetPixelOffset(spOffset);
+    m_pLabel->SetPixelOffset(spOffset);
 }

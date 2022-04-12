@@ -528,10 +528,10 @@ void CMap::FrameCall()
     /// 地图更改
     if(m_bMapChanged)
     {
-
         if(m_pPreMapNode.valid())
         {
-			
+            IOsgMapSceneNode::SetMapNode(m_pCurMapNode,m_pSceneGraph);
+
             for(auto one=m_userLayers.begin();one != m_userLayers.end();++one)
             {
                 one->second->GetModelLayer()->SetCanDelete(false);
@@ -555,7 +555,10 @@ void CMap::FrameCall()
                 one->second->GetModelLayer()->SetCanDelete(true);
             }
         }
-        IOsgMapSceneNode::SetMapNode(m_pCurMapNode,m_pSceneGraph);
+        else
+        {
+            IOsgMapSceneNode::SetMapNode(m_pCurMapNode,m_pSceneGraph);
+        }
 
         m_pGroup->removeChildren(0,m_pGroup->getNumChildren());
         /// 如果是三维地球
