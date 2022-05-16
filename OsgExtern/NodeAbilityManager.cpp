@@ -21,6 +21,8 @@ INodeAbility *CNodeAbilityManager::CreateAbility(ABILITY_TYPE emType)
     case FLAT_ABILITY:
         return(new CFlatAbility);
         break;
+    case EDIT_ABILITY:
+        break;
     default:
         break;
     }

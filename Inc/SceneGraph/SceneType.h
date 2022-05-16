@@ -35,7 +35,8 @@ enum ABILITY_TYPE
     FLASH_ABILITY=1<<0,         /// 闪烁
     AUTOSCAL_ABILITY=1<<1,      /// 自动缩放
     MOTION_ABILITY=1<<2,        /// 运动能力
-    FLAT_ABILITY=1<<3           /// 平整能力
+    FLAT_ABILITY=1<<3,          /// 平整能力
+    EDIT_ABILITY=1<<4           /// 编辑能力
 };
 
 /**

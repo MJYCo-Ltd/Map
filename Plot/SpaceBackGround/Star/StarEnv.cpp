@@ -122,7 +122,7 @@ void CStarEnv::SetMilkwayVisible(bool bVisible)
     }
 }
 
-void CStarEnv::UpdateMatrix(const CMatrix &rRotate)
+void CStarEnv::UpdateMatrix(const Math::CMatrix &rRotate)
 {
     m_rRoate.set(rRotate(0, 0), rRotate(0, 1), rRotate(0, 2), 0.,
                  rRotate(1, 0), rRotate(1, 1), rRotate(1, 2), 0.,

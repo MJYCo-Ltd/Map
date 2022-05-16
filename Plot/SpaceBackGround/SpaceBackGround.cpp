@@ -55,7 +55,7 @@ void CSpaceBackGround::InitNode()
     SetOsgNode(m_pSkyNode.get());
 }
 
-void CSpaceBackGround::UpdatePos(const std::vector<CVector> &vSolarPos)
+void CSpaceBackGround::UpdatePos(const std::vector<Math::CVector> &vSolarPos)
 {
     m_pSkyNode->UpdatePos(vSolarPos);
 }

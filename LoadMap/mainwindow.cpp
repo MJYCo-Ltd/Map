@@ -238,10 +238,10 @@ void MainWindow::on_action_triggered()
 
         double dMJD = spg41.GetTLEEpoch();
         CDate temedata(dMJD);
-        cout<<temedata;
-        vector<CVector> vPos;
-        vector<double> vTime;
-        CVector vPV;
+        std::cout<<temedata;
+        std::vector<Math::CVector> vPos;
+        std::vector<double> vTime;
+        Math::CVector vPV;
 
         vTime.reserve(86400);
         vPos.reserve(86400);
@@ -253,7 +253,7 @@ void MainWindow::on_action_triggered()
         }
 
         /// 转到地固系下
-        CVector vECF;
+        Math::CVector vECF;
         CCoorSys::TEME2ECF(dMJD,vPos[0],vECF);
         PV satPV;
         satPV.stP.dX = vECF(0);
@@ -267,7 +267,7 @@ void MainWindow::on_action_triggered()
         Pos satPRY,rPos;
 
         ScenePos testPos;
-        CVector vOther;
+        Math::CVector vOther;
         GisMath::XYZ2LBH(vECF.slice(0,2),vOther);
 
         vOther(1) += 10*DD2R;

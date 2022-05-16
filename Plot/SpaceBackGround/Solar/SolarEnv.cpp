@@ -54,7 +54,7 @@ void CSolarEnv::CreateSolar()
     this->addChild(m_pSun);
 }
 
-void CSolarEnv::UpdatePos(const std::vector<CVector> &vSolarPos)
+void CSolarEnv::UpdatePos(const std::vector<Math::CVector> &vSolarPos)
 {
     for(auto itor = m_mapPlanet.begin();
         itor != m_mapPlanet.end();
