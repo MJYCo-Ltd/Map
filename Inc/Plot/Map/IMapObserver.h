@@ -34,6 +34,8 @@ struct IMapMessageObserver
     virtual void MousePos(double,double,double){}
 
     virtual void MouseDown(MouseButtonMask type, double,double,double){};
+
+    virtual void MouseDblClick(MouseButtonMask type, double,double,double){};
 };
 
 #endif /// INTERFACE_MAP_OBSERVER_HEARDER_H

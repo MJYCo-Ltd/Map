@@ -164,6 +164,18 @@ const SceneViewPoint &QtViewPort::GetViewPoint()
     }
 }
 
+void QtViewPort::SetTrackViewPoint(const SceneViewPoint& rViewPoint)
+{
+	m_stTrackViewPoint = rViewPoint;
+
+	if (m_emType == View_Node&&m_pTrackManipulator.valid())
+	{
+		m_pTrackManipulator->setDistance(m_stTrackViewPoint.fDistance);
+		m_pTrackManipulator->setHeading(osg::DegreesToRadians(m_stTrackViewPoint.fAzimuth));
+		m_pTrackManipulator->setElevation(osg::DegreesToRadians(m_stTrackViewPoint.fElev));
+	}
+}
+
 /// 获取视图类
 osgViewer::View *QtViewPort::GetOsgView()
 {
@@ -372,9 +384,9 @@ void QtViewPort::FrameEvent()
             m_p2DEarthManipulator->SetViewPoint(m_stViewPoint,m_dTimes);
             break;
         case View_Node:
-            m_pTrackManipulator->setDistance(m_stViewPoint.fDistance);
-            m_pTrackManipulator->setHeading(osg::DegreesToRadians(m_stViewPoint.fAzimuth));
-            m_pTrackManipulator->setElevation(osg::DegreesToRadians(m_stViewPoint.fElev));
+            m_pTrackManipulator->setDistance(m_stTrackViewPoint.fDistance);
+            m_pTrackManipulator->setHeading(osg::DegreesToRadians(m_stTrackViewPoint.fAzimuth));
+            m_pTrackManipulator->setElevation(osg::DegreesToRadians(m_stTrackViewPoint.fElev));
             break;
         case View_Osg:
             m_pSelfManipulator->setDistance(m_stViewPoint.fDistance);
@@ -392,7 +404,8 @@ void QtViewPort::FrameEvent()
     /// 更新跟踪节点
     if(m_bTraceNodeChanged)
     {
-        if(m_pTrackNode->GetBoundSceneGraph() == m_pSceneGraph)
+		m_bTraceNodeChanged = false;
+        if(m_pTrackNode&&m_pTrackNode->GetBoundSceneGraph() == m_pSceneGraph)
         {
             IOsgSceneNode* pOsgNode = m_pTrackNode->AsOsgSceneNode();
 
@@ -415,24 +428,44 @@ void QtViewPort::FrameEvent()
                     m_emPreType = m_emType;
                     m_emType = View_Node;
                     m_pTrackManipulator->setTrackNode(pOsgNode->GetRealNode());
+                    m_pView->setCameraManipulator(m_pTrackManipulator);
                 }
             }
             else
             {
-                switch (m_emPreType)
-                {
-                case View_3DMap:
-                    m_pView->setCameraManipulator(m_p3DEarthManipulator);
-                    break;
-                case View_2DMap:
-                    m_pView->setCameraManipulator(m_p2DEarthManipulator);
-                    break;
-                default:
-                    m_pView->setCameraManipulator(m_pSelfManipulator);
-                    break;
-                }
+				switch (m_emPreType)
+				{
+				case View_3DMap:
+					m_pView->setCameraManipulator(m_p3DEarthManipulator);
+					break;
+				case View_2DMap:
+					m_pView->setCameraManipulator(m_p2DEarthManipulator);
+					break;
+				default:
+					m_pView->setCameraManipulator(m_pSelfManipulator);
+					break;
+				}
+				m_emType = m_emPreType;
             }
+			 
         }
+		else
+		{ 
+			switch (m_emPreType)
+			{
+			case View_3DMap:
+				m_pView->setCameraManipulator(m_p3DEarthManipulator);
+				break;
+			case View_2DMap:
+				m_pView->setCameraManipulator(m_p2DEarthManipulator);
+				break;
+			default:
+				m_pView->setCameraManipulator(m_pSelfManipulator);
+				break;
+			}
+			m_emType = m_emPreType;
+		}
+		m_bViewPointChanged = true;
     }
 
     ///  更新视口

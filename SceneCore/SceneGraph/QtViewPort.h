@@ -45,6 +45,7 @@ public:
     void SetViewPoint(const SceneViewPoint&rViewPoint,unsigned int unTimes) override;
     const SceneViewPoint& GetViewPoint() override;
 
+	virtual void SetTrackViewPoint(const SceneViewPoint&) override;
     /**
      * @brief 获取osgView
      * @return
@@ -145,7 +146,7 @@ protected:
     bool           m_bViewTypeChanged{false};
     bool           m_bRemoveCapture{false};
     SceneViewPoint m_stViewPoint;
-
+	SceneViewPoint m_stTrackViewPoint;									///跟踪视角
     QtViewHud*     m_pHud{};                                         /// 屏显根节点
     ISceneGraph*   m_pSceneGraph{};                                  /// 设置场景
     IRender*       m_pRender{};

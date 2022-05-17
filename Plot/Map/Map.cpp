@@ -486,6 +486,25 @@ void CMap::MouseDown(MouseButtonMask type, int nX, int nY)
     allObserver.clear();
 }
 
+void CMap::MouseDblClick(MouseButtonMask  type, int nX, int nY)
+{
+    m_nX = nX;
+    m_nY = nY;
+    static std::vector<IMapMessageObserver*> allObserver;
+    m_setObserver.GetAll(allObserver);
+
+    auto iter = allObserver.begin();
+    while (iter != allObserver.end())
+    {
+        auto temIter = iter;
+        temIter++;
+        (*iter)->MouseDblClick(type,m_stMousePos.dX,m_stMousePos.dY,m_stMousePos.dZ);
+        iter=temIter;
+    }
+
+    allObserver.clear();
+}
+
 void CMap::SetLockView(bool bLock)
 {
      dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())->SetLockView(bLock);
@@ -766,6 +785,7 @@ void CMap::LoadMap()
                 m_bIs3D=false;
             }
         }
+        IOsgMapSceneNode::SetMapNode(m_pCurMapNode,m_pSceneGraph);
     }
 }
 

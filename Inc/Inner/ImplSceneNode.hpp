@@ -148,14 +148,15 @@ protected:
         }
 
         /// 是否一直显示
-        if(m_bShowTopChanged)
-        {
-            //移动目标闪烁版本
-            m_pRootNode->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,
-                                                        T::m_bShowTop ? osg::StateAttribute::OFF : osg::StateAttribute::ON);
+//        if(m_bShowTopChanged)
+//        {
+//            //移动目标闪烁版本
+//            if(m_pRootNode.valid())
+//                m_pRootNode->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,
+//                                                        T::m_bShowTop ? osg::StateAttribute::OFF : osg::StateAttribute::ON);
 
-            m_bShowTopChanged=false;
-        }
+//            m_bShowTopChanged=false;
+//        }
 
         /// 如果能力状态更改
         if(m_bAbilityChanged)
@@ -169,7 +170,7 @@ protected:
 
         /// 渲染状态修改
         if(m_bStateChanged)
-        {
+        { 
             m_pProgramNode->setStateSet(T::m_pSceneGraph->ResouceLoader()->GetOrCreateStateSet(m_unStateSet));
             m_bStateChanged = false;
         }
@@ -222,6 +223,14 @@ protected:
     void LightChanged()SET_TRUE_NODE_UPDATE(m_bLightingChanged)
     void ShowTopChanged()SET_TRUE_NODE_UPDATE(m_bShowTopChanged)
     void AbilityChanged() SET_TRUE_NODE_UPDATE(m_bAbilityChanged)
+
+    virtual void AlwasOnTop(bool bOpen)
+    {
+        if(bOpen)
+            MergeStateSet(DEPTH_TEST_OFF);
+        else
+            RemoveStateSet(DEPTH_TEST_OFF);
+    }
 
     void AddNode(osg::Group* pGroup,osg::Node* pNode)
     {

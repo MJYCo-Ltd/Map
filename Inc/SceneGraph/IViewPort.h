@@ -78,6 +78,11 @@ public:
     virtual void SetViewPoint(const SceneViewPoint&,unsigned int)=0;
     virtual const SceneViewPoint& GetViewPoint()=0;
 
+	/**
+	 * @brief 设置追踪视点
+	 */
+	virtual void SetTrackViewPoint(const SceneViewPoint&) = 0;
+
     /**
      * @brief 设置home视点
      */

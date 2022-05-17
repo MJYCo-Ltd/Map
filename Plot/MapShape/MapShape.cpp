@@ -4,6 +4,7 @@
 #include "DrawShape/MapCoverImage.h"
 #include "DrawShape/MapLocation.h"
 #include "DrawShape/MapPolygon3D.h"
+#include <DrawShape/MapGroup.h>
 #include "MapShape.h"
 
 static const char s_sPoint[]="IMapPoint";
@@ -15,7 +16,7 @@ static const char s_sPolygon[]="IMapPolygon";
 static const char s_sPolygon3D[]="IMapPolygon3D";
 static const char s_sCoverImage[]="IMapCoverImage";
 static const char s_sLocation[]="IMapLocation";
-
+static const char s_sGroup[]="IMapGroup";
 ISceneNode *CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName)
 {
     if(s_sPoint == sInterfaceName)
@@ -42,6 +43,10 @@ ISceneNode *CreateNode(ISceneGraph*pSceneGraph,const std::string& sInterfaceName
     {
         return(new CMapPolygon3D(pSceneGraph));
     }
+	else if(s_sGroup == sInterfaceName)
+    {
+        return(new CMapGroup(pSceneGraph));
+    }
 
     return(nullptr);
 }
@@ -67,7 +72,8 @@ bool QueryInterface(std::string& sInterfaceName)
     sInterfaceName += s_sCoverImage;
     sInterfaceName += " ";
     sInterfaceName += s_sLocation;
-
+    sInterfaceName += " ";
+    sInterfaceName += s_sGroup;
 
     return(true);
 }

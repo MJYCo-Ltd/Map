@@ -14,6 +14,7 @@ struct SceneColor;
 struct SceneImageSize;
 struct SceneAttitude;
 class ISceneAttitudeGroup;
+class ISceneScaleGroup;
 class OSGEXTERNSHARED_EXPORT CPlaceNode
 {
 public:
@@ -73,6 +74,10 @@ public:
      */
 
     IImage* GetImage(){return(m_pImage);}
+
+    void SetCanPick(bool);
+
+    unsigned int PickID();
 protected:
     /**
       * @brief 初始化节点
@@ -85,7 +90,8 @@ protected:
     IMapLocation* m_pLocation{};
     ISceneScreenGroup* m_pSceneScreenGroup{};
     ISceneAttitudeGroup* m_pAttitudeGroup = nullptr;
-    ILabel*       m_pLabel{};
+    ISceneScaleGroup*   m_pScaleGroup;
+    ILabel*       m_pLabel= nullptr;
     IImage*       m_pImage{};
 };
 #endif // C_PLACENODEINFO_H

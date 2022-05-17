@@ -175,6 +175,10 @@ osg::StateSet* CResourceLod::GetOrCreateStateSet(unsigned unType)
             LoadShader("GLSL/Flat.glsl",pStateSet);
         }
 
+        if(unType &DEPTH_TEST_OFF)
+        {
+            pStateSet->setMode(GL_DEPTH_TEST,osg::StateAttribute::OFF);
+        }
         m_mapType2StateSets[unType] = pStateSet;
         return(pStateSet);
     }

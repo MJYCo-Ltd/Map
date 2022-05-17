@@ -128,6 +128,10 @@ public:
     void MouseDown(MouseButtonMask, int, int)override;
 
     /**
+     * @brief 鼠标双击消息
+     */
+    virtual void MouseDblClick(MouseButtonMask, int, int) override;
+    /**
      * 设置锁定视角
      */
     virtual void SetLockView(bool) override;

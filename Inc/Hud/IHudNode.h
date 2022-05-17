@@ -17,6 +17,8 @@ public:
     void SetHudPos(const HudPos& rHudPos)JUDGE_EQUAL_CALL_FUNCTION(rHudPos,m_stHudPos,HudPosChanged)
     const HudPos& GetHudPos(){return(m_stHudPos);}
 
+    virtual void SetVisible(bool bVisible) JUDGE_EQUAL_CALL_FUNCTION(bVisible,m_bVisible,VisibleChanged)
+    bool IsVisible() const{return(m_bVisible);}
     /**
      * @brief 设置节点在屏幕位置的类型
      * @return
@@ -27,7 +29,7 @@ public:
     virtual void HudTypeChanged()=0;
 protected:
     virtual ~IHudNode(){}
-
+    virtual void VisibleChanged() =0;
     virtual void HudPosChanged()=0;
 
 protected:

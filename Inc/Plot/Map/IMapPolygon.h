@@ -16,6 +16,8 @@ public:
      * @return
      */
     IPolygon* GetDrawPolygon(){return(m_pDrawPolygon);}
+
+    virtual void Update() =0;
 protected:
     virtual ~IMapPolygon(){}
 protected:

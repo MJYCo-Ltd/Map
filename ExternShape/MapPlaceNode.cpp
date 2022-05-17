@@ -5,7 +5,7 @@
 #include <Plot/Common/ISceneScreenGroup.h>
 #include <ExternShape/MapPlaceNode.h>
 #include <Plot/Common/ISceneAttitudeGroup.h>
-
+#include <Plot/Common/ISceneScaleGroup.h>
 CPlaceNode::CPlaceNode(ISceneGraph *pSceneGraph):m_pSceneGraph(pSceneGraph)
 {
     InitNode();
@@ -27,6 +27,23 @@ const ScenePos CPlaceNode::GetPos()
 
 void CPlaceNode::SetText(const std::string &sTextInfo)
 {
+    if(sTextInfo.size() ==0)
+    {
+        if(m_pLabel)
+            m_pLabel->SetText(sTextInfo);
+         return;
+    }
+    if(m_pLabel == nullptr)
+    {
+        m_pLabel = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
+        m_pSceneScreenGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCREEN_GROUP)->AsSceneScreenGroup();
+        m_pAttitudeGroup->AddSceneNode(m_pSceneScreenGroup);
+        m_pLabel->SetFontSize(14);
+        m_pLabel->SetFont("Fonts/msyh.ttf");
+        m_pSceneScreenGroup->AddSceneNode(m_pLabel);
+
+    }
+
     m_pLabel->SetText(sTextInfo);
 }
 
@@ -76,35 +93,45 @@ void CPlaceNode::SetImageSize(const SceneImageSize &stSize)
     ScenePixelOffset spOffset;
     spOffset.sHeight=0;
     spOffset.sWidth=stSize.unWidth/2;
-    m_pLabel->SetPixelOffset(spOffset);
+    //m_pLabel->SetPixelOffset(spOffset);
+}
+
+void CPlaceNode::SetCanPick(bool flag)
+{
+    m_pScaleGroup->SetCanPick(flag);
+
+}
+
+unsigned int CPlaceNode::PickID()
+{
+    return  m_pScaleGroup->PickID();;
 }
 
 void CPlaceNode::InitNode()
 {
     m_pAttitudeGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(ATTITUDE_GROUP)->AsSceneAttitudeGroup();
-    m_pSceneScreenGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCREEN_GROUP)->AsSceneScreenGroup();
-    m_pLabel = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
+    m_pScaleGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCALE_GROUP)->AsSceneScaleGroup();
+    m_pScaleGroup->SetAutoScal(true);
+    m_pAttitudeGroup->AddSceneNode(m_pScaleGroup);
     m_pLocation = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
-    m_pSceneScreenGroup->AddSceneNode(m_pLabel);
-    m_pLabel->SetFontSize(14);
-    m_pAttitudeGroup->AddSceneNode(m_pSceneScreenGroup);
+
     m_pLocation->SetSceneNode(m_pAttitudeGroup);
-    m_pLabel->SetFont("Fonts/msyh.ttf");
+
 }
 
 void CPlaceNode::CreateImage()
 {
     m_pImage=dynamic_cast<IImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IImage"));
-    m_pImage->OpenCull(false);
+    //m_pImage->OpenCull(false);
     SceneImageSize size;
-    size.unHeight=32;
-    size.unWidth=32;
+    size.unHeight=10;
+    size.unWidth=10;
     size.bOutSet=true;
     m_pImage->SetImageSize(size);
     m_pImage->AlwasOnTop(true);
-    m_pSceneScreenGroup->AddSceneNode(m_pImage);
-    ScenePixelOffset spOffset;
-    spOffset.sHeight=0;
-    spOffset.sWidth=16;
-    m_pLabel->SetPixelOffset(spOffset);
+    m_pScaleGroup->AddSceneNode(m_pImage);
+//    ScenePixelOffset spOffset;
+//    spOffset.sHeight=0;
+//    spOffset.sWidth=16;
+    //m_pLabel->SetPixelOffset(spOffset);
 }

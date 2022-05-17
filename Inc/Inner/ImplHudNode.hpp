@@ -26,6 +26,10 @@ protected:
     /// 状态更改
     void HudTypeChanged()SET_TRUE_NODE_UPDATE(m_bTypeChanged)
 
+    void VisibleChanged()
+    {
+       m_pControl->setVisible(T::m_bVisible);
+    }
     void FrameCall()
     {
         if(m_bPosChanged)

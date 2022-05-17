@@ -38,7 +38,8 @@ enum STATESET_TYPE
     FLAT_STATE=1<<14,             /// 平定模型着色器
     LIGHTING_STATE=1<<15,         /// 光照状态
     CULL_BACK=1<<16,              /// 开启背面裁剪
-    DONT_WRIT_DEPTH=1<<17         /// 不写深度值
+    DEPTH_TEST_OFF=1<<17,         /// 关闭深度测试
+    DONT_WRIT_DEPTH=1<<18         /// 不写深度值
 };
 
 /**

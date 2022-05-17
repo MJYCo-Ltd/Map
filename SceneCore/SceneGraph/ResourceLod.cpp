@@ -8,7 +8,7 @@
 #include <osgEarth/Lighting>
 #include <osgEarth/Utils>
 #include <osgEarth/VirtualProgram>
-
+#include <QTextCodec>
 #include "ResourceLod.h"
 
 class MyProxyNode:public osg::ProxyNode
@@ -70,7 +70,8 @@ osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
     {
         modelPath = sModelPath;
     }
-
+    QTextCodec *code = QTextCodec::codecForName("GB2312");
+    modelPath = code->fromUnicode(modelPath.c_str()).data();
     auto fileExten = osgDB::getLowerCaseFileExtension(modelPath);
     auto pFineOne = s_gNeedAss.find(fileExten);
     if(s_gNeedAss.end() != pFineOne)

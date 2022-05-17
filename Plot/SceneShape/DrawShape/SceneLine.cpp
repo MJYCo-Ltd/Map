@@ -13,7 +13,7 @@ void CSceneLine::CreateShape()
 
     m_pDrawArrays=new osg::DrawArrays(GL_LINE_STRIP,0,m_pVertexArray->size());
     m_pGeometry->addPrimitiveSet(m_pDrawArrays);
-
+	MergeStateSet(LINE_DRAW_STATE | BLEND_STATE);
 }
 
 void CSceneLine::UpdateShape()
@@ -62,8 +62,6 @@ void CSceneLine::UpdateShape()
     /// 如果宽度修改
     if(m_bWidthChanged)
     {
-        MergeStateSet(LINE_DRAW_STATE|BLEND_STATE);
-
         m_pGeometry->getOrCreateStateSet()->getOrCreateUniform("LineWidth",osg::Uniform::FLOAT)->set(static_cast<float>(m_nLineWidth));
         m_bWidthChanged=false;
     }
@@ -73,7 +71,7 @@ void CSceneLine::UpdateShape()
     {
         if(m_bOpenGlow)
         {
-            MergeStateSet(LINE_DRAW_STATE|BLEND_STATE);
+             
             m_pGeometry->getOrCreateStateSet()->setDefine("LINE_GLOW");
         }
         else
@@ -86,7 +84,6 @@ void CSceneLine::UpdateShape()
     /// 如果线性修改
     if(m_bLineTypeChanged)
     {
-        MergeStateSet(LINE_DRAW_STATE|BLEND_STATE);
         switch(m_emLineType)
         {
         case SOLID_LINE:

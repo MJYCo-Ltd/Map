@@ -63,7 +63,7 @@ public:
     /**
      * @brief 设置节点总是显示
      */
-    void AlwasOnTop(bool bOpen)JUDGE_EQUAL_CALL_FUNCTION(bOpen,m_bShowTop,ShowTopChanged)
+    virtual void AlwasOnTop(bool bOpen)=0;
     bool IsAlwasOnTop()const{return(m_bShowTop);}
 
     /**
