@@ -20,12 +20,6 @@ void CMapLocation::SetSceneNode(ISceneNode *pNode)
     AddNode(m_pGeoTransform.get(),pNode->AsOsgSceneNode()->GetRealNode());
 }
 
-void CMapLocation::Update()
-{
-    PosChanged();
-    UpdateMapNode();
-}
-
 void CMapLocation::UpdateMapNode()
 {
     ImplMapSceneNode<IMapLocation>::UpdateMapNode();

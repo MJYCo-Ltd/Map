@@ -21,7 +21,7 @@ bool QtViewHud::AddHudNode(IHudNode *pHudNode)
 
     m_setHudNode.insert(pHudNode);
 
-    AddControl(m_pControlCanvas.get(),dynamic_cast<osgEarth::Controls::Control*>(pHudNode->AsOsgSceneNode()->GetRealNode()));
+    AddControl(m_pControlCanvas.get(),dynamic_cast<osgEarth::Controls::Control*>(pHudNode->AsOsgSceneNode()->GetOsgNode()));
     return(true);
 }
 
@@ -34,7 +34,7 @@ bool QtViewHud::RemoveHudNode(IHudNode *pHudNode)
         return(false);
     }
 
-    DelControl(m_pControlCanvas.get(),dynamic_cast<osgEarth::Controls::Control*>(pHudNode->AsOsgSceneNode()->GetRealNode()));
+    DelControl(m_pControlCanvas.get(),dynamic_cast<osgEarth::Controls::Control*>(pHudNode->AsOsgSceneNode()->GetOsgNode()));
     m_setHudNode.erase(pHudNode);
     return(true);
 }
@@ -44,7 +44,7 @@ void QtViewHud::Clear()
 {
     for(auto one : m_setHudNode)
     {
-        DelControl(m_pControlCanvas.get(),dynamic_cast<osgEarth::Controls::Control*>(one->AsOsgSceneNode()));
+        DelControl(m_pControlCanvas.get(),dynamic_cast<osgEarth::Controls::Control*>(one->AsOsgSceneNode()->GetOsgNode()));
     }
 
     m_setHudNode.clear();

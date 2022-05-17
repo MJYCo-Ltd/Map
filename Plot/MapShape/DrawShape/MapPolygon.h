@@ -13,8 +13,6 @@ public:
      * @brief 初始化节点
      */
     void InitNode() override;
-
-    virtual void Update() override;
 };
 
 #endif // CSENEPOLYGON_H

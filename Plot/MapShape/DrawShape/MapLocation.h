@@ -15,8 +15,6 @@ public:
      * @param pNode
      */
     void SetSceneNode(ISceneNode* pNode);
-
-    virtual void Update();
     /**
      * @brief 更新地图节点
      * @param pMapNode

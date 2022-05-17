@@ -24,8 +24,6 @@ public:
      */
     virtual void SetSceneNode(ISceneNode* pNode)=0;
     virtual ISceneNode* SceneNode(){return(m_pSceneNode);}
-
-    virtual void Update() =0;
 protected:
     virtual ~IMapLocation(){}
 

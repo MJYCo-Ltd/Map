@@ -10,8 +10,3 @@ void CMapPolygon::InitNode()
         SetGeometry(m_pDrawPolygon);
     }
 }
-
-void CMapPolygon::Update()
-{
-    UpdateMapNode();
-}

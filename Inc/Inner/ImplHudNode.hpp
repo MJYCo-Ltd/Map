@@ -12,12 +12,17 @@ class ImplHudNode:public ImplSceneNode<T>
 public:
     CONSTRUCTOR(ImplHudNode,ImplSceneNode<T>)
 
+    ~ImplHudNode()
+    {
+        m_pProgramNode->unref();
+    }
 protected:
     void SetControlNode(osgEarth::Controls::Control* pControl)
     {
         m_pControl = pControl;
         m_pControl->setAlign(osgEarth::Controls::Control::ALIGN_LEFT,osgEarth::Controls::Control::ALIGN_BOTTOM);
-        ImplSceneNode<T>::m_pProgramNode = pControl;
+        SetOsgNode(m_pControl.get());
+        m_pProgramNode->ref();
     }
 
     /// 位置更改
@@ -26,10 +31,6 @@ protected:
     /// 状态更改
     void HudTypeChanged()SET_TRUE_NODE_UPDATE(m_bTypeChanged)
 
-    void VisibleChanged()
-    {
-       m_pControl->setVisible(T::m_bVisible);
-    }
     void FrameCall()
     {
         if(m_bPosChanged)
