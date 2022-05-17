@@ -12,17 +12,12 @@ class ImplHudNode:public ImplSceneNode<T>
 public:
     CONSTRUCTOR(ImplHudNode,ImplSceneNode<T>)
 
-    ~ImplHudNode()
-    {
-        m_pProgramNode->unref();
-    }
 protected:
     void SetControlNode(osgEarth::Controls::Control* pControl)
     {
         m_pControl = pControl;
         m_pControl->setAlign(osgEarth::Controls::Control::ALIGN_LEFT,osgEarth::Controls::Control::ALIGN_BOTTOM);
-        SetOsgNode(m_pControl.get());
-        m_pProgramNode->ref();
+        m_pProgramNode=pControl;
     }
 
     /// 位置更改
