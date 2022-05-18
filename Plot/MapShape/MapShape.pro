@@ -20,8 +20,7 @@ HEADERS += \
     DrawShape/MapPoint.h \
     DrawShape/MapPolygon.h \
     DrawShape/MapPolygon3D.h \
-    MapShape.h\
-    DrawShape/MapGroup.h 
+    MapShape.h
 
 SOURCES += \
     DrawShape/MapCoverImage.cpp \
@@ -30,5 +29,4 @@ SOURCES += \
     DrawShape/MapPoint.cpp \
     DrawShape/MapPolygon.cpp \
     DrawShape/MapPolygon3D.cpp \
-    MapShape.cpp\
-    DrawShape/MapGroup.cpp
+    MapShape.cpp
