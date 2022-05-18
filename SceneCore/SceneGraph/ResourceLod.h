@@ -57,6 +57,10 @@ public:
      */
     virtual std::string FindQImageKey(const QImage& rQImage);
 
+    /**
+     * @brief 查找或者创建着色器
+     * @return
+     */
     osg::StateSet* GetOrCreateStateSet(unsigned enType);
 
     /**
@@ -64,7 +68,8 @@ public:
      */
     void ClearNoUse();
 protected:
-    osg::Image* TransformQImage(const QImage& rQImage);
+    uint UniqueImage(const QImage& rQImage);
+    osg::Image* TransformQImage(uint uHashKey, const QImage& rQImage);
     osg::Node*  GetOrCreateNodeByImage(osg::Image* pImage);
     void InitSateSet(osg::StateSet* pStateSete,const std::string& sFileName);
     void LoadShader(const std::string& sGLSLPath, osg::StateSet *pStateSet);

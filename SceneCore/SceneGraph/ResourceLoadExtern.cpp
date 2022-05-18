@@ -184,10 +184,81 @@ osg::StateSet* CResourceLod::GetOrCreateStateSet(unsigned unType)
     }
 }
 
+/// 计算QImage的统一变量
+uint CResourceLod::UniqueImage(const QImage& rQImage)
+{
+    uint uHash(0);
+
+    /// 此方法copy自QImage的判等运算符
+    QImage::Format emFormat = rQImage.format();
+    if (emFormat != QImage::Format_RGB32)
+    {
+        if(emFormat >= QImage::Format_ARGB32)
+        {
+            const int n = rQImage.width() * rQImage.depth() / 8;
+            const uchar *bits = rQImage.constBits();
+            if (n == rQImage.bytesPerLine())
+            {
+                for(int i=rQImage.sizeInBytes()-1;i>-1;--i)
+                {
+                    uHash += bits[i];
+                    uHash += (uHash << 10);
+                    uHash ^= (uHash >> 6);
+                }
+            }
+            else
+            {
+                for (int y = 0; y < rQImage.height(); ++y)
+                {
+                    bits = rQImage.scanLine(y);
+                    for(int i=n-1;i>-1;--i)
+                    {
+                        uHash += bits[i];
+                        uHash += (uHash << 10);
+                        uHash ^= (uHash >> 6);
+                    }
+                }
+            }
+        }
+        else
+        {
+            const int w = rQImage.width();
+            const int h = rQImage.height();
+            QVector<QRgb> colortable = rQImage.colorTable();
+            for (int y=0; y<h; ++y)
+            {
+                for (int x=0; x<w; ++x)
+                {
+                    uHash += colortable[rQImage.pixelIndex(x, y)];
+                    uHash += (uHash << 10);
+                    uHash ^= (uHash >> 6);
+                }
+            }
+        }
+    }
+    else
+    {
+        for(int l = rQImage.height()-1; l >-1 ; --l)
+        {
+            int w = rQImage.width();
+            const uint *p1 = reinterpret_cast<const uint*>(rQImage.scanLine(l));
+            while (w--)
+            {
+                uHash += *p1++;
+                uHash += (uHash << 10);
+                uHash ^= (uHash >> 6);
+            }
+        }
+    }
+
+    return(uHash);
+}
+
 /// 将QImage转成OsgImage
 osg::Image *CResourceLod::LoadImage(const QImage &rQImage)
 {
-    auto pFindOne = m_mapQtImage.find(rQImage.cacheKey());
+    uint uHashKey = UniqueImage(rQImage);
+    auto pFindOne = m_mapQtImage.find(uHashKey);
     if(m_mapQtImage.end() != pFindOne)
     {
         return(pFindOne->second);
@@ -197,11 +268,12 @@ osg::Image *CResourceLod::LoadImage(const QImage &rQImage)
         if(rQImage.format() != QImage::Format_RGBA8888)
         {
             QImage tmpImage = rQImage.convertToFormat(QImage::Format_RGBA8888);
-            return(TransformQImage(tmpImage));
+            uHashKey = UniqueImage(tmpImage);
+            return(TransformQImage(uHashKey,tmpImage));
         }
         else
         {
-            return(TransformQImage(rQImage));
+            return(TransformQImage(uHashKey,rQImage));
         }
     }
 }
@@ -249,7 +321,7 @@ osg::Node *CResourceLod::CreateImageNode(const RGBAData *rImageData)
 /// 根据
 std::string CResourceLod::FindQImageKey(const QImage &rQImage)
 {
-    return(QString("%1_QImage").arg(rQImage.cacheKey()).toLatin1().data());
+    return(QString("%1_QImage").arg(UniqueImage(rQImage)).toLatin1().data());
 }
 
 osg::Node *CResourceLod::CreateImageNode(const std::string &sImagePath,int nWidth,int nHeight,bool bIsRef)
@@ -312,7 +384,7 @@ osg::Node* CResourceLod::GetOrCreateNodeByImage(osg::Image* pImage)
 }
 
 /// 转换QImage成osgImage
-osg::Image *CResourceLod::TransformQImage(const QImage &rQImage)
+osg::Image *CResourceLod::TransformQImage(uint uHashKey,const QImage &rQImage)
 {
     int nHeight = rQImage.height();
 #if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
@@ -329,7 +401,7 @@ osg::Image *CResourceLod::TransformQImage(const QImage &rQImage)
 
     auto image = new osg::Image;
     image->setImage(rQImage.width(), nHeight, 1, GL_RGBA,GL_RGBA, GL_UNSIGNED_BYTE,pTempBuffer,osg::Image::USE_NEW_DELETE);
-    m_mapQtImage[rQImage.cacheKey()] = image;
+    m_mapQtImage[uHashKey] = image;
     return(image);
 }
 
