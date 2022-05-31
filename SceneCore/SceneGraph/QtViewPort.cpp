@@ -62,7 +62,7 @@ QtViewPort::QtViewPort(IRender *pRender,ISceneGraph *pSceneGraph):
 {
     m_pView = new osgViewer::View;
 
-    m_pView->getDatabasePager()->setUnrefImageDataAfterApplyPolicy( true, false );
+    m_pView->getDatabasePager()->setUnrefImageDataAfterApplyPolicy( true, false);
     m_pView->getCamera()->setViewport(0,0,C_WINDOW_WIDTH,C_WINDOW_HEIGHT);
 
     m_pView->getCamera()->setDrawBuffer(GL_BACK);

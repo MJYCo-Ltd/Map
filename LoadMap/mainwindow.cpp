@@ -511,8 +511,8 @@ void MainWindow::PlotMap()
     pos.dY = 26.84;
     pos.dZ -= 400;
     pMapLocation1->SetGeoPos(pos);
-    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("F:/BaiduNetdiskDownload/xian/Data/out.osgb",false);
-    pModel->SetCanPick(true);
+//    ISceneNode *pModel = m_pSceneGraph->GetPlot()->LoadSceneNode("F:/BaiduNetdiskDownload/xian/Data/out.osgb",false);
+//    pModel->SetCanPick(true);
     pVisualGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(VISUAL_GROUP)->AsSceneVisualGroup();
     SceneViewPoint viePoint;
     viePoint.fAzimuth = 0;
@@ -521,7 +521,7 @@ void MainWindow::PlotMap()
     viePoint.stPos.dY -= 0.005;
     pVisualGroup->SetViewPoint(viePoint);
     pVisualGroup->AddSceneNode(pMapLocation1);
-    pMapLocation1->SetSceneNode(pModel);
+//    pMapLocation1->SetSceneNode(pModel);
     m_pSceneGraph->GetRoot()->AddSceneNode(pVisualGroup);
     m_pLayer->AddSceneNode(pMapLocation1);
 
