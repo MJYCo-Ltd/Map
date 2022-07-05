@@ -128,6 +128,53 @@ bool CheckPC(char *argv[])
     return(s_gBChecked);
 }
 
+#include <QTextCodec>
+QTextCodec* g_utf8 = QTextCodec::codecForName("UTF-8");
+QTextCodec* g_gb2312 = QTextCodec::codecForName("GB2312");
+/// 转成utf-8
+std::string Convert2Utf8(const std::string& sPath)
+{
+    QTextCodec::ConverterState tmpState;
+    QString sText = g_utf8->toUnicode(sPath.data(),sPath.size(),&tmpState);
+    if(tmpState.invalidChars > 0)
+    {
+        tmpState.invalidChars = 0;
+        sText = g_gb2312->toUnicode(sPath.data(),sPath.size(),&tmpState);
+        if(tmpState.invalidChars > 0)
+        {
+            auto codeList = QTextCodec::availableMibs();
+            for(int i=codeList.size()-1;tmpState.invalidChars>0 && i>-1;--i)
+            {
+                tmpState.invalidChars = 0;
+                sText = QTextCodec::codecForMib(codeList[i])->toUnicode(sPath.data(),sPath.size(),&tmpState);
+            }
+        }
+    }
+    return sText.toUtf8().toStdString();
+}
+
+/// 转成local
+std::string Convert2Local(const std::string& sPath)
+{
+    QTextCodec::ConverterState tmpState;
+    QString sText = g_utf8->toUnicode(sPath.data(),sPath.size(),&tmpState);
+    if(tmpState.invalidChars > 0)
+    {
+        tmpState.invalidChars = 0;
+        sText = g_gb2312->toUnicode(sPath.data(),sPath.size(),&tmpState);
+        if(tmpState.invalidChars > 0)
+        {
+            auto codeList = QTextCodec::availableMibs();
+            for(int i=codeList.size()-1;tmpState.invalidChars>0 && i>-1;--i)
+            {
+                tmpState.invalidChars = 0;
+                sText = QTextCodec::codecForMib(codeList[i])->toUnicode(sPath.data(),sPath.size(),&tmpState);
+            }
+        }
+    }
+    return sText.toLocal8Bit().toStdString();
+}
+
 #ifdef NEED_VR
 #include <openvr/openvr.h>
 bool CheckVR()

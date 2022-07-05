@@ -77,12 +77,12 @@ contains(SDK_CONFIG,OSG){
      #threads
             LIBS *= -lOpenThreadsd
      # osg libs
-            LIBS *= -losgd -losgDBd -losgGAd -losgSimd -losgViewerd -losgUtild -losgTextd -losgManipulatord -losgWidgetd
+            LIBS *= -losgd -losgDBd -losgGAd -losgSimd -losgViewerd -losgUtild -losgTextd -losgManipulatord
      #osgEarth libs
             LIBS *= -losgEarthd
         }else{
             LIBS *= -lOpenThreads
-            LIBS *= -losg -losgDB -losgGA -losgSim -losgViewer -losgUtil  -losgText  -losgManipulator  -losgWidget
+            LIBS *= -losg -losgDB -losgGA -losgSim -losgViewer -losgUtil  -losgText  -losgManipulator
             LIBS *= -losgEarth
         }
     }
@@ -90,7 +90,7 @@ contains(SDK_CONFIG,OSG){
     unix{
         LIBS *= -L$$PWD/../Bin/osglib
         LIBS *= -lOpenThreads
-        LIBS *= -losg -losgDB -losgGA -losgSim -losgViewer -losgUtil  -losgText  -losgManipulator  -losgWidget
+        LIBS *= -losg -losgDB -losgGA -losgSim -losgViewer -losgUtil  -losgText  -losgManipulator
         LIBS *= -losgEarth
     }
 }

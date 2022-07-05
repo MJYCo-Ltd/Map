@@ -45,6 +45,20 @@ extern "C"
      */
     SCENECORESHARED_EXPORT bool CheckPC(char *argv[]);
 
+    /**
+     * @brief 将路径转成utf-8编码的字符串
+     * @param sPath 指定路径
+     * @return
+     */
+    SCENECORESHARED_EXPORT std::string Convert2Utf8(const std::string& sPath);
+
+    /**
+     * @brief 将路径统一成本地编码
+     * @param sPath 指定路径
+     * @return
+     */
+    SCENECORESHARED_EXPORT std::string Convert2Local(const std::string& sPath);
+
 #ifdef NEED_VR
     /**
      * @brief 检查电脑是否连接VR设备
