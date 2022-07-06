@@ -28,6 +28,7 @@ CStarEnv::CStarEnv(ISceneGraph *pSceneGraph):
     setRenderOrder(osg::Camera::PRE_RENDER);
     setAllowEventFocus(false);
     setReferenceFrame(osg::Transform::ABSOLUTE_RF);
+    setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     /// 不进行远近裁剪面的计算
     setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR);
@@ -80,11 +81,6 @@ void CStarEnv::traverse(osg::NodeVisitor& nv)
         osg::Matrix matrix = m_pMainCamera->getViewMatrix();
         matrix.getRotate().get(matrix);
         this->setViewMatrix(m_rRoate*matrix);
-
-        if(GL_DEPTH_BUFFER_BIT != m_pMainCamera->getClearMask() && m_pMilkyway->Visible())
-        {
-            m_pMainCamera->setClearMask(GL_DEPTH_BUFFER_BIT);
-        }
     }
 
     osg::Camera::traverse( nv );
@@ -112,14 +108,6 @@ void CStarEnv::SetConstellationVisible(bool bVisible)
 void CStarEnv::SetMilkwayVisible(bool bVisible)
 {
     m_pMilkyway->SetVisible(bVisible);
-    if(bVisible)
-    {
-        m_pMainCamera->setClearMask(GL_DEPTH_BUFFER_BIT);
-    }
-    else
-    {
-        m_pMainCamera->setClearMask(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
-    }
 }
 
 void CStarEnv::UpdateMatrix(const Math::CMatrix &rRotate)
