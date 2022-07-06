@@ -27,25 +27,6 @@ const ScenePos CPlaceNode::GetPos()
 
 void CPlaceNode::SetText(const std::string &sTextInfo)
 {
-    if(sTextInfo.size() ==0)
-    {
-        if(m_pLabel)
-        {
-            m_pLabel->SetText(sTextInfo);
-        }
-        return;
-    }
-
-    if(m_pLabel == nullptr)
-    {
-        m_pLabel = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
-        m_pSceneScreenGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCREEN_GROUP)->AsSceneScreenGroup();
-        m_pAttitudeGroup->AddSceneNode(m_pSceneScreenGroup);
-        m_pLabel->SetFontSize(14);
-        m_pLabel->SetFont("Fonts/msyh.ttf");
-        m_pSceneScreenGroup->AddSceneNode(m_pLabel);
-    }
-
     m_pLabel->SetText(sTextInfo);
 }
 

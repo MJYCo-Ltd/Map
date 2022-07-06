@@ -72,12 +72,16 @@ osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
         modelPath = sModelPath;
     }
 
-    modelPath = Convert2Local(modelPath);
     auto fileExten = osgDB::getLowerCaseFileExtension(modelPath);
     auto pFineOne = s_gNeedAss.find(fileExten);
     if(s_gNeedAss.end() != pFineOne)
     {
+        modelPath = Convert2Utf8(modelPath);
         modelPath +=".ass";
+    }
+    else
+    {
+        modelPath = Convert2Local(modelPath);
     }
 
 
