@@ -84,6 +84,8 @@ QtViewPort::QtViewPort(IRender *pRender,ISceneGraph *pSceneGraph):
     m_stHomePoint.fDistance = 12000e3;
     m_stHomePoint.stPos.dX = 118.8f;
     m_stHomePoint.stPos.dY = 32.1f;
+
+    m_p2DEarthManipulator = new CMyEarthManipulator(MAP_2D);
 }
 
 /// 析构函数
@@ -274,6 +276,24 @@ void QtViewPort::FrameEvent()
             m_pView->getCamera()->setGraphicsContext(0);
         }
         m_bStereoChanged=false;
+    }
+
+    /// 鼠标状态修改
+    if(m_bMouseChanged)
+    {
+        switch(m_emMouse)
+        {
+        case IViewPort::FREE_STATE:
+            if(m_p2DEarthManipulator.valid()) m_p2DEarthManipulator->AvoidDrag(false);
+            if(m_p3DEarthManipulator.valid()) m_p3DEarthManipulator->AvoidDrag(false);
+            break;
+        case IViewPort::PLOT_STATE:
+            if(m_p2DEarthManipulator.valid()) m_p2DEarthManipulator->AvoidDrag(true);
+            if(m_p3DEarthManipulator.valid()) m_p3DEarthManipulator->AvoidDrag(true);
+            break;
+        }
+
+        m_bMouseChanged = false;
     }
 #ifdef NEED_VR
 
@@ -525,6 +545,14 @@ void QtViewPort::FrameEvent()
                 m_p2DEarthManipulator->InitHomePoint(m_stHomePoint);
             }
             m_pView->setCameraManipulator(m_p2DEarthManipulator);
+            if(m_emMouse==FREE_STATE)
+            {
+                m_p2DEarthManipulator->AvoidDrag(false);
+            }
+            else
+            {
+                m_p2DEarthManipulator->AvoidDrag(true);
+            }
             break;
         case View_3DMap:
             if(!m_p3DEarthManipulator.valid())
@@ -533,6 +561,15 @@ void QtViewPort::FrameEvent()
                 m_p3DEarthManipulator->InitHomePoint(m_stHomePoint);
             }
             m_pView->setCameraManipulator(m_p3DEarthManipulator);
+
+            if(m_emMouse==FREE_STATE)
+            {
+                m_p3DEarthManipulator->AvoidDrag(false);
+            }
+            else
+            {
+                m_p3DEarthManipulator->AvoidDrag(true);
+            }
             break;
         case View_Osg:
             if(!m_pSelfManipulator.valid())
