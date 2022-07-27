@@ -56,7 +56,7 @@ bool CMyEarthManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIAct
             return true;
     }
     case osgGA::GUIEventAdapter::DRAG:
-        if(ea.getButtonMask() == osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON)
+        if(m_bAvoid && ea.getButtonMask() == osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON)
         {
             return(true);
         }
