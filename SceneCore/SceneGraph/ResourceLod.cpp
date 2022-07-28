@@ -9,7 +9,7 @@
 #include <osgEarth/Utils>
 #include <osgEarth/VirtualProgram>
 #include <QTextCodec>
-#include <QDir>
+#include <QFileInfo>
 #include <ISceneCore.h>
 #include "ResourceLod.h"
 
@@ -47,7 +47,6 @@ private:
 
 static std::set<std::string> s_gNeedAss;
 static const std::string s_gEarth("earth");
-static QDir s_dir;
 
 /// 初始化路径
 CResourceLod::CResourceLod()
@@ -79,7 +78,7 @@ osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
         modelPath = sModelPath;
     }
 
-    if(!s_dir.exists(QString::fromLocal8Bit(modelPath.c_str())))
+    if(!QFileInfo::exists(QString::fromLocal8Bit(modelPath.c_str())))
     {
         return(nullptr);
     }
