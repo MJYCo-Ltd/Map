@@ -84,8 +84,6 @@ QtViewPort::QtViewPort(IRender *pRender,ISceneGraph *pSceneGraph):
     m_stHomePoint.fDistance = 12000e3;
     m_stHomePoint.stPos.dX = 118.8f;
     m_stHomePoint.stPos.dY = 32.1f;
-
-    m_p2DEarthManipulator = new CMyEarthManipulator(MAP_2D);
 }
 
 /// 析构函数

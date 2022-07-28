@@ -75,12 +75,10 @@ void CSpaceBackGround::VisibleChanged()
     if(m_bVisible)
     {
         pCamera->setClearMask(GL_DEPTH_BUFFER_BIT);
-        std::cout<<"Viisble"<<std::endl;
     }
     else
     {
         pCamera->setClearMask(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
-        std::cout<<"unViisble"<<std::endl;
     }
 
     ImplSceneNode<ISpaceBackGround>::VisibleChanged();
