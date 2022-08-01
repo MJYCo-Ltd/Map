@@ -10,6 +10,7 @@ include($$PWD/../SoftSDK.pri)
 HEADERS +=
 
 SOURCES += \
+    MapArc.cpp \
     MapCircle.cpp \
     MapExternLine.cpp \
     MapPlaceNode.cpp \
