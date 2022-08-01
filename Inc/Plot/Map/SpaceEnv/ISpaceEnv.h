@@ -19,12 +19,6 @@ public:
     virtual ISpaceBackGround* GetSpaceBackGround()=0;
 
     /**
-     * @brief 控制星空背景是否显示
-     * @attention 默认显示
-     */
-    virtual void ShowSpaceBackGround(bool)=0;
-
-    /**
      * @brief 获取地固系下太阳位置
      * @return
      */

@@ -20,6 +20,7 @@
 #include <SceneGraph/IViewPort.h>
 #include <ISceneCore.h>
 #include <Plot/Map/IMapObserver.h>
+#include <Plot/Map/SpaceEnv/ISpaceBackGround.h>
 
 #include "MapModifyLayer.h"
 #include "SpaceEnv.h"
@@ -580,6 +581,12 @@ void CMap::FrameCall()
         /// 如果是三维地球
         if(m_bIs3D)
         {
+            if(m_pSpaceEnv->IsVisible() && m_pSpaceEnv->GetSpaceBackGround() && m_pSpaceEnv->GetSpaceBackGround()->IsVisible())
+            {
+                dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
+                        ->GetOsgView()->getCamera()->setClearMask(GL_DEPTH_BUFFER_BIT);
+            }
+
             m_pGroup->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,osg::StateAttribute::ON);
             m_pDepth->setWriteMask(true);
             if(!m_p3DRoot.valid())

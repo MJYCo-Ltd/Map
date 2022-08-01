@@ -275,6 +275,24 @@ void QtViewPort::FrameEvent()
         }
         m_bStereoChanged=false;
     }
+
+    /// 鼠标状态修改
+    if(m_bMouseChanged)
+    {
+        switch(m_emMouse)
+        {
+        case IViewPort::FREE_STATE:
+            if(m_p2DEarthManipulator.valid()) m_p2DEarthManipulator->AvoidDrag(false);
+            if(m_p3DEarthManipulator.valid()) m_p3DEarthManipulator->AvoidDrag(false);
+            break;
+        case IViewPort::PLOT_STATE:
+            if(m_p2DEarthManipulator.valid()) m_p2DEarthManipulator->AvoidDrag(true);
+            if(m_p3DEarthManipulator.valid()) m_p3DEarthManipulator->AvoidDrag(true);
+            break;
+        }
+
+        m_bMouseChanged = false;
+    }
 #ifdef NEED_VR
 
     if(m_bVRStatusChanged)
@@ -525,6 +543,14 @@ void QtViewPort::FrameEvent()
                 m_p2DEarthManipulator->InitHomePoint(m_stHomePoint);
             }
             m_pView->setCameraManipulator(m_p2DEarthManipulator);
+            if(m_emMouse==FREE_STATE)
+            {
+                m_p2DEarthManipulator->AvoidDrag(false);
+            }
+            else
+            {
+                m_p2DEarthManipulator->AvoidDrag(true);
+            }
             break;
         case View_3DMap:
             if(!m_p3DEarthManipulator.valid())
@@ -533,6 +559,15 @@ void QtViewPort::FrameEvent()
                 m_p3DEarthManipulator->InitHomePoint(m_stHomePoint);
             }
             m_pView->setCameraManipulator(m_p3DEarthManipulator);
+
+            if(m_emMouse==FREE_STATE)
+            {
+                m_p3DEarthManipulator->AvoidDrag(false);
+            }
+            else
+            {
+                m_p3DEarthManipulator->AvoidDrag(true);
+            }
             break;
         case View_Osg:
             if(!m_pSelfManipulator.valid())
