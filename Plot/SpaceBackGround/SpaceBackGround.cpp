@@ -5,9 +5,6 @@
 
 
 #include "SpaceBackGround.h"
-#include <Inner/IOsgViewPoint.h>
-#include <SceneGraph/IWindow.h>
-#include <SceneGraph/IViewPort.h>
 
 CSpaceBackGround::~CSpaceBackGround()
 {
@@ -66,22 +63,6 @@ void CSpaceBackGround::UpdatePos(const std::vector<Math::CVector> &vSolarPos)
 void CSpaceBackGround::UpdateMatrix(const Math::CMatrix &matRotate)
 {
     m_pSkyNode->UpdateMatrix(matRotate);
-}
-
-/// 显隐状态更改
-void CSpaceBackGround::VisibleChanged()
-{
-    osg::Camera* pCamera = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())->GetOsgView()->getCamera();
-    if(m_bVisible)
-    {
-        pCamera->setClearMask(GL_DEPTH_BUFFER_BIT);
-    }
-    else
-    {
-        pCamera->setClearMask(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
-    }
-
-    ImplSceneNode<ISpaceBackGround>::VisibleChanged();
 }
 
 static const char s_sSpaceBackGround[]="ISpaceBackGround";

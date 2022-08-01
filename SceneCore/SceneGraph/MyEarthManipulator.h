@@ -29,12 +29,6 @@ public:
     void zoom(double dx, double dy, osg::View *view);
 
     /**
-     * @brief 忽略拖拽
-     * @param bAvoid
-     */
-    void AvoidDrag(bool bAvoid);
-
-    /**
      * @brief 初始化视点
      */
     void InitHomePoint(const SceneViewPoint& homePoint);
@@ -65,8 +59,7 @@ private:
     double m_dMaxDistance{360000000};
     bool   m_bCalFactor{false};
     bool   m_bInit{false};
-    bool   m_bLockView{false};
-    bool   m_bAvoid{false};
+    bool m_bLockView = false;
 };
 
 #endif // CFLATEARTHMANIPULATOR_H

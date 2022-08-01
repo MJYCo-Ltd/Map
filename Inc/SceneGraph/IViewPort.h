@@ -44,13 +44,6 @@ public:
         VERTICAL_SPLIT
     };
 
-    /// 鼠标状态
-    enum MouseState
-    {
-        FREE_STATE, /// 自由状态
-        PLOT_STATE  /// 标绘状态
-    };
-
     /**
      * @brief 是否开启立体
      */
@@ -63,12 +56,6 @@ public:
      */
     void SetStereoMode(StereoType emStereo)JUDGE_EQUAL_SET_TRUE(emStereo,m_emStereo,m_bStereoChanged);
     StereoType GetStereoMode()const{return(m_emStereo);}
-
-    /**
-     * @brief 设置鼠标状态
-     */
-    void SetMouseState(MouseState emMouse)JUDGE_EQUAL_SET_TRUE(emMouse,m_emMouse,m_bMouseChanged);
-    MouseState GetMouseState()const{return(m_emMouse);}
 
     /**
      * @brief 设置跟踪的节点
@@ -170,10 +157,8 @@ protected:
     virtual ~IViewPort(){}
 protected:
     StereoType     m_emStereo{ANAGLYPHIC};       /// 立体模式
-    MouseState     m_emMouse{FREE_STATE};        /// 鼠标状态
     bool           m_bOpenStereo{false};         /// 是否开启立体
     bool           m_bStereoChanged{false};      /// 立体模式更改
-    bool           m_bMouseChanged{false};       /// 鼠标状态更改
     bool           m_bHomePointChanged{false};   /// home视点更改
     bool           m_bTraceNodeChanged{false};   /// 跟踪节点更改
     bool           m_bUpdateProject{false};      /// 投影方式更改

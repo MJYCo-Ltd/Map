@@ -27,6 +27,26 @@ ISpaceBackGround *CSpaceEnv::GetSpaceBackGround()
     return(m_pSpaceBackGround);
 }
 
+/// 控制空间背景的显隐
+void CSpaceEnv::ShowSpaceBackGround(bool bShow)
+{
+    if(bShow != m_bShowSpaceBackGround)
+    {
+        m_bShowSpaceBackGround = bShow;
+        m_pSpaceBackGround->SetVisible(m_bShowSpaceBackGround);
+
+
+        if(m_bShowSpaceBackGround)
+        {
+            m_pMainCamera->setClearMask(GL_DEPTH_BUFFER_BIT);
+        }
+        else
+        {
+            m_pMainCamera->setClearMask(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
+        }
+    }
+}
+
 /// 初始化节点
 void CSpaceEnv::InitNode()
 {
@@ -80,18 +100,4 @@ void CSpaceEnv::UpdateDate(double dMJD)
 
         m_pSpaceBackGround->UpdatePos(m_vAllPos);
     }
-}
-
-void CSpaceEnv::VisibleChanged()
-{
-    if(m_bVisible)
-    {
-        m_pMainCamera->setClearMask(GL_DEPTH_BUFFER_BIT);
-    }
-    else
-    {
-        m_pMainCamera->setClearMask(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
-    }
-
-    ImplSceneAttitudeGroup<ISpaceEnv>::VisibleChanged();
 }
