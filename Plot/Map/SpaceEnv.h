@@ -24,6 +24,11 @@ public:
     ISpaceBackGround* GetSpaceBackGround();
 
     /**
+     * @brief 控制空间背景的显隐
+     */
+    void ShowSpaceBackGround(bool);
+
+    /**
      * @brief 初始化节点
      */
     void InitNode();
@@ -38,11 +43,6 @@ public:
      * @return
      */
     const Math::CVector& GetSunPos(){return(m_vSun);}
-
-    /**
-     * @brief 重写子类显隐控制
-     */
-    void VisibleChanged();
 protected:
     ISpaceBackGround* m_pSpaceBackGround{};
     bool              m_bShowSpaceBackGround{true};

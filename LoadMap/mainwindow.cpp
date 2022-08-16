@@ -177,17 +177,23 @@ void MainWindow::on_action_triggered()
     color11.fG =0.0;
     color11.fB =0.0;
 
-//    CMapCircle* pCircle = new CMapCircle(m_pSceneGraph);
-//    pCircle->SetCenter(pos11);
-//    pCircle->SetRadius(10000);
-//    pCircle->SetColor(color11);
+    CMapCircle* pCircle = new CMapCircle(m_pSceneGraph);
+    pCircle->SetCenter(pos11);
+    pCircle->SetRadius(10000 * 100);
+    //pCircle->SetFineness(4);
+    pCircle->SetColor(color11);
 
-//    ISceneGroup* pSceneRootaaaa = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
-//    IMapLocation*  aaaa = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
-//    aaaa->SetSceneNode(pSceneRootaaaa);
-//    pSceneRootaaaa->AddSceneNode(pCircle->GetMapSceneNode());
-//    IMapLayer* m_pLayerTest = m_pSceneGraph->GetMap()->CreateLayer("test");
-//    m_pLayerTest->AddSceneNode(aaaa);
+    //显示边界线并且不填充
+    pCircle->GetMapSceneNode()->GetDrawPolygon()->ShowOutLine(true);
+    pCircle->GetMapSceneNode()->GetDrawPolygon()->Fill(false);
+
+
+    ISceneGroup* pSceneRootaaaa = m_pSceneGraph->GetPlot()->CreateSceneGroup(STANDARD_GROUP);
+    IMapLocation*  aaaa = dynamic_cast<IMapLocation*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapLocation"));
+    aaaa->SetSceneNode(pSceneRootaaaa);
+    pSceneRootaaaa->AddSceneNode(pCircle->GetMapSceneNode());
+    IMapLayer* m_pLayerTest = m_pSceneGraph->GetMap()->CreateLayer("test");
+    m_pLayerTest->AddSceneNode(aaaa);
 
 //    CMapRectange* pRectangle = new CMapRectange(m_pSceneGraph);
 

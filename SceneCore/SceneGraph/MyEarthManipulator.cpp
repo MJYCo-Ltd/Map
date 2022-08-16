@@ -48,20 +48,14 @@ bool CMyEarthManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIAct
 {
     switch (ea.getEventType())
     {
-    case osgGA::GUIEventAdapter::DOUBLECLICK:
-        return true;
-    case osgGA::GUIEventAdapter::KEYDOWN:
-    {
-        if(ea.getKey()==32 &&m_bLockView) //锁定视角排除空格事件
+        case osgGA::GUIEventAdapter::DOUBLECLICK:
             return true;
-    }
-    case osgGA::GUIEventAdapter::DRAG:
-        if(m_bAvoid && ea.getButtonMask() == osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON)
+        case osgGA::GUIEventAdapter::KEYDOWN:
         {
-            return(true);
+            if(ea.getKey()==32 &&m_bLockView) //锁定视角排除空格事件
+                return true;
         }
     }
-
     if(MAP_2D == m_emType && !m_bCalFactor)
     {
         m_dTanFvoy = tan(osg::DegreesToRadians(_lastKnownVFOV/2.));
@@ -165,12 +159,6 @@ void CMyEarthManipulator::zoom(double dx, double dy, osg::View *view)
         break;
     }
     }
-}
-
-/// 是否避免拖拽
-void CMyEarthManipulator::AvoidDrag(bool bAvoid)
-{
-    m_bAvoid = bAvoid;
 }
 
 /// 调整视点

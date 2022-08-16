@@ -9,7 +9,6 @@
 #include <osgEarth/Utils>
 #include <osgEarth/VirtualProgram>
 #include <QTextCodec>
-#include <QFileInfo>
 #include <ISceneCore.h>
 #include "ResourceLod.h"
 
@@ -63,11 +62,6 @@ void CResourceLod::InitPath(const std::string &csAppPath)
 /// 加载模型
 osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
 {
-    if(sModelPath.empty())
-    {
-        return(nullptr);
-    }
-
     std::string modelPath;
     if(bIsRef)
     {
@@ -76,11 +70,6 @@ osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
     else
     {
         modelPath = sModelPath;
-    }
-
-    if(!QFileInfo::exists(QString::fromLocal8Bit(modelPath.c_str())))
-    {
-        return(nullptr);
     }
 
     auto fileExten = osgDB::getLowerCaseFileExtension(modelPath);
@@ -94,6 +83,7 @@ osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
     {
         modelPath = Convert2Local(modelPath);
     }
+
 
     auto itor = m_mapNode.find(modelPath);
     if(m_mapNode.end() != itor && itor->second.valid())
