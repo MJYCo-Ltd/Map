@@ -54,8 +54,8 @@ protected:
     IMapLine*     m_pMapLine{};
 
     float         m_fRadius{};
-    double        m_dStartAngle;
-    double        m_dEndAngle;
+    double        m_dStartAngle = 0.0;
+    double        m_dEndAngle = 360.0;
     int           m_nFineness{72};
 };
 

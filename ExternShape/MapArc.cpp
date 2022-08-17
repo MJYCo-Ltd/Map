@@ -5,8 +5,6 @@
 #include <GisMath/GisMath.h>
 CMapArc::CMapArc(ISceneGraph* pSceneGraph)
 {
-    m_dStartAngle = 0.0 / 180.0 * DPI;
-    m_dEndAngle = 360.0 / 180.0 * DPI;
     m_pSceneGraph = pSceneGraph;
     InitNode();
 }
@@ -55,13 +53,11 @@ void CMapArc::UpdateNode()
         return;
     }
     //过了360度的情况
-    if(m_dStartAngle == m_dEndAngle)
-        return;
     double dStartAngle = m_dStartAngle + (DPI / 2.0 * 3.0);
     dStartAngle = fmod(dStartAngle, D2PI);
     double dEndAngle = m_dEndAngle + (DPI / 2.0 * 3.0);
     dEndAngle = fmod(dEndAngle, D2PI);
-    if(dEndAngle <= dStartAngle)
+    if(dEndAngle < dStartAngle)
         dEndAngle += D2PI;
 
     double dTmpOffset = D2PI/m_nFineness;
