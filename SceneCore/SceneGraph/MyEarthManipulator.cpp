@@ -55,6 +55,7 @@ bool CMyEarthManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIAct
         }
         break;
     case osgGA::GUIEventAdapter::KEYDOWN:
+
         if(ea.getKey()==32 &&m_bLockView) //锁定视角排除空格事件
         {
             return true;
