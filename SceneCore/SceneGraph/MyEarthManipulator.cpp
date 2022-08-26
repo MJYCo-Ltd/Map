@@ -49,17 +49,23 @@ bool CMyEarthManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIAct
     switch (ea.getEventType())
     {
     case osgGA::GUIEventAdapter::DOUBLECLICK:
-        return true;
-    case osgGA::GUIEventAdapter::KEYDOWN:
-    {
-        if(ea.getKey()==32 &&m_bLockView) //锁定视角排除空格事件
+        if(m_bAvoidDClick)
+        {
             return true;
-    }
+        }
+        break;
+    case osgGA::GUIEventAdapter::KEYDOWN:
+        if(ea.getKey()==32 &&m_bLockView) //锁定视角排除空格事件
+        {
+            return true;
+        }
+        break;
     case osgGA::GUIEventAdapter::DRAG:
-        if(m_bAvoid && ea.getButtonMask() == osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON)
+        if(m_bAvoidDrag && ea.getButtonMask() == osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON)
         {
             return(true);
         }
+        break;
     }
 
     if(MAP_2D == m_emType && !m_bCalFactor)
@@ -143,16 +149,16 @@ void CMyEarthManipulator::zoom(double dx, double dy, osg::View *view)
     {
     case MAP_3D:
     {
-//        osgEarth::Viewpoint here = getViewpoint();
-//        if(dy>0)
-//        {
-//            here.range() = here.range().get() * 0.9;
-//        }
-//        else
-//        {
-//            here.range() = here.range().get() * 1.1;
-//        }
-//        setViewpoint( here, 0.5 );
+        //        osgEarth::Viewpoint here = getViewpoint();
+        //        if(dy>0)
+        //        {
+        //            here.range() = here.range().get() * 0.9;
+        //        }
+        //        else
+        //        {
+        //            here.range() = here.range().get() * 1.1;
+        //        }
+        //        setViewpoint( here, 0.5 );
     }
         break;
     case MAP_2D:
@@ -165,12 +171,6 @@ void CMyEarthManipulator::zoom(double dx, double dy, osg::View *view)
         break;
     }
     }
-}
-
-/// 是否避免拖拽
-void CMyEarthManipulator::AvoidDrag(bool bAvoid)
-{
-    m_bAvoid = bAvoid;
 }
 
 /// 调整视点

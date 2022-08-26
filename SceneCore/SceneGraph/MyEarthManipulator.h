@@ -32,7 +32,8 @@ public:
      * @brief 忽略拖拽
      * @param bAvoid
      */
-    void AvoidDrag(bool bAvoid);
+    void AvoidDrag(bool bAvoid){m_bAvoidDrag=bAvoid;}
+    void AvoidDClick(bool bAvoid){m_bAvoidDClick=bAvoid;}
 
     /**
      * @brief 初始化视点
@@ -66,7 +67,8 @@ private:
     bool   m_bCalFactor{false};
     bool   m_bInit{false};
     bool   m_bLockView{false};
-    bool   m_bAvoid{false};
+    bool   m_bAvoidDrag{false};
+    bool   m_bAvoidDClick{false};
 };
 
 #endif // CFLATEARTHMANIPULATOR_H

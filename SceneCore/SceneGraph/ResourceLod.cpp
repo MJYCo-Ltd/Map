@@ -78,7 +78,7 @@ osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
         modelPath = sModelPath;
     }
 
-    if(!QFileInfo::exists(QString::fromLocal8Bit(modelPath.c_str())))
+    if(!QFileInfo::exists(QString::fromLocal8Bit(Convert2Local(modelPath).c_str())))
     {
         return(nullptr);
     }
