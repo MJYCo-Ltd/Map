@@ -1,4 +1,6 @@
 #include <Inner/OsgExtern/IOsgMapSceneNode.h>
+#include <VersionMathCommon.h>
+#include <Math/VecMat.h>
 #include "MyEarthManipulator.h"
 
 CMyEarthManipulator::CMyEarthManipulator(MapType type):
@@ -65,6 +67,26 @@ bool CMyEarthManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIAct
         if(m_bAvoidDrag && ea.getButtonMask() == osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON)
         {
             return(true);
+        }
+        break;
+    case osgGA::GUIEventAdapter::FRAME:
+        if(m_bOpenEarthSelfRotate)
+        {
+            if(m_dPreTime<0)
+            {
+                m_dPreTime = ea.getTime();
+            }
+            else
+            {
+                double dOfftimeTime = ea.getTime() - m_dPreTime;
+                static Math::CVector v3(3);
+                v3.Set(_center.x(),_center.y(),_center.z());
+
+                v3 = v3*Math::CVecMat::R_z(dOfftimeTime * DS2R);
+                _center.set(v3.GetX(),v3.GetY(),v3.GetZ());
+
+                m_dPreTime = ea.getTime();
+            }
         }
         break;
     }
@@ -239,9 +261,4 @@ void CMyEarthManipulator::SetViewPoint(const SceneViewPoint &viewPoint,double dT
         vp.pitch()->set(-viewPoint.fElev,osgEarth::Units::DEGREES);
     }
     setViewpoint(vp,dTimes);
-}
-
-void CMyEarthManipulator::SetLockView(bool bLock)
-{
-    m_bLockView = bLock;
 }

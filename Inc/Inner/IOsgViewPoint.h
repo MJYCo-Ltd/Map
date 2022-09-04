@@ -34,5 +34,11 @@ public:
      * @return
      */
     virtual osgViewer::View* GetOsgView()=0;
+
+    /**
+     * @brief 开启地球旋转
+     * @param bOpen
+     */
+    virtual void OpenEarthSelfRotate(bool bOpen)=0;
 };
 #endif

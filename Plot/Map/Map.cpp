@@ -431,6 +431,13 @@ void CMap::SetEarthSelfRotate(bool bSelfRotate)
     if(m_bSelfRotate != bSelfRotate)
     {
         m_bSelfRotate = bSelfRotate;
+
+        IOsgViewPoint* pViewPoint = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint());
+        if(nullptr != pViewPoint)
+        {
+            pViewPoint->OpenEarthSelfRotate(m_bSelfRotate);
+        }
+
     }
 }
 

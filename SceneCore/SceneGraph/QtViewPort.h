@@ -91,14 +91,14 @@ public:
     void EndCapture() override;
 
     /**
-     * @brief 更新时间
-     */
-    void UpdateTime(double dt)override;
-
-    /**
      * @brief 锁定视角
      */
     void SetLockView(bool)override;
+
+    /**
+     * @brief 开启地球旋转
+     */
+    void OpenEarthSelfRotate(bool bOpen) override;
 #ifdef NEED_VR
     /**
      * @brief 将视口的内容显示到VR上
@@ -145,6 +145,7 @@ protected:
     bool           m_bViewPointChanged{false};
     bool           m_bViewTypeChanged{false};
     bool           m_bRemoveCapture{false};
+    bool           m_bOpenEarthSelfRotate{false};
     SceneViewPoint m_stViewPoint;
 	SceneViewPoint m_stTrackViewPoint;									///跟踪视角
     QtViewHud*     m_pHud{};                                         /// 屏显根节点

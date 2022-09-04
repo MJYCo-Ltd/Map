@@ -49,7 +49,12 @@ public:
     /**
      * @锁定视角
      */
-    void SetLockView(bool);
+    void SetLockView(bool bLock){m_bLockView = bLock;}
+
+    /**
+     * @brief 开启地球自转
+     */
+    void OpenEarthSelfRotate(bool bOpen){m_bOpenEarthSelfRotate = bOpen;}
 protected:
 
     /**
@@ -64,11 +69,13 @@ private:
     double m_dFactor{};
     double m_dTanFvoy{DBL_MIN};
     double m_dMaxDistance{360000000};
+    double m_dPreTime{-1};
     bool   m_bCalFactor{false};
     bool   m_bInit{false};
     bool   m_bLockView{false};
     bool   m_bAvoidDrag{false};
     bool   m_bAvoidDClick{false};
+    bool   m_bOpenEarthSelfRotate{false};
 };
 
 #endif // CFLATEARTHMANIPULATOR_H
