@@ -40,5 +40,11 @@ public:
      * @param bOpen
      */
     virtual void OpenEarthSelfRotate(bool bOpen)=0;
+
+    /**
+     * @brief 设置仿真时间和真实时间的比率
+     * @param dScale
+     */
+    virtual void SetScale(double dScale)=0;
 };
 #endif

@@ -532,6 +532,7 @@ void QtViewPort::FrameEvent()
                 m_p3DEarthManipulator = new CMyEarthManipulator(MAP_3D);
                 m_p3DEarthManipulator->InitHomePoint(m_stHomePoint);
                 m_p3DEarthManipulator->OpenEarthSelfRotate(m_bOpenEarthSelfRotate);
+                m_p3DEarthManipulator->SetScale(m_dScale);
             }
             m_pView->setCameraManipulator(m_p3DEarthManipulator);
             break;
@@ -635,6 +636,15 @@ void QtViewPort::OpenEarthSelfRotate(bool bOpen)
     if(m_p3DEarthManipulator.valid())
     {
         m_p3DEarthManipulator->OpenEarthSelfRotate(m_bOpenEarthSelfRotate);
+    }
+}
+
+void QtViewPort::SetScale(double dScale)
+{
+    m_dScale = dScale;
+    if(m_p3DEarthManipulator.valid())
+    {
+        m_p3DEarthManipulator->SetScale(m_dScale);
     }
 }
 

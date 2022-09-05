@@ -55,6 +55,11 @@ public:
      * @brief 开启地球自转
      */
     void OpenEarthSelfRotate(bool bOpen){m_bOpenEarthSelfRotate = bOpen;}
+
+    /**
+     * @brief 设置缩放比率
+     */
+    void SetScale(double dScale){m_dScale=dScale;}
 protected:
 
     /**
@@ -70,6 +75,7 @@ private:
     double m_dTanFvoy{DBL_MIN};
     double m_dMaxDistance{360000000};
     double m_dPreTime{-1};
+    double m_dScale{1.};
     bool   m_bCalFactor{false};
     bool   m_bInit{false};
     bool   m_bLockView{false};
