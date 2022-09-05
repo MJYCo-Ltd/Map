@@ -82,7 +82,7 @@ bool CMyEarthManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIAct
                 static Math::CVector v3(3);
                 v3.Set(_center.x(),_center.y(),_center.z());
 
-                v3 = v3*Math::CVecMat::R_z(dOfftimeTime * DS2R);
+                v3 = Math::CVecMat::R_z(dOfftimeTime * DS2R)*v3;
                 _center.set(v3.GetX(),v3.GetY(),v3.GetZ());
 
                 m_dPreTime = ea.getTime();
