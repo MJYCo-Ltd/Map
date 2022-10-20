@@ -9,6 +9,7 @@
 #include <osgEarth/Utils>
 #include <osgEarth/VirtualProgram>
 #include <QTextCodec>
+#include <QFileInfo>
 #include <ISceneCore.h>
 #include "ResourceLod.h"
 
@@ -70,6 +71,11 @@ osg::Node *CResourceLod::LoadNode(const std::string &sModelPath, bool bIsRef, bo
     else
     {
         modelPath = sModelPath;
+    }
+
+    if(!QFileInfo::exists(QString::fromLocal8Bit(Convert2Local(modelPath).c_str())))
+    {
+        return(nullptr);
     }
 
     auto fileExten = osgDB::getLowerCaseFileExtension(modelPath);
