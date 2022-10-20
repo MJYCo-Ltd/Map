@@ -24,7 +24,7 @@ public:
     /**
      * @brief 加载模型
      */
-    osg::Node* LoadNode(const std::string& sModelPath,bool bIsRef);
+    osg::Node* LoadNode(const std::string& sModelPath,bool bIsRef,bool bRefresh);
 
     /**
      * @brief 加载纹理

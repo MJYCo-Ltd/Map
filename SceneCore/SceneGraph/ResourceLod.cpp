@@ -60,7 +60,7 @@ void CResourceLod::InitPath(const std::string &csAppPath)
 }
 
 /// 加载模型
-osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
+osg::Node *CResourceLod::LoadNode(const std::string &sModelPath, bool bIsRef, bool bRefresh)
 {
     std::string modelPath;
     if(bIsRef)
@@ -86,7 +86,7 @@ osg::Node *CResourceLod::LoadNode(const std::string &sModelPath,bool bIsRef)
 
 
     auto itor = m_mapNode.find(modelPath);
-    if(m_mapNode.end() != itor && itor->second.valid())
+    if(!bRefresh && m_mapNode.end() != itor && itor->second.valid())
     {
         return(itor->second.get());
     }

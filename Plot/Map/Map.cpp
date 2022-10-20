@@ -52,8 +52,9 @@ CMap::~CMap()
 }
 
 /// 初始化地图路径
-bool CMap::LoadUserMap(const std::string &sFileName, bool bRef)
+bool CMap::LoadUserMap(const std::string &sFileName, bool bRef, bool bRefresh)
 {
+    m_bNeedFresh = bRefresh;
     m_emType = MAP_USER;
 
     std::string sRealFileName;
@@ -67,7 +68,7 @@ bool CMap::LoadUserMap(const std::string &sFileName, bool bRef)
     }
 
     /// 如果两者不等
-    if(sRealFileName != m_sUserMapPath)
+    if(bRefresh || sRealFileName != m_sUserMapPath)
     {
         m_sUserMapPath = sRealFileName;
         LoadMap();
@@ -726,7 +727,7 @@ void CMap::LoadMap()
     /// 保存之前的状态
     m_pPreMapNode = m_pCurMapNode;
 
-    auto pNode = m_pSceneGraph->ResouceLoader()->LoadNode(sFileName,false);
+    auto pNode = m_pSceneGraph->ResouceLoader()->LoadNode(sFileName,false,m_bNeedFresh);
 
     /// 如果节点不等于0
     if(nullptr != pNode)
