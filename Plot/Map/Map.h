@@ -184,6 +184,8 @@ protected:
     bool   m_bInstelld{false};
     bool   m_bMouseMove{false};
     bool   m_bIs3D{false};
+    double m_dPreMJD{-1.};
+    time_t m_tNow;
     bool   m_bNeedFresh{false};
 
     ScenePos m_stMousePos;                      ///保留鼠标位置

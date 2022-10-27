@@ -91,14 +91,20 @@ public:
     void EndCapture() override;
 
     /**
-     * @brief 更新时间
-     */
-    void UpdateTime(double dt)override;
-
-    /**
      * @brief 锁定视角
      */
     void SetLockView(bool)override;
+
+    /**
+     * @brief 开启地球旋转
+     */
+    void OpenEarthSelfRotate(bool bOpen) override;
+
+    /**
+     * @brief 设置比率
+     * @param dScale
+     */
+    void SetScale(double dScale) override;
 #ifdef NEED_VR
     /**
      * @brief 将视口的内容显示到VR上
@@ -142,9 +148,11 @@ protected:
     ViewPointType                                  m_emType{View_Osg};
     ViewPointType                                  m_emPreType{View_Osg};
     double                                         m_dTimes{0.};
+    double                                         m_dScale{1.};
     bool           m_bViewPointChanged{false};
     bool           m_bViewTypeChanged{false};
     bool           m_bRemoveCapture{false};
+    bool           m_bOpenEarthSelfRotate{false};
     SceneViewPoint m_stViewPoint;
 	SceneViewPoint m_stTrackViewPoint;									///跟踪视角
     QtViewHud*     m_pHud{};                                         /// 屏显根节点

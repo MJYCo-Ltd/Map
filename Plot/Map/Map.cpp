@@ -1,5 +1,6 @@
 ﻿#include <osgViewer/View>
 #include <osg/MatrixTransform>
+#include <osg/Timer>
 #include <osgEarth/Version>
 #include <osgEarth/Terrain>
 #include <osgEarth/Lighting>
@@ -432,6 +433,13 @@ void CMap::SetEarthSelfRotate(bool bSelfRotate)
     if(m_bSelfRotate != bSelfRotate)
     {
         m_bSelfRotate = bSelfRotate;
+
+        IOsgViewPoint* pViewPoint = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint());
+        if(nullptr != pViewPoint)
+        {
+            pViewPoint->OpenEarthSelfRotate(m_bSelfRotate);
+        }
+
     }
 }
 
@@ -456,6 +464,26 @@ void CMap::SetNightColor(const SceneColor &rColor)
 
 void CMap::DateChanged()
 {
+    if(m_dPreMJD<0)
+    {
+        m_dPreMJD = m_dMJD;
+        m_tNow = osg::Timer::instance()->tick();
+    }
+    else
+    {
+        double dS = (m_dMJD - m_dPreMJD)*86400000.;
+        double dR = osg::Timer::instance()->delta_m(osg::Timer::instance()->tick(),m_tNow);
+        double dScale = dS / dR;
+
+        m_dPreMJD = m_dMJD;
+        m_tNow = osg::Timer::instance()->tick();
+
+        IOsgViewPoint* pViewPoint = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint());
+        if(nullptr != pViewPoint)
+        {
+            pViewPoint->SetScale(dScale);
+        }
+    }
     m_pSpaceEnv->UpdateDate(m_dMJD);
 }
 

@@ -119,20 +119,10 @@ public:
     virtual IOsgViewPoint* AsOsgViewPoint(){return(nullptr);}
 
     /**
-     * @brief 开始截图
+     * @brief 控制截图
      */
     virtual void BeginCapture()=0;
-
-    /**
-     * @brief 停止截图
-     */
     virtual void EndCapture()=0;
-
-    /**
-     * @brief 更新时间
-     * @param dt 距离上次调用的时间间隔[s]
-     */
-    virtual void UpdateTime(double dt)=0;
 
     /**
      * @brief 设置视口背景颜色

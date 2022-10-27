@@ -531,6 +531,8 @@ void QtViewPort::FrameEvent()
             {
                 m_p3DEarthManipulator = new CMyEarthManipulator(MAP_3D);
                 m_p3DEarthManipulator->InitHomePoint(m_stHomePoint);
+                m_p3DEarthManipulator->OpenEarthSelfRotate(m_bOpenEarthSelfRotate);
+                m_p3DEarthManipulator->SetScale(m_dScale);
             }
             m_pView->setCameraManipulator(m_p3DEarthManipulator);
             break;
@@ -616,11 +618,6 @@ void QtViewPort::EndCapture()
     }
 }
 
-/// 更新时间
-void QtViewPort::UpdateTime(double dt)
-{
-}
-
 void QtViewPort::SetLockView(bool bLock)
 {
     if(m_p2DEarthManipulator.valid())
@@ -630,6 +627,24 @@ void QtViewPort::SetLockView(bool bLock)
     if(m_p3DEarthManipulator.valid())
     {
         m_p3DEarthManipulator.get()->SetLockView(bLock);
+    }
+}
+
+void QtViewPort::OpenEarthSelfRotate(bool bOpen)
+{
+    m_bOpenEarthSelfRotate = bOpen;
+    if(m_p3DEarthManipulator.valid())
+    {
+        m_p3DEarthManipulator->OpenEarthSelfRotate(m_bOpenEarthSelfRotate);
+    }
+}
+
+void QtViewPort::SetScale(double dScale)
+{
+    m_dScale = dScale;
+    if(m_p3DEarthManipulator.valid())
+    {
+        m_p3DEarthManipulator->SetScale(m_dScale);
     }
 }
 
