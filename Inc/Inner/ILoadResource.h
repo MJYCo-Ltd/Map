@@ -62,7 +62,7 @@ public:
      * @param bIsRef     是否是相对路径[相对GetPath()下的路径]
      * @return
      */
-    virtual osg::Node* LoadNode(const std::string& sModelPath,bool bIsRef=true)=0;
+    virtual osg::Node* LoadNode(const std::string& sModelPath,bool bIsRef=true,bool bRefresh=false)=0;
 
     /**
      * @brief 加载纹理

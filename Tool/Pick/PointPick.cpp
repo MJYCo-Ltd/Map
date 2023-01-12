@@ -25,7 +25,7 @@ struct RttPickerCallBack:public osgEarth::Util::RTTPicker::Callback
      */
     virtual void onMiss()
     {
-        QMetaObject::invokeMethod(m_pPicker,"HitId",Q_ARG(unsigned int,0),Q_ARG(unsigned int,0));
+        QMetaObject::invokeMethod(m_pPicker,"HitId",Q_ARG(unsigned int,0),Q_ARG(unsigned int,m_EventType));
     }
 
     /**

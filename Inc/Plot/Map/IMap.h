@@ -30,7 +30,7 @@ public:
      * @param sFileName 文件路径
      * @param bRef      是否是相对路径
      */
-    virtual bool LoadUserMap(const std::string& sFileName,bool bRef=true)=0;
+    virtual bool LoadUserMap(const std::string& sFileName,bool bRef=true,bool bRefresh=false)=0;
 
     /**
      * @brief 转换成IMap类型的节点

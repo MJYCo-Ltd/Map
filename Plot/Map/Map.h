@@ -29,7 +29,7 @@ public:
      * @brief 初始化地图
      * @param 地图路径
      */
-    bool LoadUserMap(const std::string& sFileName,bool bRef) override;
+    bool LoadUserMap(const std::string& sFileName,bool bRef,bool bRefresh) override;
 
     /**
      * @brief 设置地图类型
@@ -185,6 +185,9 @@ protected:
     bool   m_bInstelld{false};
     bool   m_bMouseMove{false};
     bool   m_bIs3D{false};
+    double m_dPreMJD{-1.};
+    time_t m_tNow;
+    bool   m_bNeedFresh{false};
 
     ScenePos m_stMousePos;                      ///保留鼠标位置
     SceneColor m_stNightColor;
