@@ -68,7 +68,6 @@ void CSkyNode::traverse(osg::NodeVisitor & nv)
     {
         /// 真实的节点进行遍历
         m_pSpaceBackGroundRoot->accept( nv );
-
     }
 
     osg::Group::traverse(nv);

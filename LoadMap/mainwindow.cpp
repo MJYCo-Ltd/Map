@@ -36,6 +36,7 @@
 #include <Plot/Common/ISceneLodGroup.h>
 #include <Plot/SceneShape/ILabel.h>
 #include <Plot/Common/ISceneScreenGroup.h>
+#include <Plot/Common/ISceneAttitudeGroup.h>
 #include <Plot/SceneShape/IBoxSensor.h>
 #include <Plot/Map/IMapPolygon3D.h>
 #include <Hud/IViewHud.h>
@@ -90,7 +91,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    startTimer(1000);
+    startTimer(100);
     ui->setupUi(this);
     ui->mainToolBar->show();
 }
@@ -109,8 +110,8 @@ void MainWindow::SetSecenGraph(ISceneGraph *pSceneGraph)
         auto pMap= new MapObser(m_pSceneGraph);
         m_pSceneGraph->GetMainWindow()->SubMessage(pMap);
         m_pSceneGraph->GetMap()->SubMessage(pMap);
-        m_pSceneGraph->GetMap()->SetEarthSelfRotate(true);
-
+        m_pSceneGraph->GetMap()->SetEarthSelfRotate(false);
+        m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->HomeViewPoint();
 //        m_pSceneGraph->GetMap()->GetSpaceEnv()->ShowSpaceBackGround(false);
 //        m_pSceneGraph->GetMap()->OpenLight(false);
 //        m_pSceneGraph->GetMap()->SetShowAtmosphere(false);

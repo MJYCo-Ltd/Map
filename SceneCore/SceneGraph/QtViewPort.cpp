@@ -71,6 +71,10 @@ QtViewPort::QtViewPort(IRender *pRender,ISceneGraph *pSceneGraph):
     {
         m_pView->getCamera()->setProjectionMatrixAsOrtho2D(0,C_WINDOW_WIDTH,0,C_WINDOW_HEIGHT);
     }
+    else
+    {
+        m_pView->getCamera()->setProjectionMatrixAsPerspective(45,1.0,0.01,100.);
+    }
 
     m_pView->addEventHandler(new osgViewer::StatsHandler);
     m_pView->addEventHandler(new ViewPortEventCallback(this));
@@ -365,6 +369,16 @@ void QtViewPort::FrameEvent()
                 m_p3DEarthManipulator->InitHomePoint(m_stHomePoint);
             }
             break;
+        case View_Osg:
+            if(m_pSelfManipulator)
+            {
+                m_pSelfManipulator->setDistance(m_stHomePoint.fDistance);
+                m_pSelfManipulator->setCenter(osg::Vec3(m_stHomePoint.stPos.dX,m_stHomePoint.stPos.dY,
+                                                        m_stHomePoint.stPos.dZ));
+                m_pSelfManipulator->setHeading(osg::DegreesToRadians(m_stHomePoint.fAzimuth));
+                m_pSelfManipulator->setElevation(osg::DegreesToRadians(m_stHomePoint.fElev));
+            }
+            break;
         default:
             break;
         }
@@ -531,16 +545,10 @@ void QtViewPort::FrameEvent()
             {
                 m_p3DEarthManipulator = new CMyEarthManipulator(MAP_3D);
                 m_p3DEarthManipulator->InitHomePoint(m_stHomePoint);
-                m_p3DEarthManipulator->OpenEarthSelfRotate(m_bOpenEarthSelfRotate);
-                m_p3DEarthManipulator->SetScale(m_dScale);
             }
             m_pView->setCameraManipulator(m_p3DEarthManipulator);
             break;
         case View_Osg:
-            if(!m_pSelfManipulator.valid())
-            {
-                m_pSelfManipulator = new osgGA::TrackballManipulator;
-            }
             m_pView->setCameraManipulator(m_pSelfManipulator);
             break;
         case View_Node:
@@ -549,7 +557,6 @@ void QtViewPort::FrameEvent()
 
         m_bViewTypeChanged=false;
     }
-
 
 }
 
@@ -627,24 +634,6 @@ void QtViewPort::SetLockView(bool bLock)
     if(m_p3DEarthManipulator.valid())
     {
         m_p3DEarthManipulator.get()->SetLockView(bLock);
-    }
-}
-
-void QtViewPort::OpenEarthSelfRotate(bool bOpen)
-{
-    m_bOpenEarthSelfRotate = bOpen;
-    if(m_p3DEarthManipulator.valid())
-    {
-        m_p3DEarthManipulator->OpenEarthSelfRotate(m_bOpenEarthSelfRotate);
-    }
-}
-
-void QtViewPort::SetScale(double dScale)
-{
-    m_dScale = dScale;
-    if(m_p3DEarthManipulator.valid())
-    {
-        m_p3DEarthManipulator->SetScale(m_dScale);
     }
 }
 

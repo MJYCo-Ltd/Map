@@ -2,11 +2,10 @@
 #define CSPACEENV_H
 #include <osg/Camera>
 #include <Inner/IOsgSceneNode.h>
-#include <Inner/Common/ImplSceneAttitudeGroup.hpp>
+#include <Inner/Common/ImplSceneGroup.hpp>
 #include <Plot/Map/SpaceEnv/ISpaceEnv.h>
-#include <Plot/Common/ISceneAttitudeGroup.h>
 
-class CSpaceEnv:public ImplSceneAttitudeGroup<ISpaceEnv>
+class CSpaceEnv:public ImplSceneGroup<ISpaceEnv>
 {
 public:
     CSpaceEnv(ISceneGraph*);
@@ -24,11 +23,6 @@ public:
     ISpaceBackGround* GetSpaceBackGround();
 
     /**
-     * @brief 控制空间背景的显隐
-     */
-    void ShowSpaceBackGround(bool);
-
-    /**
      * @brief 初始化节点
      */
     void InitNode();
@@ -36,13 +30,18 @@ public:
     /**
      * @brief 更新时间
      */
-    void UpdateDate(double);
+    void UpdateDate(double, const Math::CMatrix &rBackGroundMatrix,const Math::CMatrix& rCaleRote);
 
     /**
      * @brief 获取太阳位置
      * @return
      */
     const Math::CVector& GetSunPos(){return(m_vSun);}
+
+    /**
+     * @brief 重写子类显隐控制
+     */
+    void VisibleChanged();
 protected:
     ISpaceBackGround* m_pSpaceBackGround{};
     bool              m_bShowSpaceBackGround{true};

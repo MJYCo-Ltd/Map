@@ -12,8 +12,8 @@ public:
         View_2DMap,  /// 二维查看
         View_3DMap,  /// 三维查看
         View_Osg,    /// 不使用地图的时候的操作器
-        View_User,/// 用户查看
-        View_Node /// 跟踪节点
+        View_User,   /// 用户查看
+        View_Node    /// 跟踪节点
     };
 
     virtual ~IOsgViewPoint(){}
@@ -34,17 +34,5 @@ public:
      * @return
      */
     virtual osgViewer::View* GetOsgView()=0;
-
-    /**
-     * @brief 开启地球旋转
-     * @param bOpen
-     */
-    virtual void OpenEarthSelfRotate(bool bOpen)=0;
-
-    /**
-     * @brief 设置仿真时间和真实时间的比率
-     * @param dScale
-     */
-    virtual void SetScale(double dScale)=0;
 };
 #endif

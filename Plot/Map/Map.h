@@ -116,7 +116,7 @@ public:
     /**
      * @brief时间更新
      */
-    void DateChanged();
+    void DateChanged() override;
 
     /**
      * @brief 鼠标移动消息
@@ -170,8 +170,8 @@ protected:
      */
     void RemoveLayer(UserLayers::iterator itor);
 
-    void GetXYZ(double dLon,double dLat,double dHeight,double& x,double& y ,double&z  );
-    void GetPOS(double x,double y,double z,double& dLon,double& dLat ,double&dHeight  );
+    void GetXYZ(double dLon,double dLat,double dHeight,double& x,double& y ,double&z  )override;
+    void GetPOS(double x,double y,double z,double& dLon,double& dLat ,double&dHeight  )override;
 
     void getScreenXY(int& x,int& y) ;
 protected:
@@ -179,13 +179,12 @@ protected:
     int    m_nY{};
 
     bool   m_bSelfRotate{false};
+    bool   m_bRoateChanged{false};
     bool   m_bDateChanged{false};
     bool   m_bMapChanged{false};
     bool   m_bInstelld{false};
     bool   m_bMouseMove{false};
     bool   m_bIs3D{false};
-    double m_dPreMJD{-1.};
-    time_t m_tNow;
 
     ScenePos m_stMousePos;                      ///保留鼠标位置
     SceneColor m_stNightColor;
@@ -196,6 +195,7 @@ protected:
     osg::ref_ptr<osg::Group>   m_pNoTran2DMapNode;
     osg::ref_ptr<osg::MatrixTransform> m_pLeftTran;
     osg::ref_ptr<osg::MatrixTransform> m_pRightTran;
+    osg::ref_ptr<osg::MatrixTransform> m_pRotateNode;
 
     osg::ref_ptr<osgEarth::MapNode> m_pPreMapNode;
     osg::ref_ptr<osgEarth::MapNode> m_pCurMapNode;

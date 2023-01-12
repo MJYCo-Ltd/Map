@@ -67,6 +67,11 @@ public:
      * @brief 更新矩阵
      */
     void UpdateMatrix(const Math::CMatrix&);
+
+    /**
+     * @brief 重写子类显隐控制
+     */
+    void VisibleChanged();
 protected:
     osg::observer_ptr<CSkyNode> m_pSkyNode;
 };

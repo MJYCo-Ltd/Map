@@ -10,6 +10,8 @@
 
 #include <GisMath/GisMath.h>
 #include <Satellite/Date.h>
+#include <Satellite/CoorSys.h>
+
 #include <Inner/IRender.h>
 #include <Inner/ILoadResource.h>
 #include <Inner/IOsgSceneNode.h>
@@ -432,13 +434,7 @@ void CMap::SetEarthSelfRotate(bool bSelfRotate)
     if(m_bSelfRotate != bSelfRotate)
     {
         m_bSelfRotate = bSelfRotate;
-
-        IOsgViewPoint* pViewPoint = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint());
-        if(nullptr != pViewPoint)
-        {
-            pViewPoint->OpenEarthSelfRotate(m_bSelfRotate);
-        }
-
+        m_bRoateChanged = true;
     }
 }
 
@@ -463,27 +459,7 @@ void CMap::SetNightColor(const SceneColor &rColor)
 
 void CMap::DateChanged()
 {
-    if(m_dPreMJD<0)
-    {
-        m_dPreMJD = m_dMJD;
-        m_tNow = osg::Timer::instance()->tick();
-    }
-    else
-    {
-        double dS = (m_dMJD - m_dPreMJD)*86400000.;
-        double dR = osg::Timer::instance()->delta_m(osg::Timer::instance()->tick(),m_tNow);
-        double dScale = dS / dR;
-
-        m_dPreMJD = m_dMJD;
-        m_tNow = osg::Timer::instance()->tick();
-
-        IOsgViewPoint* pViewPoint = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint());
-        if(nullptr != pViewPoint)
-        {
-            pViewPoint->SetScale(dScale);
-        }
-    }
-    m_pSpaceEnv->UpdateDate(m_dMJD);
+    m_bDateChanged = true;
 }
 
 /// 鼠标移动消息
@@ -610,6 +586,16 @@ void CMap::FrameCall()
         {
             m_pGroup->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,osg::StateAttribute::ON);
             m_pDepth->setWriteMask(true);
+
+            if(!m_pRotateNode.valid())
+            {
+                m_pRotateNode = new osg::MatrixTransform;
+            }
+            else
+            {
+                m_pRotateNode->removeChildren(0,m_pRotateNode->getNumChildren());
+            }
+
             if(!m_p3DRoot.valid())
             {
                 m_p3DRoot = new osg::Group;
@@ -619,13 +605,24 @@ void CMap::FrameCall()
 
             if(!m_p3DRoot->containsNode(m_pCurMapNode))
             {
+                /// 移除已有的地球
                 m_p3DRoot->removeChildren(2,1);
                 m_p3DRoot->addChild(m_pCurMapNode);
             }
 
             /// 添加到根节点
+            if(m_bSelfRotate)
+            {
+                m_pRotateNode->addChild(m_p3DRoot);
             m_pGroup->addChild(m_pSpaceEnv->AsOsgSceneNode()->GetRealNode());
+                m_pGroup->addChild(m_pRotateNode);
+            }
+            else
+            {
+                m_pRotateNode->addChild(m_pSpaceEnv->AsOsgSceneNode()->GetRealNode());
+                m_pGroup->addChild(m_pRotateNode);
             m_pGroup->addChild(m_p3DRoot);
+        }
         }
         else /// 如果是二维地球
         {
@@ -683,7 +680,7 @@ void CMap::FrameCall()
         IOsgViewPoint* pViewPoint = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint());
         if(nullptr != pViewPoint)
         {
-            pViewPoint->ViewPointTypeChanged(m_bIs3D ? IOsgViewPoint::View_3DMap : IOsgViewPoint::View_2DMap);
+            pViewPoint->ViewPointTypeChanged(m_bIs3D ? m_bSelfRotate ? IOsgViewPoint::View_Osg : IOsgViewPoint::View_3DMap : IOsgViewPoint::View_2DMap);
         }
 
         m_bMapChanged=false;
@@ -692,9 +689,15 @@ void CMap::FrameCall()
     
 
     /// 每一帧更新一次
-    if(m_pCurMapNode.valid())
+    if(m_bMouseMove)
     {
+        ConvertCoord(m_nX,m_nY,m_stMousePos,0);
+        m_bMouseMove=false;
+    }
+
         if(m_bIs3D)
+        {
+        /// 防止三维穿地
         {
             static osgEarth::LogarithmicDepthBuffer s_logDepthBuffer;
 
@@ -723,10 +726,69 @@ void CMap::FrameCall()
             }
         }
 
-        if(m_bMouseMove)
+        /// 如果自转更新了
+        if(m_bRoateChanged)
         {
-            ConvertCoord(m_nX,m_nY,m_stMousePos,0);
-            m_bMouseMove=false;
+            IOsgViewPoint* pViewPoint = dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint());
+            if(nullptr != pViewPoint)
+            {
+                pViewPoint->ViewPointTypeChanged(m_bSelfRotate ? IOsgViewPoint::View_Osg : IOsgViewPoint::View_3DMap);
+            }
+
+            m_pGroup->removeChildren(0,m_pGroup->getNumChildren());
+            m_pRotateNode->removeChildren(0,m_pRotateNode->getNumChildren());
+            /// 添加到根节点
+            if(m_bSelfRotate)
+            {
+                m_pRotateNode->addChild(m_p3DRoot);
+                m_pGroup->addChild(m_pSpaceEnv->AsOsgSceneNode()->GetRealNode());
+                m_pGroup->addChild(m_pRotateNode);
+            }
+            else
+            {
+                m_pRotateNode->addChild(m_pSpaceEnv->AsOsgSceneNode()->GetRealNode());
+                m_pGroup->addChild(m_pRotateNode);
+                m_pGroup->addChild(m_p3DRoot);
+            }
+
+            m_bRoateChanged = false;
+        }
+
+        /// 星空背景更新
+        if(nullptr != m_pSpaceEnv)
+        {
+            if(m_bDateChanged)
+            {
+                Math::CMatrix RoateMatrix;
+                static Math::CMatrix EmptyMatrix;
+                if(m_bSelfRotate)
+                {
+                    RoateMatrix = Aerospace::CCoorSys::J20002ECF(m_dMJD);
+                    m_pSpaceEnv->UpdateDate(m_dMJD,EmptyMatrix,RoateMatrix);
+                }
+                else
+                {
+                    RoateMatrix = Aerospace::CCoorSys::ECF2J2000(m_dMJD);
+                    m_pSpaceEnv->UpdateDate(m_dMJD,RoateMatrix,EmptyMatrix);
+                }
+
+                if(RoateMatrix)
+                {
+                    m_pRotateNode->setMatrix(osg::Matrix(RoateMatrix(0,0),RoateMatrix(0,1),RoateMatrix(0,2),0.,
+                                                         RoateMatrix(1,0),RoateMatrix(1,1),RoateMatrix(1,2),0.,
+                                                         RoateMatrix(2,0),RoateMatrix(2,1),RoateMatrix(2,2),0.,
+                                                         0.,0.,0.,1.));
+                }
+                m_bDateChanged = false;
+            }
+
+            const Math::CVector& vSunPos = m_pSpaceEnv->GetSunPos();
+            if(vSunPos)
+            {
+                osg::Vec3 npos(vSunPos.GetX(),vSunPos.GetY(),vSunPos.GetZ());
+                m_pLight->setPosition(osg::Vec4(npos,.0));
+                m_pLightPosUniform->set(npos/npos.length());
+            }
         }
     }
 
@@ -846,9 +908,12 @@ void CMap::Init3DLight()
 
 
     const Math::CVector& vSunPos = m_pSpaceEnv->GetSunPos();
+    if(vSunPos)
+    {
     osg::Vec3 npos(vSunPos.GetX(),vSunPos.GetY(),vSunPos.GetZ());
     m_pLight->setPosition(osg::Vec4(npos,.0));
     m_pLightPosUniform->set(npos/npos.length());
+}
 }
 
 static const char s_sMap2D[]="IMap2D";

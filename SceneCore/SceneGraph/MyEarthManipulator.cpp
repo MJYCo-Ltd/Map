@@ -46,7 +46,7 @@ void CMyEarthManipulator::ChangeMap(MapType emType)
 }
 
 /// 处理处理消息
-bool CMyEarthManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& us)
+bool CMyEarthManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa)
 {
     switch (ea.getEventType())
     {
@@ -69,26 +69,6 @@ bool CMyEarthManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIAct
             return(true);
         }
         break;
-    case osgGA::GUIEventAdapter::FRAME:
-        if(m_bOpenEarthSelfRotate)
-        {
-            if(m_dPreTime<0)
-            {
-                m_dPreTime = ea.getTime();
-            }
-            else
-            {
-                double dOfftimeTime = ea.getTime() - m_dPreTime;
-                static Math::CVector v3(3);
-                v3.Set(_center.x(),_center.y(),_center.z());
-
-                v3 = Math::CVecMat::R_z(dOfftimeTime* m_dScale * DS2R)*v3;
-                _center.set(v3.GetX(),v3.GetY(),v3.GetZ());
-
-                m_dPreTime = ea.getTime();
-            }
-        }
-        break;
     }
 
     if(MAP_2D == m_emType && !m_bCalFactor)
@@ -107,14 +87,13 @@ bool CMyEarthManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIAct
         m_bInit = true;
     }
 
-    return(osgEarth::Util::EarthManipulator::handle(ea,us));
+    return(osgEarth::Util::EarthManipulator::handle(ea,aa));
 }
 
 
 void CMyEarthManipulator::pan(double dx, double dy)
 {
-    if(m_bLockView)
-        return;
+    if(m_bLockView) return;
     osgEarth::Util::EarthManipulator::pan(dx,dy);
 
     if(MAP_2D == m_emType)
@@ -150,8 +129,7 @@ void CMyEarthManipulator::pan(double dx, double dy)
 
 void CMyEarthManipulator::rotate(double dx, double dy)
 {
-    if(m_bLockView)
-        return;
+    if(m_bLockView) return;
     if(MAP_3D == m_emType)
     {
         osgEarth::Util::EarthManipulator::rotate(dx,dy);
@@ -162,11 +140,9 @@ void CMyEarthManipulator::rotate(double dx, double dy)
     }
 }
 
-#include <iostream>
 void CMyEarthManipulator::zoom(double dx, double dy, osg::View *view)
 {
-    if(m_bLockView)
-        return;
+    if(m_bLockView) return;
     osgEarth::Util::EarthManipulator::zoom(-dx,-dy,view);
     switch(m_emType)
     {

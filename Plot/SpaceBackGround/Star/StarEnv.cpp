@@ -78,9 +78,21 @@ void CStarEnv::traverse(osg::NodeVisitor& nv)
 
     if (m_pMainCamera.valid() && osg::NodeVisitor::CULL_VISITOR == nv.getVisitorType())
     {
+        if(GL_DEPTH_BUFFER_BIT != m_pMainCamera->getClearMask())
+        {
+            m_pMainCamera->setClearMask(GL_DEPTH_BUFFER_BIT);
+        }
+
         osg::Matrix matrix = m_pMainCamera->getViewMatrix();
         matrix.getRotate().get(matrix);
+        if(m_bRotate)
+        {
         this->setViewMatrix(m_rRoate*matrix);
+    }
+        else
+        {
+            this->setViewMatrix(matrix);
+        }
     }
 
     osg::Camera::traverse( nv );
@@ -112,10 +124,14 @@ void CStarEnv::SetMilkwayVisible(bool bVisible)
 
 void CStarEnv::UpdateMatrix(const Math::CMatrix &rRotate)
 {
+    m_bRotate = rRotate;
+    if(m_bRotate)
+    {
     m_rRoate.set(rRotate(0, 0), rRotate(0, 1), rRotate(0, 2), 0.,
                  rRotate(1, 0), rRotate(1, 1), rRotate(1, 2), 0.,
                  rRotate(2, 0), rRotate(2, 1), rRotate(2, 2), 0.,
                  0., 0., 0., 1.);
+}
 }
 
 void CStarEnv::InitProjMatrix()
