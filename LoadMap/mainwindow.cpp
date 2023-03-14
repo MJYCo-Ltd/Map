@@ -112,6 +112,7 @@ void MainWindow::SetSecenGraph(ISceneGraph *pSceneGraph)
         m_pSceneGraph->GetMap()->SubMessage(pMap);
         m_pSceneGraph->GetMap()->SetEarthSelfRotate(false);
         m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->HomeViewPoint();
+        m_pSceneGraph->GetMap()->GetSpaceEnv()->SetVisible(false);
 //        m_pSceneGraph->GetMap()->GetSpaceEnv()->ShowSpaceBackGround(false);
 //        m_pSceneGraph->GetMap()->OpenLight(false);
 //        m_pSceneGraph->GetMap()->SetShowAtmosphere(false);
@@ -307,7 +308,7 @@ void MainWindow::on_action_triggered()
         pSatellite->UpdateData(dMJD);
         m_pSceneGraph->GetMap()->GetSpaceEnv()->AddSceneNode(pSatellite);
 
-        m_pSceneGraph->GetMap()->UpdateDate(dMJD);
+        //m_pSceneGraph->GetMap()->UpdateDate(dMJD);
 
         m_pTrackNode = pSatelliteSensor;
     }
@@ -565,6 +566,15 @@ void MainWindow::PlotMap()
     m_pLayer->AddSceneNode(pMapLocationCLH);
     pMapLocation->SetGeoPos(poss);
     pMapLocation->SetSceneNode(pAutoImage1);
+
+
+    IMapCoverImage* pCoverImage = dynamic_cast<IMapCoverImage*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IMapCoverImage"));
+    ScenePos lu, rb;
+    lu.dX = 114.50; lu.dY = 38.05, lu.dZ = 10;
+    rb.dX = 114.52; rb.dY = 38.00, rb.dZ = 10;
+    pCoverImage->SetBound(lu,rb,"D:/1.png");
+    m_pLayer->AddSceneNode(pCoverImage);
+
 }
 
 void MainWindow::LodPlot()

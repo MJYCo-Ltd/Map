@@ -179,13 +179,10 @@ void CMapCoverImage::SetBound(const ScenePos &rLeftUp, const ScenePos &rRightDow
         AddNode(m_pCoverRoot.get(),m_pImage);
     }
 
-    m_pImage->setWest(rLeftUp.dX);
-    m_pImage->setEast(rRightDown.dX);
-    m_pImage->setNorth(rLeftUp.dY);
-    m_pImage->setSouth(rRightDown.dY);
+    m_pImage->setCorners(osg::Vec2d(rLeftUp.dX,rRightDown.dY),osg::Vec2d(rRightDown.dX,rRightDown.dY),
+                         osg::Vec2d(rLeftUp.dX,rLeftUp.dY),osg::Vec2d(rRightDown.dX,rLeftUp.dY));
 
     auto pImage =  m_pSceneGraph->ResouceLoader()->LoadImage(sImagePath,0,0,false);
     m_pImage->setImage(pImage);
-    m_pImage->setAlpha(0.5f);
     m_pImage->setDraped(true);
 }
