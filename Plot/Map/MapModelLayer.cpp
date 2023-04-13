@@ -11,8 +11,9 @@ CMapModelLayer::CMapModelLayer(ISceneGraph* pSceneGraph):
 void CMapModelLayer::init()
 {
     VisibleLayer::init();
-
+#if OSGEARTH_VERSION_LESS_OR_EQUAL(3,2,0)
     installDefaultOpacityShader();
+#endif
 }
 
 void CMapModelLayer::InitNode()
