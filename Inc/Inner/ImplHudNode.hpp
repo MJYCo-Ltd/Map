@@ -1,6 +1,7 @@
 #ifndef IMPL_HUD_NODE_H
 #define IMPL_HUD_NODE_H
 
+#include "Hud/HudType.h"
 #include <osgEarth/Controls>
 #include <Inner/ImplSceneNode.hpp>
 /**
@@ -17,7 +18,7 @@ protected:
     {
         m_pControl = pControl;
         m_pControl->setAlign(osgEarth::Controls::Control::ALIGN_LEFT,osgEarth::Controls::Control::ALIGN_BOTTOM);
-        m_pProgramNode=pControl;
+        ImplSceneNode<T>::m_pProgramNode=pControl;
     }
 
     /// 位置更改

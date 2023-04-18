@@ -53,7 +53,9 @@ struct Field
         switch (type)
         {
         case FIELD_INT:
-            return(itoa(value.nValue,s_sBuffer,10));
+//            return(itoa(value.nValue,s_sBuffer,10));
+            snprintf(s_sBuffer, 10, "%d", value.nValue);
+//            sprintf()
         case FIELD_FLOAT:
             break;
         case FIELD_BOOL:

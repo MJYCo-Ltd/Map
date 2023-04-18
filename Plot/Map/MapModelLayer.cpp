@@ -1,4 +1,5 @@
 #include <osg/PolygonOffset>
+#include <osgEarth/Version>
 #include "MapModelLayer.h"
 
 using namespace osgEarth;

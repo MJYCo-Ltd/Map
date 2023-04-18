@@ -112,7 +112,7 @@ void MainWindow::SetSecenGraph(ISceneGraph *pSceneGraph)
         m_pSceneGraph->GetMap()->SubMessage(pMap);
         m_pSceneGraph->GetMap()->SetEarthSelfRotate(false);
         m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->HomeViewPoint();
-        m_pSceneGraph->GetMap()->GetSpaceEnv()->SetVisible(false);
+        //m_pSceneGraph->GetMap()->GetSpaceEnv()->SetVisible(false);
 //        m_pSceneGraph->GetMap()->GetSpaceEnv()->ShowSpaceBackGround(false);
 //        m_pSceneGraph->GetMap()->OpenLight(false);
 //        m_pSceneGraph->GetMap()->SetShowAtmosphere(false);
