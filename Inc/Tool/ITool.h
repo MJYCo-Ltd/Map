@@ -14,6 +14,8 @@ struct PickMessage
      * @param2 1 表述鼠标左键按下 2 表示鼠标右键双击
      */
     virtual void PickID(unsigned int,unsigned int){}
+
+    virtual void ToolChanged(const char* csOldTool,const char* csNewTool){}
 };
 
 /**

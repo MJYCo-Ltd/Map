@@ -2,7 +2,6 @@
 #define INTERSECTIONPICK_H
 #include <QObject>
 #include "PickTool.h"
-
 class CToolSelector;
 class ObjectIntersectionHandle;
 class IntersectionPick: public QObject,public IToolBase
