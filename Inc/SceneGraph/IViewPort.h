@@ -125,6 +125,12 @@ public:
     virtual void EndCapture()=0;
 
     /**
+     * @brief 控制拖拽
+     */
+    virtual void BeginAvoidDrag()=0;
+    virtual void EndAvoidDrag()=0;
+
+    /**
      * @brief 设置视口背景颜色
      * @param PortColor
      */

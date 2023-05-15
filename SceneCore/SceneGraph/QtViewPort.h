@@ -90,6 +90,9 @@ public:
      */
     void EndCapture() override;
 
+    void BeginAvoidDrag() override;
+    void EndAvoidDrag()override;
+
     /**
      * @brief 锁定视角
      */

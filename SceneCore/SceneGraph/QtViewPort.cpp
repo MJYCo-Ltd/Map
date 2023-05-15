@@ -625,6 +625,30 @@ void QtViewPort::EndCapture()
     }
 }
 
+void QtViewPort::BeginAvoidDrag()
+{
+    if(m_p2DEarthManipulator.valid())
+    {
+        m_p2DEarthManipulator.get()->AvoidDrag(true);
+    }
+    if(m_p3DEarthManipulator.valid())
+    {
+        m_p3DEarthManipulator.get()->AvoidDrag(true);
+    }
+}
+
+void QtViewPort::EndAvoidDrag()
+{
+    if(m_p2DEarthManipulator.valid())
+    {
+        m_p2DEarthManipulator.get()->AvoidDrag(false);
+    }
+    if(m_p3DEarthManipulator.valid())
+    {
+        m_p3DEarthManipulator.get()->AvoidDrag(false);
+    }
+}
+
 void QtViewPort::SetLockView(bool bLock)
 {
     if(m_p2DEarthManipulator.valid())
