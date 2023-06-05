@@ -53,6 +53,7 @@ CResourceLod::CResourceLod()
 {
     s_gNeedAss.insert("fbx");
     s_gNeedAss.insert("obj");
+    s_gNeedAss.insert("glb");
 }
 
 void CResourceLod::InitPath(const std::string &csAppPath)
