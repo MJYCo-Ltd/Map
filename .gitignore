@@ -12,6 +12,7 @@
 *.idx
 /debug
 /release
+/build
 /Inc/Doc
 # Qt-es
 object_script.*.Release

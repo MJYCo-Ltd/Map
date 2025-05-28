@@ -50,6 +50,16 @@ ISceneCore *GetSceneCore()
     }
 }
 
+/// 移除核心
+void CloseSceneCore()
+{
+    if(nullptr != s_gMapCore)
+    {
+        delete s_gMapCore;
+        s_gMapCore = nullptr;
+    }
+}
+
 /// 检查硬件是否满足要求
 bool CheckPC(char *argv[])
 {

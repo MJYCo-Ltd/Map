@@ -7,6 +7,10 @@
 #include <osgEarth/GLUtils>
 #include <osgEarth/LogarithmicDepthBuffer>
 #include <osgEarth/EarthManipulator>
+#include <osgEarth/TMS>
+#include <osgEarth/GDAL>
+#include <osgEarth/OGRFeatureSource>
+#include <osgEarth/FeatureImageLayer>
 
 #include <GisMath/GisMath.h>
 #include <Satellite/Date.h>
@@ -192,10 +196,10 @@ bool CMap::ConvertCoord(int &fX, int &fY, ScenePos &geoPos, short TranType)
             osgEarth::GeoPoint geoPoint(IOsgMapSceneNode::s_pWGS84,geoPos.dX,geoPos.dY,geoPos.dZ),geoOut;
 
             if(geoPoint.transform(m_pCurMapNode->getMapSRS(),geoOut) &&
-                    m_pCurMapNode->getMapSRS()->transformToWorld(osg::Vec3d(geoOut.x(),geoOut.y(),geoOut.z()),world))
+                m_pCurMapNode->getMapSRS()->transformToWorld(osg::Vec3d(geoOut.x(),geoOut.y(),geoOut.z()),world))
             {
                 osg::Matrixd _MVPW = camera->getViewMatrix() * camera->getProjectionMatrix()
-                        * camera->getViewport()->computeWindowMatrix();
+                                     * camera->getViewport()->computeWindowMatrix();
 
                 osg::Vec3d scrennPos = world * _MVPW;
                 fX = scrennPos.x();
@@ -237,6 +241,109 @@ MapLayers CMap::GetMapLayers() const
     return(tmpLayers);
 }
 
+void CMap::addExternMapLayerLoadPath(int mtype, const std::string & spath)
+{
+    if(mtype == 1)
+    {
+        osgEarth::TMSImageLayer* layer = new osgEarth::TMSImageLayer();
+        layer->setURL(spath);
+        layer->setName(spath);
+        m_pCurMapNode->getMap()->addLayer(layer);
+    }
+    else if(mtype == 2)
+    {
+        osgEarth::GDALImageLayer* elev1 = new osgEarth::GDALImageLayer();
+        elev1->setURL(spath);
+        elev1->setName(spath);
+        m_pCurMapNode->getMap()->addLayer(elev1);
+    }
+    else if(mtype == 3)
+    {
+        osgEarth::GDALElevationLayer* elev1 = new osgEarth::GDALElevationLayer();
+        elev1->setURL(spath);
+        elev1->setName(spath);
+        m_pCurMapNode->getMap()->addLayer(elev1);
+    }
+    else if(mtype == 4)
+    {
+        osg::ref_ptr<osgEarth::OGRFeatureSource> features = new osgEarth::OGRFeatureSource();
+        features->setURL(spath);
+        features->setName("china");
+
+        // -- 定义要素数据的样式:配置线符号化器：
+        osgEarth::Style style;
+
+        // -- 可见性
+        osgEarth::RenderSymbol* rs = style.getOrCreate<osgEarth::RenderSymbol>();
+        rs->depthTest() = false;
+
+        // -- 贴地设置
+        osgEarth::AltitudeSymbol* alt = style.getOrCreate<osgEarth::AltitudeSymbol>();
+        alt->clamping() = alt->CLAMP_TO_TERRAIN;
+        alt->technique() = alt->TECHNIQUE_DRAPE;
+
+        osgEarth::LineSymbol* ls = style.getOrCreateSymbol<osgEarth::LineSymbol>();
+        ls->stroke()->color() = osgEarth::Color::Yellow;
+        ls->stroke()->width() = 2.0f;
+        ls->tessellationSize()->set(10000, osgEarth::Units::KILOMETERS);
+        osgEarth::FeatureImageLayer* layer = new osgEarth::FeatureImageLayer();
+        layer->setFeatureSource(features);
+
+        // -- 将style风格加载到图层中
+        osgEarth::StyleSheet* sheet = new osgEarth::StyleSheet();
+        sheet->addStyle(style);
+        layer->setStyleSheet(sheet);
+        m_pCurMapNode->getMap()->addLayer(layer);
+    }
+}
+
+void CMap::removeExternMapLayer(const std::string& spth)
+{
+    osgEarth::LayerVector layers;
+    m_pCurMapNode->getMap()->getLayers(layers);
+    for(auto it = layers.begin(); it != layers.end(); ++it)
+    {
+        if(osgEarth::Layer* layer = it->get())
+        {
+            bool rem = false;
+            if(osgEarth::TMSImageLayer * tmsl = dynamic_cast<osgEarth::TMSImageLayer *>(layer))
+            {
+                if(tmsl->getURL() == osgEarth::URI(spth))
+                {
+                    rem = true;
+                }
+            }
+            else if(osgEarth::GDALImageLayer * gdil = dynamic_cast<osgEarth::GDALImageLayer *>(layer))
+            {
+                if(gdil->getURL() == osgEarth::URI(spth))
+                {
+                    rem = true;
+                }
+            }
+            else if(osgEarth::GDALElevationLayer * adel = dynamic_cast<osgEarth::GDALElevationLayer *>(layer))
+            {
+                if(adel->getURL() == osgEarth::URI(spth))
+                {
+                    rem = true;
+                }
+            }
+            else if(osgEarth::FeatureImageLayer * fil = dynamic_cast<osgEarth::FeatureImageLayer *>(layer))
+            {
+                if(osgEarth::OGRFeatureSource * fs = dynamic_cast<osgEarth::OGRFeatureSource *>(fil->getFeatureSource()))
+                {
+                    if(fs->getURL() == osgEarth::URI(spth))
+                    {
+                        rem = true;
+                    }
+                }
+            }
+            if(rem)
+            {
+                m_pCurMapNode->getMap()->removeLayer(layer);
+            }
+        }
+    }
+}
 /// 控制图层显隐
 void CMap::SetLayerVisible(const std::string & sLayerName)
 {
@@ -373,7 +480,7 @@ void CMap::getScreenXY(int& x,int& y)
 
     eqcPos.fromWorld(m_pCurMapNode->getMapSRS(), out_world);
     eqcPos.makeGeographic();
-   
+
     x = eqcPos.vec3d().x();
     y = eqcPos.vec3d().y();
 }
@@ -392,7 +499,7 @@ void CMap::ClearLayers()
         m_pSceneGraph->SceneGraphRender()->AddUpdateOperation(new CMapModifyLayer(m_pCurMapNode,one->second->GetModelLayer(),false));
         delete one->second;
 
-       one =  m_userLayers.erase(one);
+        one =  m_userLayers.erase(one);
 
     }
     allObserver.clear();
@@ -512,7 +619,7 @@ void CMap::MouseDblClick(MouseButtonMask  type, int nX, int nY)
 
 void CMap::SetLockView(bool bLock)
 {
-     dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())->SetLockView(bLock);
+    dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())->SetLockView(bLock);
 }
 
 void CMap::SetViewPos(const ScenePos & pos)
@@ -615,20 +722,20 @@ void CMap::FrameCall()
             if(m_bSelfRotate)
             {
                 m_pRotateNode->addChild(m_p3DRoot);
-            m_pGroup->addChild(m_pSpaceEnv->AsOsgSceneNode()->GetRealNode());
+                m_pGroup->addChild(m_pSpaceEnv->AsOsgSceneNode()->GetRealNode());
                 m_pGroup->addChild(m_pRotateNode);
             }
             else
             {
                 m_pRotateNode->addChild(m_pSpaceEnv->AsOsgSceneNode()->GetRealNode());
                 m_pGroup->addChild(m_pRotateNode);
-            m_pGroup->addChild(m_p3DRoot);
-        }
+                m_pGroup->addChild(m_p3DRoot);
+            }
         }
         else /// 如果是二维地球
         {
             dynamic_cast<IOsgViewPoint*>(m_pSceneGraph->GetMainWindow()->GetMainViewPoint())
-                    ->GetOsgView()->getCamera()->setClearMask(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
+                ->GetOsgView()->getCamera()->setClearMask(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
             m_pGroup->getOrCreateStateSet()->setMode(GL_DEPTH_TEST,osg::StateAttribute::OFF);
             m_pDepth->setWriteMask(false);
 
@@ -696,9 +803,10 @@ void CMap::FrameCall()
         m_bMouseMove=false;
     }
 
-        if(m_bIs3D)
-        {
+    if(m_bIs3D)
+    {
         /// 防止三维穿地
+        //if(0)
         {
             static osgEarth::LogarithmicDepthBuffer s_logDepthBuffer;
 
@@ -878,7 +986,7 @@ void CMap::Init3DLight()
     m_pLight = new osgEarth::LightGL3( 0 );
     m_pLight->setPosition( osg::Vec4f(0.0f, 0.0f, 1.0f, 0.0f) );
     m_pLight->setAmbient ( osg::Vec4f(m_stNightColor.fR,m_stNightColor.fG
-                                      ,m_stNightColor.fB,m_stNightColor.fA) );
+                                    ,m_stNightColor.fB,m_stNightColor.fA) );
     m_pLight->setDiffuse ( osg::Vec4f(1.0f, 1.0f, 1.0f, 1.0f) );
     m_pLight->setSpecular( osg::Vec4f(1.0f, 1.0f, 1.0f, 1.0f) );
     lightSource->setLight(m_pLight);
@@ -911,10 +1019,10 @@ void CMap::Init3DLight()
     const Math::CVector& vSunPos = m_pSpaceEnv->GetSunPos();
     if(vSunPos)
     {
-    osg::Vec3 npos(vSunPos.GetX(),vSunPos.GetY(),vSunPos.GetZ());
-    m_pLight->setPosition(osg::Vec4(npos,.0));
-    m_pLightPosUniform->set(npos/npos.length());
-}
+        osg::Vec3 npos(vSunPos.GetX(),vSunPos.GetY(),vSunPos.GetZ());
+        m_pLight->setPosition(osg::Vec4(npos,.0));
+        m_pLightPosUniform->set(npos/npos.length());
+    }
 }
 
 static const char s_sMap2D[]="IMap2D";

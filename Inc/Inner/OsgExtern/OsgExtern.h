@@ -179,6 +179,33 @@ private:
 };
 
 /**
+ * @brief 操作容器
+ */
+class CAttachContainer:public osg::Operation
+{
+public:
+    CAttachContainer(osgEarth::Controls::ControlEventHandler* pEventHandler,
+                     osgEarth::Controls::Control* pControl,bool bAdd):
+        m_pEnventHandler(pEventHandler),m_pControl(pControl),m_bAdd(bAdd){}
+
+    void operator()(osg::Object*)
+    {
+        if(m_pControl.valid() && m_pEnventHandler)
+        {
+            if(m_bAdd)
+            {
+                m_pControl->addEventHandler(m_pEnventHandler);
+            }
+        }
+    }
+
+private:
+    osg::ref_ptr<osgEarth::Controls::ControlEventHandler> m_pEnventHandler;
+    osg::ref_ptr<osgEarth::Controls::Control> m_pControl;
+    bool m_bAdd;
+};
+
+/**
  * @brief 清空所有的子节点
  */
 class CClearContainer:public osg::Operation

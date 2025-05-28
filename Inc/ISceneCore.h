@@ -39,6 +39,11 @@ extern "C"
     SCENECORESHARED_EXPORT ISceneCore* GetSceneCore();
 
     /**
+     * @brief 移除渲染场景核心库
+     */
+    SCENECORESHARED_EXPORT void CloseSceneCore();
+
+    /**
      * @brief 检查电脑配置是否支持
      * @param argv 为mian函数中第二个参数
      * @return

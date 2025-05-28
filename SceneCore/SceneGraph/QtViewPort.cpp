@@ -553,6 +553,8 @@ void QtViewPort::FrameEvent()
             break;
         case View_Node:
             break;
+        case IOsgViewPoint::View_User:
+            break;
         }
 
         m_bViewTypeChanged=false;

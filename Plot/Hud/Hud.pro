@@ -16,10 +16,12 @@ HEADERS += \
     HudImage.h \
     HudLayout.h \
     HudShape.h \
-    HudText.h
+    HudText.h \
+    HudButton.h
 
 SOURCES += \
     HudImage.cpp \
     HudLayout.cpp \
     HudShape.cpp \
-    HudText.cpp
+    HudText.cpp \
+    HudButton.cpp

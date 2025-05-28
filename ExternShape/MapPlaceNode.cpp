@@ -100,13 +100,14 @@ void CPlaceNode::InitNode()
 
     m_pLocation->SetSceneNode(m_pAttitudeGroup);
 
-    m_pSceneScreenGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCREEN_GROUP)->AsSceneScreenGroup();
-    m_pAttitudeGroup->AddSceneNode(m_pSceneScreenGroup);
+//    m_pSceneScreenGroup = m_pSceneGraph->GetPlot()->CreateSceneGroup(SCREEN_GROUP)->AsSceneScreenGroup();
+//    m_pAttitudeGroup->AddSceneNode(m_pSceneScreenGroup);
 
     m_pLabel = dynamic_cast<ILabel*>(m_pSceneGraph->GetPlot()->CreateSceneNode("ILabel"));
     m_pLabel->SetFontSize(14);
     m_pLabel->SetFont("Fonts/msyh.ttf");
-    m_pSceneScreenGroup->AddSceneNode(m_pLabel);
+    m_pLabel->AlwasOnTop(true);
+    m_pAttitudeGroup->AddSceneNode(m_pLabel);
 
 }
 

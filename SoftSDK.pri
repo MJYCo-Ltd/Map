@@ -73,14 +73,21 @@ contains(SDK_CONFIG,OSG){
     win32{
         INCLUDEPATH *=$${NEWGL3PATH}/include
         LIBS *= -L$${NEWGL3PATH}/lib
-        CONFIG (debug, debug|release){
-     #threads
-            LIBS *= -lOpenThreadsd
-     # osg libs
-            LIBS *= -losgd -losgDBd -losgGAd -losgSimd -losgViewerd -losgUtild -losgTextd -losgManipulatord
-     #osgEarth libs
-            LIBS *= -losgEarthd
-        }else{
+        msvc{
+            CONFIG (debug, debug|release){
+         #threads
+                LIBS *= -lOpenThreadsd
+         # osg libs
+                LIBS *= -losgd -losgDBd -losgGAd -losgSimd -losgViewerd -losgUtild -losgTextd -losgManipulatord
+         #osgEarth libs
+                LIBS *= -losgEarthd
+            }else{
+                LIBS *= -lOpenThreads
+                LIBS *= -losg -losgDB -losgGA -losgSim -losgViewer -losgUtil  -losgText  -losgManipulator
+                LIBS *= -losgEarth
+            }
+        }
+        mingw{
             LIBS *= -lOpenThreads
             LIBS *= -losg -losgDB -losgGA -losgSim -losgViewer -losgUtil  -losgText  -losgManipulator
             LIBS *= -losgEarth

@@ -84,6 +84,16 @@ public:
     virtual IMapLayer* CreateLayer(const std::string&)=0;
 
     /**
+     *  动态加载地图
+     * */
+    virtual void addExternMapLayerLoadPath(int, const std::string&){}
+
+    /**
+     *  动态删除地图
+     * */
+    virtual void removeExternMapLayer(const std::string&){}
+
+    /**
      * @brief 移除图层
      * @return
      */

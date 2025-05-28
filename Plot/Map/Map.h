@@ -69,6 +69,12 @@ public:
     virtual MapLayers GetMapLayers() const override;
 
     /**
+     * @brief addExternMapLayerLoadPath 动态添加删除地图图层
+     */
+    virtual void addExternMapLayerLoadPath(int, const std::string&) override;
+    virtual void removeExternMapLayer(const std::string&) override;
+
+    /**
      * @brief 控制地图图层显隐
      * @param
      */

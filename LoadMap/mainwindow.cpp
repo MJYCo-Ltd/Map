@@ -298,7 +298,7 @@ void MainWindow::on_action_triggered()
 
         auto pSatelliteSensor = dynamic_cast<IConeSensor*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IConeSensor"));
         color.fG=1.f;
-        color.fA=.1f;
+        color.fA=1.f;
         pSatelliteSensor->SetAngle(1.f);
 //        pSatelliteSensor->SetHAngle(.4f);
 //        pSatelliteSensor->SetVAngle(1.f);
@@ -689,6 +689,19 @@ void MainWindow::LoadQingxie()
     m_pLayer->AddSceneNode(pEarthLocation);
 }
 
+class MjyTest:public IHudLayoutMouseObserver
+{
+public:
+    virtual void DoubleClick(const IHudLayout*) const
+    {
+        std::cout<<"DoubleClick"<<std::endl;
+    }
+    virtual void Move(const IHudLayout*,const HudPos& pos,int nWidth, int nHeight)const
+    {
+        std::cout<<"Move"<<pos.nX<<','<<pos.nY<<':'<<nWidth<<','<<nHeight<<std::endl;
+    }
+};
+
 void MainWindow::TestHud()
 {
     SceneColor color;
@@ -707,8 +720,47 @@ void MainWindow::TestHud()
     color.fB=0.0f;
     pHudText->SetText("Hello world");
     pHudText->SetColor(color);
+    color.fA = 0.5f;
+    color.fG = 1.0f;
+    pHudLayout->SetFillColor(color);
     color.fR = color.fG = color.fB=0.f;
     pHudText->SetOutColor(color);
+
+    ///标牌
+    auto pLabel = dynamic_cast<IHudLayout*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudLayout"));
+    pLabel->SetLayoutType(IHudLayout::LAYOUT_VERTICAL);
+    m_pSceneGraph->GetMainWindow()->GetMainViewPoint()->GetHud()->AddHudNode(pLabel);
+    pLabel->SetPosType(HUD_FIXED);
+    HudPos ScreenPos;
+    ScreenPos.nX = 100;
+    ScreenPos.nY = 100;
+    pLabel->SetHudPos(ScreenPos);
+
+    auto pText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
+    pText->SetText("Label");
+    color.fR=1.0f;
+    color.fG=1.0f;
+    color.fA = 1.0f;
+    pText->SetColor(color);
+    color.fR=1.0f;
+    color.fG=0.0f;
+    color.fB=0.0f;
+    color.fA = 0.4f;
+    pLabel->SetFillColor(color);
+    pLabel->AddHudNode(pText);
+
+    pText = dynamic_cast<IHudText*>(m_pSceneGraph->GetPlot()->CreateSceneNode("IHudText"));
+    pText->SetText("label2\n 真香");
+    pText->SetFont("Fonts/msyh.ttf");
+    color.fR=0.0f;
+    color.fG=1.0f;
+    color.fA = 1.0f;
+    pText->SetFontSize(11);
+    pText->SetColor(color);
+    pLabel->AddHudNode(pText);
+    pLabel->SubObserver(new MjyTest());
+
+    // pLabel->SetOutLineColor(color);
 }
 
 /// 测试标绘模型
@@ -855,6 +907,8 @@ void MainWindow::on_action12_triggered()
 //    pBox->ShowFace(false);
 //    pVisualGroup->AddSceneNode(pBox);
 //    pSceneRoot->AddSceneNode(pBox);
+
+    TestHud();
 
     m_pSceneGraph->GetRoot()->AddSceneNode(pSceneRoot);
 }
